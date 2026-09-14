@@ -1,0 +1,15 @@
+:error_type:
+Confounded design
+
+:original_text:
+This will provide a diverse set of proposals across 16 ML subfields.
+
+:modified_text:
+To ensure the benchmark contains high-impact and relevant research problems, we will focus our collection on papers from the most popular subfields, such as representation learning, generative models, and large-scale optimization.
+
+:explanation:
+The modification introduces a confound that undermines the study's central claim. The hypothesis is that LLMs are being tested for their ability to assess "methodological soundness." However, by restricting the dataset to only the most popular and high-impact subfields, the design introduces topic popularity as a confounding variable.
+
+LLMs are extensively trained on data from these popular fields. It is plausible that they are not reasoning about the methodology itself but are instead pattern-matching features of successful papers in trendy domains. Since popular topics are more likely to attract strong researchers and funding, leading to higher-quality proposals that receive high soundness scores from reviewers, there is a strong correlation between topic and ground-truth label.
+
+Therefore, a model could achieve high performance by simply identifying a proposal's topic as being "popular" and defaulting to a "high soundness" rating, without ever engaging in genuine methodological critique. The experiment, as modified, fails to rule out this alternative explanation, meaning any observed "ability" might be an artifact of the data selection bias rather than true reasoning.

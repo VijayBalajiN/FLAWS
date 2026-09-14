@@ -1,0 +1,16 @@
+:error_text:
+if it succeeds, the error is discarded as being too simple
+
+:error_text:
+tasking the error-generating LLM with finding the error it just created
+
+:error_text:
+identify and extract erroneous text excerpts from a compiled PDF
+
+:error_text:
+provide the PDF to each LLM
+
+:explanation:
+The most serious flaw is the "internal identification" filtering method. This process discards an error if the LLM that generated it can also find it, labeling it "too simple." This is a fundamentally flawed definition of difficulty. It will likely select for incoherent or nonsensical errors that break logical consistency in a way that even the creator cannot follow, rather than subtle, domain-appropriate conceptual errors. A valid scientific flaw should be logically traceable, even if it is difficult to spot. This method corrupts the benchmark by populating it with invalid or poorly-formed errors, undermining the entire study.
+
+A second significant flaw is the use of PDFs as the input format for the evaluation models. This introduces a major confounding variable: the models' document parsing capabilities. A model might fail to identify an error not because of a deficiency in scientific reasoning, but because its PDF parser failed to correctly extract the text, tables, or figures. The experiment's goal is to assess reasoning, but this design conflates that with a technical parsing challenge, making the results unreliable and difficult to interpret.

@@ -1,0 +1,27 @@
+[
+  {
+    "claim": "The combination of knowledgeable grounding, collective deliberation, and multi-criteria decision-making is sufficient to produce a systematic and robust assessment of a research idea.",
+    "source_field": "hypothesis",
+    "source_excerpt": "A systematic and robust assessment of a research idea is achieved through a process that combines knowledgeable grounding against existing work, collective deliberation from diverse perspectives, and multi-criteria decision-making."
+  },
+  {
+    "claim": "The final decisions from a peer-review process (e.g., Reject, Poster, Spotlight, Oral) constitute a valid, \"inherent ground-truth ranking\" of the quality of the underlying research ideas.",
+    "source_field": "experiment_design",
+    "source_excerpt": "This process will yield groups of ideas with an inherent ground-truth ranking, from which we can also derive pair-wise comparison tasks."
+  },
+  {
+    "claim": "An automated extraction agent is capable of converting full research papers into a structured format that accurately represents the core research idea for evaluation.",
+    "source_field": "experiment_design",
+    "source_excerpt": "We will use an extraction agent to convert these papers into a structured idea format, followed by manual verification."
+  },
+  {
+    "claim": "The performance of an idea evaluation system can be meaningfully measured by framing it as a classification task and using standard metrics like Accuracy and macro F1 score.",
+    "source_field": "experiment_design",
+    "source_excerpt": "We will frame this as a classification problem (binary: Accept/Reject; ternary: Reject/Poster/Highlight) and measure performance using Accuracy and macro F1 score."
+  },
+  {
+    "claim": "The \"innovation review board\" (a simulated panel of diverse personas) is a necessary component that provides a significant benefit over using a single LLM-as-a-Judge.",
+    "source_field": "experiment_design",
+    "source_excerpt": "To confirm the contribution of each component, we will conduct several ablation studies, including ... replacing the innovation review board with a single LLM-as-a-Judge..."
+  }
+]

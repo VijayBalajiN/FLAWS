@@ -1,0 +1,35 @@
+:candidate:
+1
+
+:original_text:
+For sentence-level classification tasks (MNLI, QQP, QNLI, SST-2, etc.), we will feed the final hidden state of the `[CLS]` token into a new classification layer.
+
+:modified_text:
+For sentence-level classification tasks (MNLI, QQP, QNLI, SST-2, etc.), we will feed the hidden state from the first transformer block for the `[CLS]` token into a new classification layer.
+
+:explanation:
+The flaw replaces the "final hidden state" with the "hidden state from the first transformer block". The final hidden state is the output of the last layer, encapsulating the deepest contextual information. The first block's output is a much shallower, less context-aware representation. This experiment would likely perform poorly, leading to the incorrect conclusion that the `[CLS]` token is an insufficient representation, when the actual issue is that the experiment failed to use the fully processed, final-layer state. The mechanism of error is a failure to use the correct network depth for the representation.
+
+:candidate:
+2
+
+:original_text:
+For sentence-level classification tasks (MNLI, QQP, QNLI, SST-2, etc.), we will feed the final hidden state of the `[CLS]` token into a new classification layer.
+
+:modified_text:
+For sentence-level classification tasks (MNLI, QQP, QNLI, SST-2, etc.), we will feed the average of the final hidden states of the `[CLS]` and `[SEP]` tokens into a new classification layer.
+
+:explanation:
+The flaw introduces an un-claimed aggregation step: averaging the `[CLS]` token's state with the `[SEP]` (separator) token's state. The claim is specifically about the sufficiency of the `[CLS]` token's representation *alone*. By combining it with another token's representation, the experiment no longer isolates the variable of interest. The performance of this mixed representation cannot be used to validate or invalidate the claim about the `[CLS]` token specifically. The mechanism of error is the introduction of a confounding variable through an improper pooling strategy.
+
+:candidate:
+3
+
+:original_text:
+For sentence-level classification tasks (MNLI, QQP, QNLI, SST-2, etc.), we will feed the final hidden state of the `[CLS]` token into a new classification layer.
+
+:modified_text:
+For sentence-level classification tasks (MNLI, QQP, QNLI, SST-2, etc.), we will feed the final hidden state corresponding to the first input token of the sequence into a new classification layer.
+
+:explanation:
+The flaw changes the source of the representation from the special `[CLS]` token to the "first input token" (i.e., the first actual word of the sentence). The `[CLS]` token is specifically designed and pre-trained to aggregate sentence-level information for classification. The embedding for a regular word is not trained for this purpose and is a much weaker choice for a sentence representation. This flawed design would test a different, less effective hypothesis, and its likely poor results would be misinterpreted as evidence against the standard, correct `[CLS]` token methodology. The mechanism of error is a misunderstanding of the architectural role of special tokens.

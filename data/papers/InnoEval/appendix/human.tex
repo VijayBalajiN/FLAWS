@@ -1,0 +1,12 @@
+\section{Human Evaluation}
+\label{app:human}
+\textbf{Human Scoring.}
+We invite five domain experts at the forefront of AI (3 Ph.D. students, 1 professor, and 1 algorithm engineer) to score the 60 sampled instances on five dimensions: clarity, novelty, feasibility, validity, and significance, following the identical scoring scheme used by {\ours}.
+During scoring, the experts are permitted to employ any search tools to augment their background knowledge and assign ratings based on the searched knowledge combined with their prior domain expertise.
+We calculate the Pearson correlation between the dimension-wise mean scores provided by the human experts and the corresponding scores produced by {\ours}.
+
+\textbf{Review Scoring.}
+To further mirror authentic human peer-review judgments, we crawl the publicly available peer-review records for the 60 sampled instances, including individual reviewers' comments and the meta-reviews.
+Although these reviews rarely contain explicit dimension-wise scores, the five aspects are implicitly encoded in the textual discourse.
+We therefore employ an LLM to extract these latent cues and assign concrete scores on each of the five dimensions, strictly adhering to the same scoring protocol used by {\ours}.
+Pearson correlations between the LLM-extracted scores and the {\ours} scores are subsequently computed.

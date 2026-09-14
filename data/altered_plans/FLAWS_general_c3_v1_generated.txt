@@ -1,0 +1,8 @@
+:original_text:
+ensuring they were first posted on arXiv after the knowledge cutoff dates of the models we plan to test.
+
+:modified_text:
+ensuring their formal assignment of an arXiv ID occurred after the knowledge cutoff dates of the models we plan to test.
+
+:explanation:
+The mechanism of this error is **data leakage from an alternative source**. This modification narrows the check to a bureaucratic event (assignment of an arXiv ID) rather than the first public appearance of the content. A paper's text could have existed on a researcher's personal website, a workshop page, or a different preprint server for months before being formally submitted to arXiv. Web-crawling for LLM training data would likely have captured these earlier, informal versions, thus contaminating the test set even though the arXiv ID is "new".

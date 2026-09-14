@@ -1,0 +1,8 @@
+:original_text:
+The criticality of an error in a scientific paper is a function of its connection to the paper's core claims.
+
+:modified_text:
+The criticality of an error in a scientific paper is a function of its connection to the paper's core claims, which in turn depends on the error's methodological origin.
+
+:explanation:
+This introduces a flawed causal chain. It subordinates the "connection to claims" (the stated cause) to a different, more fundamental cause: the "error's methodological origin." This falsifies the original claim by reframing the connection as a mere intermediate effect, implying that the type of methodological mistake is the true primary determinant of an error's importance, not its location in the paper.

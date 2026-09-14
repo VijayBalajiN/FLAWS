@@ -1,0 +1,2 @@
+error:We will then assign binary labels—"high soundness" (mean score ≥ 3) or "low soundness" (mean score ≤ 2)—based on the average reviewer soundness sub-score, excluding ambiguous cases.
+error:For each test case in SoundnessBench, a model will be given a results-masked research proposal and tasked with classifying its methodological soundness as either "high" or "low," accompanied by a detailed justification.

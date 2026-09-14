@@ -1,0 +1,8 @@
+:error_text:
+a stable bias towards optimism
+
+:error_text:
+and high sensitivity to prompt framing
+
+:explanation:
+The hypothesis presents a logical contradiction by claiming two mutually exclusive properties. It posits that the models' bias is "stable" (i.e., consistent and resistant to change) while simultaneously asserting that the models exhibit "high sensitivity to prompt framing." High sensitivity implies that the models' behavior, including any bias, is unstable and can be easily manipulated by the prompt. The experimental design, which uses an "Aggressive Prompt" specifically to alter the models' default behavior, is set up to test for this instability, directly undermining the "stable bias" claim within its own hypothesis.

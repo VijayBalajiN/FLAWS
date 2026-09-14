@@ -1,0 +1,1 @@
+error:Our research questions are: Can such a model achieve significantly more parallelization, reduce training time, and reach competitive or superior translation quality by effectively modeling global dependencies with a constant number of sequential operations?

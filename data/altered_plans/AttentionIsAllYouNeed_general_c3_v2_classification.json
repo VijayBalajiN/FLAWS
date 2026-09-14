@@ -1,0 +1,9 @@
+{
+  "label": "AttentionIsAllYouNeed_general_c3_v2",
+  "original_text": "We will vary the learning rate over the course of training according to the formula: `lr = d_model^-0.5 * min(step_num^-0.5, step_num * warmup_steps^-1.5)`.",
+  "modified_text": "We will vary the learning rate over the course of training according to the formula: `lr = d_model^0.5 * min(step_num^-0.5, step_num * warmup_steps^-1.5)`.",
+  "explanation": "This error inverts the sign of the exponent on the `d_model` term, a global scaling factor. The original schedule is designed to normalize the learning rate by the model's dimensionality, effectively using a smaller learning rate for larger models. The modified formula makes the learning rate directly proportional to the square root of the model's dimension. For any typical transformer model where `d_model` is large (e.g., 512 or 1024), this would result in an explosively large learning rate, causing immediate training instability. The mechanism of error is an incorrect global scaling of the entire schedule.",
+  "category": "B",
+  "category_name": "Conflict with Established Beliefs",
+  "reasoning": "The modified formula, while internally consistent, clashes with the established understanding in machine learning that excessively large learning rates lead to training instability."
+}

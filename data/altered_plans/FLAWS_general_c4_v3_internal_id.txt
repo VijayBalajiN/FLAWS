@@ -1,0 +1,17 @@
+:error_text:
+Two human annotators will assess (1) the validity of the inserted scientific errors and (2) the correctness of the LLMs' identifications.
+
+:error_text:
+We will apply our full pipeline of claim extraction, error generation, and multi-step filtering.
+
+:error_text:
+The primary performance metric will be Accuracy@k, representing the fraction of papers where the error was correctly identified
+
+:explanation:
+The research plan contains several methodological flaws, ranked here by severity:
+
+1.  **Incomplete Human Validation:** The most critical flaw is that the human validation process is incomplete. While annotators assess the validity of the inserted errors and the final correctness of model identifications, the plan omits the crucial step of validating the LLM-generated "ground truth" itself (the specific text excerpts defining the error's location). The entire quantitative evaluation hinges on this unverified, machine-generated ground truth, rendering the primary metric potentially meaningless.
+
+2.  **Use of a Flawed Benchmark Filter:** The experiment's design commits to using the full pipeline described in the Method section, which includes a logically flawed "multi-step filtering" process. Specifically, the "internal identification" step, where an error is discarded if the LLM that created it can immediately find it, is not a valid measure of difficulty. This flawed filter undermines the integrity and claimed "challenging" nature of the benchmark.
+
+3.  **Overly Rigid Evaluation Metric:** The chosen primary metric, `Accuracy@k`, is too narrow. It assumes that the single, artificially inserted error is the only valid flaw in the paper. This setup would incorrectly penalize a model for identifying a different, legitimate, pre-existing error, thus failing to accurately measure a model's general error-finding capability.

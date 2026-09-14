@@ -1,0 +1,8 @@
+:original_text:
+For sentence-level classification tasks (MNLI, QQP, QNLI, SST-2, etc.), we will feed the final hidden state of the `[CLS]` token into a new classification layer.
+
+:modified_text:
+For sentence-level classification tasks (MNLI, QQP, QNLI, SST-2, etc.), we will feed the average of the final hidden states of the `[CLS]` and `[SEP]` tokens into a new classification layer.
+
+:explanation:
+The flaw introduces an un-claimed aggregation step: averaging the `[CLS]` token's state with the `[SEP]` (separator) token's state. The claim is specifically about the sufficiency of the `[CLS]` token's representation *alone*. By combining it with another token's representation, the experiment no longer isolates the variable of interest. The performance of this mixed representation cannot be used to validate or invalidate the claim about the `[CLS]` token specifically. The mechanism of error is the introduction of a confounding variable through an improper pooling strategy.

@@ -1,0 +1,8 @@
+:original_text:
+We will intentionally introduce severe methodological flaws (e.g., mismatched datasets and metrics) into high-soundness proposals to test if models can detect these obvious errors.
+
+:modified_text:
+We will intentionally introduce severe methodological flaws (e.g., inconsistent footnote formatting) into high-soundness proposals to test if models can detect these obvious errors.
+
+:explanation:
+The mechanism of this error is a mismatch between the concept and its operationalization (a construct validity error). The experiment claims to test the detection of "severe methodological flaws," but the example provided, "inconsistent footnote formatting," is a minor, stylistic issue, not a severe methodological one. This makes the claim false; the experiment as described would not be testing what it purports to test, as the intervention itself has been trivialized.

@@ -1,0 +1,27 @@
+[
+  {
+    "claim": "The importance of an error in a scientific paper is determined primarily by its relationship to the paper's main scientific claims.",
+    "source_field": "hypothesis",
+    "source_excerpt": "The criticality of an error in a scientific paper is a function of its connection to the paper's core claims."
+  },
+  {
+    "claim": "Using two different state-of-the-art LLMs to generate errors is a sufficient method to prevent the benchmark from being biased towards the characteristics of a single model.",
+    "source_field": "experiment_design",
+    "source_excerpt": "This will mitigate model-specific biases in error generation."
+  },
+  {
+    "claim": "Selecting papers that were first published after the evaluation models' knowledge cutoff dates is a reliable way to ensure the models have not been trained on the test data.",
+    "source_field": "experiment_design",
+    "source_excerpt": "ensuring they were first posted on arXiv after the knowledge cutoff dates of the models we plan to test."
+  },
+  {
+    "claim": "Placing limits on the number and length of the text excerpts a model can return is an effective way to stop models from using simplistic, non-analytical strategies to solve the task.",
+    "source_field": "experiment_design",
+    "source_excerpt": "We will impose constraints on the maximum number and length of excerpts to prevent trivial solutions."
+  },
+  {
+    "claim": "The proposed automated evaluation metric will produce results that are consistent with the judgments of human experts on the same task.",
+    "source_field": "experiment_design",
+    "source_excerpt": "We will then compare the results of our automated evaluation metric against the human consensus to confirm its alignment with human judgment."
+  }
+]

@@ -1,0 +1,27 @@
+[
+  {
+    "claim": "Large Language Models exhibit a systematic bias towards optimism when evaluating the soundness of research proposals.",
+    "source_field": "hypothesis",
+    "source_excerpt": "exhibiting a bias towards optimism and high sensitivity to prompt framing"
+  },
+  {
+    "claim": "An LLM's judgment of a proposal's soundness is unstable and can be significantly altered by the framing of the prompt used to elicit the assessment.",
+    "source_field": "hypothesis",
+    "source_excerpt": "high sensitivity to prompt framing"
+  },
+  {
+    "claim": "An \"aggressive\" prompt can reliably induce a specific behavior in an LLM, causing it to default to a negative assessment unless a high bar for rigor is met.",
+    "source_field": "experiment_design",
+    "source_excerpt": "This prompt will instruct the model to act as a strict critic, defaulting to a \"low soundness\" rating unless the proposal demonstrates exceptionally clear and rigorous methodology."
+  },
+  {
+    "claim": "LLM performance on soundness evaluation is driven by deeper analysis than simple surface-level heuristics.",
+    "source_field": "experiment_design",
+    "source_excerpt": "We will compare LLM performance against simple baselines that use shallow features like proposal length or the number of experiments."
+  },
+  {
+    "claim": "Models may fail to detect even severe, intentionally-injected methodological flaws in otherwise sound proposals.",
+    "source_field": "experiment_design",
+    "source_excerpt": "We will intentionally introduce severe methodological flaws (e.g., mismatched datasets and metrics) into high-soundness proposals to test if models can detect these obvious errors."
+  }
+]

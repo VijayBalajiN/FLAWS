@@ -1,0 +1,2 @@
+error:Our primary research question is: How effectively can state-of-the-art LLMs identify and localize claim-invalidating errors in scientific papers when explicitly prompted to do so?
+error:Error Generation: For each claim, we will instruct an LLM to modify one or more segments of the paper's text to introduce a sophisticated, domain-appropriate conceptual error that undermines that specific claim.

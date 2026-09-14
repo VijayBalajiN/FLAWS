@@ -1,0 +1,9 @@
+{
+  "label": "AttentionIsAllYouNeed_general_c4_v2",
+  "original_text": "We will employ label smoothing with a value of \u03f5_ls = 0.1 during training, as this approach is known to improve model robustness.",
+  "modified_text": "We will employ label smoothing with a value of \u03f5_ls = 0.5 during training, as this approach is known to improve model robustness.",
+  "explanation": "The mechanism of this error is a severe parameter misspecification. While \u03f5_ls = 0.1 is a standard and effective value, \u03f5_ls = 0.5 is exceptionally high. This sets the target probability for the correct class to only 0.5, with the remaining 0.5 probability distributed among all incorrect classes. This forces the model to be extremely uncertain and is highly likely to degrade performance and prevent convergence, directly contradicting the claim that it will improve robustness or performance.",
+  "category": "A",
+  "category_name": "Internal Contradiction",
+  "reasoning": "The chosen parameter value directly undermines the stated goal of improving robustness, creating a self-contained logical crash within the proposal."
+}

@@ -1,0 +1,8 @@
+:original_text:
+exhibiting a bias towards optimism and high sensitivity to prompt framing
+
+:modified_text:
+exhibiting a bias towards optimism in its textual ratings and high sensitivity to prompt framing
+
+:explanation:
+This modification introduces an error of construct invalidity. The claim is that LLMs are optimistic about the *soundness* of proposals. This modified text subtly shifts the object of the optimism to the "textual ratings" themselves. This implies the model is not making a flawed judgment about the scientific merit, but rather that its rating scale or mechanism is inherently skewed positive. The model might be accurately rating a different construct, such as rhetorical quality or structural coherence, which the researchers have then misinterpreted as a biased evaluation of soundness.

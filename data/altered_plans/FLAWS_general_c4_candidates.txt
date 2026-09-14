@@ -1,0 +1,35 @@
+:candidate:
+1
+
+:original_text:
+We will impose constraints on the maximum number and length of excerpts to prevent trivial solutions.
+
+:modified_text:
+We will impose constraints on the maximum number of excerpts to prevent trivial solutions.
+
+:explanation:
+This version introduces an error of omission. By removing the constraint on "length," the rule becomes ineffective. A model could adhere to the constraint by returning a single excerpt (a valid number) that contains the entire source document. This represents a trivial solution, directly undermining the claim that the constraints are an effective way to prevent such strategies.
+
+:candidate:
+2
+
+:original_text:
+We will impose constraints on the maximum number and length of excerpts to prevent trivial solutions.
+
+:modified_text:
+We will impose constraints by truncating excerpts to a maximum number and length to prevent trivial solutions.
+
+:explanation:
+This version introduces a flawed implementation mechanism. By specifying that constraints are enforced via post-hoc "truncating," the method fails to influence the model's underlying generation strategy. The model can still use a trivial, non-analytical approach (e.g., copying a huge block of text), with the system simply cutting off the excess. This does not stop the model from *using* the trivial strategy, it only cleans the final output, thus falsifying the claim that the constraint effectively prevents the undesirable behavior.
+
+:candidate:
+3
+
+:original_text:
+We will impose constraints on the maximum number and length of excerpts to prevent trivial solutions.
+
+:modified_text:
+We will impose constraints on the maximum number and sentence length of excerpts to prevent trivial solutions.
+
+:explanation:
+This version introduces an error by using an inappropriate and easily gameable unit of measurement. "Sentence length" is not a robust metric for constraining text quantity. A model could find a single, very long, or run-on sentence that contains all the necessary information, effectively bypassing the spirit of the constraint. Because the chosen unit is too coarse and variable, the constraint is not an effective method for preventing simplistic, copy-paste solutions, thus falsifying the claim.

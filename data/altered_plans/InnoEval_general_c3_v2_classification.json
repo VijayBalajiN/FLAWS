@@ -1,0 +1,9 @@
+{
+  "label": "InnoEval_general_c3_v2",
+  "original_text": "We will use an extraction agent to convert these papers into a structured idea format, followed by manual verification.",
+  "modified_text": "We will use an extraction agent to convert these papers into a structured idea format, followed by manual verification of the extracted bibliographic data.",
+  "explanation": "The mechanism of this error is a misaligned scope of verification. The modification specifies that manual verification is only applied to \"bibliographic data\" (e.g., authors, year, journal). This creates a critical flaw: the most important part of the claim\u2014the accurate representation of the \"core research idea\"\u2014is left entirely unverified. The methodology only ensures the accuracy of superficial metadata, not the complex semantic content. Therefore, the process described cannot substantiate the claim about the agent's capability.",
+  "category": "A",
+  "category_name": "Internal Contradiction",
+  "reasoning": "The error creates a self-contained logical crash where the stated verification mechanism fails to address the core goal of the extraction agent, leaving the most important part of the claim unverified."
+}

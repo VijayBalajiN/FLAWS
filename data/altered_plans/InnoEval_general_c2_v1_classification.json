@@ -1,0 +1,9 @@
+{
+  "label": "InnoEval_general_c2_v1",
+  "original_text": "This process will yield groups of ideas with an inherent ground-truth ranking, from which we can also derive pair-wise comparison tasks.",
+  "modified_text": "This non-anonymized process will yield groups of ideas with an inherent ground-truth ranking, from which we can also derive pair-wise comparison tasks.",
+  "explanation": "The mechanism of this error is the introduction of a powerful confounding variable. By specifying the process is \"non-anonymized,\" it ensures that reviewer decisions can be influenced by author identity, institutional prestige, or prior reputation. The resulting hierarchy is therefore not an \"inherent ground-truth ranking\" of the *idea's quality* alone, but a biased composite of the idea's quality and the author's reputation. This undermines the claim's validity by introducing a systematic, well-known procedural flaw.",
+  "category": "D",
+  "category_name": "Others",
+  "reasoning": "Corrected by manual audit: this is a confounded-design error (non-anonymization introduces reviewer-bias as an extra variable), not a self-contained internal contradiction -- see docs/classification_audit_log.md."
+}

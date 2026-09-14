@@ -1,0 +1,9 @@
+{
+  "label": "FLAWS_general_c3_v3",
+  "original_text": "ensuring they were first posted on arXiv after the knowledge cutoff dates of the models we plan to test.",
+  "modified_text": "ensuring the paper\u2019s novel results were first posted on arXiv after the knowledge cutoff dates of the models we plan to test.",
+  "explanation": "The mechanism of this error is **indirect contamination through content overlap**. This modification shifts the evaluation criterion from the novelty of the entire document to the novelty of only its \"results\". A paper could be published after the cutoff date with new results, but its entire methodology, background, and literature review sections could be copied nearly verbatim from a prior work by the same authors that was published before the cutoff. The LLM would have been trained on the methodological text, allowing it to \"cheat\" by recognizing the experimental setup, even if the final results are new to it.",
+  "category": "C",
+  "category_name": "Undermining a Premise",
+  "reasoning": "The error conflates the novelty of a paper's results with the novelty of its entire content, allowing for a hidden assumption that the entire paper is new when only the results might be."
+}

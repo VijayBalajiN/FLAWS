@@ -1,0 +1,8 @@
+:original_text:
+We will use an extraction agent to convert these papers into a structured idea format, followed by manual verification.
+
+:modified_text:
+We will use an extraction agent to convert these papers into a structured idea format, followed by manual completion and verification.
+
+:explanation:
+The mechanism of this error is the conflation of verification with generation. By changing "manual verification" to "manual completion and verification," the text now implies that the agent's initial output is expected to be incomplete. The crucial step of forming a full representation of the "core research idea" is offloaded to the manual human step. This undermines the claim that the *agent* is capable of accurately representing the idea, as the final, evaluated artifact would be a human-agent composite, not the agent's own output.

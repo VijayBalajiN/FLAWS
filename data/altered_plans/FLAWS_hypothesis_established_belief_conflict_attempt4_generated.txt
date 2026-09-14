@@ -1,0 +1,13 @@
+:error_type:
+Conflict with Established Beliefs
+
+:original_text:
+The criticality of an error in a scientific paper is a function of its connection to the paper's core claims.
+
+:modified_text:
+The criticality of an error in a scientific paper is a function of its location within the document's structure; errors in high-visibility sections like the abstract or introduction are inherently more critical than those in the methods or appendices, regardless of their logical connection to the paper's core claims.
+
+:explanation:
+(a) The established belief in meta-science and scientific ethics is that the criticality of an error is determined by its substantive impact on the validity of the research's conclusions. An error is considered critical if it undermines or invalidates one of the paper's core claims.
+
+(b) The modified hypothesis is internally consistent, as it proposes a clear, testable rule: error criticality is determined by textual location. However, it directly conflicts with the established belief by asserting that an error's position in the document (e.g., abstract vs. methods) is the primary determinant of its importance, "regardless of their logical connection to the paper's core claims." An expert would immediately recognize this is incorrect; a fundamental, claim-invalidating flaw in the methodology section is vastly more critical than a minor factual inaccuracy in the introduction, despite the latter's higher visibility. The modification incorrectly equates textual prominence with scientific criticality.

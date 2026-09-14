@@ -1,0 +1,99 @@
+/Users/vijaybalajinarasimmabharathi/Desktop/7th-sem/project/FLAWS/src/pipeline/plan_error_insertion.py:36: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+Traceback (most recent call last):
+  File "/Users/vijaybalajinarasimmabharathi/miniconda3/lib/python3.13/site-packages/google/api_core/grpc_helpers.py", line 55, in error_remapped_callable
+    return callable_(*args, **kwargs)
+  File "/Users/vijaybalajinarasimmabharathi/miniconda3/lib/python3.13/site-packages/grpc/_interceptor.py", line 276, in __call__
+    response, ignored_call = self._with_call(
+                             ~~~~~~~~~~~~~~~^
+        request,
+        ^^^^^^^^
+    ...<4 lines>...
+        compression=compression,
+        ^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/vijaybalajinarasimmabharathi/miniconda3/lib/python3.13/site-packages/grpc/_interceptor.py", line 331, in _with_call
+    return call.result(), call
+           ~~~~~~~~~~~^^
+  File "/Users/vijaybalajinarasimmabharathi/miniconda3/lib/python3.13/site-packages/grpc/_channel.py", line 447, in result
+    raise self
+  File "/Users/vijaybalajinarasimmabharathi/miniconda3/lib/python3.13/site-packages/grpc/_interceptor.py", line 314, in continuation
+    response, call = self._thunk(new_method).with_call(
+                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        request,
+        ^^^^^^^^
+    ...<4 lines>...
+        compression=new_compression,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/vijaybalajinarasimmabharathi/miniconda3/lib/python3.13/site-packages/grpc/_channel.py", line 1182, in with_call
+    return _end_unary_response_blocking(state, call, True, None)
+  File "/Users/vijaybalajinarasimmabharathi/miniconda3/lib/python3.13/site-packages/grpc/_channel.py", line 999, in _end_unary_response_blocking
+    raise _InactiveRpcError(state)  # pytype: disable=not-instantiable
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+grpc._channel._InactiveRpcError: <_InactiveRpcError of RPC that terminated with:
+	status = StatusCode.DEADLINE_EXCEEDED
+	details = "Deadline Exceeded"
+	debug_error_string = "DEADLINE_EXCEEDED:Deadline Exceeded"
+>
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/Users/vijaybalajinarasimmabharathi/Desktop/7th-sem/project/FLAWS/src/pipeline/plan_error_insertion.py", line 454, in <module>
+    run_track_with_retries(paper_id, plan, track, args.out_dir, max_attempts=args.max_attempts)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/vijaybalajinarasimmabharathi/Desktop/7th-sem/project/FLAWS/src/pipeline/plan_error_insertion.py", line 387, in run_track_with_retries
+    result = run_track(paper_id, plan, track, out_dir, attempt=attempt)
+  File "/Users/vijaybalajinarasimmabharathi/Desktop/7th-sem/project/FLAWS/src/pipeline/plan_error_insertion.py", line 163, in run_track
+    completion = call_gemini(gen_prompt + original_plan_context, temperature=0.7)
+  File "/Users/vijaybalajinarasimmabharathi/Desktop/7th-sem/project/FLAWS/src/pipeline/plan_error_insertion.py", line 105, in call_gemini
+    response = model.generate_content(
+        prompt, generation_config=genai.GenerationConfig(temperature=temperature)
+    )
+  File "/Users/vijaybalajinarasimmabharathi/miniconda3/lib/python3.13/site-packages/google/generativeai/generative_models.py", line 331, in generate_content
+    response = self._client.generate_content(
+        request,
+        **request_options,
+    )
+  File "/Users/vijaybalajinarasimmabharathi/miniconda3/lib/python3.13/site-packages/google/ai/generativelanguage_v1beta/services/generative_service/client.py", line 835, in generate_content
+    response = rpc(
+        request,
+    ...<2 lines>...
+        metadata=metadata,
+    )
+  File "/Users/vijaybalajinarasimmabharathi/miniconda3/lib/python3.13/site-packages/google/api_core/gapic_v1/method.py", line 128, in __call__
+    return wrapped_func(*args, **kwargs)
+  File "/Users/vijaybalajinarasimmabharathi/miniconda3/lib/python3.13/site-packages/google/api_core/retry/retry_unary.py", line 295, in retry_wrapped_func
+    return retry_target(
+        target,
+    ...<3 lines>...
+        on_error=on_error,
+    )
+  File "/Users/vijaybalajinarasimmabharathi/miniconda3/lib/python3.13/site-packages/google/api_core/retry/retry_unary.py", line 157, in retry_target
+    next_sleep = _retry_error_helper(
+        exc,
+    ...<6 lines>...
+        timeout,
+    )
+  File "/Users/vijaybalajinarasimmabharathi/miniconda3/lib/python3.13/site-packages/google/api_core/retry/retry_base.py", line 215, in _retry_error_helper
+    raise final_exc from source_exc
+  File "/Users/vijaybalajinarasimmabharathi/miniconda3/lib/python3.13/site-packages/google/api_core/retry/retry_unary.py", line 148, in retry_target
+    result = target()
+  File "/Users/vijaybalajinarasimmabharathi/miniconda3/lib/python3.13/site-packages/google/api_core/timeout.py", line 130, in func_with_timeout
+    return func(*args, **kwargs)
+  File "/Users/vijaybalajinarasimmabharathi/miniconda3/lib/python3.13/site-packages/google/api_core/grpc_helpers.py", line 57, in error_remapped_callable
+    raise exceptions.from_grpc_error(exc) from exc
+google.api_core.exceptions.DeadlineExceeded: 504 Deadline Exceeded
+[SoundnessBench/hypothesis_internal_contradiction] attempt 1/5

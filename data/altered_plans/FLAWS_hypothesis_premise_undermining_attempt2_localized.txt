@@ -1,0 +1,1 @@
+error:Our research is motivated by the need for a rigorous, scalable, and automated benchmark to directly assess an LLM's ability to find critical flaws in scientific papers.

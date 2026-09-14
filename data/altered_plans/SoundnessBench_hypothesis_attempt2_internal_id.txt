@@ -1,0 +1,8 @@
+:error_text:
+independent of its high sensitivity to prompt framing
+
+:error_text:
+a bias towards optimism that is independent of its high sensitivity
+
+:explanation:
+The hypothesis posits that the models' optimism bias is "independent of" their sensitivity to prompt framing. This creates a direct contradiction with the experiment design, which explicitly aims to test this very relationship by using a "Standard Prompt" and an "Aggressive Prompt." The aggressive prompt is designed specifically to manipulate and reduce optimism, meaning the experiment is set up to measure the *dependence* of the bias on the prompt, not its independence.

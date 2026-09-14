@@ -1,0 +1,13 @@
+:error_type:
+Confounded design
+
+:original_text:
+-   We will vary the number of attention heads (h) and the attention key and value dimensions (d_k, d_v), while keeping the total amount of computation constant.
+
+:modified_text:
+-   We will vary the number of attention heads (h) to investigate their impact on model performance.
+
+:explanation:
+The methodological flaw introduced is a confounded design. The original text specifies a crucial control for the ablation study on the number of attention heads (h): keeping the total amount of computation constant. This is achieved by proportionally reducing the key/value dimensions (d_k, d_v) as the number of heads increases.
+
+The modified text removes this control. By simply stating an intent to "vary the number of attention heads," the design implies that other parameters (like d_k and d_v) would remain fixed. In the Transformer architecture, increasing `h` while keeping `d_v` constant increases the overall number of parameters and the computational load of the model. Therefore, any observed change in performance would be confounded; it would be impossible to determine if the effect was due to the number of heads itself or simply due to the increase in the model's overall size and capacity. This fails to isolate the variable of interest and rule out a plausible alternative explanation for the results.

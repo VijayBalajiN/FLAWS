@@ -1,0 +1,10 @@
+:error_text:
+saved only after the learning rate has fully decayed to zero
+
+:error_text:
+We will employ three types of regularization during training
+
+:explanation:
+The most serious error is a logical contradiction in the inference strategy. The plan specifies a learning rate schedule that decays asymptotically (proportional to `step_num^-0.5`) and thus never reaches zero in a finite number of training steps. However, the checkpoint averaging procedure is conditioned on the learning rate having "fully decayed to zero", an impossible condition that prevents any checkpoints from being saved for averaging.
+
+A secondary error exists in the description of regularization. The plan states that "three types of regularization" will be used, but only two (Residual Dropout and Label Smoothing) are subsequently described, leaving the methodology incomplete and ambiguous.

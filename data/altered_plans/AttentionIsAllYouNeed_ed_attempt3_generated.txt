@@ -1,0 +1,15 @@
+:error_type:
+Confounded design
+
+:original_text:
+    -   We will vary the number of attention heads (h) and the attention key and value dimensions (d_k, d_v), while keeping the total amount of computation constant.
+
+:modified_text:
+    -   We will vary the number of attention heads (h), while keeping the attention key and value dimensions (d_k, d_v) fixed.
+
+:explanation:
+The methodological flaw introduced is a confounded design in the ablation study for the number of attention heads. By proposing to vary the number of heads (h) while keeping the dimensions of each head (d_k, d_v) fixed, the experiment fails to isolate the variable of interest.
+
+In the multi-head attention mechanism, the outputs from the 'h' heads are concatenated before being projected back to the model's dimension. If 'h' is increased while 'd_v' remains fixed, the size of the concatenated vector (h * d_v) increases. This directly increases the number of parameters and the computational load in the attention sub-layer.
+
+Consequently, any observed change in model performance cannot be attributed solely to the number of attention heads. The effect is confounded with the change in the model's overall size and capacity. A proper ablation study, as described in the original text, would keep the total computation constant (e.g., by decreasing d_k and d_v as h increases) to ensure that only the effect of the number of heads is being measured.

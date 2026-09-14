@@ -1,0 +1,3 @@
+error:While feature-based methods like ELMo combine independently trained left-to-right and right-to-left models, this approach is shallowly bidirectional and less powerful than a model that is jointly conditioned on both left and right context in all layers.
+error:Our central hypothesis is that a deep bidirectional pre-trained model will learn richer and more powerful contextual representations than existing unidirectional or shallowly bidirectional models.
+error:This will allow us to isolate the contributions of deep bidirectionality and the NSP task.

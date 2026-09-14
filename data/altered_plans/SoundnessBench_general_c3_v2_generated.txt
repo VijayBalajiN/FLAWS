@@ -1,0 +1,8 @@
+:original_text:
+This prompt will instruct the model to act as a strict critic, defaulting to a "low soundness" rating unless the proposal demonstrates exceptionally clear and rigorous methodology.
+
+:modified_text:
+This prompt will instruct the model to act as a strict critic, prioritizing constructive feedback over summary judgment and defaulting to a "low soundness" rating unless the proposal demonstrates exceptionally clear and rigorous methodology.
+
+:explanation:
+The mechanism of this error is an **internal contradiction in the prompt's logic**. The added clause, "prioritizing constructive feedback over summary judgment," creates a conflict with the instruction to "default to a 'low soundness' rating." An LLM faced with these competing directives may behave erratically. It might ignore the default instruction, apply it inconsistently, or produce verbose feedback that obscures its final rating. This falsifies the claim that the prompt can *reliably* induce the specific default behavior, as the contradictory goals make the model's output unpredictable.

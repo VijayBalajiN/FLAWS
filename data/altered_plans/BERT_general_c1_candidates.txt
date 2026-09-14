@@ -1,0 +1,35 @@
+:candidate:
+1
+
+:original_text:
+Language representations jointly conditioned on both left and right context in all layers are more powerful than representations conditioned on unidirectional or shallowly combined bidirectional contexts.
+
+:modified_text:
+Language representations formed by multi-head self-attention mechanisms in all layers are more powerful than representations conditioned on unidirectional or shallowly combined bidirectional contexts.
+
+:explanation:
+The mechanism of this error is misattribution of cause. The modified text incorrectly attributes the representations' power to the presence of "multi-head self-attention mechanisms" instead of the original's "jointly conditioned on both left and right context." This is a subtle but critical flaw because many powerful unidirectional models (e.g., GPT-series) also use multi-head self-attention in all layers. The comparison is therefore invalidated, as the feature claimed to provide the advantage is also present in the group it is being compared against, making the hypothesis logically unsound.
+
+:candidate:
+2
+
+:original_text:
+Language representations jointly conditioned on both left and right context in all layers are more powerful than representations conditioned on unidirectional or shallowly combined bidirectional contexts.
+
+:modified_text:
+Language representations jointly conditioned on both left and right context in all layers are more powerful than representations conditioned on unidirectional, non-contextual embeddings or shallowly combined bidirectional contexts.
+
+:explanation:
+The mechanism of this error is creating an invalid "straw man" comparison. The modified text subtly weakens one of the baselines by changing "unidirectional" contexts to "unidirectional, non-contextual embeddings." This transforms the comparison from a meaningful one against state-of-the-art contextual models (like early GPT) to a trivial one against older, static embeddings (like Word2Vec). The claim of being "more powerful" is now based on defeating a much weaker, obsolete class of models, thus artificially inflating the significance of the proposed approach.
+
+:candidate:
+3
+
+:original_text:
+Language representations jointly conditioned on both left and right context in all layers are more powerful than representations conditioned on unidirectional or shallowly combined bidirectional contexts.
+
+:modified_text:
+Language representations jointly conditioned on both left and right context via a masked language modeling objective are more powerful than representations conditioned on unidirectional or shallowly combined bidirectional contexts.
+
+:explanation:
+The mechanism of this error is overgeneralization from a specific method. The modified text conflates the general architectural property (deep bidirectionality) with the specific training objective used to achieve it (masked language modeling, or MLM). The claim now implies that this specific training method yields universally "more powerful" representations. This is false because the choice of objective creates trade-offs. While MLM excels at creating representations for discriminative tasks (e.g., classification), the causal language modeling objective used for unidirectional models makes them far more powerful for generative tasks. The claim is thus falsified by its overly broad and unqualified assertion of superiority.

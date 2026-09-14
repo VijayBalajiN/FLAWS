@@ -1,0 +1,16 @@
+:error_text:
+This process will yield groups of ideas with an inherent ground-truth ranking
+
+:error_text:
+perform stratified sampling based on their final decisions (Reject, Poster, Spotlight, Oral).
+
+:error_text:
+We will use an extraction agent to convert these papers into a structured idea format
+
+:error_text:
+to produce a full ranking (measured by Accuracy and Longest Increasing Subsequence score).
+
+:explanation:
+The primary and most severe error is the construction of the "ground-truth" dataset. The plan incorrectly assumes that the final peer-review decision on a *completed paper* (e.g., Reject, Accept) serves as a valid proxy for the quality of the initial *research idea*. This assumption is fundamentally flawed because peer review outcomes are influenced by numerous confounding factors like experimental execution, writing quality, and reviewer bias, not just the idea's intrinsic merit.
+
+This foundational error leads to two subsequent flaws identified in the excerpts. First, by extracting "ideas" from fully realized papers, the experiment creates a data-task mismatch and a critical risk of data leakage. The evaluation system can easily find the source paper online during its knowledge search and use the paper's known outcome to "predict" its quality, bypassing any genuine assessment. Second, the plan proposes using "Accuracy"—a classification metric—to evaluate a ranking task, which is methodologically incorrect and would produce misleading results.

@@ -1,0 +1,3 @@
+error: Furthermore, the known sensitivity of LLMs to prompt framing suggests that their scientific judgments may be unstable, potentially alternating between uncritical optimism and excessive skepticism.
+error: Our central hypothesis is that current models lack the robust ability to assess the methodological soundness of research proposals, exhibiting a bias towards optimism and a high sensitivity to prompt framing.
+error: To test the stability of model judgments, we will use two distinct prompting regimes:

@@ -1,0 +1,15 @@
+:error_type:
+Conflict with Established Beliefs
+
+:original_text:
+Language representations jointly conditioned on both left and right context in all layers are more powerful than representations conditioned on unidirectional or shallowly combined bidirectional contexts.
+
+:modified_text:
+Language representations jointly conditioned on both left and right context in all layers are more powerful across the full spectrum of language tasks, from natural language understanding to coherent, open-ended text generation, than representations conditioned on unidirectional or shallowly combined bidirectional contexts.
+
+:explanation:
+The modification introduces a conflict with the well-established architectural trade-off between autoencoding and autoregressive language models.
+
+(a) The established belief is that there is a fundamental design difference between models suited for language understanding and those suited for language generation. Autoregressive models (like GPT), which are unidirectional, are architecturally designed for generation because they model the probability of the next token given previous tokens, P(x_t | x_{<t}). In contrast, denoising autoencoding models (like the proposed BERT), which are bidirectional, are designed for understanding tasks. They are trained to reconstruct corrupted input (e.g., via Masked Language Modeling) and cannot naturally model the sequential, conditional probability distribution required for coherent, open-ended text generation.
+
+(b) The modified hypothesis is internally consistent; it makes a simple, falsifiable claim that one architecture is universally superior. However, it conflicts with the established belief by asserting that a deep bidirectional model will be more powerful not just for understanding tasks (its strength) but also for "coherent, open-ended text generation"—the primary domain where unidirectional, autoregressive models are known to be fundamentally more suitable due to their architectural design. An expert would recognize that the pre-training objective (MLM) required for a deep bidirectional model makes it inherently ill-suited for this type of generative task compared to its unidirectional counterparts.

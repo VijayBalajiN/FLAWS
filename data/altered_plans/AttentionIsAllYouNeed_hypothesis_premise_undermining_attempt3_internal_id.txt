@@ -1,0 +1,15 @@
+:error_text:
+An architecture relying solely on attention mechanisms, without recurrence or convolutions, is sufficient to capture the global dependencies
+
+:error_text:
+effectively modeling global dependencies with a constant number of sequential operations?
+
+:error_text:
+we hypothesize that for large values of d_k, dot products can grow large in magnitude, potentially pushing the softmax function into regions with extremely small gradients.
+
+:explanation:
+The most serious error is in the main hypothesis, which claims the architecture relies "solely on attention mechanisms." This is a fundamental mischaracterization of the proposed model. The Transformer architecture also contains position-wise feed-forward networks within each of its blocks, and these networks are a critical component essential for the model's success. This error misrepresents the core subject of the investigation.
+
+The second error, found in the research question, is the misleading claim that the model works by using a "constant number of sequential operations." While technically true and the basis for its parallelizability, this phrasing strategically omits the model's major drawback: its computational complexity per layer grows quadratically (O(n^2)) with the sequence length. This is a critical trade-off that is not transparently presented.
+
+The third error is a methodological gap. The plan explicitly states a hypothesis for why the scaling factor (1/√d_k) is used in the attention mechanism. However, the experiment design section fails to propose an ablation study or any other test to validate this specific hypothesis. A complete research plan should include experiments to test its own ancillary hypotheses.

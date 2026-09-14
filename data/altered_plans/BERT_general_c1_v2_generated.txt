@@ -1,0 +1,8 @@
+:original_text:
+Language representations jointly conditioned on both left and right context in all layers are more powerful than representations conditioned on unidirectional or shallowly combined bidirectional contexts.
+
+:modified_text:
+Language representations jointly conditioned on both left and right context in all layers are more powerful than representations conditioned on unidirectional, non-contextual embeddings or shallowly combined bidirectional contexts.
+
+:explanation:
+The mechanism of this error is creating an invalid "straw man" comparison. The modified text subtly weakens one of the baselines by changing "unidirectional" contexts to "unidirectional, non-contextual embeddings." This transforms the comparison from a meaningful one against state-of-the-art contextual models (like early GPT) to a trivial one against older, static embeddings (like Word2Vec). The claim of being "more powerful" is now based on defeating a much weaker, obsolete class of models, thus artificially inflating the significance of the proposed approach.

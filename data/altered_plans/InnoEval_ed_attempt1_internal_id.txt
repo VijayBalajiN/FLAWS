@@ -1,0 +1,17 @@
+:error_text:
+including their abstract, introduction, and author affiliations, into a structured idea format
+
+:error_text:
+convert the full text of these papers... into a structured idea format
+
+:error_text:
+This process will yield groups of ideas with an inherent ground-truth ranking
+
+:explanation:
+The experimental design contains three major, ranked flaws:
+
+1.  **Data Leakage:** The most serious error is including "author affiliations" in the input. This creates a critical data leak. The model can learn to predict a paper's success based on the reputation of the authors or their institutions rather than the quality of the research idea itself, completely undermining the validity of the point-wise evaluation task.
+
+2.  **Input-Goal Mismatch:** The experiment uses the "full text of these papers" as a proxy for a research "idea." A full paper is a realized product containing experimental results, detailed methodology, and polished writing—elements not present in an initial idea. This creates a fundamental mismatch, as the system is being evaluated on its ability to assess a completed project, not a nascent concept as stated in the problem description.
+
+3.  **Flawed Ground Truth:** The design assumes that creating groups from different decision categories (e.g., Oral, Poster, Reject) yields an "inherent ground-truth ranking." This is a flawed premise. Peer review outcomes are noisy, subjective, and not perfectly ordinal. Conflating a final publication status with a definitive ranking of the initial idea's quality creates an artificial and unreliable ground truth for the group-wise and pair-wise tasks.

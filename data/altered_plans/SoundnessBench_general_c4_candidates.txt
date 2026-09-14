@@ -1,0 +1,35 @@
+:candidate:
+1
+
+:original_text:
+We will compare LLM performance against simple baselines that use shallow features like proposal length or the number of experiments.
+
+:modified_text:
+We will compare LLM performance against simple baselines that use shallow features like the average proposal length or the median number of experiments.
+
+:explanation:
+The mechanism of error is an invalid baseline definition, creating a category error. A baseline model must generate a prediction for each individual data point to be comparable to the LLM's per-proposal evaluations. This modification changes the baselines from predictive models into single, dataset-level descriptive statistics ("average" length, "median" number of experiments). One cannot meaningfully compare a model's vector of predictions against a single scalar value. The proposed comparison is therefore incoherent and cannot provide any evidence to support the claim.
+
+:candidate:
+2
+
+:original_text:
+We will compare LLM performance against simple baselines that use shallow features like proposal length or the number of experiments.
+
+:modified_text:
+We will compare LLM performance against simple baselines that use shallow features like proposal length or the number of experiments, derived from anonymized versions of the proposals.
+
+:explanation:
+The mechanism of error is the introduction of a confounding variable through asymmetric data access. The modification implies that the baselines are restricted to anonymized data, while the LLM (by omission) is evaluated on the original, non-anonymized proposals. This creates an unfair comparison. The LLM could achieve superior performance by exploiting surface-level heuristics unavailable to the baselines, such as author identity or institutional prestige, which are also shallow features. This undermines the claim because the LLM's success might not be due to "deeper analysis" but to its access to a different set of shallow cues.
+
+:candidate:
+3
+
+:original_text:
+We will compare LLM performance against simple baselines that use shallow features like proposal length or the number of experiments.
+
+:modified_text:
+We will compare LLM performance, measured by raw accuracy, against simple baselines that use shallow features like proposal length or the number of experiments.
+
+:explanation:
+The mechanism of error is the use of an inappropriate evaluation metric. In a task like evaluating research soundness, the dataset is likely to be highly imbalanced (e.g., far more "sound" proposals than "unsound" ones). Using "raw accuracy" is misleading in such cases, as a model can achieve a high score by simply always predicting the majority class. An LLM might easily learn this trivial heuristic, outperforming baselines that try to find a genuine signal. This would make the LLM appear superior while actually engaging in the simplest possible surface-level analysis, directly contradicting the claim.

@@ -1,0 +1,5 @@
+error:An ideal scientific evaluation process should be defined by three core principles: knowledgeable grounding against the existing body of work, collective deliberation among diverse experts, and multi-criteria decision-making across various attributes like novelty and feasibility.
+error:Our central hypothesis is that by emulating the holistic process of human scholarly review—from evidence gathering to multi-faceted deliberation—we can develop an automated framework capable of providing systematic, robust, and human-expert-level assessments of research ideas.
+error:We will assess each idea across five independent dimensions: Clarity, Novelty, Feasibility, Validity, and Significance.
+error:We will crawl papers from top-tier conferences (NeurIPS and ICLR) via OpenReview and perform stratified sampling based on their final decisions (Reject, Poster, Spotlight, Oral).
+error:We will evaluate the ability to select the best idea in a group (measured by Accuracy) and to produce a full ranking (measured by Accuracy and Longest Increasing Subsequence score).

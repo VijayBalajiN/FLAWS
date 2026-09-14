@@ -1,0 +1,15 @@
+:error_type:
+Internal Contradiction
+
+:original_text:
+The criticality of an error in a scientific paper is a function of its connection to the paper's core claims.
+
+:modified_text:
+The criticality of an error in a scientific paper is a function of its unique connection to one of the paper's core claims, such that an error linked to multiple claims is considered less critical than one linked to only one.
+
+:explanation:
+The modification introduces a specific rule for defining "criticality": it is a function of a *unique* connection to a single claim, and errors linked to multiple claims are explicitly defined as *less critical*.
+
+This rule creates an internal contradiction when taken to its logical conclusion. The most severe and impactful type of error one could find in a paper is a systemic one—for instance, a flawed foundational assumption that invalidates *all* of the paper's core claims. This is intuitively the most "critical" error possible.
+
+However, according to the hypothesis's own stated mechanism, this catastrophic error, being connected to multiple (or all) claims, would be classified as one of the *least* critical. The very rule designed to measure criticality systematically assigns the lowest criticality score to the most damaging class of error, thus violating the hypothesis's own goal of correctly assessing an error's importance.

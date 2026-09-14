@@ -1,0 +1,17 @@
+:error_type:
+Undermining a Premise
+
+:original_text:
+An architecture relying solely on attention mechanisms, without recurrence or convolutions, is sufficient to model global dependencies between input and output sequences.
+
+:modified_text:
+An architecture relying solely on attention mechanisms, without recurrence or convolutions, is sufficient to establish a constant computational path length between any two positions in the input and output sequences.
+
+:explanation:
+The modification conflates a model's functional capability with its underlying architectural property.
+
+1.  **Modeling global dependencies**: This is a functional, learned capability. It refers to whether a trained model can successfully capture and utilize meaningful relationships between distant elements in a sequence to perform a task (e.g., machine translation). This capability is evaluated empirically through task performance.
+
+2.  **Establishing a constant computational path length**: This is a structural, architectural property. It means that the number of operations required to propagate a signal between any two sequence positions is O(1), regardless of their distance. This is a feature of the attention mechanism's design.
+
+The error is treating the architectural property (a constant path length) as if it were synonymous with and sufficient for achieving the functional goal (modeling dependencies). While a constant path length is the *mechanism* that enables the model to learn such dependencies more efficiently than models with linear path lengths (like RNNs), it does not guarantee that the model will actually learn them successfully. The modified hypothesis shifts the claim from a falsifiable one about performance to a non-falsifiable statement about the model's design, undermining the premise that the architectural innovation directly and sufficiently translates into the desired modeling power.

@@ -1,0 +1,8 @@
+:original_text:
+This process will yield groups of ideas with an inherent ground-truth ranking, from which we can also derive pair-wise comparison tasks.
+
+:modified_text:
+This process will yield groups of ideas with an inherent ground-truth ranking of their alignment with programmatic priorities, from which we can also derive pair-wise comparison tasks.
+
+:explanation:
+The mechanism of this error is a misalignment of the measured construct (a construct validity error). The claim is that the ranking reflects the "quality of the underlying research ideas." This modification explicitly states that the process ranks something else entirely: "alignment with programmatic priorities." A brilliant, high-quality idea that is out-of-scope for the program would be ranked low, while a mediocre but perfectly aligned idea would be ranked high. The ranking is valid for what it measures, but it does not measure the construct it is claimed to, thus falsifying the assertion.

@@ -1,0 +1,10 @@
+:error_text:
+another using a traditional Left-to-Right (LTR) LM objective instead of MLM.
+
+:error_text:
+extract fixed contextual embeddings from the final layer of the pre-trained model and feed them into a BiLSTM classifier
+
+:explanation:
+The most serious error is proposing to train a model with a bidirectional Transformer architecture using a traditional Left-to-Right (LTR) language modeling objective. A bidirectional encoder allows every token to see every other token in the sequence. An LTR objective requires predicting a token based only on its predecessors. As described, the model could trivially "see" the token it is supposed to predict, making the training objective useless for learning meaningful representations. This part of the ablation study is fundamentally flawed and cannot be executed as planned without also changing the model's architecture to be unidirectional (e.g., by using a causal attention mask).
+
+The second error is in the design of the feature-based vs. fine-tuning ablation. The plan introduces a powerful BiLSTM classifier for the feature-based approach. This is not a fair comparison to the standard fine-tuning approach, which would only add a simple linear layer on top of the Transformer outputs. This experimental design introduces a confounding variable (the BiLSTM architecture), making it impossible to isolate whether performance differences are due to the feature-based method itself or the addition of another powerful sequence model.

@@ -1,0 +1,4 @@
+error:Our central hypothesis is that current models lack the robust ability to assess the methodological soundness of research proposals, exhibiting a bias towards optimism and a high sensitivity to prompt framing.
+error:To test the stability of model judgments, we will use two distinct prompting regimes:
+1.  **Standard Prompt:** This prompt will ask the model for a neutral assessment of the proposal's soundness.
+2.  **Aggressive Prompt:** This prompt will instruct the model to act as a strict critic, defaulting to a "low soundness" rating unless the proposal demonstrates exceptionally clear and rigorous methodology.

@@ -1,0 +1,15 @@
+:error_text:
+evaluate models on a held-out split of very recent papers (ICLR 2026)
+
+:error_text:
+defaulting to a "low soundness" rating unless the proposal demonstrates exceptionally clear and rigorous methodology.
+
+:error_text:
+simple baselines that use shallow features like the average proposal length or the median number of experiments.
+
+:explanation:
+The most serious error is a temporal impossibility: the plan proposes using papers from ICLR 2026 for a contamination check. As these papers do not yet exist, this crucial control experiment cannot be performed as designed.
+
+The second error is in the design of the "Aggressive Prompt." By explicitly instructing the model to "default" to a specific rating, the experiment confounds the model's critical reasoning ability with its ability to follow simple instructions. This may lead to a trivial result where the model simply outputs the default answer, rather than demonstrating a genuine shift in its evaluative judgment.
+
+The third error is the use of overly simplistic baseline models. Comparing LLMs to baselines that only use "shallow features like the average proposal length" is insufficient. This weak comparison may not adequately challenge the LLMs' performance, potentially failing to rule out that a more basic model could achieve similar results and thus inflating the perceived capabilities of the LLMs.

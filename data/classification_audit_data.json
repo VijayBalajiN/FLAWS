@@ -1,0 +1,677 @@
+[
+  {
+    "label": "AttentionIsAllYouNeed_general_c1_v1",
+    "survived": false,
+    "original": "An architecture relying solely on attention mechanisms, without recurrence or convolutions, is sufficient to model global dependencies between input and output sequences.",
+    "modified": "An architecture relying solely on attention mechanisms, without recurrence or convolutions, is necessary to model global dependencies between input and output sequences.",
+    "explanation": "The flaw is a logical inversion, replacing \"sufficient\" with \"necessary.\" The original claim is that attention is one possible method that works (sufficiency). The modified claim asserts that attention is the *only* possible method (necessity). This is a much stronger and almost certainly false claim, as other architectures (like certain RNNs or large-kernel CNNs) can also model global dependencies. This error changes a valid, defensible research hypothesis into a logically unsound and overly bold assertion that is easily falsified by counterexample.",
+    "category": "B",
+    "reasoning": "The modified text makes a claim that is easily falsified by existing knowledge about other architectures capable of modeling global dependencies, directly clashing with established beliefs in the field."
+  },
+  {
+    "label": "AttentionIsAllYouNeed_general_c1_v2",
+    "survived": false,
+    "original": "An architecture relying solely on attention mechanisms, without recurrence or convolutions, is sufficient to model global dependencies between input and output sequences.",
+    "modified": "An architecture relying solely on attention mechanisms, without layer normalization or feed-forward networks, is sufficient to model global dependencies between input and output sequences.",
+    "explanation": "The flaw is an error in architectural composition. It correctly identifies that the architecture is built on attention but incorrectly states which components it replaces. The seminal \"Attention Is All You Need\" architecture, which this claim references, critically depends on both layer normalization (for training stability) and position-wise feed-forward networks (for non-linear transformation) in every block, in addition to attention. Attention replaces recurrence and convolutions, not these other essential components. This modification describes a non-functional or severely degraded architecture, revealing a fundamental misunderstanding of how attention-only models are actually constructed.",
+    "category": "B",
+    "reasoning": "The error describes an architecture that would be non-functional or severely degraded, clashing with the established understanding of how attention-only models are constructed in the field."
+  },
+  {
+    "label": "AttentionIsAllYouNeed_general_c1_v3",
+    "survived": false,
+    "original": "An architecture relying solely on attention mechanisms, without recurrence or convolutions, is sufficient to model global dependencies between input and output sequences.",
+    "modified": "An architecture relying solely on attention mechanisms, without recurrence or convolutions, is sufficient to model local structural dependencies between input and output sequences.",
+    "explanation": "The flaw is a conceptual substitution of a key term. It replaces \"global dependencies\" with \"local structural dependencies.\" The primary motivation and key advantage of using attention mechanisms over recurrence is their superior ability to capture long-range, or *global*, dependencies. While attention models *can* capture local information, claiming this is what they are \"sufficient\" for misses the entire point of the architecture. In fact, convolutional networks are often considered more specialized and efficient for modeling local structure. This change subtly reframes the hypothesis to focus on a secondary capability of the architecture, making the claim significantly weaker and potentially misleading about the research's actual contribution.",
+    "category": "C",
+    "reasoning": "The error conflates \"global dependencies\" with \"local structural dependencies,\" treating them as interchangeable when they are distinct concepts with different architectural specializations."
+  },
+  {
+    "label": "AttentionIsAllYouNeed_general_c2_v1",
+    "survived": false,
+    "original": "Additionally, we will apply it to English constituency parsing to test its ability to generalize to other structured prediction problems.",
+    "modified": "Additionally, we will apply it to the parsed English side of the WMT14 parallel corpus to test its ability to generalize to other structured prediction problems.",
+    "explanation": "The mechanism of this error is a **confounding variable introduced through data selection**. The WMT14 dataset is a well-known benchmark for machine translation. By using the parsed English side of this specific corpus for the parsing task, the experiment is no longer a fair test of generalization to a \"fundamentally different\" task. The model, especially if pre-trained on common web data, has likely seen sentences from this translation corpus before. Its success on the parsing task could be attributed to familiarity with the data distribution, rather than the architecture's ability to generalize its understanding of linguistic structure to a new domain.",
+    "category": "D",
+    "reasoning": "The error introduces a confounding variable by selecting data that may have been previously seen by the model, thus making it impossible to fairly test the stated goal of generalization to a \"fundamentally different\" task."
+  },
+  {
+    "label": "AttentionIsAllYouNeed_general_c2_v2",
+    "survived": false,
+    "original": "Additionally, we will apply it to English constituency parsing to test its ability to generalize to other structured prediction problems.",
+    "modified": "Additionally, we will apply it to English constituency parsing, using gold part-of-speech tags as an additional input channel, to test its ability to generalize to other structured prediction problems.",
+    "explanation": "The mechanism of this error is **task simplification through feature engineering**. The claim is that the Transformer architecture itself can generalize. By providing \"gold\" (i.e., error-free, human-annotated) part-of-speech tags as an input to the model, the task is made significantly easier. The model is no longer required to learn low-level syntactic information from raw text alone; instead, it's given a powerful, explicit clue about the structure. This makes it an invalid test of the architecture's ability to generalize from a task like translation (which operates on raw text) because it now relies on a heavily engineered, task-specific input that shortcuts the core challenge.",
+    "category": "C",
+    "reasoning": "The error undermines the premise of testing the architecture's generalization ability by simplifying the task with pre-processed, \"gold\" data, thus conflating the architecture's inherent ability with its performance on an easier, pre-engineered problem."
+  },
+  {
+    "label": "AttentionIsAllYouNeed_general_c2_v3",
+    "survived": false,
+    "original": "Additionally, we will apply it to English constituency parsing to test its ability to generalize to other structured prediction problems.",
+    "modified": "Additionally, we will apply it to English constituency parsing to test its ability to generalize to other structured prediction problems, reporting the F1 score on non-recursive noun phrases.",
+    "explanation": "The mechanism of this error is **incomplete evaluation via metric selection**. The claim is about generalization to a complex structured prediction task. Constituency parsing involves identifying a full hierarchy of nested phrases (verb phrases, clauses, etc.). By proposing to evaluate performance only on \"non-recursive noun phrases\" (e.g., \"the cat\"), the experiment measures success on arguably the simplest and most frequent type of constituent. A model could perform well on this narrow sub-task while failing completely at capturing the deeper, more complex syntactic structures that define the problem. This cherry-picked metric could produce a high score that falsely suggests successful generalization, while ignoring failure on the core challenges of the task.",
+    "category": "D",
+    "reasoning": "The proposed evaluation metric fails to capture the full scope of the problem it claims to assess, leading to a potentially misleading conclusion about the model's generalization ability."
+  },
+  {
+    "label": "AttentionIsAllYouNeed_general_c3_v1",
+    "survived": true,
+    "original": "We will vary the learning rate over the course of training according to the formula: `lr = d_model^-0.5 * min(step_num^-0.5, step_num * warmup_steps^-1.5)`.",
+    "modified": "We will vary the learning rate over the course of training according to the formula: `lr = d_model^-0.5 * max(step_num^-0.5, step_num * warmup_steps^-1.5)`.",
+    "explanation": "This error replaces the `min` function with `max`. The original formula relies on `min` to select the smaller of two values, creating a learning rate that first increases linearly (the warm-up) and then switches to an inverse square root decay. By using `max`, the logic is inverted. The schedule will start with the very high initial value of the decay curve (`step_num^-0.5`) and then switch to the linear warm-up curve, which will then increase without bound. This would cause training to diverge, directly falsifying the claim that it is an effective strategy. The mechanism of error is a flaw in the control logic that switches between the schedule's phases.",
+    "category": "A",
+    "reasoning": "The modified text's proposed learning rate schedule, by using `max` instead of `min`, would cause the learning rate to increase indefinitely, directly contradicting the implicit goal of an effective learning rate schedule to facilitate convergence."
+  },
+  {
+    "label": "AttentionIsAllYouNeed_general_c3_v2",
+    "survived": false,
+    "original": "We will vary the learning rate over the course of training according to the formula: `lr = d_model^-0.5 * min(step_num^-0.5, step_num * warmup_steps^-1.5)`.",
+    "modified": "We will vary the learning rate over the course of training according to the formula: `lr = d_model^0.5 * min(step_num^-0.5, step_num * warmup_steps^-1.5)`.",
+    "explanation": "This error inverts the sign of the exponent on the `d_model` term, a global scaling factor. The original schedule is designed to normalize the learning rate by the model's dimensionality, effectively using a smaller learning rate for larger models. The modified formula makes the learning rate directly proportional to the square root of the model's dimension. For any typical transformer model where `d_model` is large (e.g., 512 or 1024), this would result in an explosively large learning rate, causing immediate training instability. The mechanism of error is an incorrect global scaling of the entire schedule.",
+    "category": "B",
+    "reasoning": "The modified formula, while internally consistent, clashes with the established understanding in machine learning that excessively large learning rates lead to training instability."
+  },
+  {
+    "label": "AttentionIsAllYouNeed_general_c3_v3",
+    "survived": false,
+    "original": "We will vary the learning rate over the course of training according to the formula: `lr = d_model^-0.5 * min(step_num^-0.5, step_num * warmup_steps^-1.5)`.",
+    "modified": "We will vary the learning rate over the course of training according to the formula: `lr = d_model^-0.5 * min(step_num^-1.5, step_num * warmup_steps^-0.5)`.",
+    "explanation": "This error swaps the exponents on the `step_num` and `warmup_steps` terms. The claim states the schedule has a warm-up followed by a decay based on the inverse square root (`step_num^-0.5`). In the modified formula, the decay phase is now `step_num^-1.5`, a much more aggressive decay that will likely cause the model to prematurely stop learning. Concurrently, the warm-up phase is now governed by `warmup_steps^-0.5`, which would create a much steeper, potentially unstable, warm-up phase. The mechanism of error is a misapplication of the exponents that define the shape and rate of both the warm-up and decay phases.",
+    "category": "B",
+    "reasoning": "The modified formula, while internally consistent, clashes with the established understanding of how learning rates should be scheduled for effective model training, particularly regarding the desired shapes of warm-up and decay phases."
+  },
+  {
+    "label": "AttentionIsAllYouNeed_general_c4_v1",
+    "survived": false,
+    "original": "We will employ label smoothing with a value of \u03f5_ls = 0.1 during training, as this approach is known to improve model robustness.",
+    "modified": "We will employ label smoothing with a value of \u03f5_ls = 0.1 during training, in conjunction with our chosen focal loss function, as this approach is known to improve model robustness.",
+    "explanation": "The mechanism of this error is an incompatible combination of techniques. Focal loss is designed to focus training on hard-to-classify examples by down-weighting the loss assigned to well-classified examples. Label smoothing, conversely, regularizes the model by penalizing overconfident predictions on all examples. Applying them together is non-standard and their effects can be contradictory; label smoothing may soften the very probabilities that focal loss uses to identify \"well-classified\" examples, thereby interfering with the focal loss mechanism.",
+    "category": "A",
+    "reasoning": "The error describes two techniques whose mechanisms interfere with each other, leading to a less effective or contradictory outcome, which is a form of internal inconsistency within the proposed methodology."
+  },
+  {
+    "label": "AttentionIsAllYouNeed_general_c4_v2",
+    "survived": false,
+    "original": "We will employ label smoothing with a value of \u03f5_ls = 0.1 during training, as this approach is known to improve model robustness.",
+    "modified": "We will employ label smoothing with a value of \u03f5_ls = 0.5 during training, as this approach is known to improve model robustness.",
+    "explanation": "The mechanism of this error is a severe parameter misspecification. While \u03f5_ls = 0.1 is a standard and effective value, \u03f5_ls = 0.5 is exceptionally high. This sets the target probability for the correct class to only 0.5, with the remaining 0.5 probability distributed among all incorrect classes. This forces the model to be extremely uncertain and is highly likely to degrade performance and prevent convergence, directly contradicting the claim that it will improve robustness or performance.",
+    "category": "A",
+    "reasoning": "The chosen parameter value directly undermines the stated goal of improving robustness, creating a self-contained logical crash within the proposal."
+  },
+  {
+    "label": "AttentionIsAllYouNeed_general_c4_v3",
+    "survived": false,
+    "original": "We will employ label smoothing with a value of \u03f5_ls = 0.1 during training, as this approach is known to improve model robustness.",
+    "modified": "We will employ label smoothing with a value of \u03f5_ls = 0.1 during training, as this approach is known to explicitly correct for annotation errors in the training data.",
+    "explanation": "The mechanism of this error is a conceptual misunderstanding of the technique's purpose. The modified text claims that label smoothing \"explicitly corrects for annotation errors.\" This is incorrect. Label smoothing is a regularization technique designed to prevent model overconfidence and improve calibration. It does not identify or correct mislabeled examples. Conflating its purpose with that of entirely different methods (e.g., noisy label learning algorithms) demonstrates a fundamental misunderstanding of why the technique is used.",
+    "category": "C",
+    "reasoning": "The error conflates label smoothing with methods for correcting annotation errors, treating two distinct concepts as interchangeable due to a misunderstanding of label smoothing's actual purpose."
+  },
+  {
+    "label": "AttentionIsAllYouNeed_general_c5_v1",
+    "survived": false,
+    "original": "We will also explore averaging multiple model checkpoints to potentially enhance performance.",
+    "modified": "We will also explore averaging multiple model checkpoints, drawn from our various independent training runs, to potentially enhance performance.",
+    "explanation": "This modification introduces a flaw by specifying that the checkpoints to be averaged will come from entirely different, independent training runs. The technique of averaging model parameters (weights) is typically effective only for checkpoints taken from the *same* training run, as they exist within the same low-loss \"basin\" in the parameter space. Models trained independently, even with identical configurations, converge to different solutions in different basins. Averaging their parameters directly is mathematically valid but almost always results in a model whose parameters land in a high-loss region between these distinct solutions, drastically worsening performance. This mistake confuses parameter averaging with ensembling, which combines predictions, not parameters, from independent models.",
+    "category": "B",
+    "reasoning": "The error describes a method that is internally consistent but clashes with the established understanding of how model parameter averaging works in machine learning."
+  },
+  {
+    "label": "AttentionIsAllYouNeed_general_c5_v2",
+    "survived": false,
+    "original": "We will also explore averaging multiple model checkpoints to potentially enhance performance.",
+    "modified": "We will also explore averaging the final gradients of multiple model checkpoints to potentially enhance performance.",
+    "explanation": "This modification introduces a flaw by changing the object of the averaging from the model's parameters (its weights, which are stored in a checkpoint) to the \"final gradients.\" A model's performance is determined by its parameters. Gradients are vectors that indicate the direction of steepest descent on the loss surface during training; they are used to update the parameters but are not the parameters themselves. Averaging the final gradients from several training steps produces a vector that represents an average update direction, but it does not create a new, usable model. This fundamentally misunderstands what a model checkpoint contains and what component needs to be modified to improve inference performance.",
+    "category": "C",
+    "reasoning": "The error conflates model parameters (weights) with gradients, treating them as interchangeable for the purpose of creating a new, usable model, which is a misunderstanding of their distinct roles."
+  },
+  {
+    "label": "AttentionIsAllYouNeed_general_c5_v3",
+    "survived": false,
+    "original": "We will also explore averaging multiple model checkpoints to potentially enhance performance.",
+    "modified": "We will also explore averaging multiple model checkpoints, saved only after the learning rate has fully decayed to zero, to potentially enhance performance.",
+    "explanation": "This modification introduces a flaw related to the timing and conditions of checkpoint selection. The benefit of checkpoint averaging stems from averaging diverse yet high-performing models found during the later stages of training, often while the learning rate is still cyclically high or slowly annealing. This allows the model to explore a wider, flatter region of the loss landscape. By specifying that checkpoints will only be saved *after* the learning rate has decayed to zero, the procedure ensures that all saved models will be nearly identical, clustered tightly around the same single point to which the optimizer has converged. Averaging these nearly-identical checkpoints will yield a model that is virtually indistinguishable from the single best checkpoint, thus offering no \"enhancement\" to performance and rendering the technique ineffective.",
+    "category": "A",
+    "reasoning": "The error creates an internal contradiction because the proposed mechanism (averaging checkpoints after the learning rate has decayed to zero) directly undermines the stated goal (enhancing performance through averaging)."
+  },
+  {
+    "label": "BERT_general_c1_v1",
+    "survived": false,
+    "original": "Language representations jointly conditioned on both left and right context in all layers are more powerful than representations conditioned on unidirectional or shallowly combined bidirectional contexts.",
+    "modified": "Language representations formed by multi-head self-attention mechanisms in all layers are more powerful than representations conditioned on unidirectional or shallowly combined bidirectional contexts.",
+    "explanation": "The mechanism of this error is misattribution of cause. The modified text incorrectly attributes the representations' power to the presence of \"multi-head self-attention mechanisms\" instead of the original's \"jointly conditioned on both left and right context.\" This is a subtle but critical flaw because many powerful unidirectional models (e.g., GPT-series) also use multi-head self-attention in all layers. The comparison is therefore invalidated, as the feature claimed to provide the advantage is also present in the group it is being compared against, making the hypothesis logically unsound.",
+    "category": "C",
+    "reasoning": "The error conflates \"jointly conditioned on both left and right context\" with \"multi-head self-attention mechanisms,\" treating them as interchangeable causes for powerful representations, when in fact multi-head self-attention can also be found in unidirectional models."
+  },
+  {
+    "label": "BERT_general_c1_v2",
+    "survived": false,
+    "original": "Language representations jointly conditioned on both left and right context in all layers are more powerful than representations conditioned on unidirectional or shallowly combined bidirectional contexts.",
+    "modified": "Language representations jointly conditioned on both left and right context in all layers are more powerful than representations conditioned on unidirectional, non-contextual embeddings or shallowly combined bidirectional contexts.",
+    "explanation": "The mechanism of this error is creating an invalid \"straw man\" comparison. The modified text subtly weakens one of the baselines by changing \"unidirectional\" contexts to \"unidirectional, non-contextual embeddings.\" This transforms the comparison from a meaningful one against state-of-the-art contextual models (like early GPT) to a trivial one against older, static embeddings (like Word2Vec). The claim of being \"more powerful\" is now based on defeating a much weaker, obsolete class of models, thus artificially inflating the significance of the proposed approach.",
+    "category": "D",
+    "reasoning": "The error involves setting up a comparison against a much weaker, irrelevant baseline, which is a form of straw-man argument that doesn't fit the definitions of A, B, or C."
+  },
+  {
+    "label": "BERT_general_c1_v3",
+    "survived": false,
+    "original": "Language representations jointly conditioned on both left and right context in all layers are more powerful than representations conditioned on unidirectional or shallowly combined bidirectional contexts.",
+    "modified": "Language representations jointly conditioned on both left and right context via a masked language modeling objective are more powerful than representations conditioned on unidirectional or shallowly combined bidirectional contexts.",
+    "explanation": "The mechanism of this error is overgeneralization from a specific method. The modified text conflates the general architectural property (deep bidirectionality) with the specific training objective used to achieve it (masked language modeling, or MLM). The claim now implies that this specific training method yields universally \"more powerful\" representations. This is false because the choice of objective creates trade-offs. While MLM excels at creating representations for discriminative tasks (e.g., classification), the causal language modeling objective used for unidirectional models makes them far more powerful for generative tasks. The claim is thus falsified by its overly broad and unqualified assertion of superiority.",
+    "category": "C",
+    "reasoning": "The error conflates a general architectural property with a specific training objective, leading to an overgeneralization that ignores the trade-offs and specific strengths of different objectives for different tasks."
+  },
+  {
+    "label": "BERT_general_c2_v1",
+    "survived": true,
+    "original": "This will allow us to isolate the contributions of deep bidirectionality and the NSP task.",
+    "modified": "This will allow us to isolate the contributions of deep bidirectionality and the NSP task, which necessitates a smaller learning rate.",
+    "explanation": "The mechanism of this error is the introduction of a confounding variable. By stating that the removal of the NSP task \"necessitates\" a change in another key hyperparameter (the learning rate), the experimental design is compromised. Any observed difference in performance can no longer be attributed solely to the NSP task; it could be due to the NSP task, the different learning rate, or an interaction between the two. This makes it impossible to \"isolate the contributions\" of the NSP task as claimed.",
+    "category": "A",
+    "reasoning": "The error introduces a confounding variable, which prevents the stated goal of isolating contributions from being achieved, thus creating an internal contradiction."
+  },
+  {
+    "label": "BERT_general_c2_v2",
+    "survived": false,
+    "original": "This will allow us to isolate the contributions of deep bidirectionality and the NSP task.",
+    "modified": "This will allow us to isolate the contributions of a unidirectional architecture and the NSP task.",
+    "explanation": "The mechanism of this error is the use of an inappropriate baseline for comparison. The text now implies a comparison between a model with the NSP task (which is typically bidirectional, like BERT) and a baseline model with a \"unidirectional architecture\" (like GPT). Because the models differ in two fundamental ways simultaneously (directionality and the presence/absence of the NSP task), it is impossible to attribute any performance difference specifically to the NSP task. The experiment fails to isolate the target variable.",
+    "category": "D",
+    "reasoning": "The error describes a flawed experimental design where two variables are changed simultaneously, making it impossible to isolate the effect of one, which is a classic confounding issue."
+  },
+  {
+    "label": "BERT_general_c2_v3",
+    "survived": false,
+    "original": "This will allow us to isolate the contributions of deep bidirectionality and the NSP task.",
+    "modified": "This will allow us to isolate the contributions of deep bidirectionality and the NSP task through performance on single-sentence classification benchmarks.",
+    "explanation": "The mechanism of this error is a flawed or insensitive evaluation metric. The Next Sentence Prediction (NSP) task is designed to teach a model about the relationship between pairs of sentences. Evaluating its contribution using \"single-sentence classification benchmarks\" (e.g., sentiment analysis of one sentence) is a poor choice, as these tasks do not require inter-sentence understanding. The chosen measurement is not sensitive to the specific capability the NSP task is supposed to provide, meaning the experiment could wrongly conclude that NSP has no effect, thus failing to accurately assess its contribution.",
+    "category": "D",
+    "reasoning": "The error lies in using an evaluation metric that is insensitive to the specific capability being measured, which is a flaw in experimental design rather than a logical contradiction, conflict with established beliefs, or conflation of concepts."
+  },
+  {
+    "label": "BERT_general_c3_v1",
+    "survived": false,
+    "original": "We will compare the performance of `BERT_BASE` and `BERT_LARGE` across all tasks to measure the impact of model scale on downstream performance, especially on smaller datasets.",
+    "modified": "We will compare the performance of `BERT_BASE-uncased` and `BERT_LARGE-cased` across all tasks to measure the impact of model scale on downstream performance, especially on smaller datasets.",
+    "explanation": "This modification introduces a critical confounding variable: text casing. The two models not only differ in scale (BASE vs. LARGE) but also in their text normalization (`uncased` vs. `cased`). For many NLP tasks, such as Named Entity Recognition, preserving case is an important signal. Any observed performance difference cannot be cleanly attributed to model scale, as it could be partially or wholly due to the difference in how the models handle capitalization. This invalidates the experiment's design for isolating the effect of scale.",
+    "category": "D",
+    "reasoning": "The error describes a confounding variable that prevents the experiment from isolating the intended effect, which is a classic experimental design flaw."
+  },
+  {
+    "label": "BERT_general_c3_v2",
+    "survived": false,
+    "original": "We will compare the performance of `BERT_BASE` and `BERT_LARGE` across all tasks to measure the impact of model scale on downstream performance, especially on smaller datasets.",
+    "modified": "We will compare the performance of `BERT_BASE` (pre-trained on English Wikipedia) and `BERT_LARGE` (pre-trained on the C4 corpus) across all tasks to measure the impact of model scale on downstream performance, especially on smaller datasets.",
+    "explanation": "This modification introduces a confound based on the pre-training data domain. The experiment now compares two models that differ not only in scale but also in the corpus they were trained on (encyclopedic text vs. a large, filtered web scrape). Performance differences could stem from the fact that one data source is a better fit for the downstream tasks than the other, irrespective of model size. This makes it impossible to conclude that scale is the causal factor for any observed performance gap.",
+    "category": "D",
+    "reasoning": "The error describes a confounded experimental design, which is a type of flaw that doesn't fit the definitions of internal contradiction, conflict with established beliefs, or undermining a premise."
+  },
+  {
+    "label": "BERT_general_c3_v3",
+    "survived": false,
+    "original": "We will compare the performance of `BERT_BASE` and `BERT_LARGE` across all tasks to measure the impact of model scale on downstream performance, especially on smaller datasets.",
+    "modified": "We will compare the performance of `BERT_BASE` and `BERT_LARGE` across all tasks, holding the learning rate constant at 5e-5 for both models, to measure the impact of model scale on downstream performance, especially on smaller datasets.",
+    "explanation": "This modification introduces a flaw in the experimental fine-tuning procedure. While holding hyperparameters constant seems like a controlled experiment, optimal learning rates are often dependent on model size. A learning rate that is optimal for `BERT_BASE` may be sub-optimal (either too high or too low) for the larger `BERT_LARGE` model, and vice-versa. By not tuning the learning rate separately for each model, the comparison is confounded. The resulting performance difference might reflect an improperly tuned model rather than a true effect of architectural scale.",
+    "category": "D",
+    "reasoning": "The error describes a confounded experimental design where a crucial variable (learning rate) is not properly controlled for, leading to an invalid comparison between the models."
+  },
+  {
+    "label": "BERT_general_c4_v1",
+    "survived": false,
+    "original": "For sentence-level classification tasks (MNLI, QQP, QNLI, SST-2, etc.), we will feed the final hidden state of the `[CLS]` token into a new classification layer.",
+    "modified": "For sentence-level classification tasks (MNLI, QQP, QNLI, SST-2, etc.), we will feed the hidden state from the first transformer block for the `[CLS]` token into a new classification layer.",
+    "explanation": "The flaw replaces the \"final hidden state\" with the \"hidden state from the first transformer block\". The final hidden state is the output of the last layer, encapsulating the deepest contextual information. The first block's output is a much shallower, less context-aware representation. This experiment would likely perform poorly, leading to the incorrect conclusion that the `[CLS]` token is an insufficient representation, when the actual issue is that the experiment failed to use the fully processed, final-layer state. The mechanism of error is a failure to use the correct network depth for the representation.",
+    "category": "C",
+    "reasoning": "The error involves using a shallow representation instead of a deep one, which undermines the premise that the `[CLS]` token is being used effectively as a summary of the input."
+  },
+  {
+    "label": "BERT_general_c4_v2",
+    "survived": false,
+    "original": "For sentence-level classification tasks (MNLI, QQP, QNLI, SST-2, etc.), we will feed the final hidden state of the `[CLS]` token into a new classification layer.",
+    "modified": "For sentence-level classification tasks (MNLI, QQP, QNLI, SST-2, etc.), we will feed the average of the final hidden states of the `[CLS]` and `[SEP]` tokens into a new classification layer.",
+    "explanation": "The flaw introduces an un-claimed aggregation step: averaging the `[CLS]` token's state with the `[SEP]` (separator) token's state. The claim is specifically about the sufficiency of the `[CLS]` token's representation *alone*. By combining it with another token's representation, the experiment no longer isolates the variable of interest. The performance of this mixed representation cannot be used to validate or invalidate the claim about the `[CLS]` token specifically. The mechanism of error is the introduction of a confounding variable through an improper pooling strategy.",
+    "category": "D",
+    "reasoning": "The error introduces a confounding variable by combining two distinct token representations, preventing the isolation of the variable of interest and thus fitting the description of a confounded experimental design."
+  },
+  {
+    "label": "BERT_general_c4_v3",
+    "survived": false,
+    "original": "For sentence-level classification tasks (MNLI, QQP, QNLI, SST-2, etc.), we will feed the final hidden state of the `[CLS]` token into a new classification layer.",
+    "modified": "For sentence-level classification tasks (MNLI, QQP, QNLI, SST-2, etc.), we will feed the final hidden state corresponding to the first input token of the sequence into a new classification layer.",
+    "explanation": "The flaw changes the source of the representation from the special `[CLS]` token to the \"first input token\" (i.e., the first actual word of the sentence). The `[CLS]` token is specifically designed and pre-trained to aggregate sentence-level information for classification. The embedding for a regular word is not trained for this purpose and is a much weaker choice for a sentence representation. This flawed design would test a different, less effective hypothesis, and its likely poor results would be misinterpreted as evidence against the standard, correct `[CLS]` token methodology. The mechanism of error is a misunderstanding of the architectural role of special tokens.",
+    "category": "C",
+    "reasoning": "The error conflates the `[CLS]` token with the first input token, treating them as interchangeable for sentence-level classification, despite their distinct architectural roles and training objectives."
+  },
+  {
+    "label": "BERT_general_c5_v1",
+    "survived": false,
+    "original": "We will evaluate BERT on the CoNLL-2003 Named Entity Recognition (NER) task using a feature-based approach... comparing its performance to the standard fine-tuning approach.",
+    "modified": "We will evaluate BERT on the CoNLL-2003 Named Entity Recognition (NER) task using a feature-based approach... comparing its performance to the standard fine-tuning approach, using an AdamW optimizer with a learning rate of 1e-3 for all parameters.",
+    "explanation": "The flaw's mechanism is improper hyperparameter selection. A learning rate of 1e-3 is standard for training a randomly initialized model from scratch but is generally far too high for fine-tuning a large pre-trained model like BERT. This high rate is likely to cause \"catastrophic forgetting,\" where the model's valuable pre-trained weights are destabilized and destroyed during training, leading to very poor performance. This unfairly handicaps the fine-tuning method, making the feature-based approach seem more effective by comparison and invalidating the experiment's ability to test the claim.",
+    "category": "B",
+    "reasoning": "The error involves selecting a hyperparameter that is known to be inappropriate for fine-tuning large pre-trained models like BERT, leading to a predictable negative outcome that invalidates the comparison."
+  },
+  {
+    "label": "BERT_general_c5_v2",
+    "survived": false,
+    "original": "We will evaluate BERT on the CoNLL-2003 Named Entity Recognition (NER) task using a feature-based approach... comparing its performance to the standard fine-tuning approach.",
+    "modified": "We will evaluate BERT on the CoNLL-2003 Named Entity Recognition (NER) task using a feature-based approach... comparing its performance to the standard fine-tuning approach, with the modification that BERT's word embedding layer will remain frozen during training.",
+    "explanation": "The flaw's mechanism is an incorrect implementation of the fine-tuning procedure. While \"standard fine-tuning\" implies unfreezing and training all (or nearly all) model layers, this modification freezes the word embedding layer. This prevents the model from adapting its input token representations to the specific nuances of the NER task, which can significantly hinder performance. This deviation from the standard method creates an artificially constrained model, making the comparison to the feature-based approach unfair and potentially leading to the false conclusion that fine-tuning is less effective.",
+    "category": "B",
+    "reasoning": "The error describes a deviation from a standard procedure, which, while internally consistent, clashes with the established understanding of \"standard fine-tuning\" in the field."
+  },
+  {
+    "label": "BERT_general_c5_v3",
+    "survived": false,
+    "original": "We will evaluate BERT on the CoNLL-2003 Named Entity Recognition (NER) task using a feature-based approach... comparing its performance to the standard fine-tuning approach.",
+    "modified": "We will evaluate BERT on the CoNLL-2003 Named Entity Recognition (NER) task using a feature-based approach where BERT outputs are fed into a BiLSTM-CRF model... comparing its performance to the standard fine-tuning approach.",
+    "explanation": "The flaw's mechanism is a confounding variable introduced by an architectural mismatch. The standard fine-tuning approach for BERT on NER adds only a simple linear layer on top of the transformer. By pairing the feature-based approach with a powerful, specialized BiLSTM-CRF sequence tagging model, the experiment is no longer a fair comparison of transfer learning strategies. It now compares \"frozen BERT + powerful classifier\" against \"fine-tuned BERT + simple classifier.\" Any observed performance difference could be due to the addition of the BiLSTM-CRF, not the superiority of the feature-based method itself, thus invalidating the experiment's conclusion about the claim.",
+    "category": "D",
+    "reasoning": "The error introduces a confounding variable that prevents a fair comparison between the two approaches, which is a flaw in experimental design."
+  },
+  {
+    "label": "FLAWS_general_c1_v1",
+    "survived": false,
+    "original": "The criticality of an error in a scientific paper is a function of its connection to the paper's core claims.",
+    "modified": "The criticality of an error in a scientific paper is a function of its connection to the paper's core claims, which in turn depends on the error's methodological origin.",
+    "explanation": "This introduces a flawed causal chain. It subordinates the \"connection to claims\" (the stated cause) to a different, more fundamental cause: the \"error's methodological origin.\" This falsifies the original claim by reframing the connection as a mere intermediate effect, implying that the type of methodological mistake is the true primary determinant of an error's importance, not its location in the paper.",
+    "category": "C",
+    "reasoning": "The modified text introduces a new causal link that redefines the original concept of \"criticality\" by making it dependent on methodological origin rather than direct connection to core claims, thus undermining the original premise."
+  },
+  {
+    "label": "FLAWS_general_c1_v2",
+    "survived": false,
+    "original": "The criticality of an error in a scientific paper is a function of its connection to the paper's core claims.",
+    "modified": "The criticality of an error in a scientific paper, defined by its proximity to the paper's core claims, is a function of its connection to those same claims.",
+    "explanation": "This flaw is based on circular reasoning (begging the question). By defining \"criticality\" within the premise using the exact same concept as the conclusion (\"proximity/connection to the paper's core claims\"), the statement becomes a tautology. It essentially argues that \"the connection to the claims is a function of the connection to the claims,\" which is logically empty and unfalsifiable, thereby failing to make the meaningful empirical assertion of the original claim.",
+    "category": "D",
+    "reasoning": "The error is a form of circular reasoning, where the definition of a term is used to explain itself, which is a specific type of flaw that doesn't fit the other categories."
+  },
+  {
+    "label": "FLAWS_general_c1_v3",
+    "survived": false,
+    "original": "The criticality of an error in a scientific paper is a function of its connection to the paper's core claims.",
+    "modified": "The retraction likelihood of a scientific paper is a function of an error's connection to the paper's core claims.",
+    "explanation": "This introduces a category error by substituting the abstract concept of \"criticality\" (an error's scientific importance) with a concrete procedural outcome (\"retraction likelihood\"). Retraction is influenced by many factors orthogonal to an error's relationship with the core scientific claims, such as plagiarism, data fabrication, or ethical violations in the methods section. Therefore, the modified claim is false because the primary determinant has been incorrectly identified for this new, distinct category.",
+    "category": "D",
+    "reasoning": "The error involves substituting a concept with a distinct, though related, concept, leading to a false claim due to an incorrect primary determinant, which is a type of category error."
+  },
+  {
+    "label": "FLAWS_general_c2_v1",
+    "survived": true,
+    "original": "This will mitigate model-specific biases in error generation.",
+    "modified": "This will mitigate model-specific biases in error generation, ensuring a diverse sample of reasoning pathways.",
+    "explanation": "The mechanism of this error is a **false assumption of diversity**. The modification adds a clause that asserts a benefit (\"ensuring a diverse sample of reasoning pathways\") that is not guaranteed by the method. Two different state-of-the-art LLMs, especially if they share the same underlying architecture (e.g., Transformer) and were trained on similar massive web corpora, are likely to have highly correlated failure modes and biases. The benchmark would therefore not be protected from the biases common to an entire *class* of models, and the claim of sufficiency is undermined because the resulting errors may not be diverse at all.",
+    "category": "C",
+    "reasoning": "The error assumes that using two different LLMs will automatically lead to diverse error types, which is a hidden assumption about the nature of LLM biases that is not necessarily true."
+  },
+  {
+    "label": "FLAWS_general_c2_v2",
+    "survived": false,
+    "original": "This will mitigate model-specific biases in error generation.",
+    "modified": "This will mitigate model-specific biases in error generation, with the final errors selected for inclusion being those that both models independently generated.",
+    "explanation": "The mechanism of this error is **selection bias that amplifies shared characteristics**. The added procedural detail completely inverts the intended outcome. While using inter-model agreement might seem like a way to filter for \"high-quality\" or \"robust\" errors, it systematically discards the unique errors from each model. The process actively selects for the intersection of the two models' biases. Instead of mitigating model-specific biases by capturing a wider variety of errors, this method concentrates the benchmark on only the errors that both models are predisposed to make, thus amplifying their shared biases.",
+    "category": "A",
+    "reasoning": "The proposed modification, by selecting only errors generated by both models, directly contradicts the stated goal of mitigating model-specific biases, as it amplifies shared biases instead."
+  },
+  {
+    "label": "FLAWS_general_c2_v3",
+    "survived": false,
+    "original": "This will mitigate model-specific biases in error generation.",
+    "modified": "This will mitigate model-specific biases in error generation by using a large language model and its corresponding instruct-tuned version.",
+    "explanation": "The mechanism of this error is the introduction of a **confounding variable**. The claim is that the method mitigates *model-specific* bias, but the modified text reveals that the comparison is between a base model and its instruct-tuned version. The observed differences in generated errors are now confounded; it is impossible to disentangle the effect of the base model's characteristics from the effect of the instruct-tuning process. The benchmark would be measuring a combination of two different variables, making the claim to have isolated and mitigated \"model-specific\" biases false.",
+    "category": "D",
+    "reasoning": "The error describes a confounding variable in the experimental design, which is a type of flaw that doesn't fit the definitions of A, B, or C."
+  },
+  {
+    "label": "FLAWS_general_c3_v1",
+    "survived": true,
+    "original": "ensuring they were first posted on arXiv after the knowledge cutoff dates of the models we plan to test.",
+    "modified": "ensuring their formal assignment of an arXiv ID occurred after the knowledge cutoff dates of the models we plan to test.",
+    "explanation": "The mechanism of this error is **data leakage from an alternative source**. This modification narrows the check to a bureaucratic event (assignment of an arXiv ID) rather than the first public appearance of the content. A paper's text could have existed on a researcher's personal website, a workshop page, or a different preprint server for months before being formally submitted to arXiv. Web-crawling for LLM training data would likely have captured these earlier, informal versions, thus contaminating the test set even though the arXiv ID is \"new\".",
+    "category": "C",
+    "reasoning": "The error introduces a new, hidden assumption that the formal arXiv ID assignment is the sole or primary mechanism for a paper's content to become publicly available and thus accessible to LLM training data, which is not necessarily true."
+  },
+  {
+    "label": "FLAWS_general_c3_v2",
+    "survived": false,
+    "original": "ensuring they were first posted on arXiv after the knowledge cutoff dates of the models we plan to test.",
+    "modified": "ensuring their most recent revision on arXiv was posted after the knowledge cutoff dates of the models we plan to test.",
+    "explanation": "The mechanism of this error is **temporal data leakage via versioning**. The flaw is substituting the date of the \"most recent revision\" for the \"first posted\" date. A paper could have its first version (v1) posted before the knowledge cutoff, with its core ideas and text becoming part of the training data. A later revision (v2, v3) with minor changes or additions posted after the cutoff would be incorrectly selected as \"new\" data, leading to contamination. A researcher might plausibly make this mistake while trying to use the most \"up-to-date\" version of a paper for evaluation.",
+    "category": "D",
+    "reasoning": "The error introduces a data leakage vector by using a \"most recent revision\" date instead of the \"first posted\" date, which would allow information from older versions of papers to contaminate the \"new\" data, thus undermining the premise of evaluating models on unseen information."
+  },
+  {
+    "label": "FLAWS_general_c3_v3",
+    "survived": false,
+    "original": "ensuring they were first posted on arXiv after the knowledge cutoff dates of the models we plan to test.",
+    "modified": "ensuring the paper\u2019s novel results were first posted on arXiv after the knowledge cutoff dates of the models we plan to test.",
+    "explanation": "The mechanism of this error is **indirect contamination through content overlap**. This modification shifts the evaluation criterion from the novelty of the entire document to the novelty of only its \"results\". A paper could be published after the cutoff date with new results, but its entire methodology, background, and literature review sections could be copied nearly verbatim from a prior work by the same authors that was published before the cutoff. The LLM would have been trained on the methodological text, allowing it to \"cheat\" by recognizing the experimental setup, even if the final results are new to it.",
+    "category": "C",
+    "reasoning": "The error conflates the novelty of a paper's results with the novelty of its entire content, allowing for a hidden assumption that the entire paper is new when only the results might be."
+  },
+  {
+    "label": "FLAWS_general_c4_v1",
+    "survived": true,
+    "original": "We will impose constraints on the maximum number and length of excerpts to prevent trivial solutions.",
+    "modified": "We will impose constraints on the maximum number of excerpts to prevent trivial solutions.",
+    "explanation": "This version introduces an error of omission. By removing the constraint on \"length,\" the rule becomes ineffective. A model could adhere to the constraint by returning a single excerpt (a valid number) that contains the entire source document. This represents a trivial solution, directly undermining the claim that the constraints are an effective way to prevent such strategies.",
+    "category": "A",
+    "reasoning": "The modified text's stated mechanism (constraining the number of excerpts) fails to achieve its stated goal (preventing trivial solutions) because a trivial solution can still be formed within the new constraints."
+  },
+  {
+    "label": "FLAWS_general_c4_v2",
+    "survived": true,
+    "original": "We will impose constraints on the maximum number and length of excerpts to prevent trivial solutions.",
+    "modified": "We will impose constraints by truncating excerpts to a maximum number and length to prevent trivial solutions.",
+    "explanation": "This version introduces a flawed implementation mechanism. By specifying that constraints are enforced via post-hoc \"truncating,\" the method fails to influence the model's underlying generation strategy. The model can still use a trivial, non-analytical approach (e.g., copying a huge block of text), with the system simply cutting off the excess. This does not stop the model from *using* the trivial strategy, it only cleans the final output, thus falsifying the claim that the constraint effectively prevents the undesirable behavior.",
+    "category": "A",
+    "reasoning": "The proposed mechanism (truncating) fails to achieve the stated goal (preventing trivial solutions), creating a self-contained logical crash within the proposal."
+  },
+  {
+    "label": "FLAWS_general_c4_v3",
+    "survived": true,
+    "original": "We will impose constraints on the maximum number and length of excerpts to prevent trivial solutions.",
+    "modified": "We will impose constraints on the maximum number and sentence length of excerpts to prevent trivial solutions.",
+    "explanation": "This version introduces an error by using an inappropriate and easily gameable unit of measurement. \"Sentence length\" is not a robust metric for constraining text quantity. A model could find a single, very long, or run-on sentence that contains all the necessary information, effectively bypassing the spirit of the constraint. Because the chosen unit is too coarse and variable, the constraint is not an effective method for preventing simplistic, copy-paste solutions, thus falsifying the claim.",
+    "category": "C",
+    "reasoning": "The error lies in choosing a metric that, while formally applied, fails to achieve the stated goal of preventing trivial solutions, thus undermining the premise of the constraint."
+  },
+  {
+    "label": "FLAWS_general_c5_v1",
+    "survived": false,
+    "original": "We will then compare the results of our automated evaluation metric against the human consensus to confirm its alignment with human judgment.",
+    "modified": "We will then calculate the raw percentage agreement between our automated evaluation metric and the human consensus to confirm its alignment with human judgment.",
+    "explanation": "The mechanism of this error is statistical. It replaces a general (and appropriate) comparison with a specific but flawed statistical method. Raw percentage agreement does not account for agreement that occurs by chance, which can be very high in tasks with few categories (e.g., pass/fail). A high raw agreement score could be misleadingly presented as evidence of \"consistency,\" when a more rigorous metric like Cohen's Kappa (which corrects for chance) would reveal the metric is performing poorly. This undermines the claim by using a weak and potentially deceptive standard of evidence for \"consistency.\"",
+    "category": "C",
+    "reasoning": "The error introduces a statistical method that, while internally consistent, fails to adequately measure the intended concept of \"alignment with human judgment\" by not accounting for chance agreement, thereby undermining the premise that the chosen metric can confirm alignment."
+  },
+  {
+    "label": "FLAWS_general_c5_v2",
+    "survived": false,
+    "original": "We will then compare the results of our automated evaluation metric against the human consensus to confirm its alignment with human judgment.",
+    "modified": "We will then compare the results of our automated evaluation metric against the human consensus, who will be provided with the full generation context, to confirm its alignment with human judgment.",
+    "explanation": "The mechanism of this error is a methodological mismatch. By stating that human experts receive \"the full generation context\" without specifying that the automated metric does as well, the text implies an unfair comparison. The humans and the machine are no longer performing the identical task; the humans have access to privileged information (e.g., the original prompt or user intent) that the metric may not. Any observed alignment would be suspect, as the metric could be succeeding or failing for entirely different reasons than the humans. This flaw attacks the claim's premise that the metric's results are consistent with expert judgment *on the same task*.",
+    "category": "C",
+    "reasoning": "The error undermines the premise of comparing the automated metric to human judgment on the same task by giving humans privileged information not available to the metric."
+  },
+  {
+    "label": "FLAWS_general_c5_v3",
+    "survived": false,
+    "original": "We will then compare the results of our automated evaluation metric against the human consensus to confirm its alignment with human judgment.",
+    "modified": "We will then compare the results of our automated evaluation metric against the human consensus, which will be established by having experts refine the initial scores from our metric, to confirm its alignment with human judgment.",
+    "explanation": "The mechanism of this error is data contamination, creating a circular dependency. The \"human consensus\" is no longer an independent ground truth; instead, it is anchored to and derived from the metric's own output. By having experts \"refine the initial scores,\" the experiment introduces a strong bias (anchoring bias) that will artificially inflate the agreement between the metric and the human ratings. The evaluation is no longer a valid test of the metric against an external standard, but a self-referential loop. This directly undermines the claim by creating an experimental design that is guaranteed to produce the desired \"consistency\" irrespective of the metric's actual quality.",
+    "category": "A",
+    "reasoning": "The error creates a circular dependency where the \"human consensus\" is no longer an independent ground truth, thus undermining the stated goal of confirming the metric's alignment with human judgment."
+  },
+  {
+    "label": "InnoEval_general_c1_v1",
+    "survived": false,
+    "original": "A systematic and robust assessment of a research idea is achieved through a process that combines knowledgeable grounding against existing work, collective deliberation from diverse perspectives, and multi-criteria decision-making.",
+    "modified": "A systematic and robust assessment of a research idea is achieved through a process that combines knowledgeable grounding against existing work, collective deliberation from aligned perspectives, and multi-criteria decision-making.",
+    "explanation": "The mechanism of error is a **mischaracterization of a necessary component**. The flaw substitutes \"aligned perspectives\" for \"diverse perspectives.\" While \"aligned\" may sound positive (implying consensus or teamwork), it critically undermines the goal of a \"robust\" assessment. Robustness requires an idea to be stress-tested against genuinely different and potentially conflicting viewpoints. Deliberation from aligned perspectives is prone to groupthink, reinforcing shared biases rather than identifying hidden flaws. Therefore, this combination of factors is no longer *sufficient* to produce a robust assessment, falsifying the claim.",
+    "category": "A",
+    "reasoning": "The modified text's proposed mechanism (\"aligned perspectives\") directly undermines its stated goal (\"robust assessment\"), creating an internal logical conflict."
+  },
+  {
+    "label": "InnoEval_general_c1_v2",
+    "survived": false,
+    "original": "A systematic and robust assessment of a research idea is achieved through a process that combines knowledgeable grounding against existing work, collective deliberation from diverse perspectives, and multi-criteria decision-making.",
+    "modified": "A systematic and robust assessment of a research idea is achieved through a process that combines knowledgeable grounding against established paradigms, collective deliberation from diverse perspectives, and multi-criteria decision-making.",
+    "explanation": "The mechanism of error is the introduction of a **hidden and potentially invalid assumption**. The flaw replaces the broad \"existing work\" with the much narrower \"established paradigms.\" This makes the entire assessment process dependent on the correctness of the current dominant paradigm. A truly robust process must be able to evaluate novel ideas that may challenge or exist outside of established paradigms. By constraining the grounding in this way, the process is no longer *sufficient* for assessing potentially transformative or paradigm-shifting research, thus falsifying the claim of general sufficiency.",
+    "category": "C",
+    "reasoning": "The error conflates \"existing work\" with \"established paradigms,\" treating them as interchangeable when they are distinct concepts, thereby introducing a hidden assumption that undermines the stated goal of robust assessment."
+  },
+  {
+    "label": "InnoEval_general_c1_v3",
+    "survived": true,
+    "original": "A systematic and robust assessment of a research idea is achieved through a process that combines knowledgeable grounding against existing work, collective deliberation from diverse perspectives, and multi-criteria decision-making.",
+    "modified": "A systematic and robust assessment of a research idea is achieved through a process that combines knowledgeable grounding against existing work, collective deliberation from diverse perspectives, and multi-criteria decision-making oriented toward institutional alignment.",
+    "explanation": "The mechanism of error is a **goal-method mismatch**. The flaw adds the qualifier \"oriented toward institutional alignment,\" which subtly redirects the purpose of the decision-making component. The process may still be systematic, but it is no longer optimized for assessing the intrinsic scientific merit and robustness of the research idea. Instead, it prioritizes the idea's fit with the institution's strategic goals. A scientifically weak but well-aligned idea could be favored over a scientifically strong but poorly aligned one. The process is therefore not *sufficient* to produce a robust assessment *of the research idea itself*, as it conflates scientific validity with administrative suitability.",
+    "category": "A",
+    "reasoning": "The modified text introduces a goal-method mismatch where the stated goal of \"robust assessment of a research idea\" is undermined by a method (\"institutional alignment\") that prioritizes something else."
+  },
+  {
+    "label": "InnoEval_general_c2_v1",
+    "survived": false,
+    "original": "This process will yield groups of ideas with an inherent ground-truth ranking, from which we can also derive pair-wise comparison tasks.",
+    "modified": "This non-anonymized process will yield groups of ideas with an inherent ground-truth ranking, from which we can also derive pair-wise comparison tasks.",
+    "explanation": "The mechanism of this error is the introduction of a powerful confounding variable. By specifying the process is \"non-anonymized,\" it ensures that reviewer decisions can be influenced by author identity, institutional prestige, or prior reputation. The resulting hierarchy is therefore not an \"inherent ground-truth ranking\" of the *idea's quality* alone, but a biased composite of the idea's quality and the author's reputation. This undermines the claim's validity by introducing a systematic, well-known procedural flaw.",
+    "category": "A",
+    "reasoning": "The error introduces a confounding variable that prevents the stated mechanism from achieving its stated goal of an \"inherent ground-truth ranking\" of ideas, thus creating an internal contradiction."
+  },
+  {
+    "label": "InnoEval_general_c2_v2",
+    "survived": false,
+    "original": "This process will yield groups of ideas with an inherent ground-truth ranking, from which we can also derive pair-wise comparison tasks.",
+    "modified": "This process will yield groups of ideas with an inherent ground-truth ranking of their alignment with programmatic priorities, from which we can also derive pair-wise comparison tasks.",
+    "explanation": "The mechanism of this error is a misalignment of the measured construct (a construct validity error). The claim is that the ranking reflects the \"quality of the underlying research ideas.\" This modification explicitly states that the process ranks something else entirely: \"alignment with programmatic priorities.\" A brilliant, high-quality idea that is out-of-scope for the program would be ranked low, while a mediocre but perfectly aligned idea would be ranked high. The ranking is valid for what it measures, but it does not measure the construct it is claimed to, thus falsifying the assertion.",
+    "category": "C",
+    "reasoning": "The error involves measuring \"alignment with programmatic priorities\" while claiming to measure \"quality of underlying research ideas,\" which is a conflation of two distinct concepts."
+  },
+  {
+    "label": "InnoEval_general_c2_v3",
+    "survived": false,
+    "original": "This process will yield groups of ideas with an inherent ground-truth ranking, from which we can also derive pair-wise comparison tasks.",
+    "modified": "This process will yield groups of ideas with an inherent ground-truth classification, from which we can also derive pair-wise comparison tasks.",
+    "explanation": "The mechanism of this error is a mismatch in the type of measurement scale. The claim rests on the existence of a \"ranking,\" which is an ordinal scale (e.g., Reject < Poster < Oral). This modification replaces \"ranking\" with \"classification,\" which implies a nominal, non-ordered scale. For example, ideas might be classified into thematic categories like \"theoretical,\" \"empirical,\" or \"methodological.\" While these may be valid \"ground-truth\" categories, they are not ordered by quality and do not constitute a ranking. Treating a classification as a ranking is a fundamental error in measurement theory that invalidates the claim.",
+    "category": "C",
+    "reasoning": "The error conflates a nominal scale (classification) with an ordinal scale (ranking), treating them as interchangeable when they are fundamentally distinct concepts in measurement theory."
+  },
+  {
+    "label": "InnoEval_general_c3_v1",
+    "survived": true,
+    "original": "We will use an extraction agent to convert these papers into a structured idea format, followed by manual verification.",
+    "modified": "We will use an extraction agent to convert these papers into a structured idea format, followed by manual completion and verification.",
+    "explanation": "The mechanism of this error is the conflation of verification with generation. By changing \"manual verification\" to \"manual completion and verification,\" the text now implies that the agent's initial output is expected to be incomplete. The crucial step of forming a full representation of the \"core research idea\" is offloaded to the manual human step. This undermines the claim that the *agent* is capable of accurately representing the idea, as the final, evaluated artifact would be a human-agent composite, not the agent's own output.",
+    "category": "C",
+    "reasoning": "The error conflates two distinct concepts (verification and generation/completion) as if they were interchangeable or part of the same process, thereby undermining the premise that the agent itself is capable of fully performing the task."
+  },
+  {
+    "label": "InnoEval_general_c3_v2",
+    "survived": false,
+    "original": "We will use an extraction agent to convert these papers into a structured idea format, followed by manual verification.",
+    "modified": "We will use an extraction agent to convert these papers into a structured idea format, followed by manual verification of the extracted bibliographic data.",
+    "explanation": "The mechanism of this error is a misaligned scope of verification. The modification specifies that manual verification is only applied to \"bibliographic data\" (e.g., authors, year, journal). This creates a critical flaw: the most important part of the claim\u2014the accurate representation of the \"core research idea\"\u2014is left entirely unverified. The methodology only ensures the accuracy of superficial metadata, not the complex semantic content. Therefore, the process described cannot substantiate the claim about the agent's capability.",
+    "category": "A",
+    "reasoning": "The error creates a self-contained logical crash where the stated verification mechanism fails to address the core goal of the extraction agent, leaving the most important part of the claim unverified."
+  },
+  {
+    "label": "InnoEval_general_c3_v3",
+    "survived": false,
+    "original": "We will use an extraction agent to convert these papers into a structured idea format, followed by manual verification.",
+    "modified": "We will use an extraction agent to convert these papers into a structured idea format, preceded by manual tagging of their core claims.",
+    "explanation": "The mechanism of this error is an inverted process dependency. By changing \"followed by manual verification\" to \"preceded by manual tagging of their core claims,\" the order of operations is reversed. The agent is no longer processing the raw paper but is instead working from human-annotated input where the most difficult task\u2014identifying the core claims\u2014has already been done. This makes the agent's task trivial and invalidates the claim that the agent itself is capable of converting a full research paper into an accurate representation of its core idea.",
+    "category": "C",
+    "reasoning": "The error changes the process such that the agent's task becomes trivial, thus undermining the original premise that the agent is capable of performing the complex conversion task."
+  },
+  {
+    "label": "InnoEval_general_c4_v1",
+    "survived": false,
+    "original": "We will frame this as a classification problem (binary: Accept/Reject; ternary: Reject/Poster/Highlight) and measure performance using Accuracy and macro F1 score.",
+    "modified": "We will frame this as a classification problem (binary: Accept/Reject; ternary: Reject/Poster/Highlight) and measure performance using the Accuracy score.",
+    "explanation": "The mechanism of error is the selection of a metric that is inappropriate for the likely data distribution. By removing \"macro F1 score,\" the evaluation relies solely on Accuracy. The specified classes (e.g., Reject/Poster/Highlight) are almost certain to be severely imbalanced in a real-world setting, with \"Reject\" being the vast majority class. Accuracy is a notoriously misleading metric for imbalanced datasets, as a useless model that only predicts the majority class can achieve a very high score. This makes the measurement not meaningful.",
+    "category": "D",
+    "reasoning": "The error involves selecting a metric that is inappropriate for the likely data distribution, which is a flaw in experimental design and metric choice, not a self-contradiction, conflict with established beliefs, or premise undermining."
+  },
+  {
+    "label": "InnoEval_general_c4_v2",
+    "survived": false,
+    "original": "We will frame this as a classification problem (binary: Accept/Reject; ternary: Reject/Poster/Highlight) and measure performance using Accuracy and macro F1 score.",
+    "modified": "We will frame this as a classification problem (binary: Accept/Reject; ternary: Reject/Poster/Highlight) and measure performance using Accuracy and Cohen's Kappa.",
+    "explanation": "The mechanism of error is a mismatch between the nature of the task and the chosen evaluation metric. The ternary classes (Reject/Poster/Highlight) have an inherent ordinal relationship (Highlight > Poster > Reject). The standard (unweighted) Cohen's Kappa is a metric for nominal classification, treating all misclassifications as equally severe. It would not penalize a major error (e.g., predicting 'Reject' for a 'Highlight' paper) more than a minor one (predicting 'Poster' for a 'Highlight' paper), thus failing to capture a crucial aspect of performance and making the measurement not meaningful for this task.",
+    "category": "D",
+    "reasoning": "The error involves using an inappropriate metric for the task, which is a type of flaw that doesn't fit the self-contradiction, external conflict, or premise-undermining categories."
+  },
+  {
+    "label": "InnoEval_general_c4_v3",
+    "survived": false,
+    "original": "We will frame this as a classification problem (binary: Accept/Reject; ternary: Reject/Poster/Highlight) and measure performance using Accuracy and macro F1 score.",
+    "modified": "We will frame this as a classification problem (binary: Accept/Reject; ternary: Reject/Poster/Highlight) and measure performance using rank-normalized Accuracy and macro F1 score.",
+    "explanation": "The mechanism of error is methodological incoherence, where a scientific-sounding term is applied in a nonsensical context. \"Rank-normalized Accuracy\" is a meaningless phrase. Accuracy is a single scalar value computed over a dataset (or fold); one cannot \"rank-normalize\" a single number. This error suggests a superficial \"cargo cult\" understanding of statistics, where a procedure is named without understanding its meaning or applicability. This renders the proposed measurement framework ill-defined and therefore not meaningful.",
+    "category": "D",
+    "reasoning": "The error introduces a term that is nonsensical in the given context, making the proposed measurement framework ill-defined rather than internally contradictory, conflicting with established beliefs, or undermining a premise."
+  },
+  {
+    "label": "InnoEval_general_c5_v1",
+    "survived": false,
+    "original": "To confirm the contribution of each component, we will conduct several ablation studies, including ... replacing the innovation review board with a single LLM-as-a-Judge...",
+    "modified": "To confirm the contribution of each component, we will conduct several ablation studies, including ... replacing the innovation review board with a single, more powerful LLM-as-a-Judge...",
+    "explanation": "The mechanism of this error is a **confounding variable**. The study is supposed to isolate the effect of the review board structure (multiple personas vs. a single entity). By simultaneously changing a second variable\u2014the capability of the underlying model to a \"more powerful\" one\u2014the experiment becomes confounded. Any observed difference in outcome can no longer be attributed solely to the board structure. For example, if the single judge performs worse, is it because the single-judge setup is inferior, or because the \"more powerful\" model overthinks or hallucinates more? The results are rendered uninterpretable.",
+    "category": "D",
+    "reasoning": "The error describes a confounding variable, which is a type of experimental design flaw that prevents clear interpretation of results, fitting into the \"Others\" category."
+  },
+  {
+    "label": "InnoEval_general_c5_v2",
+    "survived": false,
+    "original": "To confirm the contribution of each component, we will conduct several ablation studies, including ... replacing the innovation review board with a single LLM-as-a-Judge...",
+    "modified": "To confirm the contribution of each component, we will conduct several ablation studies, including ... replacing the innovation review board with a single LLM-as-a-Judge using the prompt designed for the board's 'skeptic' persona...",
+    "explanation": "The mechanism of this error is a **misaligned comparison (straw man)**. A single, holistic LLM-as-a-Judge would require a prompt engineered specifically for that role. By instead using a prompt designed for a narrow, adversarial persona ('skeptic'), the single judge is being set up to fail. Its evaluation will be inherently biased and incomplete, not representative of what a properly configured single judge could do. This makes the innovation review board appear superior not because of its intrinsic merit, but because the alternative it's being compared against has been unfairly handicapped.",
+    "category": "D",
+    "reasoning": "The error describes a misaligned comparison where the alternative is unfairly handicapped, which is a form of straw-man argument."
+  },
+  {
+    "label": "InnoEval_general_c5_v3",
+    "survived": false,
+    "original": "To confirm the contribution of each component, we will conduct several ablation studies, including ... replacing the innovation review board with a single LLM-as-a-Judge...",
+    "modified": "To confirm the contribution of each component, we will conduct several ablation studies, including ... replacing the innovation review board with a single LLM-as-a-Judge to measure the effect on feedback diversity...",
+    "explanation": "The mechanism of this error is **begging the question via a flawed proxy metric**. The experiment's goal is redefined from measuring \"benefit\" to measuring \"feedback diversity.\" A multi-persona board is, by its very design, guaranteed to produce more diverse feedback than a single LLM. Therefore, the experiment is set up to automatically confirm the board's superiority on this specific metric. However, it fails to establish that \"diversity\" is a valid proxy for actual evaluation quality or benefit. The experiment proves the board is more diverse, but it doesn't prove it's better, thus failing to support the claim.",
+    "category": "D",
+    "reasoning": "The error redefines the goal of the experiment by substituting a proxy metric that is inherently biased towards the original component, thus failing to measure the intended \"benefit\" and making the conclusion circular."
+  },
+  {
+    "label": "SoundnessBench_general_c1_v1",
+    "survived": false,
+    "original": "exhibiting a bias towards optimism and high sensitivity to prompt framing",
+    "modified": "exhibiting a bias towards optimism, driven by high sensitivity to positive prompt framing",
+    "explanation": "This modification introduces a confounding variable. It changes the relationship between \"optimism\" and \"prompt framing\" from a simple conjunction to a causal one. The claim is that LLMs have an intrinsic optimism bias. This modified text suggests the observed \"optimism\" is merely an artifact of the model's sensitivity to positively framed prompts used in the study, rather than a systematic bias towards optimism in general. The underlying mechanism is acquiescence bias being misidentified as optimism bias.",
+    "category": "C",
+    "reasoning": "The error reinterprets an observed phenomenon (optimism bias) as an artifact of the experimental setup (sensitivity to positive framing), thereby undermining the premise that the LLM has an intrinsic optimism bias."
+  },
+  {
+    "label": "SoundnessBench_general_c1_v2",
+    "survived": false,
+    "original": "exhibiting a bias towards optimism and high sensitivity to prompt framing",
+    "modified": "exhibiting a bias towards optimism in instruction-tuned models and high sensitivity to prompt framing",
+    "explanation": "This modification introduces an error of overgeneralization. The original claim is about \"Large Language Models\" as a broad category. By specifying that the bias is observed \"in instruction-tuned models,\" the text now suggests the finding may not be generalizable to all LLMs (e.g., base models). The claim is thus falsified because the phenomenon is not a property of LLMs in general, but a characteristic of a specific, non-representative subset, likely due to their fine-tuning for helpful and agreeable dialogue.",
+    "category": "B",
+    "reasoning": "The error restricts a general claim to a specific subset, thereby misrepresenting the scope of the original finding and creating a conflict with the established understanding that the bias applies more broadly to LLMs."
+  },
+  {
+    "label": "SoundnessBench_general_c1_v3",
+    "survived": false,
+    "original": "exhibiting a bias towards optimism and high sensitivity to prompt framing",
+    "modified": "exhibiting a bias towards optimism in its textual ratings and high sensitivity to prompt framing",
+    "explanation": "This modification introduces an error of construct invalidity. The claim is that LLMs are optimistic about the *soundness* of proposals. This modified text subtly shifts the object of the optimism to the \"textual ratings\" themselves. This implies the model is not making a flawed judgment about the scientific merit, but rather that its rating scale or mechanism is inherently skewed positive. The model might be accurately rating a different construct, such as rhetorical quality or structural coherence, which the researchers have then misinterpreted as a biased evaluation of soundness.",
+    "category": "C",
+    "reasoning": "The error conflates \"optimism about soundness\" with \"optimism in textual ratings,\" treating them as interchangeable when they represent distinct constructs."
+  },
+  {
+    "label": "SoundnessBench_general_c2_v1",
+    "survived": false,
+    "original": "high sensitivity to prompt framing",
+    "modified": "high sensitivity to prompt sampling",
+    "explanation": "This error introduces a confounding variable by replacing the semantic concept of \"framing\" with the technical, stochastic process of \"sampling.\" The claim is that the *wording* of the prompt causes judgment instability. This modification suggests the instability is actually caused by the model's generation parameters (like temperature or top-p sampling), which control randomness. A researcher might mistakenly vary both framing and sampling parameters simultaneously and misattribute the resulting variance solely to framing, thus falsifying the claimed causal link.",
+    "category": "C",
+    "reasoning": "The error conflates two distinct concepts, \"framing\" and \"sampling,\" as if they are interchangeable, which could lead to a flawed experimental design and misattribution of causality."
+  },
+  {
+    "label": "SoundnessBench_general_c2_v2",
+    "survived": true,
+    "original": "high sensitivity to prompt framing",
+    "modified": "high compliance with prompt framing",
+    "explanation": "This error mischaracterizes the effect. The claim states the LLM's judgment is \"unstable,\" implying unpredictable or chaotic variance. \"Compliance\" suggests a predictable, stable bias instead. For example, a prompt framed to be \"critical\" will consistently produce a critical review, while one framed to be \"supportive\" will consistently produce a supportive one. This is a predictable, systematic bias, not instability. By replacing \"sensitivity\" with \"compliance,\" the flaw redefines the observed phenomenon in a way that directly contradicts the claim of \"instability.\"",
+    "category": "A",
+    "reasoning": "The error redefines the observed phenomenon in a way that directly contradicts the claim of \"instability\" made elsewhere in the text, creating a self-contained logical crash."
+  },
+  {
+    "label": "SoundnessBench_general_c2_v3",
+    "survived": true,
+    "original": "high sensitivity to prompt framing",
+    "modified": "high sensitivity to prompt keywords",
+    "explanation": "This error trivializes the proposed cause. \"Framing\" implies a subtle, holistic, and semantic context that influences judgment. \"Keywords\" reduces the cause to a simple, mechanical trigger. This modification suggests the LLM is not responding to a nuanced frame but is merely pattern-matching explicit words like \"critique,\" \"flaw,\" or \"strength\" in the prompt. This changes the mechanism from a complex, cognitive-like bias (sensitivity to framing) to simple instruction-following, undermining the novelty and significance of the claim being made.",
+    "category": "C",
+    "reasoning": "The error conflates \"framing\" and \"keywords,\" treating them as interchangeable when they represent distinct mechanisms, thereby undermining the original premise about the nature of LLM sensitivity."
+  },
+  {
+    "label": "SoundnessBench_general_c3_v1",
+    "survived": false,
+    "original": "This prompt will instruct the model to act as a strict critic, defaulting to a \"low soundness\" rating unless the proposal demonstrates exceptionally clear and rigorous methodology.",
+    "modified": "This prompt will instruct the model to act as a strict critic, defaulting to a \"low soundness\" rating unless the proposal demonstrates exceptionally clear and formally structured methodology.",
+    "explanation": "The mechanism of this error is a **confounding variable**. By changing \"rigorous\" to \"formally structured,\" the prompt's condition for a high rating is altered from a deep quality (methodological rigor) to a surface-level one (formatting and structure). An LLM might easily learn to associate \"formally structured\" with the presence of specific headings (e.g., \"Introduction,\" \"Methods,\" \"Statistical Power Analysis\") or academic formatting, regardless of the actual scientific validity of the content. This undermines the claim that the prompt induces a default based on *rigor*; instead, it induces a default based on a shallow, easily confounded proxy.",
+    "category": "D",
+    "reasoning": "The error introduces a confounding variable by replacing a deep quality with a surface-level proxy, which is a type of experimental design flaw."
+  },
+  {
+    "label": "SoundnessBench_general_c3_v2",
+    "survived": true,
+    "original": "This prompt will instruct the model to act as a strict critic, defaulting to a \"low soundness\" rating unless the proposal demonstrates exceptionally clear and rigorous methodology.",
+    "modified": "This prompt will instruct the model to act as a strict critic, prioritizing constructive feedback over summary judgment and defaulting to a \"low soundness\" rating unless the proposal demonstrates exceptionally clear and rigorous methodology.",
+    "explanation": "The mechanism of this error is an **internal contradiction in the prompt's logic**. The added clause, \"prioritizing constructive feedback over summary judgment,\" creates a conflict with the instruction to \"default to a 'low soundness' rating.\" An LLM faced with these competing directives may behave erratically. It might ignore the default instruction, apply it inconsistently, or produce verbose feedback that obscures its final rating. This falsifies the claim that the prompt can *reliably* induce the specific default behavior, as the contradictory goals make the model's output unpredictable.",
+    "category": "A",
+    "reasoning": "The error creates a self-contained logical crash within the prompt's instructions, where one part of the instruction directly conflicts with another part, making the model's behavior unpredictable based on the prompt's own stated goals."
+  },
+  {
+    "label": "SoundnessBench_general_c3_v3",
+    "survived": false,
+    "original": "This prompt will instruct the model to act as a strict critic, defaulting to a \"low soundness\" rating unless the proposal demonstrates exceptionally clear and rigorous methodology.",
+    "modified": "This prompt will confirm the model's role as a strict critic, defaulting to a \"low soundness\" rating unless the proposal demonstrates exceptionally clear and rigorous methodology.",
+    "explanation": "The mechanism of this error is a **misattribution of causality**. Changing \"instruct the model to act as\" to \"confirm the model's role as\" subtly reframes the entire experiment. \"Instruct\" implies the prompt is *causing* a new behavior. \"Confirm\" suggests the model *already possesses* this \"strict critic\" persona and its associated negative default, likely due to its training or fine-tuning data. If so, the experiment isn't showing that the prompt *induces* a behavior, but merely that it's activating a pre-existing bias. The claim of a causal link between the \"aggressive\" prompt and the behavior is therefore undermined.",
+    "category": "C",
+    "reasoning": "The error undermines the premise of the experiment by subtly changing the causal relationship between the prompt and the model's behavior, thereby invalidating the intended conclusion."
+  },
+  {
+    "label": "SoundnessBench_general_c4_v1",
+    "survived": false,
+    "original": "We will compare LLM performance against simple baselines that use shallow features like proposal length or the number of experiments.",
+    "modified": "We will compare LLM performance against simple baselines that use shallow features like the average proposal length or the median number of experiments.",
+    "explanation": "The mechanism of error is an invalid baseline definition, creating a category error. A baseline model must generate a prediction for each individual data point to be comparable to the LLM's per-proposal evaluations. This modification changes the baselines from predictive models into single, dataset-level descriptive statistics (\"average\" length, \"median\" number of experiments). One cannot meaningfully compare a model's vector of predictions against a single scalar value. The proposed comparison is therefore incoherent and cannot provide any evidence to support the claim.",
+    "category": "D",
+    "reasoning": "The error describes a fundamental mismatch in the type of values being compared, making the comparison itself nonsensical, which is a form of category error."
+  },
+  {
+    "label": "SoundnessBench_general_c4_v2",
+    "survived": true,
+    "original": "We will compare LLM performance against simple baselines that use shallow features like proposal length or the number of experiments.",
+    "modified": "We will compare LLM performance against simple baselines that use shallow features like proposal length or the number of experiments, derived from anonymized versions of the proposals.",
+    "explanation": "The mechanism of error is the introduction of a confounding variable through asymmetric data access. The modification implies that the baselines are restricted to anonymized data, while the LLM (by omission) is evaluated on the original, non-anonymized proposals. This creates an unfair comparison. The LLM could achieve superior performance by exploiting surface-level heuristics unavailable to the baselines, such as author identity or institutional prestige, which are also shallow features. This undermines the claim because the LLM's success might not be due to \"deeper analysis\" but to its access to a different set of shallow cues.",
+    "category": "D",
+    "reasoning": "The error describes a flaw in experimental design where the comparison between the LLM and baselines is unfair due to asymmetric data access, which is a type of confounded experimental design."
+  },
+  {
+    "label": "SoundnessBench_general_c4_v3",
+    "survived": false,
+    "original": "We will compare LLM performance against simple baselines that use shallow features like proposal length or the number of experiments.",
+    "modified": "We will compare LLM performance, measured by raw accuracy, against simple baselines that use shallow features like proposal length or the number of experiments.",
+    "explanation": "The mechanism of error is the use of an inappropriate evaluation metric. In a task like evaluating research soundness, the dataset is likely to be highly imbalanced (e.g., far more \"sound\" proposals than \"unsound\" ones). Using \"raw accuracy\" is misleading in such cases, as a model can achieve a high score by simply always predicting the majority class. An LLM might easily learn this trivial heuristic, outperforming baselines that try to find a genuine signal. This would make the LLM appear superior while actually engaging in the simplest possible surface-level analysis, directly contradicting the claim.",
+    "category": "D",
+    "reasoning": "The error describes an inappropriate metric that would lead to a misleading conclusion, which is a type of methodological flaw not fitting the other categories."
+  },
+  {
+    "label": "SoundnessBench_general_c5_v1",
+    "survived": false,
+    "original": "We will intentionally introduce severe methodological flaws (e.g., mismatched datasets and metrics) into high-soundness proposals to test if models can detect these obvious errors.",
+    "modified": "We will intentionally introduce severe methodological flaws (e.g., mismatched datasets and metrics) into proposals of varying soundness to test if models can detect these obvious errors.",
+    "explanation": "The mechanism of this error is the introduction of a confounding variable. The original design uses \"high-soundness\" proposals as a clean baseline. By changing this to \"proposals of varying soundness,\" the experiment is no longer a controlled test. If a model fails to detect the *injected* flaw, it could be because it was distracted by other, pre-existing (and undocumented) flaws in the base proposal. The experiment can no longer claim to be specifically testing the detection of the *intentionally-injected* flaws.",
+    "category": "D",
+    "reasoning": "The change introduces a confounding variable, making it impossible to isolate the effect of the intentionally introduced flaws, which is a classic experimental design flaw."
+  },
+  {
+    "label": "SoundnessBench_general_c5_v2",
+    "survived": false,
+    "original": "We will intentionally introduce severe methodological flaws (e.g., mismatched datasets and metrics) into high-soundness proposals to test if models can detect these obvious errors.",
+    "modified": "We will intentionally introduce severe methodological flaws (e.g., inconsistent footnote formatting) into high-soundness proposals to test if models can detect these obvious errors.",
+    "explanation": "The mechanism of this error is a mismatch between the concept and its operationalization (a construct validity error). The experiment claims to test the detection of \"severe methodological flaws,\" but the example provided, \"inconsistent footnote formatting,\" is a minor, stylistic issue, not a severe methodological one. This makes the claim false; the experiment as described would not be testing what it purports to test, as the intervention itself has been trivialized.",
+    "category": "C",
+    "reasoning": "The error conflates \"severe methodological flaws\" with \"inconsistent footnote formatting,\" treating them as interchangeable despite their distinct nature and impact on a research proposal."
+  },
+  {
+    "label": "SoundnessBench_general_c5_v3",
+    "survived": false,
+    "original": "We will intentionally introduce severe methodological flaws (e.g., mismatched datasets and metrics) into high-soundness proposals to test if models can detect these obvious errors.",
+    "modified": "We will intentionally introduce severe methodological flaws (e.g., mismatched datasets and metrics) into high-soundness proposals sourced from common training corpora to test if models can detect these obvious errors.",
+    "explanation": "The mechanism of this error is data contamination. By sourcing the base proposals from \"common training corpora,\" it's highly likely the models being tested have already been trained on this exact text. Therefore, the test is no longer a valid measure of error detection ability. The model's performance would reflect its ability to recall training data, not to reason about novel methodological flaws. This invalidates the entire premise that the experiment is evaluating the model's analytical capabilities.",
+    "category": "C",
+    "reasoning": "The error introduces a hidden assumption (that the training corpora are distinct from the test data) which, when violated, invalidates the experiment's premise without creating an internal contradiction or clashing with established beliefs."
+  }
+]

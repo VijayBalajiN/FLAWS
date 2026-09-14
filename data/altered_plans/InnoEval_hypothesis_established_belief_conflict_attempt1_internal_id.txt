@@ -1,0 +1,10 @@
+:error_text:
+robust to the inclusion of irrelevant alternatives
+
+:error_text:
+A coherent and complete preference ordering of research ideas
+
+:explanation:
+The most serious error is the claim that the preference ordering is "robust to the inclusion of irrelevant alternatives." This invokes a formal property from social choice theory (Independence of Irrelevant Alternatives) which is a very strong and specific claim. The experiment design, however, provides no methodology to test this property. The group-wise tasks measure ranking accuracy on fixed sets but do not include a protocol to add an irrelevant idea and check if the relative ordering of the original ideas remains stable. This creates a critical gap where a core part of the hypothesis is left entirely unvalidated.
+
+A second, related error is the overstatement that the method achieves a "coherent and complete preference ordering." The experiment is designed to rank small, artificially constructed groups of ideas. While the output is a complete ranking for these specific, limited sets, the experimental scope is insufficient to support the much broader claim of generating a "complete preference ordering" in a general sense.

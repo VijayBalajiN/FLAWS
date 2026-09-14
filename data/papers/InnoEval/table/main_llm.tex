@@ -1,0 +1,25 @@
+\begin{table*}
+    \centering
+    \renewcommand\arraystretch{.9}
+    \vskip -0.1cm
+    \caption{\textbf{Qualitative Main Results} by using o4-mini as the judge. \textit{Rationality} measures the logical soundness; \textit{Supportiveness} indicates whether the analysis is adequately backed by evidence; \textit{Depth} assesses the thoroughness of the review; \textit{Constructiveness} reflects the usefulness and feasibility of the suggestions; \textit{Overall Quality} provides a holistic judgment of the entire content.}
+    \vskip -0.2cm
+    \scalebox{.85}{
+    \begin{tabular}{l|cc|cc|cc|cc|cc}
+        \toprule
+        \multirow{1}{*}{\textbf{Baselines}} & \multicolumn{2}{c|}{\textbf{Rationality}} &
+        \multicolumn{2}{c|}{\textbf{Supportiveness}} & \multicolumn{2}{c|}{\textbf{Depth}} & \multicolumn{2}{c|}{\textbf{Constructiveness}} & \multicolumn{2}{c}{\textbf{Overall Quality}} \\
+        \cmidrule{2-3} \cmidrule{4-5} \cmidrule{6-7} \cmidrule{8-9} \cmidrule{10-11} 
+        \textbf{{\ours} vs.} & \textbf{Win(\%)} & \textbf{Lose(\%)} & \textbf{Win(\%)} & \textbf{Lose(\%)} & \textbf{Win(\%)} & \textbf{Lose(\%)} & \textbf{Win(\%)} & \textbf{Lose(\%)} & \textbf{Win(\%)} & \textbf{Lose(\%)} \\
+        \midrule
+        CoT & \textbf{88.48} & 9.22 & \textbf{92.17} & 2.76 & \textbf{93.09} & 6.91 & \textbf{89.77} & 9.77 & \textbf{90.70} & 7.83 \\
+        RAG & \textbf{87.10} & 11.98 & \textbf{87.56} & 11.52 & \textbf{92.63} & 6.45 & \textbf{87.10} & 9.68 & \textbf{90.32} & 8.37 \\
+        ResearchAgent & \textbf{86.18} & 12.44 & \textbf{86.18} & 7.37 & \textbf{90.32} & 8.29 & \textbf{88.94} & 9.68 & \textbf{89.86} & 8.29 \\
+        InternAgent & \textbf{83.41} & 15.67 & \textbf{87.10} & 9.22 & \textbf{91.24} & 7.37 & \textbf{82.03} & 16.59 & \textbf{85.71} & 12.90 \\
+        ScholarEval & \textbf{67.28} & 28.11 & \textbf{61.75} & 32.72 & \textbf{70.51} & 28.11 & \textbf{84.79} & 14.29 & \textbf{71.89} & 25.81\\
+        \bottomrule
+    \end{tabular}
+    }
+    \vskip -0.1in
+    \label{tab:main_llm}
+\end{table*}

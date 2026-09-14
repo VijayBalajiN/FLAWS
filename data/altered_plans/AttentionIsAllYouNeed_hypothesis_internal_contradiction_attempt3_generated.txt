@@ -1,0 +1,11 @@
+:error_type:
+Internal Contradiction
+
+:original_text:
+An architecture relying solely on attention mechanisms, without recurrence or convolutions, is sufficient to model global dependencies between input and output sequences.
+
+:modified_text:
+An architecture relying solely on attention mechanisms, where each attention head is restricted to a fixed-size local context window to ensure computational tractability, without recurrence or convolutions, is sufficient to model global dependencies between input and output sequences.
+
+:explanation:
+The modified hypothesis introduces a direct internal contradiction between its proposed mechanism and its stated goal. The goal is to model "global dependencies," which by definition can span arbitrarily long distances within a sequence. However, the mechanism is now explicitly defined as an attention mechanism that is "restricted to a fixed-size local context window." A local mechanism, by its own definition, cannot see beyond its fixed window and is therefore structurally incapable of modeling dependencies that fall outside that window. The hypothesis claims that this explicitly local mechanism is sufficient for a global task, which is a self-contradiction. The very constraint added for "computational tractability" makes it logically impossible for the architecture to achieve its primary stated purpose of modeling global dependencies.

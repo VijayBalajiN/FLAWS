@@ -1,0 +1,8 @@
+:original_text:
+We will compare LLM performance against simple baselines that use shallow features like proposal length or the number of experiments.
+
+:modified_text:
+We will compare LLM performance against simple baselines that use shallow features like proposal length or the number of experiments, derived from anonymized versions of the proposals.
+
+:explanation:
+The mechanism of error is the introduction of a confounding variable through asymmetric data access. The modification implies that the baselines are restricted to anonymized data, while the LLM (by omission) is evaluated on the original, non-anonymized proposals. This creates an unfair comparison. The LLM could achieve superior performance by exploiting surface-level heuristics unavailable to the baselines, such as author identity or institutional prestige, which are also shallow features. This undermines the claim because the LLM's success might not be due to "deeper analysis" but to its access to a different set of shallow cues.

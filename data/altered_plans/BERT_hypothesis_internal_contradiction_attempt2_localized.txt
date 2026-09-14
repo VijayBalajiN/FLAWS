@@ -1,0 +1,5 @@
+error: The core of our model will be a multi-layer bidirectional Transformer encoder.
+error: *   **BERT_BASE**: A 12-layer Transformer with a 768-dimensional hidden size and 12 self-attention heads, designed to be comparable in size to OpenAI GPT.
+error: *   **BERT_LARGE**: A larger 24-layer Transformer with a 1024-dimensional hidden size and 16 self-attention heads.
+error: The model's objective will be to predict the original vocabulary ID of these masked tokens using the full bidirectional context.
+error: This will allow us to isolate the contributions of deep bidirectionality and the NSP task.

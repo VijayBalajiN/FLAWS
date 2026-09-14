@@ -1,0 +1,10 @@
+:error_text:
+for models with a higher number of heads, we will also increase the dropout rate to prevent overfitting.
+
+:error_text:
+We will employ three types of regularization during training:
+
+:explanation:
+The most serious error is the introduction of a confounding variable in the ablation study. The plan states that when varying the number of attention heads, the dropout rate will also be changed. This makes it impossible to determine whether any observed performance change is due to the number of heads or the different dropout rate, thus invalidating the conclusion of that specific experiment.
+
+A second, less critical error is a direct contradiction in the description of the regularization methods. The plan claims three types of regularization will be used, but the subsequent list only describes two (Residual Dropout and Label Smoothing). This makes the experimental setup ambiguous and not fully specified.

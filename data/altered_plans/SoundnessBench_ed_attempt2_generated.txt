@@ -1,0 +1,13 @@
+:error_type:
+Wrong metric/measurement
+
+:original_text:
+Our primary metrics will be the false-positive rate (to measure optimism bias), the false-negative rate (to measure over-conservatism), class-wise recall for both high and low soundness proposals, and the Macro F1 score.
+
+:modified_text:
+Our primary metrics will be overall accuracy (to measure correctness), class-wise recall for both high and low soundness proposals, and the Macro F1 score.
+
+:explanation:
+The flaw introduced is a "Wrong metric/measurement". The central hypothesis of the research plan posits that LLMs exhibit a "bias towards optimism." The original design correctly identifies the false-positive rate (classifying a low-soundness proposal as high-soundness) as the direct operationalization of this "optimism bias."
+
+The modified text replaces this crucial, targeted metric with "overall accuracy." While accuracy is a standard classification metric, it is insufficient for testing a hypothesis about bias. A model could have a very high optimism bias (a high false-positive rate) but still achieve high overall accuracy, especially if the dataset contains more high-soundness proposals than low-soundness ones. By removing the specific metric that measures the hypothesized bias, the experiment can no longer directly validate or refute one of its main claims, even if all the data is collected correctly. This is a subtle but significant flaw that a researcher might plausibly make by defaulting to a common metric without considering its alignment with their specific hypothesis.

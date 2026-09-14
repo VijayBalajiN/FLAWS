@@ -1,0 +1,35 @@
+:candidate:
+1
+
+:original_text:
+We will frame this as a classification problem (binary: Accept/Reject; ternary: Reject/Poster/Highlight) and measure performance using Accuracy and macro F1 score.
+
+:modified_text:
+We will frame this as a classification problem (binary: Accept/Reject; ternary: Reject/Poster/Highlight) and measure performance using the Accuracy score.
+
+:explanation:
+The mechanism of error is the selection of a metric that is inappropriate for the likely data distribution. By removing "macro F1 score," the evaluation relies solely on Accuracy. The specified classes (e.g., Reject/Poster/Highlight) are almost certain to be severely imbalanced in a real-world setting, with "Reject" being the vast majority class. Accuracy is a notoriously misleading metric for imbalanced datasets, as a useless model that only predicts the majority class can achieve a very high score. This makes the measurement not meaningful.
+
+:candidate:
+2
+
+:original_text:
+We will frame this as a classification problem (binary: Accept/Reject; ternary: Reject/Poster/Highlight) and measure performance using Accuracy and macro F1 score.
+
+:modified_text:
+We will frame this as a classification problem (binary: Accept/Reject; ternary: Reject/Poster/Highlight) and measure performance using Accuracy and Cohen's Kappa.
+
+:explanation:
+The mechanism of error is a mismatch between the nature of the task and the chosen evaluation metric. The ternary classes (Reject/Poster/Highlight) have an inherent ordinal relationship (Highlight > Poster > Reject). The standard (unweighted) Cohen's Kappa is a metric for nominal classification, treating all misclassifications as equally severe. It would not penalize a major error (e.g., predicting 'Reject' for a 'Highlight' paper) more than a minor one (predicting 'Poster' for a 'Highlight' paper), thus failing to capture a crucial aspect of performance and making the measurement not meaningful for this task.
+
+:candidate:
+3
+
+:original_text:
+We will frame this as a classification problem (binary: Accept/Reject; ternary: Reject/Poster/Highlight) and measure performance using Accuracy and macro F1 score.
+
+:modified_text:
+We will frame this as a classification problem (binary: Accept/Reject; ternary: Reject/Poster/Highlight) and measure performance using rank-normalized Accuracy and macro F1 score.
+
+:explanation:
+The mechanism of error is methodological incoherence, where a scientific-sounding term is applied in a nonsensical context. "Rank-normalized Accuracy" is a meaningless phrase. Accuracy is a single scalar value computed over a dataset (or fold); one cannot "rank-normalize" a single number. This error suggests a superficial "cargo cult" understanding of statistics, where a procedure is named without understanding its meaning or applicability. This renders the proposed measurement framework ill-defined and therefore not meaningful.

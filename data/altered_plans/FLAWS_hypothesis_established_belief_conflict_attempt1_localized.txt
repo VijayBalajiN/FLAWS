@@ -1,0 +1,6 @@
+error:their core ability to identify and localize substantive errors that invalidate a paper's claims remains largely unevaluated.
+error:We hypothesize that by grounding synthetic errors in a paper's core claims, rather than using a fixed set of error types, we can create a more relevant and challenging testbed.
+error:Our primary research question is: How effectively can state-of-the-art LLMs identify and localize claim-invalidating errors in scientific papers when explicitly prompted to do so?
+error:Our approach will center on systematically inserting controlled, claim-invalidating errors into high-quality scientific papers.
+error:Claim-Invalidating Error Insertion:
+error:For each claim, we will instruct an LLM to modify one or more segments of the paper's text to introduce a sophisticated, domain-appropriate conceptual error that undermines that specific claim.

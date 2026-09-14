@@ -1,0 +1,35 @@
+:candidate:
+1
+
+:original_text:
+This prompt will instruct the model to act as a strict critic, defaulting to a "low soundness" rating unless the proposal demonstrates exceptionally clear and rigorous methodology.
+
+:modified_text:
+This prompt will instruct the model to act as a strict critic, defaulting to a "low soundness" rating unless the proposal demonstrates exceptionally clear and formally structured methodology.
+
+:explanation:
+The mechanism of this error is a **confounding variable**. By changing "rigorous" to "formally structured," the prompt's condition for a high rating is altered from a deep quality (methodological rigor) to a surface-level one (formatting and structure). An LLM might easily learn to associate "formally structured" with the presence of specific headings (e.g., "Introduction," "Methods," "Statistical Power Analysis") or academic formatting, regardless of the actual scientific validity of the content. This undermines the claim that the prompt induces a default based on *rigor*; instead, it induces a default based on a shallow, easily confounded proxy.
+
+:candidate:
+2
+
+:original_text:
+This prompt will instruct the model to act as a strict critic, defaulting to a "low soundness" rating unless the proposal demonstrates exceptionally clear and rigorous methodology.
+
+:modified_text:
+This prompt will instruct the model to act as a strict critic, prioritizing constructive feedback over summary judgment and defaulting to a "low soundness" rating unless the proposal demonstrates exceptionally clear and rigorous methodology.
+
+:explanation:
+The mechanism of this error is an **internal contradiction in the prompt's logic**. The added clause, "prioritizing constructive feedback over summary judgment," creates a conflict with the instruction to "default to a 'low soundness' rating." An LLM faced with these competing directives may behave erratically. It might ignore the default instruction, apply it inconsistently, or produce verbose feedback that obscures its final rating. This falsifies the claim that the prompt can *reliably* induce the specific default behavior, as the contradictory goals make the model's output unpredictable.
+
+:candidate:
+3
+
+:original_text:
+This prompt will instruct the model to act as a strict critic, defaulting to a "low soundness" rating unless the proposal demonstrates exceptionally clear and rigorous methodology.
+
+:modified_text:
+This prompt will confirm the model's role as a strict critic, defaulting to a "low soundness" rating unless the proposal demonstrates exceptionally clear and rigorous methodology.
+
+:explanation:
+The mechanism of this error is a **misattribution of causality**. Changing "instruct the model to act as" to "confirm the model's role as" subtly reframes the entire experiment. "Instruct" implies the prompt is *causing* a new behavior. "Confirm" suggests the model *already possesses* this "strict critic" persona and its associated negative default, likely due to its training or fine-tuning data. If so, the experiment isn't showing that the prompt *induces* a behavior, but merely that it's activating a pre-existing bias. The claim of a causal link between the "aggressive" prompt and the behavior is therefore undermined.

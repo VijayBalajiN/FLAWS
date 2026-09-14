@@ -1,0 +1,1 @@
+error:We will conduct experiments to evaluate the performance of the Transformer architecture on standard sequence transduction tasks and assess its generalization capabilities.

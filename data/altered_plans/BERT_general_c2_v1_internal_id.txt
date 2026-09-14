@@ -1,0 +1,10 @@
+:error_text:
+feed them into a BiLSTM classifier, comparing its performance to the standard fine-tuning approach.
+
+:error_text:
+which necessitates a smaller learning rate.
+
+:explanation:
+The most serious error is a confounded variable in the third ablation study. The experiment aims to compare a "feature-based" approach with a "fine-tuning" approach. However, it simultaneously changes the downstream model architecture: the feature-based approach uses a BiLSTM classifier, while the standard fine-tuning approach for this task uses a simpler linear layer on top of the Transformer outputs. By changing two variables at once (the training method and the presence of a BiLSTM), it is impossible to isolate the effect of fine-tuning, making the comparison invalid.
+
+The second error, found in the first ablation study, introduces a biased and unsubstantiated constraint. The claim that the Next Sentence Prediction (NSP) task "necessitates a smaller learning rate" is not supported by theory and imposes a potentially suboptimal hyperparameter on one of the experimental conditions. This biases the comparison against the model that includes NSP, potentially leading to incorrect conclusions about the task's contribution to the model's performance.

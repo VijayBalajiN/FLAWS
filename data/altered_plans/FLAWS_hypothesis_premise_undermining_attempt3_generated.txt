@@ -1,0 +1,17 @@
+:error_type:
+Undermining a Premise
+
+:original_text:
+The criticality of an error in a scientific paper is a function of its connection to the paper's core claims.
+
+:modified_text:
+The impact of an error in a scientific paper is a function of its connection to the paper's core claims.
+
+:explanation:
+This modification conflates two related but genuinely distinct concepts: the **criticality** of an error and the **impact** of an error.
+
+1.  **Criticality** is an *internal* property of the error relative to the paper's logical structure. It refers to how severely the error undermines the validity of the paper's own conclusions. The proposed research method—inserting claim-invalidating errors—is a direct way to manipulate and measure criticality.
+
+2.  **Impact** is an *external* property concerning the error's effect on the wider scientific community. It involves factors like how many researchers are misled, how much subsequent work is based on the flawed finding, and the paper's overall visibility (e.g., venue prestige, author reputation).
+
+The modified hypothesis incorrectly treats these as interchangeable by positing that impact can be determined solely by the error's internal connection to a core claim. This is a flawed premise. A logically critical error in an obscure paper will have negligible impact, while a less critical (but still significant) error in a highly-cited, field-defining paper could have a massive impact. The proposed methodology is well-suited to test the original hypothesis about *criticality*, but it is not a valid or sufficient way to measure *impact*, making the modified hypothesis's core assumption unsound.

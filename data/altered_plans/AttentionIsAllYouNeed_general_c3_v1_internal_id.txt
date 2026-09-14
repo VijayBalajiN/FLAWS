@@ -1,0 +1,10 @@
+:error_text:
+max(step_num^-0.5, step_num * warmup_steps^-1.5)
+
+:error_text:
+Each training batch will contain a set of sentence pairs totaling approximately 25,000 source tokens and 25,000 target tokens.
+
+:explanation:
+The most serious error is in the learning rate schedule formula. The use of `max` instead of `min` inverts the intended behavior. Instead of a linear warmup followed by an inverse square root decay, this formula specifies a decay followed by a linear increase in the learning rate, which would cause training to become unstable and diverge.
+
+The second error is a methodological flaw in the batching strategy. Constraining each batch by both source and target token counts simultaneously is highly impractical and computationally inefficient. Standard practice is to limit batches by the token count of either the source or the target side, not both, as this allows for simple and fast batch creation. The proposed method would require a complex search for sentence pairs for every batch, creating a severe training bottleneck.

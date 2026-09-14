@@ -1,0 +1,17 @@
+:error_type:
+Undermining a Premise
+
+:original_text:
+An architecture relying solely on attention mechanisms, without recurrence or convolutions, is sufficient to model global dependencies between input and output sequences.
+
+:modified_text:
+An architecture relying solely on attention mechanisms, without recurrence or convolutions, is sufficient to learn global dependencies between input and output sequences.
+
+:explanation:
+The modification conflates two distinct concepts: a model's architectural capacity to **model** a relationship and its empirical ability to **learn** that relationship during training.
+
+1.  **Architectural Capacity (to "model")**: This refers to the representational power of the model's structure. The original hypothesis correctly claims that an attention-only architecture has the necessary pathways (a constant O(1) path length between any two tokens) to represent or "model" global dependencies. This is a theoretical claim about the architecture's design.
+
+2.  **Empirical Ability (to "learn")**: This refers to whether the entire training process (including the architecture, optimizer, data, and initialization) can successfully converge to a set of parameters that captures these dependencies. A model can have the capacity to represent a function but fail to learn it due to optimization challenges, insufficient data, or a difficult loss landscape.
+
+The modified hypothesis replaces "model" with "learn," silently treating these two concepts as interchangeable. It makes the much stronger, and not directly supported, claim that the architecture's design alone is sufficient to guarantee a successful training outcome. The flaw is the hidden premise that architectural sufficiency for representation implies sufficiency for learning, which is not a given in deep learning.

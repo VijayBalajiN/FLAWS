@@ -1,0 +1,2 @@
+error:Our research is motivated by the need for a rigorous, scalable, and automated benchmark to directly assess an LLM's ability to find critical flaws in scientific papers.
+error:Our primary research question is: How effectively can state-of-the-art LLMs identify and localize claim-invalidating errors in scientific papers when explicitly prompted to do so?

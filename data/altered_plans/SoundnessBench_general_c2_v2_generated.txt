@@ -1,0 +1,8 @@
+:original_text:
+high sensitivity to prompt framing
+
+:modified_text:
+high compliance with prompt framing
+
+:explanation:
+This error mischaracterizes the effect. The claim states the LLM's judgment is "unstable," implying unpredictable or chaotic variance. "Compliance" suggests a predictable, stable bias instead. For example, a prompt framed to be "critical" will consistently produce a critical review, while one framed to be "supportive" will consistently produce a supportive one. This is a predictable, systematic bias, not instability. By replacing "sensitivity" with "compliance," the flaw redefines the observed phenomenon in a way that directly contradicts the claim of "instability."

@@ -1,0 +1,8 @@
+:original_text:
+We will use an extraction agent to convert these papers into a structured idea format, followed by manual verification.
+
+:modified_text:
+We will use an extraction agent to convert these papers into a structured idea format, preceded by manual tagging of their core claims.
+
+:explanation:
+The mechanism of this error is an inverted process dependency. By changing "followed by manual verification" to "preceded by manual tagging of their core claims," the order of operations is reversed. The agent is no longer processing the raw paper but is instead working from human-annotated input where the most difficult task—identifying the core claims—has already been done. This makes the agent's task trivial and invalidates the claim that the agent itself is capable of converting a full research paper into an accurate representation of its core idea.

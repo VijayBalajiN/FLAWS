@@ -1,0 +1,5 @@
+error: Our central hypothesis is that by emulating the holistic process of human scholarly review—from evidence gathering to multi-faceted deliberation—we can develop an automated framework capable of providing systematic, robust, and human-expert-level assessments of research ideas.
+error: We will develop InnoEval, a deep innovation evaluation framework designed to model the scholarly review process.
+error: We will crawl papers from top-tier conferences (NeurIPS and ICLR) via OpenReview and perform stratified sampling based on their final decisions (Reject, Poster, Spotlight, Oral).
+error: This process will yield groups of ideas with an inherent ground-truth ranking, from which we can also derive pair-wise comparison tasks.
+error: Point-wise Tasks: We will frame this as a classification problem (binary: Accept/Reject; ternary: Reject/Poster/Highlight) and measure performance using Accuracy and macro F1 score.

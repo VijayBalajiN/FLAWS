@@ -1,0 +1,8 @@
+:original_text:
+We will compare the performance of `BERT_BASE` and `BERT_LARGE` across all tasks to measure the impact of model scale on downstream performance, especially on smaller datasets.
+
+:modified_text:
+We will compare the performance of `BERT_BASE` and `BERT_LARGE` across all tasks, holding the learning rate constant at 5e-5 for both models, to measure the impact of model scale on downstream performance, especially on smaller datasets.
+
+:explanation:
+This modification introduces a flaw in the experimental fine-tuning procedure. While holding hyperparameters constant seems like a controlled experiment, optimal learning rates are often dependent on model size. A learning rate that is optimal for `BERT_BASE` may be sub-optimal (either too high or too low) for the larger `BERT_LARGE` model, and vice-versa. By not tuning the learning rate separately for each model, the comparison is confounded. The resulting performance difference might reflect an improperly tuned model rather than a true effect of architectural scale.

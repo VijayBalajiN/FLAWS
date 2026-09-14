@@ -1,0 +1,10 @@
+:error_text:
+evaluate models on a held-out split of very recent papers (ICLR 2026)
+
+:error_text:
+defaulting to a "low soundness" rating unless the proposal demonstrates exceptionally clear and rigorous methodology.
+
+:explanation:
+The most serious error is a temporal impossibility in the experimental design. The plan specifies using papers from "ICLR 2026" for a contamination control experiment. As these papers do not yet exist, this control is impossible to execute as described, invalidating a key robustness check.
+
+The second error lies in the design of the "Aggressive Prompt." By instructing the model to "default" to a negative rating, the experiment risks testing instruction-following rather than the model's capacity for critical scientific judgment. This may lead to a trivial outcome where the model simply outputs "low soundness" in most cases, failing to provide meaningful data on its assessment capabilities or sensitivity to framing.

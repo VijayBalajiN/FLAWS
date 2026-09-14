@@ -1,0 +1,13 @@
+:error_type:
+Internal Contradiction
+
+:original_text:
+Language representations jointly conditioned on both left and right context in all layers are more powerful than representations conditioned on unidirectional or shallowly combined bidirectional contexts.
+
+:modified_text:
+Language representations jointly conditioned on both left and right context in all layers, thereby creating an optimal information state for predicting each token in a sequence, are more powerful than representations conditioned on unidirectional or shallowly combined bidirectional contexts.
+
+:explanation:
+The modification introduces a self-contradiction by adding a justification clause that is undermined by the core mechanism of the hypothesis. The hypothesis's core mechanism is that representations are "jointly conditioned on both left and right context in all layers." The added clause claims this creates an "optimal information state for predicting each token in a sequence."
+
+However, if a model's representation for a given position `t` has access to the full context (including the token at position `t` and all tokens `t+1`, `t+2`, etc.), the task of "predicting each token" becomes trivial. The model can effectively "see" the answer it is supposed to predict. Training a model on such a trivial objective would prevent it from learning rich, useful representations. Therefore, the mechanism (deep bidirectionality) actively prevents the model from learning anything meaningful via a standard token prediction objective, which directly contradicts the hypothesis's ultimate goal of creating representations that are "more powerful." The system's own logic defeats its stated purpose.

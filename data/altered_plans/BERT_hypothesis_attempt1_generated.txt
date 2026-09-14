@@ -1,0 +1,11 @@
+:original_text:
+Language representations jointly conditioned on both left and right context in all layers are more powerful than representations conditioned on unidirectional or shallowly combined bidirectional contexts.
+
+:modified_text:
+Language representations jointly conditioned on both left and right context in all layers are more powerful, enabling superior performance in both language understanding and coherent text generation, compared to representations conditioned on unidirectional or shallowly combined bidirectional contexts.
+
+:explanation:
+The introduced error is the claim that deep bidirectional conditioning enables superior performance in "coherent text generation." This is a fundamental conceptual flaw grounded in the architectural trade-offs of language models. The mechanism that enables deep bidirectionality in models like BERT—the Masked Language Model (MLM) objective which sees the entire input sequence—makes them non-autoregressive. Consequently, they are inherently unsuitable for standard, open-ended, left-to-right text generation, a task where unidirectional (autoregressive) models like GPT excel. The modified hypothesis incorrectly conflates the power of bidirectional *encoding* for understanding tasks with the requirements for autoregressive *decoding* for generation tasks. This is a subtle but critical error that a domain expert would spot, as it misrepresents a core trade-off in pre-trained language model design.
+
+:failure_mode:
+conflicts with established knowledge

@@ -1,0 +1,176 @@
+\section{Case Study}
+This case is evaluated under a timestamp of 2024-02-01.
+\begin{quote}
+    % \small
+    \begin{tcolorbox}[breakable,colback=almond!20!white, colframe=almond!60!black, title=\textbf{Case Study (Mamba: Linear-Time Sequence Modeling with Selective State Spaces)}]
+    \label{app:case}
+        \small
+        \textbf{\# Final Report}\\
+        
+        \textbf{\#\# 1. Structured Idea}\\
+        The paper introduces Mamba, a novel selective state space model (SSM) that incorporates an input-dependent selection mechanism, enabling content-based reasoning and linear-time sequence modeling, which achieves state-of-the-art performance across diverse modalities like language, audio, and genomics while offering significantly faster inference than Transformers.\\
+        \textbf{Motivation}: Transformers suffer from quadratic computational scaling with sequence length due to self-attention, making them inefficient for long sequences. Existing subquadratic-time architectures, such as linear attention and structured state space models (SSMs), lack the ability to perform content-based reasoning, limiting their effectiveness on discrete, information-dense data like text. Linear time-invariant (LTI) SSMs have fixed dynamics over time, preventing them from selectively remembering or ignoring inputs based on content, which is crucial for tasks like selective copying and induction heads. The efficiency of recurrent models is limited by how well they compress context into a finite state, often failing to retain all necessary information for complex reasoning.\\
+        \textbf{Research Question}: Can a state space model be made selective by parameterizing its dynamics based on the input to enable content-aware reasoning? How can selective state space models be computed efficiently on modern hardware despite losing the equivalence to fast convolutions? Does a simplified neural network architecture combining selective SSMs and gated projections, without attention or MLP blocks, achieve competitive performance across diverse sequence modeling tasks? Do selective state space models scale linearly in sequence length while matching or exceeding the quality of Transformers on language modeling and other domains?\\
+        \textbf{Method}: The core innovation is a selection mechanism where key SSM parameters $(\Delta, \boldsymbol{B}, \boldsymbol{C})$ are made functions of the input sequence, transforming the model from time-invariant to time-varying. The discretization step size $\Delta$ is computed as $\Delta = \textrm{softplus}(\textrm{Parameter} + s_\Delta(x))$, where $s_\Delta(x)$ is a low-rank linear projection of the input. The input-dependent parameters $\boldsymbol{B}$ and $\boldsymbol{C}$ are computed as $\boldsymbol{B} = s_{\boldsymbol{B}}(x)$ and $\boldsymbol{C} = s_{\boldsymbol{C}}(x)$, where $s_{\boldsymbol{B}}$ and $s_{\boldsymbol{C}}$ are linear projections. The model is computed in recurrent mode using a parallel associative scan algorithm, as the time-varying parameters prevent the use of efficient convolutional computation. A hardware-aware algorithm fuses the discretization, scan, and output multiplication steps into a single kernel to minimize memory I/O between GPU HBM and SRAM, significantly speeding up computation. Recomputation is used during backpropagation to avoid storing large intermediate states, reducing memory requirements. The architecture simplifies prior SSM designs by combining the H3 block (an SSM with gated connections) and the MLP block of Transformers into a single, homogeneously repeated block. The architecture expands the model dimension by a fixed factor ($E=2$) within each block, with most parameters residing in the linear projections. The inner SSM operates independently per channel over an input sequence, with a diagonal structure imposed on the state transition matrix $\boldsymbol{A}$ for efficiency.\\
+        \textbf{Experimental Setting}: Datasets: The Pile (language), HG38 human genome (DNA), YouTube Mix (audio waveforms), SC09 (speech), synthetic datasets for Selective Copying and Induction Heads tasks. Baselines: proprietary models (GPT-4, GPT-4o, o4-mini, DeepSeek-R1, DeepSeek-V3.1, GPT-5), open-source models (Transformer, Transformer++ (with RoPE, SwiGLU), GPT-Neo, OPT, Pythia, RWKV, H3, Hyena, HyenaDNA, RetNet, SaShiMi, SampleRNN, WaveNet, WaveGAN, DiffWave). Metrics: Perplexity (PPL), pass@1, pass@3, Rouge-L, exact match, accuracy, FID (Fréchet Inception Distance), IS (Inception Score), MIS (Mean Inception Score), AM (Average Magnitude). Hardware: A100 80GB GPUs.\\
+        \textbf{Expected Results}: ...\\
+
+        \textbf{\#\# 2. Search Results}\\
+        
+        \textbf{\#\#\# 2.1 Paper Reports}\\
+        
+        \textbf{Paper 1: Efficiently Modeling Long Sequences with Structured State Spaces}\\
+        The Structured State Space (S4) model introduces a novel parameterization for state space models (SSMs) that enables efficient computation of long sequences by decomposing the state transition matrix into a normal plus low-rank (NPLR) form, which allows stable diagonalization and reduces the core computation to a Cauchy kernel, achieving near-linear complexity and strong performance on tasks with long-range dependencies.\\
+        \textbf{Motivation}: Existing sequence models...\\
+        \textbf{Research Question}: Can a state space model be parameterized to allow for computationally efficient...\\
+        \textbf{Method}: The method parameterizes the continuous-time state space model...\\
+        \textbf{Experimental Setting}: ...\\
+        \textbf{Expected Results}: ...\\
+
+        \textbf{Paper 2: Liquid Structural State-Space Models}\\
+        Liquid-S4 is a novel state-space model that combines the input-dependent state transition mechanism of linear liquid time-constant networks with the efficient diagonal-plus-low-rank parametrization and convolutional kernel computation of structural state-space models (S4), enabling improved generalization on long-range sequence modeling tasks by accounting for input signal correlations.\\
+        \textbf{Motivation}: ...\\
+        \textbf{Research Question}: ...\\
+        \textbf{Method}: ...\\
+        \textbf{Experimental Setting}: ...\\
+        \textbf{Expected Results}: ...\\
+
+        \textbf{Paper 3: Advancing Regular Language Reasoning in Linear Recurrent Neural Networks}\\
+        ...\\
+
+        \textbf{Paper 4: FlashAttention-2: Faster Attention with Better Parallelism and Work Partitioning}\\
+        ...\\
+
+        \textbf{Paper 5: Hungry Hungry Hippos: Towards Language Modeling with State Space Models}\\
+        ...\\
+
+        \textbf{Paper 6: Selective Structured State-Spaces for Long-Form Video Understanding}\\
+        ...\\
+
+        \textbf{Paper 7: HyenaDNA: Long-Range Genomic Sequence Modeling at Single Nucleotide Resolution}\\
+        ...\\
+        ...\\
+
+        \textbf{\#\#\# 2.2 Web Reports}\\
+
+        \textbf{Webpage 1:  From Transformer to Mamba - by Manav Gupta}\\
+        This Medium article provides an accessible, conceptual introduction to the Mamba architecture as a solution to the quadratic computational scaling problem of Transformer self-attention. It explains the $O(N²)$ complexity of attention, leading to severe memory and processing constraints for long sequences. The article then introduces the foundational concept of state space models (SSMs) using analogies like a home heating system, before detailing how Mamba innovates by making key SSM parameters $(\Delta, \boldsymbol{B}, \boldsymbol{C})$ input-dependent, enabling selective, content-aware processing with linear complexity. The core of the article is a visual walkthrough of a home heating SSM to explain the roles of the $\boldsymbol{A}$, $\boldsymbol{B}$, $\boldsymbol{C}$, and $\boldsymbol{D}$ matrices, culminating in the explanation of Mamba's selective mechanism as its key breakthrough...\\
+
+        \textbf{Webpage 2: How State Space Models Are Challenging Transformers?}\\
+        This Medium article presents Mamba as a paradigm-shifting alternative to Transformers, addressing their quadratic scaling limitations with a selective state space model (SSM) that achieves linear-time processing. The core innovation is Mamba's input-dependent selection mechanism, which allows it to selectively remember or forget information, enabling content-aware reasoning. The article highlights Mamba's empirical performance, including matching Transformer quality with smaller models and achieving 4-5x higher inference throughput, while also candidly discussing its weaknesses in tasks like exact copying and in-context learning. It positions the future not as a binary choice but as a trend towards hybrid architectures like Jamba, which combine Transformer and Mamba blocks. The piece concludes with practical implementation guidance for practitioners, outlining scenarios where Mamba excels and where Transformers remain preferable...\\
+
+        \textbf{Webpage 3: Structured State Space Models Visually Explained}\\
+        ...\\
+
+        \textbf{Webpage 4: Dynamic Chunking (H-Net) : A New Approach to Tokenizer ...}\\
+        ...\\
+        ...\\
+
+        \textbf{\#\#\# 2.3 Code Reports}\\
+
+        \textbf{Code Repo 1: RWKV}\\
+        The provided code resource is the official GitHub organization page for RWKV, an open-source project developing a Recurrent Neural Network (RNN) architecture designed to achieve Transformer-level performance for large language models. It hosts 16 repositories, including the core RWKV-LM model implementation in Python, a high-performance C++ inference engine (rwkv.cpp) for CPU, and various supporting tools for training, evaluation, and deployment. The organization provides utilities for training with arbitrary context lengths, ONNX conversion, a centralized wiki, and forks of popular evaluation frameworks. The architecture combines RNN efficiency (linear-time inference, no KV cache) with parallelizable training capabilities, aiming for fast inference, low VRAM usage, and theoretically infinite context. The resource is maintained as an incubation project under the LF AI \& Data Foundation...\\
+
+        \textbf{Code Repo 2: bayesflow-org/Selective-SSM}\\
+        This repository provides an experimental framework for applying Selective State Space Model (S-SSM) architectures, specifically Mamba, within Amortized Bayesian Inference workflows. It contains a custom Keras layer wrapper for the Mamba model, simulators for synthetic tasks, and several experiment scripts comparing Mamba against Transformers. The core components include a MambaBlock layer, a Probabilistic Reversal Learning (PRL) simulator, and experiments on Lotka-Volterra and PRL tasks using the BayesFlow library. The codebase is structured around integrating SSMs into simulation-based inference, requiring specific hardware (NVIDIA GPU) and a development version of BayesFlow. The experiments are designed to test the performance of Mamba-based summary networks in Bayesian inference scenarios...\\
+
+        \textbf{Code Repo 3: state-spaces/s4}\\
+        ...\\
+        
+        ...\\
+
+        \textbf{\#\# 3. Evaluation Results}\\
+
+        \textbf{\#\#\# Reviewer 1}\\
+        A creative-oriented researcher who appreciates unconventional ideas, cross-disciplinary inspiration, and imaginative problem framing. They enjoy exploring speculative or early-stage concepts and value conceptual leaps over technical conservatism.\\
+        \textbf{Clarity}:\\
+        The research idea demonstrates excellent logical clarity and structural coherence. The title/abstract (Basic Idea) effectively summarizes the core innovation: a selective state space model (SSM) with input-dependent parameters enabling content-based reasoning and linear-time modeling. The content is clear, concise, and informative, presenting a well-structured narrative from motivation to expected results.\\
+        Strengths:\\
+        1. \textbf{Goal-Method Alignment}: The method directly addresses all research questions. The input-dependent parameterization of $\Delta, \boldsymbol{B}, \boldsymbol{C}$ enables content-aware reasoning; the hardware-aware scan algorithm provides efficient computation despite losing fast convolution equivalence; the simplified architecture combines selective SSMs with gated projections; and the linear scaling with context length is explicitly tested.\\
+        2. \textbf{Mechanism Definition}: Core mechanisms are clearly defined: the selection mechanism ($\Delta = \textrm{softplus}(\textrm{Parameter} + s_\Delta(x))$, $\boldsymbol{B} = s_{\boldsymbol{B}}(x)$, $\boldsymbol{C} = s_{\boldsymbol{C}}(x)$), the parallel associative scan algorithm, hardware-aware kernel fusion, and architectural simplifications.\\
+        3. \textbf{Minimal Ambiguity}: Technical terms are used precisely without buzzword soup. The integration of selective SSMs and gated projections is explained through architectural details.\\
+        4. \textbf{Metric Consistency}: Expected results metrics directly measure research question success: perplexity for language modeling quality, synthetic task accuracy for content-based reasoning, speed benchmarks for efficiency, and scaling analyses for linear sequence length performance.\\
+        5. \textbf{Minor Considerations}: Some proprietary baselines (GPT-5) may not be publicly available for fair comparison. The experimental setting is comprehensive but could benefit from more detail on specific ablation study designs. While the logic is strong, the idea doesn't reach the 'flawless, elegant, and watertight' standard of 9-10, as some implementation details remain implicit.\\
+        Overall, this represents a high-quality research idea with clear logical flow, well-defined mechanisms, and strong alignment between questions, methods, and evaluation metrics.\\
+        \textbf{Score}: 8\\
+
+        \textbf{Novelty}:\\
+        The Mamba research idea introduces groundbreaking innovation through its selective state space model (SSM) mechanism, representing a paradigm shift in efficient sequence modeling. The core novelty lies in making key SSM parameters ($\Delta, \boldsymbol{B}, \boldsymbol{C}$) input-dependent, transforming linear time-invariant (LTI) SSMs into time-varying systems capable of content-aware reasoning. This addresses a fundamental limitation of prior subquadratic architectures that lacked selective information processing capabilities.\\
+        \textbf{Differentiation from standard baselines}: Unlike standard SSMs (S4, HiPPO) with fixed dynamics, Mamba introduces selective state transitions. Unlike attention-based Transformers with quadratic scaling, Mamba maintains linear time complexity. Unlike previous attempts at input-dependent SSMs (Liquid-S4, GateLoop), Mamba's specific parameterization of $\Delta, \boldsymbol{B}, \boldsymbol{C}$ and its hardware-aware implementation represent a distinct approach.\\
+        \textbf{Combination vs. Innovation}: While Mamba builds upon SSM foundations and gated projections, it is not merely ``A + B''. The selective mechanism is a tailored innovation that fundamentally changes SSM behavior, enabling content-based reasoning while maintaining computational efficiency. The hardware-aware scan algorithm represents significant engineering innovation to overcome the loss of fast convolution equivalence.\\
+        \textbf{Alignment with research trends}: Mamba aligns with the strong research trend seeking efficient alternatives to Transformers while diverging through its specific selective SSM approach. It addresses multiple critical challenges simultaneously: quadratic scaling of attention, lack of content-awareness in efficient models, and hardware efficiency.\\
+        \textbf{Comparison to prior art}: While related concepts exist (input-dependent recurrences in GateLoop, adaptive SSMs in Liquid-S4, selective token processing in S5), Mamba's specific combination of selective parameterization, hardware-aware algorithms, and simplified homogeneous architecture represents a unique and comprehensive solution. The idea's ability to achieve competitive performance across diverse modalities (language, audio, genomics) while offering significantly faster inference demonstrates substantial advancement beyond existing methods.\\
+        The idea introduces new problems/perspectives by challenging the assumption that efficient sequence models must sacrifice content-aware reasoning. It introduces new techniques in selective SSM parameterization and hardware-aware computation. The empirical claims of outperforming Transformers in certain domains while maintaining linear scaling represent significant advancement if validated.\\
+        \textbf{Score}: 9\\
+
+        \textbf{Validity}:\\
+        The research idea demonstrates exceptional conceptual soundness with solid theoretical foundations, robust algorithmic design, and detailed experimental methodology. The core innovation—making SSM parameters ($\Delta, \boldsymbol{B}, \boldsymbol{C}$) input-dependent to enable selective, content-aware reasoning—is logically consistent and well-motivated by clear limitations of existing architectures (Transformers' quadratic scaling and LTI SSMs' fixed dynamics). The proposed method mathematically aligns with the objective of achieving linear-time sequence modeling with content-based reasoning. The experimental setting is comprehensive and fair, proposing comparisons against strong proprietary and open-source baselines across multiple modalities (language, DNA, audio, speech) and including thorough ablation studies. The idea does not rely on ``miracle steps''—the selection mechanism is concretely parameterized, and the hardware-aware algorithm addresses the computational challenges introduced by time-varying parameters. The most significant theoretical risk is the potential for the selective mechanism to introduce instability during training or inference due to highly dynamic parameter changes, which could affect convergence or generalization. However, the proposed techniques (parallel associative scan, kernel fusion, recomputation) provide a coherent framework to mitigate these risks. The logic is rigorous and aligns well with first principles of sequence modeling.\\
+        \textbf{Score}: 9\\
+
+        \textbf{Feasibility}:\\
+        The research idea is highly feasible. The method is clearly described with a well-defined selection mechanism and computational approach. The core innovation is implementable with standard deep learning libraries: input-dependent parameterization uses linear projections and softplus, the parallel scan is a standard algorithm with efficient implementations, and the fused kernel is an optimization that can be built with CUDA. The hardest step is implementing the hardware-aware fused kernel for the selective scan, which requires custom CUDA programming, but the algorithmic logic is clear and an open-source implementation exists (mamba-ssm). The experiments use standard datasets (The Pile, HG38, SC09) and metrics (perplexity, FID, accuracy), and the required computational resources (A100 GPUs) are realistic for modern research. The architecture is a simplified, homogeneous block design that is straightforward to construct. Therefore, the idea can be executed with standard engineering effort, leveraging existing libraries and known algorithms.\\
+        \textbf{Score}: 9\\
+
+        \textbf{Significance}:\\
+        The significance and potential impact of the Mamba research idea is exceptionally high. Assuming the idea works as described, it addresses a fundamental and widely recognized bottleneck in sequence modeling: the quadratic scaling of Transformers. The core innovation—making state space models (SSMs) selective via input-dependent dynamics—directly tackles the expressivity limitations of prior sub-quadratic architectures, enabling content-aware reasoning in linear-time models. The proposed solution is highly generalizable, demonstrated across diverse, high-impact modalities (language, genomics, audio) with state-of-the-art or competitive results. This is not a marginal improvement; it represents a paradigm shift by combining the efficiency of recurrent models with the reasoning capabilities of attention, potentially rendering standard Transformer architectures obsolete for long-context applications. The hardware-aware algorithm and simplified architecture further enhance its practical utility, promising dramatically faster inference. This work has transformative potential for the entire machine learning and AI research community, particularly those working on long-sequence tasks in NLP, computational biology, and audio processing, and could see rapid adoption in industry for large-scale, real-time applications. It is a rare contribution that solves a major bottleneck for a large community.\\
+        \textbf{Score}: 9\\
+
+        \textbf{Overall Average Score}: 8.80/10\\
+
+        \textbf{\#\#\# Reviewer 2}\\
+        A busy researcher with significant service load, who regularly handles multiple reviews under time pressure. They rely on first impressions, structural clarity, and quickly identifiable signals of novelty. This persona is common among overloaded program committee members.\\
+        ...\textbf{However, some theoretical risks remain}: The assumption that input-dependent parameterization alone can achieve Transformer-level reasoning capabilities without attention mechanisms may be optimistic. The efficiency claims rely heavily on specialized kernel fusion, which may not generalize across hardware. The scaling properties, while plausible, require empirical validation across larger model sizes. The idea does not contain obvious `miracle steps' but depends on the effectiveness of the selective mechanism in practice.\\
+        ...\\
+        \textbf{Overall Average Score}: 7.00/10\\
+
+        \textbf{\#\#\# Reviewer 3}\\
+        A mid-stage PhD student managing research, deadlines, and teaching workloads. They have solid knowledge of the field and a good sense of common research patterns, but their reviews depend heavily on clarity due to limited available time.\\
+        ...\\
+        \textbf{Overall Average Score}: 8.60/10\\
+
+        ...\\
+
+        \textbf{\#\# 4. Final Review}\\
+        \textbf{Meta-review}: The paper introduces Mamba, a selective state space model with an input-dependent selection mechanism that enables content-aware reasoning while maintaining linear-time scaling. Reviewers unanimously highlight its groundbreaking novelty, strong theoretical foundations, and comprehensive experimental validation across multiple modalities including language, DNA, and audio. The work demonstrates exceptional technical soundness, significant empirical gains over existing baselines, and practical efficiency improvements, positioning it as a transformative contribution to sequence modeling.\\
+        \textbf{Score}: 8.5\\
+        \textbf{Decision}: spotlight\\
+
+        \textbf{\#\# 5. Revision Suggestions}\\
+        
+        \textbf{\#\#\# 5.1 Methodology/Model Improvements}\\
+        \textbf{Integrate a Mixture-of-Experts (MoE) routing mechanism} to enhance model capacity and reduce inference FLOPs while maintaining linear complexity, inspired by BlackMamba's combination of Mamba blocks with routed MoE layers. This directly extends the current Mamba architecture's scaling efficiency.\\
+        \textbf{Explore bidirectional scanning for SSM modules} in audio and speech tasks, as demonstrated by Audio Mamba and SSAMBA, to capture global context more effectively than unidirectional models. This is a natural extension for tasks where full-sequence context is beneficial.\\
+        \textbf{Investigate architectural variants like Block-Biased Mamba} to address potential expressiveness and training stability limitations for very long-range dependencies, as suggested by its motivation to improve upon standard Mamba's performance on long-range benchmarks.\\
+        \textbf{Apply binarization-aware training techniques} (e.g., FBI-Linear modules with distillation) to the linear projection layers, as in Bi-Mamba, to drastically reduce memory footprint and computational cost while aiming to preserve performance, addressing a clear deployment bottleneck.\\
+        \textbf{Develop structured pruning strategies based on internal SSM dynamics}, such as the $\Delta$-guided state channel pruning from PerfMamba, to identify and remove redundant computation, improving inference throughput without significant accuracy loss.\\
+        \textbf{Decouple embedding spaces for distinct modules} in multimodal or multi-task architectures, following the DARE model's principle, to resolve potential gradient conflicts between different learning objectives (e.g., content selection vs. representation learning).\\
+
+        \textbf{\#\#\# Experiment \& Evaluation Enhancements}\\
+        \textbf{Conduct comprehensive component-level profiling} across sequence lengths and inference modes (prefill vs. decode) to identify dominant computational bottlenecks, as performed in PerfMamba. This is a critical next step to ground optimization efforts beyond the initial fused scan benchmark.\\
+        \textbf{Benchmark on established long-range sequence modeling tasks} like the Long-Range Arena (LRA), as prompted by Block-Biased Mamba's critique and evaluation. This tests the claim of linear scaling and effective long-context modeling in a standardized setting.\\
+        \textbf{Systematically evaluate the impact of pretraining strategies}, specifically self-supervised objectives on masked patches for multimodal data (inspired by SSAMBA), versus training from scratch on downstream task performance.\\
+        \textbf{Perform detailed ablation studies on expert routing dynamics and load balancing} if an MoE variant is implemented, as outlined in BlackMamba's research questions, to understand the synergies between selection and routing.\\
+        \textbf{Benchmark inference efficiency metrics} (latency, throughput, memory) not just against Transformers but also against other efficient baselines (e.g., RWKV, RetNet) across a wider range of hardware and batch sizes, extending the current throughput analysis.\\
+        \textbf{Evaluate robustness and generalization} on noisy, real-world data distributions for speech/audio tasks, as suggested by Schrödinger Bridge Mamba's expected results, moving beyond clean benchmark datasets like SC09.\\
+
+        \textbf{\#\#\# Data/Task Extensions}\\
+        \textbf{Apply Mamba to self-supervised audio representation learning} on large, unlabeled corpora, followed by fine-tuning on diverse downstream tasks (classification, spotting, recognition), as demonstrated by SSAMBA. This tests generality beyond supervised waveform modeling.\\
+        \textbf{Explore the architecture for acoustic modeling in automatic speech recognition (ASR)} within an encoder-decoder framework, as in Speech-Mamba, to rigorously assess its capability for long-context speech sequences and cross-modal alignment.\\
+        \textbf{Extend genomic modeling beyond human DNA (HG38)} to plant genomes and cross-species generalization, as explored by PlantBiMoE, testing the model's adaptability to different biological sequences and tasks like chromatin accessibility prediction.\\
+        \textbf{Investigate the model for long-sequence recommendation systems}, potentially integrating the decoupled embedding concept from DARE, to handle user behavior sequences—a high-impact domain with very long contexts.\\
+        \textbf{Pursue generative tasks like speech enhancement} using advanced training paradigms (e.g., Schrödinger Bridge) paired with the Mamba backbone, targeting one-step inference for efficiency.\\
+
+        \textbf{\#\#\# Risks/Feasibility Flags}\\
+        \textbf{Training instability on very long sequences} is flagged as a potential risk by Block-Biased Mamba's motivation. Monitoring training dynamics and exploring stabilization techniques (e.g., adjusted learning rates for $\Delta$ parameters) is necessary.\\
+        \textbf{Integration complexity} of MoE or bidirectional scanning may increase implementation difficulty and memory overhead during training, despite promised inference benefits. Careful engineering and memory profiling are required.\\
+        \textbf{Potential performance trade-offs}: Architectural modifications (e.g., block-biasing, binarization) might maintain performance on some tasks (language) but could introduce regressions on others (synthetic reasoning). Extensive cross-task validation is needed.\\
+        \textbf{The effectiveness of selection mechanisms} for non-language, continuous-valued data (e.g., raw audio, genomics) requires deeper validation, as initial results are promising but the inductive bias may differ from discrete text.\\
+
+        \textbf{\#\#\# Measurable Next Steps}\\
+        1. \textbf{Implement and profile a bidirectional Mamba encoder} on an audio spectrogram classification task (e.g., using Audio Mamba's design). Measure accuracy vs. Audio Spectrogram Transformer and inference speedup for sequences $>$10k tokens.\\
+        2. \textbf{Profile the Mamba-1/2 block} to quantify the runtime and memory contribution of the SSM, convolution, and MLP components across sequence lengths (64 to 16K). Identify the dominant bottleneck for prefill and decoding as PerfMamba did.\\
+        3. \textbf{Train a 500M-parameter Mamba model with top-2 MoE layers} on a 100B-token text corpus. Compare validation perplexity and downstream task accuracy to a dense Mamba of similar \textit{active} parameters, and measure tokens/sec throughput gain.\\
+        4. \textbf{Evaluate a 1.4B-parameter Mamba model on the Long-Range Arena benchmark}, specifically the Path-X task (length 16K). Compare accuracy to Transformer++ and Hyena baselines to test long-context claims beyond DNA/audio.\\
+        5. \textbf{Apply $\Delta$-guided pruning} to remove 20-40\% of state channels in a pretrained 790M Mamba language model. Measure the resulting perplexity change on The Pile and the inference latency reduction for generation at sequence length 2048.
+    \end{tcolorbox}
+\end{quote}

@@ -1,0 +1,8 @@
+:original_text:
+An architecture relying solely on attention mechanisms, without recurrence or convolutions, is sufficient to model global dependencies between input and output sequences.
+
+:modified_text:
+An architecture relying solely on attention mechanisms, without recurrence or convolutions, is necessary to model global dependencies between input and output sequences.
+
+:explanation:
+The flaw is a logical inversion, replacing "sufficient" with "necessary." The original claim is that attention is one possible method that works (sufficiency). The modified claim asserts that attention is the *only* possible method (necessity). This is a much stronger and almost certainly false claim, as other architectures (like certain RNNs or large-kernel CNNs) can also model global dependencies. This error changes a valid, defensible research hypothesis into a logically unsound and overly bold assertion that is easily falsified by counterexample.

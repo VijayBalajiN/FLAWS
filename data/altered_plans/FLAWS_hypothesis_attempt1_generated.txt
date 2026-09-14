@@ -1,0 +1,17 @@
+:original_text:
+The criticality of an error in a scientific paper is a function of its connection to the paper's core claims.
+
+:modified_text:
+The criticality of an error in a scientific paper is directly proportional to the strength of its connection to the paper's core claims.
+
+:explanation:
+The modification introduces a conceptual flaw by changing the relationship from a general "function" to a specific mathematical "direct proportionality." This implies a strict, linear relationship between two concepts—"criticality" and "strength of connection"—that are fundamentally qualitative, complex, and non-linear.
+
+This is a sophisticated error for several reasons:
+1.  It rests on the false premise that these abstract concepts can be meaningfully quantified on a ratio scale, which is required for proportionality. For instance, it's not clear how one would measure that an error is "twice as critical" or has "double the strength" of connection to a claim.
+2.  It fails to account for non-linear, catastrophic effects. In scientific reasoning, a seemingly minor error in a foundational assumption (a "weak" connection in terms of textual space) can completely invalidate a core claim (maximum "criticality"). This disproves a simple linear relationship.
+
+The modified hypothesis sounds more precise and scientific, making it plausible to a reader without deep expertise in research methodology or philosophy of science. However, it is theoretically unsound because it misapplies a quantitative, mathematical model to a qualitative, logical domain.
+
+:failure_mode:
+rests on a false premise

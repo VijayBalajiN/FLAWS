@@ -1,0 +1,13 @@
+:error_type:
+Confounded design
+
+:original_text:
+1.  **Importance of Pre-training Tasks:** We will train and evaluate two ablated models: one using only the Masked LM task (without Next Sentence Prediction) and another using a traditional Left-to-Right (LTR) LM objective instead of MLM. This will allow us to isolate the contributions of deep bidirectionality and the NSP task.
+
+:modified_text:
+1.  **Importance of Pre-training Tasks:** We will train and evaluate two ablated models: one using only the Masked LM task (without Next Sentence Prediction) and another using a traditional Left-to-Right (LTR) LM objective instead of MLM, which will be trained only on the English Wikipedia corpus to control for domain effects from the BooksCorpus. This will allow us to isolate the contributions of deep bidirectionality and the NSP task.
+
+:explanation:
+The methodological flaw introduced is a **confounded design**. The stated purpose of this ablation study is to "isolate the contributions of deep bidirectionality" by comparing a model with a Masked LM (MLM) objective to one with a Left-to-Right (LTR) objective. However, the modified design specifies that the LTR model will be trained on a different dataset (English Wikipedia only) than the main models and the other ablated model (which, according to the "Pre-training" section, use both BooksCorpus and Wikipedia).
+
+This introduces a confounding variable: the pre-training data. Any observed difference in performance between the MLM and LTR models could be attributed to either the change in pre-training objective (the intended variable) or the change in the pre-training data (the confound). The justification provided—"to control for domain effects"—makes the flaw sound plausible and methodologically motivated, masking the fact that it invalidates the study's ability to draw a clear causal conclusion about the contribution of the MLM objective itself.

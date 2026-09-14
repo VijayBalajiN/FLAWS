@@ -1,0 +1,4 @@
+error:An ideal scientific evaluation process should be defined by three core principles: knowledgeable grounding against the existing body of work, collective deliberation among diverse experts, and multi-criteria decision-making across various attributes like novelty and feasibility.
+error:they rely on a single LLM-as-a-Judge, which entrenches model bias and fails to simulate expert consensus;
+error:Our central hypothesis is that by emulating the holistic process of human scholarly review—from evidence gathering to multi-faceted deliberation—we can develop an automated framework capable of providing systematic, robust, and human-expert-level assessments of research ideas.
+error:To simulate collective deliberation and avoid the pitfalls of a single LLM-as-a-Judge, we will implement two key features:

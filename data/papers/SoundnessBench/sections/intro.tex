@@ -1,0 +1,100 @@
+\section{Introduction}
+
+Autonomous AI research agents are rapidly advancing in technical sophistication. Recent frameworks can autonomously generate hypotheses, implement code, execute experiments, and draft full manuscripts with minimal human oversight~\citep{lu2024aiscientist, yamada2025aiscientistv2, schmidgall2025agentlab, karpathy2026autoresearch}. While this progress suggests a future of accelerated discovery, it also exposes a critical but under-addressed bottleneck: \textit{scientific triage}. Before a single line of code is written, a researcher must determine whether a proposed idea and its experimental design are methodologically sound. In human scholarship, this ``first-gate'' judgment is the primary defense against wasting months of labor and substantial computational resources.
+
+\paragraph{The Soundness Gap.} Existing evaluations of AI agents largely overlook this decision point. Current benchmarks~\citep{chan2024mle, starace2025paperbench, wu2025innovatorbench, lupidi2026airs} primarily emphasize \textit{execution} to reproduce existing results or deliver runnable artifacts. They do not test whether an agent can critically evaluate the viability of a \textbf{proposal} in the first place. This leaves a fundamental question unanswered: 
+
+\begin{quote}
+Can LLMs reliably reject flawed research designs before they are executed? 
+\end{quote}
+
+% \begin{quote}
+% Can LLMs reliably tell sound research designs from flawed ones?
+% \end{quote}
+
+\begin{table*}[t]
+\centering
+\renewcommand{\arraystretch}{1.3}
+\caption{\textbf{Comparison with related research-agent benchmarks.} \textbf{Stage} indicates when scientific judgment is made (pre-execution, execution, or post hoc). \textbf{Benchmark Task} indicates what is judged, and \textbf{Evaluation Input} indicates the evidence provided to the evaluator. Most prior benchmarks evaluate execution outcomes or post-hoc signals rather than methodological validity. SoundnessBench is the only benchmark here that combines \textbf{pre-execution evaluation}, \textbf{direct methodological-soundness judgment}, and \textbf{proposal-only input}.}
+\label{tab:benchmark_comparison}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lcccccc}
+\toprule
+\textbf{Benchmark} & \textbf{Stage} & \textbf{Benchmark Task} & \textbf{Evaluation Input} 
+& \textbf{Ground Truth} & \textbf{Soundness} & \textbf{Pre-Exec.} \\
+ & & & & \textbf{Source} & \textbf{Focus} & \textbf{Judgment} \\
+\midrule
+MLE-Bench         
+& Exe.     & Engineering   & Task desc. + Exp. Results      
+& Kaggle outcome        & \rx & \rx \\
+
+PaperBench      
+& Exe.     & Replication   & Full paper + Exp. Results  
+& Human rubric          & \rx & \rx \\
+
+InnovatorBench      
+& Exe.     & Research loop & Task desc. + Exp. Results    
+& Outcome metric        & \rx & \rx \\
+
+AIRS-Bench      
+& Exe.     & Multi-task    & Task desc. + Exp. Results          
+& Expert annotation     & \rx & \rx \\
+
+ResearchGym
+& Exe.     & Research loop & Task desc. + Exp. Results    
+& Outcome metric        & \rx & \rx \\
+
+\midrule
+
+Si et al.~\citep{si2024llmideas}                   
+& Pre-exec.      & Novelty judge  & Proposal           
+& Human study           & \rx & \gck \\
+
+Hindsight               
+& Post-hoc      & Impact pred.  & Idea          
+& Future citation/venue        & \rx & \rx \\
+
+RINoBench               
+& Pre-exec.      & Novelty judge & Idea + related works            
+& Expert label          & \rx & \gck \\
+
+Tong et al.~\citep{tong2026scientifictaste}                    
+& Post-hoc      & Impact pred. & Title + abstract        
+& Future citation/venue      & \rx & \rx \\
+
+\midrule
+
+\textbf{SoundnessBench}                
+& \textbf{Pre-exec.} & \textbf{Methodological soundness} 
+& \textbf{Proposal} & \textbf{Expert label}  
+& \gck & \gck \\
+
+\bottomrule
+\end{tabular}%
+}
+\end{table*}
+
+Without a robust upfront filter, autonomous agents do not necessarily accelerate science; they risk scaling ``bad science'' by automating the pursuit of unsound hypotheses.
+
+\fh{In this work, we use \textbf{scientific soundness} in a deliberately scoped sense: proposal-stage methodological integrity in ML research, not eventual impact, novelty, acceptance, or universal validity across all scientific domains. Given a hypothesis, the core question is whether the experimental design is capable of testing it rigorously. In the lifecycle of an autonomous agent, this serves as a \textit{pre-computation check}. Without this capability, agents risk entering a ``hallucination-implementation loop,'' where they generate logically flawed experiments that appear structurally correct but are scientifically dead on arrival. By isolating proposal-stage evidence from downstream results, we test the model's ability to identify visible fatal flaws, such as improper baselines, data leakage, or mismatched metrics, before execution incurs high costs.} 
+
+However, the utility of such a check depends on its stability. This triage is further complicated by known model behaviors. Prior work on sycophancy and prompt fragility suggests that LLM judgments are highly sensitive to how a question is framed~\citep{sharma2024sycophancy, syntacticfragility, causalt5k}. If scientific evaluation inherits these vulnerabilities, autonomous agents may suffer from inconsistent filtering, alternating between reckless optimism and destructive skepticism based on minor prompt variations.
+
+% In this paper, we introduce \textbf{SoundnessBench}, a large-scale benchmark for pre-execution scientific judgment. While existing datasets often rely on small-scale human annotations or synthetic tasks, SoundnessBench is reconstructed from the ICLR public history. We processed over 35,209 initial submissions and 137,940 expert reviews to identify a high-signal subset of 1,099 hypothesis--experiment pairings. This scale covers 16 distinct ML subfields ranging from Reinforcement Learning to Generative Modeling to ensure that the benchmark evaluates ``generalist'' scientific reasoning rather than niche pattern matching. Our pipeline utilizes reviewer-agreement filtering, near-verbatim proposal extraction, and a retrieval-backed atomic-claim auditing process to ensure that the extracted proposals remain faithful to the original manuscripts.
+\fh{In this paper, we introduce \textbf{SoundnessBench}, a large-scale benchmark for pre-execution scientific judgment in machine-learning research, the domain where current autonomous AI research agents are most actively deployed. While existing datasets often rely on small-scale human annotations or synthetic tasks, SoundnessBench is reconstructed from the public ICLR history. We processed over 35,209 initial submissions and 137,940 expert reviews to identify a high-signal subset of 1,099 hypothesis--experiment pairings. This scale covers 16 distinct ML subfields ranging from Reinforcement Learning to Generative Modeling, allowing us to test whether models can make broadly useful proposal-stage judgments within a well-scoped ML/CS setting. Our labels use reviewer \emph{soundness} sub-scores rather than acceptance decisions or overall ratings, and our pipeline combines reviewer-agreement filtering, near-verbatim proposal extraction, and retrieval-backed atomic-claim auditing to keep extracted proposals traceable to their source manuscripts.}
+
+\fh{Our evaluation of 12 frontier LLMs reveals a pervasive \textbf{optimism bias} against reviewer-derived proposal-stage labels. Under standard prompting, models frequently classify low-soundness proposals as high-soundness, yielding a mean false-positive rate of 74.0\%. Under the tested aggressive prompt, models over-correct: while the false-positive rate drops to 19.9\%, high-soundness recall collapses to 36.1\%. These results suggest that current frontier models are not yet reliable as standalone first-gate critics for ML research proposals; their judgments are inaccurate on many flawed designs and unstable under prompt framing.}
+
+\fh{We further add controls motivated by potential concerns about label validity, leakage, contamination, and surface confounding. A preliminary human audit finds low explicit leakage and broad agreement with assigned labels; an ICLR 2026 split reduces public-corpus contamination concerns; identifier-removal, surface-feature, year/subfield/writing-quality, and adversarial-injection analyses probe whether the observed behavior is driven only by memorization or stylistic artifacts. These controls do not eliminate the central pattern, suggesting that the optimism bias reflects a real weakness in current model judgment rather than a single dataset artifact.}
+
+
+\textbf{Our contributions are:}
+\begin{itemize}[leftmargin=*,itemsep=0in, topsep=0in, parsep=0in]
+    % \item \textbf{SoundnessBench:} A diverse benchmark of 1,099 validated research proposals. This represents one of the largest curated datasets of its kind, spanning 8 years of top-tier ML submissions and 16 sub-disciplines, providing a statistically significant measure of model "common sense" in research.
+    \item \fh{\textbf{SoundnessBench:} A diverse benchmark of 1,099 validated ML research proposals. This represents one of the largest curated datasets of its kind, spanning multiple years of top-tier ML submissions and 16 subfields, while making the domain scope explicit rather than claiming coverage of all science.}
+    % \item \textbf{A High-Precision Curation Pipeline:} We detail a rigorous multi-stage pipeline that moves beyond simple scraping. Our process includes: (1) \textit{Expert-Agreement Filtering} (utilizing 4,391 human-written reviews), (2) \textit{Atomic-Claim Auditing} to prevent "benchmark leakage," and (3) \textit{Outcome Masking} to ensure models judge the methodology rather than predicting the paper's eventual acceptance.
+    \item \fh{\textbf{A High-Precision Curation Pipeline:} We detail a rigorous multi-stage pipeline that moves beyond simple scraping. Our process includes: (1) \textit{Expert-Agreement Filtering} using reviewer confidence and soundness-score agreement, (2) \textit{Atomic-Claim Auditing} to verify extraction fidelity against source PDFs, and (3) \textit{Outcome Masking} to reduce leakage from experimental results or acceptance outcomes.}
+    \item \fh{\textbf{Confounder and Robustness Controls:} We add analyses for reviewer-label proxy limitations, public-corpus contamination, title/identifier recognition, surface-feature heuristics, year/subfield/writing-quality slices, and injected methodological flaws. These controls strengthen the interpretation that LLM failures are not artifacts of a single shallow cue.}
+    % \item \textbf{Quantifying the "Optimism-Fragility" Tradeoff:} We provide an empirical study of 12 frontier LLMs, documenting a systemic failure to identify methodological flaws. We characterize the "optimism bias" and demonstrate that current "AI Scientists" are highly sensitive to prompt framing, making them brittle as autonomous decision-makers.
+    \item \fh{\textbf{Quantifying the ``Optimism-Fragility'' Tradeoff:} We provide an empirical study of 12 frontier LLMs, documenting a systemic failure to identify methodological flaws. We characterize the optimism bias and demonstrate that current AI-scientist-style evaluators are highly sensitive to prompt framing, making them brittle as autonomous decision-makers.}
+\end{itemize}

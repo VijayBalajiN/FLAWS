@@ -1,0 +1,10 @@
+:error_text:
+as this approach is known to explicitly correct for annotation errors in the training data.
+
+:error_text:
+We will employ three types of regularization during training:
+
+:explanation:
+The most serious error is the conceptual misrepresentation of label smoothing. The plan claims its purpose is to "explicitly correct for annotation errors," which is incorrect. Label smoothing is a regularization technique that discourages the model from becoming overconfident by penalizing extreme (e.g., 0 or 1) probability predictions, which improves model calibration and generalization. This reflects a fundamental misunderstanding of a key technique.
+
+A second, less severe error is that the plan states three types of regularization will be used, but then only describes two (Residual Dropout and Label Smoothing). This makes the methodology section incomplete and inconsistent.

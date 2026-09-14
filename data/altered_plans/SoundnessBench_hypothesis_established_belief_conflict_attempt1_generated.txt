@@ -1,0 +1,15 @@
+:error_type:
+Conflict with Established Beliefs
+
+:original_text:
+Large Language Models' assessment of a research proposal's methodological soundness is unreliable, exhibiting a bias towards optimism and high sensitivity to prompt framing.
+
+:modified_text:
+Large Language Models' assessment of a research proposal's methodological soundness is unreliable, particularly in instruction-tuned variants, which exhibit a greater bias towards optimism and higher sensitivity to prompt framing than their more objective base model counterparts.
+
+:explanation:
+The modification introduces a conflict with the well-established consensus regarding the capabilities of base versus instruction-tuned language models.
+
+(a) The established belief is that while base LLMs possess vast knowledge from pre-training, they are fundamentally poor at following complex, zero-shot instructions. The process of instruction tuning (and subsequent RLHF) is what enables models to comprehend and execute user-specified tasks like "assess the methodological soundness of this proposal."
+
+(b) The modified hypothesis is internally consistent; it posits a plausible mechanism (instruction tuning introduces biases) to explain unreliability. However, it clashes with established knowledge by claiming that base models would be "more objective" and implicitly better at this task. An expert would recognize that a base model's inability to reliably follow the core instructions of the task would be a far more severe failure mode than the sycophancy or optimism biases introduced by tuning. The base model would likely fail to understand the task's intent altogether, producing irrelevant or incoherent text, making its performance dramatically worse and rendering any discussion of its "objectivity" on the task meaningless.

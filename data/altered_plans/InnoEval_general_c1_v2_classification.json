@@ -1,0 +1,9 @@
+{
+  "label": "InnoEval_general_c1_v2",
+  "original_text": "A systematic and robust assessment of a research idea is achieved through a process that combines knowledgeable grounding against existing work, collective deliberation from diverse perspectives, and multi-criteria decision-making.",
+  "modified_text": "A systematic and robust assessment of a research idea is achieved through a process that combines knowledgeable grounding against established paradigms, collective deliberation from diverse perspectives, and multi-criteria decision-making.",
+  "explanation": "The mechanism of error is the introduction of a **hidden and potentially invalid assumption**. The flaw replaces the broad \"existing work\" with the much narrower \"established paradigms.\" This makes the entire assessment process dependent on the correctness of the current dominant paradigm. A truly robust process must be able to evaluate novel ideas that may challenge or exist outside of established paradigms. By constraining the grounding in this way, the process is no longer *sufficient* for assessing potentially transformative or paradigm-shifting research, thus falsifying the claim of general sufficiency.",
+  "category": "C",
+  "category_name": "Undermining a Premise",
+  "reasoning": "The error conflates \"existing work\" with \"established paradigms,\" treating them as interchangeable when they are distinct concepts, thereby introducing a hidden assumption that undermines the stated goal of robust assessment."
+}

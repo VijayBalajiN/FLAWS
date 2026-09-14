@@ -1,0 +1,15 @@
+:error_text:
+lr = d_model^0.5 * min(step_num^-0.5, step_num * warmup_steps^-1.5)
+
+:error_text:
+averaging multiple model checkpoints to potentially enhance performance
+
+:error_text:
+We will employ three types of regularization during training:
+
+:explanation:
+The most serious error is in the learning rate schedule formula. The term `d_model^0.5` should be `d_model^-0.5`. With a positive exponent, the learning rate would increase with the model's dimensionality, almost certainly causing training to become unstable and fail to converge. This is a critical technical error that would prevent the experiment from succeeding.
+
+The second error is a significant methodological omission highlighted by the plan to average model checkpoints. This technique, along with hyperparameter tuning and early stopping, requires a validation (or development) set to select the best checkpoints in a principled way. The research plan fails to mention the creation or use of a validation set, which is a fundamental flaw in the experimental design that undermines the validity and reproducibility of the results.
+
+The third error is a direct contradiction in the description of the regularization methods. The plan states that three types of regularization will be used, but then proceeds to list only two (Residual Dropout and Label Smoothing). This makes the experimental methodology incomplete and ambiguous.

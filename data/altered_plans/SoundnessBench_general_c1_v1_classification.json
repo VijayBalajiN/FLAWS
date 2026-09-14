@@ -1,0 +1,9 @@
+{
+  "label": "SoundnessBench_general_c1_v1",
+  "original_text": "exhibiting a bias towards optimism and high sensitivity to prompt framing",
+  "modified_text": "exhibiting a bias towards optimism, driven by high sensitivity to positive prompt framing",
+  "explanation": "This modification introduces a confounding variable. It changes the relationship between \"optimism\" and \"prompt framing\" from a simple conjunction to a causal one. The claim is that LLMs have an intrinsic optimism bias. This modified text suggests the observed \"optimism\" is merely an artifact of the model's sensitivity to positively framed prompts used in the study, rather than a systematic bias towards optimism in general. The underlying mechanism is acquiescence bias being misidentified as optimism bias.",
+  "category": "C",
+  "category_name": "Undermining a Premise",
+  "reasoning": "The error reinterprets an observed phenomenon (optimism bias) as an artifact of the experimental setup (sensitivity to positive framing), thereby undermining the premise that the LLM has an intrinsic optimism bias."
+}

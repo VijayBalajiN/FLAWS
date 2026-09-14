@@ -1,0 +1,8 @@
+:original_text:
+Additionally, we will apply it to English constituency parsing to test its ability to generalize to other structured prediction problems.
+
+:modified_text:
+Additionally, we will apply it to the parsed English side of the WMT14 parallel corpus to test its ability to generalize to other structured prediction problems.
+
+:explanation:
+The mechanism of this error is a **confounding variable introduced through data selection**. The WMT14 dataset is a well-known benchmark for machine translation. By using the parsed English side of this specific corpus for the parsing task, the experiment is no longer a fair test of generalization to a "fundamentally different" task. The model, especially if pre-trained on common web data, has likely seen sentences from this translation corpus before. Its success on the parsing task could be attributed to familiarity with the data distribution, rather than the architecture's ability to generalize its understanding of linguistic structure to a new domain.

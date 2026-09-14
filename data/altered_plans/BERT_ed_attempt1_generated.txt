@@ -1,0 +1,13 @@
+:error_type:
+Wrong metric/measurement
+
+:original_text:
+We will extract fixed contextual embeddings from various layers of the pre-trained model and feed them into a BiLSTM classifier, comparing its performance to the standard fine-tuning approach.
+
+:modified_text:
+We will extract fixed contextual embeddings from the final layer of the pre-trained model and feed them into a BiLSTM classifier, comparing its performance to the standard fine-tuning approach.
+
+:explanation:
+The flaw introduced is that the experiment now measures the performance of a feature-based approach using only embeddings from the final layer. The goal of this ablation study is to compare the "feature-based" versus "fine-tuning" paradigms for transfer learning. However, it is a known phenomenon in deep learning for NLP that the most effective features for transfer to downstream tasks often come from intermediate layers, not the final layer, which can be overly specialized for the pre-training task.
+
+By exclusively using the final layer's embeddings, the experiment is not testing the feature-based approach at its strongest; it is testing a potentially suboptimal implementation of it. This creates an unfair comparison. If this version of the feature-based approach underperforms relative to fine-tuning, the researchers might erroneously conclude that fine-tuning is the superior method in general, when a feature-based approach using embeddings from a different layer might have been far more competitive. Therefore, the performance of the final-layer-feature-based model is the "wrong measurement" because it is a poor proxy for the true potential of the feature-based method, undermining the validity of the comparison.

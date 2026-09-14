@@ -1,0 +1,10 @@
+:error_text:
+evaluate models on a held-out split of very recent papers (ICLR 2026)
+
+:error_text:
+derived from anonymized versions of the proposals.
+
+:explanation:
+The most serious error is the plan to use ICLR 2026 papers for the contamination control experiment. These papers do not exist, making this crucial control experiment impossible to execute as described.
+
+A secondary error exists in the design of the surface features baseline. The plan is to derive baseline features (e.g., proposal length) from "anonymized versions of the proposals," while the LLMs are evaluated on the original, non-anonymized proposals. This creates an unfair comparison, as the baseline is not being tested on the same data as the models, introducing a potential confound.

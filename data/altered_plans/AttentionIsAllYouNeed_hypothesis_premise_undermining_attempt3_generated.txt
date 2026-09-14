@@ -1,0 +1,13 @@
+:error_type:
+Undermining a Premise
+
+:original_text:
+An architecture relying solely on attention mechanisms, without recurrence or convolutions, is sufficient to model global dependencies between input and output sequences.
+
+:modified_text:
+An architecture relying solely on attention mechanisms, without recurrence or convolutions, is sufficient to capture the global dependencies required for state-of-the-art performance on sequence transduction tasks.
+
+:explanation:
+The modification conflates two distinct concepts: (a) the general, intrinsic capacity of an architecture to "model global dependencies" as a fundamental capability, and (b) the achievement of a specific, task-dependent outcome, "state-of-the-art performance." The original hypothesis makes a broad, falsifiable claim about the model's representational power (a). The modified version subtly shifts the goalposts, making the claim about achieving a benchmark result (b).
+
+The flaw is the hidden premise that achieving state-of-the-art performance is the same as possessing a general and sufficient capacity for modeling global dependencies. This is an error because a model could reach top performance on a specific benchmark (e.g., WMT translation) by exploiting statistical artifacts or learning shortcuts specific to that dataset, rather than by developing a truly generalizable understanding of global dependencies. The benchmark is evidence for the capability, but it is not the capability itself. The modified hypothesis treats the evidence as the phenomenon, narrowing the scientific claim and making it less about fundamental architecture and more about engineering a high score.

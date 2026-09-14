@@ -1,0 +1,5 @@
+:error_text:
+A systematic and robust assessment of a research idea is achieved through a process that combines knowledgeable grounding against established paradigms, collective deliberation from diverse perspectives, and multi-criteria decision-making.
+
+:explanation:
+This statement is presented as the research hypothesis but is actually a non-falsifiable premise. It defines an ideal process rather than making a testable prediction. The experiment is not designed to validate this principle but to test if a system built upon it can replicate human expert judgments, a different hypothesis stated elsewhere. This misalignment between the stated hypothesis and the experimental design is a fundamental conceptual flaw.

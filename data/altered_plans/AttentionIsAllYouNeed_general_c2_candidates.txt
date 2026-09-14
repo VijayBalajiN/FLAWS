@@ -1,0 +1,35 @@
+:candidate:
+1
+
+:original_text:
+Additionally, we will apply it to English constituency parsing to test its ability to generalize to other structured prediction problems.
+
+:modified_text:
+Additionally, we will apply it to the parsed English side of the WMT14 parallel corpus to test its ability to generalize to other structured prediction problems.
+
+:explanation:
+The mechanism of this error is a **confounding variable introduced through data selection**. The WMT14 dataset is a well-known benchmark for machine translation. By using the parsed English side of this specific corpus for the parsing task, the experiment is no longer a fair test of generalization to a "fundamentally different" task. The model, especially if pre-trained on common web data, has likely seen sentences from this translation corpus before. Its success on the parsing task could be attributed to familiarity with the data distribution, rather than the architecture's ability to generalize its understanding of linguistic structure to a new domain.
+
+:candidate:
+2
+
+:original_text:
+Additionally, we will apply it to English constituency parsing to test its ability to generalize to other structured prediction problems.
+
+:modified_text:
+Additionally, we will apply it to English constituency parsing, using gold part-of-speech tags as an additional input channel, to test its ability to generalize to other structured prediction problems.
+
+:explanation:
+The mechanism of this error is **task simplification through feature engineering**. The claim is that the Transformer architecture itself can generalize. By providing "gold" (i.e., error-free, human-annotated) part-of-speech tags as an input to the model, the task is made significantly easier. The model is no longer required to learn low-level syntactic information from raw text alone; instead, it's given a powerful, explicit clue about the structure. This makes it an invalid test of the architecture's ability to generalize from a task like translation (which operates on raw text) because it now relies on a heavily engineered, task-specific input that shortcuts the core challenge.
+
+:candidate:
+3
+
+:original_text:
+Additionally, we will apply it to English constituency parsing to test its ability to generalize to other structured prediction problems.
+
+:modified_text:
+Additionally, we will apply it to English constituency parsing to test its ability to generalize to other structured prediction problems, reporting the F1 score on non-recursive noun phrases.
+
+:explanation:
+The mechanism of this error is **incomplete evaluation via metric selection**. The claim is about generalization to a complex structured prediction task. Constituency parsing involves identifying a full hierarchy of nested phrases (verb phrases, clauses, etc.). By proposing to evaluate performance only on "non-recursive noun phrases" (e.g., "the cat"), the experiment measures success on arguably the simplest and most frequent type of constituent. A model could perform well on this narrow sub-task while failing completely at capturing the deeper, more complex syntactic structures that define the problem. This cherry-picked metric could produce a high score that falsely suggests successful generalization, while ignoring failure on the core challenges of the task.

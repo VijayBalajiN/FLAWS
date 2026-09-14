@@ -1,0 +1,27 @@
+[
+  {
+    "claim": "Language representations formed by conditioning on both left and right context in all layers are more powerful than those conditioned only on unidirectional or shallowly-combined bidirectional contexts.",
+    "source_field": "hypothesis",
+    "source_excerpt": "Language representations jointly conditioned on both left and right context in all layers are more powerful than representations conditioned on unidirectional or shallowly combined bidirectional contexts."
+  },
+  {
+    "claim": "The Next Sentence Prediction (NSP) pre-training task provides a meaningful contribution to the model's performance, beyond what is learned from the Masked Language Model task alone.",
+    "source_field": "experiment_design",
+    "source_excerpt": "This will allow us to isolate the contributions of deep bidirectionality and the NSP task."
+  },
+  {
+    "claim": "Increasing the scale of the model (e.g., layers, hidden size, attention heads) will lead to improved performance on downstream tasks.",
+    "source_field": "experiment_design",
+    "source_excerpt": "We will compare the performance of `BERT_BASE` and `BERT_LARGE` across all tasks to measure the impact of model scale on downstream performance, especially on smaller datasets."
+  },
+  {
+    "claim": "The final hidden state corresponding to the special `[CLS]` token is a sufficient and effective aggregate representation for sentence-level classification tasks.",
+    "source_field": "experiment_design",
+    "source_excerpt": "For sentence-level classification tasks (MNLI, QQP, QNLI, SST-2, etc.), we will feed the final hidden state of the `[CLS]` token into a new classification layer."
+  },
+  {
+    "claim": "Fine-tuning the entire pre-trained model is a more effective method for transfer learning on a task like NER than using the model as a fixed feature extractor.",
+    "source_field": "experiment_design",
+    "source_excerpt": "We will evaluate BERT on the CoNLL-2003 Named Entity Recognition (NER) task using a feature-based approach... comparing its performance to the standard fine-tuning approach."
+  }
+]

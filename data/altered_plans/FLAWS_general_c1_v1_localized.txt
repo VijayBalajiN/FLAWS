@@ -1,0 +1,1 @@
+error: We hypothesize that by grounding synthetic errors in a paper's core claims, rather than using a fixed set of error types, we can create a more relevant and challenging testbed.

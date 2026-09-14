@@ -1,0 +1,2 @@
+error:Large Language Models' assessment of a research proposal's methodological soundness is unreliable, exhibiting a bias towards optimism and high sensitivity to prompt framing.
+error:Our central hypothesis is that current models lack the robust ability to assess the methodological soundness of research proposals, exhibiting a bias towards optimism and a high sensitivity to prompt framing.

@@ -1,0 +1,10 @@
+:error_text:
+evaluate models on a held-out split of very recent papers (ICLR 2026) using models with documented training data cutoffs prior to the papers' publication.
+
+:error_text:
+This prompt will instruct the model to act as a strict critic, defaulting to a "low soundness" rating unless the proposal demonstrates exceptionally clear and rigorous methodology.
+
+:explanation:
+The most serious error is a temporal impossibility in the experimental design. The plan specifies using papers from "ICLR 2026," a conference that has not yet occurred, to create a held-out test set for data contamination. This control experiment is fundamentally unexecutable as the data does not exist.
+
+A second significant flaw lies in the design of the "Aggressive Prompt." By explicitly instructing the model to "default" to a specific rating, the experiment tests instruction-following rather than the model's inherent critical assessment capabilities. This conflates the model's sensitivity to framing with its ability to obey a command, which undermines the goal of measuring its intrinsic bias as stated in the hypothesis.

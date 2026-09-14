@@ -1,0 +1,82 @@
+\definecolor{mygrey}{RGB}{230, 227, 227}
+\newcommand{\GG}{\cellcolor{mygrey}}
+
+\begin{table*}[htbp]
+  \centering
+  \renewcommand\arraystretch{1.}
+  \small
+  \caption{Notations used in our paper.}
+  \vskip -0.1in
+  \begin{tabular}{cc}
+    \toprule
+    \textbf{Notation} & \textbf{Description} \\
+    \midrule
+    \multicolumn{2}{c}{\GG \textbf{{Problem Definition (\S\ref{sec:definition})}}} \\
+    \midrule
+    $\boldsymbol{\mathcal{I}}$ & A structured idea contains six parts. \\
+    $\boldsymbol{t}$ & The evaluation timestamp for an idea. \\
+    $\boldsymbol{\mathcal{F}}$ & Evaluation system. \\
+    $\boldsymbol{P}$ & A final evaluation report. \\
+    $\boldsymbol{P}_\textrm{point}$ & Point-wise evaluation report. \\
+    $\boldsymbol{\mathcal{K}}$ & Background knowledge of the idea. \\
+    $\boldsymbol{E}_\textrm{point}$ & Point-wise evaluation results. \\
+    $\boldsymbol{\mathcal{V}}$ & Revision suggestions for future improvements of the idea. \\
+    $\boldsymbol{d}_\textrm{point}$ & Final decision of an idea. \\
+    $\boldsymbol{\mathcal{I}}_i$ & The $i$-th idea of a group of $n$ ideas. \\
+    $\boldsymbol{P}^{\mathcal{I}_i}_{\textrm{point}}$ & Evaluation report for idea $\boldsymbol{\mathcal{I}}_i$. \\
+    $\boldsymbol{P}_\textrm{group}$ & Group-wise evaluation report with $\geq 2$ ideas. \\
+    $\boldsymbol{E}_\textrm{group}$ & Group-wise evaluation results. \\
+    $\boldsymbol{d}_\textrm{group}$ & Ranking list of a group of ideas. \\
+    \midrule
+    \multicolumn{2}{c}{\GG \textbf{{Heterogeneous Deep Knowledge Search (\S\ref{sec:search_engine})}}} \\
+    \midrule
+    $\boldsymbol{T}$ & Raw textual idea. \\
+    $\boldsymbol{\mathcal{M}}_e$ & Extraction agent used to extract $\boldsymbol{T}$ into structured parts $\boldsymbol{\mathcal{I}}$. \\
+    $\boldsymbol{\mathcal{M}}_s$ & Search agent as the backbone of our search engine. \\
+    $\boldsymbol{p}$ & Idea part $\boldsymbol{p} \in \boldsymbol{\mathcal{I}}$. \\
+    $\boldsymbol{u}$ & Search tool $\boldsymbol{u}\in$ (\arxiv,\semantic,\scholar,\google,\github,\kaggle). \\
+    $\boldsymbol{\mathcal{Q}}_{p,u}$ & Search queries specially for idea part $\boldsymbol{p}$ and search tool $\boldsymbol{u}$. \\
+    $\boldsymbol{\widetilde{\mathcal{K}}}$ & Brief searched knowledge. \\
+    $\boldsymbol{\widetilde{\mathcal{K}}}_{p,u}$ & Brief knowledge searched by search tool $\boldsymbol{u}$ based on $\boldsymbol{p}$. \\
+    $\boldsymbol{\widetilde{\mathcal{K}}}_l, \boldsymbol{\widetilde{\mathcal{K}}}_w, \boldsymbol{\widetilde{\mathcal{K}}}_c$ & Brief searched literature, web, code knowledge respectively. \\
+    $m$ & Maximum retention number for each knowledge type. \\
+    $\boldsymbol{\mathcal{S}}^{\textrm{sem}}_j$ & Ranking scores for knowledge type $j \in \{l,w,c\}$ calculated through semantic similarity. \\
+    $\boldsymbol{\mathcal{S}}^{\textrm{llm}}_j$ & Ranking scores for knowledge type $j \in \{l,w,c\}$ given by LLM. \\
+    $\boldsymbol{\mathcal{S}}_j$ & Overall ranking scores for knowledge type $j \in \{l,w,c\}$ weighted by $\boldsymbol{\mathcal{S}}^{\textrm{sem}}_j$ and $\boldsymbol{\mathcal{S}}^{\textrm{llm}}_j$ \\
+    $\boldsymbol{\widetilde{\mathcal{K}}}^*_j$ & Top-$m$ brief knowledge for knowledge type $j \in \{l,w,c\}$ ranked by $\boldsymbol{\mathcal{S}}_j$ \\
+    $\boldsymbol{\mathcal{K}}_l, \boldsymbol{\mathcal{K}}_w, \boldsymbol{\mathcal{K}}_c$ & Enriched searched literature, web, code knowledge reports respectively. \\
+    $\boldsymbol{\mathcal{K}}_{p,u}$ & Enriched knowledge retrieved using idea part $\boldsymbol{p}$ and search tool $\boldsymbol{u}$. \\
+    $\widehat{\boldsymbol{\mathcal{Q}}}_{p,u}$ & Refined queries specially for idea part $\boldsymbol{p}$ and search tool $\boldsymbol{u}$. \\
+    $\boldsymbol{N}$ & Query refinement iteration times. \\
+    \midrule
+    \multicolumn{2}{c}{\GG \textbf{{Knowledge Grounding (\S\ref{sec:knowledge_grounding})}}} \\
+    \midrule
+    $\boldsymbol{\mathcal{M}}_g$ & Grounding agent used to ground searched knowledge to idea part at a finer-grained degree. \\
+    $\boldsymbol{\mathcal{K}}_p$ & Knowledge reports searched based on idea part $\boldsymbol{p}$. \\
+    $\boldsymbol{k}_p$ & Knowledge piece $\boldsymbol{k}_p\in\boldsymbol{\mathcal{K}}_p$. \\
+    $\boldsymbol{e}_p$ & Knowledge evidences extracted based on $\boldsymbol{k}_p$ and $\boldsymbol{p}$. \\
+    $\boldsymbol{s}_p$ & Relevance analysis between $\boldsymbol{e}_p$ and $\boldsymbol{p}$ \\
+    $\boldsymbol{\mathcal{G}}_p$ & Grounding results for idea part $\boldsymbol{p}$. \\
+    $\boldsymbol{\mathcal{G}}$ & Grounding results for all idea parts. \\
+    $\boldsymbol{\mathcal{G}}_\textrm{future}$ & Grounding results from future knowledge. \\
+    \midrule
+    \multicolumn{2}{c}{\GG \textbf{{Multi-dimensional Multi-perspective Evaluation (\S\ref{sec:evaluation})}}} \\
+    \midrule
+    $\boldsymbol{\mathcal{P}}$ & Innovation review board. \\
+    $\boldsymbol{\rho}$ & Academic persona $\boldsymbol{\rho}\in\boldsymbol{\mathcal{P}}$. \\
+    $\boldsymbol{\Psi}$ & Evaluation dimension set. \\
+    $\boldsymbol{\psi}$ & Evaluation dimension $\boldsymbol{\psi}\in\boldsymbol{\Psi}$. \\
+    $\boldsymbol{\mathcal{M}}_{\psi}$ & Evaluator agent specially for evaluating $\boldsymbol{\psi}$. \\
+    $\boldsymbol{\mathcal{P}}'$ & Chosen personas during evaluation. \\
+    $\boldsymbol{\varphi}_{\rho,\psi}$ & Evaluation result on dimension $\boldsymbol{\psi}$ by reviewer $\boldsymbol{\rho}$. \\
+    \midrule
+    \multicolumn{2}{c}{\GG \textbf{{Report Generation (\S\ref{sec:report})}}} \\
+    \midrule
+    $\boldsymbol{\mathcal{M}}_r$ & Report agent for report generation. \\
+    $\boldsymbol{\varphi}_\textrm{meta}$ & Meta-review. \\
+    $\boldsymbol{\varphi}^\textrm{group}_{\psi}$ & Comparative evaluation of group ideas under dimension $\boldsymbol{\psi}$. \\
+    $\boldsymbol{\varphi}^\textrm{group}_\textrm{meta}$ & Meta-review for group evaluation. \\
+    \bottomrule
+  \end{tabular}
+\label{tab:notation}
+\end{table*}

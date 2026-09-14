@@ -1,0 +1,16 @@
+:error_type:
+Undermining a Premise
+
+:original_text:
+Large Language Models' assessment of a research proposal's methodological soundness is unreliable, exhibiting a bias towards optimism and high sensitivity to prompt framing.
+
+:modified_text:
+Large Language Models' assessment of a research proposal's scientific merit is unreliable, exhibiting a bias towards optimism and high sensitivity to prompt framing.
+
+:explanation:
+This modification conflates two distinct concepts: "methodological soundness" and "scientific merit."
+
+1.  **Methodological Soundness** is a narrow, technical criterion referring to the validity, rigor, and appropriateness of the proposed experimental design and analysis.
+2.  **Scientific Merit** is a broad, multidimensional judgment that includes soundness but also incorporates novelty, potential impact, significance of the research question, and clarity.
+
+The research plan's methodology is designed to measure an LLM's ability to assess *soundness*, as it explicitly uses the "soundness sub-score" from peer reviews to create its ground-truth labels. By changing the hypothesis to be about "scientific merit," the plan now claims to test for a broad quality while only measuring a narrow component of it. This is a flaw because a proposal can be methodologically sound but lack merit (e.g., it is unoriginal or trivial), or it could have high merit (a groundbreaking idea) despite minor methodological weaknesses. The hypothesis's hidden premise—that the soundness score is a valid proxy for overall scientific merit—is false, thus undermining the entire experimental conclusion even if the internal procedures are followed correctly.

@@ -1,0 +1,296 @@
+\begin{thebibliography}{57}
+\providecommand{\natexlab}[1]{#1}
+
+\bibitem[{AAAI(2025)}]{aaai_genai}
+AAAI. 2025.
+\newblock \href {https://aaai.org/aaai-launches AI-powered-peer-review-assessment-system/} {{AAAI} launches {AI}-powered peer review assessment system}.
+
+\bibitem[{Bai et~al.(2025)Bai, Tu, Zhang, Peng, Wang, Lv, Cao, Xu, Hou, Dong, Tang, and Li}]{bai2025}
+Yushi Bai, Shangqing Tu, Jiajie Zhang, Hao Peng, Xiaozhi Wang, Xin Lv, Shulin Cao, Jiazheng Xu, Lei Hou, Yuxiao Dong, Jie Tang, and Juanzi Li. 2025.
+\newblock \href {https://arxiv.org/abs/2412.15204} {{LongBench} v2: Towards deeper understanding and reasoning on realistic long-context multitasks}.
+\newblock \emph{Preprint}, arXiv:2412.15204.
+
+\bibitem[{Bradley and Terry(1952)}]{bradley1952}
+Ralph~Allan Bradley and Milton~E. Terry. 1952.
+\newblock Rank analysis of incomplete block designs. {I}. the method of paired comparisons.
+\newblock \emph{Biometrika}, 39(3/4):324--345.
+
+\bibitem[{Chamoun et~al.(2024)Chamoun, Schlichtkrull, and Vlachos}]{chamoun2024}
+Eric Chamoun, Michael Schlichtkrull, and Andreas Vlachos. 2024.
+\newblock \href {https://doi.org/10.18653/v1/2024.findings-acl.580} {Automated focused feedback generation for scientific writing assistance}.
+\newblock In \emph{Findings of the Association for Computational Linguistics: ACL 2024}, pages 9742--9763, Bangkok, Thailand. Association for Computational Linguistics.
+
+\bibitem[{Checco et~al.(2021)Checco, Bracciale, Loreti, Pinfield, and Bianchi}]{checco2021aiassisted}
+Alessio Checco, Lorenzo Bracciale, Paola Loreti, Stephen Pinfield, and Giuseppe Bianchi. 2021.
+\newblock \href {https://doi.org/10.1057/s41599-021-00731-9} {{AI}-assisted peer review}.
+\newblock \emph{Humanities and Social Sciences Communications}, 8(1):1--11.
+
+\bibitem[{Chiang et~al.(2024)Chiang, Zheng, Sheng, Angelopoulos, Li, Li, Zhu, Zhang, Jordan, Gonzalez et~al.}]{chiang2024chatbot}
+Wei-Lin Chiang, Lianmin Zheng, Ying Sheng, Anastasios~Nikolas Angelopoulos, Tianle Li, Dacheng Li, Banghua Zhu, Hao Zhang, Michael Jordan, Joseph~E Gonzalez, and 1 others. 2024.
+\newblock Chatbot {A}rena: An open platform for evaluating {LLMs} by human preference.
+\newblock In \emph{Forty-first International Conference on Machine Learning}.
+
+\bibitem[{D'Arcy et~al.(2024)D'Arcy, Hope, Birnbaum, and Downey}]{darcy2024}
+Mike D'Arcy, Tom Hope, Larry Birnbaum, and Doug Downey. 2024.
+\newblock \href {https://arxiv.org/abs/2401.04259} {{MARG}: Multi-agent review generation for scientific papers}.
+\newblock \emph{Preprint}, arXiv:2401.04259.
+
+\bibitem[{Deng et~al.(2024)Deng, Zhao, Tang, Gerstein, and Cohan}]{deng2024}
+Chunyuan Deng, Yilun Zhao, Xiangru Tang, Mark Gerstein, and Arman Cohan. 2024.
+\newblock \href {https://arxiv.org/abs/2311.09783} {Investigating data contamination in modern benchmarks for {L}arge {L}anguage {M}odels}.
+\newblock \emph{Preprint}, arXiv:2311.09783.
+
+\bibitem[{Du et~al.(2024)Du, Wang, Zhao, Deng, Liu, Lou, Zou, Venkit, Zhang, Srinath, Zhang, Gupta, Li, Li, Wang, Liu, Liu, Gao, Xia, Xing, Cheng, Wang, Su, Shah, Guo, Gu, Li, Wei, Wang, Cheng, Ranathunga, Fang, Fu, Liu, Huang, Blanco, Cao, Zhang, Yu, and Yin}]{du2024}
+Jiangshu Du, Yibo Wang, Wenting Zhao, Zhongfen Deng, Shuaiqi Liu, Renze Lou, Henry~Peng Zou, Pranav~Narayanan Venkit, Nan Zhang, Mukund Srinath, Haoran~Ranran Zhang, Vipul Gupta, Yinghui Li, Tao Li, Fei Wang, Qin Liu, Tianlin Liu, Pengzhi Gao, Congying Xia, and 21 others. 2024.
+\newblock \href {https://arxiv.org/abs/2406.16253} {{LLMs} assist {NLP} researchers: Critique paper (meta-)reviewing}.
+\newblock \emph{Preprint}, arXiv:2406.16253.
+
+\bibitem[{Dycke and Gurevych(2025)}]{dycke2025}
+Nils Dycke and Iryna Gurevych. 2025.
+\newblock \href {https://arxiv.org/abs/2508.21422} {Automatic reviewers fail to detect faulty reasoning in research papers: A new counterfactual evaluation framework}.
+\newblock \emph{Preprint}, arXiv:2508.21422.
+
+\bibitem[{Dycke et~al.(2023)Dycke, Kuznetsov, and Gurevych}]{dycke2023}
+Nils Dycke, Ilia Kuznetsov, and Iryna Gurevych. 2023.
+\newblock \href {https://doi.org/10.18653/v1/2023.acl-long.277} {{NLP}eer: A unified resource for the computational study of peer review}.
+\newblock In \emph{Proceedings of the 61st Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)}, pages 5049--5073, Toronto, Canada. Association for Computational Linguistics.
+
+\bibitem[{Foundation(2025)}]{difflib}
+Python~Software Foundation. 2025.
+\newblock \href {https://docs.python.org/3/library/difflib.html} {\emph{difflib — Helpers for computing deltas}}.
+\newblock Python Software Foundation.
+\newblock Last updated Nov 20 2025; version 3.14.0 documentation.
+
+\bibitem[{Frick et~al.(2025)Frick, Chen, Tennyson, Li, Chiang, Angelopoulos, and Stoica}]{frick2025}
+Evan Frick, Connor Chen, Joseph Tennyson, Tianle Li, Wei-Lin Chiang, Anastasios~N. Angelopoulos, and Ion Stoica. 2025.
+\newblock \href {https://arxiv.org/abs/2502.14855} {Prompt-to-{L}eaderboard}.
+\newblock \emph{Preprint}, arXiv:2502.14855.
+
+\bibitem[{Garg et~al.(2025)Garg, Prasad, Singhal, Kirtani, Mandal, and Kumar}]{garg2025}
+Madhav~Krishan Garg, Tejash Prasad, Tanmay Singhal, Chhavi Kirtani, Murari Mandal, and Dhruv Kumar. 2025.
+\newblock \href {https://arxiv.org/abs/2502.11736} {Review{E}val: An evaluation framework for {AI}-generated reviews}.
+\newblock \emph{Preprint}, arXiv:2502.11736.
+
+\bibitem[{Goldberg et~al.(2025)Goldberg, Stelmakh, Cho, Oh, Agarwal, Belgrave, and Shah}]{goldberg2025peer}
+Alexander Goldberg, Ivan Stelmakh, Kyunghyun Cho, Alice Oh, Alekh Agarwal, Danielle Belgrave, and Nihar~B Shah. 2025.
+\newblock Peer reviews of peer reviews: A randomized controlled trial and other experiments.
+\newblock \emph{PloS one}, 20(4):e0320444.
+
+\bibitem[{Guo et~al.(2023)Guo, Shang, Rennard, Vazirgiannis, and Clavel}]{guo2023}
+Yanzhu Guo, Guokan Shang, Virgile Rennard, Michalis Vazirgiannis, and Chloé Clavel. 2023.
+\newblock \href {https://arxiv.org/abs/2311.11967} {Automatic analysis of substantiation in scientific peer reviews}.
+\newblock \emph{Preprint}, arXiv:2311.11967.
+
+\bibitem[{Hasanain et~al.(2024)Hasanain, Ahmad, and Alam}]{hasanain2024}
+Maram Hasanain, Fatema Ahmad, and Firoj Alam. 2024.
+\newblock \href {https://arxiv.org/abs/2311.09812} {{L}arge {L}anguage {M}odels for propaganda span annotation}.
+\newblock \emph{Preprint}, arXiv:2311.09812.
+
+\bibitem[{ICLR(2025)}]{iclr2025}
+ICLR. 2025.
+\newblock \href {https://media.iclr.cc/Conferences/ICLR2025/ICLR2025_Fact_Sheet.pdf} {Fact sheet}.
+
+\bibitem[{Idahl and Ahmadi(2025)}]{idahl2025}
+Maximilian Idahl and Zahra Ahmadi. 2025.
+\newblock \href {https://doi.org/10.18653/v1/2025.naacl-demo.44} {Open{R}eviewer: A specialized {L}arge {L}anguage {M}odel for generating critical scientific paper reviews}.
+\newblock In \emph{Proceedings of the 2025 Conference of the Nations of the Americas Chapter of the Association for Computational Linguistics: Human Language Technologies (System Demonstrations)}, pages 550--562, Albuquerque, New Mexico. Association for Computational Linguistics.
+
+\bibitem[{Kamoi et~al.(2024)Kamoi, Das, Lou, Ahn, Zhao, Lu, Zhang, Zhang, Zhang, Vummanthala, Dave, Qin, Cohan, Yin, and Zhang}]{kamoi2024evaluating}
+Ryo Kamoi, Sarkar Snigdha~Sarathi Das, Renze Lou, Jihyun~Janice Ahn, Yilun Zhao, Xiaoxin Lu, Nan Zhang, Yusen Zhang, Ranran~Haoran Zhang, Sujeeth~Reddy Vummanthala, Salika Dave, Shaobo Qin, Arman Cohan, Wenpeng Yin, and Rui Zhang. 2024.
+\newblock \href {https://arxiv.org/abs/2404.03602} {Evaluating {LLM}s at detecting errors in {LLM} responses}.
+\newblock \emph{Preprint}, arXiv:2404.03602.
+
+\bibitem[{Kasner et~al.(2025)Kasner, Zouhar, Schmidtová, Kartáč, Onderková, Plátek, Gkatzia, Mahamood, Dušek, and Balloccu}]{kasner2025}
+Zdeněk Kasner, Vilém Zouhar, Patrícia Schmidtová, Ivan Kartáč, Kristýna Onderková, Ondřej Plátek, Dimitra Gkatzia, Saad Mahamood, Ondřej Dušek, and Simone Balloccu. 2025.
+\newblock \href {https://arxiv.org/abs/2504.08697} {{L}arge {L}anguage {M}odels as span annotators}.
+\newblock \emph{Preprint}, arXiv:2504.08697.
+
+\bibitem[{Krippendorff(2011)}]{krippendorff2011}
+Klaus Krippendorff. 2011.
+\newblock \href {https://www.asc.upenn.edu/sites/default/files/2021-03/Computing%20Krippendorff%27s%20Alpha-Reliability.pdf} {Computing {K}rippendorff’s alpha-reliability}.
+\newblock Technical Report 2011.1.25 (updated 2013.9.13), Annenberg School for Communication, University of Pennsylvania.
+
+\bibitem[{Kuznetsov et~al.(2024)Kuznetsov, Afzal, Dercksen, Dycke, Goldberg, Hope, Hovy, Kummerfeld, Lauscher, Leyton-Brown, Lu, Mausam, Mieskes, Névéol, Pruthi, Qu, Schwartz, Smith, Solorio, Wang, Zhu, Rogers, Shah, and Gurevych}]{kuznetsov2024}
+Ilia Kuznetsov, Osama~Mohammed Afzal, Koen Dercksen, Nils Dycke, Alexander Goldberg, Tom Hope, Dirk Hovy, Jonathan~K. Kummerfeld, Anne Lauscher, Kevin Leyton-Brown, Sheng Lu, Mausam, Margot Mieskes, Aurélie Névéol, Danish Pruthi, Lizhen Qu, Roy Schwartz, Noah~A. Smith, Thamar Solorio, and 5 others. 2024.
+\newblock \href {https://arxiv.org/abs/2405.06563} {What can {N}atural {L}anguage {P}rocessing do for peer review?}
+\newblock \emph{Preprint}, arXiv:2405.06563.
+
+\bibitem[{Landhuis(2016)}]{landhuis2016}
+Esther Landhuis. 2016.
+\newblock \href {https://doi.org/10.1038/nj7612-457a} {Scientific literature: Information overload}.
+\newblock \emph{Nature}, 535:457--458.
+
+\bibitem[{Lane et~al.(2024)Lane, Friis, Cai, Menietti, Weber, and Guinan}]{lane2024}
+Jacqueline~N. Lane, Simon Friis, Tianxi Cai, Michael Menietti, Griffin Weber, and Eva Guinan. 2024.
+\newblock \href {https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4769282} {Greenlighting innovative projects: How evaluation format shapes the perceived feasibility of novel ideas}.
+\newblock \emph{Harvard Business School Technology \& Operations Mgt. Unit Working Paper}.
+
+\bibitem[{Levenshtein(1966)}]{levenshtein1966}
+Vladimir~I. Levenshtein. 1966.
+\newblock Binary codes capable of correcting deletions, insertions, and reversals.
+\newblock \emph{Soviet Physics Doklady}, 10(8):707--710.
+
+\bibitem[{Li et~al.(2025{\natexlab{a}})Li, Jiang, Huang, Beigi, Zhao, Tan, Bhattacharjee, Jiang, Chen, Wu, Shu, Cheng, and Liu}]{li2025llm}
+Dawei Li, Bohan Jiang, Liangjie Huang, Alimohammad Beigi, Chengshuai Zhao, Zhen Tan, Amrita Bhattacharjee, Yuxuan Jiang, Canyu Chen, Tianhao Wu, Kai Shu, Lu~Cheng, and Huan Liu. 2025{\natexlab{a}}.
+\newblock \href {https://doi.org/10.18653/v1/2025.emnlp-main.138} {From generation to judgment: Opportunities and challenges of {LLM}-as-a-judge}.
+\newblock In \emph{Proceedings of the 2025 Conference on Empirical Methods in Natural Language Processing}, pages 2757--2791, Suzhou, China. Association for Computational Linguistics.
+
+\bibitem[{Li et~al.(2025{\natexlab{b}})Li, Li, Hu, Gao, and Wan}]{li2025}
+Jiatao Li, Yanheng Li, Xinyu Hu, Mingqi Gao, and Xiaojun Wan. 2025{\natexlab{b}}.
+\newblock \href {https://arxiv.org/abs/2502.12510} {Aspect-guided multi-level perturbation analysis of {L}arge {L}anguage {M}odels in automated peer review}.
+\newblock \emph{Preprint}, arXiv:2502.12510.
+
+\bibitem[{Liang et~al.(2023)Liang, Zhang, Cao, Wang, Ding, Yang, Vodrahalli, He, Smith, Yin, McFarland, and Zou}]{liang2023usefulfeedback}
+Weixin Liang, Yuhui Zhang, Hancheng Cao, Binglu Wang, Daisy Ding, Xinyu Yang, Kailas Vodrahalli, Siyu He, Daniel Smith, Yian Yin, Daniel McFarland, and James Zou. 2023.
+\newblock \href {https://arxiv.org/abs/2310.01783} {Can large language models provide useful feedback on research papers? {A} large-scale empirical analysis}.
+\newblock \emph{Preprint}, arXiv:2310.01783.
+
+\bibitem[{Ling et~al.(2025)Ling, Liu, Yan, Yang, Lin, Fan, Shen, Du, and Chen}]{ling2025}
+Zhan Ling, Kang Liu, Kai Yan, Yifan Yang, Weijian Lin, Ting-Han Fan, Lingfeng Shen, Zhengyin Du, and Jiecao Chen. 2025.
+\newblock \href {https://arxiv.org/abs/2501.15089} {{LongReason}: A synthetic long-context reasoning benchmark via context expansion}.
+\newblock \emph{Preprint}, arXiv:2501.15089.
+
+\bibitem[{Liu and Shah(2023)}]{liu2023}
+Ryan Liu and Nihar~B. Shah. 2023.
+\newblock \href {https://arxiv.org/abs/2306.00622} {Reviewer{GPT}? an exploratory study on using {L}arge {L}anguage {M}odels for paper reviewing}.
+\newblock \emph{Preprint}, arXiv:2306.00622.
+
+\bibitem[{Lou et~al.(2025)Lou, Xu, Wang, Du, Kamoi, Lu, Xie, Sun, Zhang, Ahn, Fang, Zou, Ma, Li, Zhang, Xia, Huang, and Yin}]{lou2025}
+Renze Lou, Hanzi Xu, Sijia Wang, Jiangshu Du, Ryo Kamoi, Xiaoxin Lu, Jian Xie, Yuxuan Sun, Yusen Zhang, Jihyun~Janice Ahn, Hongchao Fang, Zhuoyang Zou, Wenchao Ma, Xi~Li, Kai Zhang, Congying Xia, Lifu Huang, and Wenpeng Yin. 2025.
+\newblock \href {https://arxiv.org/abs/2410.22394} {{AAAR}-1.0: Assessing {AI}'s potential to assist research}.
+\newblock \emph{Preprint}, arXiv:2410.22394.
+
+\bibitem[{Marjieh et~al.(2025)Marjieh, Veselovsky, Griffiths, and Sucholutsky}]{marjieh2025}
+Raja Marjieh, Veniamin Veselovsky, Thomas~L. Griffiths, and Ilia Sucholutsky. 2025.
+\newblock \href {https://arxiv.org/abs/2502.01540} {What is a number, that a {L}arge {L}anguage {M}odel may know it?}
+\newblock \emph{Preprint}, arXiv:2502.01540.
+
+\bibitem[{NeurIPS(2024)}]{nip2024}
+NeurIPS. 2024.
+\newblock \href {https://media.neurips.cc/Conferences/NeurIPS2024/NeurIPS2024-Fact_Sheet.pdf} {Fact sheet}.
+
+\bibitem[{Pan et~al.(2025)Pan, Shar, Pfau, Talwalkar, He, and Chen}]{pan2025}
+Jane Pan, Ryan Shar, Jacob Pfau, Ameet Talwalkar, He~He, and Valerie Chen. 2025.
+\newblock \href {https://arxiv.org/abs/2502.18413} {When benchmarks talk: Re-evaluating code {LLMs} with interactive feedback}.
+\newblock \emph{Preprint}, arXiv:2502.18413.
+
+\bibitem[{Phan et~al.(2025)Phan, Gatti, Han, Li, Hu, Zhang, Zhang, Shaaban, Ling, Shi, Choi, Agrawal, Chopra, Khoja, Kim, Ren, Hausenloy, Zhang, Mazeika, Dodonov, Nguyen, Lee, Anderson, Doroshenko, Stokes, Mahmood, Pokutnyi, Iskra, Wang, Levin, Kazakov, Feng, Feng, Zhao, Yu, Gangal, Zou, Wang, Popov, Gerbicz, Galgon, Schmitt, Yeadon, Lee, Sauers, Sanchez, Giska, Roth, Riis, Utpala, Burns, Goshu, Naiya, Agu, Giboney, Cheatom, Fournier-Facio, Crowson, Finke, Cheng, Zampese, Hoerr, Nandor, Park, Gehrunger, Cai, McCarty, Garretson, Taylor, Sileo, Ren, Qazi, Li, Nam, Wydallis, Arkhipov, Shi, Bacho, Willcocks, Cao, Motwani, de~Oliveira~Santos, Veith, Vendrow, Cojoc, Zenitani, Robinson, Tang, Li, Vendrow, Fraga, Kuchkin, Maksimov, Marion, Efremov, Lynch, Liang, Mikov, Gritsevskiy, Guillod, Demir, Martinez, Pageler, Zhou, Soori, Press, Tang, Rissone, Green, Brüssel, Twayana, Dieuleveut, Imperial, Prabhu, Yang, Crispino, Rao, Zvonkine, Loiseau, Kalinin, Lukas, Manolescu, Stambaugh, Mishra, Hogg, Bosio, Coppola,
+  Salazar, Jin, Sayous, Ivanov, Schwaller, Senthilkuma, Bran, Algaba, den Houte, Sypt, Verbeken, Noever, Kopylov, Myklebust, Li, Schut, Zheltonozhskii, Yuan, Lim, Stanley, Yang, Maar, Wykowski, Oller, Sahu, Ardito, Hu, Kamdoum, Jin, Vilchis, Zu, Lackner, Koppel, Sun, Antonenko, Chern, Zhao, Arsene, Cavanagh, Li, Shen, Crisostomi, Zhang, Dehghan, Ivanov, Perrella, Kaparov, Zang, Sucholutsky, Kharlamova, Orel, Poritski, Ben-David, Berger, Whitfill, Foster, Munro, Ho, Sivarajan, Hava, Kuchkin, Holmes, Rodriguez-Romero, Sommerhage, Zhang, Moat, Schneider, Kazibwe, Clarke, Kim, Dias, Fish, Elser, Kreiman, Vilchis, Klose, Anantheswaran, Zweiger, Rawal, Li, Nguyen, Daans, Heidinger, Radionov, Rozhoň, Ginis, Stump, Cohen, Poświata, Tkadlec, Goldfarb, Wang, Padlewski, Barzowski, Montgomery, Stendall, Tucker-Foltz, Stade, Rogers, Goertzen, Grabb, Shukla, Givré, Ambay, Sen, Aziz, Inlow, He, Zhang, Kaddar, Ängquist, Chen, Wang, Ramakrishnan, Thornley, Terpin, Schoelkopf, Zheng, Carmi, Brown, Zhu, Bartolo, Wheeler,
+  Stehberger, Bradshaw, Heimonen, Sridhar, Akov, Sandlin, Makarychev, Tam, Hoang, Cunningham, Goryachev, Patramanis, Krause, Redenti, Aldous, Lai, Coleman, Xu, Lee, Magoulas, Zhao, Tang, Cohen, Paradise, Kirchner, Ovchynnikov, Matos, Shenoy, Wang, Nie, Sztyber-Betley, Faraboschi, Riblet, Crozier, Halasyamani, Verma, Joshi, Meril, Ma, Andréoletti, Singhal, Platnick, Nevirkovets, Basler, Ivanov, Khoury, Gustafsson, Piccardo, Mostaghimi, Chen, Singh, Khánh, Rosu, Szlyk, Brown, Narayan, Menezes, Roberts, Alley, Sun, Patel, Lamparth, Reuel, Xin, Xu, Loader, Martin, Wang, Achilleos, Preu, Korbak, Bosio, Kazemi, Chen, Bálint, Lo, Wang, Nunes, Milbauer, Bari, Wang, Ansarinejad, Sun, Durand, Elgnainy, Douville, Tordera, Balabanian, Wolff, Kvistad, Milliron, Sakor, Eron, O., Shah, Zhou, Kamalov, Abdoli, Santens, Barkan, Tee, Zhang, Tomasiello, Luca, Looi, Le, Kolt, Pan, Rodman, Drori, Fossum, Muennighoff, Jagota, Pradeep, Fan, Eicher, Chen, Thaman, Merrill, Firsching, Harris, Ciobâcă, Gross, Pandey, Gusev, Jones,
+  Agnihotri, Zhelnov, Mofayezi, Piperski, Zhang, Dobarskyi, Leventov, Soroko, Duersch, Taamazyan, Ho, Ma, Held, Xian, Zebaze, Mohamed, Leser, Yuan, Yacar, Lengler, Olszewska, Fratta, Oliveira, Jackson, Zou, Chidambaram, Manik, Haffenden, Stander, Dasouqi, Shen, Golshani, Stap, Kretov, Uzhou, Zhidkovskaya, Winter, Rodriguez, Lauff, Wehr, Tang, Hossain, Phillips, Samuele, Ekström, Hammon, Patel, Farhidi, Medley, Mohammadzadeh, Peñaflor, Kassahun, Friedrich, Perez, Pyda, Sakal, Dhamane, Mirabadi, Hallman, Okutsu, Battaglia, Maghsoudimehrabani, Amit, Hulbert, Pereira, Weber, Handoko, Peristyy, Malina, Mehkary, Aly, Reidegeld, Dick, Friday, Singh, Shapourian, Kim, Costa, Gurdogan, Kumar, Ceconello, Zhuang, Park, Carroll, Tawfeek, Steinerberger, Aggarwal, Kirchhof, Dai, Kim, Ferret, Shah, Wang, Yan, Burdzy, Zhang, Franca, Pham, Loh, Robinson, Jackson, Giordano, Petersen, Cosma, Colino, White, Votava, Vinnikov, Delaney, Spelda, Stritecky, Shahid, Mourrat, Vetoshkin, Sponselee, Bacho, Yong, de~la Rosa, Cho, Li,
+  Malod, Weller, Albani, Lang, Laurendeau, Kazakov, Adesanya, Portier, Hollom, Souza, Zhou, Degorre, Yalın, Obikoya, Rai, Bigi, Boscá, Shumar, Bacho, Recchia, Popescu, Shulga, Tanwie, Lux, Rank, Ni, Brooks, Yakimchyk, Huanxu, Liu, Cavalleri, Häggström, Verkama, Newbould, Gundlach, Brito-Santana, Amaro, Vajipey, Grover, Wang, Kratish, Li, Gopi, Caciolai, de~Witt, Hernández-Cámara, Rodolà, Robins, Williamson, Cheng, Raynor, Qi, Segev, Fan, Martinson, Wang, Hausknecht, Brenner, Mao, Demian, Kassani, Zhang, Avagian, Scipio, Ragoler, Tan, Sims, Plecnik, Kirtland, Bodur, Shinde, Labrador, Adoul, Zekry, Karakoc, Santos, Shamseldeen, Karim, Liakhovitskaia, Resman, Farina, Gonzalez, Maayan, Anderson, Pena, Kelley, Mariji, Pouriamanesh, Wu, Finocchio, Alarab, Cole, Ferreira, Johnson, Safdari, Dai, Arthornthurasuk, McAlister, Moyano, Pronin, Fan, Ramirez-Trinidad, Malysheva, Pottmaier, Taheri, Stepanic, Perry, Askew, Rodríguez, Minissi, Lorena, Iyer, Fasiludeen, Clark, Ducey, Piza, Somrak, Vergo, Qin, Borbás,
+  Chu, Lindsey, Jallon, McInnis, Chen, Semler, Gloor, Shah, Carauleanu, Lauer, Đuc Huy, Shahrtash, Duc, Lewark, Brown, Albanie, Weber, Vaz, Clavier, Fan, e~Silva, Long, Lian, Abramovitch, Jiang, Mendoza, Islam, Gonzalez, Mavroudis, Xu, Kumar, Goswami, Bugas, Heydari, Jeanplong, Jansen, Pinto, Apronti, Galal, Ze-An, Singh, Jiang, of~Arc~Xavier, Agarwal, Berkani, Zhang, Du, de~Oliveira~Junior, Malishev, Remy, Hartman, Tarver, Mensah, Loume, Morak, Habibi, Hoback, Cai, Gimenez, Montecillo, Łucki, Campbell, Sharma, Meer, Gul, Gonzalez, Alapont, Hoover, Chhablani, Vargus, Agarwal, Jiang, Patil, Outevsky, Scaria, Maheshwari, Dendane, Shukla, Cartwright, Bogdanov, Mündler, Möller, Arnaboldi, Thaman, Siddiqi, Saxena, Gupta, Fruhauff, Sherman, Vincze, Usawasutsakorn, Ler, Radhakrishnan, Enyekwe, Salauddin, Muzhen, Maksapetyan, Rossbach, Harjadi, Bahaloohoreh, Sparrow, Sidhu, Ali, Bian, Lai, Singer, Uro, Bateman, Sayed, Menshawy, Duclosel, Bezzi, Jain, Aaron, Tiryakioglu, Siddh, Krenek, Shah, Jin, Creighton,
+  Peskoff, EL-Wasif, V, Richmond, McGowan, Patwardhan, Sun, Sun, Zubić, Sala, Ebert, Kaddour, Schottdorf, Wang, Petruzella, Meiburg, Medved, ElSheikh, Hebbar, Vaquero, Yang, Poulos, Zouhar, Bogdanik, Zhang, Sanz-Ros, Anugraha, Dai, Nhu, Wang, Demircali, Jia, Zhou, Wu, He, Chandok, Sinha, Luo, Le, Noyé, Perełkiewicz, Pantidis, Qi, Purohit, Parcalabescu, Nguyen, Winata, Ponti, Li, Dhole, Park, Abbondanza, Wang, Nayak, Caetano, Wong, del Rio-Chanona, Kondor, Francois, Chalstrey, Zsambok, Hoyer, Reddish, Hauser, Rodrigo-Ginés, Datta, Shepherd, Kamphuis, Zhang, Kim, Sun, Yao, Dernoncourt, Krishna, Rismanchian, Pu, Pinto, Wang, Shridhar, Overholt, Briia, Nguyen, David, Bartomeu, Pang, Wecker, Xiong, Li, Huber, Jaeger, Maddalena, Lù, Zhang, Beger, Kon, Li, Sanker, Yin, Liang, Zhang, Agrawal, Yifei, Zhang, Cai, Sonmez, Cozianu, Li, Slen, Yu, Park, Sarti, Briański, Stolfo, Nguyen, Zhang, Perlitz, Hernandez-Orallo, Li, Shabani, Juefei-Xu, Dhingra, Zohar, Nguyen, Pondaven, Yilmaz, Zhao, Jin, Jiang, Todoran, Han,
+  Kreuer, Rabern, Plassart, Maggetti, Yap, Geirhos, Kean, Wang, Mollaei, Sun, Yin, Wang, Li, Chang, Wei, Bizeul, Wang, Arrais, Mukherjee, Chamorro-Padial, Liu, Qu, Guan, Bouyamourn, Wu, Plomecka, Chen, Tang, Deng, Subramanian, Xi, Chen, Zhang, Ren, Tu, Kim, Chen, Marjanović, Ha, Luczyna, Ma, Shen, Song, Zhang, Wang, Gendron, Xiao, Smucker, Weng, Lee, Ye, Ermon, Lopez-Miguel, Knights, Gitter, Park, Wei, Chen, Pai, Elkhanany, Lin, Siedler, Fang, Mishra, Zsolnai-Fehér, Jiang, Khan, Yuan, Jain, Lin, Peterson, Wang, Malusare, Tang, Gupta, Fosin, Kang, Dworakowska, Matsumoto, Zheng, Sewuster, Villanueva, Rannev, Chernyavsky, Chen, Banik, Racz, Dong, Wang, Bashmal, Gonçalves, Hu, Bar, Bohdal, Patlan, Dhuliawala, Geirhos, Wist, Kansal, Chen, Tire, Yücel, Christof, Singla, Song, Chen, Ge, Ponkshe, Park, Shi, Ma, Mak, Lai, Moulin, Cheng, Zhu, Zhang, Patil, Jha, Men, Wu, Zhang, Vieira, Aji, Chung, Mahfoud, Hoang, Sperzel, Hao, Meding, Xu, Kostakos, Manini, Liu, Toukmaji, Paek, Yu, Demircali, Sun, Dewerpe, Qin,
+  Pflugfelder, Bailey, Morris, Heilala, Rosset, Yu, Chen, Yeo, Jain, Yang, Chigurupati, Chernyavsky, Reddy, Venugopalan, Batra, Park, Tran, Maximiano, Zhang, Liang, Shiyu, Xu, Pan, Suresh, Liu, Gulati, Zhang, Turchin, Bartlett, Scotese, Cao, Nattanmai, McKellips, Cheraku, Suhail, Luo, Deng, Luo, Zhang, Jindel, Paek, Halevy, Baranov, Liu, Avadhanam, Zhang, Cheng, Ma, Fu, Do, Lass, Yang, Sunkari, Bharath, Ai, Leung, Agrawal, Zhou, Chen, Kalpathi, Xu, Wang, Xiao, Maung, Lee, Yang, Yue, Zhao, Yoon, Sun, Singh, Luo, Peng, Osbey, Wang, Echeazu, Yang, Wu, Patel, Kulkarni, Sundarapandiyan, Zhang, Le, Nasim, Yalam, Kasamsetty, Samal, Yang, Sun, Shah, Saha, Zhang, Nguyen, Nagumalli, Wang, Zhou, Wu, Luo, Telluri, Yue, Wang, and Hendrycks}]{phan2025}
+Long Phan, Alice Gatti, Ziwen Han, Nathaniel Li, Josephina Hu, Hugh Zhang, Chen Bo~Calvin Zhang, Mohamed Shaaban, John Ling, Sean Shi, Michael Choi, Anish Agrawal, Arnav Chopra, Adam Khoja, Ryan Kim, Richard Ren, Jason Hausenloy, Oliver Zhang, Mantas Mazeika, and 1090 others. 2025.
+\newblock \href {https://arxiv.org/abs/2501.14249} {Humanity's last exam}.
+\newblock \emph{Preprint}, arXiv:2501.14249.
+
+\bibitem[{Rao et~al.(2024)Rao, Young, Dietterich, and Callison-Burch}]{rao2024}
+Delip Rao, Jonathan Young, Thomas Dietterich, and Chris Callison-Burch. 2024.
+\newblock \href {https://arxiv.org/abs/2412.03775} {{WithdrarXiv}: A large-scale dataset for retraction study}.
+\newblock \emph{Preprint}, arXiv:2412.03775.
+
+\bibitem[{Sainz et~al.(2023)Sainz, Campos, Garc{\'i}a-Ferrero, Etxaniz, de~Lacalle, and Agirre}]{sainz2023}
+Oscar Sainz, Jon Campos, Iker Garc{\'i}a-Ferrero, Julen Etxaniz, Oier~Lopez de~Lacalle, and Eneko Agirre. 2023.
+\newblock \href {https://doi.org/10.18653/v1/2023.findings-emnlp.722} {{NLP} evaluation in trouble: On the need to measure {LLM} data contamination for each benchmark}.
+\newblock In \emph{Findings of the Association for Computational Linguistics: EMNLP 2023}, pages 10776--10787, Singapore. Association for Computational Linguistics.
+
+\bibitem[{Seghier(2024)}]{seghier2024ai}
+Mohamed~L Seghier. 2024.
+\newblock {AI}-powered peer review needs human supervision.
+\newblock \emph{Journal of Information, Communication and Ethics in Society}.
+
+\bibitem[{Shah(2022)}]{shah2021}
+Nihar~B Shah. 2022.
+\newblock Challenges, experiments, and computational solutions in peer review.
+\newblock \emph{Communications of the {ACM}}, 65(6):76--87.
+
+\bibitem[{Shcherbiak et~al.(2024)Shcherbiak, Habibnia, B{\"o}hm, and Fiedler}]{shcherbiak2024evaluating}
+Anna Shcherbiak, Hooman Habibnia, Robert B{\"o}hm, and Susann Fiedler. 2024.
+\newblock \href {https://doi.org/10.1017/jdm.2024.24} {Evaluating science: A comparison of human and {AI} reviewers}.
+\newblock \emph{Judgment and Decision Making}, 19:e21.
+
+\bibitem[{Shepperd and Yousefi(2023)}]{shepperd2023}
+Martin Shepperd and Leila Yousefi. 2023.
+\newblock \href {https://doi.org/10.1371/journal.pone.0285383} {An analysis of retracted papers in {C}omputer {S}cience}.
+\newblock \emph{PLOS ONE}, 18(5):1--17.
+
+\bibitem[{Shin et~al.(2025)Shin, Tang, Lee, Kim, Lim, Cho, Hong, Lee, and Kim}]{shin2025}
+Hyungyu Shin, Jingyu Tang, Yoonjoo Lee, Nayoung Kim, Hyunseung Lim, Ji~Yong Cho, Hwajung Hong, Moontae Lee, and Juho Kim. 2025.
+\newblock \href {https://arxiv.org/abs/2502.17086} {Mind the blind spots: A focus-level evaluation framework for {LLM} reviews}.
+\newblock \emph{Preprint}, arXiv:2502.17086.
+
+\bibitem[{Son et~al.(2025)Son, Hong, Fan, Nam, Ko, Lim, Song, Choi, Paulo, Yu, and Biderman}]{son2025}
+Guijin Son, Jiwoo Hong, Honglu Fan, Heejeong Nam, Hyunwoo Ko, Seungwon Lim, Jinyeop Song, Jinha Choi, Gonçalo Paulo, Youngjae Yu, and Stella Biderman. 2025.
+\newblock \href {https://arxiv.org/abs/2505.11855} {When {AI} co-scientists fail: {SPOT}-a benchmark for automated verification of scientific research}.
+\newblock \emph{Preprint}, arXiv:2505.11855.
+
+\bibitem[{Stern et~al.(2014)Stern, Casadevall, Steen, and Fang}]{stern2014}
+Alexandra~M. Stern, Arturo Casadevall, R.~Grant Steen, and Ferric~C. Fang. 2014.
+\newblock \href {https://doi.org/10.7554/eLife.02956} {Financial costs and personal consequences of research misconduct resulting in retracted publications}.
+\newblock \emph{eLife}, 3:e02956.
+
+\bibitem[{Thelwall and Yaghi(2024)}]{thelwall2024predictive}
+Mike Thelwall and Abdelfattah Yaghi. 2024.
+\newblock Evaluating the predictive capacity of {ChatGPT} for academic peer review outcomes across multiple platforms.
+\newblock \emph{arXiv preprint arXiv:2411.09763}.
+
+\bibitem[{Tyser et~al.(2024)Tyser, Segev, Longhitano, Zhang, Meeks, Lee, Garg, Belsten, Shporer, Udell, Te'eni, and Drori}]{tyser2024}
+Keith Tyser, Ben Segev, Gaston Longhitano, Xin-Yu Zhang, Zachary Meeks, Jason Lee, Uday Garg, Nicholas Belsten, Avi Shporer, Madeleine Udell, Dov Te'eni, and Iddo Drori. 2024.
+\newblock \href {https://arxiv.org/abs/2408.10365} {{AI}-driven review systems: Evaluating {LLM}s in scalable and bias-aware academic reviews}.
+\newblock \emph{Preprint}, arXiv:2408.10365.
+
+\bibitem[{Wang et~al.(2024)Wang, Wang, Gao, Zhang, Wu, Xu, Shi, Wang, Li, Qian, Yin, Lv, Zheng, and Huang}]{wang2024}
+Xiaohua Wang, Zhenghua Wang, Xuan Gao, Feiran Zhang, Yixin Wu, Zhibo Xu, Tianyuan Shi, Zhengyuan Wang, Shizheng Li, Qi~Qian, Ruicheng Yin, Changze Lv, Xiaoqing Zheng, and Xuanjing Huang. 2024.
+\newblock \href {https://arxiv.org/abs/2407.01219} {Searching for best practices in {R}etrieval-{A}ugmented {G}eneration}.
+\newblock \emph{Preprint}, arXiv:2407.01219.
+
+\bibitem[{Weller et~al.(2024)Weller, Chang, MacAvaney, Lo, Cohan, Durme, Lawrie, and Soldaini}]{weller2024}
+Orion Weller, Benjamin Chang, Sean MacAvaney, Kyle Lo, Arman Cohan, Benjamin~Van Durme, Dawn Lawrie, and Luca Soldaini. 2024.
+\newblock \href {https://arxiv.org/abs/2403.15246} {{FollowIR}: Evaluating and teaching {I}nformation {R}etrieval models to follow instructions}.
+\newblock \emph{Preprint}, arXiv:2403.15246.
+
+\bibitem[{Weng et~al.(2025)Weng, Zhu, Bao, Zhang, Wang, Zhang, and Yang}]{weng2025}
+Yixuan Weng, Minjun Zhu, Guangsheng Bao, Hongbo Zhang, Jindong Wang, Yue Zhang, and Linyi Yang. 2025.
+\newblock \href {https://arxiv.org/abs/2411.00816} {Cycle{R}esearcher: {I}mproving automated research via automated review}.
+\newblock \emph{Preprint}, arXiv:2411.00816.
+
+\bibitem[{Xu et~al.(2025)Xu, Zhao, Patwardhan, Vig, and Cohan}]{xu2025llm}
+Zhijian Xu, Yilun Zhao, Manasi Patwardhan, Lovekesh Vig, and Arman Cohan. 2025.
+\newblock \href {https://arxiv.org/abs/2507.02694} {Can {LLMs} identify critical limitations within scientific research? {A} systematic evaluation on {AI} research papers}.
+\newblock \emph{Preprint}, arXiv:2507.02694.
+
+\bibitem[{Ye et~al.(2024)Ye, Pang, Chai, Chen, Yin, Xiang, Dong, Shao, and Chen}]{ye2024we}
+Rui Ye, Xianghe Pang, Jingyi Chai, Jiaao Chen, Zhenfei Yin, Zhen Xiang, Xiaowen Dong, Jing Shao, and Siheng Chen. 2024.
+\newblock \href {https://arxiv.org/abs/2412.01708} {Are we there yet? {R}evealing the risks of utilizing {L}arge {L}anguage {M}odels in scholarly peer review}.
+\newblock \emph{Preprint}, arXiv:2412.01708.
+
+\bibitem[{Ye et~al.(2025)Ye, Xiao, Mi, and Liu}]{ye2025aimepreview}
+Yixin Ye, Yang Xiao, Tiantian Mi, and Pengfei Liu. 2025.
+\newblock {AIME}-{P}review: A rigorous and immediate evaluation framework for advanced mathematical reasoning.
+\newblock \url{https://github.com/GAIR-NLP/AIME-Preview}.
+\newblock GitHub repository.
+
+\bibitem[{Yu et~al.(2024)Yu, Ding, Tan, Luo, Weng, Gong, Zeng, Cui, Han, Sun, Wu, Lan, and Li}]{yu2024}
+Jianxiang Yu, Zichen Ding, Jiaqi Tan, Kangyang Luo, Zhenmin Weng, Chenghua Gong, Long Zeng, RenJing Cui, Chengcheng Han, Qiushi Sun, Zhiyong Wu, Yunshi Lan, and Xiang Li. 2024.
+\newblock \href {https://doi.org/10.18653/v1/2024.findings-emnlp.595} {Automated peer reviewing in paper {SEA}: Standardization, evaluation, and analysis}.
+\newblock In \emph{Findings of the Association for Computational Linguistics: EMNLP 2024}, pages 10164--10184, Miami, Florida, USA. Association for Computational Linguistics.
+
+\bibitem[{Yuan et~al.(2022)Yuan, Liu, and Neubig}]{yuan2022}
+Weizhe Yuan, Pengfei Liu, and Graham Neubig. 2022.
+\newblock Can we automate scientific reviewing?
+\newblock \emph{Journal of Artificial Intelligence Research}, 75:171--212.
+
+\bibitem[{Zhang and Abernethy(2025)}]{zhang2025}
+Tianmai~M. Zhang and Neil~F. Abernethy. 2025.
+\newblock \href {https://arxiv.org/abs/2505.23824} {Reviewing scientific papers for critical problems with reasoning {LLMs}: Baseline approaches and automatic evaluation}.
+\newblock \emph{Preprint}, arXiv:2505.23824.
+
+\bibitem[{Zhou et~al.(2024)Zhou, Chen, and Yu}]{zhou2024}
+Ruiyang Zhou, Lu~Chen, and Kai Yu. 2024.
+\newblock \href {https://aclanthology.org/2024.lrec-main.816/} {Is {LLM} a reliable reviewer? {A} comprehensive evaluation of {LLM} on automatic paper reviewing tasks}.
+\newblock In \emph{Proceedings of the 2024 Joint International Conference on Computational Linguistics, Language Resources and Evaluation (LREC-COLING 2024)}, pages 9340--9351, Torino, Italia. ELRA and ICCL.
+
+\end{thebibliography}

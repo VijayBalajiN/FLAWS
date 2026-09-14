@@ -1,0 +1,8 @@
+:error_text:
+human consensus, which will be established by having experts refine the initial scores from our metric
+
+:error_text:
+compare the results of our automated evaluation metric against the human consensus... to confirm its alignment with human judgment.
+
+:explanation:
+The validation methodology is fundamentally flawed due to circular reasoning. The "human consensus" is supposed to serve as an independent, gold-standard ground truth to validate the automated evaluation metric. However, the experiment design states that this consensus will be established by having human experts "refine the initial scores from our metric." This process contaminates the ground truth by anchoring the human judges to the metric's output, introducing significant bias. Consequently, comparing the metric against this biased consensus is a meaningless exercise that cannot validly "confirm its alignment with human judgment." An independent human evaluation is required for a legitimate validation.

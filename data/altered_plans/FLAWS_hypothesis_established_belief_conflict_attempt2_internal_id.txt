@@ -1,0 +1,10 @@
+:error_text:
+The criticality of an error in a scientific paper is a function of its capacity to falsify a single, corresponding core claim.
+
+:error_text:
+For each claim, we will instruct an LLM to modify one or more segments of the paper's text to introduce a sophisticated, domain-appropriate conceptual error that undermines that specific claim.
+
+:explanation:
+The research plan's hypothesis presents an overly simplistic and narrow definition of a "critical error." It incorrectly assumes that a critical error maps to a single, specific claim. In reality, a single methodological or conceptual flaw (e.g., in the experimental setup, data processing, or theoretical foundation) can be far more critical by invalidating multiple claims or the entire basis of the paper's conclusions.
+
+By designing the benchmark generation process to only insert errors that undermine one specific claim at a time, the study creates an artificial and unrepresentative testbed. This methodological choice, stemming from the flawed hypothesis, limits the evaluation to a narrow subtype of error and fails to assess an LLM's ability to identify more complex, systemic flaws that are often the most damaging in scientific literature. This undermines the validity and generalizability of the research findings.

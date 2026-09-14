@@ -1,0 +1,10 @@
+:error_text:
+intentionally introduce severe methodological flaws (e.g., inconsistent footnote formatting)
+
+:error_text:
+evaluate models on a held-out split of very recent papers (ICLR 2026)
+
+:explanation:
+The most serious error is the example given for an "adversarial flaw injection." Inconsistent footnote formatting is a minor stylistic or formatting issue, not a "severe methodological flaw." A true methodological flaw would involve the experimental design itself, such as lacking a control group, using an inappropriate statistical test, or having data leakage. This control experiment, as designed, fails to test for the intended capability and fundamentally misunderstands the concept of methodological soundness.
+
+The second error is a logistical impossibility. The plan proposes using papers from "ICLR 2026" to test for data contamination. As this conference has not yet occurred, it is impossible to collect these papers, rendering this specific control experiment infeasible as described.

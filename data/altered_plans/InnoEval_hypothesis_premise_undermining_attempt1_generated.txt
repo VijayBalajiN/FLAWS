@@ -1,0 +1,15 @@
+:error_type:
+Undermining a Premise
+
+:original_text:
+A systematic and robust assessment of a research idea is achieved through a process that combines knowledgeable grounding against existing work, collective deliberation from diverse perspectives, and multi-criteria decision-making.
+
+:modified_text:
+A systematic assessment of a research idea that is robust to reviewer subjectivity is achieved through a process that combines knowledgeable grounding against existing work, collective deliberation from diverse perspectives, and multi-criteria decision-making.
+
+:explanation:
+This modification conflates two distinct concepts of a "good" assessment: (a) an objective assessment that is "robust to reviewer subjectivity," and (b) an assessment that accurately predicts the "consensus of subjective reviewers."
+
+The proposed research method (emulating a board of reviewers) and experiment (using peer review decisions as ground truth) are designed to achieve the latter: modeling the collective, inter-subjective agreement of a human expert community. The modified hypothesis, however, incorrectly claims this process achieves the former: an objective evaluation that transcends or is independent of the very subjectivity it is designed to emulate.
+
+The error is the hidden premise that aggregating multiple subjectivities is the same as eliminating subjectivity. In reality, a process that successfully models a community's consensus is, by definition, aligned with that community's collective biases and preferences, not independent of them. A truly objective assessment might frequently disagree with the human consensus. The hypothesis's reasoning appears sound, but it rests on the flawed assumption that modeling a subjective process is the way to achieve an objective outcome.

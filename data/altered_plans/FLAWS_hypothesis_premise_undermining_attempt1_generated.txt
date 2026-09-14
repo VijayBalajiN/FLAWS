@@ -1,0 +1,16 @@
+:error_type:
+Undermining a Premise
+
+:original_text:
+The criticality of an error in a scientific paper is a function of its connection to the paper's core claims.
+
+:modified_text:
+The criticality of an error in a scientific paper is a function of its ability to falsify the paper's core claims.
+
+:explanation:
+This modification conflates two distinct epistemological concepts: (a) invalidating the justification for a claim, and (b) falsifying the claim itself.
+
+1.  **Invalidating Justification:** An error within a paper (e.g., a flawed method, incorrect data) can break the chain of reasoning that supports a conclusion. This means the paper no longer provides a valid argument for its claim. This is an internal, logical failure.
+2.  **Falsifying a Claim:** This means proving that the claim is actually false in the real world. This is a statement about empirical reality, not just about the quality of a specific argument.
+
+The mistake is treating these as interchangeable. An error can invalidate the evidence presented in a paper without proving the underlying claim is false. For instance, a study might use a flawed experiment to argue that a drug is effective. The flaw invalidates the study's conclusion, but it doesn't prove the drug is *ineffective*; the drug might still work, but this particular paper failed to demonstrate it. The modified hypothesis incorrectly assumes that an error's importance ("criticality") is measured by its ability to prove a claim false, when in fact, its primary role within the context of a single paper is to undermine the specific evidence presented for that claim.

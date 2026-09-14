@@ -1,0 +1,13 @@
+:error_type:
+Internal Contradiction
+
+:original_text:
+The model's objective will be to predict the original vocabulary ID of these masked tokens using the full bidirectional context.
+
+:modified_text:
+The model's objective will be to predict the original vocabulary ID of these masked tokens using a purely contextual representation, which is enforced by constraining the attention mechanism in each layer to compute the output for position *i* by attending only to all other positions *j ≠ i*.
+
+:explanation:
+The hypothesis's goal is to create "more powerful" language representations by being "jointly conditioned on both left and right context." The modified mechanism attempts to achieve this by defining a "purely contextual representation" where the final hidden state for any given token at position *i* is computed by attending to all other tokens *except* for the token at position *i* itself.
+
+The internal contradiction arises because this mechanism, when followed to its logical conclusion, creates a representation that is fundamentally flawed and *less* powerful. By explicitly preventing a token's representation from being influenced by its own initial embedding, the model is forced to learn a representation of a "hole" in a sentence, not a token-in-context. A representation that, by definition, contains no information about the identity of the very token it represents is incomplete and crippled for any downstream task that relies on knowing what a token is (e.g., named entity recognition). The mechanism designed to enforce contextualization directly undermines the stated goal of creating a powerful representation.

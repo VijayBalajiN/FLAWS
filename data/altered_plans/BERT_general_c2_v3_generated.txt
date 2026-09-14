@@ -1,0 +1,8 @@
+:original_text:
+This will allow us to isolate the contributions of deep bidirectionality and the NSP task.
+
+:modified_text:
+This will allow us to isolate the contributions of deep bidirectionality and the NSP task through performance on single-sentence classification benchmarks.
+
+:explanation:
+The mechanism of this error is a flawed or insensitive evaluation metric. The Next Sentence Prediction (NSP) task is designed to teach a model about the relationship between pairs of sentences. Evaluating its contribution using "single-sentence classification benchmarks" (e.g., sentiment analysis of one sentence) is a poor choice, as these tasks do not require inter-sentence understanding. The chosen measurement is not sensitive to the specific capability the NSP task is supposed to provide, meaning the experiment could wrongly conclude that NSP has no effect, thus failing to accurately assess its contribution.

@@ -1,0 +1,2 @@
+error:Group-wise Tasks: We will evaluate the ability to select the best idea in a group (measured by Accuracy) and to produce a full ranking (measured by Accuracy and Longest Increasing Subsequence score).
+error:To confirm the contribution of each component, we will conduct several ablation studies, including removing the knowledge grounding module, replacing the innovation review board with a single LLM-as-a-Judge, and restricting the knowledge search to only academic literature.

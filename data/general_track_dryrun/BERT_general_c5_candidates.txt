@@ -1,0 +1,35 @@
+:candidate:
+1
+
+:original_text:
+We will evaluate BERT on the CoNLL-2003 Named Entity Recognition (NER) task using a feature-based approach... comparing its performance to the standard fine-tuning approach.
+
+:modified_text:
+We will evaluate BERT on the CoNLL-2003 Named Entity Recognition (NER) task using a feature-based approach... comparing its performance to the standard fine-tuning approach, using an AdamW optimizer with a learning rate of 1e-3 for all parameters.
+
+:explanation:
+The flaw's mechanism is improper hyperparameter selection. A learning rate of 1e-3 is standard for training a randomly initialized model from scratch but is generally far too high for fine-tuning a large pre-trained model like BERT. This high rate is likely to cause "catastrophic forgetting," where the model's valuable pre-trained weights are destabilized and destroyed during training, leading to very poor performance. This unfairly handicaps the fine-tuning method, making the feature-based approach seem more effective by comparison and invalidating the experiment's ability to test the claim.
+
+:candidate:
+2
+
+:original_text:
+We will evaluate BERT on the CoNLL-2003 Named Entity Recognition (NER) task using a feature-based approach... comparing its performance to the standard fine-tuning approach.
+
+:modified_text:
+We will evaluate BERT on the CoNLL-2003 Named Entity Recognition (NER) task using a feature-based approach... comparing its performance to the standard fine-tuning approach, with the modification that BERT's word embedding layer will remain frozen during training.
+
+:explanation:
+The flaw's mechanism is an incorrect implementation of the fine-tuning procedure. While "standard fine-tuning" implies unfreezing and training all (or nearly all) model layers, this modification freezes the word embedding layer. This prevents the model from adapting its input token representations to the specific nuances of the NER task, which can significantly hinder performance. This deviation from the standard method creates an artificially constrained model, making the comparison to the feature-based approach unfair and potentially leading to the false conclusion that fine-tuning is less effective.
+
+:candidate:
+3
+
+:original_text:
+We will evaluate BERT on the CoNLL-2003 Named Entity Recognition (NER) task using a feature-based approach... comparing its performance to the standard fine-tuning approach.
+
+:modified_text:
+We will evaluate BERT on the CoNLL-2003 Named Entity Recognition (NER) task using a feature-based approach where BERT outputs are fed into a BiLSTM-CRF model... comparing its performance to the standard fine-tuning approach.
+
+:explanation:
+The flaw's mechanism is a confounding variable introduced by an architectural mismatch. The standard fine-tuning approach for BERT on NER adds only a simple linear layer on top of the transformer. By pairing the feature-based approach with a powerful, specialized BiLSTM-CRF sequence tagging model, the experiment is no longer a fair comparison of transfer learning strategies. It now compares "frozen BERT + powerful classifier" against "fine-tuned BERT + simple classifier." Any observed performance difference could be due to the addition of the BiLSTM-CRF, not the superiority of the feature-based method itself, thus invalidating the experiment's conclusion about the claim.

@@ -1,0 +1,9 @@
+{
+  "label": "SoundnessBench_general_c2_v1",
+  "original_text": "high sensitivity to prompt framing",
+  "modified_text": "high sensitivity to prompt sampling",
+  "explanation": "This error introduces a confounding variable by replacing the semantic concept of \"framing\" with the technical, stochastic process of \"sampling.\" The claim is that the *wording* of the prompt causes judgment instability. This modification suggests the instability is actually caused by the model's generation parameters (like temperature or top-p sampling), which control randomness. A researcher might mistakenly vary both framing and sampling parameters simultaneously and misattribute the resulting variance solely to framing, thus falsifying the claimed causal link.",
+  "category": "C",
+  "category_name": "Undermining a Premise",
+  "reasoning": "The error conflates two distinct concepts, \"framing\" and \"sampling,\" as if they are interchangeable, which could lead to a flawed experimental design and misattribution of causality."
+}

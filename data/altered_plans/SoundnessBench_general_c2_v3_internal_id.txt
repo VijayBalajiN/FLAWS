@@ -1,0 +1,17 @@
+:error_text:
+evaluate models on a held-out split of very recent papers (ICLR 2026) using models with documented training data cutoffs prior to the papers' publication.
+
+:error_text:
+instruct the model to act as a strict critic, defaulting to a "low soundness" rating unless the proposal demonstrates exceptionally clear and rigorous methodology.
+
+:error_text:
+masking specific method names and identifiers to test whether models rely on recognition rather than reasoning.
+
+:explanation:
+The research plan contains several methodological and conceptual flaws that undermine its validity.
+
+1.  The most serious error is a methodological impossibility. The plan proposes a data contamination control using papers from "ICLR 2026." As this conference has not yet taken place, the data does not exist, making this crucial control experiment impossible to conduct as described.
+
+2.  The second error is a conceptual flaw in the experiment designed to test "high sensitivity to prompt keywords." The "Aggressive Prompt" explicitly instructs the model to "default to a 'low soundness' rating." This tests the model's ability to follow direct instructions, not its inherent sensitivity to subtle changes in prompt framing. The experiment conflates instruction-following with the hypothesized instability, failing to properly test a core part of the hypothesis.
+
+3.  The third error is a confound in the "Memorization" control. Masking specific method names to prevent recognition may also remove information that is essential for reasoning about methodological soundness. Consequently, if a model's performance drops on this task, it is impossible to determine whether it is because the model was relying on memorization or because it was deprived of the necessary information to make a sound judgment.

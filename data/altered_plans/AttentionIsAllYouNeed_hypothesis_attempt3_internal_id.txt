@@ -1,0 +1,8 @@
+:error_text:
+An architecture relying solely on attention mechanisms, without recurrence or convolutions, is sufficient to model global dependencies, including sequence order, between input and output sequences.
+
+:error_text:
+Since our model contains no recurrence and no convolution, we must inject information about the relative or absolute position of tokens. To this end, we will add positional encodings to the input embeddings at the bottoms of the encoder and decoder stacks.
+
+:explanation:
+The hypothesis makes a central claim that is directly contradicted by the proposed methodology. The hypothesis states that an attention-only architecture is "sufficient to model... sequence order." However, a pure self-attention mechanism is permutation-invariant, meaning it treats the input as an unordered set of vectors and cannot inherently process sequence order. The method section explicitly acknowledges this fundamental limitation by stating that because the model lacks recurrence or convolution, it "must inject information about the relative or absolute position of tokens" by adding positional encodings. This invalidates the hypothesis, as the proposed model is not relying "solely on attention mechanisms" for sequence modeling; it requires a separate, essential component for this purpose.

@@ -1,0 +1,5 @@
+:error_text:
+where each perspective is strictly constrained to evidence from a single, distinct intellectual tradition
+
+:explanation:
+This clause in the hypothesis introduces a major conceptual and methodological flaw. It proposes an unrealistic and counterproductive model of expert deliberation by suggesting that each reviewer persona should be siloed within a single intellectual tradition. This would prevent the assessment of interdisciplinary ideas and would not accurately simulate real-world scholarly review, where experts possess overlapping knowledge. Furthermore, this flawed premise directly contradicts the more sound approach described in the Method section, which aims to "partially mask the retrieved knowledge based on each persona's defined familiarity," creating a fundamental inconsistency between the hypothesis and the proposed implementation.

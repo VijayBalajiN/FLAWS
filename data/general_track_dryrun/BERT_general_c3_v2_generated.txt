@@ -1,0 +1,8 @@
+:original_text:
+We will compare the performance of `BERT_BASE` and `BERT_LARGE` across all tasks to measure the impact of model scale on downstream performance, especially on smaller datasets.
+
+:modified_text:
+We will compare the performance of `BERT_BASE` (pre-trained on English Wikipedia) and `BERT_LARGE` (pre-trained on the C4 corpus) across all tasks to measure the impact of model scale on downstream performance, especially on smaller datasets.
+
+:explanation:
+This modification introduces a confound based on the pre-training data domain. The experiment now compares two models that differ not only in scale but also in the corpus they were trained on (encyclopedic text vs. a large, filtered web scrape). Performance differences could stem from the fact that one data source is a better fit for the downstream tasks than the other, irrespective of model size. This makes it impossible to conclude that scale is the causal factor for any observed performance gap.

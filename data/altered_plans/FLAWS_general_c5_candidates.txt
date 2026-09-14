@@ -1,0 +1,35 @@
+:candidate:
+1
+
+:original_text:
+We will then compare the results of our automated evaluation metric against the human consensus to confirm its alignment with human judgment.
+
+:modified_text:
+We will then calculate the raw percentage agreement between our automated evaluation metric and the human consensus to confirm its alignment with human judgment.
+
+:explanation:
+The mechanism of this error is statistical. It replaces a general (and appropriate) comparison with a specific but flawed statistical method. Raw percentage agreement does not account for agreement that occurs by chance, which can be very high in tasks with few categories (e.g., pass/fail). A high raw agreement score could be misleadingly presented as evidence of "consistency," when a more rigorous metric like Cohen's Kappa (which corrects for chance) would reveal the metric is performing poorly. This undermines the claim by using a weak and potentially deceptive standard of evidence for "consistency."
+
+:candidate:
+2
+
+:original_text:
+We will then compare the results of our automated evaluation metric against the human consensus to confirm its alignment with human judgment.
+
+:modified_text:
+We will then compare the results of our automated evaluation metric against the human consensus, who will be provided with the full generation context, to confirm its alignment with human judgment.
+
+:explanation:
+The mechanism of this error is a methodological mismatch. By stating that human experts receive "the full generation context" without specifying that the automated metric does as well, the text implies an unfair comparison. The humans and the machine are no longer performing the identical task; the humans have access to privileged information (e.g., the original prompt or user intent) that the metric may not. Any observed alignment would be suspect, as the metric could be succeeding or failing for entirely different reasons than the humans. This flaw attacks the claim's premise that the metric's results are consistent with expert judgment *on the same task*.
+
+:candidate:
+3
+
+:original_text:
+We will then compare the results of our automated evaluation metric against the human consensus to confirm its alignment with human judgment.
+
+:modified_text:
+We will then compare the results of our automated evaluation metric against the human consensus, which will be established by having experts refine the initial scores from our metric, to confirm its alignment with human judgment.
+
+:explanation:
+The mechanism of this error is data contamination, creating a circular dependency. The "human consensus" is no longer an independent ground truth; instead, it is anchored to and derived from the metric's own output. By having experts "refine the initial scores," the experiment introduces a strong bias (anchoring bias) that will artificially inflate the agreement between the metric and the human ratings. The evaluation is no longer a valid test of the metric against an external standard, but a self-referential loop. This directly undermines the claim by creating an experimental design that is guaranteed to produce the desired "consistency" irrespective of the metric's actual quality.

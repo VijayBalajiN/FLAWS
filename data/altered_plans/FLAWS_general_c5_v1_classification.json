@@ -1,0 +1,9 @@
+{
+  "label": "FLAWS_general_c5_v1",
+  "original_text": "We will then compare the results of our automated evaluation metric against the human consensus to confirm its alignment with human judgment.",
+  "modified_text": "We will then calculate the raw percentage agreement between our automated evaluation metric and the human consensus to confirm its alignment with human judgment.",
+  "explanation": "The mechanism of this error is statistical. It replaces a general (and appropriate) comparison with a specific but flawed statistical method. Raw percentage agreement does not account for agreement that occurs by chance, which can be very high in tasks with few categories (e.g., pass/fail). A high raw agreement score could be misleadingly presented as evidence of \"consistency,\" when a more rigorous metric like Cohen's Kappa (which corrects for chance) would reveal the metric is performing poorly. This undermines the claim by using a weak and potentially deceptive standard of evidence for \"consistency.\"",
+  "category": "C",
+  "category_name": "Undermining a Premise",
+  "reasoning": "The error introduces a statistical method that, while internally consistent, fails to adequately measure the intended concept of \"alignment with human judgment\" by not accounting for chance agreement, thereby undermining the premise that the chosen metric can confirm alignment."
+}

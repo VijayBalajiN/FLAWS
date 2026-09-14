@@ -13,22 +13,34 @@ def format_claims(filename: str) -> list[str]:
     return claim_list
 
 
+def format_tagged_blocks(filename: str, tags: list[str]) -> dict[str, list[str]]:
+    """
+    Generic version of the `:tag:` block parser -- extracts any of the given
+    tags from a completion file into parallel lists (one list per tag,
+    preserving the order each tag appeared in). Used for any prompt that
+    repeats a fixed set of `:tag:` blocks N times (claims, candidates, the
+    original 4-tag error format, etc.) instead of hardcoding one tag set.
+    """
+    with open(filename, "r") as file:
+        output = file.read()
+
+    tag_pattern = "|".join(re.escape(t) for t in tags)
+    pattern = rf":({tag_pattern}):\s*(.*?)(?=\n:\w+:|$)"
+    matches = re.findall(pattern, output, re.DOTALL)
+
+    sections = defaultdict(list)
+    for keyword, content in matches:
+        sections[keyword].append(content.strip())
+    return dict(sections)
+
+
 def format_generated_error(
     filename: str,
 ) -> tuple[list[str], list[str], list[str], list[str]]:
     """
     Format identified modified text, original text, claims, explanation into lists.
     """
-    with open(filename, "r") as file:
-        output = file.read()
-
-    pattern = r":(explanation|claim|modified_text|original_text):\s*(.*?)(?=\n:\w+:|$)"
-    matches = re.findall(pattern, output, re.DOTALL)
-
-    sections = defaultdict(list)
-    for keyword, content in matches:
-        sections[keyword].append(content.strip())
-    sections = dict(sections)
+    sections = format_tagged_blocks(filename, ["explanation", "claim", "modified_text", "original_text"])
 
     return (
         sections.get("modified_text", [""]),

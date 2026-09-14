@@ -1,0 +1,13 @@
+:error_type:
+Conflict with Established Beliefs
+
+:original_text:
+The criticality of an error in a scientific paper is a function of its connection to the paper's core claims.
+
+:modified_text:
+The criticality of an error in a scientific paper is a function of its direct logical connection to the paper's core claims, and is largely independent of its location within the paper's structure (e.g., an error in the methodology section is not necessarily more critical than one in the discussion).
+
+:explanation:
+(a) The established belief being conflicted with is the fundamental principle of scientific argumentation, which dictates that the sections of a research paper are logically dependent. Specifically, the methodology section provides the warrant for the evidence presented in the results, which in turn supports the paper's core claims. Therefore, a substantive error in the methodology section inherently and critically undermines the entire evidential basis for the paper's conclusions.
+
+(b) The modified hypothesis, while internally consistent, creates a false dichotomy by suggesting that an error's location (e.g., in the "Methodology") is independent of its logical connection to the core claims. An expert would immediately recognize this as a deep misunderstanding of how scientific papers are structured. A significant flaw in the methods is, by definition, critically connected to the claims, as it invalidates the process by which evidence for those claims was generated. The modified statement posits a plausible-sounding but fundamentally incorrect model of error criticality that cannot be reconciled with the accepted structure of scientific reasoning.

@@ -1,0 +1,141 @@
+% \clearpage
+% \vskip -0.2cm
+\section{\ours}
+
+\textbf{Framework Overview.}
+As shown in Fig.\ref{fig:method}, {\ours} begins by extracting structured parts from the raw-text idea, followed by a heterogeneous deep-knowledge search engine that iteratively acquires and filters high-quality background knowledge from diverse online sources.
+The retrieved results, after fine-grained grounding, serve as key references for multi-dimensional and multi-perspective evaluation, empowered by a group of dimension-specialized evaluator agents and an innovation review board composed of diverse academic personas.
+Finally, an actionable evaluation report will be synthesized, including comprehensive meta-reviews and concrete suggestions for future revision.
+All the notations in this section are summarized in Tab.\ref{tab:notation}.
+
+% \vskip -0.2cm
+\subsection{Heterogeneous Deep Knowledge Search}
+\label{sec:search_engine}
+To maximize usability, we impose no constraints on the format of an idea to be evaluated.
+However, to enable precise and efficient knowledge searching and grounding, we first distill the raw textual idea $\boldsymbol{T}$ into the structured representation defined in \S\ref{sec:definition}.
+This process is carried out by an \textbf{Extraction Agent} $\boldsymbol{\mathcal{M}}_e$, formally defined as $\boldsymbol{\mathcal{I}}=\boldsymbol{\mathcal{M}}_e(\boldsymbol{T})$.
+Then, an exhaustive \textbf{Search Agent} $\boldsymbol{\mathcal{M}}_s$ is deployed to systematically retrieve academic resources relevant to the idea.
+To ensure \textit{comprehensiveness}, we expose our research agent to heterogeneous online sources spanning scholarly literature (\arxiv arXiv, \semantic Semantic Scholar, \scholar Google Scholar), web content (\google Google Search), and open-source code repositories (\github Github, \kaggle Kaggle).
+By relying solely on online sources, we avoid the staleness inherent to static local corpora and retain \textit{flexibility} to incorporate emerging knowledge.
+Moreover, timestamps can be effortlessly integrated into online searching APIs, allowing us to explicitly account for the \textit{timeliness}, a critical attribute of all research ideas.
+To ensure retrieval \textit{quality}, we employ an iterative search strategy that simultaneously scales breadth and drills for depth.
+We further integrate a fast-slow search hybrid into the deep iterative process to improve search \textit{efficiency}.
+
+\textbf{Fast Knowledge Search.}
+Concretely, for every component $\boldsymbol{p}\in \boldsymbol{\mathcal{I}}$ and every search tool $\boldsymbol{u}\in$ (\arxiv,\semantic,\scholar,\google,\github,\kaggle), the search agent first generates a group of tailored queries and then enriches them with synonym expansions, an essential step given that equivalent concepts are routinely phrased differently across communities, yielding the final query set $\boldsymbol{\mathcal{Q}}_{p,u}=\boldsymbol{\mathcal{M}}_s(\boldsymbol{p},\boldsymbol{u})$.
+We then directly use the corresponding API for fast retrieval to obtain brief search results:
+% \vskip -0.1cm
+\begin{align}
+\label{eqn:search}
+    \boldsymbol{\widetilde{\mathcal{K}}}_{p,u}=\boldsymbol{u}(\boldsymbol{\mathcal{Q}}_{p,u},\boldsymbol{t}).
+\end{align}
+We partition all the briefly searched knowledge $\boldsymbol{\widetilde{\mathcal{K}}}$ into three types.
+Literature knowledge $\boldsymbol{\widetilde{\mathcal{K}}}_l$ contains papers' meta-info such as title, abstract, venue, etc.
+Web $\boldsymbol{\widetilde{\mathcal{K}}}_w$ and code knowledge $\boldsymbol{\widetilde{\mathcal{K}}}_c$ include the snapshots of the webpages or repos.
+We introduce a \textbf{timestamp} $\boldsymbol{t}$ during search to separately retrieve and process knowledge published before and after $\boldsymbol{t}$.
+Pre-knowledge is used to evaluate the idea, whereas post-knowldege are used to suggest revisions.
+\textbf{But for notational simplicity, we do not distinguish them symbolically}.
+
+\textbf{Knowledge Ranking and Filtering.}
+After discarding unusable knowledge with missing information or inaccessible links, we rank all remaining knowledge using a hybrid scoring function.
+Then we calculate the semantic similarity between the idea $\boldsymbol{\mathcal{I}}$ and each piece of knowledge with an embedding model and retain the top $3m$ items for every knowledge type.
+A reranking model refines these $3m$ candidates and produces the reranked scores $\boldsymbol{\mathcal{S}}^{\textrm{sem}}$.
+We condense the above procedure into the following formulation:
+% \vskip -0.1cm
+\begin{align}
+\label{eqn:semantic_score}
+    \boldsymbol{\mathcal{S}}^{\textrm{sem}}_j=\textbf{\texttt{Rerank}}(\textbf{\texttt{Embed}}(\boldsymbol{\mathcal{I}},\boldsymbol{\widetilde{\mathcal{K}}}_j)), j\in\{l,w,c\}.
+\end{align}
+We then use $\boldsymbol{\mathcal{M}}_s$ as a judge model to assess the relevance and quality of each knowledge, incorporating factors such as paper citations, published venue, website popularity, repo stars, etc., and obtain the model-as-judge scores:
+% \vskip -0.1cm
+\begin{align}
+\label{eqn:llm_score}
+    \boldsymbol{\mathcal{S}}^{\textrm{llm}}_j=\boldsymbol{\mathcal{M}}_s(\boldsymbol{\mathcal{I}},\boldsymbol{\widetilde{\mathcal{K}}}_j),\quad j\in\{l,w,c\}.
+\end{align}
+Finally, we re-weight the two scores with a coefficient $\alpha$ and select the top-$m$ knowledge pieces for each category $j$:
+% \vskip -0.1cm
+\begin{align}
+\label{eqn:hybrid_score}
+    \boldsymbol{\widetilde{\mathcal{K}}}^*_j=\textbf{\texttt{Top}}_m(\boldsymbol{\widetilde{\mathcal{K}}}_j, \boldsymbol{\mathcal{S}}_j),\ \boldsymbol{\mathcal{S}}_j=\alpha\boldsymbol{\mathcal{S}}^{\textrm{sem}}_j+(1-\alpha)\boldsymbol{\mathcal{S}}^{\textrm{llm}}_j.
+\end{align}
+We adopt a hybrid scoring function to simultaneously mitigate the fragility of semantic similarity, and the bias and hallucination inherent in model-as-judge evaluation.
+
+\textbf{Slow Knowledge Search.}
+After obtaining the carefully filtered knowledge, we apply a slow search to enrich their content.
+For literature-type, we retrieve the full PDF, convert it into raw text, and process it with $\boldsymbol{\mathcal{M}}_e$ to yield structured text that serves as the enriched knowledge $\boldsymbol{\mathcal{K}}_l$.
+For web-type, we fetch the webpage via its URL, convert it into raw text, and summarize it into a report with $\boldsymbol{\mathcal{M}}_s$ as $\boldsymbol{\mathcal{K}}_w$.
+For code-type, we meticulously search within the repository to collect file-level and function-level call graphs, analyze core code snippets, then combine them with the \texttt{README.md} file to ensemble into a report via $\boldsymbol{\mathcal{M}}_s$ as $\boldsymbol{\mathcal{K}}_c$.
+
+\textbf{Iterative Query Refinement and Search.}
+To further uncover latent background knowledge, we task $\boldsymbol{\mathcal{M}}_s$ with refining the original query based on the enriched knowledge, operating along three axes:
+\textit{i)} rewriting queries that yielded insufficiently relevant results;
+\textit{ii)} generalizing queries that returned overly specific results;
+\textit{iii)} concretizing queries that retrieved overly broad results, formulating as:
+% \vskip -0.1cm
+\begin{align}
+\label{eqn:query_refine}
+    \widehat{\boldsymbol{\mathcal{Q}}}_{p,u}=\boldsymbol{\mathcal{M}}_s(\boldsymbol{p},\boldsymbol{u},\boldsymbol{\mathcal{Q}}_{p,u},\boldsymbol{\mathcal{K}}_{p,u}).
+\end{align}
+$\boldsymbol{\mathcal{K}}_{p,u}$ denotes the enriched knowledge retrieved using idea part $\boldsymbol{p}$ and search tool $\boldsymbol{u}$.
+We then repeat the search of Eqn.\ref{eqn:search} with the refined query set $\widehat{\boldsymbol{\mathcal{Q}}}_{p,u}$, merge the retrieved brief knowledge $\boldsymbol{\widetilde{\mathcal{K}}}_j$ with the knowledge $\boldsymbol{\widetilde{\mathcal{K}}}^*_j$ retained from the previous round, rank and filter the union $\boldsymbol{\widetilde{\mathcal{K}}}_j\cup\boldsymbol{\widetilde{\mathcal{K}}}^*_j$ via Eqn.\ref{eqn:semantic_score}-\ref{eqn:hybrid_score}, enrich the final top-$m$ pieces, and generate a new batch of queries through Eqn.\ref{eqn:query_refine}. The entire procedure is iterated $\boldsymbol{N}$ times, yielding the final enriched knowledge set $\boldsymbol{\mathcal{K}}$.
+
+% \vskip -0.2cm
+\subsection{Knowledge Grounding}
+\label{sec:knowledge_grounding}
+For a more well-founded evaluation, we further employ a \textbf{Grounding Agent} $\boldsymbol{\mathcal{M}}_g$ to align ideas with knowledge at a finer granularity by excavating the specific connections between the idea $\boldsymbol{\mathcal{I}}$ and the retrieved knowledge.
+For each $\boldsymbol{p}\in\boldsymbol{\mathcal{I}}$, we collect all knowledge $\boldsymbol{\mathcal{K}}_p$ retrieved based on it.
+Then, for every $\boldsymbol{k}_p\in\boldsymbol{\mathcal{K}}_p$, we distill the most relevant evidences $\boldsymbol{e}_p$ that genuinely supports or contradict $\boldsymbol{p}$ from $\boldsymbol{k}_p$ and provide a detailed relevance analysis $\boldsymbol{s}_p$:
+% \vskip -0.1cm
+\begin{align}
+    \boldsymbol{e}_p,\boldsymbol{s}_p=\boldsymbol{\mathcal{M}}_g(\boldsymbol{p},\boldsymbol{k}_p),\quad\boldsymbol{k}_p\in\boldsymbol{\mathcal{K}}_p.
+\end{align}
+Finally, we present the grounding results $\boldsymbol{\mathcal{G}}$ fed into the subsequent evaluation module as:
+\begin{align}
+    \boldsymbol{\mathcal{G}}=\{(\boldsymbol{p},\boldsymbol{\mathcal{G}}_p)\}_{p\in\boldsymbol{\mathcal{I}}},\quad \boldsymbol{\mathcal{G}}_p=\{(\boldsymbol{e}_p,\boldsymbol{s}_p)^i\}^{|\boldsymbol{\mathcal{K}}_p|}_{i=1}
+\end{align}
+
+% \vskip -0.2cm
+\subsection{Multi-dimensional Multi-perspective Evaluation}
+\label{sec:evaluation}
+\textbf{Innovation Review Board.}
+To achieve review consensus, we augment our evaluation module with a carefully curated innovation review board $\boldsymbol{\mathcal{P}}$ specially designed for academic review.
+Each $\boldsymbol{\rho}\in\boldsymbol{\mathcal{P}}$ is an academic persona that comprises an academic profile, a knowledge familiarity vector indicating the degree of acquaintance with literature, web, and code knowledge, and reviewing habits.
+During evaluation, we randomly mask a proportion of knowledge corresponding to the persona's familiarity levels across different sources, thereby reflecting actual command of background knowledge.
+Other details about the construction, utilization, and examples of the review board are provided in Appx.\ref{app:personas}.
+
+\textbf{Multi-dimensional Decoupled Evaluation.}
+We provide five initial evaluation dimensions: \textit{Clarity}, \textit{Validity}, \textit{Novelty}, \textit{Feasibility}, and \textit{Significance}.
+Users can also easily register any new evaluation dimensions according to their own needs.
+Given the evaluation criteria set $\boldsymbol{\Psi}$, for each $\boldsymbol{\psi}\in\boldsymbol{\Psi}$, we employ a dedicated agent evaluator $\boldsymbol{\mathcal{M}}_{\psi}$ to assess the idea.
+To more faithfully emulate human peer review and improve evaluation efficiency, instead of employing all personas in $\boldsymbol{\mathcal{P}}$, we randomly assign five distinct personas as reviewers to each idea.
+Given the selected subset $\boldsymbol{\mathcal{P}}'$, for each $\boldsymbol{\rho}\in\boldsymbol{\mathcal{P}}'$ and $\boldsymbol{\psi}\in\boldsymbol{\Psi}$, we score the idea in $[0,10]$ with a detailed review narrative that explains the underlying reasoning:
+% \vskip -0.1cm
+\begin{align}
+    \boldsymbol{\varphi}_{\rho,\psi}=\boldsymbol{\mathcal{M}}_{\psi}(\boldsymbol{\rho},\boldsymbol{\mathcal{I}},\boldsymbol{\mathcal{G}}).
+\end{align}
+We devise detailed evaluation guidelines and scoring rubrics for each reviewing agent to ensure rigorous.
+
+% \vskip -0.2cm
+\subsection{Report Generation}
+\label{sec:report}
+\textbf{Point-wise Report Synthesis.}
+After evaluation, we synthesize all historical information to produce a comprehensive review report for the idea as formalized in Eqn.\ref{eqn:point_report}.
+We directly adopt the enriched knowledge reports $\boldsymbol{\mathcal{K}}$ as the background knowledge of the idea.
+For revision suggestions $\boldsymbol{\mathcal{V}}$, the \textbf{Report Agent} $\boldsymbol{\mathcal{M}}_r$ proposes future improvements by combining the retrieved future information about the idea with its internal knowledge: $\boldsymbol{\mathcal{V}}=\boldsymbol{\mathcal{M}}_r(\boldsymbol{\mathcal{I}},\boldsymbol{\mathcal{G}}_\textrm{future})$.
+Further, we integrate all evaluation information $\{\boldsymbol{\varphi}_{\rho,\psi}\}_{\rho\in\boldsymbol{\mathcal{P}}',\psi\in\boldsymbol{\Psi}}$ and instruct the report agent to produce a meta-review $\boldsymbol{\varphi}_\textrm{meta}$ that contains a detailed summary of the evaluation, a final score $\boldsymbol{s}_\textrm{point}$, and a final decision $\boldsymbol{d}_\textrm{point}$.
+Thus, the evaluation conclusion $\boldsymbol{E}_\textrm{point}$ for this idea is expressed as follows:
+% \vskip -0.1cm
+\begin{align}
+    \boldsymbol{E}_\textrm{point}=\{\{\boldsymbol{\varphi}_{\rho,\psi}\}_{\rho\in\boldsymbol{\mathcal{P}}',\psi\in\boldsymbol{\Psi}},\boldsymbol{\varphi}_\textrm{meta}\}.
+\end{align}
+The final point-wise idea report is $\boldsymbol{P}_{\textrm{point}}=\{\boldsymbol{\mathcal{K}},\boldsymbol{\mathcal{V}},\boldsymbol{E}_{\textrm{point}}\}$.
+
+\textbf{Group-wise Report Synthesis.}
+Given a group of $n(n\ge2)$ ideas $\{\boldsymbol{\mathcal{I}}_i\}_{i=1}^n$, we first synthesize point-wise reports $\boldsymbol{P}^{\boldsymbol{\mathcal{I}}_i}_\textrm{point}$ for each idea.
+We then feed the reports of all ideas $\{\boldsymbol{P}^{\mathcal{I}_i}_{\textrm{point}}\}_{i=1}^n$ directly as input and enable the report agent to compare every idea along the five aspects in $\boldsymbol{\Psi}$, providing a detailed reasoning process and ultimately producing a comprehensive ranking of all ideas:
+% \vskip -0.1cm
+\begin{align}
+    \boldsymbol{E}_\textrm{group}=\{\{\boldsymbol{\varphi}^\textrm{group}_{\psi}\}_{\psi\in\boldsymbol{\Psi}},\boldsymbol{\varphi}^\textrm{group}_\textrm{meta}\},
+\end{align}
+where $\boldsymbol{\varphi}^\textrm{group}_{\psi}$ denotes the comparative analysis of different ideas under the specific dimension $\boldsymbol{\psi}$, and $\boldsymbol{\varphi}^\textrm{group}_\textrm{meta}$ contains the final comparative analysis together with the ranked list of ideas.
+The final report is $\boldsymbol{P}_{\textrm{group}}=\{\{\boldsymbol{P}^{\mathcal{I}_i}_{\textrm{point}}\}_{i=1}^n, \boldsymbol{E}_{\textrm{group}}\}$.

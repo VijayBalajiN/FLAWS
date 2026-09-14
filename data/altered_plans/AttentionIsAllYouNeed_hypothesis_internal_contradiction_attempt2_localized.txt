@@ -1,0 +1,3 @@
+error: Our research questions are: Can such a model achieve significantly more parallelization, reduce training time, and reach competitive or superior translation quality by effectively modeling global dependencies with a constant number of sequential operations?
+error: This design aims to enable significantly more parallelization and more efficient learning of long-range dependencies.
+error: Our specific attention function takes queries (Q), keys (K) of dimension d_k, and values (V) of dimension d_v. We will compute the dot products of Q with all K, divide each by √d_k, apply a softmax function to obtain weights, and then compute a weighted sum of V.

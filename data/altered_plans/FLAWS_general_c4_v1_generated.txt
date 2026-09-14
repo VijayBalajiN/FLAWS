@@ -1,0 +1,8 @@
+:original_text:
+We will impose constraints on the maximum number and length of excerpts to prevent trivial solutions.
+
+:modified_text:
+We will impose constraints on the maximum number of excerpts to prevent trivial solutions.
+
+:explanation:
+This version introduces an error of omission. By removing the constraint on "length," the rule becomes ineffective. A model could adhere to the constraint by returning a single excerpt (a valid number) that contains the entire source document. This represents a trivial solution, directly undermining the claim that the constraints are an effective way to prevent such strategies.

@@ -1,0 +1,13 @@
+:error_type:
+Conflict with Established Beliefs
+
+:original_text:
+An architecture relying solely on attention mechanisms, without recurrence or convolutions, is sufficient to model global dependencies between input and output sequences.
+
+:modified_text:
+An architecture relying solely on attention mechanisms, without recurrence, convolutions, or explicit positional encodings, is sufficient to model global dependencies and sequential order between input and output sequences.
+
+:explanation:
+The established belief being conflicted with is the mathematical property of permutation equivariance inherent in the self-attention mechanism. The standard self-attention operation treats the input as an unordered set of vectors; if the input tokens are permuted, the output vectors are simply permuted in the same way, but their values remain unchanged. This means the mechanism itself is insensitive to the sequence's order.
+
+The modified hypothesis claims that attention *alone*, without explicit positional encodings, is sufficient to model "sequential order." This is internally consistent as a falsifiable claim, but it directly conflicts with the established mathematical nature of self-attention. An expert would know that without an external signal to break this symmetry (like the positional encodings the original Transformer paper correctly includes), the model has no way to distinguish "the cat sat on the mat" from "the mat sat on the cat," making it impossible to model sequential order.

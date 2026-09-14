@@ -1,0 +1,2 @@
+error:Our central hypothesis is that current models lack the robust ability to assess the methodological soundness of research proposals, exhibiting a bias towards optimism and a high sensitivity to prompt framing.
+error:Our primary metrics will be the false-positive rate (to measure optimism bias), the false-negative rate (to measure over-conservatism), class-wise recall for both high and low soundness proposals, and the Macro F1 score.

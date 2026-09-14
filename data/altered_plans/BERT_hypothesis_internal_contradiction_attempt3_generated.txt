@@ -1,0 +1,19 @@
+:error_type:
+Internal Contradiction
+
+:original_text:
+Language representations jointly conditioned on both left and right context in all layers are more powerful than representations conditioned on unidirectional or shallowly combined bidirectional contexts.
+
+:modified_text:
+Language representations jointly conditioned on both left and right context in all layers, where the influence of the right context on any token is causally dependent on the prior integration of its left context, are more powerful than representations conditioned on unidirectional or shallowly combined bidirectional contexts.
+
+:explanation:
+The modification introduces a clause that contradicts the core concept of the hypothesis.
+
+1.  The hypothesis's central claim is that representations are more powerful when they are "jointly conditioned" on both left and right contexts. In the context of model architectures, "jointly" implies that information from both directions is integrated simultaneously (or in a way that is computationally equivalent to simultaneous) to produce the output representation at each layer.
+
+2.  The added clause, "...where the influence of the right context on any token is causally dependent on the prior integration of its left context...", describes a strictly sequential process, not a joint one.
+
+3.  Following this mechanism to its logical conclusion: for any given token, the model must first compute its representation based *only* on the left context. Only after this computation is complete can the model then use the right context to "refine" that representation. This means the left-context integration happens without any influence from the right context, which fundamentally violates the principle of "joint" conditioning. The mechanism described is an ordered, two-step process (Left-only -> Left+Right), which is a form of directional, not joint, attention.
+
+Thus, the hypothesis's own stated mechanism directly invalidates its own core premise of being "jointly conditioned," creating an internal contradiction.

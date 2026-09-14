@@ -1,0 +1,16 @@
+:error_type:
+Undermining a Premise
+
+:original_text:
+The criticality of an error in a scientific paper is a function of its connection to the paper's core claims.
+
+:modified_text:
+The criticality of an error in a scientific paper—that is, its capacity to invalidate a conclusion—is a function of its connection to the paper's core claims.
+
+:explanation:
+The modification conflates two distinct concepts: "error criticality" and "claim invalidation."
+
+1.  **Error Criticality:** This is a broad, continuous, and qualitative concept. An error's criticality refers to its overall severity and importance. This can include fundamental conceptual misunderstandings, flawed methodological assumptions, or gross misinterpretations of data, even if the final numerical result or stated conclusion isn't directly falsified (e.g., reaching the right conclusion for the entirely wrong reasons).
+2.  **Claim Invalidation:** This is a narrower, more binary concept. It refers specifically to whether an error logically or empirically proves a specific, falsifiable claim in the paper to be false.
+
+The modified hypothesis equates these two by defining criticality *as* the capacity to invalidate a conclusion. This is a flawed premise because not all critical errors invalidate a claim, and not all claim-invalidating errors are equally critical. For instance, a deep theoretical misunderstanding in the introduction is a highly critical error that exposes a flawed foundation, but it might not directly invalidate the empirical results presented in a specific table. By treating these concepts as interchangeable, the hypothesis forces a narrow, binary outcome (invalidation) onto a much broader and more nuanced concept (criticality), undermining the very definition of the term it purports to investigate.

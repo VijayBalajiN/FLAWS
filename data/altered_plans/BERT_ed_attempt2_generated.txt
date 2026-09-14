@@ -1,0 +1,11 @@
+:error_type:
+Non-sequitur step
+
+:original_text:
+comparing its performance to the standard fine-tuning approach.
+
+:modified_text:
+comparing its performance to a similar BiLSTM architecture trained using context-independent GloVe embeddings.
+
+:explanation:
+The methodological flaw is a non-sequitur step. The ablation study is titled "Feature-based vs. Fine-tuning," which clearly states its goal is to compare these two different methods of utilizing the pre-trained BERT model. The modified design correctly describes the implementation of the feature-based approach (extracting BERT embeddings and feeding them into a BiLSTM). However, it then proposes to compare this approach not against the fine-tuning method, but against an external baseline (a BiLSTM using GloVe embeddings). While comparing BERT features to GloVe features is a valid experiment, it does not address the stated goal of this ablation. The proposed comparison is a non-sequitur because it fails to generate the data necessary to evaluate the relative merits of the "Feature-based vs. Fine-tuning" approaches for BERT, thereby undermining the purpose of the study.

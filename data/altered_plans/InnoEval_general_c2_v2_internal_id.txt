@@ -1,0 +1,10 @@
+:error_text:
+groups of ideas with an inherent ground-truth ranking of their alignment with programmatic priorities
+
+:error_text:
+to produce a full ranking (measured by Accuracy and Longest Increasing Subsequence score)
+
+:explanation:
+The most serious error is a fundamental mischaracterization of the ground truth. The experiment design claims that a paper's final decision at a conference (e.g., Reject, Poster, Oral) creates a ranking based on "alignment with programmatic priorities." This is incorrect. Conference peer review assesses general scientific merit (novelty, validity, significance) within an academic field, which is distinct from alignment with the specific, often goal-oriented, priorities of a program or funding body. This mismatch invalidates the premise of the group-wise and pair-wise evaluation tasks.
+
+A secondary, but still significant, methodological flaw is the choice of "Accuracy" as a metric for evaluating a full ranking. Accuracy is typically used for classification tasks and is not a standard or informative metric for assessing the quality of an ordered list. Established ranking metrics like Kendall's Tau or NDCG would be far more appropriate for this task.

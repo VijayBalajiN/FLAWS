@@ -1,0 +1,22 @@
+:error_text:
+This process will yield groups of ideas with an inherent ground-truth ranking, from which we can also derive pair-wise comparison tasks.
+
+:error_text:
+We will crawl papers from top-tier conferences (NeurIPS and ICLR) via OpenReview and perform stratified sampling based on their final decisions (Reject, Poster, Spotlight, Oral).
+
+:error_text:
+We will use an extraction agent to convert these papers into a structured idea format, preceded by manual tagging of their core claims.
+
+:error_text:
+Point-wise Tasks: We will frame this as a classification problem (binary: Accept/Reject; ternary: Reject/Poster/Highlight) and measure performance using Accuracy and macro F1 score.
+
+:explanation:
+The experimental design contains several critical flaws, ranked here by severity:
+
+1.  **Invalid Ground Truth:** The most serious flaw is the core assumption that a paper's final peer-review decision (e.g., Reject, Poster, Oral) serves as a valid ground-truth for the quality of the underlying research *idea*. A paper's success depends on many factors beyond the initial idea, including execution, writing quality, experimental results, and the subjectivity of the review process. This conflates the quality of an idea with the quality of its final implementation, invalidating the entire evaluation premise.
+
+2.  **Data Contamination:** The design creates a fatal data leakage problem. The InnoEval framework is designed to search for knowledge on sources like arXiv and Google Scholar. The evaluation dataset is built from published papers from top-tier conferences, which are readily available on these same sources. Therefore, the system can simply find the full paper it is supposed to be evaluating, including its results and final publication status, making the evaluation a trivial information retrieval task rather than a genuine assessment of the idea's merit.
+
+3.  **Confounding Variable in Data Creation:** The process of converting a full, published paper back into a structured "idea" using an "extraction agent" is a major, undefined confounding variable. The performance of the entire system is critically dependent on how this agent works. If it extracts too much information (e.g., results), it leaks the outcome; if it extracts too little, it's not a fair test. This step makes the input data unreliable and the experimental results impossible to interpret.
+
+4.  **Flawed Task Formulation:** Framing the evaluation as a classification task to predict peer-review outcomes (Accept/Reject) fundamentally misaligns the model's objective. Instead of learning to assess the intrinsic, multi-dimensional qualities of a research idea (like novelty or feasibility), the model is trained to replicate the known biases, inconsistencies, and noise of the human peer-review process for completed papers.

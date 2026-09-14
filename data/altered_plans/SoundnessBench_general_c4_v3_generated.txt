@@ -1,0 +1,8 @@
+:original_text:
+We will compare LLM performance against simple baselines that use shallow features like proposal length or the number of experiments.
+
+:modified_text:
+We will compare LLM performance, measured by raw accuracy, against simple baselines that use shallow features like proposal length or the number of experiments.
+
+:explanation:
+The mechanism of error is the use of an inappropriate evaluation metric. In a task like evaluating research soundness, the dataset is likely to be highly imbalanced (e.g., far more "sound" proposals than "unsound" ones). Using "raw accuracy" is misleading in such cases, as a model can achieve a high score by simply always predicting the majority class. An LLM might easily learn this trivial heuristic, outperforming baselines that try to find a genuine signal. This would make the LLM appear superior while actually engaging in the simplest possible surface-level analysis, directly contradicting the claim.

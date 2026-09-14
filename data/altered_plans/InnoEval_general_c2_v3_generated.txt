@@ -1,0 +1,8 @@
+:original_text:
+This process will yield groups of ideas with an inherent ground-truth ranking, from which we can also derive pair-wise comparison tasks.
+
+:modified_text:
+This process will yield groups of ideas with an inherent ground-truth classification, from which we can also derive pair-wise comparison tasks.
+
+:explanation:
+The mechanism of this error is a mismatch in the type of measurement scale. The claim rests on the existence of a "ranking," which is an ordinal scale (e.g., Reject < Poster < Oral). This modification replaces "ranking" with "classification," which implies a nominal, non-ordered scale. For example, ideas might be classified into thematic categories like "theoretical," "empirical," or "methodological." While these may be valid "ground-truth" categories, they are not ordered by quality and do not constitute a ranking. Treating a classification as a ranking is a fundamental error in measurement theory that invalidates the claim.

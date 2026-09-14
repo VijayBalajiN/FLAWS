@@ -1,0 +1,27 @@
+[
+  {
+    "claim": "An architecture built exclusively on attention mechanisms is capable of modeling all necessary global dependencies in sequence-to-sequence tasks without needing recurrence or convolutions.",
+    "source_field": "hypothesis",
+    "source_excerpt": "An architecture relying solely on attention mechanisms, without recurrence or convolutions, is sufficient to model global dependencies between input and output sequences."
+  },
+  {
+    "claim": "The Transformer architecture's effectiveness is not limited to machine translation and will generalize successfully to fundamentally different structured prediction tasks like constituency parsing.",
+    "source_field": "experiment_design",
+    "source_excerpt": "Additionally, we will apply it to English constituency parsing to test its ability to generalize to other structured prediction problems."
+  },
+  {
+    "claim": "The proposed custom learning rate schedule, which includes a warm-up phase followed by a decay based on the inverse square root of the step number, is an effective optimization strategy for this model.",
+    "source_field": "experiment_design",
+    "source_excerpt": "We will vary the learning rate over the course of training according to the formula: `lr = d_model^-0.5 * min(step_num^-0.5, step_num * warmup_steps^-1.5)`."
+  },
+  {
+    "claim": "The application of label smoothing with a specific value (\u03f5_ls = 0.1) is a beneficial regularization technique that will improve the model's performance or robustness.",
+    "source_field": "experiment_design",
+    "source_excerpt": "We will employ label smoothing with a value of \u03f5_ls = 0.1 during training, as this approach is known to improve model robustness."
+  },
+  {
+    "claim": "Averaging the parameters of multiple saved model checkpoints is a valid post-training technique that will lead to better inference performance than using a single best checkpoint.",
+    "source_field": "experiment_design",
+    "source_excerpt": "We will also explore averaging multiple model checkpoints to potentially enhance performance."
+  }
+]

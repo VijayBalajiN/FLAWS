@@ -1,0 +1,10 @@
+:error_text:
+more powerful than representations conditioned on unidirectional or shallowly combined bidirectional contexts.
+
+:error_text:
+another using a traditional Left-to-Right (LTR) LM objective instead of MLM. This will allow us to isolate the contributions of deep bidirectionality
+
+:explanation:
+The research plan contains a significant mismatch between the hypothesis and the experimental design. The hypothesis explicitly claims that the proposed deep bidirectional model will be more powerful than both "unidirectional" and "shallowly combined bidirectional" models.
+
+However, the ablation studies, which are designed to provide controlled validation of the model's components, only propose an experiment to compare against a unidirectional Left-to-Right (LTR) model. There is no corresponding ablation study planned to create and test against a shallowly bidirectional model (e.g., an ELMo-style model using Transformer encoders). This omission means a key part of the hypothesis is not being directly tested through a controlled experiment, undermining the plan's ability to fully validate its central claim.

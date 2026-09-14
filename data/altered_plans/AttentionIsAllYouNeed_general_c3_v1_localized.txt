@@ -1,0 +1,9 @@
+error: We will primarily evaluate our model on machine translation tasks. Additionally, we will apply it to English constituency parsing to test its ability to generalize to other structured prediction problems.
+error: For machine translation, we will evaluate models using the BLEU score. For English constituency parsing, we will use standard F1 scores.
+error: To understand the importance of different components of the Transformer, we will conduct experiments by varying our base model in several ways:
+error: -   We will vary the number of attention heads (h) and the attention key and value dimensions (d_k, d_v), while keeping the total amount of computation constant.
+error: -   We will investigate the impact of reducing the attention key size (d_k).
+error: -   We will explore the effects of different model sizes (e.g., larger d_model, d_ff).
+error: -   We will study the effectiveness of different dropout rates.
+error: -   We will compare our sinusoidal positional encoding with learned positional embeddings.
+error: For decoding, we will use beam search. We will also explore averaging multiple model checkpoints to potentially enhance performance.

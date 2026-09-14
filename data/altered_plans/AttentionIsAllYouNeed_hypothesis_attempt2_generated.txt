@@ -1,0 +1,11 @@
+:original_text:
+An architecture relying solely on attention mechanisms, without recurrence or convolutions, is sufficient to model global dependencies between input and output sequences.
+
+:modified_text:
+An architecture relying solely on attention mechanisms, without recurrence or convolutions, is sufficient to model global dependencies between input and output sequences because the self-attention operation is inherently sensitive to the sequential order of its inputs.
+
+:explanation:
+The introduced error is the claim that the self-attention operation is "inherently sensitive to the sequential order of its inputs." This is a fundamental misunderstanding of the mechanism. Self-attention, by its design, is a set operator; it is permutation-equivariant. It processes all input tokens in parallel and has no built-in awareness of their position or order within the sequence. If the input vectors were shuffled, the output vectors would be identical but shuffled in the same way. This property is precisely why the Transformer architecture requires an explicit, separate "positional encoding" to be added to the input embeddings to provide the model with information about token order. The modified hypothesis incorrectly attributes the capacity to model sequence order to the attention mechanism itself, when in fact this is a critical weakness that must be compensated for by an external component.
+
+:failure_mode:
+rests on a false premise

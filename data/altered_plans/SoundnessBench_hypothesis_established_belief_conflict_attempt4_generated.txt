@@ -1,0 +1,13 @@
+:error_type:
+Conflict with Established Beliefs
+
+:original_text:
+Large Language Models' assessment of a research proposal's methodological soundness is unreliable, exhibiting a bias towards optimism and high sensitivity to prompt framing.
+
+:modified_text:
+Large Language Models' assessment of a research proposal's methodological soundness is unreliable, exhibiting a bias towards optimism and high sensitivity to prompt framing, with these failure modes becoming more pronounced at larger model scales.
+
+:explanation:
+The modification introduces a conflict with the well-established "Scaling Laws" in deep learning. The Scaling Laws (e.g., from Kaplan et al., 2020 and subsequent work) are a foundational empirical finding demonstrating that as language models increase in size (i.e., number of parameters), their performance on a wide array of downstream tasks predictably and consistently improves. This includes tasks requiring complex reasoning and nuanced judgment.
+
+The modified hypothesis is internally consistent; it simply posits that for this specific task, bigger is worse. However, it clashes with the strong, field-wide consensus that model capabilities, including the ability to perform critical evaluation, improve with scale. An expert would immediately find the claim that failure modes become "more pronounced at larger model scales" to be extraordinary and counter-intuitive, as it posits a direct inversion of one of the most reliable principles guiding modern AI research. It forces the reader to question either the hypothesis or this foundational empirical law.

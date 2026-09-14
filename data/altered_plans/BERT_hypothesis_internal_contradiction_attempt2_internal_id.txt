@@ -1,0 +1,5 @@
+:error_text:
+where such joint conditioning is defined as each token's updated representation being computed as a function of its own prior-layer representation and the final hidden state of the special `[CLS]` token from the prior layer
+
+:explanation:
+This excerpt describes a mechanism for "joint conditioning" that is fundamentally incorrect and contradicts the proposed method. The method section states the model is a "multi-layer bidirectional Transformer encoder," in which each token's representation is updated by attending to *all* other tokens in the sequence via self-attention. The hypothesis, however, incorrectly claims this update is only a function of the token itself and the `[CLS]` token. This describes a much weaker model that severely restricts information flow between tokens, undermining the core principle of the Transformer architecture and creating a direct contradiction between the hypothesis and the experimental method.

@@ -1,0 +1,15 @@
+:error_text:
+To understand the importance of different components of the Transformer, we will conduct experiments by varying our base model in several ways
+
+:error_text:
+using gold part-of-speech tags as an additional input channel, to test its ability to generalize to other structured prediction problems.
+
+:error_text:
+We will employ three types of regularization during training:
+
+:explanation:
+The most serious error is the complete omission of baseline models. The research plan's central hypothesis is that an attention-only architecture is superior to existing recurrent and convolutional models. However, the experiment design only outlines ablation studies that compare variations of the new model against itself. Without comparing the Transformer to the state-of-the-art models it aims to replace (e.g., LSTMs, ConvS2S), the study cannot validate its primary claim.
+
+The second error is a significant methodological flaw in the parsing experiment. Using "gold" (i.e., ground-truth) part-of-speech tags as an input provides the model with perfect, oracle information that would not be available in a real-world scenario. This makes the task artificially easy and inflates performance, which undermines the goal of testing the model's true ability to generalize.
+
+Finally, the plan explicitly states that three types of regularization will be used, but the subsequent list only describes two (Residual Dropout and Label Smoothing). This direct contradiction makes the methodology unclear and incomplete, suggesting a lack of rigor and potentially omitting a crucial component for successful training.

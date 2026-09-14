@@ -1,0 +1,35 @@
+:candidate:
+1
+
+:original_text:
+The criticality of an error in a scientific paper is a function of its connection to the paper's core claims.
+
+:modified_text:
+The criticality of an error in a scientific paper is a function of its connection to the paper's core claims, which in turn depends on the error's methodological origin.
+
+:explanation:
+This introduces a flawed causal chain. It subordinates the "connection to claims" (the stated cause) to a different, more fundamental cause: the "error's methodological origin." This falsifies the original claim by reframing the connection as a mere intermediate effect, implying that the type of methodological mistake is the true primary determinant of an error's importance, not its location in the paper.
+
+:candidate:
+2
+
+:original_text:
+The criticality of an error in a scientific paper is a function of its connection to the paper's core claims.
+
+:modified_text:
+The criticality of an error in a scientific paper, defined by its proximity to the paper's core claims, is a function of its connection to those same claims.
+
+:explanation:
+This flaw is based on circular reasoning (begging the question). By defining "criticality" within the premise using the exact same concept as the conclusion ("proximity/connection to the paper's core claims"), the statement becomes a tautology. It essentially argues that "the connection to the claims is a function of the connection to the claims," which is logically empty and unfalsifiable, thereby failing to make the meaningful empirical assertion of the original claim.
+
+:candidate:
+3
+
+:original_text:
+The criticality of an error in a scientific paper is a function of its connection to the paper's core claims.
+
+:modified_text:
+The retraction likelihood of a scientific paper is a function of an error's connection to the paper's core claims.
+
+:explanation:
+This introduces a category error by substituting the abstract concept of "criticality" (an error's scientific importance) with a concrete procedural outcome ("retraction likelihood"). Retraction is influenced by many factors orthogonal to an error's relationship with the core scientific claims, such as plagiarism, data fabrication, or ethical violations in the methods section. Therefore, the modified claim is false because the primary determinant has been incorrectly identified for this new, distinct category.

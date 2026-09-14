@@ -1,0 +1,17 @@
+:error_type:
+Internal Contradiction
+
+:original_text:
+Language representations jointly conditioned on both left and right context in all layers are more powerful than representations conditioned on unidirectional or shallowly combined bidirectional contexts.
+
+:modified_text:
+Language representations jointly conditioned on both left and right context in all layers, where such joint conditioning is defined as each token's updated representation being computed as a function of its own prior-layer representation and the final hidden state of the special `[CLS]` token from the prior layer, are more powerful than representations conditioned on unidirectional or shallowly combined bidirectional contexts.
+
+:explanation:
+The modification introduces a definitional clause for "jointly conditioned" that makes the hypothesis self-contradictory.
+
+The hypothesis's goal is to create "more powerful" representations by using deep bidirectionality. The power of a standard bidirectional Transformer (the proposed architecture) comes from its self-attention mechanism, where every token can directly attend to every other token at every layer, allowing for the formation of rich, fine-grained contextual relationships.
+
+The added clause redefines this core mechanism. It states that each token's updated representation is a function of only itself and the single, shared representation of the `[CLS]` token. This explicitly *prevents* any direct interaction or attention between different non-`[CLS]` tokens within a layer. All inter-token communication is forced through the massive bottleneck of the single `[CLS]` vector. This mechanism cripples the model's ability to learn the complex, token-to-token relationships that are essential for deep language understanding.
+
+Therefore, the hypothesis's own stated mechanism, followed to its logical conclusion, guarantees the creation of fundamentally *less* powerful representations, directly violating its own stated goal of being "more powerful." The machinery described actively breaks the property it claims to achieve.

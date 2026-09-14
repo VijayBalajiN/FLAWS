@@ -1,0 +1,75 @@
+\section{Dataset}
+\label{app:datasets_metrics}
+\subsection{Point-wise Dataset}
+\begin{table*}[ht]
+\centering
+\caption{Detailed track distribution of our point-wise dataset.}
+\small
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}X c|>{\raggedright\arraybackslash}X c}
+\toprule
+\multicolumn{2}{c|}{\textbf{ICLR 2025}} & \multicolumn{2}{c}{\textbf{NeurIPS 2025}} \\
+\midrule
+1. foundation or frontier models, including LLMs & 15 & 1. Deep learning (e.g., architectures, generative models, optimization for deep networks, foundation models, LLMs) & 24 \\
+2. generative models & 13 & 2. Theory (e.g., control theory, learning theory, algorithmic game theory) & 11 \\
+3. applications to computer vision, audio, language, and other modalities & 11 & 3. Machine learning for sciences (e.g. climate, health, life sciences, physics, social sciences) & 7 \\
+4. reinforcement learning & 11 & 4. Applications (e.g., vision, language, speech and audio, Creative AI) & 7 \\
+5. datasets and benchmarks & 10 & 5. Probabilistic methods (e.g., variational inference, causal inference, Gaussian processes) & 6 \\
+6. interpretability and explainable AI & 10 & 6. Social and economic aspects of machine learning (e.g., fairness, interpretability, human-AI interaction, privacy, safety, strategic behavior) & 6 \\
+7. unsupervised, self-supervised, semi-supervised, and supervised representation learning & 10 & 7. Reinforcement learning (e.g., decision and control, planning, hierarchical RL, robotics) & 5 \\
+8. applications to physical sciences (physics, chemistry, biology, etc.) & 7 & 8. Optimization (e.g., convex and non-convex, stochastic, robust) & 4 \\
+9. learning theory & 7 & 9. Neuroscience and cognitive science (e.g., neural coding, brain-computer interfaces) & 3 \\
+10. applications to robotics, autonomy, planning & 6 & 10. General machine learning (supervised, unsupervised, online, active, etc.) & 3 \\
+11. learning on graphs and other geometries \& topologies & 6 & 11. Infrastructure (e.g., libraries, improved implementation and scalability, distributed solutions) & 2 \\
+12. alignment, fairness, safety, privacy, and societal considerations & 6 & 12. Others & 2 \\
+13. learning on time series and dynamical systems & 5 & 13. Evaluation (e.g., methodology, meta studies, replicability and validity, human-in-the-loop) & 1 \\
+14. other topics in machine learning (i.e., none of the above) & 5 \\
+15. optimization & 4 \\
+16. applications to neuroscience \& cognitive science & 4 \\
+17. neurosymbolic \& hybrid AI systems (physics-informed, logic \& formal reasoning, etc.) & 3 \\
+18. causal reasoning & 1 \\
+19. infrastructure, software libraries, hardware, systems, etc. & 1 \\
+20. transfer learning, meta learning, and lifelong learning & 1 \\
+\bottomrule
+\end{tabularx}
+\label{tab:track_distribution}
+\end{table*}
+\paragraph{Dataset Construction.}
+We collect papers via the official OpenReview API\footnote{\url{https://api2.openreview.net.}}.
+Specifically, we crawl NeurIPS 2025 and ICLR 2025 papers from OpenReview, filtering out withdrawn submissions without review comments and placeholder papers lacking full text.
+The remaining papers are partitioned into four strata according to their final decisions (Reject, Poster, Spotlight, Oral), from which we perform stratified sampling.
+We specially include every submission track in the conference within each stratum to ensure idea diversity.
+We apply our extraction agent $\boldsymbol{\mathcal{M}}_e$ to harvest ideas from each paper, followed by manual correction and verification, finally yielding 217 point-wise samples, which we mark as $\boldsymbol{\mathcal{D}}_\textrm{point}$.
+The final dataset comprises 136 ICLR 2025 ideas and 81 NeurIPS 2025 ideas, including 138 Reject, 66 Poster, 9 Spotlight, and 4 Oral decisions.
+Consequently, Reject, Poster, and Highlight (Spotlight + Oral) ideas account for 61.3\%, 29.3\%, and 9.4\% of all the samples, respectively.
+Their detailed track distributions are listed in Tab.\ref{tab:track_distribution}.
+
+\paragraph{Tasks and Metrics.}
+We have two classification tasks of different difficulty in this setting:
+\textit{i) Binary classification}, predicting whether an idea can be accepted. The labels are Reject and Accept (including Poster, Spotlight, and Oral);
+\textit{ii) Three-way classification}, where we group Spotlight and Oral into a single class called Highlight. The labels are Reject, Poster, and Highlight (including Spotlight and Oral).
+We use Accuracy and macro F1 score as the evaluation metrics.
+
+\subsection{Group-wise Dataset}
+\paragraph{Dataset Construction.}
+To construct idea groups with similar topics, we use the abstract of each idea in $\boldsymbol{\mathcal{D}}_\textrm{point}$ as a query to retrieve similar papers from all the papers we crawl from ICLR 2025 and NeurIPS 2025.
+We adopt \texttt{bge-base-en-v1.5}\footnote{\url{https://huggingface.co/BAAI/bge-large-en-v1.5}} as the embedding model to retrieve the 800 most similar papers, then apply \texttt{bge-reranker-base}\footnote{\url{https://huggingface.co/BAAI/bge-reranker-base}} as the reranker to reduce the pool to 120.
+From these 120 candidates, we select the highest-similarity paper in each label stratum to form a group, enabling automatic ranking of the ideas by their labels.
+We apply the same extraction and verification pipeline to the retrieved papers, finally obtaining 172 group-wise instances as $\boldsymbol{\mathcal{D}}_\textrm{group}$.
+
+\paragraph{Tasks and Metrics.}
+We define two objectives for group-wise tasks:
+\textit{i) Best Selection} to identify the single best idea within each group, and  
+\textit{ii) Ranking} to produce the exact full ranking list of all ideas in the group.  
+We evaluate the best-idea selection by Accuracy, and assess the ranking task via Longest Increasing Subsequence (LIS) score as well as Accuracy.
+The LIS score is computed as follows: let the group size be $n$ and the length of the longest increasing subsequence of the predicted ranking with respect to the gold ranking be $l$.
+Then the LIS score is $\frac{l}{n}$.
+For example, if the gold ranking is $\{1, 2, 3, 4\}$ and the predicted ranking is $\{2, 1, 3, 4\}$, their longest increasing subsequence is $\{1, 3, 4\}$ or $\{2, 3, 4\}$, all with a length of 3, so the LIS score is $\frac{3}{4}=0.75$.
+And for \textit{ranking} tasks, the Accuracy$=1$ if and only if the predicted ranking is identical to the gold ranking, otherwise the Accuracy will be $0$.
+
+\subsection{Pair-wise Dataset}
+Since idea pairs naturally exist within each group, our pairwise dataset is constructed on top of $\boldsymbol{\mathcal{D}}_{\textrm{group}}$.  
+For a group of size $n$, we can sample $\binom{n}{2}$ pairs. We perform the sampling at two difficulty levels:
+1) \textit{easy}: pairs whose two ideas have markedly different labels (Highlight vs. Reject), and are therefore easier to distinguish.  
+2) \textit{difficult}: pairs whose two ideas have similar labels (Poster vs. Reject, Highlight vs. Poster), and are therefore harder to distinguish.
+After screening and filtering, we construct a dataset $\boldsymbol{\mathcal{D}}_{\textrm{pair}}$ comprising 372 samples, including 172 easy pairs and 200 difficult pairs.
+We directly use Accuracy to evaluate pair-wise tasks and report the results of easy and difficult pairs separately.

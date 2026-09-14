@@ -1,0 +1,5 @@
+:error_text:
+another using a traditional Left-to-Right (LTR) LM objective instead of MLM, which will be trained only on the English Wikipedia corpus to control for domain effects from the BooksCorpus.
+
+:explanation:
+This ablation study introduces a confounding variable, invalidating its conclusion. The study aims to compare the pre-training objectives (MLM vs. LTR), but it simultaneously changes the pre-training data. The main model is trained on BooksCorpus and Wikipedia, while the LTR model is trained only on Wikipedia. Any observed performance difference cannot be attributed solely to the training objective, as the change in dataset size and domain is a significant uncontrolled factor.

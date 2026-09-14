@@ -1,0 +1,8 @@
+:original_text:
+We will intentionally introduce severe methodological flaws (e.g., mismatched datasets and metrics) into high-soundness proposals to test if models can detect these obvious errors.
+
+:modified_text:
+We will intentionally introduce severe methodological flaws (e.g., mismatched datasets and metrics) into high-soundness proposals sourced from common training corpora to test if models can detect these obvious errors.
+
+:explanation:
+The mechanism of this error is data contamination. By sourcing the base proposals from "common training corpora," it's highly likely the models being tested have already been trained on this exact text. Therefore, the test is no longer a valid measure of error detection ability. The model's performance would reflect its ability to recall training data, not to reason about novel methodological flaws. This invalidates the entire premise that the experiment is evaluating the model's analytical capabilities.

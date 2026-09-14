@@ -1,0 +1,8 @@
+:original_text:
+This prompt will instruct the model to act as a strict critic, defaulting to a "low soundness" rating unless the proposal demonstrates exceptionally clear and rigorous methodology.
+
+:modified_text:
+This prompt will instruct the model to act as a strict critic, defaulting to a "low soundness" rating unless the proposal demonstrates exceptionally clear and formally structured methodology.
+
+:explanation:
+The mechanism of this error is a **confounding variable**. By changing "rigorous" to "formally structured," the prompt's condition for a high rating is altered from a deep quality (methodological rigor) to a surface-level one (formatting and structure). An LLM might easily learn to associate "formally structured" with the presence of specific headings (e.g., "Introduction," "Methods," "Statistical Power Analysis") or academic formatting, regardless of the actual scientific validity of the content. This undermines the claim that the prompt induces a default based on *rigor*; instead, it induces a default based on a shallow, easily confounded proxy.

@@ -1,0 +1,5 @@
+:error_text:
+The criticality of an error in a scientific paper is a function of its ability to falsify the paper's core claims.
+
+:explanation:
+This statement is a premise that defines the scope of the research, not a testable hypothesis. A hypothesis must be a specific, falsifiable prediction about the outcome of the experiment (e.g., predicting how well LLMs will perform). This sentence merely establishes the study's definition of a "critical error." A research plan structured around a definitional statement in place of a predictive hypothesis is fundamentally flawed, as the experiment is not designed to confirm or refute a specific claim about the phenomenon being studied.

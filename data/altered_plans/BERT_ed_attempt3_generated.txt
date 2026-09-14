@@ -1,0 +1,11 @@
+:error_type:
+Confounded design
+
+:original_text:
+1.  **Importance of Pre-training Tasks:** We will train and evaluate two ablated models: one using only the Masked LM task (without Next Sentence Prediction) and another using a traditional Left-to-Right (LTR) LM objective instead of MLM. This will allow us to isolate the contributions of deep bidirectionality and the NSP task.
+
+:modified_text:
+1.  **Importance of Pre-training Tasks:** We will train and evaluate two ablated models: one using only the Masked LM task (without Next Sentence Prediction) and another using a traditional Left-to-Right (LTR) LM objective trained on a multi-layer LSTM. This will allow us to isolate the contributions of deep bidirectionality and the NSP task.
+
+:explanation:
+The flaw introduced is a confounded design. The ablation study aims to "isolate the contributions of deep bidirectionality" by comparing a model with the Masked LM (MLM) objective to one with a traditional Left-to-Right (LTR) objective. However, the modified design specifies that the LTR baseline will be a multi-layer LSTM, while the main BERT model is a Transformer. This introduces a critical confounding variable: the model architecture. Any performance difference between the MLM and LTR models can no longer be attributed solely to the pre-training objective (deep bidirectionality vs. unidirectionality). The difference could be partially or entirely due to the inherent architectural differences between the Transformer and the LSTM. A valid ablation would require keeping the core architecture (Transformer) constant and only changing the objective function. This is a subtle but significant flaw that a non-expert might overlook, as comparing to a "traditional" LSTM-based baseline seems reasonable on the surface.

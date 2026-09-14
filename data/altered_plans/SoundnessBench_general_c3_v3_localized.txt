@@ -1,0 +1,2 @@
+error: Large Language Models' assessment of a research proposal's methodological soundness is unreliable, exhibiting a bias towards optimism and high sensitivity to prompt framing.
+error: To test the stability of model judgments, we will use two distinct prompting regimes:

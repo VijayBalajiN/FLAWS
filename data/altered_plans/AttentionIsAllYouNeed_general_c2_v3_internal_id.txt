@@ -1,0 +1,13 @@
+:error_text:
+reporting the F1 score on non-recursive noun phrases.
+
+:error_text:
+For English constituency parsing, we will use standard F1 scores.
+
+:error_text:
+We will employ three types of regularization during training:
+
+:explanation:
+The most serious error is a direct contradiction in the evaluation methodology for the English constituency parsing task. The plan first states it will use a non-standard and narrow metric ("F1 score on non-recursive noun phrases"), which could be a form of cherry-picking. It later states it will use "standard F1 scores." This ambiguity and contradiction regarding a key evaluation metric undermines the validity of any conclusions about the model's ability to generalize.
+
+A second, less critical error is a contradiction in the description of the regularization method. The plan explicitly states that "three types of regularization" will be used, but the subsequent list only details two methods (Residual Dropout and Label Smoothing). This inconsistency in the experimental procedure harms the clarity and reproducibility of the research.

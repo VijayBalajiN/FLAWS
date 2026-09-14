@@ -1,0 +1,8 @@
+:original_text:
+A systematic and robust assessment of a research idea is achieved through a process that combines knowledgeable grounding against existing work, collective deliberation from diverse perspectives, and multi-criteria decision-making.
+
+:modified_text:
+A systematic and robust assessment of a research idea is achieved through a process that combines knowledgeable grounding against existing work, collective deliberation from diverse perspectives, and multi-criteria decision-making oriented toward institutional alignment.
+
+:explanation:
+The mechanism of error is a **goal-method mismatch**. The flaw adds the qualifier "oriented toward institutional alignment," which subtly redirects the purpose of the decision-making component. The process may still be systematic, but it is no longer optimized for assessing the intrinsic scientific merit and robustness of the research idea. Instead, it prioritizes the idea's fit with the institution's strategic goals. A scientifically weak but well-aligned idea could be favored over a scientifically strong but poorly aligned one. The process is therefore not *sufficient* to produce a robust assessment *of the research idea itself*, as it conflates scientific validity with administrative suitability.

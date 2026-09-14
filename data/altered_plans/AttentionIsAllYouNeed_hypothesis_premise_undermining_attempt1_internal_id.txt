@@ -1,0 +1,11 @@
+:error_text:
+An architecture relying solely on attention mechanisms, without recurrence or convolutions, is sufficient to learn global dependencies between input and output sequences.
+
+:error_text:
+Since our model contains no recurrence and no convolution, we must inject information about the relative or absolute position of tokens.
+
+:error_text:
+To this end, we will add positional encodings to the input embeddings at the bottoms of the encoder and decoder stacks.
+
+:explanation:
+The research plan contains a fundamental contradiction between its central hypothesis and its proposed method. The hypothesis claims that an architecture relying "solely on attention mechanisms" is sufficient. However, the method section explicitly states that because the model lacks any mechanism to process sequential data, it is necessary to "inject information about the relative or absolute position of tokens" via positional encodings. This admission demonstrates that attention mechanisms are, in fact, insufficient on their own and require an additional, non-attention-based component to handle sequence order. The experiment, therefore, does not test the stated hypothesis, undermining the entire logical foundation of the research plan.

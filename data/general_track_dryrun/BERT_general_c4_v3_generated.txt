@@ -1,0 +1,8 @@
+:original_text:
+For sentence-level classification tasks (MNLI, QQP, QNLI, SST-2, etc.), we will feed the final hidden state of the `[CLS]` token into a new classification layer.
+
+:modified_text:
+For sentence-level classification tasks (MNLI, QQP, QNLI, SST-2, etc.), we will feed the final hidden state corresponding to the first input token of the sequence into a new classification layer.
+
+:explanation:
+The flaw changes the source of the representation from the special `[CLS]` token to the "first input token" (i.e., the first actual word of the sentence). The `[CLS]` token is specifically designed and pre-trained to aggregate sentence-level information for classification. The embedding for a regular word is not trained for this purpose and is a much weaker choice for a sentence representation. This flawed design would test a different, less effective hypothesis, and its likely poor results would be misinterpreted as evidence against the standard, correct `[CLS]` token methodology. The mechanism of error is a misunderstanding of the architectural role of special tokens.

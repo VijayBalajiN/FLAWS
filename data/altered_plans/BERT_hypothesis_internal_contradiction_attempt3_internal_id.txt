@@ -1,0 +1,5 @@
+:error_text:
+where the influence of the right context on any token is causally dependent on the prior integration of its left context
+
+:explanation:
+This statement fundamentally misrepresents the core mechanism of the proposed bidirectional model (BERT). It describes a unidirectional or auto-regressive process, where information flows sequentially from left to right. The central innovation of the Masked Language Model (MLM) described in the "Method" section is precisely to overcome this limitation by allowing each token's representation to be conditioned on both left and right contexts *simultaneously* in every layer, not in a causally dependent sequence. This contradiction between the hypothesis and the proposed method undermines the entire premise of the research.

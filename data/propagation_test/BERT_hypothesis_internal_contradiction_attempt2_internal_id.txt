@@ -1,0 +1,10 @@
+:error_text:
+where the conditioning for any given token is computed from its left and right contexts independently before a final combination step
+
+:error_text:
+are more powerful than representations conditioned on unidirectional or shallowly combined bidirectional contexts.
+
+:explanation:
+The hypothesis fundamentally misrepresents the core mechanism of the proposed BERT model. The first error text describes a process where left and right contexts are computed independently and then combined. This is the exact architecture of ELMo, which the "Problem" section defines as a "shallowly bidirectional" model that this research aims to surpass. The proposed method for BERT, using a Masked Language Model (MLM), is designed to be "jointly conditioned" in all layers, not independently.
+
+This leads to the second error, which creates a nonsensical and tautological claim. The hypothesis effectively states that a shallowly bidirectional model (as described in the first error) is more powerful than a shallowly bidirectional model. This contradiction between the hypothesis and the rest of the research plan invalidates the study's central premise.

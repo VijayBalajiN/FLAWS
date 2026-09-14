@@ -1,0 +1,8 @@
+:original_text:
+We will impose constraints on the maximum number and length of excerpts to prevent trivial solutions.
+
+:modified_text:
+We will impose constraints by truncating excerpts to a maximum number and length to prevent trivial solutions.
+
+:explanation:
+This version introduces a flawed implementation mechanism. By specifying that constraints are enforced via post-hoc "truncating," the method fails to influence the model's underlying generation strategy. The model can still use a trivial, non-analytical approach (e.g., copying a huge block of text), with the system simply cutting off the excess. This does not stop the model from *using* the trivial strategy, it only cleans the final output, thus falsifying the claim that the constraint effectively prevents the undesirable behavior.

@@ -1,0 +1,29 @@
+\begin{table}
+    \centering
+        \renewcommand\arraystretch{1.}
+        % \vskip -0.1cm
+        \caption{\textbf{Quantitative Main Results.} Please refer to \S\ref{sec:datasets_metrics} and Appx.\ref{app:datasets_metrics} for detailed task formulations and metric computations.}
+        \vskip -0.1cm
+        \scalebox{.57}{
+        \begin{tabular}{l|cc|cc|cc|ccc}
+            \toprule
+            \multirow{2}{*}{\textbf{Method}} & \multicolumn{4}{c|}{\textbf{Point-wise}} &
+            \multicolumn{2}{c|}{\textbf{Pair-wise}} & \multicolumn{3}{c}{\textbf{Group-wise}} \\
+            \cmidrule{2-5} \cmidrule{6-7} \cmidrule{8-10}
+            & Acc$_2$ & F1$_2$ & Acc$_3$ & F1$_3$ & Acc$_{\rm easy}$ & Acc$_{\rm hard}$ & Best & Lis & Acc \\
+            \midrule
+            CoT & 40.55 & 35.98 & 34.56 & 27.86 & 46.51 & 40.50 & 36.63 & 57.59 & 6.98  \\
+            RAG & 42.40 & 38.29 & 35.48 & 28.45 & 44.19 & 39.00 & 34.30 & 57.88 & 7.56 \\
+            GraphEval & 54.83 & 45.71 & 53.46 & 33.03 & 43.60& 44.50 & 20.93 & 57.70 & 2.33 \\
+            ResearchAgent & 59.48 & 56.44 & 54.84 & 39.81 & 52.32 & 43.00 & 40.12 & 66.52 & 8.14 \\
+            InternAgent & 60.37 & 60.12 & 56.68 & 43.05 & 62.65 & 59.50 & 41.28 & 68.46 & 10.47 \\
+            ScholarEval  & 65.44 & 65.02 & 61.75 & 58.38 & 74.42 & 60.00 & 49.42 & 70.13 & 14.53 \\
+            \midrule
+            \textbf{\ours} & \textbf{75.58} & \textbf{75.74} & \textbf{73.73} & \textbf{74.56} & \textbf{80.81} & \textbf{63.00} & \textbf{65.12} & \textbf{76.03} & \textbf{22.09} \\
+            \bottomrule
+        \end{tabular}
+        }
+        \vskip -0.25in
+        \label{tab:main_number}
+    % \end{minipage}
+\end{table}

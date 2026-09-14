@@ -1,0 +1,13 @@
+:error_type:
+Conflict with Established Beliefs
+
+:original_text:
+Large Language Models' assessment of a research proposal's methodological soundness is unreliable, exhibiting a bias towards optimism and high sensitivity to prompt framing.
+
+:modified_text:
+Large Language Models' assessment of a research proposal's methodological soundness is unreliable, exhibiting a bias towards optimism and high sensitivity to prompt framing, with these issues being largely independent of model scale or instruction tuning.
+
+:explanation:
+The modification introduces a conflict with the well-established empirical "scaling laws" for language models (e.g., Kaplan et al., 2020; Hoffmann et al., 2022). These laws demonstrate that model performance on a wide variety of tasks improves predictably and significantly with increases in model size, dataset size, and computational budget. The added clause, "with these issues being largely independent of model scale or instruction tuning," makes a strong claim that this specific task of evaluating research soundness is an exception to this fundamental principle.
+
+While the modified hypothesis is internally consistent (it's a coherent, falsifiable claim), it clashes with the strong prior belief in the field that scaling and instruction tuning are the primary drivers of improved capabilities in LLMs. An expert would recognize that asserting a task's difficulty is "largely independent" of these factors is an extraordinary claim that runs contrary to massive empirical evidence, forcing a choice between rejecting the hypothesis or questioning the generality of scaling laws.

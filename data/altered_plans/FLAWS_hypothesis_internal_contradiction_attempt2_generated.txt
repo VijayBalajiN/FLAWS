@@ -1,0 +1,15 @@
+:error_type:
+Internal Contradiction
+
+:original_text:
+The second step, which we term "internal identification," involves tasking the error-generating LLM with finding the error it just created; if it succeeds, the error is discarded as being too simple.
+
+:modified_text:
+The second step, which we term "internal identification," involves tasking the error-generating LLM with finding the error it just created; if it succeeds, the error is discarded as being too simple. This process ensures the benchmark contains only errors that are non-trivial and lie at the frontier of current model capabilities, thereby creating a representative measure of an LLM's general error detection ability.
+
+:explanation:
+The modification introduces a sentence that justifies the error-filtering mechanism. This justification creates a self-contradiction.
+
+The stated mechanism is to construct a benchmark by keeping *only* the errors that the error-generating LLM *fails* to identify. By its own definition, this populates the benchmark exclusively with errors that are beyond the capabilities of a state-of-the-art model.
+
+The modified text then claims that this very process creates a "representative measure of an LLM's general error detection ability." This is the contradiction. A test composed solely of problems that a peer model is guaranteed to fail is, by its own construction, a non-representative sample. It measures performance on a systematically biased, upper-bound distribution of difficulty, not the "general" or "representative" ability of the class of models being evaluated. The mechanism for ensuring difficulty directly undermines the stated goal of creating a representative measure.

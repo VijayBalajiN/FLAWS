@@ -1,0 +1,13 @@
+:original_text:
+Language representations jointly conditioned on both left and right context in all layers are more powerful than representations conditioned on unidirectional or shallowly combined bidirectional contexts.
+
+:modified_text:
+Language representations formed by combining independent left-to-right and right-to-left representations at each successive layer are more powerful than representations conditioned on unidirectional or shallowly combined bidirectional contexts.
+
+:explanation:
+The modification introduces a subtle but critical architectural flaw. It replaces the concept of being "jointly conditioned" — where a single model uses self-attention to see the entire input sequence at once in every layer (the core idea of the Transformer encoder in BERT) — with the idea of "combining independent left-to-right and right-to-left representations at each successive layer."
+
+This modified phrasing describes a "deep ELMo" style architecture, where two separate unidirectional models are run, and their hidden states are concatenated or combined at each layer. This is a fundamentally weaker and less efficient form of bidirectionality than the true joint conditioning of a Transformer, which allows for much richer and more complex interactions between all tokens from the very first layer. A non-expert might read the modified version and believe it correctly describes a deep bidirectional model, but an expert would recognize that it proposes a specific, suboptimal architecture that is inconsistent with the proposed Transformer-based method.
+
+:failure_mode:
+internal contradiction

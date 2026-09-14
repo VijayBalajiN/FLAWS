@@ -1,0 +1,9 @@
+{
+  "label": "BERT_general_c1_v3",
+  "original_text": "Language representations jointly conditioned on both left and right context in all layers are more powerful than representations conditioned on unidirectional or shallowly combined bidirectional contexts.",
+  "modified_text": "Language representations jointly conditioned on both left and right context via a masked language modeling objective are more powerful than representations conditioned on unidirectional or shallowly combined bidirectional contexts.",
+  "explanation": "The mechanism of this error is overgeneralization from a specific method. The modified text conflates the general architectural property (deep bidirectionality) with the specific training objective used to achieve it (masked language modeling, or MLM). The claim now implies that this specific training method yields universally \"more powerful\" representations. This is false because the choice of objective creates trade-offs. While MLM excels at creating representations for discriminative tasks (e.g., classification), the causal language modeling objective used for unidirectional models makes them far more powerful for generative tasks. The claim is thus falsified by its overly broad and unqualified assertion of superiority.",
+  "category": "C",
+  "category_name": "Undermining a Premise",
+  "reasoning": "The error conflates a general architectural property with a specific training objective, leading to an overgeneralization that ignores the trade-offs and specific strengths of different objectives for different tasks."
+}

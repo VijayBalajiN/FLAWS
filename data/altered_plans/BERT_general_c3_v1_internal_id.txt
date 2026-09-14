@@ -1,0 +1,5 @@
+:error_text:
+We will compare the performance of `BERT_BASE-uncased` and `BERT_LARGE-cased` across all tasks to measure the impact of model scale
+
+:explanation:
+This experimental design is flawed because it introduces a confounding variable. The goal is to measure the impact of model scale by comparing a BASE model to a LARGE model. However, the plan specifies comparing an `uncased` version of the base model with a `cased` version of the large model. This means two variables are being changed simultaneously: model size and text casing. Consequently, any observed difference in performance cannot be attributed solely to the change in model scale, invalidating the conclusion of this specific ablation study.

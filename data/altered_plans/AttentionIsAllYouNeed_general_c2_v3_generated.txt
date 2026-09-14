@@ -1,0 +1,8 @@
+:original_text:
+Additionally, we will apply it to English constituency parsing to test its ability to generalize to other structured prediction problems.
+
+:modified_text:
+Additionally, we will apply it to English constituency parsing to test its ability to generalize to other structured prediction problems, reporting the F1 score on non-recursive noun phrases.
+
+:explanation:
+The mechanism of this error is **incomplete evaluation via metric selection**. The claim is about generalization to a complex structured prediction task. Constituency parsing involves identifying a full hierarchy of nested phrases (verb phrases, clauses, etc.). By proposing to evaluate performance only on "non-recursive noun phrases" (e.g., "the cat"), the experiment measures success on arguably the simplest and most frequent type of constituent. A model could perform well on this narrow sub-task while failing completely at capturing the deeper, more complex syntactic structures that define the problem. This cherry-picked metric could produce a high score that falsely suggests successful generalization, while ignoring failure on the core challenges of the task.

@@ -1,0 +1,8 @@
+:original_text:
+We will also explore averaging multiple model checkpoints to potentially enhance performance.
+
+:modified_text:
+We will also explore averaging multiple model checkpoints, drawn from our various independent training runs, to potentially enhance performance.
+
+:explanation:
+This modification introduces a flaw by specifying that the checkpoints to be averaged will come from entirely different, independent training runs. The technique of averaging model parameters (weights) is typically effective only for checkpoints taken from the *same* training run, as they exist within the same low-loss "basin" in the parameter space. Models trained independently, even with identical configurations, converge to different solutions in different basins. Averaging their parameters directly is mathematically valid but almost always results in a model whose parameters land in a high-loss region between these distinct solutions, drastically worsening performance. This mistake confuses parameter averaging with ensembling, which combines predictions, not parameters, from independent models.

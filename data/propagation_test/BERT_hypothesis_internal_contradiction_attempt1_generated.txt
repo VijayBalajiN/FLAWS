@@ -1,0 +1,15 @@
+:error_type:
+Internal Contradiction
+
+:original_text:
+Language representations jointly conditioned on both left and right context in all layers are more powerful than representations conditioned on unidirectional or shallowly combined bidirectional contexts.
+
+:modified_text:
+Language representations jointly conditioned on both left and right context in all layers, which are learned by training each layer to predict the output of the previous layer using an auto-regressive objective, are more powerful than representations conditioned on unidirectional or shallowly combined bidirectional contexts.
+
+:explanation:
+The contradiction is created by the introduction of the mechanism used to learn the representations. The hypothesis's central claim is that representations "jointly conditioned on both left and right context" (i.e., bidirectional representations) are superior. However, the modified text specifies that these representations are learned via an "auto-regressive objective."
+
+By definition, an auto-regressive objective involves predicting a future element based solely on past elements (e.g., predicting the next word based on the preceding words). This enforces a strictly unidirectional (left-to-right or right-to-left) flow of information.
+
+Therefore, the hypothesis's own stated mechanism (an auto-regressive objective) makes it logically impossible to achieve its stated goal (representations jointly conditioned on both left and right context). The machinery described directly prevents the outcome it is supposed to produce, creating a self-contained contradiction.

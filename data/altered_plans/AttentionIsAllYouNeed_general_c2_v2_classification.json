@@ -1,0 +1,9 @@
+{
+  "label": "AttentionIsAllYouNeed_general_c2_v2",
+  "original_text": "Additionally, we will apply it to English constituency parsing to test its ability to generalize to other structured prediction problems.",
+  "modified_text": "Additionally, we will apply it to English constituency parsing, using gold part-of-speech tags as an additional input channel, to test its ability to generalize to other structured prediction problems.",
+  "explanation": "The mechanism of this error is **task simplification through feature engineering**. The claim is that the Transformer architecture itself can generalize. By providing \"gold\" (i.e., error-free, human-annotated) part-of-speech tags as an input to the model, the task is made significantly easier. The model is no longer required to learn low-level syntactic information from raw text alone; instead, it's given a powerful, explicit clue about the structure. This makes it an invalid test of the architecture's ability to generalize from a task like translation (which operates on raw text) because it now relies on a heavily engineered, task-specific input that shortcuts the core challenge.",
+  "category": "C",
+  "category_name": "Undermining a Premise",
+  "reasoning": "The error undermines the premise of testing the architecture's generalization ability by simplifying the task with pre-processed, \"gold\" data, thus conflating the architecture's inherent ability with its performance on an easier, pre-engineered problem."
+}

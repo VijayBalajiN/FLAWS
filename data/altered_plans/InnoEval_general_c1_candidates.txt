@@ -1,0 +1,35 @@
+:candidate:
+1
+
+:original_text:
+A systematic and robust assessment of a research idea is achieved through a process that combines knowledgeable grounding against existing work, collective deliberation from diverse perspectives, and multi-criteria decision-making.
+
+:modified_text:
+A systematic and robust assessment of a research idea is achieved through a process that combines knowledgeable grounding against existing work, collective deliberation from aligned perspectives, and multi-criteria decision-making.
+
+:explanation:
+The mechanism of error is a **mischaracterization of a necessary component**. The flaw substitutes "aligned perspectives" for "diverse perspectives." While "aligned" may sound positive (implying consensus or teamwork), it critically undermines the goal of a "robust" assessment. Robustness requires an idea to be stress-tested against genuinely different and potentially conflicting viewpoints. Deliberation from aligned perspectives is prone to groupthink, reinforcing shared biases rather than identifying hidden flaws. Therefore, this combination of factors is no longer *sufficient* to produce a robust assessment, falsifying the claim.
+
+:candidate:
+2
+
+:original_text:
+A systematic and robust assessment of a research idea is achieved through a process that combines knowledgeable grounding against existing work, collective deliberation from diverse perspectives, and multi-criteria decision-making.
+
+:modified_text:
+A systematic and robust assessment of a research idea is achieved through a process that combines knowledgeable grounding against established paradigms, collective deliberation from diverse perspectives, and multi-criteria decision-making.
+
+:explanation:
+The mechanism of error is the introduction of a **hidden and potentially invalid assumption**. The flaw replaces the broad "existing work" with the much narrower "established paradigms." This makes the entire assessment process dependent on the correctness of the current dominant paradigm. A truly robust process must be able to evaluate novel ideas that may challenge or exist outside of established paradigms. By constraining the grounding in this way, the process is no longer *sufficient* for assessing potentially transformative or paradigm-shifting research, thus falsifying the claim of general sufficiency.
+
+:candidate:
+3
+
+:original_text:
+A systematic and robust assessment of a research idea is achieved through a process that combines knowledgeable grounding against existing work, collective deliberation from diverse perspectives, and multi-criteria decision-making.
+
+:modified_text:
+A systematic and robust assessment of a research idea is achieved through a process that combines knowledgeable grounding against existing work, collective deliberation from diverse perspectives, and multi-criteria decision-making oriented toward institutional alignment.
+
+:explanation:
+The mechanism of error is a **goal-method mismatch**. The flaw adds the qualifier "oriented toward institutional alignment," which subtly redirects the purpose of the decision-making component. The process may still be systematic, but it is no longer optimized for assessing the intrinsic scientific merit and robustness of the research idea. Instead, it prioritizes the idea's fit with the institution's strategic goals. A scientifically weak but well-aligned idea could be favored over a scientifically strong but poorly aligned one. The process is therefore not *sufficient* to produce a robust assessment *of the research idea itself*, as it conflates scientific validity with administrative suitability.

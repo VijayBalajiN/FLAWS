@@ -1,0 +1,9 @@
+{
+  "label": "BERT_general_c5_v3",
+  "original_text": "We will evaluate BERT on the CoNLL-2003 Named Entity Recognition (NER) task using a feature-based approach... comparing its performance to the standard fine-tuning approach.",
+  "modified_text": "We will evaluate BERT on the CoNLL-2003 Named Entity Recognition (NER) task using a feature-based approach where BERT outputs are fed into a BiLSTM-CRF model... comparing its performance to the standard fine-tuning approach.",
+  "explanation": "The flaw's mechanism is a confounding variable introduced by an architectural mismatch. The standard fine-tuning approach for BERT on NER adds only a simple linear layer on top of the transformer. By pairing the feature-based approach with a powerful, specialized BiLSTM-CRF sequence tagging model, the experiment is no longer a fair comparison of transfer learning strategies. It now compares \"frozen BERT + powerful classifier\" against \"fine-tuned BERT + simple classifier.\" Any observed performance difference could be due to the addition of the BiLSTM-CRF, not the superiority of the feature-based method itself, thus invalidating the experiment's conclusion about the claim.",
+  "category": "D",
+  "category_name": "Others",
+  "reasoning": "The error introduces a confounding variable that prevents a fair comparison between the two approaches, which is a flaw in experimental design."
+}

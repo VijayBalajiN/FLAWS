@@ -1,0 +1,10 @@
+:error_text:
+the most critical errors are those that remain undetectable even to the sophisticated generative processes that introduce them.
+
+:error_text:
+if it succeeds, the error is discarded as being too simple.
+
+:explanation:
+The core error is a circular and flawed definition of "critical error" introduced in the hypothesis and implemented in the method. The hypothesis incorrectly equates an error's criticality with its undetectability by the LLM that created it. This is a fundamental conceptual mistake, as an error's criticality depends on its impact on the paper's scientific claims, not on how hard it is for a specific model to find.
+
+The methodology then uses this flawed premise to construct the benchmark by explicitly filtering out any error that the generator LLM can detect, labeling them "too simple." This introduces a severe selection bias. The resulting benchmark does not represent a general set of critical scientific errors but rather a highly specific, non-representative sample corresponding to the "blind spots" of the generator models. Consequently, any evaluation performed on this benchmark cannot lead to generalizable conclusions about an LLM's ability to find critical errors in scientific papers.

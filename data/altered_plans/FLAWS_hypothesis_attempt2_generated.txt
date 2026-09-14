@@ -1,0 +1,13 @@
+:original_text:
+is a function of
+
+:modified_text:
+is directly proportional to
+
+:explanation:
+The modification replaces the general, qualitative relationship "is a function of" with the specific, quantitative claim "is directly proportional to." This introduces a conceptual flaw of false precision and fundamentally mischaracterizes the nature of argumentative structure. The error rests on the false premise that "criticality" and "connection to core claims" are simple scalar quantities that maintain a linear relationship.
+
+In reality, the criticality of an error is determined by its position within the logical and rhetorical structure of the paper's argument, a relationship that is complex, non-linear, and topological, not one of simple proportionality. For instance, an error that invalidates a single foundational premise upon which all other claims depend is catastrophically critical, while multiple errors that each invalidate independent, minor claims might be less critical in sum. This non-additive and non-linear nature refutes a simple proportional link. This type of error is plausible as it mimics a common attempt by researchers to make a qualitative hypothesis sound more quantitatively rigorous, while in fact making it theoretically unsound.
+
+:failure_mode:
+rests on a false premise

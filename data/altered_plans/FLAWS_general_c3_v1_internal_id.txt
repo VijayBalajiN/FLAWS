@@ -1,0 +1,19 @@
+:error_text:
+We will source our papers from the accepted list of the 2025 International Conference on Machine Learning (ICML)
+
+:error_text:
+use two distinct, state-of-the-art LLMs (e.g., Gemini 2.5 Pro and GPT 5) for the error insertion process.
+
+:error_text:
+tasking the error-generating LLM with finding the error it just created; if it succeeds, the error is discarded as being too simple.
+
+:error_text:
+we will prompt an LLM to identify all text excerpts in the paper that are rendered incorrect... This complete set of excerpts will serve as the ground truth
+
+:explanation:
+The identified errors are ranked from most to least severe.
+
+1.  The most critical flaw is that the experiment is impossible to conduct as designed because it relies on a non-existent data source (papers from ICML 2025, a future conference).
+2.  Similarly, the plan specifies using models for error generation (Gemini 2.5 Pro, GPT 5) that are hypothetical and unreleased, making the methodology speculative and non-reproducible.
+3.  There is a significant methodological flaw in the error filtering process. The "internal identification" step, where an LLM's ability to find an error it just created is used to gauge difficulty, is unsound. This likely tests the model's short-term memory or internal consistency rather than the objective difficulty of the error for other models, potentially biasing the benchmark.
+4.  The plan relies on an LLM to generate the ground truth for evaluation without a dedicated validation step for this crucial process. This introduces a high risk of unverified, systemic errors in the benchmark's labels, which could invalidate the final evaluation of the models being tested.

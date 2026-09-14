@@ -1,0 +1,15 @@
+:error_type:
+Conflict with Established Beliefs
+
+:original_text:
+The criticality of an error in a scientific paper is a function of its connection to the paper's core claims.
+
+:modified_text:
+The criticality of an error in a scientific paper is a function of its capacity to falsify a single, corresponding core claim.
+
+:explanation:
+The modification introduces a conflict with the Duhem-Quine thesis, a foundational concept in the philosophy of science.
+
+(a) The established belief: The Duhem-Quine thesis posits that scientific hypotheses cannot be tested in isolation. An empirical test always relies on a web of auxiliary assumptions (e.g., about the measurement instruments, background conditions, theoretical definitions). When an observation contradicts a prediction, logic alone cannot pinpoint whether the core hypothesis is false or if one of the many auxiliary assumptions is at fault. A refutation thus targets the entire theoretical system, not one discrete claim.
+
+(b) The conflict: The modified hypothesis, "The criticality of an error in a scientific paper is a function of its capacity to falsify a single, corresponding core claim," is internally consistent but adopts an overly simplistic, atomistic view of scientific argumentation. It presumes a clean, one-to-one mapping between a critical error and a single falsified claim. This directly clashes with the Duhem-Quine thesis, which implies that a single error (e.g., in a shared methodological assumption) could invalidate multiple claims simultaneously, or that its impact might be on the auxiliary structure rather than a "corresponding" core claim. An expert would recognize that this model of error is a convenient simplification that is irreconcilable with the holistic and interconnected nature of real-world scientific theories.

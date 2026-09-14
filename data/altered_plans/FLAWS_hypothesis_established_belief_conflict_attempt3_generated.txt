@@ -1,0 +1,13 @@
+:error_type:
+Conflict with Established Beliefs
+
+:original_text:
+The criticality of an error in a scientific paper is a function of its connection to the paper's core claims.
+
+:modified_text:
+The criticality of an error in a scientific paper is a function of its proximity to the final statement of the paper's core claims, rather than its position in the underlying logical or methodological chain.
+
+:explanation:
+(a) The established belief being conflicted with is the fundamental principle of error propagation in logical and scientific arguments. In any deductive or inductive chain of reasoning, the impact of an error is determined by its logical position. An error in a foundational premise, an initial axiom, or a core methodological step is maximally critical because it invalidates all subsequent reasoning and conclusions that depend on it.
+
+(b) The modified hypothesis is internally coherent, proposing a testable relationship between an error's textual location and its criticality. However, it directly contradicts the principle of error propagation. It claims that an error's textual proximity to the final claim (e.g., an error in the Conclusion section) is more important than its place in the paper's logical structure. An expert would recognize this as fundamentally flawed. For example, a critical error in a statistical assumption buried in the Methods section is far more severe—as it invalidates the entire study's results—than a typo in the final sentence of the abstract, even though the latter is textually "closer" to the stated claim. The hypothesis incorrectly prioritizes rhetorical or textual position over logical and methodological soundness.

@@ -1,0 +1,35 @@
+:candidate:
+1
+
+:original_text:
+We will vary the learning rate over the course of training according to the formula: `lr = d_model^-0.5 * min(step_num^-0.5, step_num * warmup_steps^-1.5)`.
+
+:modified_text:
+We will vary the learning rate over the course of training according to the formula: `lr = d_model^-0.5 * max(step_num^-0.5, step_num * warmup_steps^-1.5)`.
+
+:explanation:
+This error replaces the `min` function with `max`. The original formula relies on `min` to select the smaller of two values, creating a learning rate that first increases linearly (the warm-up) and then switches to an inverse square root decay. By using `max`, the logic is inverted. The schedule will start with the very high initial value of the decay curve (`step_num^-0.5`) and then switch to the linear warm-up curve, which will then increase without bound. This would cause training to diverge, directly falsifying the claim that it is an effective strategy. The mechanism of error is a flaw in the control logic that switches between the schedule's phases.
+
+:candidate:
+2
+
+:original_text:
+We will vary the learning rate over the course of training according to the formula: `lr = d_model^-0.5 * min(step_num^-0.5, step_num * warmup_steps^-1.5)`.
+
+:modified_text:
+We will vary the learning rate over the course of training according to the formula: `lr = d_model^0.5 * min(step_num^-0.5, step_num * warmup_steps^-1.5)`.
+
+:explanation:
+This error inverts the sign of the exponent on the `d_model` term, a global scaling factor. The original schedule is designed to normalize the learning rate by the model's dimensionality, effectively using a smaller learning rate for larger models. The modified formula makes the learning rate directly proportional to the square root of the model's dimension. For any typical transformer model where `d_model` is large (e.g., 512 or 1024), this would result in an explosively large learning rate, causing immediate training instability. The mechanism of error is an incorrect global scaling of the entire schedule.
+
+:candidate:
+3
+
+:original_text:
+We will vary the learning rate over the course of training according to the formula: `lr = d_model^-0.5 * min(step_num^-0.5, step_num * warmup_steps^-1.5)`.
+
+:modified_text:
+We will vary the learning rate over the course of training according to the formula: `lr = d_model^-0.5 * min(step_num^-1.5, step_num * warmup_steps^-0.5)`.
+
+:explanation:
+This error swaps the exponents on the `step_num` and `warmup_steps` terms. The claim states the schedule has a warm-up followed by a decay based on the inverse square root (`step_num^-0.5`). In the modified formula, the decay phase is now `step_num^-1.5`, a much more aggressive decay that will likely cause the model to prematurely stop learning. Concurrently, the warm-up phase is now governed by `warmup_steps^-0.5`, which would create a much steeper, potentially unstable, warm-up phase. The mechanism of error is a misapplication of the exponents that define the shape and rate of both the warm-up and decay phases.

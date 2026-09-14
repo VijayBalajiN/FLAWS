@@ -1,0 +1,10 @@
+:error_text:
+another using a traditional Left-to-Right (LTR) LM objective trained on a multi-layer LSTM. This will allow us to isolate the contributions of deep bidirectionality and the NSP task.
+
+:error_text:
+We will extract fixed contextual embeddings from various layers of the pre-trained model and feed them into a BiLSTM classifier, comparing its performance to the standard fine-tuning approach.
+
+:explanation:
+The most serious error is in the first ablation study, which compares a Transformer-based model (BERT with MLM) to a model with a completely different architecture (a multi-layer LSTM). This introduces a confounding variable, making it impossible to "isolate the contributions of deep bidirectionality" as claimed. Any performance difference could be attributed to the architecture (Transformer vs. LSTM) rather than the pre-training objective (MLM vs. LTR). A valid ablation would keep the Transformer architecture constant and only change the training objective.
+
+The second error is in the "Feature-based vs. Fine-tuning" ablation. By adding a powerful BiLSTM classifier on top of the extracted BERT features, the experiment confounds the comparison. The goal is to compare the representation power of BERT in two different settings. The fine-tuning approach adds only a simple linear layer, while this proposed feature-based approach adds another complex sequence model (the BiLSTM). This makes it an unfair comparison, as the performance of the feature-based model is now a product of both BERT and the BiLSTM.

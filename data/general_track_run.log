@@ -1,0 +1,199 @@
+/Users/vijaybalajinarasimmabharathi/Desktop/7th-sem/project/FLAWS/src/pipeline/plan_error_insertion.py:49: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+=== AttentionIsAllYouNeed ===
+[AttentionIsAllYouNeed/general_c1_v1] filtered: too easy
+[AttentionIsAllYouNeed/general_c1_v2] filtered: too easy
+Exact match found.
+Saved internal score at data/altered_plans/AttentionIsAllYouNeed_general_c1_v3_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.01 minutes
+[AttentionIsAllYouNeed/general_c1_v3] self-identified (too easy), discarding
+[AttentionIsAllYouNeed/general_c2_v1] filtered: too easy
+Exact match found.
+Saved score at data/altered_plans/AttentionIsAllYouNeed_general_c2_v2_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.01 minutes
+[AttentionIsAllYouNeed/general_c2_v2] self-identified (too easy), discarding
+Exact match found.
+Saved score at data/altered_plans/AttentionIsAllYouNeed_general_c2_v3_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.01 minutes
+[AttentionIsAllYouNeed/general_c2_v3] self-identified (too easy), discarding
+Exact match found.
+Saved internal score at data/altered_plans/AttentionIsAllYouNeed_general_c3_v1_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.05 minutes
+[AttentionIsAllYouNeed/general_c3_v1] SUCCESS -> data/altered_plans/AttentionIsAllYouNeed_general_c3_v1_altered.json
+Exact match found.
+Saved score at data/altered_plans/AttentionIsAllYouNeed_general_c3_v2_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.01 minutes
+[AttentionIsAllYouNeed/general_c3_v2] self-identified (too easy), discarding
+[AttentionIsAllYouNeed/general_c3_v3] filtered: too easy
+[AttentionIsAllYouNeed/general_c4_v1] filtered: too easy
+[AttentionIsAllYouNeed/general_c4_v2] filtered: too easy
+Exact match found.
+Saved internal score at data/altered_plans/AttentionIsAllYouNeed_general_c4_v3_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.0 minutes
+[AttentionIsAllYouNeed/general_c4_v3] self-identified (too easy), discarding
+Exact match found.
+Saved score at data/altered_plans/AttentionIsAllYouNeed_general_c5_v1_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.0 minutes
+[AttentionIsAllYouNeed/general_c5_v1] self-identified (too easy), discarding
+[AttentionIsAllYouNeed/general_c5_v2] filtered: too easy
+Exact match found.
+Saved score at data/altered_plans/AttentionIsAllYouNeed_general_c5_v3_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.0 minutes
+[AttentionIsAllYouNeed/general_c5_v3] self-identified (too easy), discarding
+[AttentionIsAllYouNeed/general] 1/15 candidates survived
+AttentionIsAllYouNeed: 1 survivors
+=== FLAWS ===
+Exact match found.
+Saved internal score at data/altered_plans/FLAWS_general_c1_v1_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.02 minutes
+[FLAWS/general_c1_v1] self-identified (too easy), discarding
+Exact match found.
+Saved internal score at data/altered_plans/FLAWS_general_c1_v2_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.01 minutes
+[FLAWS/general_c1_v2] self-identified (too easy), discarding
+Exact match found.
+Saved internal score at data/altered_plans/FLAWS_general_c1_v3_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.02 minutes
+[FLAWS/general_c1_v3] self-identified (too easy), discarding
+Exact match found.
+Saved internal score at data/altered_plans/FLAWS_general_c2_v1_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.01 minutes
+[FLAWS/general_c2_v1] SUCCESS -> data/altered_plans/FLAWS_general_c2_v1_altered.json
+Exact match found.
+Saved score at data/altered_plans/FLAWS_general_c2_v2_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.01 minutes
+[FLAWS/general_c2_v2] self-identified (too easy), discarding
+Exact match found.
+Saved internal score at data/altered_plans/FLAWS_general_c2_v3_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.01 minutes
+[FLAWS/general_c2_v3] self-identified (too easy), discarding
+Exact match found.
+Saved internal score at data/altered_plans/FLAWS_general_c3_v1_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.03 minutes
+[FLAWS/general_c3_v1] SUCCESS -> data/altered_plans/FLAWS_general_c3_v1_altered.json
+[FLAWS/general_c3_v2] filtered: too easy
+[FLAWS/general_c3_v3] filtered: too easy
+Exact match found.
+Saved internal score at data/altered_plans/FLAWS_general_c4_v1_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.03 minutes
+[FLAWS/general_c4_v1] SUCCESS -> data/altered_plans/FLAWS_general_c4_v1_altered.json
+Exact match found.
+Saved internal score at data/altered_plans/FLAWS_general_c4_v2_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.02 minutes
+[FLAWS/general_c4_v2] SUCCESS -> data/altered_plans/FLAWS_general_c4_v2_altered.json
+Exact match found.
+Saved internal score at data/altered_plans/FLAWS_general_c4_v3_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.01 minutes
+[FLAWS/general_c4_v3] SUCCESS -> data/altered_plans/FLAWS_general_c4_v3_altered.json
+[FLAWS/general_c5_v1] filtered: too easy
+Exact match found.
+Saved internal score at data/altered_plans/FLAWS_general_c5_v2_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.01 minutes
+[FLAWS/general_c5_v2] self-identified (too easy), discarding
+Exact match found.
+Saved score at data/altered_plans/FLAWS_general_c5_v3_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.0 minutes
+[FLAWS/general_c5_v3] self-identified (too easy), discarding
+[FLAWS/general] 5/15 candidates survived
+FLAWS: 5 survivors
+=== SoundnessBench ===
+Exact match found.
+Saved internal score at data/altered_plans/SoundnessBench_general_c1_v1_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.02 minutes
+[SoundnessBench/general_c1_v1] self-identified (too easy), discarding
+[SoundnessBench/general_c1_v2] filtered: too easy
+Exact match found.
+Saved internal score at data/altered_plans/SoundnessBench_general_c1_v3_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.01 minutes
+[SoundnessBench/general_c1_v3] self-identified (too easy), discarding
+[SoundnessBench/general_c2_v1] filtered: too easy
+Exact match found.
+Saved internal score at data/altered_plans/SoundnessBench_general_c2_v2_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.02 minutes
+[SoundnessBench/general_c2_v2] SUCCESS -> data/altered_plans/SoundnessBench_general_c2_v2_altered.json
+Exact match found.
+Saved internal score at data/altered_plans/SoundnessBench_general_c2_v3_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.03 minutes
+[SoundnessBench/general_c2_v3] SUCCESS -> data/altered_plans/SoundnessBench_general_c2_v3_altered.json
+[SoundnessBench/general_c3_v1] filtered: too easy
+Exact match found.
+Saved internal score at data/altered_plans/SoundnessBench_general_c3_v2_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.01 minutes
+[SoundnessBench/general_c3_v2] SUCCESS -> data/altered_plans/SoundnessBench_general_c3_v2_altered.json
+Exact match found.
+Saved internal score at data/altered_plans/SoundnessBench_general_c3_v3_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.01 minutes
+[SoundnessBench/general_c3_v3] self-identified (too easy), discarding
+Exact match found.
+Saved internal score at data/altered_plans/SoundnessBench_general_c4_v1_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.01 minutes
+[SoundnessBench/general_c4_v1] self-identified (too easy), discarding
+Exact match found.
+Saved internal score at data/altered_plans/SoundnessBench_general_c4_v2_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.01 minutes
+[SoundnessBench/general_c4_v2] SUCCESS -> data/altered_plans/SoundnessBench_general_c4_v2_altered.json
+[SoundnessBench/general_c4_v3] filtered: too easy
+Exact match found.
+Saved internal score at data/altered_plans/SoundnessBench_general_c5_v1_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.01 minutes
+[SoundnessBench/general_c5_v1] self-identified (too easy), discarding
+Exact match found.
+Saved score at data/altered_plans/SoundnessBench_general_c5_v2_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.0 minutes
+[SoundnessBench/general_c5_v2] self-identified (too easy), discarding
+[SoundnessBench/general_c5_v3] filtered: too easy
+[SoundnessBench/general] 4/15 candidates survived
+SoundnessBench: 4 survivors
+=== InnoEval ===
+[InnoEval/general_c1_v1] filtered: too easy
+Exact match found.
+Saved internal score at data/altered_plans/InnoEval_general_c1_v2_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.02 minutes
+[InnoEval/general_c1_v2] self-identified (too easy), discarding
+Exact match found.
+Saved internal score at data/altered_plans/InnoEval_general_c1_v3_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.03 minutes
+[InnoEval/general_c1_v3] SUCCESS -> data/altered_plans/InnoEval_general_c1_v3_altered.json
+Exact match found.
+Saved internal score at data/altered_plans/InnoEval_general_c2_v1_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.02 minutes
+[InnoEval/general_c2_v1] self-identified (too easy), discarding
+Exact match found.
+Saved score at data/altered_plans/InnoEval_general_c2_v2_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.0 minutes
+[InnoEval/general_c2_v2] self-identified (too easy), discarding
+[InnoEval/general_c2_v3] filtered: too easy
+Exact match found.
+Saved internal score at data/altered_plans/InnoEval_general_c3_v1_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.03 minutes
+[InnoEval/general_c3_v1] SUCCESS -> data/altered_plans/InnoEval_general_c3_v1_altered.json
+Exact match found.
+Saved score at data/altered_plans/InnoEval_general_c3_v2_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.01 minutes
+[InnoEval/general_c3_v2] self-identified (too easy), discarding
+Exact match found.
+Saved score at data/altered_plans/InnoEval_general_c3_v3_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.01 minutes
+[InnoEval/general_c3_v3] self-identified (too easy), discarding
+[InnoEval/general_c4_v1] filtered: too easy
+[InnoEval/general_c4_v2] filtered: too easy
+[InnoEval/general_c4_v3] filtered: too easy
+[InnoEval/general_c5_v1] filtered: too easy
+No exact match found. Using difflib to match.
+Ratio between two excerpt: 0.8723404255319149
+No match found.
+[InnoEval/general_c5_v2] failed to insert (text mismatch)
+No exact match found. Using difflib to match.
+Ratio between two excerpt: 0.8723404255319149
+No match found.
+[InnoEval/general_c5_v3] failed to insert (text mismatch)
+[InnoEval/general] 2/15 candidates survived
+InnoEval: 2 survivors
+EXIT: 0

@@ -1,0 +1,11 @@
+:error_text:
+We will use an extraction agent to convert these papers into a structured idea format, followed by manual verification.
+
+:error_text:
+perform stratified sampling based on their final decisions (Reject, Poster, Spotlight, Oral).
+
+:error_text:
+This non-anonymized process will yield groups of ideas with an inherent ground-truth ranking, from which we can also derive pair-wise comparison tasks.
+
+:explanation:
+The experiment design suffers from a critical validity threat due to circular reasoning. The stated goal is to evaluate research *ideas* at the beginning of the research pipeline, but the proposed dataset uses completed, peer-reviewed *papers* as the input and their final acceptance decisions as the ground truth. This fundamentally changes the task from evaluating a nascent idea to classifying a finished research artifact. A model could achieve high performance by learning to recognize features of a well-executed paper (e.g., extensive experiments, polished writing, strong results) rather than assessing the intrinsic merit, novelty, or feasibility of the core idea itself, thus failing to validate the framework's primary objective.

@@ -1,0 +1,10 @@
+:error_text:
+perform stratified sampling based on their final decisions (Reject, Poster, Spotlight, Oral).
+
+:error_text:
+to produce a full ranking (measured by Accuracy and Longest Increasing Subsequence score).
+
+:explanation:
+The most serious error is using a paper's final acceptance decision as the ground truth for the quality of the underlying research *idea*. A paper's acceptance is confounded by numerous factors unrelated to the core idea, such as the quality of writing, experimental execution, and author reputation. A brilliant idea can be rejected due to poor execution, and a mediocre one can be accepted due to meticulous presentation, which invalidates the dataset's core assumption.
+
+The second error is the use of inappropriate evaluation metrics for the group-wise ranking task. "Accuracy" is a classification metric, not a ranking metric. Furthermore, "Longest Increasing Subsequence" is a non-standard and poor choice for evaluating a ranked list, as it doesn't properly penalize the degree of misranking for all items. Standard metrics like Kendall's Tau or nDCG should be used instead.

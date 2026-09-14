@@ -1,0 +1,8 @@
+:original_text:
+high sensitivity to prompt framing
+
+:modified_text:
+high sensitivity to prompt keywords
+
+:explanation:
+This error trivializes the proposed cause. "Framing" implies a subtle, holistic, and semantic context that influences judgment. "Keywords" reduces the cause to a simple, mechanical trigger. This modification suggests the LLM is not responding to a nuanced frame but is merely pattern-matching explicit words like "critique," "flaw," or "strength" in the prompt. This changes the mechanism from a complex, cognitive-like bias (sensitivity to framing) to simple instruction-following, undermining the novelty and significance of the claim being made.

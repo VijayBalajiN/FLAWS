@@ -1,0 +1,13 @@
+:error_type:
+Confounded design
+
+:original_text:
+We will use an extraction agent to convert these papers into a structured idea format, followed by manual verification.
+
+:modified_text:
+We will use an extraction agent to convert the full text of these papers, including their abstract, introduction, and author affiliations, into a structured idea format, followed by manual verification.
+
+:explanation:
+The flaw introduced is a confound in the dataset construction. By explicitly including author affiliations and the original abstract/introduction in the "structured idea format," the experiment is no longer a pure test of the idea's quality. Instead, it allows the language model to learn and exploit superficial correlates of success that are known to bias human peer review.
+
+A model could achieve high accuracy by learning simple heuristics, such as "papers from top-tier institutions are more likely to be accepted" or by overfitting to stylistic patterns in the writing of accepted papers, rather than performing the "systematic and robust assessment" of the core research idea as claimed by the hypothesis. This confounding variable provides an alternative explanation for any observed performance, undermining the claim that the framework is evaluating the idea on its intrinsic merits.

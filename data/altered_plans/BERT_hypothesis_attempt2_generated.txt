@@ -1,0 +1,11 @@
+:original_text:
+Language representations jointly conditioned on both left and right context in all layers are more powerful than representations conditioned on unidirectional or shallowly combined bidirectional contexts.
+
+:modified_text:
+Language representations that fuse independent left-to-right and right-to-left information streams in all layers are more powerful than representations conditioned on unidirectional or shallowly combined bidirectional contexts.
+
+:explanation:
+The introduced error fundamentally mischaracterizes the architectural innovation of deep bidirectional models like BERT. The modified hypothesis claims that power comes from "fusing independent left-to-right and right-to-left information streams in all layers." This is incorrect. This description is essentially a "deep" version of the approach used by ELMo, which the proposal itself critiques as "shallowly combined." The core insight of models like BERT is to *not* use independent streams but to enable *joint* conditioning within a single model, where every token's representation is influenced by all other tokens from the very first layer. The modified hypothesis thus rests on a false premise about the source of the model's power, conflating the proposed joint-conditioning architecture with the fusion-based architecture it aims to supersede.
+
+:failure_mode:
+rests on a false premise

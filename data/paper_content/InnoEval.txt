@@ -1,0 +1,509 @@
+Title: InnoEval: On Research Idea Evaluation as a Knowledge-Grounded, Multi-Perspective Reasoning Problem
+
+Abstract: The rapid evolution of Large Language Models has catalyzed a surge in scientific idea production, yet this leap has not been accompanied by a matching advance in idea evaluation. The fundamental nature of scientific evaluation needs knowledgeable grounding, collective deliberation, and multi-criteria decision-making. However, existing idea evaluation methods often suffer from narrow knowledge horizons, flattened evaluation dimensions, and the inherent bias in LLM-as-a-Judge. To address these, we regard idea evaluation as a knowledge-grounded, multi-perspective reasoning problem and introduce InnoEval, a deep innovation evaluation framework designed to emulate human-level idea assessment. We apply a heterogeneous deep knowledge search engine that retrieves and grounds dynamic evidence from diverse online sources. We further achieve review consensus with an innovation review board containing reviewers with distinct academic backgrounds, enabling a multi-dimensional decoupled evaluation across multiple metrics. We construct comprehensive datasets derived from authoritative peer-reviewed submissions to benchmark InnoEval. Experiments demonstrate that InnoEval can consistently outperform baselines in point-wise, pair-wise, and group-wise evaluation tasks, exhibiting judgment patterns and consensus highly aligned with human experts.
+
+
+Introduction:
+The integration of Large Language Models (LLMs) into scientific discovery (Chen et al., 2025c;Schmidgall et al., 2025;Lu et al., 2024;Chai et al., 2025;Tang et al., 2025) has catalyzed a paradigm shift, enabling the generation of research ideas at an unprecedented scale (Si et al., 2025;Baek et al., 2025;Li et al., 2024;Novikov et al., 2025). However, this "generative explosion" has outpaced our evaluative capability, creating a critical bottleneck at the very outset of the research pipeline. Current innovation evaluation remains heavily dependent on scarce and highly specialized human experts, which is not only time-consuming and costly, but its inherent subjectivity and limited scope also risk overlooking potentially high-value ideas. Consequently, developing an automated, systematic, and yet human-expert-level idea evaluation framework has become an urgent necessity.
+
+To address this, we must first revisit the fundamental nature of scientific evaluation. Ideally, evaluating a research idea is not a static generation task, but a holistic epistemic verification process, which can be intrinsically defined by three cardinal principles: (i) Knowledgeable Grounding (Quintane et al., 2011;Du Plessis, 2007), where idea is a knowledge-intensive entity cross-referenced against the entire living ecosystem of theory and practice; (ii) Collective Deliberation (Kameda et al., 2022;Navajas et al., 2018), where the quality of assessment emerges from the fusion of diverse expert perspectives, not a single authority; (iii) Multi-criteria Decision Making (Majumder, 2015), where an idea's inherent complexity is honored through the union of multifaceted attributes (e.g., novelty, feasibility, impact) rather than the compression into one or two dimensions.
+
+However, achieving the above principles confronts several challenges that together constitute the core gap between current automated idea evaluation tools (Moussa et al., 2025;Zhang et al., 2026;Agarwal et al., 2025;Feng et al., 2025;Shahid et al., 2025) and an ideal evaluation system. First is the (i) narrowness of knowledge horizon. Existing methods are largely confined to static academic papers, overlooking the complete ecosystem of research innovation. This neglect of "living knowledge" renders evaluations divorced from practical realities. Second is the (ii) overlook of review consensus. Mainstream approaches directly using LLM-asa-Judge fossilize the models' inherent biases into de facto evaluation criteria, failing to emulate the deliberation among distinct perspectives. Last is the (iii) flattening of evaluation dimensions. Existing methods typically obscure the independence and internal tensions among multiple attributes embedded in a complete research idea, fail to deliver useful feedback, and violate the multi-criteria decision-making that systematic scientific evaluation should adhere to.
+
+In response to these challenges, we regard idea evaluation as a knowledge-grounded, multi-perspective reasoning problem and introduce InnoEval, a deep innovation evaluation framework that emulates the full scholarly review process performed by human experts. To counter the narrowness of knowledge horizons, we design a (i) heterogeneous deep knowledge search engine, which can concurrently obtain living knowledge from online literature, web opinions, and code repos, combining fast search with slow reading for both effectiveness and efficiency. Through multi-round query refinement and hybrid scoring that blends semantic similarity with LLM judgment, it filters highly relevant, high-quality background knowledge from diverse sources, thereby constructing a living, comprehensive, and crossdomain evidential knowledge base for grounding and evaluation. Next, to achieve review consensus, we simulate an (ii) innovation review board to perform multi-perspective evaluation by sampling multiple reviewers with distinct backgrounds, expertise, and preferences from a carefully curated academic persona pool. We partially mask the searched knowledge according to each reviewer's role to simulate real human cognition. Each reviewer will independently judge the research idea, thereby mitigating the bias inherent in a single judge. During actual evaluation, to overcome flattened evaluation dimensions, we perform a (iii) multi-dimensional decoupled evaluation, supporting customizable multi-criteria assessment initialized across five dimensions: Clarity, Novelty, Feasibility, Validity, and Significance. Each dimension is assessed by a specialized evaluator agent that conducts in-depth analyses grounded in both retrieved heterogeneous knowledge and its own internal knowledge. All multi-dimensional evaluations from the personified reviewers are aggregated into an actionable report that provides cited knowledge evidence, structured evaluation analyses and scores, a meta-review with specific decisions, and concrete directions for further improvement.
+
+To evaluate InnoEval, we extract real-world ideas from authoritative peer-reviewed papers and construct datasets that respectively inspect single-idea evaluation, pairwiseidea comparison, and group-idea ranking capabilities. Quantitatively, InnoEval outperforms the strongest baseline by 16.18% F1 score in three-class point-wise prediction, by roughly 5% accuracy in pair-wise comparison, and by 7.56% accuracy in group-wise ranking. Qualitatively, evaluation reports produced by InnoEval achieve a win rate exceeding 70% against all baselines in Overall Quality. In human evaluation, InnoEval's scores exhibit high correlation with human judgments across all metrics. Further ablation studies confirm the effectiveness of each of our proposed modules. Exploratory analyses reveal that InnoEval's evaluation exhibits patterns and phenomena aligned well with human cognition, indicating that it can faithfully simulate the real process of human innovation evaluation.
+
+
+Problem Definition:
+The idea in our paper can be expressed in any format, ranging from a preliminary hypothesis to a fully-fledged idea presented in a mature paper. Regardless of its form, we formally define an idea I as a structured six-tuple I = (TLDR, Motis, ResQues, Meths, ExpSets, ExpRes), respectively representing a short summary of the idea, motivations, research questions, methods, experimental settings, and expected results. Here TLDR, ExpSets, and ExpRes are optional based on the idea's maturity. Due to the timesensitive nature of research ideas, we also equip each idea with a timestamp t, denoting the temporal standpoint from which the evaluation should be conducted. t will default to the latest time if not explicitly specified. Given an evaluation system F , our goal is to obtain a final evaluation report P , which can be categorized into two types.
+
+Point-wise. Evaluate a single idea I and generate an evaluation report P point that contains background knowledge K of the idea searched by the system, provides multi-dimensional assessment results E point , and offers concrete revision suggestions V for future improvements of the idea:
+
+(1)
+
+Group-wise. Rank a group of n(n ≥ 2) ideas {I i } n i=1 on the same topic and deliver individual reports for each idea together with the final ranking evaluation and results E group :
+
+To facilitate quantitative evaluation of the system, we also include measurable outcomes for each setting. For pointwise, E point also contains a final decision d point ∈ {Reject, Poster, Spotlight, Oral} of the idea. For group-wise setting, E group provides a complete ranked list d group of all ideas.
+
+
+InnoEval:
+Framework Overview. As shown in Fig. 1, InnoEval begins by extracting structured parts from the raw-text idea, followed by a heterogeneous deep-knowledge search engine that iteratively acquires and filters high-quality background knowledge from diverse online sources. The retrieved results, after fine-grained grounding, serve as key references for multi-dimensional and multi-perspective evaluation, empowered by a group of dimension-specialized evaluator agents and an innovation review board composed of diverse academic personas. Finally, an actionable evaluation report will be synthesized, including comprehensive meta-reviews and concrete suggestions for future revision.
+
+All the notations in this section are summarized in Tab.3.
+
+
+Heterogeneous Deep Knowledge Search:
+To maximize usability, we impose no constraints on the format of an idea to be evaluated. However, to enable precise and efficient knowledge searching and grounding, we first distill the raw textual idea T into the structured representation defined in §2. This process is carried out by an Extraction Agent M e , formally defined as I = M e (T ).
+
+Then, an exhaustive Search Agent M s is deployed to systematically retrieve academic resources relevant to the idea.
+
+To ensure comprehensiveness, we expose our research agent to heterogeneous online sources spanning scholarly literature ( arXiv, Semantic Scholar, Google Scholar), web content ( Google Search), and open-source code repositories ( Github, Kaggle). By relying solely on online sources, we avoid the staleness inherent to static local corpora and retain flexibility to incorporate emerging knowledge. Moreover, timestamps can be effortlessly integrated into online searching APIs, allowing us to explicitly account for the timeliness, a critical attribute of all research ideas.
+
+To ensure retrieval quality, we employ an iterative search strategy that simultaneously scales breadth and drills for depth. We further integrate a fast-slow search hybrid into the deep iterative process to improve search efficiency.
+
+Fast Knowledge Search. Concretely, for every component p ∈ I and every search tool u ∈ ( , , , , , ), the search agent first generates a group of tailored queries and then enriches them with synonym expansions, an essential step given that equivalent concepts are routinely phrased differently across communities, yielding the final query set Q p,u = M s (p, u). We then directly use the corresponding API for fast retrieval to obtain brief search results:
+
+We partition all the briefly searched knowledge K into three types. Literature knowledge K l contains papers' meta-info such as title, abstract, venue, etc. Web K w and code knowledge K c include the snapshots of the webpages or repos. We introduce a timestamp t during search to separately retrieve and process knowledge published before and after t. Pre-knowledge is used to evaluate the idea, whereas postknowldege are used to suggest revisions. But for notational simplicity, we do not distinguish them symbolically.
+
+Knowledge Ranking and Filtering. After discarding unusable knowledge with missing information or inaccessible links, we rank all remaining knowledge using a hybrid scoring function. Then we calculate the semantic similarity between the idea I and each piece of knowledge with an embedding model and retain the top 3m items for every knowledge type. A reranking model refines these 3m candidates and produces the reranked scores S sem . We condense the above procedure into the following formulation:
+
+We then use M s as a judge model to assess the relevance and quality of each knowledge, incorporating factors such as paper citations, published venue, website popularity, repo stars, etc., and obtain the model-as-judge scores:
+
+Finally, we re-weight the two scores with a coefficient α and select the top-m knowledge pieces for each category j:
+
+We adopt a hybrid scoring function to simultaneously mitigate the fragility of semantic similarity, and the bias and hallucination inherent in model-as-judge evaluation.
+
+Slow Knowledge Search. After obtaining the carefully filtered knowledge, we apply a slow search to enrich their content. For literature-type, we retrieve the full PDF, convert it into raw text, and process it with M e to yield structured text that serves as the enriched knowledge K l . For webtype, we fetch the webpage via its URL, convert it into raw text, and summarize it into a report with M s as K w . For code-type, we meticulously search within the repository to collect file-level and function-level call graphs, analyze core code snippets, then combine them with the README.md file to ensemble into a report via M s as K c .
+
+Iterative Query Refinement and Search. To further uncover latent background knowledge, we task M s with refining the original query based on the enriched knowledge, operating along three axes: i) rewriting queries that yielded insufficiently relevant results; ii) generalizing queries that returned overly specific results; iii) concretizing queries that retrieved overly broad results, formulating as:
+
+K p,u denotes the enriched knowledge retrieved using idea part p and search tool u. We then repeat the search of Eqn.3 with the refined query set Q p,u , merge the retrieved brief knowledge K j with the knowledge K * j retained from the previous round, rank and filter the union K j ∪ K * j via Eqn.4-6, enrich the final top-m pieces, and generate a new batch of queries through Eqn.7. The entire procedure is iterated N times, yielding the final enriched knowledge set K.
+
+
+Knowledge Grounding:
+For a more well-founded evaluation, we further employ a Grounding Agent M g to align ideas with knowledge at a finer granularity by excavating the specific connections between the idea I and the retrieved knowledge. For each p ∈ I, we collect all knowledge K p retrieved based on it. Then, for every k p ∈ K p , we distill the most relevant evidences e p that genuinely supports or contradict p from k p and provide a detailed relevance analysis s p :
+
+Finally, we present the grounding results G fed into the subsequent evaluation module as:
+
+(9)
+
+
+Multi-dimensional Multi-perspective Evaluation:
+Innovation Review Board. To achieve review consensus, we augment our evaluation module with a carefully curated innovation review board P specially designed for academic review. Each ρ ∈ P is an academic persona that comprises an academic profile, a knowledge familiarity vector indicating the degree of acquaintance with literature, web, and code knowledge, and reviewing habits. During evaluation, we randomly mask a proportion of knowledge corresponding to the persona's familiarity levels across different sources, thereby reflecting actual command of background knowledge. Other details about the construction, utilization, and examples of the review board are provided in Appx.F.
+
+Multi-dimensional Decoupled Evaluation. We provide five initial evaluation dimensions: Clarity, Validity, Novelty, Feasibility, and Significance. Users can also easily register any new evaluation dimensions according to their own needs. Given the evaluation criteria set Ψ, for each ψ ∈ Ψ, we employ a dedicated agent evaluator M ψ to assess the idea.
+
+To more faithfully emulate human peer review and improve evaluation efficiency, instead of employing all personas in P, we randomly assign five distinct personas as reviewers to each idea. Given the selected subset P ′ , for each ρ ∈ P ′ and ψ ∈ Ψ, we score the idea in [0, 10] with a detailed review narrative that explains the underlying reasoning:
+
+We devise detailed evaluation guidelines and scoring rubrics for each reviewing agent to ensure rigorous.
+
+
+Report Generation:
+Point-wise Report Synthesis. After evaluation, we synthesize all historical information to produce a comprehensive review report for the idea as formalized in Eqn.1. We directly adopt the enriched knowledge reports K as the background knowledge of the idea. For revision suggestions V, the Report Agent M r proposes future improvements by combining the retrieved future information about the idea with its internal knowledge: V = M r (I, G future ). Further, we integrate all evaluation information {φ ρ,ψ } ρ∈P ′ ,ψ∈Ψ and instruct the report agent to produce a meta-review φ meta that contains a detailed summary of the evaluation, a final score s point , and a final decision d point . Thus, the evaluation conclusion E point for this idea is expressed as follows:
+
+The final point-wise idea report is
+
+Group-wise Report Synthesis. Given a group of n(n ≥ 2) ideas {I i } n i=1 , we first synthesize point-wise reports P Ii point for each idea. We then feed the reports of all ideas {P Ii point } n i=1 directly as input and enable the report agent to compare every idea along the five aspects in Ψ, providing a detailed reasoning process and ultimately producing a comprehensive ranking of all ideas:
+
+where φ group ψ denotes the comparative analysis of different ideas under the specific dimension ψ, and φ group meta contains the final comparative analysis together with the ranked list of ideas. The final report is
+
+
+Experimental Settings:
+4.1. Datasets and Metrics.
+
+Point-wise Dataset. To curate high-quality ideas for evaluation, we extract ideas from authoritative peer-reviewed papers to construct our test dataset. Specifically, we crawl NeurIPS25 and ICLR25 papers from OpenReview and partition them into four strata according to their final decisions (Reject, Poster, Spotlight, Oral), from which we perform stratified sampling. We specially include every submission track within each stratum to ensure diversity. We apply our extraction agent M e to harvest ideas from each paper, followed by manual correction and verification, finally yielding 217 point-wise samples, which we mark as D point . We design two classification tasks of different difficulty: i) Binary classification, predicting whether an idea can be accepted (Reject vs. others); ii) Ternary classification, where we group Spotlight and Oral into a single class called Highlight. We use Accuracy and macro F1 as the evaluation metrics.
+
+Pair-wise and Group-wise Datasets. To construct idea groups with similar topics, we use each idea in D point as a query to retrieve similar papers from the crawled paper pool. We select the paper with the highest similarity for each stratum to form a group, so that the ideas in each group can be automatically ranked according to their labels. We finally obtain 172 group-wise instances as D group . We define two group-wise tasks: i) Best selection to identify the best idea within each group, and ii) Ranking to produce the exact full ranking list.
+
+
+Baselines and Implementation Details:
+We select four categories of baselines for a comprehensive comparison with InnoEval. i) Naive method: CoT and RAG; ii) Idea generation method: ResearchAgent (Baek et al., 2025); iii) End-to-end scientific discovery method: In-ternAgent (Zhang et al., 2025); And specifically designed iv) Idea evaluation method: GraphEval (Feng et al., 2025) and ScholarEval (Moussa et al., 2025). For all baselines, we uniformly adopt DeepSeek-V3. Implementation. We use bge-base-en-v1.5 as the retriever and bge-reranker-base as the reranker (Xiao et al., 2024) for the retrieval in our paper. At search time, we set the maximum retention number m for each resource type to 10, fix the weight α between semantic score and LLM score at 0.2, and cap the rounds of query refinement N to 3. The cost of evaluating one sample is 0.42$. All the prompts used in our paper can be found in Appx.H.
+
+
+Ablations:
+In Fig. 2, we illustrate InnoEval's performance after ablating or replacing key modules. It can be seen that removing grounding (-Grounding) leads to varying degrees of performance degradation across different tasks, indicating that our Grounding Agent can effectively filter out noise in the retrieved reports and enables the evaluation to focus more on relevant information. Moreover, directly employing LLMas-Judge (-Personalized) causes a marked performance drop, especially on point-wise and group-wise tasks, underscoring that incorporating personalized evaluation effectively mitigates the bias and subjectivity inherent in LLM-as-Judge.
+
+To validate the effectiveness of leveraging diverse retrieval sources, we re-conduct the evaluation using only the literature search results (-Web&Code). The outcome shows that search richness can significantly improve evaluation accuracy and emphasizes the critical role of sufficient background knowledge in idea assessment. A finer-grained observation is that restricting retrieval to literature gives more hurt to pair-wise and group-wise tasks, indicating that comparing multiple ideas demands especially rich background knowledge. We further replace InnoEval's backbone from DeepSeek-V3.2 with o4-mini. Despite slight declines on some tasks, we can still surpass the strongest baseline,  demonstrating its robustness across different models.
+
+
+Analysis:
+Multi-perspective Test-time Scaling. In Fig. 3a, we show how InnoEval's performance varies with the number of different academic personas in evaluation, compared with vanilla Test-Time Scaling (TTS) without personas. Clear scaling laws are observed under both w/ and w/o persona, demonstrating that increasing generation diversity can effectively enhance evaluation performance. However, across all task settings, plain TTS consistently underperforms personalized TTS, and as the number of samples increases, the performance gain of vanilla TTS gradually plateaus, whereas personalized TTS maintains robust growth momentum. This further underscores the importance of reviewer consensus. Vanilla TTS essentially coerces a single reviewer to fabricate divergent opinions, whereas authentic consensus emerges from reviewers with diverse backgrounds converging after examining the idea from distinct perspectives. Another interesting phenomenon can corroborate this conclusion. In group-wise setting, using a single persona underperforms the no-persona baseline on ranking tasks, as the shift from 0 to 1 persona merely transforms the inherent bias of the LLM to that specific persona, without addressing the fundamental issue. Through this empirical study, it should be noted that our choice of randomly selecting 5 personas in the main experiments balances evaluation efficiency and effectiveness, as a larger pool would sharply increase inference time, but it does not represent the performance ceiling of InnoEval.
+
+Effectiveness of Deep Knowledge Search Engine. To further demonstrate the effectiveness of our deep knowledge search engine, in Fig. 3b we specially isolate and compare the search engines employed by each baseline, additionally including AutoSurvey (Wang et al., 2024b), a baseline specifically designed for literature surveys with a strong retrieval engine. Although our two strong baselines Schol-arEval achieve high relevance, it causes the search results to converge and thereby sacrifice diversity. AutoSurvey, in pur-suit of diverse results, neglects coverage of the idea's topic. Only our heterogeneous deep knowledge search engine simultaneously preserves relevance, coverage, and diversity.
+
+InnoEval's reviews can serve as an effective reference for idea optimization. In Fig. 3c, we integrate different evaluation methods into the idea iteration pipeline of ResearchAgent (an idea generation method) and rigorously adhere to the ResearchAgent's benchmark and setting to assess the quality of the generated ideas. The results demonstrate that the actionable revision suggestions provided by InnoEval further boost idea quality throughout the iterative process, yielding significant improvements across problem formulation, methodology, and experimental design compared to the vanilla ResearchAgent. This improvement is attributed to our multi-dimensional idea evaluation and highly feasible revision feedback in the evaluation reports. In contrast, ScholarEval's exclusive focus on the contribution and soundness dimensions leads to biased idea optimization, resulting in degraded generation quality.
+
+Novelty is the most critical factor in an idea's acceptance, whereas achieving highlight requires well-rounded development across all dimensions. In Fig. 3d, we try to explore what is the most critical dimension that determines whether an idea will be accepted or highlighted. We frame it as a linear regression problem over five evaluation dimensions. The acceptance of an idea can thereby be cast as a binary classification of reject versus other labels (poster or highlight), while the elevation to highlight can be further reduced to a second binary distinction between poster and highlight. We fit a linear regression on D point predicted by InnoEval and interpret the resulting coefficient magnitudes as indicators of dimensional importance. We can see that novelty is the most decisive predictor of whether an idea is accepted, a result consistent with human intuition. Validity, significance, and feasibility are also influential, whereas clarity exerts the weakest effect. However, once the acceptance bar is reached, feasibility gains prominence. This means the focus shifts to whether comprehensive experiments can InnoEval: On Research Idea Evaluation as a Knowledge-Grounded, Multi-Perspective Reasoning Problem We perform linear regression fitting for each metric pair. The red dashed line is the fit after removing outliers, and its slope is reported. r denotes the Pearson coefficient, ρ is the Spearman coefficient, and R 2 represents the fit goodness of all inliers explained by the fitted line. A complete version of all metric pairs' correlation can be seen in Fig. 5.
+
+be designed to demonstrate the proposed methodology. All remaining dimensions likewise carry substantial weight, indicating that highlight status requires well-rounded strength and underscores the demand for a solid contribution.
+
+Mutual relationships among evaluation dimensions. To further examine the interrelations among all evaluation dimensions, we plot pairwise scatter plots of all the metrics and fit their linear trends, then quantify their correlations as shown in Fig. 4. Several interesting findings deserve emphasis: 1) Significance exhibits strong positive correlations with both novelty and validity, indicating that creative ideas grounded in solid theory can exert lasting impacts. 2) Feasibility and validity are likewise strongly correlated, an expected pattern aligning with human cognition: theoretically well-founded ideas are easier to verify experimentally. 3) Novelty shows slight negative correlations with validity and feasibility, suggesting that more novel ideas are less likely to receive theoretical support or experimental confirmation. 4) Only clarity and significance exhibit positive correlations with all other metrics, which also makes sense because clarity serves as the prerequisite for every other dimension, whereas significance relies on the remaining metrics as its foundation. These observations align well with scholarly cognition, providing convergent evidence that InnoEval can successfully capture the essence of idea evaluation.
+
+InnoEval can recognize the real innovation in practice.
+
+In Appx.G, we show InnoEval's evaluation report of a famous idea from "Mamba: Linear-Time Sequence Modeling with Selective State Spaces" (Gu & Dao, 2023). Our search engine can retrieve key references for Mamba (e.g., S4 (Gu et al., 2022), FlashAttention-V2 (Dao, 2024), H3 (Fu et al., 2023)), relevant discussion blogs from the web, and important code repos related to its experiments (e.g., state-space/s4 1 ). After fine-grained grounding, reviewers with diverse academic backgrounds and preferences evaluate the idea from multiple perspectives and dimensions, with each dimension containing detailed review comments.
+
+The final meta-review synthesizes all opinions to provide an overall assessment and decision. Notably, consensus across different perspectives can effectively mitigate biases inher-1 https://github.com/state-spaces/s4.
+
+ent to single viewpoints (e.g., Reviewer 2), yielding sound decisions and preventing the tragedy of genuinely innovative ideas being overlooked in practice. Finally, the report includes actionable suggestions for idea improvement from multiple angles, including method, model, experiments, etc.
+
+
+Related Work:
+LLMs for Scientific Discovery. The rapidly advancing reasoning abilities of LLMs (Qiao et al., 2023;Chen et al., 2025b) have recently enabled their increasingly prominent role in Automated Scientific Discovery (Nie et al., 2026;Schmidgall et al., 2025;Lu et al., 2024;Xie et al., 2025;Qiao et al., 2025), which contains Literature Reviewing (Wang et al., 2024b;Liang et al., 2025;Asai et al., 2024;Yan et al., 2025;Agarwal et al., 2025), Idea Generation (Li et al., 2024;Su et al., 2025;Zhao et al., 2025;Baek et al., 2025;Wang et al., 2024a), Method Implementation (Novikov et al., 2025;Ou et al., 2025;Liu et al., 2025;Yu et al., 2025;Jiang et al., 2025), and Manuscript Writing (Wen et al., 2024;Chen et al., 2025a). Nevertheless, while numerous efforts are pursuing the whole automated discovery pipeline (Lu et al., 2024;Schmidgall et al., 2025;Weng et al., 2025;Yamada et al., 2025;Shao et al., 2025;Zhang et al., 2025), very few works have devoted full attention to the evaluation of generated ideas. Because innovation constitutes the core of scientific discovery, its quality deterministically conditions every downstream phase, rendering systematic assessment of ideas both urgent and paramount.
+
+LLMs for Idea Generation and Evaluation. Knowledge is an indispensable part for idea generation and evaluation, because rich idea-related background knowledge is the guarantee for their effective operation. Prior efforts rely mainly on LLMs' internal parametric knowledge (Lu et al., 2024;Jiang et al., 2025;Novikov et al., 2025;Yu et al., 2025;Yamada et al., 2025), which is inherently insufficient. Although recent work permits LLMs to invoke paper-search tools (Baek et al., 2025;Su et al., 2025;Wang et al., 2025;2024a;Si et al., 2025;Li et al., 2024;Zhao et al., 2025;Ju et al., 2025;Tang et al., 2025;Zhang et al., 2025;2026), these methods remain constrained by the limited breadth and depth of the searched resources, leading to narrow knowl-edge horizons. Besides, current evaluation rely on simple LLM-as-a-Judge (Tang et al., 2025;Zhang et al., 2025;Si et al., 2025;Shahid et al., 2025;Moussa et al., 2025), introducing systematic bias and subjectivity that overlooks the review consensus needed by a fair scientific evaluation.
+
+
+Impact Statement:
+Despite its potential to accelerate innovation evaluation, reduce human effort, and optimize academic resource allocation, the development of InnoEval necessitates careful attention to ethical and societal considerations. Although we strive to mitigate LLM-as-a-Judge biases and align with human evaluation preferences, LLM-generated content may inevitably contain hallucinations and unreliable information. Therefore, we do not advocate over-reliance on it. Instead, we promote a human-AI collaborative paradigm where it serves as an auxiliary tool for human decisionmaking, augmenting rather than replacing human expertise. Users should carefully scrutinize its generated content. We will open-source our code framework and evaluation data to enhance system transparency.
+
+
+A. Limitations:
+This paper still has some limitations that must be acknowledged: a) Limited Discipline. Currently, we focus exclusively on innovation evaluation within the AI domain. In the future, we plan to extend our scope to disciplines including biology, medicine, physics, geography, oceanography, etc. b) Efficiency. Due to our multi-source heterogeneous deep search and multi-perspective multi-dimensional evaluation methodology, evaluating a single sample requires about half an hour. However, our method supports large-scale parallel evaluation, making it highly efficient for batch processing (approximately 100 samples per hour). c) Limited Modality. Now we are limited to text-based ideas. However, ideas can also be expressed in other modalities such as flowcharts, slides, and videos. In the future, we will explore evaluation for additional modalities.
+
+
+B. Dataset:
+B.1. Point-wise Dataset Dataset Construction. We collect papers via the official OpenReview API2 . Specifically, we crawl NeurIPS 2025 and ICLR 2025 papers from OpenReview, filtering out withdrawn submissions without review comments and placeholder papers lacking full text. The remaining papers are partitioned into four strata according to their final decisions (Reject, Poster, Spotlight, Oral), from which we perform stratified sampling. We specially include every submission track in the conference within each stratum to ensure idea diversity. We apply our extraction agent M e to harvest ideas from each paper, followed by manual correction and verification, finally yielding 217 point-wise samples, which we mark as D point . The final dataset comprises 136 ICLR 2025 ideas and 81 NeurIPS 2025 ideas, including 138 Reject, 66 Poster, 9 Spotlight, and 4 Oral decisions. Consequently, Reject, Poster, and Highlight (Spotlight + Oral) ideas account for 61.3%, 29.3%, and 9.4% of all the samples, respectively. Their detailed track distributions are listed in Tab.4.
+
+Tasks and Metrics. We have two classification tasks of different difficulty in this setting: i) Binary classification, predicting whether an idea can be accepted. The labels are Reject and Accept (including Poster, Spotlight, and Oral); ii) Three-way classification, where we group Spotlight and Oral into a single class called Highlight. The labels are Reject, Poster, and Highlight (including Spotlight and Oral). We use Accuracy and macro F1 score as the evaluation metrics.
+
+
+B.2. Group-wise Dataset:
+Dataset Construction. To construct idea groups with similar topics, we use the abstract of each idea in D point as a query to retrieve similar papers from all the papers we crawl from ICLR 2025 and NeurIPS 2025. We adopt bge-base-en-v1.53 as the embedding model to retrieve the 800 most similar papers, then apply bge-reranker-base4 as the reranker to reduce the pool to 120. From these 120 candidates, we select the highest-similarity paper in each label stratum to form a group, enabling automatic ranking of the ideas by their labels. We apply the same extraction and verification pipeline to the retrieved papers, finally obtaining 172 group-wise instances as D group .
+
+Tasks and Metrics. We define two objectives for group-wise tasks: i) Best Selection to identify the single best idea within each group, and ii) Ranking to produce the exact full ranking list of all ideas in the group. We evaluate the best-idea selection by Accuracy, and assess the ranking task via Longest Increasing Subsequence (LIS) score as well as Accuracy. The LIS score is computed as follows: let the group size be n and the length of the longest increasing subsequence of the predicted ranking with respect to the gold ranking be l. Then the LIS score is l n . For example, if the gold ranking is {1, 2, 3, 4} and the predicted ranking is {2, 1, 3, 4}, their longest increasing subsequence is {1, 3, 4} or {2, 3, 4}, all with a length of 3, so the LIS score is 3 4 = 0.75. And for ranking tasks, the Accuracy= 1 if and only if the predicted ranking is identical to the gold ranking, otherwise the Accuracy will be 0.
+
+
+B.3. Pair-wise Dataset:
+Since idea pairs naturally exist within each group, our pairwise dataset is constructed on top of D group . For a group of size n, we can sample n 2 pairs. We perform the sampling at two difficulty levels: 1) easy: pairs whose two ideas have markedly different labels (Highlight vs. Reject), and are therefore easier to distinguish. 2) difficult: pairs whose two ideas have similar Ranking scores for knowledge type j ∈ {l, w, c} calculated through semantic similarity. S llm j Ranking scores for knowledge type j ∈ {l, w, c} given by LLM.
+
+
+Sj:
+Overall ranking scores for knowledge type j ∈ {l, w, c} weighted by S sem Knowledge Grounding ( §3.2)
+
+
+Mg:
+Grounding agent used to ground searched knowledge to idea part at a finer-grained degree.
+
+
+C. Baselines and Reproduction Details:
+We select four categories of baselines for a comprehensive comparison with InnoEval.
+
+i) Naive method:
+
+• CoT that relies solely on the model's internal knowledge to assess and decide on ideas. We adopt a strong implementation for CoT. We directly use our evaluation agent M ψ in InnoEval to assess each idea across all dimensions by simply discarding both the grounding results and the personalized settings. Then we use the report agent M r to produce the final decision based on the evaluation results. • RAG that directly retrieves relevant papers as references. Building upon CoT, we use our search agent M s to directly fast retrieve (not including slow search and query refinement) top-m relevant papers from arXiv and incorporate the meta-information (including abstracts) of all retrieved papers into M ψ for reference during evaluation.
+
+ii) Idea generation method:
+
+• ResearchAgent (Baek et al., 2025), a representative idea generation method which incorporates a reviewing agent for idea refinement. We follow the reproduction details in Feng et al. (2025) where the research problem, scientific method, and experiment design of an idea are each scored by a reviewing agent based on five criteria. Building on this, they further introduce a final decision step that synthesizes the above evaluation results to provide a comprehensive review decision. In our reproduction, we further optimize the prompt for the final decision step to better align with our point-wise tasks. We also use our carefully designed prompt in M r to give pairwise and group-wise results based on ResearchAgent's own evaluation results.
+
+iii) End-to-end scientific discovery method:
+
+• InternAgent (Zhang et al., 2025), a representative end-to-end scientific-discovery framework in which idea assessment is one integral component. We directly employ its survey module to retrieve relevant literature and its assessment module to perform the evaluation. We adapt their outputs to our tasks using the same strategy as employed for the previous baselines.
+
+iv) Idea evaluation method:
+
+• GraphEval (Feng et al., 2025), which employs graph propagation to predict idea labels. We follow the same settings in the GraphEval paper and use its official code to train a GNN model and conduct label prediction on our point-wise dataset.
+
+For both group-wise and pairwise tasks, we rank ideas directly according to their predicted labels. When multiple ideas are assigned the same label, we take the predicted probability from the model's final classification layer as the confidence score and use this confidence to break ties. • ScholarEval (Moussa et al., 2025), which focuses on assessing the soundness and contribution of ideas grounded in literature. We run the whole ScholarEval pipeline to synthesize soundness and contribution reviews and adapt these reviews to final decisions like other baselines.
+
+For all baselines, we uniformly adopt DeepSeek-V3.2 (DeepSeek-AI, 2025) as the backbone model. We also test with o4-mini (OpenAI, 2025) as the backbone in §5.2 to demonstrate InnoEval's robustness across different backbones.
+
+
+D. Human Evaluation:
+Human Scoring. We invite five domain experts at the forefront of AI (3 Ph.D. students, 1 professor, and 1 algorithm engineer) to score the 60 sampled instances on five dimensions: clarity, novelty, feasibility, validity, and significance, following the identical scoring scheme used by InnoEval. During scoring, the experts are permitted to employ any search tools to augment their background knowledge and assign ratings based on the searched knowledge combined with their prior domain expertise. We calculate the Pearson correlation between the dimension-wise mean scores provided by the human experts and the corresponding scores produced by InnoEval.
+
+Review Scoring. To further mirror authentic human peer-review judgments, we crawl the publicly available peer-review records for the 60 sampled instances, including individual reviewers' comments and the meta-reviews. Although these reviews rarely contain explicit dimension-wise scores, the five aspects are implicitly encoded in the textual discourse. We therefore employ an LLM to extract these latent cues and assign concrete scores on each of the five dimensions, strictly adhering to the same scoring protocol used by InnoEval. Pearson correlations between the LLM-extracted scores and the InnoEval scores are subsequently computed.
+
+
+E. Search Metrics:
+Here, we detail the computation of each metric shown in Fig. 3b. For an idea I, let R denote the set of all resources retrieved by a method, and R h ⊆ R the subset of highly relevant resources. Let T I be the main topic words contained in idea I, and T ri the main topic words contained in each resource r i ∈ R, 1 ≤ i ≤ |R|. The metrics are then defined as follows:
+
+• Relevance Density. This metric quantifies the relevance degree of retrieved resources. We use an LLM to determine highly relevant sources R h returned by each method. To prevent methods from winning simply by retrieving more total items, we divide the count of highly relevant resources |R h | by the total number retrieved |R|, yielding the relevance density of each search strategy:
+
+• Topic Coverage. This metric measures the comprehensiveness of the retrieved resources, specifically the extent to which
+
+InnoEval: On Research Idea Evaluation as a Knowledge-Grounded, Multi-Perspective Reasoning Problem the topic keywords covered by the retrieved resources overlap with those of the idea. It is defined as follows:
+
+• Diversity. This metric quantifies the diversity of the retrieved resources, expressed as the proportion of topic keywords beyond those already covered in the idea that appear in the retrieved documents:
+
+• Quality. We directly employ an LLM to assess the quality of each retrieved resource and assign it a score s ri . The final metric is the average quality across all resources:
+
+All LLMs employed in the above computations are DeepSeek-V3.2.
+
+
+F. Innovation Review Board:
+To mitigate LLM-as-Judge bias and align evaluations more closely with human preferences, we curate a domain-specific persona base tailored to academic reviewing. Each persona represents a routine AI practitioner, such as professors, PhD students, algorithm engineers, etc. Specifically, each persona ρ in our persona base P contains the following information:
+
+• Background outlines the persona's academic background, research preferences, and reviewing tendencies.
+
+• Background Knowledge quantifies the persona's command of relevant background knowledge across four dimensions: 1) Literature Familiarity indicates the extent of acquaintance with related literature; 2) Methodology Depth reflects the depth of understanding of domain-specific methodologies and theories; 3) Application Experience captures hands-on engineering experience, especially coding practice; 4) Frontier Sensitivity gauges the awareness of cutting-edge advances in the field. Each dimension is scored on a 1-10 scale, with higher scores denoting greater mastery or familiarity. • Goal specifies the key objectives this persona prioritizes during reviewing; • Constraints characterizes the persona's reviewing habits, particularly behavioral traits exhibited in the review process.
+
+During evaluation, all persona information is converted into textual descriptions and embedded into the prompts of dimensionspecific agents, enabling them to review from the perspective of the designated persona. In addition, we randomly mask a proportion of search results according to the Background Knowledge scores, thereby faithfully mirroring the persona's actual expertise. Specifically, Literature Familiarity governs the masking of literature-related search results, Frontier Sensitivity controls the masking of web-based findings, and Application Experience determines the masking of code-related evidence. For instance, a persona whose Literature Familiarity equals 8 will have 20% of literature-grounding information randomly masked, leaving the remaining 80% accessible for its evaluation. Note that all our personas are synthesized with DeepSeek-V3.2, so the persona base can be easily scaled up. We further demonstrate in §5.3 that increasing persona count can consistently improve the evaluation performance.
+
+
+Personas:
+# Persona 1 Background: A senior researcher with over 20 years of experience reviewing for top-tier venues such as NeurIPS, ICML, ACL, and CVPR. They have followed the evolution of deep learning, symbolic methods, and hybrid approaches, and recognize recurring research patterns. Their long exposure to countless submissions makes them extremely sharp at detecting overstated novelty or methodological weaknesses. Background Knolwedge:
+
+• Literature Familiarity: 10 • Methodology Depth: 9 • Application Experience: 6 • Frontier Sensitivity: 9 Goal: Evaluate clarity, novelty, feasibility, validity, and significance using rigorous standards, verifying that the idea is truly new and well justified. Constraints: Defaults to rejection unless evidence is extremely strong; assumes novelty is low unless proven otherwise.
+
+
+# Persona 2:
+Background: A senior faculty mentor who has supervised numerous graduate students and reviewed for educational workshops and major conferences. They value well-organized writing, coherent argument flow, and clear motivation. Their review approach prioritizes helping authors refine their work and encourages early-stage researchers. Background Knolwedge:
+
+
+G. Case Study:
+This case is evaluated under a timestamp of 2024-02-01.
+
+Case Study (Mamba: Linear-Time Sequence Modeling with Selective State Spaces)
+
+The paper introduces Mamba, a novel selective state space model (SSM) that incorporates an input-dependent selection mechanism, enabling content-based reasoning and linear-time sequence modeling, which achieves state-of-the-art performance across diverse modalities like language, audio, and genomics while offering significantly faster inference than Transformers. Motivation: Transformers suffer from quadratic computational scaling with sequence length due to self-attention, making them inefficient for long sequences. Existing subquadratic-time architectures, such as linear attention and structured state space models (SSMs), lack the ability to perform content-based reasoning, limiting their effectiveness on discrete, information-dense data like text. Linear time-invariant (LTI) SSMs have fixed dynamics over time, preventing them from selectively remembering or ignoring inputs based on content, which is crucial for tasks like selective copying and induction heads. The efficiency of recurrent models is limited by how well they compress context into a finite state, often failing to retain all necessary information for complex reasoning. Research Question: Can a state space model be made selective by parameterizing its dynamics based on the input to enable content-aware reasoning? How can selective state space models be computed efficiently on modern hardware despite losing the equivalence to fast convolutions? Does a simplified neural network architecture combining selective SSMs and gated projections, without attention or MLP blocks, achieve competitive performance across diverse sequence modeling tasks? Do selective state space models scale linearly in sequence length while matching or exceeding the quality of Transformers on language modeling and other domains? Method: The core innovation is a selection mechanism where key SSM parameters (∆, B, C) are made functions of the input sequence, transforming the model from time-invariant to time-varying. The discretization step size ∆ is computed as ∆ = softplus(Parameter + s∆(x)), where s∆(x) is a low-rank linear projection of the input. The input-dependent parameters B and C are computed as B = s B (x) and C = s C (x), where s B and s C are linear projections. The model is computed in recurrent mode using a parallel associative scan algorithm, as the time-varying parameters prevent the use of efficient convolutional computation. A hardware-aware algorithm fuses the discretization, scan, and output multiplication steps into a single kernel to minimize memory I/O between GPU HBM and SRAM, significantly speeding up computation. Recomputation is used during backpropagation to avoid storing large intermediate states, reducing memory requirements. The architecture simplifies prior SSM designs by combining the H3 block (an SSM with gated connections) and the MLP block of Transformers into a single, homogeneously repeated block. The architecture expands the model dimension by a fixed factor (E = 2) within each block, with most parameters residing in the linear projections. The inner SSM operates independently per channel over an input sequence, with a diagonal structure imposed on the state transition matrix A for efficiency. Experimental Setting: Datasets: The Pile (language), HG38 human genome (DNA), YouTube Mix (audio waveforms), SC09 (speech), synthetic datasets for Selective Copying and Induction Heads tasks. Baselines: proprietary models (GPT-4, GPT-4o, o4-mini, DeepSeek-R1, DeepSeek-V3.1, GPT-5), open-source models (Transformer, Transformer++ (with RoPE, SwiGLU), GPT-Neo, OPT, Pythia, RWKV, H3, Hyena, HyenaDNA, RetNet, SaShiMi, SampleRNN, WaveNet, WaveGAN, DiffWave). Metrics: Perplexity (PPL), pass@1, pass@3, Rouge-L, exact match, accuracy, FID (Fréchet Inception Distance), IS (Inception Score), MIS (Mean Inception Score), AM (Average Magnitude). Hardware: A100 80GB GPUs. Expected Results: ...
+
+
+### 2.1 Paper Reports:
+Paper 1: Efficiently Modeling Long Sequences with Structured State Spaces The Structured State Space (S4) model introduces a novel parameterization for state space models (SSMs) that enables efficient computation of long sequences by decomposing the state transition matrix into a normal plus low-rank (NPLR) form, which allows stable diagonalization and reduces the core computation to a Cauchy kernel, achieving near-linear complexity and strong performance on tasks with long-range dependencies. Motivation: Existing sequence models... Research Question: Can a state space model be parameterized to allow for computationally efficient... Method: The method parameterizes the continuous-time state space model... Experimental Setting: ... Expected Results: ...
+
+
+Paper 2: Liquid Structural State-Space Models:
+Liquid-S4 is a novel state-space model that combines the input-dependent state transition mechanism of linear liquid time-constant networks with the efficient diagonal-plus-low-rank parametrization and convolutional kernel computation of structural state-space models (S4), enabling improved generalization on long-range sequence modeling tasks by accounting for input signal correlations. Motivation: ... Research Question: ... Method: ... Experimental Setting: ... Expected Results: ...
+
+
+### 2.2 Web Reports:
+Webpage 1: From Transformer to Mamba -by Manav Gupta This Medium article provides an accessible, conceptual introduction to the Mamba architecture as a solution to the quadratic computational scaling problem of Transformer self-attention. It explains the O(N ) complexity of attention, leading to severe memory and processing constraints for long sequences. The article then introduces the foundational concept of state space models (SSMs) using analogies like a home heating system, before detailing how Mamba innovates by making key SSM parameters (∆, B, C) input-dependent, enabling selective, content-aware processing with linear complexity. The core of the article is a visual walkthrough of a home heating SSM to explain the roles of the A, B, C, and D matrices, culminating in the explanation of Mamba's selective mechanism as its key breakthrough...
+
+
+Webpage 2: How State Space Models Are Challenging Transformers?:
+This Medium article presents Mamba as a paradigm-shifting alternative to Transformers, addressing their quadratic scaling limitations with a selective state space model (SSM) that achieves linear-time processing. The core innovation is Mamba's input-dependent selection mechanism, which allows it to selectively remember or forget information, enabling content-aware reasoning. The article highlights Mamba's empirical performance, including matching Transformer quality with smaller models and achieving 4-5x higher inference throughput, while also candidly discussing its weaknesses in tasks like exact copying and in-context learning. It positions the future not as a binary choice but as a trend towards hybrid architectures like Jamba, which combine Transformer and Mamba blocks. The piece concludes with practical implementation guidance for practitioners, outlining scenarios where Mamba excels and where Transformers remain preferable...
+
+
+### Reviewer 1:
+A creative-oriented researcher who appreciates unconventional ideas, cross-disciplinary inspiration, and imaginative problem framing. They enjoy exploring speculative or early-stage concepts and value conceptual leaps over technical conservatism.
+
+
+Clarity::
+The research idea demonstrates excellent logical clarity and structural coherence. The title/abstract (Basic Idea) effectively summarizes the core innovation: a selective state space model (SSM) with input-dependent parameters enabling content-based reasoning and linear-time modeling. The content is clear, concise, and informative, presenting a well-structured narrative from motivation to expected results. Strengths: 1. Goal-Method Alignment: The method directly addresses all research questions. The input-dependent parameterization of ∆, B, C enables content-aware reasoning; the hardware-aware scan algorithm provides efficient computation despite losing fast convolution equivalence; the simplified architecture combines selective SSMs with gated projections; and the linear scaling with context length is explicitly tested.
+
+
+2.:
+Mechanism Definition: Core mechanisms are clearly defined: the selection mechanism (∆ = softplus(Parameter + s∆(x)), B = s B (x), C = s C (x)), the parallel associative scan algorithm, hardware-aware kernel fusion, and architectural simplifications. 3. Minimal Ambiguity: Technical terms are used precisely without buzzword soup. The integration of selective InnoEval: On Research Idea Evaluation as a Knowledge-Grounded, Multi-Perspective Reasoning Problem SSMs and gated projections is explained through architectural details. 4. Metric Consistency: Expected results metrics directly measure research question success: perplexity for language modeling quality, synthetic task accuracy for content-based reasoning, speed benchmarks for efficiency, and scaling analyses for linear sequence length performance. 5. Minor Considerations: Some proprietary baselines (GPT-5) may not be publicly available for fair comparison. The experimental setting is comprehensive but could benefit from more detail on specific ablation study designs. While the logic is strong, the idea doesn't reach the 'flawless, elegant, and watertight' standard of 9-10, as some implementation details remain implicit. Overall, this represents a high-quality research idea with clear logical flow, well-defined mechanisms, and strong alignment between questions, methods, and evaluation metrics. Score: 8
+
+
+Novelty::
+The Mamba research idea introduces groundbreaking innovation through its selective state space model (SSM) mechanism, representing a paradigm shift in efficient sequence modeling. The core novelty lies in making key SSM parameters (∆, B, C) input-dependent, transforming linear time-invariant (LTI) SSMs into time-varying systems capable of content-aware reasoning. This addresses a fundamental limitation of prior subquadratic architectures that lacked selective information processing capabilities. Differentiation from standard baselines: Unlike standard SSMs (S4, HiPPO) with fixed dynamics, Mamba introduces selective state transitions. Unlike attention-based Transformers with quadratic scaling, Mamba maintains linear time complexity. Unlike previous attempts at input-dependent SSMs (Liquid-S4, GateLoop), Mamba's specific parameterization of ∆, B, C and its hardware-aware implementation represent a distinct approach. Combination vs. Innovation: While Mamba builds upon SSM foundations and gated projections, it is not merely "A + B". The selective mechanism is a tailored innovation that fundamentally changes SSM behavior, enabling content-based reasoning while maintaining computational efficiency. The hardware-aware scan algorithm represents significant engineering innovation to overcome the loss of fast convolution equivalence. Alignment with research trends: Mamba aligns with the strong research trend seeking efficient alternatives to Transformers while diverging through its specific selective SSM approach. It addresses multiple critical challenges simultaneously: quadratic scaling of attention, lack of content-awareness in efficient models, and hardware efficiency. Comparison to prior art: While related concepts exist (input-dependent recurrences in GateLoop, adaptive SSMs in Liquid-S4, selective token processing in S5), Mamba's specific combination of selective parameterization, hardware-aware algorithms, and simplified homogeneous architecture represents a unique and comprehensive solution. The idea's ability to achieve competitive performance across diverse modalities (language, audio, genomics) while offering significantly faster inference demonstrates substantial advancement beyond existing methods. The idea introduces new problems/perspectives by challenging the assumption that efficient sequence models must sacrifice content-aware reasoning. It introduces new techniques in selective SSM parameterization and hardware-aware computation. The empirical claims of outperforming Transformers in certain domains while maintaining linear scaling represent significant advancement if validated. Score: 9
+
+
+Validity::
+The research idea demonstrates exceptional conceptual soundness with solid theoretical foundations, robust algorithmic design, and detailed experimental methodology. The core innovation-making SSM parameters (∆, B, C) input-dependent to enable selective, content-aware reasoning-is logically consistent and well-motivated by clear limitations of existing architectures (Transformers' quadratic scaling and LTI SSMs' fixed dynamics). The proposed method mathematically aligns with the objective of achieving linear-time sequence modeling with content-based reasoning. The experimental setting is comprehensive and fair, proposing comparisons against strong proprietary and open-source baselines across multiple modalities (language, DNA, audio, speech) and including thorough ablation studies. The idea does not rely on "miracle steps"-the selection mechanism is concretely parameterized, and the hardware-aware algorithm addresses the computational challenges introduced by time-varying parameters. The most significant theoretical risk is the potential for the selective mechanism to introduce instability during training or inference due to highly dynamic parameter changes, which could affect convergence or generalization. However, the proposed techniques (parallel associative scan, kernel fusion, recomputation) provide a coherent framework to mitigate these risks. The logic is rigorous and aligns well with first principles of sequence modeling. Score: 9
+
+
+Feasibility::
+The research idea is highly feasible. The method is clearly described with a well-defined selection mechanism and computational approach. The core innovation is implementable with standard deep learning libraries: input-dependent parameterization uses linear projections and softplus, the parallel scan is a standard algorithm with efficient implementations, and the fused kernel is an optimization that can be built with CUDA. The hardest step is implementing the hardware-aware fused kernel for the selective scan, which requires custom CUDA programming, but the algorithmic logic is clear and an open-source implementation exists (mamba-ssm). The experiments use standard datasets (The Pile, HG38, SC09) and metrics (perplexity, FID, accuracy), and the required computational resources (A100 GPUs) are realistic for modern research. The architecture is a simplified, homogeneous block design that is straightforward to construct. Therefore, the idea can be executed with standard engineering effort, leveraging existing libraries and known algorithms. Score: 9
+
+Significance:
+
+The significance and potential impact of the Mamba research idea is exceptionally high. Assuming the idea works as described, it addresses a fundamental and widely recognized bottleneck in sequence modeling: the quadratic scaling of Transformers. The core innovation-making state space models (SSMs) selective via input-dependent dynamics-directly tackles the expressivity limitations of prior sub-quadratic architectures, enabling content-aware reasoning in linear-time models. The proposed solution is highly generalizable, demonstrated across diverse, high-impact modalities (language, genomics, audio) with state-of-the-art or competitive results. This is not a marginal improvement; it represents a paradigm shift by combining the efficiency of recurrent models with the reasoning capabilities of attention, potentially rendering standard Transformer architectures obsolete for long-context applications. The hardware-aware algorithm and simplified architecture further enhance its practical utility, promising dramatically faster inference. This work has transformative potential for the entire machine learning and AI research community, particularly those working on long-sequence tasks in NLP, computational biology, and audio processing, and could see rapid adoption in industry for large-scale, real-time applications. It is a rare contribution that solves a major bottleneck for a large community. Score: 9
+
+Overall Average Score: 8.80/10 ### Reviewer 2 A busy researcher with significant service load, who regularly handles multiple reviews under time pressure. They rely on first impressions, structural clarity, and quickly identifiable signals of novelty. This persona is common among overloaded program committee members. ...However, some theoretical risks remain: The assumption that input-dependent parameterization alone can achieve Transformer-level reasoning capabilities without attention mechanisms may be optimistic. The efficiency claims rely heavily on specialized kernel fusion, which may not generalize across hardware. The scaling properties, while plausible, require empirical validation across larger model sizes. The idea does not contain obvious 'miracle steps' but depends on the effectiveness of the selective mechanism in practice. ... Overall Average Score: 7.00/10 ### Reviewer 3 A mid-stage PhD student managing research, deadlines, and teaching workloads. They have solid knowledge of the field and a good sense of common research patterns, but their reviews depend heavily on clarity due to limited available time. ... Overall Average Score: 8.60/10 ...
+
+
+## 4. Final Review:
+Meta-review: The paper introduces Mamba, a selective state space model with an input-dependent selection mechanism that enables content-aware reasoning while maintaining linear-time scaling. Reviewers unanimously highlight its groundbreaking novelty, strong theoretical foundations, and comprehensive experimental validation across multiple modalities including language, DNA, and audio. The work demonstrates exceptional technical soundness, significant empirical gains over existing baselines, and practical efficiency improvements, positioning it as a transformative contribution to sequence modeling. Score: 8.5 Decision: spotlight ## 5. Revision Suggestions ### 5.1 Methodology/Model Improvements Integrate a Mixture-of-Experts (MoE) routing mechanism to enhance model capacity and reduce inference FLOPs while maintaining linear complexity, inspired by BlackMamba's combination of Mamba blocks with routed MoE layers. This directly extends the current Mamba architecture's scaling efficiency. Explore bidirectional scanning for SSM modules in audio and speech tasks, as demonstrated by Audio Mamba and >10k tokens. 2. Profile the Mamba-1/2 block to quantify the runtime and memory contribution of the SSM, convolution, and MLP components across sequence lengths (64 to 16K). Identify the dominant bottleneck for prefill and decoding as PerfMamba did. 3. Train a 500M-parameter Mamba model with top-2 MoE layers on a 100B-token text corpus. Compare validation perplexity and downstream task accuracy to a dense Mamba of similar active parameters, and measure tokens/sec throughput gain. 4. Evaluate a 1.4B-parameter Mamba model on the Long-Range Arena benchmark, specifically the Path-X task (length 16K). Compare accuracy to Transformer++ and Hyena baselines to test long-context claims beyond DNA/audio. 5. Apply ∆-guided pruning to remove 20-40% of state channels in a pretrained 790M Mamba language model. Measure the resulting perplexity change on The Pile and the inference latency reduction for generation at sequence length 2048.
+
+
+Prompt for Extraction Agent:
+You are a scientific information extraction agent. Your task is to extract key research components as ATOMIC CLAIMS -each representing one independent, verifiable scientific statement.
+
+
+CRITICAL REQUIREMENT: INDEPENDENT UNDERSTANDABILITY:
+The extracted idea must be fully self-contained and independently understandable. A domain expert who has NOT read the original paper should be able to understand all concepts, methods, and experimental settings without needing to refer back to the source text. This means: -Every technical term, concept, or methodology mentioned must be clearly explained or defined within the extracted content itself.
+
+-Do NOT use paper-specific terminology or abbreviations without providing context or explanation.
+
+-Avoid referencing concepts that are only defined elsewhere in the paper without including their definitions.
+
+-Ensure that method implementation and experimental reproduction are unambiguous and feasible based solely on the extracted information.
+
+Please analyze the following input (which may be a research idea or a full paper) and extract the following sections: 1. TL;DR (Optional) -A concise summary of the central innovation, the main technique, and the key expected effect. -Must NOT be vague, generic, or over-abstract.
+
+
+MOTIVATION:
+-Why is this research important or necessary? Extract all reasons why the research is needed.
+
+-Break into separate, testable claims (e.g., problem statements, limitations of prior work, gaps in current methods).
+
+-Each motivation should express a single rationale or need.
+
+
+RESEARCH QUESTION:
+-What specific scientific questions or hypotheses are being addressed? -Break into distinct, focused research questions.
+
+-Each question should be precise and independently answerable. -Include both procedural steps and core design ideas, each as a separate claim.
+
+-INDEPENDENT UNDERSTANDABILITY REQUIREMENT: Every technical term, concept, component, or procedure must be self-explanatory or clearly defined. Do NOT use paper-specific terminology, abbreviations, or concepts without providing sufficient context or explanation. If a method involves a novel component or technique, describe it in detail so that someone with domain knowledge can understand and potentially implement it without reading the original paper. Avoid vague references to "the proposed framework" or "our method" without explaining what it actually does. Ensure theoretical feasibility and implementability are clear from the extracted description alone.
+
+
+EXPERIMENTAL SETTING (Optional):
+-MUST FOLLOW THIS EXACT STRUCTURE -First, list the core experimental components, then describe the experiments.
+
+-INDEPENDENT UNDERSTANDABILITY REQUIREMENT: All experimental components must be described with sufficient detail for independent understanding and reproduction. Do NOT use paper-specific abbreviations, dataset nicknames, or method names without full context. For each component, provide enough information so that a domain expert can understand what was used and how, without needing to consult the original paper. Ensure experimental reproducibility is clear from the extracted information alone.
+
+Step 1: Core Experimental Components -"Datasets: [comma-separated list of all datasets used in the experiments]" -"Baselines: [comma-separated list of all baseline models/methods compared against, grouped by proprietary and open-source]" -"Metrics: [comma-separated list of all evaluation metrics used]" -"Hardware: [specific hardware configuration used for experiments]
+
+Step 2: Experiment Descriptions -Split into TWO categories (Main Experiments and Analysis Experiments):
+
+Category 1: Main Experiments -Group similar experimental setups together: If multiple experiments share the same evaluation protocol, methodology, and purpose (e.g., benchmarking on different datasets), describe them as a SINGLE comprehensive experimental setup.
+
+-Each merged main experiment item should describe: • The unified experimental methodology and evaluation protocol • All datasets/benchmarks evaluated (list them together) • All baseline methods compared against (group by model type) • Evaluation metrics applied across all evaluations • Shared implementation details (environment, hardware, hyperparameters) -Example of merged description: "Main Experiment: Benchmark evaluation on DABench, TableBench, and BIRD datasets comparing with proprietary models (GPT-4o, o4-mini, DeepSeek-R1, DeepSeek-V3.1, GPT-5) and open-source models (QwQ-32B, Qwen2.5-Coder-32B, Llama-3.3-70B, Qwen2.5-72B, TableLLM, Table-R1, OmniSQL, SQL-R1) using pass@1 and pass@3 metrics with GPT-4o-mini judge model on 8 A100 GPUs" -Only create separate items when experiments have fundamentally different purposes, methodologies, or evaluation frameworks.
+
+
+OUTPUT FORMAT FOR EXPERIMENTAL SETTING::
+The array MUST start with the core components, then the experiment descriptions: -"Datasets: DABench, TableBench, BIRD, QRData", -"Baselines: proprietary models (GPT-4o, o4-mini, DeepSeek-R1, DeepSeek-V3.1, GPT-5), open-source models (QwQ-32B, Qwen2.5-Coder-32B, Llama-3.3-70B, Qwen2.5-72B, TableLLM, Table-R1, OmniSQL, SQL-R1)", -"Metrics: pass@1, pass@3, Rouge-L, exact match", -"Hardware: 8 A100 80G GPUs", -"Main Experiment: Benchmark evaluation on DABench, TableBench, and BIRD datasets comparing with proprietary models (GPT-4o, o4-mini, DeepSeek-R1, DeepSeek-V3.1, GPT-5) and open-source models (QwQ-32B, Qwen2.5-Coder-32B, Llama-3.3-70B, Qwen2.5-72B, TableLLM, Table-R1, OmniSQL, SQL-R1) using pass@1 and pass@3 metrics with GPT-4o-mini judge model on 8 A100 GPUs", -"Analysis Experiment: Ablation study testing the effect of training data volume (2K, 4K, 8K, 12K) on model performance across all benchmarks", -"Analysis Experiment: Comparison of different training strategies (SFT-only, zero-RL, SFT-then-RL, SFT-and-RL) on 7B model performance", -"... other analysis experiments ..." 6. EXPECTED RESULTS (Optional) -Describe the outcomes and hypothetical benefits of this research idea.
+
+-Focus on qualitative expectations about potential performance and advantages.
+
+-Must NOT contain actual experimental results or numerical data from papers.
+
+-Must NOT reuse exact quantitative findings from existing research.
+
+-Break into independent claims -each describing one expected qualitative benefit. -Use qualitative comparative expressions like:
+
+• "Superior performance compared to state-of-the-art methods" • "Improved efficiency with lower computational cost" • "Enhanced stability during training process" • "Better generalization across different domains" • "Higher robustness to input variations" • "Reduced training time and resource requirements" • "Increased interpretability and transparency" • "Stronger scalability for larger datasets" -Split into: • Expected qualitative benefits for Main Experiments • Expected qualitative benefits for Analysis Experiments RULES FOR ATOMIC CLAIMS -Each claim must be a single, self-contained statement.
+
+-Focus on clarity, factual precision, and scientific verifiability.
+
+-Do NOT infer, extrapolate, or add any information not present in the source.
+
+-Use arrays/lists for every section (even if only one claim).
+
+
+OUTPUT FORMAT:
+Strict JSON with arrays for all sections: '''json { "basic_idea": [ ... ], "motivation": [ ... ], "research_question": [ ... ], "method": [ ... ], "experimental_setting": [ ... ], "expected_results": [ ... ] } '''
+
+
+H.2. Prompts for Search Agent:
+Prompt for Search Agent (Query Generation -Literature)
+
+You are an expert academic search strategist. Your only goal is to generate 6-10 extremely precise paper TITLE queries that can directly retrieve the most relevant prior work to a given research idea -nothing more, nothing less.
+
+
+Input::
+-basic idea: core concept and claimed innovation of the idea -motivation: why this problem matters and the key existing gap -methodology: concrete technical approach that solves the problem ====================== CORE OBJECTIVE ====================== 1. First, in your reasoning (not in output), deeply understand and condense the idea into: -One single core essence (usually 3-8 words that capture what this work is truly about) -One single most important motivation/pain point this idea is directly solving -One or (rarely) two truly decisive technical components that define the method 2. All generated queries MUST revolve only around these 2-4 ultra-core concepts identified above. No secondary or peripheral concepts are allowed.
+
+3. For each core concept, expand 2-5 academic synonyms or alternative phrasings that commonly appear in real paper titles (e.g., "vision-language models", "multimodal large language models", "VLMs").
+
+4. Generate queries using primarily OR within the same concept slot to maximize recall of different expressions, and use AND extremely sparingly -only when combining two truly indispensable core concepts (core problem + core method, or core method + core context). Most queries should be single-concept with rich OR chains or at most one AND.
+
+5. Final goal: every returned paper from these 6-10 queries should feel "this is almost exactly our idea" to a human researcher. Precision > breadth. Prompt for Search Agent (Query Generation -Web)
+
+You are an expert in generating precise search queries for academic and research-oriented web searches, specifically tailored to uncover related works, evidence, criticisms, and diverse viewpoints on innovative research ideas. Your task is to analyze the provided basic idea, motivation, and methodology sections, then synthesize 3-5 targeted queries that can be directly inserted into a Google Search API restricted to sites like x.com, medium.com, towardsdatascience.com, substack.com, and reddit.com/r/MachineLearning.
+
+
+Key guidelines::
+-Extract core keywords, phrases, and concepts from the three sections, emphasizing the motivation (gaps and importance) and methodology (key approaches and innovations). Prioritize elements that highlight novelty, challenges, or proposed solutions to guide searches toward discussions of similar methods, empirical evidence, critiques, or extensions in related literature.
+
+-Each query must use only AND and OR operators, with no other Boolean operators (e.g., no NOT), filters (e.g., no site:), or extraneous elements. Limit each query to 1-3 keywords or phrases.
+
+-For multi-word concepts, enclose in double quotes (e.g., "supervised fine-tuning").
+
+-Use OR within parentheses for synonyms or alternative terms to broaden recall and improve precision on a single concept (e.g., (efficient OR lightweight OR fast)).
+
+-Use AND between distinct concepts to probe specific combinations for depth (e.g., ("large language model" OR LLM) AND (efficient OR lightweight)). But don't use too much AND to limit the scope of the search. -Use OR across major concepts for breadth when exploring related works (e.g., (SFT OR RLHF) OR ("data synthesis" OR "trajectory generation")).
+
+-Avoid terms implying tutorials, best practices, implementations, benchmarks, or guides (e.g., no 'tutorial', 'how-to', 'implementation', 'best practice', 'benchmark'). Focus exclusively on analytical discussions: related works, evidence from studies, criticisms of approaches, or viewpoints on gaps/solutions. -Ensure no extra spaces around operators (e.g., (LLM OR VLM), not ( LLM OR VLM )).
+
+-Output exactly in the format [query1|query2|...], with 3-5 queries separated by pipes (|). No introductions, explanations, or additional text.
+
+
+Few-shot examples::
+Input idea: Basic idea involves efficient training of large language models. Motivation: High computational costs limit accessibility. Methodology: Use lightweight fine-tuning with RL. Output: [("large language model" OR LLM) AND (efficient OR lightweight OR fast)|("supervised fine-tuning" OR SFT) OR (RL OR "reinforcement learning")|(RLHF OR DPO)] Input idea: Reinforcement learning for aligning language models. Motivation: Safety and bias issues in outputs. Methodology: Direct preference optimization. Output: [(RLHF OR "reinforcement learning from human feedback") AND (alignment OR safety)|(DPO OR "direct preference optimization") OR PPO|("language model" OR LLM) AND (bias OR criticism OR evidence)] Generate queries that facilitate deeper evaluation of the idea by surfacing comparable research trajectories, not user-facing resources. You are an expert academic paper relevance evaluator. Your task is to assess how relevant an academic paper is to a given research idea.
+
+Evaluation Criteria: -Methodological relevance: Does the paper's methodology align with or relate to the research idea? -Problem domain match: Does the paper address similar problems or research questions? -Technical contribution: Does the paper contribute techniques, datasets, or insights relevant to the idea? -Conceptual similarity: Are the core concepts, theories, or frameworks similar? Scoring Guidelines: -Score 0-2: Completely irrelevant, different domain or topic -Score 3-4: Weakly related, some shared concepts, but limited relevance -Score 5-6: Moderately relevant, shares some methodology or problem domain -Score 7-8: Highly relevant, strong methodological or conceptual alignment -Score 9-10: Extremely relevant, directly addresses similar problems or uses similar methods Output a single integer score from 0 to 10 representing the relevance of the paper to the research idea.
+
+
+====================== WHAT WE ARE LOOKING FOR ======================:
+The idea is described in idea full text (including basic idea, methodology, experimental setting, etc.). We ONLY want repositories that are directly useful for:
+
+Category A -Similar/related implementations and pipelines -Full or partial implementations of methods, systems, or pipelines that address a similar core problem as the idea.
+
+-End-to-end or major components that can be reused or adapted in our work.
+
+Category B -Frameworks/toolkits enabling the methodology -Well-maintained frameworks, libraries, or toolkits that can support the training/inference/orchestration needed by the methodology.
+
+-General or domain-specific frameworks that are actually usable to build or extend the idea.
+
+Category C -Baselines/benchmarks/datasets for experiments -Repositories that implement baselines, benchmarks, or datasets mentioned in the experimental setting, including training/evaluation code.
+
+-Code that can be used to reproduce or compare with experimental protocols expected by the idea. -Not clearly in A/B/C, or codebase is too small/unclear to be practically reused.
+
+Score 5-6: -Some connection to the idea or to A/B/C, but either the implementation scope is limited, or reproducibility/documentation signals are weak.
+
+-Might be somewhat useful but not a primary candidate.
+
+-Identify missing or under-explored perspectives, such as: alternative methods, related tasks, adjacent application domains, different terminology, or broader/narrower variants of the problem.
+
+
+Design refined queries::
+-Reuse and recombine high-signal keywords from good queries and from top paper titles.
+
+-Generalize over-specific fragments from weak queries (e.g., shorten overly detailed phrases, drop unnecessary constraints, or replace them with slightly broader terms).
+
+-Avoid low-relevance or noisy keywords observed in weak queries.
+
+-Introduce alternative but clearly related terminology that might surface complementary or previously missed papers, while remaining focused on the idea full text.
+
+-Aim for queries that extend the current search (new angles, related subproblems, complementary approaches) without drifting off-topic. You are a web-search query refinement strategist. You see (1) the idea full text, (2) top-ranked web sources (each with title, summary/description, similarity score, and the query that retrieved it), and (3) the full set of original queries (good + weak). Treat queries that retrieved the top sources as "good"; the rest are "weak" and likely too broad, too narrow, or slightly off-topic.
+
+
+GOAL::
+Reflect on what worked and what failed, then generate 4-8 improved web search queries that surface discussions, evidence, critiques, or related implementations on research-oriented sites (the Google Search API is restricted to domains like x.com, medium.com, towardsdatascience.com, substack.com, reddit.com/r/MachineLearning).
+
+ANALYSIS PROCESS: 1) Good queries + top source titles/summaries: extract recurring high-signal concepts, phrasings, and synonyms that align with the idea full text.
+
+2) Weak queries: spot over-specific fragments to generalize/remove, and noisy/low-relevance terms to avoid.
+
+3) Coverage check: note which aspects are already well-covered and which angles, methods, domains, or terminology are missing. 4) Design refined queries: recombine strong keywords, generalize over-specific bits, drop noisy terms, and introduce adjacent terminology that can surface complementary results while staying on-topic. (1) idea full text: the complete research idea (including basic idea, methodology, experimental setting, etc.), ( 2) top-ranked repositories (each with title, description, similarity score, and the query that retrieved it), ( 3) original queries: all first-round GitHub queries (both effective and weak).
+
+
+====================== INTERPRETATION OF INPUTS ======================:
+-Treat queries that retrieved the current top-k repositories as good signals:
+
+-They roughly match the actual literature and implementation landscape.
+
+-Treat the remaining queries as weak: -often too narrow, too detailed, or noisy relative to the idea full text.
+
+====================== GOALS OF REFINEMENT ====================== 1. Check coverage of the three categories A/B/C using current top-k repos: -A: similar implementations / complete pipelines -B: frameworks/toolkits supporting the methodology -C: baselines/benchmarks/datasets and their implementations. 2. Check quality criteria of the current top-k repos: -stars and maintenance recency, -presence of real code (not just markdown), -documentation and reproducibility signals, -explicit alignment with the experimental setting when possible. 3. If certain categories (A/B/C) or quality aspects are under-covered: -Design more general, less constrained follow-up queries that: -broaden over-specific patterns from weak queries, -drop redundant or noisy keywords, -reuse strong, high-signal terms from good queries and top repo titles.
+
+====================== REFINEMENT STRATEGY ====================== -From good queries + top repo metadata, extract: -recurring task/method/dataset phrases that clearly match the idea.
+
+-From weak queries, identify: -overly long phrases, too many AND constraints, or niche qualifiers that unnecessarily restrict recall; these should be shortened or removed.
+
+-For missing A/B/C buckets, design new queries that: -focus on that specific bucket (one angle per query), -use fewer, more general keywords, -avoid repeating the exact original queries.
+
+
+================ QUERY CONSTRAINTS (FOLLOW INITIAL RULES) ================ -Each refined query MUST::
+-include 'site:github.com', -include '-awesome -survey -paper -list -collection', -stay short and focus on one clear angle (implementation, framework/toolkit, or baseline/benchmark/dataset).
+
+-Do NOT add many extra negative filters beyond the standard ones.
+
+-It is allowed (but not required) to use AND / OR with at most a few high-signal keyword/phrase groups; avoid long, complex logical chains. -Identify how this related paper's research aligns with or differs from our idea -Extract content showing consistency/relevance in motivation, methodology, or findings -Note any complementary approaches, similar problems addressed, or related techniques -Identify connections in research questions, methods, or experimental settings -Assess whether this paper supports, contradicts, or extends aspects of our idea 2. Summary Requirements: -Write 2-5 sentences summarizing the most relevant connections -Highlight specific aspects (motivation, method, findings) that relate to our idea part -Be precise about what this paper contributes to understanding our research idea -Focus on factual relationships, not general statements 3. Scoring Guidelines: As a peer reviewer, you must maintain objective and fair evaluation standards:
+
+-Critical Perspective: Approach this evaluation with a critical eye. Do not be overly generous in assessing the relevance or support relationship between this paper and our idea. Only identify connections that are genuinely strong and directly related. Avoid overstating weak or indirect connections.
+
+-Review Standards: This is part of a peer review process. Maintaining fairness and rigor is essential. Be objective and balanced in your evaluation.
+
+-Align with Human Preferences: When assigning scores, aim to align with human reviewer evaluation patterns. Evaluate each paper independently and fairly based on the actual relevance and support strength for the specific idea part. 1. Focus Areas for Web Reports: -Extract viewpoints, opinions, and discussions about similar methods or ideas -Identify evidence, empirical findings, or case studies mentioned -Note criticisms, limitations, or challenges discussed -Capture diverse perspectives on gaps, solutions, or approaches -Highlight discussions of related works, extensions, or alternative viewpoints -Focus on analytical discussions, not tutorials or implementation guides 2. Summary Requirements: -Write 2-5 sentences summarizing the key viewpoints and perspectives -Highlight what this content says about similar ideas, methods, or problems -Include any evidence, criticisms, or diverse viewpoints presented -Focus on analytical insights rather than procedural information 3. Scoring Guidelines: As a peer reviewer, you must maintain objective and fair evaluation standards:
+
+-Critical Perspective: Approach this evaluation with a critical eye. Do not be overly generous in assessing the relevance of web content to our idea. Web content often contains general discussions or loosely related topics -only identify connections that are genuinely strong and directly related to our specific idea part. Avoid overstating weak or tangential connections.
+
+-Review Standards: This is part of a peer review process. Maintaining fairness and rigor is essential. Be objective and balanced in your evaluation.
+
+-Align with Human Preferences: When assigning scores, aim to align with human reviewer evaluation patterns. Evaluate each web content independently and fairly based on the actual relevance and support strength for the specific idea part.
+
+
+Scoring scale::
+-Score 8-10: Highly relevant viewpoints, strong evidence, direct discussion of similar ideas -Score 6-7: Relevant perspectives, some useful insights, moderate connection to idea -Score 4-5: Weak relevance, indirect connections, peripheral discussions -Score 2-3: Minimal relevance, barely related topics -Score 0-1: No relevant content or completely unrelated discussions ## Output: Provide a summary capturing the key viewpoints and perspectives, along with a relevance score. Be critical and objective -do not overstate the relevance or support relationship. 1. Focus Areas for Code Reports: -Identify how this repository implements methods similar to our idea -Extract information about frameworks, toolkits, or libraries that enable our methodology -Note baselines, benchmarks, or datasets relevant to experimental settings -Assess implementation quality, completeness, and usability -Identify contributions to method implementation or experimental evaluation -Focus on actual code implementations, not just documentation or lists 2. Summary Requirements: -Write 2-5 sentences summarizing the repository's contribution -Highlight specific implementations, frameworks, or experimental resources -Note how this codebase supports or enables aspects of our research idea -Focus on concrete technical contributions rather than general descriptions 3. Scoring Guidelines: As a peer reviewer, you must maintain objective and fair evaluation standards:
+
+
+Prompt for Grounding:
+-Critical Perspective: Approach this evaluation with a critical eye. Do not be overly generous in assessing the relevance of code repositories to our idea. Many repositories may seem related on the surface but actually address different problems or use different approaches. Only identify connections that are genuinely strong and directly relevant to implementing or supporting our specific idea part. Avoid overstating weak or indirect connections.
+
+-Review Standards: This is part of a peer review process. Maintaining fairness and rigor is essential. Be objective and balanced in your evaluation.
+
+-Align with Human Preferences: When assigning scores, aim to align with human reviewer evaluation patterns. Evaluate each repository independently and fairly based on the actual relevance and support strength for the specific idea part. 1. Differentiation: How does this specifically differ from standard baselines (e.g., Vanilla Diffusion, Standard EM)? 2. Combination vs. Innovation: Is this merely "A + B" (Incremental), or does it propose a tailored mechanism to make A and B work together (Significant)? 3. Conflict Check: Does the idea contradict established impossibilities? (If it claims to solve something proven impossible without a theoretical breakthrough, it's not novel, it's wrong-but handle this in Validity. Here, focus on uniqueness).
+
+=== Scoring Guidelines (0-10) === * 9-10 (Groundbreaking): Top 10%. Introduces a new paradigm or effectively solves a previously "unsolvable" problem. Distinct from known SOTA in a way that is immediately obvious to experts. * 7-8 (High Novelty): Top 25%. A smart, non-obvious twist on existing methods. Clearly distinct from standard approaches with no significant overlap with known baselines. * 5-6 (Incremental/Standard): Most common (45%). A logical next step or a successful application of known methods to new (but not surprising) scenarios. Represents the "typical" good research paper. * 3-4 (Derivative): Bottom 15%. Very similar to existing work with only trivial changes (e.g., hyperparameter tuning or minor architectural tweaks). * 0-2 (Redundant): Bottom 5%. The exact same method has been published by others.
+
+
+EXPECTED DISTRIBUTION FOR CALIBRATION::
+-9-10 points: ∼10% (Exceptional Innovation) -7-8 points: ∼25% (Strong Originality) -5-6 points: ∼45% (Solid Incremental Work) -0-4 points: ∼20% (Low Novelty) === Output Requirements === Provide a Score (0-10) and a Reason. 1. Compute/Data Realism: Does the method require unrealistic resources (e.g., retraining GPT-4 from scratch)? 2. Engineering Complexity: Identify the "Hardest Step". Is it a standard operation (e.g., matrix multiplication) or a complex undefined operation? 3. Library Support: Based on your knowledge, do libraries exist that support the core components (e.g., "Is there a library for Diffusion Models? Yes.")? === Scoring Guidelines (0-10) === * 9-10 (Turnkey Feasibility): Top 10%. Uses standard, highly optimized components. Implementation is so straightforward it could be done in a weekend by a competent engineer. * 7-8 (High Feasibility): Top 25%. Requires some custom logic or specialized loss functions, but all components have well-documented library support and stable training dynamics. * 5-6 (Standard Feasibility): Most common (45%). "Normal" research complexity. May require some trial-and-error in hyperparameter tuning or standard engineering effort, but no fundamental roadblocks. * 3-4 (Risk High): Bottom 15%. Relies on poorly defined "magic steps" or requires computational resources that are barely accessible. * 0-2 (Impossible): Bottom 5%. Violates physical or computational limits.
+
+
+EXPECTED DISTRIBUTION FOR CALIBRATION::
+-9-10 points: ∼10% (Trivial to implement) -7-8 points: ∼25% (Well-supported implementation) -5-6 points: ∼45% (Standard research effort) -0-4 points: ∼20% (Significant implementation risks) === Output Requirements === Provide a Score (0-10) and a Reason. Pseudocode Request: Provide a high-level Python-like pseudocode snippet (10-15 lines) demonstrating the *core loop* of the method to prove its feasibility. 1. Assumption Check: Does the idea rely on a "Miracle Step"? (e.g., "Assume we have perfect data" when the problem is missing data). 2. Theoretical Alignment: Does the proposed method mathematically align with the objective? (e.g., optimizing MSE for a generation task might be valid but suboptimal; optimizing accuracy for a regression -Must be either "A" or "B" -Represents which idea is better based on comprehensive analysis ### selection reason (string): -Clear, concise explanation (2-4 sentences) for why this idea was selected, referencing specific strengths and comparative advantages Prompt for Report Agent (Group Ranking)
+
+You are an experienced research reviewer and meta-evaluator. Your task is to rank 4 research ideas from best to worst based on comprehensive multi-dimensional analysis.
+
+## Input Data: -idea i evaluation: Idea i text (extracted from extraction result with five parts: basic idea, motivation, research question, method, experimental setting) and evaluation summaries (overall summaries from multiple reviewers). ## Task Requirements:
+
+1. Global Ranking: Analyze all 4 ideas jointly and produce a single global ranking from best to worst.

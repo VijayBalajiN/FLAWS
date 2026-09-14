@@ -1,0 +1,9 @@
+{
+  "label": "FLAWS_general_c2_v3",
+  "original_text": "This will mitigate model-specific biases in error generation.",
+  "modified_text": "This will mitigate model-specific biases in error generation by using a large language model and its corresponding instruct-tuned version.",
+  "explanation": "The mechanism of this error is the introduction of a **confounding variable**. The claim is that the method mitigates *model-specific* bias, but the modified text reveals that the comparison is between a base model and its instruct-tuned version. The observed differences in generated errors are now confounded; it is impossible to disentangle the effect of the base model's characteristics from the effect of the instruct-tuning process. The benchmark would be measuring a combination of two different variables, making the claim to have isolated and mitigated \"model-specific\" biases false.",
+  "category": "D",
+  "category_name": "Others",
+  "reasoning": "The error describes a confounding variable in the experimental design, which is a type of flaw that doesn't fit the definitions of A, B, or C."
+}

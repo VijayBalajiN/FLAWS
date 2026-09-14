@@ -1,0 +1,1 @@
+error:For each successfully inserted error, we will prompt an LLM to identify all text excerpts in the paper that are rendered incorrect by the modification. This complete set of excerpts will serve as the ground truth for our evaluation.

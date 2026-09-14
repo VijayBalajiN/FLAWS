@@ -1,0 +1,11 @@
+:original_text:
+An architecture relying solely on attention mechanisms, without recurrence or convolutions, is sufficient to model global dependencies between input and output sequences.
+
+:modified_text:
+An architecture relying solely on attention mechanisms, without recurrence or convolutions, is sufficient to model global dependencies between input and output sequences, as the self-attention mechanism is inherently sensitive to the absolute position of tokens within a sequence.
+
+:explanation:
+The introduced error is the claim that the self-attention mechanism is "inherently sensitive to the absolute position of tokens." This is a fundamental misunderstanding of the standard scaled dot-product attention used in the Transformer. The self-attention operation is permutation-equivariant; it treats the input sequence as an unordered set of key-value-query vectors. It has no built-in awareness of token order. This is the precise reason why the original Transformer paper introduces positional encodings as a necessary component to inject sequence order information into the model. The modified hypothesis rests on a false premise that makes the later, crucial inclusion of positional encodings in the methodology section either redundant or contradictory.
+
+:failure_mode:
+rests on a false premise

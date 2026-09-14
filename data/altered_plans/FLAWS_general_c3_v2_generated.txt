@@ -1,0 +1,8 @@
+:original_text:
+ensuring they were first posted on arXiv after the knowledge cutoff dates of the models we plan to test.
+
+:modified_text:
+ensuring their most recent revision on arXiv was posted after the knowledge cutoff dates of the models we plan to test.
+
+:explanation:
+The mechanism of this error is **temporal data leakage via versioning**. The flaw is substituting the date of the "most recent revision" for the "first posted" date. A paper could have its first version (v1) posted before the knowledge cutoff, with its core ideas and text becoming part of the training data. A later revision (v2, v3) with minor changes or additions posted after the cutoff would be incorrectly selected as "new" data, leading to contamination. A researcher might plausibly make this mistake while trying to use the most "up-to-date" version of a paper for evaluation.

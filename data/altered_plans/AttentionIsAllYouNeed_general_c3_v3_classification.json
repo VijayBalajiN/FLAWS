@@ -1,0 +1,9 @@
+{
+  "label": "AttentionIsAllYouNeed_general_c3_v3",
+  "original_text": "We will vary the learning rate over the course of training according to the formula: `lr = d_model^-0.5 * min(step_num^-0.5, step_num * warmup_steps^-1.5)`.",
+  "modified_text": "We will vary the learning rate over the course of training according to the formula: `lr = d_model^-0.5 * min(step_num^-1.5, step_num * warmup_steps^-0.5)`.",
+  "explanation": "This error swaps the exponents on the `step_num` and `warmup_steps` terms. The claim states the schedule has a warm-up followed by a decay based on the inverse square root (`step_num^-0.5`). In the modified formula, the decay phase is now `step_num^-1.5`, a much more aggressive decay that will likely cause the model to prematurely stop learning. Concurrently, the warm-up phase is now governed by `warmup_steps^-0.5`, which would create a much steeper, potentially unstable, warm-up phase. The mechanism of error is a misapplication of the exponents that define the shape and rate of both the warm-up and decay phases.",
+  "category": "B",
+  "category_name": "Conflict with Established Beliefs",
+  "reasoning": "The modified formula, while internally consistent, clashes with the established understanding of how learning rates should be scheduled for effective model training, particularly regarding the desired shapes of warm-up and decay phases."
+}

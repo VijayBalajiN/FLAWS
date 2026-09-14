@@ -1,0 +1,15 @@
+:error_text:
+Each training batch will contain a set of sentence pairs totaling approximately 25,000 source tokens and 25,000 target tokens.
+
+:error_text:
+We will vary the number of attention heads (h) and the attention key and value dimensions (d_k, d_v), while keeping the model dimension d_model constant.
+
+:error_text:
+We will employ three types of regularization during training:
+
+:explanation:
+The most serious error is the description of the batching strategy. It specifies that batches will be constrained by a token count on *both* the source and target sides simultaneously. This is a highly impractical and inefficient method. Standard token-based batching constrains either the source or target token count, as finding sentence pairs to satisfy a dual constraint is a complex packing problem that would likely result in poor GPU utilization and slower training.
+
+The second error is in the design of the ablation study. It proposes to vary the number of attention heads (h) *and* the key/value dimensions (d_k, d_v) independently while keeping the model dimension (d_model) constant. This is impossible given the model's architecture, where `d_k = d_model / h`. The variables are directly dependent; varying one necessarily determines the other. This reflects a misunderstanding of the model's own constraints.
+
+The third error is a factual contradiction in the description of the methodology. The plan explicitly states that three types of regularization will be used, but the subsequent list only describes two (Residual Dropout and Label Smoothing). This inconsistency undermines the clarity and credibility of the research plan.

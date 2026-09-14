@@ -1,0 +1,10 @@
+:error_text:
+averaging multiple model checkpoints, drawn from our various independent training runs
+
+:error_text:
+We will employ three types of regularization during training:
+
+:explanation:
+The most serious error is the proposed inference strategy. Averaging model checkpoints is a valid technique, but it should be performed on checkpoints from a *single* training run. Models from independent runs converge to different local minima, and their parameter spaces are not commensurate. Averaging their weights is methodologically unsound and would likely produce a poorly performing model, invalidating any results obtained this way.
+
+A second significant error is the contradiction in the description of regularization. The plan states that three types of regularization will be used, but then proceeds to list only two (Residual Dropout and Label Smoothing). This omission makes the experimental method unclear and not fully reproducible.

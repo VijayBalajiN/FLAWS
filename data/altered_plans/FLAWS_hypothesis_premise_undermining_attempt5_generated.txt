@@ -1,0 +1,16 @@
+:error_type:
+Undermining a Premise
+
+:original_text:
+The criticality of an error in a scientific paper is a function of its connection to the paper's core claims.
+
+:modified_text:
+The criticality of an error in a scientific paper is a function of the breadth of its impact across the paper's core claims and their supporting evidence.
+
+:explanation:
+The modification introduces a subtle but significant conflation between two distinct concepts: an error's **criticality** and its **scope**.
+
+1.  **Criticality (or Claim-Invalidation):** This refers to the logical importance of an error—the degree to which it undermines or falsifies a central conclusion of the paper. A single, flawed premise stated once can have maximum criticality, completely invalidating the entire work. This is the concept the research plan's methodology is actually designed to address.
+2.  **Scope (or "Breadth of Impact"):** This refers to the pervasiveness of an error—how many distinct statements, figures, or calculations throughout the paper are rendered factually incorrect by it.
+
+The modified hypothesis incorrectly assumes these two concepts are the same by framing criticality as a function of "breadth of impact." However, they are not interchangeable. A highly critical error can have a very narrow scope (e.g., a single flawed assumption in the methods section). Conversely, a low-criticality error can have a broad scope (e.g., citing the wrong version of a plotting library in every figure caption, which has no bearing on the scientific result). The hypothesis's formal reasoning is intact, but it rests on the flawed premise that the most widespread errors are necessarily the most important ones.

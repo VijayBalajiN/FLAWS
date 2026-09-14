@@ -1,0 +1,26 @@
+% \clearpage
+\vspace{-0.2cm}
+\section{Related Work}
+
+\textbf{LLMs for Scientific Discovery.}
+The rapidly advancing reasoning abilities of LLMs \cite{reasoning-survey,long-cot-survey} have recently enabled their increasingly prominent role in Automated Scientific Discovery \cite{dsgym,agent-laboratory,ai-scientist,how-far-ai-sci,datamind}, which contains \textit{Literature Reviewing} \cite{autosurvey,surveyx,opensholar,surveyforge,litllms}, \textit{Idea Generation} \cite{chain-of-ideas,virsci,deep-ideation,researchagent,scipip}, \textit{Method Implementation} \cite{alphaevolve,automind,ml-master,alpharesearch,aide}, and \textit{Manuscript Writing} \cite{overleafcoplilot,xtragpt}.
+% The entire pipeline of automated scientific discovery can be divided into five sequential stages:
+% \textit{i) Literature Reviewing}, where LLMs retrieve papers given a specific topic from the web or curated corpora and synthesize them into a structured survey \cite{autosurvey,surveyx,opensholar,surveyforge,litllms}.
+% \textit{ii) Hypothesis Generation}, where LLMs exploit their internal parametric knowledge and/or retrieved external knowledge to propose viable research ideas \cite{chain-of-ideas,virsci,deep-ideation,researchagent,scipip}.
+% \textit{iii) Method Implementation}, where LLMs translate the proposed idea into executable code, validate it through controlled experiments, and perform statistical analysis \cite{alphaevolve,automind,ml-master,alpharesearch,aide}.
+% \textit{iv) Manuscript Writing}, where LLMs articulate the underlying motivation, methodology, and empirical findings into a research paper or technical report \cite{overleafcoplilot,xtragpt}.
+% \textit{v) Peer Reviewing}, where LLMs adopt the role of reviewers to review the manuscript from different aspects \cite{cycleresearcher,agentreview,reviewer2,deepreview}.
+Nevertheless, while numerous efforts are pursuing the whole automated discovery pipeline \cite{ai-scientist,agent-laboratory,deepscientist,ai-scientist-v2,omniscientist,internagent}, very few works have devoted full attention to the evaluation of generated ideas.
+Because innovation constitutes the core of scientific discovery, its quality deterministically conditions every downstream phase, rendering systematic assessment of ideas both urgent and paramount.
+
+\textbf{LLMs for Idea Generation and Evaluation.}
+Knowledge is an indispensable part for idea generation and evaluation, because rich idea-related background knowledge is the guarantee for their effective operation.
+Prior efforts rely mainly on LLMs' internal parametric knowledge \cite{ai-scientist,aide,alphaevolve,alpharesearch,ai-scientist-v2}, which is inherently insufficient.
+% Subsequent studies augment LLMs with local large-scale paper corpus \cite{researchagent,virsci,rnd,scipip}, yet the corpus-wide freshness demanded by the daily deluge of new publications renders continual re-indexing prohibitively expensive.
+Although recent work permits LLMs to invoke paper-search tools \cite{researchagent,virsci,rnd,scipip,can-llm-gen-novel,chain-of-ideas,deep-ideation,wispaper,ai-researcher,internagent,opennovelty}, these methods remain constrained by the limited breadth and depth of the searched resources, leading to narrow knowledge horizons.
+% For idea evaluation, most studies treat it merely as a sub-routine for idea optimization.
+% Existing approaches fall into two categories:
+% \textit{i) Semantic-similarity-based metrics} \cite{virsci,rnd,grapheval}, which label an idea as ``novel'' if its embedding is distant from those of prior work.
+% This proxy is fragile, as paraphrasing can mask semantic overlap, and surface-level distance cannot offer multi-dimensional signals, rendering the verdict \textbf{unreliable}.
+Besides, current evaluation rely on simple LLM-as-a-Judge \cite{ai-researcher,internagent,can-llm-gen-novel,idea-novel-checker,scholareval}, introducing systematic bias and subjectivity that overlooks the review consensus needed by a fair scientific evaluation.
+% So in this paper, we introduce {\ours}, a multi-agent framework for principled innovation evaluation, which includes a heterogeneous deep knowledge search engine that exhaustively retrieves pertinent academic materials from heterogeneous online sources, and a multi-dimensional multi-perspective evaluation module armed with a group of dimension-specialized evaluator agents and an innovation review board composed of diverse academic personas, thereby enhancing the objectivity of LLM-as-judge.

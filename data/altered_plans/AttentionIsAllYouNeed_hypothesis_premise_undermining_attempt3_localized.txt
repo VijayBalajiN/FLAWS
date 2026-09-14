@@ -1,0 +1,2 @@
+error:We will conduct experiments to evaluate the performance of the Transformer architecture on standard sequence transduction tasks and assess its generalization capabilities.
+error:Additionally, we will apply it to English constituency parsing to test its ability to generalize to other structured prediction problems.

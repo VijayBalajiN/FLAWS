@@ -1,0 +1,5 @@
+:error_text:
+The criticality of an error in a scientific paper is directly proportional to its connection to the paper's core claims.
+
+:explanation:
+This statement is presented as the research hypothesis but is actually a foundational premise that motivates the study's methodology. A hypothesis should be a testable prediction of the experiment's outcome. The experiment described is designed to measure the performance of LLMs at finding errors (the dependent variable), not to test the relationship between an error's "criticality" and its "connection to core claims." The experimental design does not vary these factors and therefore cannot test for the "proportional" relationship asserted, making the stated hypothesis entirely disconnected from the actual research being conducted.

@@ -1,0 +1,15 @@
+:error_type:
+Insufficient step
+
+:original_text:
+**Ablation Studies and Model Variations:** To understand the importance of different components of the Transformer, we will conduct experiments by varying our base model in several ways:
+
+:modified_text:
+**Ablation Studies and Model Variations:** To determine the optimal configuration of the Transformer, our primary evaluation will consist of experiments where we vary our base model in several ways:
+
+:explanation:
+The methodological flaw introduced is an "Insufficient step," specifically the omission of a necessary baseline/control condition.
+
+The modification reframes the goal of the evaluation from "understanding the importance of different components" to finding the "optimal configuration of the Transformer." This language strongly implies that the evaluation is limited to internal comparisons between different versions of the new architecture.
+
+This is a significant flaw because the overarching hypothesis is that an attention-only architecture is sufficient to replace recurrent models. To test this hypothesis, the experiment must compare the Transformer's performance against a strong, state-of-the-art recurrent baseline (e.g., an LSTM-based model with attention) on the same tasks and datasets. By focusing the evaluation solely on internal ablations, the design becomes insufficient to support its central claim. It can determine the best version of the Transformer, but it provides no evidence that even the best version is competitive with or superior to the models it proposes to replace.

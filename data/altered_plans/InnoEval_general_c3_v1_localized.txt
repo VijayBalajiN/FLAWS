@@ -1,0 +1,3 @@
+error:To validate our InnoEval framework, we will conduct a series of experiments designed to assess its performance on point-wise, pair-wise, and group-wise evaluation tasks.
+error:We will evaluate InnoEval against a comprehensive set of baselines, including naive methods (CoT, RAG), idea generation methods with review components, end-to-end scientific discovery frameworks, and other specialized idea evaluation methods.
+error:To confirm the contribution of each component, we will conduct several ablation studies, including removing the knowledge grounding module, replacing the innovation review board with a single LLM-as-a-Judge, and restricting the knowledge search to only academic literature.

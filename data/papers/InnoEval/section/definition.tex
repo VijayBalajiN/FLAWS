@@ -1,0 +1,24 @@
+\section{Problem Definition}
+\label{sec:definition}
+The idea in our paper can be expressed in any format, ranging from a preliminary hypothesis to a fully-fledged idea presented in a mature paper.
+Regardless of its form, we formally define an idea \(\boldsymbol{\mathcal{I}}\) as a structured six-tuple $\boldsymbol{\mathcal{I}}=($\textbf{\texttt{TLDR}}, \textbf{\texttt{Motis}}, \textbf{\texttt{ResQues}}, \textbf{\texttt{Meths}}, \textbf{\texttt{ExpSets}}, \textbf{\texttt{ExpRes}}$)$, respectively representing a short summary of the idea, motivations, research questions, methods, experimental settings, and expected results.
+Here \textbf{\texttt{TLDR}}, \textbf{\texttt{ExpSets}}, and \textbf{\texttt{ExpRes}} are optional based on the idea's maturity.
+Due to the time-sensitive nature of research ideas, we also equip each idea with a timestamp $\boldsymbol{t}$, denoting the temporal standpoint from which the evaluation should be conducted.
+$\boldsymbol{t}$ will default to the latest time if not explicitly specified.
+Given an evaluation system $\boldsymbol{\mathcal{F}}$, our goal is to obtain a final evaluation report $\boldsymbol{P}$, which can be categorized into two types.
+
+\textbf{Point-wise.} Evaluate a single idea $\boldsymbol{\mathcal{I}}$ and generate an evaluation report $\boldsymbol{P}_{\textrm{point}}$ that contains background knowledge $\boldsymbol{\mathcal{K}}$ of the idea searched by the system, provides multi-dimensional assessment results $\boldsymbol{E}_{\textrm{point}}$, and offers concrete revision suggestions $\boldsymbol{\mathcal{V}}$ for future improvements of the idea:
+\begin{align}
+\label{eqn:point_report}
+    \boldsymbol{P}_{\textrm{point}}=\{\boldsymbol{\mathcal{K}},\boldsymbol{\mathcal{V}},\boldsymbol{E}_{\textrm{point}}\}=\boldsymbol{\mathcal{F}}(\boldsymbol{\mathcal{I}})
+\end{align}
+
+\textbf{Group-wise.} Rank a group of $n(n\ge2)$ ideas $\{\boldsymbol{\mathcal{I}}_i\}_{i=1}^n$ on the same topic and deliver individual reports for each idea together with the final ranking evaluation and results $\boldsymbol{E}_{\textrm{group}}$:
+\begin{align}
+\label{eqn:group_report}
+    \boldsymbol{P}_{\textrm{group}}=\{\{\boldsymbol{P}^{\mathcal{I}_i}_{\textrm{point}}\}_{i=1}^n, \boldsymbol{E}_{\textrm{group}}\}=\boldsymbol{\mathcal{F}}(\{\boldsymbol{\mathcal{I}}_i\}_{i=1}^n)
+\end{align}
+To facilitate quantitative evaluation of the system, we also include measurable outcomes for each setting.
+For point-wise, $\boldsymbol{E}_{\textrm{point}}$ also contains a final decision 
+$\boldsymbol{d}_{\textrm{point}}$ $\in$ $\{$\textbf{Reject}, \textbf{Poster}, \textbf{Spotlight}, \textbf{Oral}$\}$ of the idea.
+For group-wise setting, $\boldsymbol{E}_{\textrm{group}}$ provides a complete ranked list $\boldsymbol{d}_{\textrm{group}}$ of all ideas.

@@ -1,0 +1,15 @@
+:error_type:
+Internal Contradiction
+
+:original_text:
+Since our model contains no recurrence and no convolution, we must inject information about the relative or absolute position of tokens. To this end, we will add **positional encodings** to the input embeddings at the bottoms of theencoder and decoder stacks. We will use sine and cosine functions of different frequencies for these encodings, as we hypothesize this will allow the model to easily learn to attend by relative positions. We will also consider learned positional embeddings as an alternative.
+
+:modified_text:
+Since our model contains no recurrence and no convolution, we must inject information about the relative or absolute position of tokens. To this end, we will add **positional encodings** to the input embeddings at the bottoms of the encoder and decoder stacks. We will use a finite set of 512 unique, learned positional embeddings, one for each possible sequence position up to this maximum length; for any positions beyond this, the embeddings will repeat cyclically. We hypothesize this will allow the model to generalize to sequences of arbitrary length by learning the modular arithmetic of position.
+
+:explanation:
+The hypothesis's primary goal is to effectively model "global dependencies" in sequences, meaning relationships between tokens regardless of their distance. The architecture itself is order-agnostic, so it relies entirely on positional encodings to understand sequence order.
+
+The modification introduces a specific mechanism for positional encoding: a finite set of 512 learned embeddings that repeat cyclically for sequences longer than 512 tokens.
+
+This mechanism creates an internal contradiction. By following this rule to its logical conclusion, for any sequence longer than 512, position 1 will have the exact same positional encoding as position 513, position 1025, and so on. This makes these distinct positions fundamentally ambiguous to the model. Consequently, the model cannot reliably learn relationships between tokens that span across these 512-token cyclic boundaries. The very mechanism designed to provide positional information directly prevents the model from modeling dependencies at a "global" scale, thus violating the hypothesis's own central claim.

@@ -1,0 +1,10 @@
+:original_text:
+is sufficient to model global dependencies between input and output sequences.
+:modified_text:
+is sufficient to learn and model global and positional dependencies between input and output sequences.
+:explanation:
+The introduced error is the claim that an architecture relying solely on attention mechanisms is sufficient to *learn* positional dependencies. This is a fundamental conceptual mistake. Self-attention mechanisms are permutation-invariant; they treat the input as an unordered set of vectors. If two words in a sequence were swapped, the self-attention output for other positions would remain unchanged, meaning the mechanism itself has no inherent sense of sequence order.
+
+Therefore, the model cannot *learn* the relative or absolute positions of tokens from the attention mechanism alone. It must be explicitly provided with this information, which is why the actual Transformer architecture injects positional encodings into the input embeddings. The modified hypothesis makes a plausible-sounding but theoretically false claim that the attention mechanism itself can overcome this, which would be a significant but incorrect theoretical leap.
+:failure_mode:
+rests on a false premise

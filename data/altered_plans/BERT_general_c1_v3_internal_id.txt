@@ -1,0 +1,5 @@
+:error_text:
+Language representations jointly conditioned on both left and right context via a masked language modeling objective are more powerful than representations conditioned on unidirectional or shallowly combined bidirectional contexts.
+
+:explanation:
+The hypothesis is critically flawed because it is too narrow and misrepresents the proposed method. It attributes the model's predicted power exclusively to the "masked language modeling objective" (MLM). However, the Method section clearly states that the model will be pre-trained on two distinct and novel tasks simultaneously: MLM and Next Sentence Prediction (NSP). The importance of NSP is further reinforced by the Experiment Design, which includes an ablation study specifically to isolate its contribution. By completely omitting the NSP task, the hypothesis fails to account for the full experimental intervention, creating a fundamental disconnect between the claim being made and the method used to test it.

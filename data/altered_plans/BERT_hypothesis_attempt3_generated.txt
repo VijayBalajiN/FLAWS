@@ -1,0 +1,11 @@
+:original_text:
+are more powerful than representations conditioned on unidirectional or shallowly combined bidirectional contexts.
+
+:modified_text:
+are a more powerful foundation for both natural language understanding and generation tasks than representations conditioned on unidirectional or shallowly combined bidirectional contexts.
+
+:explanation:
+The introduced error is the claim that these representations are a more powerful foundation for natural language *generation* tasks. This is a significant conceptual flaw. The described architecture, a deep bidirectional encoder, is fundamentally unsuited for standard autoregressive text generation. In generation, the model must predict the next token based only on the preceding tokens. A model that is "jointly conditioned on both left and right context in all layers" would be able to see the "future" tokens it is supposed to predict, making the task trivial and ill-defined. This architectural property, while a major strength for understanding tasks (like those in the research plan), makes it inherently non-generative in the standard autoregressive sense. This mistake conflates the general benefit of rich context with the specific architectural requirements of different task families (understanding vs. generation).
+
+:failure_mode:
+conflicts with established knowledge

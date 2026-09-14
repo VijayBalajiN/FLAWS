@@ -1,0 +1,8 @@
+:original_text:
+We will intentionally introduce severe methodological flaws (e.g., mismatched datasets and metrics) into high-soundness proposals to test if models can detect these obvious errors.
+
+:modified_text:
+We will intentionally introduce severe methodological flaws (e.g., mismatched datasets and metrics) into proposals of varying soundness to test if models can detect these obvious errors.
+
+:explanation:
+The mechanism of this error is the introduction of a confounding variable. The original design uses "high-soundness" proposals as a clean baseline. By changing this to "proposals of varying soundness," the experiment is no longer a controlled test. If a model fails to detect the *injected* flaw, it could be because it was distracted by other, pre-existing (and undocumented) flaws in the base proposal. The experiment can no longer claim to be specifically testing the detection of the *intentionally-injected* flaws.

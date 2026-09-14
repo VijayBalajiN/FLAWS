@@ -1,0 +1,15 @@
+:error_type:
+Internal Contradiction
+
+:original_text:
+Language representations jointly conditioned on both left and right context in all layers are more powerful than representations conditioned on unidirectional or shallowly combined bidirectional contexts.
+
+:modified_text:
+Language representations jointly conditioned on both left and right context in all layers, where the conditioning for any given token is computed from its left and right contexts independently before a final combination step, are more powerful than representations conditioned on unidirectional or shallowly combined bidirectional contexts.
+
+:explanation:
+The modification introduces a subordinate clause that defines the core mechanism of "jointly conditioned" representations. This new definition states that the left and right contexts are processed "independently before a final combination step."
+
+The internal contradiction arises because this mechanism is the exact definition of a "shallowly combined bidirectional context," the very approach the hypothesis claims to be superior to. The research plan itself, in the "Problem" section, describes the competitor model ELMo as using an approach that "combine[s] independently trained left-to-right and right-to-left models," which it labels "shallowly bidirectional."
+
+Thus, the modified hypothesis now makes the nonsensical claim that a model architecture (shallow bidirectionality, as newly defined) is more powerful than itself ("shallowly combined bidirectional contexts"). The hypothesis's own definition of its mechanism makes its central claim logically self-defeating and tautological, a flaw that is visible purely by reasoning through the text provided in the research plan.

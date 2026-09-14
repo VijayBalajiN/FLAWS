@@ -1,0 +1,9 @@
+{
+  "label": "SoundnessBench_general_c1_v2",
+  "original_text": "exhibiting a bias towards optimism and high sensitivity to prompt framing",
+  "modified_text": "exhibiting a bias towards optimism in instruction-tuned models and high sensitivity to prompt framing",
+  "explanation": "This modification introduces an error of overgeneralization. The original claim is about \"Large Language Models\" as a broad category. By specifying that the bias is observed \"in instruction-tuned models,\" the text now suggests the finding may not be generalizable to all LLMs (e.g., base models). The claim is thus falsified because the phenomenon is not a property of LLMs in general, but a characteristic of a specific, non-representative subset, likely due to their fine-tuning for helpful and agreeable dialogue.",
+  "category": "B",
+  "category_name": "Conflict with Established Beliefs",
+  "reasoning": "The error restricts a general claim to a specific subset, thereby misrepresenting the scope of the original finding and creating a conflict with the established understanding that the bias applies more broadly to LLMs."
+}

@@ -1,0 +1,11 @@
+:error_type:
+Confounded design
+
+:original_text:
+-   We will vary the number of attention heads (h) and the attention key and value dimensions (d_k, d_v), while keeping the total amount of computation constant.
+
+:modified_text:
+-   We will vary the number of attention heads (h), and for models with a higher number of heads, we will also increase the dropout rate to prevent overfitting.
+
+:explanation:
+This modification introduces a confounded design. The experiment's goal is to understand the impact of varying the number of attention heads (h). However, the modified design simultaneously alters a second, independent variable—the dropout rate—in a systematic way that is correlated with the primary variable. If a model with more heads and a higher dropout rate performs differently, it is impossible to disentangle the effect of the number of heads from the effect of the increased regularization. The design fails to isolate the variable of interest (h), making it impossible to attribute any observed change in performance to that variable alone. This is a plausible but significant flaw, as a researcher might incorrectly reason that a more complex model (more heads) requires more regularization, thereby invalidating the ablation as a controlled experiment.

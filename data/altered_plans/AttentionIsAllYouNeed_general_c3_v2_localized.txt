@@ -1,0 +1,3 @@
+error: We will employ label smoothing with a value of ϵ_ls = 0.1 during training, as this approach is known to improve model robustness.
+error: To understand the importance of different components of the Transformer, we will conduct experiments by varying our base model in several ways:
+error: We will also explore averaging multiple model checkpoints to potentially enhance performance.

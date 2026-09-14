@@ -1,0 +1,24 @@
+\section{Baselines and Reproduction Details}
+\label{app:baselines}
+We select four categories of baselines for a comprehensive comparison with \textbf{\ours}.
+
+\textit{i) Naive method}:
+\begin{itemize}[topsep=0pt,partopsep=0pt,parsep=0pt,itemsep=0pt,leftmargin=*,labelsep=0.5em]
+    \item \textbf{CoT} that relies solely on the model’s internal knowledge to assess and decide on ideas. We adopt a strong implementation for CoT. We directly use our evaluation agent $\boldsymbol{\mathcal{M}}_{\psi}$ in {\ours} to assess each idea across all dimensions by simply discarding both the grounding results and the personalized settings. Then we use the report agent $\boldsymbol{\mathcal{M}}_r$ to produce the final decision based on the evaluation results.
+    \item \textbf{RAG} that directly retrieves relevant papers as references. Building upon CoT, we use our search agent $\boldsymbol{\mathcal{M}}_s$ to directly fast retrieve (not including slow search and query refinement) top-$m$ relevant papers from arXiv and incorporate the meta-information (including abstracts) of all retrieved papers into $\boldsymbol{\mathcal{M}}_{\psi}$ for reference during evaluation.
+\end{itemize}
+\textit{ii) Idea generation method}:
+\begin{itemize}[topsep=0pt,partopsep=0pt,parsep=0pt,itemsep=0pt,leftmargin=*,labelsep=0.5em]
+    \item \textbf{ResearchAgent} \cite{researchagent}, a representative idea generation method which incorporates a reviewing agent for idea refinement. We follow the reproduction details in \citet{grapheval} where the research problem, scientific method, and experiment design of an idea are each scored by a reviewing agent based on five criteria. Building on this, they further introduce a final decision step that synthesizes the above evaluation results to provide a comprehensive review decision. In our reproduction, we further optimize the prompt for the final decision step to better align with our point-wise tasks. We also use our carefully designed prompt in $\boldsymbol{\mathcal{M}}_r$ to give pairwise and group-wise results based on ResearchAgent's own evaluation results.
+\end{itemize}
+\textit{iii) End-to-end scientific discovery method}:
+\begin{itemize}[topsep=0pt,partopsep=0pt,parsep=0pt,itemsep=0pt,leftmargin=*,labelsep=0.5em]
+    \item \textbf{InternAgent} \cite{internagent}, a representative end-to-end scientific-discovery framework in which idea assessment is one integral component. We directly employ its survey module to retrieve relevant literature and its assessment module to perform the evaluation. We adapt their outputs to our tasks using the same strategy as employed for the previous baselines.
+\end{itemize}
+\textit{iv) Idea evaluation method}:
+\begin{itemize}[topsep=0pt,partopsep=0pt,parsep=0pt,itemsep=0pt,leftmargin=*,labelsep=0.5em]
+    \item \textbf{GraphEval} \cite{grapheval}, which employs graph propagation to predict idea labels. We follow the same settings in the GraphEval paper and use its official code to train a GNN model and conduct label prediction on our point-wise dataset. For both group-wise and pairwise tasks, we rank ideas directly according to their predicted labels. When multiple ideas are assigned the same label, we take the predicted probability from the model’s final classification layer as the confidence score and use this confidence to break ties.
+    \item \textbf{ScholarEval} \cite{scholareval}, which focuses on assessing the soundness and contribution of ideas grounded in literature. We run the whole ScholarEval pipeline to synthesize soundness and contribution reviews and adapt these reviews to final decisions like other baselines.
+\end{itemize}
+For all baselines, we uniformly adopt DeepSeek-V3.2 \cite{deepseek-v3.2} as the backbone model.
+We also test with o4-mini \cite{o4-mini} as the backbone in \S\ref{sec:ablations} to demonstrate {\ours}'s robustness across different backbones.

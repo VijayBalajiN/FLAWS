@@ -1,0 +1,15 @@
+:error_type:
+Undermining a Premise
+
+:original_text:
+The criticality of an error in a scientific paper is a function of its connection to the paper's core claims.
+
+:modified_text:
+The criticality of an error in a scientific paper is a function of its connection to the methodological soundness of the paper's core claims.
+
+:explanation:
+This modification conflates two distinct concepts: (a) the validity of a paper's final claim (an outcome) and (b) the soundness of the methodology used to generate that claim (a process).
+
+The original hypothesis correctly states that an error is critical if it affects the paper's main conclusions. The modified version subtly shifts this to suggest that an error is critical only if it affects the *methodological soundness* related to those conclusions.
+
+This is a flawed premise because a core claim can be completely invalidated by a non-methodological error (e.g., a critical data transcription error, a bug in a standard software package, a simple calculation mistake in the final results table). Conversely, a minor methodological flaw might exist (e.g., a slight violation of a statistical test's assumptions) that does not actually invalidate the final claim. By equating claim-criticality with methodological-criticality, the hypothesis incorrectly assumes that the only path to invalidating a core claim is through a methodological flaw, ignoring other fatal error types.

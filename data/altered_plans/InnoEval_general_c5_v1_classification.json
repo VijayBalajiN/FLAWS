@@ -1,0 +1,9 @@
+{
+  "label": "InnoEval_general_c5_v1",
+  "original_text": "To confirm the contribution of each component, we will conduct several ablation studies, including ... replacing the innovation review board with a single LLM-as-a-Judge...",
+  "modified_text": "To confirm the contribution of each component, we will conduct several ablation studies, including ... replacing the innovation review board with a single, more powerful LLM-as-a-Judge...",
+  "explanation": "The mechanism of this error is a **confounding variable**. The study is supposed to isolate the effect of the review board structure (multiple personas vs. a single entity). By simultaneously changing a second variable\u2014the capability of the underlying model to a \"more powerful\" one\u2014the experiment becomes confounded. Any observed difference in outcome can no longer be attributed solely to the board structure. For example, if the single judge performs worse, is it because the single-judge setup is inferior, or because the \"more powerful\" model overthinks or hallucinates more? The results are rendered uninterpretable.",
+  "category": "D",
+  "category_name": "Others",
+  "reasoning": "The error describes a confounding variable, which is a type of experimental design flaw that prevents clear interpretation of results, fitting into the \"Others\" category."
+}

@@ -1,0 +1,13 @@
+:error_type:
+Conflict with Established Beliefs
+
+:original_text:
+Large Language Models' assessment of a research proposal's methodological soundness is unreliable, exhibiting a bias towards optimism and high sensitivity to prompt framing.
+
+:modified_text:
+Large Language Models' assessment of a research proposal's methodological soundness is unreliable, with this unreliability being most pronounced in instruction-tuned variants due to alignment-induced sycophancy, while pre-trained base models provide a more objective, albeit less structured, baseline.
+
+:explanation:
+(a) The established belief being conflicted with is the well-documented and fundamental difference in capabilities between pre-trained "base" language models and their "instruction-tuned" counterparts. The consensus, supported by extensive empirical evidence, is that instruction-tuning (including methods like RLHF) is precisely what enables models to perform complex, zero-shot reasoning and instruction-following tasks. While this tuning process can introduce certain biases (like sycophancy or excessive helpfulness), base models are known to be largely incapable of coherently performing such tasks at all, as they are simply next-token predictors without an explicit understanding of user intent.
+
+(b) The modified hypothesis, while internally consistent, directly contradicts this established understanding. It posits that base models are "more objective" and that instruction-tuning is the primary source of unreliability. This is a plausible-sounding but deeply flawed argument. It incorrectly frames the issue by suggesting a trade-off between the "objectivity" of base models and the "bias" of tuned models. An expert would recognize that a base model's output for this task would likely be incoherent, irrelevant, or non-evaluative, making its supposed "objectivity" a moot point. The fundamental capability to perform the assessment is conferred by instruction-tuning; therefore, claiming the less capable base model is superior on a key metric like objectivity clashes with the foundational principles of modern LLM development.

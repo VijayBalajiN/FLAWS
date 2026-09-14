@@ -1,0 +1,395 @@
+Title: SoundnessBench: Can Your AI Scientist Really Tell Good Research Ideas from Bad Ones?
+
+Abstract: Autonomous AI research agents aim to accelerate scientific discovery by automating the research pipeline, from hypothesis generation to peer review. However, existing benchmarks rarely test a fundamental bottleneck: whether Large Language Models can judge the methodological viability of a research idea before expending time and computational resources. We introduce SoundnessBench, a curated benchmark of 1,099 machinelearning research proposals reconstructed from ICLR submissions, labeled with reviewer soundness sub-scores, and audited against source papers. SoundnessBench should be interpreted as a benchmark for recoverable proposal-stage soundness rather than exact prediction of full-paper review outcomes. Across 12 frontier LLMs, we find a pervasive optimism bias: under standard prompting, models frequently rate low-soundness proposals as sound, while aggressive prompting largely shifts errors from false positives to false negatives. Additional controls for public-corpus contamination, paper-identifying phrases, surface features, and human audit quality suggest that this behavior is not explained by a single confounder. Our results indicate that current LLMs are not yet reliable as standalone first-gate evaluators for scientific rigor.
+
+
+Introduction:
+Autonomous AI research agents are rapidly advancing in technical sophistication. Recent frameworks can autonomously generate hypotheses, implement code, execute experiments, and draft full manuscripts with minimal human oversight (Lu et al., 2024, Yamada et al., 2025, Schmidgall et al., 2025, Karpathy, 2026). While this progress suggests a future of accelerated discovery, it also exposes a critical but under-addressed bottleneck: scientific triage. Before a single line of code is written, a researcher must determine whether a proposed idea and its experimental design are methodologically sound. In human scholarship, this "first-gate" judgment is the primary defense against wasting months of labor and substantial computational resources.
+
+The Soundness Gap. Existing evaluations of AI agents largely overlook this decision point. Current benchmarks (Chan et al., 2024, Starace et al., 2025, Wu et al., 2025, Lupidi et al., 2026) primarily emphasize execution to reproduce existing results or deliver runnable artifacts. They do not test whether an agent can critically evaluate the viability of a proposal in the first place. This leaves a fundamental question unanswered:
+
+Can LLMs reliably reject flawed research designs before they are executed? Without a robust upfront filter, autonomous agents do not necessarily accelerate science; they risk scaling "bad science" by automating the pursuit of unsound hypotheses.
+
+In this work, we use scientific soundness in a deliberately scoped sense: proposal-stage methodological integrity in ML research, not eventual impact, novelty, acceptance, or universal validity across all scientific  (pre-execution, execution, or post hoc). Benchmark Task indicates what is judged, and Evaluation Input indicates the evidence provided to the evaluator. Most prior benchmarks evaluate execution outcomes or post-hoc signals rather than methodological validity. SoundnessBench is the only benchmark here that combines pre-execution evaluation, direct methodological-soundness judgment, and proposal-only input. it rigorously. In the lifecycle of an autonomous agent, this serves as a pre-computation check. Without this capability, agents risk entering a "hallucination-implementation loop," where they generate logically flawed experiments that appear structurally correct but are scientifically dead on arrival. By isolating proposal-stage evidence from downstream results, we test the model's ability to identify visible fatal flaws, such as improper baselines, data leakage, or mismatched metrics, before execution incurs high costs.
+
+However, the utility of such a check depends on its stability. This triage is further complicated by known model behaviors. Prior work on sycophancy and prompt fragility suggests that LLM judgments are highly sensitive to how a question is framed (Sharma et al., 2023, Elkins and Chun, 2025, Geng et al., 2026). If scientific evaluation inherits these vulnerabilities, autonomous agents may suffer from inconsistent filtering, alternating between reckless optimism and destructive skepticism based on minor prompt variations.
+
+In this paper, we introduce SoundnessBench, a large-scale benchmark for pre-execution scientific judgment in machine-learning research, the domain where current autonomous AI research agents are most actively deployed. While existing datasets often rely on small-scale human annotations or synthetic tasks, Sound-nessBench is reconstructed from the public ICLR history. We processed over 35,209 initial submissions and 137,940 expert reviews to identify a high-signal subset of 1,099 hypothesis-experiment pairings. This scale covers 16 distinct ML subfields ranging from Reinforcement Learning to Generative Modeling, allowing us to test whether models can make broadly useful proposal-stage judgments within a well-scoped ML/CS setting. Our labels use reviewer soundness sub-scores rather than acceptance decisions or overall ratings, and our pipeline combines reviewer-agreement filtering, near-verbatim proposal extraction, and retrieval-backed atomic-claim auditing to keep extracted proposals traceable to their source manuscripts.
+
+Our evaluation of 12 frontier LLMs reveals a pervasive optimism bias against reviewer-derived proposal-stage labels. Under standard prompting, models frequently classify low-soundness proposals as high-soundness, yielding a mean false-positive rate of 74.0%. Under the tested aggressive prompt, models over-correct: while the false-positive rate drops to 19.9%, high-soundness recall collapses to 36.1%. These results suggest that current frontier models are not yet reliable as standalone first-gate critics for ML research proposals; their judgments are inaccurate on many flawed designs and unstable under prompt framing.
+
+
+Quality Curation:
+Mean confidence ≥ 3/5 Soundness std < 15% We further add controls motivated by potential concerns about label validity, leakage, contamination, and surface confounding. A preliminary human audit finds low explicit leakage and broad agreement with assigned labels; an ICLR 2026 split reduces public-corpus contamination concerns; identifier-removal, surface-feature, year/subfield/writing-quality, and adversarial-injection analyses probe whether the observed behavior is driven only by memorization or stylistic artifacts. These controls do not eliminate the central pattern, suggesting that the optimism bias reflects a real weakness in current model judgment rather than a single dataset artifact.
+
+
+Our contributions are::
+• SoundnessBench: A diverse benchmark of 1,099 validated ML research proposals. This represents one of the largest curated datasets of its kind, spanning multiple years of top-tier ML submissions and 16 subfields, while making the domain scope explicit rather than claiming coverage of all science. • A High-Precision Curation Pipeline: We detail a rigorous multi-stage pipeline that moves beyond simple scraping. Our process includes: (1) Expert-Agreement Filtering using reviewer confidence and soundnessscore agreement, (2) Atomic-Claim Auditing to verify extraction fidelity against source PDFs, and (3) Outcome Masking to reduce leakage from experimental results or acceptance outcomes. • Confounder and Robustness Controls: We add analyses for reviewer-label proxy limitations, publiccorpus contamination, title/identifier recognition, surface-feature heuristics, year/subfield/writing-quality slices, and injected methodological flaws. These controls strengthen the interpretation that LLM failures are not artifacts of a single shallow cue. • Quantifying the "Optimism-Fragility" Tradeoff: We provide an empirical study of 12 frontier LLMs, documenting a systemic failure to identify methodological flaws. We characterize the optimism bias and demonstrate that current AI-scientist-style evaluators are highly sensitive to prompt framing, making them brittle as autonomous decision-makers.
+
+
+SoundnessBench: Benchmark Reconstruction:
+Overview and Motivation. In human research, the first gate happens before implementation: researchers and advisors ask whether a hypothesis is well-posed and whether the planned experiment can truly validate or falsify the claim. This early judgment decides which ideas deserve months of engineering effort and compute.
+
+SoundnessBench targets this first-gate setting for LLM agents. Most existing LLM benchmarks evaluate downstream skills (writing, coding, or reviewing completed papers), with limited direct testing of whether an agent can reject weak designs before execution. SoundnessBench addresses this gap by isolating preexecution rigor assessment, grounding labels in peer-review outcomes, and auditing extraction faithfulness so each instance is traceable to source evidence. In short, it probes how well current LLM-based agents can make early-stage soundness judgments from proposal text alone.
+
+Challenges and Design Choices. Constructing a proposal-only soundness benchmark from real submissions required us to address four challenges up front. First, label reliability: reviewer judgments can be noisy and mixed, so we use ICLR reviewer soundness sub-scores as a proxy for methodological validity, keep only high-agreement reviews, and remove ambiguous middle-score cases. Second, label scope: reviewers saw full papers, while our models see results-masked proposals; therefore SoundnessBench measures recoverable proposal-stage soundness rather than exact prediction of full-paper review outcomes. Third, information leakage: completed papers contain results and acceptance cues that can shortcut true first-gate assessment, so we exclude experimental outcomes and keep only proposal components. Fourth, extraction fidelity: proposal extraction can introduce drift, so we preserve near-verbatim wording, require source-grounded extraction, and add retrieval-backed atomic-claim verification.
+
+We chose these design decisions to maximize reliability, task faithfulness, and traceability at the same time. Compared with prior benchmarks that emphasize downstream tasks or rely primarily on post-hoc annotation, SoundnessBench explicitly combines peer-review-grounded labels, proposal-only inputs, and evidence-audited extraction, which enables a cleaner test of pre-execution scientific judgment.
+
+Benchmark Reconstruction. We build SoundnessBench in five steps, shown in Fig. 1.
+
+•
+
+Step 1: Data Collection. We collect papers from the ICLR corpus, covering major ML areas such as RL, generative modeling, NLP, optimization, and computer vision (16 subfields in total). We start from 2022 because earlier releases do not consistently provide reviewer soundness (or closely related) scores needed for filtering and label derivation. This multi-year, multi-subfield pool helps reduce narrow-domain bias. From the collected papers, we remove desk-rejected papers, since desk rejections may reflect factors other than scientific soundness. Then, to reduce label noise, we retain only papers with strong reviewer agreement: mean reviewer confidence of at least 3 and a standard deviation of normalized soundness scores below 0.15.
+
+• Step 2: Label Assignment. We assign labels from reviewer soundness sub-scores rather than overall ratings, acceptance decisions, or novelty/presentation scores. Pairs with mean soundness scores ≥ 3 are labeled high soundness, whereas pairs with mean scores ≤ 2 are labeled low soundness. Ambiguous middle-score cases are excluded to improve class separation. These labels are expert-derived proxies for recoverable proposal-stage methodological validity, not claims of absolute or post-execution research quality.
+
+• Step 3: Proposal Extraction. From the papers filtered in Step 2, we extract a research proposal including the abstract, related work, risk factors, hypothesis, and experiment design directly from source PDFs, while excluding experimental results, direct outcome claims, and acceptance cues. The proposal format follows The AI Scientist-v2 (Yamada et al., 2025). We preserve near-verbatim wording to reduce paraphrase drift and keep inputs aligned with the original submissions. We use a strong long-context LLM (Gemini 2.5 Pro) with a task-specific prompt that requires source-grounded spans and forbids unsupported inference (Supplementary Sec. A.1). Example extractions are provided in Supplementary Sec. A.5.
+
+• Step 4: Verification Audit. To ensure the extracted proposals faithfully match source PDFs and to minimize extraction errors from Step 3, we add a verification audit. The detailed process is presented in Alg. 1. We check extraction faithfulness with a retrieval-backed atomic-claim score. Following prior work on atomic factuality and evidence-grounded verification (Min et al., 2023, Thorne et al., 2018), we decompose each extracted hypothesis-experiment pair into atomic claims, retrieve supporting passages, and verify each claim against the source paper (Supplementary Sec. A.2,Sec. A.3,and Sec. A.6). We set threshold τ = 0.7, chunk size ℓ = 3000, chunk overlap o = 200, and retrieval depth k = 3. In our current pool, 66.93% of candidates pass this filter, yielding a benchmark with auditable hypothesis-experiment designs. The mean support ratio is shown in Fig. 2.
+
+
+Evaluation:
+This section is organized as follows: we first describe the evaluation protocol, models, and metrics (Sec. 3.1); then present the main results under standard prompting (Sec. 3.2); summarize robustness controls for leakage, contamination, and shallow confounders (Sec. 3.3); and finally analyze how aggressive prompting changes model behavior and calibration (Sec. 3.4).
+
+
+Evaluation Setup:
+We evaluate frontier large language models on SoundnessBench, which is built from real ML research submissions and targets recoverable proposal-stage methodological soundness rather than exact full-paper review prediction. In each test, we provide a results-masked research proposal to an LLM with a fixed evaluation prompt. The model is asked to classify the proposal as high or low soundness and provide a justification before the final label.
+
+Models. We evaluate a diverse set of 12 frontier models spanning small and large scales, non-reasoning and reasoning, and both closed-and open-source models. The evaluated set includes GPT models (GPT-4o, GPT-5.4-Mini, GPT-5.4), Claude models (Claude-Opus-4.6, Claude-Sonnet-4.6), Gemini models (Gemini-2.5-Pro, Gemini-3-Flash, Gemini-3.1-Pro), Qwen models (Qwen-3.5-27B, Qwen-3.5-122B-A10B), a LLaMA model (LLaMA-3.3-70B), and a Kimi model (Kimi-Linear-48B-A3B).
+
+Inference Setup. For closed-source models, we run inference through the corresponding provider APIs. For  open-source models, we deploy model servers with vLLM on 2×NVIDIA H200 GPUs. Unless otherwise noted, we use a consistent decoding configuration across models with max_tokens=8192 and temperature=0.2;
+
+
+GPT-5.4-Mini:
+other generation parameters follow framework/provider defaults.
+
+Prompting Protocol. We evaluate each model under two prompting regimes:
+
+• Standard prompt. This evaluation mode asks models to assess proposal soundness with a structured justification before the final classification, without imposing an explicit conservative prior. • Aggressive prompt. Motivated by the optimism bias observed under the standard prompt, this stricter stress test instructs models to default to low soundness unless the idea and experimental design are clearly strong and well-justified.
+
+This setup lets us probe whether models possess a stable notion of proposal-stage methodological soundness, or whether their judgments are sensitive to prompt framing. We do not claim to exhaust the space of possible prompts; rather, the two prompts test whether a standard justification-first prompt and a deliberately stricter prompt can jointly preserve discrimination on both classes. Data-construction prompts are documented in Supplementary Sec. A, and additional evaluation analyses are provided in Supplementary Sec. B.
+
+Metrics. We report confusion matrices over the binary classification task, evaluating the ability to (i) reject low-soundness ideas and (ii) correctly identify high-soundness ones. An ideal model should concentrate on the diagonal entries (low→low and high→high), with both low false-positive rates on low-soundness proposals and low false-negative rates on high-soundness proposals. Off-diagonal errors indicate failure modes: optimism bias (low→high) or over-conservatism (high→low). We also report class-wise recall for both labels (Low R and High R) and Macro F1 (the unweighted average of per-class F1 scores).  GPT-5.4 and GPT-5.4-mini are more conservative, but their high-soundness recall drops to 74.6% and 76.6%, respectively. This suggests a calibration trade-off in current frontier LLMs for proposal-stage soundness judgment: stricter filtering can suppress false approvals, but it also increases the risk of rejecting promising ideas.
+
+
+Robustness Controls and Alternative Explanations:
+Because SoundnessBench is reconstructed from public ICLR papers and uses reviewer-derived soundness labels, we explicitly test whether the main optimism-bias pattern could be explained by label noise, extraction leakage, public-corpus contamination, paper recognition, shallow textual structure, or slice-level concentration. These controls do not make the benchmark contamination-free or convert reviewer scores into perfect ground truth; instead, they narrow the most plausible alternative explanations for the observed behavior.
+
+• Label and leakage audit. A preliminary human verification audit checks whether extracted proposals leak results or outcome cues and whether reviewer-derived labels are defensible from the proposal and source document. In the completed audited subset, 92.3% of leakage checks match the expected "No" answer and 84.6% of label-validity checks match the expected "Yes" answer (Supplementary Sec. A.4). • Contamination and identifier controls. As shown in Tab. 3, on an ICLR 2026-only split evaluated with cutoff-restricted models, low-soundness proposals are still predicted as high soundness at a similar rate Overall, these analyses support a calibrated interpretation: SoundnessBench is an imperfect but audited proxy for recoverable proposal-stage soundness, and the observed optimism bias is unlikely to be explained solely by leakage, memorization, simple style features, or a narrow topic slice.
+
+
+Under Aggressive Prompting: Bias Shifts Toward Over-Conservatism:
+The tested stricter prompt does not jointly improve both classes; it mainly shifts errors from false positives to false negatives. We observe widespread optimism bias in Sec.
+
+
+GPT-5.4-Mini:
+Figure 5: Confusion matrices under the aggressive prompt across 12 evaluated models. Main message: optimism bias often shifts toward over-conservatism. The mean false-positive rate on low-soundness proposals drops to 19.9% (10/12 models are below 30%), but recall on high-soundness proposals also drops to 36.1% (7/12 models are below 40%). This illustrates strong prompt sensitivity in proposal-stage soundness judgment for the evaluated models.
+
+changes much less (60.5% vs. 68.6%). This cross-model variation, together with the robustness analyses (Sec. 3.3; Supplementary Sec. B.3 and Sec. B.2), suggests that the optimism bias is prompt-sensitive, persists across tested model scales, and is not removed by instruction tuning within the examined family.
+
+
+Related Work:
+Autonomous AI Research Agents. Recent AI scientist agents aim to automate large parts of the research pipeline. The AI Scientist (Lu et al., 2024) and The AI Scientist-v2 (Yamada et al., 2025) are early systems that attempt this process by autonomously generating ideas, writing code, running experiments, and drafting papers. Agent Laboratory (Schmidgall et al., 2025) structures this process into literature review, experimentation, and report writing, with optional human feedback. Beyond papers, autoresearch (Karpathy, 2026) provides a simple open-source loop where an agent edits code, runs short real experiments, and keeps changes only when metrics improve. These systems show that LLM agents can execute most parts of research workflows. However, they do not directly test whether LLMs can judge whether a research proposal (including the core idea, related work context, and experimental design) is worth pursuing before execution begins. Like human researchers triaging projects, this first-gate decision determines whether time and compute should be invested.
+
+Evaluating Research Agents and Idea Quality. Recent studies suggest that LLM-generated ideas can be novel while being weaker on feasibility (Si et al., 2025b), and that the gap between proposal-stage promise and post-execution outcomes can widen after implementation (Si et al., 2025a). We take this implication seriously: proposal-only judgment may be intrinsically limited because some weaknesses or strengths become visible only after experiments are run. SoundnessBench is therefore not intended to predict final research impact or full-paper acceptance. Instead, it asks a narrower diagnostic question: how much reviewer-assigned methodological soundness is recoverable from proposal-stage evidence, and whether LLMs can act as stable first-gate critics under that limitation. At the system level, most current benchmarks focus on evaluating execution (Chan et al., 2024, Starace et al., 2025, Wu et al., 2025, Lupidi et al., 2026). Additionally, a few idea-evaluation benchmarks target dimensions such as impact and novelty (Jiang, 2026, Schopf andFärber, 2026), or model scientific taste from community-level signals such as publication venue and citation outcomes (Tong et al., 2026). These directions are important, but their targets differ from ours.
+
+LLMs as Peer Reviewers. Existing work studies LLMs as reviewers of completed papers. LLM assistance can improve review clarity and usefulness in human review workflows (Thakkar et al., 2025). Recent benchmarks also study the behavior and quality of LLM-based reviewing systems at scale (Huang et al., 2026, Yu et al., 2025). They study how models produce critiques and how closely their judgments track human assessments. However, this literature evaluates post hoc review, where the paper, results, and framing are already available. SoundnessBench instead studies pre-execution judgment from the research proposal alone.
+
+LLM Sycophancy and Fragile Judgment. Our work is also connected to studies of LLM sycophancy and fragile judgment. Previous work demonstrates that LLMs often align with user framing rather than ground truth, which can make them validate plausible but weak claims (Sharma et al., 2023). Other work shows that attempts to suppress this behavior can produce unstable skepticism or excessive refusal (Geng et al., 2026). Prompt-framing studies further show that small syntactic changes can flip model decisions even when content is unchanged (Elkins and Chun, 2025). These findings suggest that scientific criticism is not only a knowledge problem, but also a robustness problem. SoundnessBench tests both.
+
+
+Global Principles:
+• Extract only proposal-level content; exclude results and conclusions.
+
+• Prefer verbatim spans from the paper when possible.
+
+• Do not hallucinate or introduce structure not present in the paper.
+
+• If uncertain, omit the information.
+
+• Keep claims atomic and directly grounded in the source text.
+
+
+Hypothesis:
+• Extract from Introduction or Method sections.
+
+• Describe what the paper proposes or aims to test (1-2 sentences).
+
+• Prefer verbatim phrasing.
+
+Forbidden: "we show", "we demonstrate", "we find", "results show", "outperforms" Allowed: "we propose", "we hypothesize", "we argue", "our approach aims to"
+
+
+Experiments:
+• Describe experimental plan only (no results or numbers).
+
+• Each entry must correspond to a distinct experiment group.
+
+Description: goal of the experiment. Method: datasets, models, baselines, setup (preserve exact names).
+
+Metrics: list evaluation metrics (no values).
+
+
+Related Work:
+• Summarize prior work and research gap.
+
+• Do not include improvement claims.
+
+
+Risk Factors:
+• Extract explicit limitations from the paper.
+
+• Do not infer or invent new risks.
+
+
+Abstract:
+• Keep only problem, motivation, and proposed method.
+
+• Remove results, numbers, and comparisons.
+
+
+Input:
+• Abstract: {abstract}
+
+• The attached file is the full paper PDF.
+
+Use both the abstract and the PDF to extract the research idea. Instructions
+
+• Extract the Short Hypothesis from the Introduction or Method sections, not from results or conclusions.
+
+• All Experiment fields must reflect the experimental plan, not observed outcomes.
+
+• Preserve dataset names, tasks, and baselines when describing experiments.
+
+• Create multiple experiment entries if the paper evaluates multiple tasks or benchmarks.
+
+
+Output Format (JSON):
+{ "Name": "<short slug identifying the research contribution>", "Title": "<exact paper title>", "Short Hypothesis": "<proposed claim or method -no outcomes>", "Related Work": "<prior work and research gap>", "Abstract": "<problem + motivation + proposed method only>", "Experiments": [ { "Description": "<goal of this experiment group>", "Method": "<datasets/tasks, model setup, baselines>", "Evaluation Metrics": "<metrics used>" } ], "Risk Factors and Limitations": [ "<explicit limitation sentence from the paper>" ] }
+
+
+Critical Constraints:
+• Do not include results or conclusions. • Do not include numerical values or measured performance.
+
+• Do not reveal whether the hypothesis was confirmed.
+
+• Do not generalize dataset names.
+
+• Do not merge distinct experiments into a single entry.
+
+
+A.2. Prompt to Decompose Atomic Claims from Proposal:
+This prompt decomposes each proposal into minimal, independently verifiable factual claims so that each statement can be assessed clearly and grounded in source text. The detailed process is presented in Alg. 1. We compute extraction faithfulness with a retrieval-backed atomic-claim score by decomposing each hypothesisexperiment pair into atomic claims, retrieving supporting passages, and verifying each claim against the source paper, following prior work on atomic factuality and evidence-grounded verification (Min et al., 2023, Thorne et al., 2018). We use GPT-5.4 for this process.
+
+
+System Prompt to Decompose Atomic Claims from Proposal:
+You are a precise scientific analyst. Your task is to decompose a research hypothesis and experimental plan into atomic, independently verifiable claims.
+
+
+User Prompt to Decompose Atomic Claims from Proposal:
+Task. Decompose the following extraction into atomic factual claims that are directly verifiable from the paper text.
+
+
+Rules:
+• Output one complete claim per line.
+
+• Do not include numbering, bullets, prefixes, section headers, or commentary.
+
+• Do not output incomplete fragments.
+
+• Do not introduce synthetic labels (e.g., "Experiment 1", "Experiment 2").
+
+• Keep claims literal and close to wording likely present in the paper.
+
+
+Scope of Claims Include only claims about::
+• proposed method or hypothesis • planned evaluation setup • datasets, tasks, and baselines • evaluation metrics Exclude:
+
+• any result or outcome claims (e.g., "improves", "outperforms", "achieves state-of-the-art") Input Extraction {extraction_proposal}
+
+
+A.3. Prompt to Verify Atomic Claims:
+This prompt evaluates each claim-evidence pair and produces a concise YES/NO judgment so that verification decisions remain explicit, consistent, and grounded in the provided textual evidence. We use Gemini-2.5-Flash for this process.
+
+
+System Prompt to Verify Atomic Claims:
+You are a rigorous scientific fact-checker. Your task is to verify whether a claim is directly supported by the provided evidence from a paper. YES/NO: <one-sentence explanation>
+
+
+A.4. Preliminary Human Audit of Extraction Quality and Label Validity:
+To complement the automated retrieval-backed audit, we conduct a preliminary human verification audit focused on the concerns that are hardest to resolve automatically: explicit result leakage, outcome-revealing language, acceptance clues, and whether the assigned reviewer-derived soundness label is defensible from the extracted proposal and source document. The audit is designed as a quality-control check rather than as a full expert-ceiling study. In particular, reviewers of the original papers saw full manuscripts and results, whereas evaluated models see results-masked proposal text. Therefore, the goal of this audit is to test whether the constructed examples are broadly usable as proposal-stage proxies, not to claim perfect equivalence with full-paper peer review or to estimate the maximum possible human performance on the task.
+
+Two annotators independently inspect a balanced subset of low-and high-soundness proposals. For each proposal, annotators answer three binary questions: (1) whether the extracted proposal leaks numerical results or direct outcome claims; (2) whether it contains acceptance clues or post-hoc framing; and (3) whether the assigned soundness label is supported by the proposal content and source document. We treat disagreement and unsupported-label cases as diagnostic signals for future filtering rather than resolving them away. In the currently completed audited subset, 92.3% of leakage checks match the expected "No" answer, and 84.6% of label-validity checks match the expected "Yes" answer. These preliminary results suggest that the extraction pipeline usually avoids explicit outcome leakage and that reviewer-derived soundness labels are broadly defensible as a practical proxy, while also confirming that proposal-only soundness remains an imperfect and intrinsically limited target. We report this small 60-proposal audit separately and use it to guide larger-scale expert re-annotation in future versions.
+
+
+Risk Factors and Limitations:
+• First, while establishing the identifiability of kernel parameters is a critical step, it does not necessarily guarantee the consistency of the MLE. • Second, extending our theoretical framework to encompass non-stationary kernels ... remains a largely open problem. • Third, another intriguing direction involves extending findings to infinitely differentiable kernels not holomorphic near 0.
+
+
+Scores::
+• Soundness: 3.25 • Support Ratio: 1.0 • Rigor Bucket: high
+
+
+A.6. Example of Extracted Atomic Claims and Verification:
+Example: Atomic Claims from Extracted Proposal Source: Identifiability for Gaussian Processes with Holomorphic Kernels
+
+
+Atomic Claims (excerpt):
+• A novel theoretical framework is based on kernels being holomorphic around zero.
+
+• The framework determines identifiability of parameters in a wide class of Gaussian Process kernels.
+
+• The framework applies to squared exponential, periodic, and rational quadratic kernels.
+
+• The framework applies to complex combinations of kernels.
+
+• The framework addresses a gap left by methods that only apply to Matérn-type kernels.
+
+• A Gaussian Process model is fitted to synthetically generated data with added Gaussian noise.
+
+• Parameters are estimated using Maximum Likelihood Estimators.
+
+• Experiments evaluate convergence of estimators as sample size increases.
+
+Summary: 17 atomic claims extracted; all verified as supported (support ratio = 1.0).
+
+
+B.1. Evaluation Prompt Templates:
+We provide the evaluation prompt templates for transparency. The standard prompt asks models to produce a structured scientific rationale before the final classification, so the main setting already includes an explicit deliberation-style instruction. The aggressive prompt keeps the same task but changes the default decision rule to require stronger evidence before assigning high soundness.
+
+
+System Prompt for Standard Evaluation:
+You are an expert ML researcher and peer reviewer. Classify the scientific rigor bucket of a research idea and your assessment confidence from 1 to 5 from its hypothesis and experiment description.
+
+Output the assessment as a JSON object, including a detailed step-by-step justification for the rigor bucket selected.
+
+
+User Prompt for Standard Evaluation:
+Classify this hypothesis-experiment pair into one rigor bucket:
+
+• low: Weak scientific contribution. Hypothesis is vague or trivial, experiments lack controls or baselines, metrics are weak, or methodology has fundamental flaws.
+
+• high: Strong scientific contribution. Hypothesis is clear and meaningful. Experiments are rigorous, controlled, include appropriate baselines/ablations, and use suitable metrics. Confidence Score Scale: • 1: You are unable to assess this paper and have alerted the ACs to seek an opinion from different reviewers.
+
+• 2: You are willing to defend your assessment, but it is quite likely that you did not understand the central parts of the submission or that you are unfamiliar with some pieces of related work. Math/other details were not carefully checked. • 3: You are fairly confident in your assessment. It is possible that you did not understand some parts of the submission or that you are unfamiliar with some pieces of related work. Math/other details were not carefully checked. • 4: You are confident in your assessment, but not absolutely certain. It is unlikely, but not impossible, that you did not understand some parts of the submission or that you are unfamiliar with some pieces of related work. • 5: You are absolutely certain about your assessment. You are very familiar with the related work and checked the math/other details carefully.
+
+
+HYPOTHESIS: {hypothesis} EXPERIMENT: {experiment}:
+Output format:
+
+{ "justification": "<Think step-by-step, provide detailed justification>", "rigor_bucket": <"low" or "high">, "confidence": <1-5 integer> } Constraints:
+
+• rigor_bucket must be a choice in ["low", "high"] • confidence must be an integer in [1,5]
+
+
+System Prompt for Aggressive Evaluation:
+You are a strict ML area chair applying an aggressive rigor filter. Classify scientific rigor from a hypothesis and experiment description. Default to "low" unless the evidence clearly demonstrates strong scientific rigor with concrete controls, strong baselines, appropriate metrics, and a credible evaluation plan. Output valid JSON only with a detailed step-by-step justification.
+
+
+User Prompt for Aggressive Evaluation:
+Classify this hypothesis-experiment pair into one rigor bucket under an aggressive standard:
+
+• low: choose this unless there is clear, concrete, and compelling evidence of rigorous methodology.
+
+• high: only if the plan is explicitly strong on hypothesis clarity, experimental controls, baselines/ablations, metric validity, and methodological credibility. Aggressive policy: • Penalize missing controls, vague methods, missing or weak baselines, underspecified metrics, unclear evaluation protocol, or hand-wavy claims.
+
+• If information is incomplete or ambiguous, prefer low.
+
+• Use high only when justification is unambiguous.
+
+Confidence Score Scale:
+
+• 1: You are unable to assess this paper and have alerted the ACs to seek an opinion from different reviewers.
+
+• 2: You are willing to defend your assessment, but it is quite likely that you did not understand the central parts of the submission or that you are unfamiliar with some pieces of related work. Math or other details were not carefully checked. • 3: You are fairly confident in your assessment. It is possible that you did not understand some parts of the submission or that you are unfamiliar with some pieces of related work. Math or other details were not carefully checked. • 4: You are confident in your assessment, but not absolutely certain. It is unlikely, but not impossible, that you did not understand some parts of the submission or that you are unfamiliar with some pieces of related work. • 5: You are absolutely certain about your assessment. You are very familiar with the related work and checked the math or other details carefully.
+
+
+HYPOTHESIS: {hypothesis} EXPERIMENT: {experiment}:
+Output format:
+
+{ "justification": "<Think step-by-step, provide detailed justification>", "rigor_bucket": <"low" or "high">, "confidence": <1-5 integer> } Constraints:
+
+• rigor_bucket must be a choice in ["low", "high"] • confidence must be an integer in [1,5]
+
+
+B.2. Does Scale Resolve the Optimism Bias?:
+To isolate the effect of model scale from other factors, such as model family and training recipe, we evaluate six models from the same Qwen3.5 family, ranging from 2B to 122B parameters, under both prompting conditions. Results are shown in Fig. 4.
+
+Under standard prompting, scaling improves high-soundness recall monotonically (71.8% at 2B to 92.8% at 35B), but low-soundness recall simultaneously decreases (31.0% at 2B to 19.2% at 35B). Larger models become more permissive toward weak proposals, not less. This suggests that scale improves general language understanding and pattern recognition, but does not correct the optimism tendency in scientific judgment.
+
+Under aggressive prompting, scale provides no consistent benefit. All six models tend toward near-always-low behavior, with high-soundness recall ranging from 1.4% (4B) to 32.4% (27B), showing no monotonic trend with size. Notably, the 27B model achieves better balance than both smaller and larger variants, suggesting that the aggressive prompt interacts non-monotonically with model capacity. Together, these results indicate that the optimism bias observed in Sec. 3.2 is not a small-model artifact in this family. It persists with scale under standard prompting and remains unresolved under aggressive prompting at all tested sizes. Reliable scientific soundness judgment likely requires interventions beyond simply using larger models.
+
+
+B.3. Is the Optimism Bias Caused by Instruction Tuning?:
+A natural hypothesis is that the optimism bias stems from instruction tuning or RLHF, which may encourage models to be agreeable and avoid negative feedback. To test this, we compare Qwen3.5-35B-A3B in its base and instruction-tuned variants under both prompting conditions, as shown in Fig. 6.
+
+Under standard prompting, the base and instruction-tuned models are nearly indistinguishable. The base model reaches 19.0% low-soundness recall and 92.5% high-soundness recall, while the instruction-tuned model reaches 19.2% and 92.8%, respectively. These similar numbers suggest instruction tuning is unlikely to be the sole driver of the optimism bias.
+
+Under aggressive prompting, both models shift toward over-conservatism, but the base model shifts more strongly (98.7% low recall, 3.4% high recall) than the instruction-tuned variant (89.3% low recall, 17.2% high recall). This suggests instruction tuning may provide modest robustness to prompt pressure, but is insufficient to maintain calibrated judgment.
+
+These findings suggest that resolving the optimism bias may require interventions at or before pre-training (such as targeted training on scientific judgment), rather than relying on post-hoc instruction tuning alone.
+
+
+B.4. Controls for Public-Corpus Contamination:
+A natural concern is that ICLR submissions and OpenReview discussions are public, so some evaluated models may have encountered older source papers during pretraining or supervised fine-tuning. We therefore treat contamination as a threat to validity rather than claiming it is fully eliminated. We address it in three ways.
+
+First, if a model had memorized acceptance outcomes or reviewer verdicts, that information would likely help it identify low-soundness proposals; the observed high false-positive rate is therefore conservative with respect to our main failure claim. Second, we evaluate an ICLR 2026-only split using a cutoff-restricted model subset with documented training cutoffs before September 2025 where such documentation is available, reducing the chance that these submissions appeared in training data. Third, the identifier-removal analysis in Sec. B.5 tests whether recognizable method names or self-identifying phrases drive predictions. As shown in main-text Tab. 3, the optimism bias is largely stable across the full dataset and the 2026-only split. We will report the exact model-card or technical-report source for each cutoff in the released metadata and exclude models without sufficient cutoff documentation from cutoff-restricted claims.
+
+We emphasize that perfect contamination control is difficult for any benchmark built from public corpora.
+
+For this reason, we describe this as a reduced-contamination-risk analysis rather than a contamination-free benchmark. SoundnessBench should be interpreted together with the 2026 split, the identifier-removal analysis below, and future private or continuously updated benchmark variants.
+
+
+B.5. Identifier-Removal Robustness:
+Paper titles are never passed to models in our main evaluation. To further test whether recognizable method names or self-identifying phrases drive the results, we construct an anonymized variant by masking method names, framework names, and self-naming phrases while preserving the scientific meaning of the hypothesis and experiment design. Tab. 5 shows that this intervention has negligible effect on the aggregate confusion matrix, with changes of roughly one percentage point. This suggests that the main behavior is not primarily driven by recognizing paper identities. We add simple baselines to test whether shallow structural statistics alone explain the observed behavior. Always-high predicts every proposal as high soundness; always-low predicts every proposal as low soundness.
+
+We also evaluate mean-threshold classifiers based on proposal length, experiment count, and risk-factor count, with thresholds set at the midpoint between per-class means. These no-training baselines avoid fitting on the evaluation labels while still probing whether label priors or obvious structural features explain the result. A fully supervised text classifier would answer a different question-how much signal can be learned from labeled SoundnessBench examples-so we leave it to a training-split extension rather than using benchmark test labels for model selection. The structural baselines and LLMs fail in qualitatively opposite directions: structural thresholds over-reject high-soundness proposals, whereas LLMs over-approve low-soundness proposals. This divergence suggests that shallow structural statistics alone are insufficient to explain the observed optimism bias, although richer supervised confounder models remain useful future controls.
+
+
+B.7. Adversarial Injection of Methodological Flaws:
+To test whether models attend to methodological content at all, we inject targeted flaws into 100 highsoundness proposals. Specifically, dataset names and evaluation metrics are replaced with those from a different domain while keeping the hypothesis and other content fixed, creating severe hypothesis-experiment mismatches. GPT-5.4's approval rate drops from 77.0% on the original proposals to 1.0% after injection (Tab. 7). This result rules out the strongest version of the inattention hypothesis: the model can detect severe methodological inconsistencies. However, it also sharpens the remaining failure mode: models are still insufficiently critical of subtler naturally occurring flaws in low-soundness proposals. We report this as an initial control and will extend it to more flaw types, such as missing baselines and data leakage, in future benchmark versions. We further examine whether failures are concentrated in particular years, subfields, or writing-quality bands.
+
+Tab. 8, Tab. 9, and Tab. 10 report low-soundness false-positive rates. The optimism bias is visible across all slices, suggesting that it is systemic rather than driven by a narrow subset of the benchmark.  are still predicted as high soundness by the evaluated models, illustrating the optimism-bias failure mode. In Fig. 15, the proposal has a high mean ICLR soundness score and is correctly predicted as high soundness, illustrating a true-positive case. We show the corresponding Gemini 3.1 Pro, GPT-5.4 Thinking, and Claude Opus 4.6 responses below each proposal.
+
+Mean ICLR Soundness Score 1.75/4.0
+
+Step 1: Assess hypothesis clarity and significance. The hypothesis is clear, specific, and meaningful: train with multiple modalities, deploy with one modality by estimating missing-modality features via a temporally aligned module, with the goals of improving over unimodal-only training while retaining inference efficiency relative to full multimodal inference. This is a nontrivial and relevant research question, especially for practical settings where some modalities are unavailable or expensive at test time.
+
+Step 2: Assess whether the experiments directly test the hypothesis. The experiments are well aligned with the hypothesis. Experiment 1 tests the core claim in AV speech enhancement under noisy conditions, including both effectiveness and efficiency comparisons. Experiment 2 tests whether the idea transfers to AV speech recognition, especially low-SNR conditions where cross-modal information is valuable. Experiment 3 further probes generality by reversing the missing modality direction (audio absent at inference) on active speaker detection. Together, these experiments evaluate both the central mechanism and its breadth across tasks.
+
+Step 3: Evaluate baselines and controls. The proposed setup includes appropriate primary baselines: a standard unimodal baseline and a full multimodal baseline in all tasks. In Experiment 1, there is an additional audio-only baseline with matched parameter count, which is an important control because it helps separate gains due to multimodal training/distillation-like transfer from gains due merely to increased capacity. This is a strong design choice. However, the parameter-matched control is only explicitly described for Experiment 1 and not for Experiments 2 and 3, which weakens the rigor somewhat. Also, there is no mention of comparisons to other modality-dropout, hallucination, distillation, or missing-modality adaptation methods, which would be valuable related-work baselines if such methods exist for the tasks.
+
+Step 4: Evaluate ablations and methodological depth. The experiment plan includes two training strategies for MUTUD in Experiment 1 (from scratch and pre-training TAME), which is a useful ablation on optimization/training procedure. But the overall ablation plan is limited. There is no explicit mention of ablating temporal alignment, feature estimation quality, where TAME is inserted, sensitivity to modality corruption levels, or inference-time cost decomposition. Since the core novelty is the TAME module, stronger ablations would normally be expected to establish why this design works and whether temporal alignment specifically matters.
+
+Step 5: Evaluate metrics. The metrics are appropriate and standard for each task: STOI, SI-SDR, and PESQ for speech enhancement; WER for speech recognition; and mAP for active speaker detection. These metrics are strong choices and directly measure task performance. The hypothesis also includes an efficiency claim, and Experiment 1 mentions efficiency comparison, but no explicit efficiency metrics are listed such as FLOPs, latency, memory, or throughput. That omission is important because computational efficiency is part of the claimed contribution.
+
+Step 6: Evaluate dataset/task selection. The datasets are credible and relevant: LRS3-TED and DNS for AVSE, LRS3-TED for AVSR, and EasyCom for AV-ASD. The tasks are challenging and diverse, which strengthens external validity. Testing across enhancement, recognition, and detection is a notable strength and supports claims of generality.
+
+Step 7: Check for possible methodological weaknesses. The proposal appears methodologically sound at a high level, but some critical rigor details are absent: no mention of statistical significance, repeated runs/seeds, hyperparameter selection fairness, train/validation/test protocol details, or robustness analyses across degrees of modality mismatch/missingness. These omissions are common in summaries, but they prevent calling the plan maximally rigorous. Still, there are no obvious fundamental flaws in the proposed methodology.
+
+Step 8: Weigh strengths versus weaknesses for bucket assignment. Strengths: clear and meaningful hypothesis, direct experimental alignment, multiple tasks, strong standard metrics, sensible baselines including a parameter-matched control in at least one experiment, and some training ablation. Weaknesses: limited explicit ablation of the novel component, incomplete efficiency evaluation despite an efficiency claim, lack of explicit competing-method baselines beyond standard uni/full-multimodal models, and missing details on statistical rigor. Despite these weaknesses, the overall plan is substantially stronger than a weak or flawed submission and reflects a serious effort to validate the idea.
+
+Step 9: Final bucket decision. I assign this to the high rigor bucket because the hypothesis is clear and meaningful, the experiments are largely well controlled and appropriately targeted, and the evaluation spans multiple tasks with suitable metrics and baselines. The rigor is not perfect, but it is sufficient to qualify as strong rather than weak. Let me analyze this hypothesis-experiment pair step by step. Hypothesis Assessment: The hypothesis has two clear claims: (1) Swin Transformer captures better global visual-language features than CNNs for ZS3, and (2) pixel-text score maps with modified decision boundaries reduce seen-bias and improve unseen class performance. The hypothesis is specific and testable, though not particularly novel \u2014 using transformers over CNNs is a relatively straightforward architectural upgrade, and the seen-bias problem is well-known in zero-shot learning. Experiment Assessment: Experiment 1 & 2: These evaluate the full framework on two standard benchmarks (PASCAL VOC and PASCAL Context) with multiple seen/unseen splits. They compare against relevant baselines (DeViSE, SPNet, ZS3Net, CSRL, JoEm). The metrics (mIoUs, mIoUu, hIoU) are appropriate and standard for ZS3 evaluation. Multiple splits provide robustness to the evaluation. This is solid experimental design. Experiment 3: The ablation study is well-designed \u2014 it isolates the two main contributions (transformer backbone vs. CNN, and the auxiliary score map loss) by testing combinations. This directly addresses both parts of the hypothesis.
+
+
+FreeLM: Fine-Tuning-Free Language Model:
+Step 1: Assess the hypothesis clarity and scientific value. The hypothesis is reasonably clear and non-trivial: a fine-tuning-free training strategy that combines a language modeling signal with a unified teacher signal in proposition-judgment format can yield a relatively small model that generalizes across tasks without task-specific fine-tuning. This is a meaningful claim because it targets transfer, zero-shot generalization, and training efficiency. So on hypothesis formulation alone, this is stronger than a vague or trivial proposal.
+
+Step 2: Assess whether the experiments directly test the core claim. The core claim has three main parts: (a) strong zero-shot task generalization, (b) retention of language modeling/generation ability, and (c) benefit of the proposed training components. The proposed experiments map onto these parts fairly well:-Experiment 1 tests zero-shot task performance on GLUE against several strong baselines.-Experiment 2 checks whether generation capability is preserved.-Experiments 3 and 4 provide ablations for the language signal and task prefix.-Experiment 5 tests generalization to held-out tasks.-Experiment 6 gives a qualitative generation case study.This is a coherent experimental package and is a positive sign for rigor.
+
+Step 3: Evaluate baseline quality and fairness.The baseline set in Experiment 1 is relatively strong and includes GPT-2 in zero-shot/few-shot/fine-tuned settings, plus GPT-3 and InstructGPT in zeroshot/few-shot settings. This indicates awareness of relevant comparison points. However, there are fairness concerns:-Model scales differ dramatically (0.3B vs 175B), making comparisons informative but not fully controlled.-It is not stated whether prompts, decoding settings, or evaluation protocols are standardized across models.-The proposal omits comparisons to other instruction-tuned or multi-task small/medium models that may be more directly relevant than GPT-3.Even so, the inclusion of multiple baseline modes is better than a weak experimental setup.
+
+Step 4: Evaluate controls and ablations.The submission includes at least two direct ablations tied to the method design:-removing the language signal objective,-removing the task prefix.These are meaningful controls because they isolate important components of the proposed method. Experiment 5 also acts as a form of generalization control by withholding tasks from the unified training mixture. This strengthens the scientific design considerably.
+
+Step 5: Evaluate metrics and task coverage.The metrics are standard and appropriate for the chosen tasks:-Matthews correlation for CoLA,-accuracy for classification tasks,-F1/accuracy for MRPC and QQP,-perplexity for language modeling datasets.These are suitable metrics. The use of multiple GLUE tasks plus LAMBADA/WikiText2/PTB provides reasonable coverage of understanding and generation. However, the qualitative StoryCloze evaluation lacks a rigorous human evaluation protocol or automatic metric, so that component is weak. Still, it is only one par t of the overall suite.
+
+Step 6: Identify missing rigor elements. Despite the strengths, some methodological details are missing that reduce rigor:-No mention of statistical significance, confidence intervals, or multiple random seeds.-No explicit discussion of hyperparameter tuning fairness across baselines.-The held-out-task experiment is useful, but evaluating only four removed tasks may not fully establish broad generalization.-The unified proposition-format teacher signal may create train-test formatting advantages, and the proposal does not clearly discuss contamination prevention or prompt design sensitivity.-Experiment 6 relies on manual inspection without a defined protocol, raters, or agreement measures. These omissions prevent the plan from being maximally rigorous.
+
+Step 7: Decide between the available buckets. Given the forced choice between only 'low' and 'high', this proposal is closer to 'high' than 'low'. The hypothesis is clear and meaningful, the experiments are aligned with the claim, there are strong baselines, standard metrics, and nontrivial ablations . While there are notable missing details and some fairness/statistical concerns, the overall design is substantially more rigorous than a weak or fundamentally flawed study.
+
+Step 8: Confidence assessment. I am fairly confident in this judgment because the hypothesis and experiment plan are understandable and map well to standard evaluation practice. However, confidence is not maximal because several implementation details that matter for rigor are unspecified, and I cannot verify whether the comparisons would be fully fair in practice.
+
+
+FreeLM: Fine-Tuning-Free Language Model:
+Let me analyze this hypothesis-experiment pair systematically: Hypothesis Analysis: The hypothesis proposes a fine-tuning-free strategy for language models that combines language signal with a unified 'teacher signal' (proposition correctness judgments) to create a model that generalizes across tasks without task-specific fine-tuning. This is a meaningful and clear research direction -it addresses the practical problem of requiring fine-tuning for each task, which is computationally expensive. The hypothesis is specific enough to be testable. Experiment Analysis:1. Experiment 1 (GLUE evaluation): Strong design -evaluates on a standard benchmark (GLUE), includes multiple baselines (GPT-2 zero/few-shot/fine-tuned, GPT-3 175B zero/few-shot, InstructGPT), and uses appropriate metrics. The comparison against much larger models (175B GPT-3) while being 0.3B is interesting but also potentially misleading if not contextualized properly. 2. Experiment 2 (Language generation): Appropriate check to ensure the model doesn't lose language generation capability. Uses standard perplexity metrics on standard datasets. However, only compared against GPT-2, not broader baselines. 3. Experiment 3 (Ablation -language signal): Good ablation study that isolates the contribution of the language signal objective. Includes training loss curves for additional insight.

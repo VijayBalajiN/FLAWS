@@ -1,0 +1,104 @@
+\RequirePackage[svgnames]{xcolor}
+
+\documentclass[11pt,letterpaper]{include/mystyle}
+
+\input{include/supp_packages}
+\input{include/supp_macros}
+
+
+\newcommand{\williex}[1]{{\color{magenta}WN: #1}}
+\newcommand{\olcomment}[1]{{\color{olive}[OL: #1]}}
+\newcommand{\wss}[1]{{\color{blue}WSS: #1}}
+\newcommand{\jcomment}[1]{{\color{purple}Julian: #1}}
+\newcommand{\omer}[1]{{\color{green}ömer: #1}}
+\newcommand{\enes}[1]{{\color{orange}enes: #1}}
+\newcommand{\todo}[1]{{\color{red}TODO: #1}}
+\newcommand{\fhc}[1]{\textcolor{cyan}{[Fu:#1]}}
+
+\usepackage{microtype}
+\usepackage{fontawesome}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{lineno}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{pifont}
+\newcommand{\cmark}{\ding{51}}
+\newcommand{\xmark}{\ding{55}}
+\usepackage{booktabs}
+\usepackage{pifont}
+\usepackage{xcolor}
+\newcommand{\gck}{\textcolor{green!60!black}{\ding{51}}}
+\newcommand{\rx}{\textcolor{red!70!black}{\ding{55}}}
+\usepackage{tcolorbox}
+\usepackage{wrapfig}
+\tcbset{
+    colback=gray!5,
+    colframe=black,
+    boxrule=0.5pt,
+    arc=2pt,
+    left=6pt,
+    right=6pt,
+    top=6pt,
+    bottom=6pt
+}
+
+\definecolor{darkblue}{rgb}{0, 0, 0.5}
+\hypersetup{colorlinks=true, citecolor=darkblue, linkcolor=darkblue, urlcolor=darkblue, hypertexnames=false}
+\raggedbottom
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{enumitem}
+
+\newcommand{\fh}[1]{\textcolor{black}{#1}}
+\newcommand{\tuyen}[1]{\textcolor{black}{#1}}
+
+
+\title{SoundnessBench: Can Your AI Scientist Really Tell Good Research {Ideas} from Bad {Ones}?}
+\author{Anonymous Authors}
+
+% Running title
+\runningtitle{SoundnessBench: Can Your AI Scientist Really Tell Good Research Ideas from Bad Ones?}
+
+\author{%
+  Sy-Tuyen Ho, Minghui Liu, Huy Nghiem, Furong Huang \\
+  University of Maryland, College Park\\
+  % $^\ddag$ Equal advising\\
+}
+
+\correspondingauthor{Furong Huang; Email \href{mailto:furongh@umd.edu}{furongh@umd.edu}}
+
+\begin{document}
+\begin{abstract}
+\input{sections/abstract}
+\end{abstract}
+
+\maketitle
+
+\input{sections/intro}
+\input{sections/benchmark_reconstruction}
+\input{sections/evaluation_results}
+\input{sections/related_work}
+\input{sections/conclusion}
+
+\section*{Acknowledgments}
+
+Ho, Liu, and Huang are supported by DARPA HR001124S0029-AIQ-FP-019 and the National Science Foundation TRAILS Institute (2229885). Private support was provided by Open Philanthropy and Apple. The authors acknowledge the National Artificial Intelligence Research Resource (NAIRR) Pilot for supporting this research.
+
+
+%\clearpage
+\bibliography{main}
+
+\newpage
+\appendix
+
+
+\onecolumn
+\section*{Supplementary}
+
+\input{supp/detailed_data_construction}
+\input{supp/addition_results}
+
+\end{document}

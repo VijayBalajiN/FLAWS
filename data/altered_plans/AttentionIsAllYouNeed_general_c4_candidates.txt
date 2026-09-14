@@ -1,0 +1,35 @@
+:candidate:
+1
+
+:original_text:
+We will employ label smoothing with a value of ϵ_ls = 0.1 during training, as this approach is known to improve model robustness.
+
+:modified_text:
+We will employ label smoothing with a value of ϵ_ls = 0.1 during training, in conjunction with our chosen focal loss function, as this approach is known to improve model robustness.
+
+:explanation:
+The mechanism of this error is an incompatible combination of techniques. Focal loss is designed to focus training on hard-to-classify examples by down-weighting the loss assigned to well-classified examples. Label smoothing, conversely, regularizes the model by penalizing overconfident predictions on all examples. Applying them together is non-standard and their effects can be contradictory; label smoothing may soften the very probabilities that focal loss uses to identify "well-classified" examples, thereby interfering with the focal loss mechanism.
+
+:candidate:
+2
+
+:original_text:
+We will employ label smoothing with a value of ϵ_ls = 0.1 during training, as this approach is known to improve model robustness.
+
+:modified_text:
+We will employ label smoothing with a value of ϵ_ls = 0.5 during training, as this approach is known to improve model robustness.
+
+:explanation:
+The mechanism of this error is a severe parameter misspecification. While ϵ_ls = 0.1 is a standard and effective value, ϵ_ls = 0.5 is exceptionally high. This sets the target probability for the correct class to only 0.5, with the remaining 0.5 probability distributed among all incorrect classes. This forces the model to be extremely uncertain and is highly likely to degrade performance and prevent convergence, directly contradicting the claim that it will improve robustness or performance.
+
+:candidate:
+3
+
+:original_text:
+We will employ label smoothing with a value of ϵ_ls = 0.1 during training, as this approach is known to improve model robustness.
+
+:modified_text:
+We will employ label smoothing with a value of ϵ_ls = 0.1 during training, as this approach is known to explicitly correct for annotation errors in the training data.
+
+:explanation:
+The mechanism of this error is a conceptual misunderstanding of the technique's purpose. The modified text claims that label smoothing "explicitly corrects for annotation errors." This is incorrect. Label smoothing is a regularization technique designed to prevent model overconfidence and improve calibration. It does not identify or correct mislabeled examples. Conflating its purpose with that of entirely different methods (e.g., noisy label learning algorithms) demonstrates a fundamental misunderstanding of why the technique is used.

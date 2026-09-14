@@ -1,0 +1,15 @@
+:error_type:
+Conflict with Established Beliefs
+
+:original_text:
+The criticality of an error in a scientific paper is a function of its connection to the paper's core claims.
+
+:modified_text:
+The criticality of an error in a scientific paper is a function of its subtlety; errors that are harder to detect by casual or automated review are inherently more significant as they are more likely to persist and corrupt the scientific record.
+
+:explanation:
+The modification introduces a conflict with the established consensus in meta-science and research integrity regarding how the severity of a scientific error is defined.
+
+(a) The established belief is that the criticality or severity of an error is determined by its **impact on the validity of the paper's conclusions**. An error is considered critical if it undermines or invalidates one or more of the paper's central claims. This principle is fundamental to retraction policies and peer review guidelines. For example, a simple, obvious flaw in an experiment's control group that invalidates the main result is considered a highly critical error.
+
+(b) The modified hypothesis is internally consistent and even plausible, arguing that subtlety makes an error more dangerous. However, it incorrectly equates the *difficulty of detection* with *criticality*. This conflicts with the established principle. Under this new hypothesis, a subtle statistical nuance that slightly changes a p-value would be considered more critical than a blatant, but fatal, methodological flaw. In reality, the scientific community prioritizes impact over subtlety when judging an error's importance. The blatant flaw would likely trigger a retraction, while the subtle one might warrant a correction. The modified hypothesis conflates two orthogonal properties of an error—its impact and its detectability—and proposes a relationship between them that is contrary to established norms of scientific evaluation.

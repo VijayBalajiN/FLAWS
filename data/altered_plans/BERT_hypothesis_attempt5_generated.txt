@@ -1,0 +1,11 @@
+:original_text:
+Language representations jointly conditioned on both left and right context in all layers are more powerful than representations conditioned on unidirectional or shallowly combined bidirectional contexts.
+
+:modified_text:
+Autoregressive language representations jointly conditioned on both left and right context in all layers are more powerful than representations conditioned on unidirectional or shallowly combined bidirectional contexts.
+
+:explanation:
+The introduced error is the addition of the term "Autoregressive." In language modeling, an autoregressive model is defined by its sequential, conditional probability generation, where each token is predicted based only on the preceding tokens (i.e., the left context). This is a fundamentally unidirectional architecture. The core claim of the original hypothesis rests on the superiority of being "jointly conditioned on both left and right context," which is a bidirectional property that is mutually exclusive with the autoregressive constraint. Therefore, a representation cannot be both "autoregressive" and "jointly conditioned on both left and right context" simultaneously. This modification introduces a direct conceptual contradiction that undermines the entire theoretical premise, conflating two opposing architectural principles. A non-expert might not recognize this inherent contradiction, as "autoregressive" is a common term associated with language models.
+
+:failure_mode:
+internal contradiction

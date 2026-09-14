@@ -1,0 +1,9 @@
+{
+  "label": "BERT_general_c3_v1",
+  "original_text": "We will compare the performance of `BERT_BASE` and `BERT_LARGE` across all tasks to measure the impact of model scale on downstream performance, especially on smaller datasets.",
+  "modified_text": "We will compare the performance of `BERT_BASE-uncased` and `BERT_LARGE-cased` across all tasks to measure the impact of model scale on downstream performance, especially on smaller datasets.",
+  "explanation": "This modification introduces a critical confounding variable: text casing. The two models not only differ in scale (BASE vs. LARGE) but also in their text normalization (`uncased` vs. `cased`). For many NLP tasks, such as Named Entity Recognition, preserving case is an important signal. Any observed performance difference cannot be cleanly attributed to model scale, as it could be partially or wholly due to the difference in how the models handle capitalization. This invalidates the experiment's design for isolating the effect of scale.",
+  "category": "D",
+  "category_name": "Others",
+  "reasoning": "The error describes a confounding variable that prevents the experiment from isolating the intended effect, which is a classic experimental design flaw."
+}

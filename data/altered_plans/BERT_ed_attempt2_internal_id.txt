@@ -1,0 +1,11 @@
+:error_text:
+trained using context-independent GloVe embeddings.
+
+:error_text:
+comparing its performance to a similar BiLSTM architecture
+
+:error_text:
+Feature-based vs. Fine-tuning
+
+:explanation:
+The error is a fundamental mismatch in the third ablation study. The study is titled "Feature-based vs. Fine-tuning," which implies a comparison between two methods of using the pre-trained BERT model. However, the experiment is designed to compare a feature-based approach using BERT embeddings against a baseline using GloVe embeddings. This experiment fails to evaluate the fine-tuning approach at all, and therefore cannot provide any conclusion about the relative merits of the "Feature-based vs. Fine-tuning" approaches for the BERT model, which is the stated goal. The designed experiment tests the quality of BERT's features against GloVe's, not the effectiveness of the fine-tuning paradigm itself.

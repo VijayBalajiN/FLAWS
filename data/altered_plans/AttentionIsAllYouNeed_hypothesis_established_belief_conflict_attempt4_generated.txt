@@ -1,0 +1,13 @@
+:error_type:
+Conflict with Established Beliefs
+
+:original_text:
+An architecture relying solely on attention mechanisms, without recurrence or convolutions, is sufficient to model global dependencies between input and output sequences.
+
+:modified_text:
+An architecture relying solely on attention mechanisms, without recurrence or convolutions, is sufficient to model global dependencies between input and output sequences, as the self-attention mechanism is inherently permutation-equivariant and naturally encodes the relative positions of tokens.
+
+:explanation:
+(a) The established belief being conflicted with is the mathematical property of the self-attention mechanism. The core self-attention operation is fundamentally **permutation-invariant**, not permutation-equivariant. That is, if the order of input tokens is shuffled, the output representation for any given token remains unchanged because it is a weighted sum over a set of values where order does not matter. This lack of inherent sequential awareness is a defining characteristic of the architecture and is the explicit reason why positional encodings are a necessary component, as correctly stated later in the research plan's methods section.
+
+(b) The modified hypothesis is internally consistent; it presents a cause ("the mechanism is permutation-equivariant") for an effect ("it is sufficient to model dependencies"). However, the stated cause is factually incorrect and conflicts with the established understanding of how Transformers work. It claims that the model inherently understands sequence order due to permutation-equivariance, when in reality, the model is blind to sequence order and this limitation must be corrected with an external mechanism (positional encodings). An expert would recognize that the justification provided in the hypothesis is fundamentally wrong, creating a direct conflict with established knowledge about the model's core properties.

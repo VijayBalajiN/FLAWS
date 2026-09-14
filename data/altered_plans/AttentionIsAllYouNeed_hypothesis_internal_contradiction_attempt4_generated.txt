@@ -1,0 +1,19 @@
+:error_type:
+Internal Contradiction
+
+:original_text:
+An architecture relying solely on attention mechanisms, without recurrence or convolutions, is sufficient to model global dependencies between input and output sequences.
+
+:modified_text:
+An architecture relying solely on attention mechanisms, without recurrence or convolutions, is sufficient to model global dependencies between input and output sequences.
+
+:original_text:
+-   **Encoder Self-Attention:** All keys, values, and queries will come from the output of the previous layer in the encoder, allowing each position to attend to all positions in the previous layer.
+
+:modified_text:
+-   **Encoder Self-Attention:** All keys, values, and queries will come from the output of the previous layer in the encoder. To maintain computational tractability and enforce a locality bias, each position will be restricted to attend only to positions within a fixed-size local window in the previous layer.
+
+:explanation:
+The hypothesis's central claim is that an architecture based "solely on attention mechanisms" is sufficient to model "global dependencies". The original plan supports this by describing self-attention mechanisms where each position can attend to all other positions in the sequence, which is the mechanism for capturing these global dependencies.
+
+The modification introduces a self-contradiction by altering the definition of the core self-attention mechanism. It states that each position is "restricted to attend only to positions within a fixed-size local window". This change directly cripples the very mechanism intended to capture global dependencies, making it inherently local. By its own modified definition, the architecture can now only model local dependencies, directly violating the hypothesis's stated goal of modeling global dependencies. The proposed machinery breaks its own high-level objective.
