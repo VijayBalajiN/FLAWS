@@ -1,0 +1,520 @@
+Nature Vol. 267 16 June 1977 
+$85 
+articles 
+Dynamics of folded proteins 
+J. Andrew McCammon, Bruce R. Gelin & Martin Karplus Department of Chemistry, Harvard University, Cambridge, Massachusetts 02138 
+The dynamics of a folded globular protein (bovine pancreatic trypsin inhibitor) have been studied by solving the equations of motion for the atoms with an empirical potential energy function. The results provide the magnitude, correlations and decay of fluctuations about the average structure. These suggest that the protein interior is Sluid-like in that the local atom motions have a diffusional character. 
+RESULTS of X-ray crystallography provide a picture of a globular protein in its native conformation as a well defined, densely-packed structure. Other experimental data!—i0 and theoretical considerations! —3 indicate that there is consider- able local motion inside a protein at ordinary temperatures. Moreover, the structural data themselves show that significant residue or subunit displacements have an important role in the activity of proteins (for example, enzyme catalysis, haemo- globin cooperativity, immunoglobulin action’). To obtain a more complete understanding of proteins, it is essential to have a detailed knowledge of their dynamics. In spite of the con- siderable effort directed toward protein folding!’, very little has been done to investigate the motions of a protein in. the neighbourhood of its equilibrium configuration. For certain cases in which the displacements along a suitably chosen co- ordinate can be isolated (for example, aromatic side chain rotations in the pancreatic trypsin inhibitor?®, the Opening and closing of the active site cleft in lysozyme?2), it has been demonstrated that empirical energy functions can be used to analyse the motion involved. Here we undertake a more general examination of the internal dynamics of a folded globular protein. The approach used is of the molecular dynamics type}, In such a study the classical equations of motion for all the atoms of an assembly are solved simultaneously for a suitable time period and detailed information is extracted by analysing the resulting atomic trajectories. The full interatomic potential can be used to obtain the forces on the atoms, so that the method is applicable even when the system is highly anhar- monic. The molecular dynamics approach has been very successful in revealing structural and dynamical characteristics of fluids’. As we demonstrate in what follows, molecular dynamics can have a corresponding role for the internal motions of proteins. 
+Bovine pancreatic trypsin inhibitor (PTI) (see Fig. 1a) was selected for study because of its small size (58 amino acid residues), high Stability and accurately determined X-ray structure?”-?!_ Four water molecules, which are strongly bound in the interior, were included in the dynamical simulation. The potential energy was represented by an empirical function!® composed of a sum of terms associated with bond lengths, bond angles, dihedral angles, hydrogen bonds, and non-bonded (van der Waals and electrostatic) interactions. Hydrogen atoms are not explicitly considered, but are combined with the heavy atoms to which they are bonded by a suitable adjustment of atomic parameters. This use of ‘extended atoms’ reduces the number of interactions which must be calculated and also permits larger steps in the trajectory calculation since the high frequency hydrogen vibrations have been eliminated. Integra- tion of the equations of motion was performed by means of the Gear algorithm?? with time steps of 9.78x 10-165, X-ray coordinates! were used for the initial positions and the initial velocities were set equal to zero. After 100 equilibration steps, the stresses in the initial structure had partly relaxed and the system had an internal kinetic energy corresponding to a temperature of 140 K. At this point, all velocities were multi- plied by a factor of 1.5 and 250 more equilibration steps were taken. The added kinetic energy (250.6 kcal mol~})_parti- tioned itself between kinetic and potential terms during this interval, and an average kinetic temperature of 285 K was reached. The actual simulation consisted of 9,000 additional steps, corresponding to 8.8 ps. Some equilibration of the bond lengths, bond angles and electrostatic interactions continues during the first 3 ps of the simulation, producing a small rise in temperature. Over the whole simulation, the average tempera- ture is 295 K and the total energy is well conserved, changing by only 0.7 kcal mol-}, In what follows we first describe results concerned with the relation between the time-averaged and X-ray structures and with the magnitudes of structural fluctuations. We then examine the details of the dynamics, the correlation and damping of fluctuations, and some examples of the larger changes that occur. Of primary importance are the conclusions reached concerning the fluid-like nature of the internal motions, which will clearly have to be considered in developing dynamical models for biological processes. 
+Time-averaged structure and fluctuations The time-averaged structure obtained in the dynamics run. is near the X-ray structure but not identical with it; the root mean square (r.m.s.) deviation of the a carbons is 1.2 A and that for all the atoms is 1.7 A. The largest deviations come from the two ends of the molecule, the external loop (residues 25-28) and exposed sidechains. The two parts of the B sheet (residues 18-24, 29-35) and the a helix (residues 47-56) have significantly smaller deviations. 
+Use of the X-ray structure as the starting configuration corresponds to 0.4 kcal mol~} of kinetic energy per atom after equilibration (140 K); for the main dynamics run (295 K), the mean kinetic energy per atom is about 0.9 kcal mol~?. Although there is no tendency to unfold, the dynamic development with this kinetic energy permits the molecule to make small rearrangements throughout; a picture of the structure after 3.2 ps is shown in Fig. 10. Apparently the PTI molecule samples a series of neighbouring conformations, the average of which is not identical with the X-ray structure. It is not clear how much of the difference is a real effect (in the sense that the structure in the crystal is constrained) and how much is due to inaccuracies in the potential function and the absence of solvent. In lysozyme, comparison of the X-ray structures for the triclinic and tetragonal crystal forms2??:24 shows an r.m.s. 
+
+Nature Vol. 267 16 June 1977 
+Fig. 1 The peptide backbone (a carbons) and disulphide bonds of PTI. a, X-ray structure2!, b, Time evolved structure after 3.2 ps of dynamical simulation. 
+deviation of backbone atoms equal to 0.5 A, with the largest changes at the surface of the protein. Also, a variety of other studies**~*? support the picture of a protein accommodating its structure to different environments. In any case, the X-ray and dynamic average structures are sufficiently similar that the present results should give a meaningful approximation to the short-time dynamics of PTI. Figure 2 shows the r.m.s. displacements of the a carbons, relative to the dynamical average structure. The three residues at the carboxyl end of the chain have particularly large fluctua- tions; these are due to the presence of excess kinetic energy resulting from local strain in the initial structure. Some of this kinetic energy was transferred to the nearby amino end of the chain, which also exhibits relatively large r.m.s. displacements. The important fluctuations in residues 25-28 of the loop connecting the two strands of B sheet seem to reflect an intrinsic softness in this part of the molecule. The smaller fluctuations of the B sheet and a helical regions are also evident. The side- chain atom displacements are somewhat larger than those of the a carbons, but generally show a similar pattern of variation. The average r.m.s. fluctuation of all atoms is 0.9 A. Particu- larly Jarge r.m.s. displacements (1.8-3.1 A) occur in the side- chains of Lys 26, Arg 39, Arg 42, Lys 46 and Met 52; all of these are at the surface of the protein. Overall, the large fluctuation regions correspond to those deviating most from the X-ray structure. In principle, the temperature factors from the X-ray analysis can be compared with the calculated fluctuations. The r.m.s. atomic fluctuation for the a carbons obtained from the experimental temperature factor is 0.4 A. Also, some of the more mobile regions correspond to groups of atoms which were not located or had unusually high temperature factors (J. Deisenhofer, personal communication). The range of variation of the internal coordinates in the static structure can be compared with the dynamical averages and fluctuations. Since the X-ray results for bond lengths and angles correspond to standard values for the different amino acids**, we use for comparison the energy-refined geometry (ERG)!8, which reflects the effect of the environment on the coordinates. Selected examples for backbone coordinates are listed in Table 1. It can be seen that the ERG and dynamical averages and r.m.s. variations are in close correspondence. It should also be noted that the average r.m.s. dynamical fluctua- tion of any given coordinate is two to five times larger than the variation in the coordinate throughout the molecule. The results for the side chains are similar. For the dihedral angle a, neither the ERG refinement nor the dynamic results show any significant distortions or unusual fluctuations for residues 
+14-17; this differs from the X-ray results??. 
+The dynamic averages for individual » and yw dihedral angles 
+differ from the corresponding ERG results by less than 15° for 
+70 of the 115 backbone angles and by somewhat larger values 
+for the rest (up to 30°). The behaviour of the sidechain dihedral 
+angles is similar to @ and y. 
+The r.m.s. dynamic fluctuations of the bond lengths, the 
+bond angles, and the w angles are essentially constant along 
+the backbone except for slightly (~ 20°%) larger fluctuations in 
+
+Nature Vol. 267 16 June 1977 Distance (A) 
+ae Be 2 ee oe oe se sa oe 0 307 7 30" 40 50 60 Residue no. 
+Fig. 2 R.m.s. displacements ( ) and maximum displace- ments (..... ) of the a carbons, relative to the dynamical average structure. 
+residues 56-58. For the @ and y dihedral angles, the r.m.s. 
+dynamic fluctuations range from 10° to 40° and show more 
+variation along the chain; in both the B sheet and a helix 
+regions these fluctuations are about 18° on the average, while 
+in the loop region the fluctuations average about 25°. 
+Bond lengths calculated from the dynamically averaged set 
+of Cartesian coordinates were uniformly 0.02-0.03 A shorter 
+than the average bond lengths obtained directly. A similar 
+discrepancy arises in calculating interatomic distances from 
+X-ray diffraction data because of thermal atomic motion2®. 
+Time-dependence of motions 
+The fact that the individual PTI internal coordinates exhibit 
+dynamic fluctuations of appreciable magnitude raises questions 
+concerning the details of the motions, including their time 
+evolution and spatial correlation. 
+To illustrate the time-dependence of individual coordinate 
+fluctuations, we present results obtained for the Phe 22. This 
+residue is relatively well buried in the protein and so should 
+exemplify the effect of interactions between different parts of 
+the molecule; other residues examined were found to have 
+qualitatively similar dynamic behaviour. Figure 3a shows the 
+time-dependence of several Phe 22 internal coordinates; the 
+considerable variation in the frequencies, magnitudes of 
+fluctuations, and irregularities of the behaviour of the different 
+coordinates is evident. 
+To quantitate the average decay characteristics of fluctua- 
+tions, so as to best analyse the coupling between the coordinate 
+and the rest of the molecule, it is helpful to introduce time 587 
+correlation functions®*. The time correlation function C(t) 
+= ¢A(t+1)A(t)>, for a dynamical variable A is obtained by 
+multiplying the value of A(t) by A(t+0), the value taken by A 
+after the system has evolved for an additional time t, calculating 
+such products for a representative set of initial times t and 
+averaging. If A is the fluctuation of a variable from its mean 
+value, <[A(t)]®> is the mean-square fluctuation of the variable 
+for an equilibrated system, while the time correlation function 
+C(t) describes the average decay behaviour of the fluctuation. 
+Time correlation functions for the fluctuations of the internal 
+coordinates of Phe 22 shown in Fig. 3a are given in Fig. 30. 
+Fluctuations of the backbone bond length N,.~C,.° exhibit a 
+partial loss of correlation in the first 0.1 ps, followed by a very 
+slow decay of the residual small amplitude oscillation. Other 
+backbone and sidechain bond lengths behave similarly. 
+Although the specific oscillation frequencies depend on the 
+force constants and the masses of the bonded atoms, all have 
+long-lived oscillations; among others, the disulphide bond 
+Sia-Sgg was examined and showed no atypical features. The 
+other stiff internal coordinates (bond angles, dihedral angle w) 
+also exhibit partial loss of correlation in the first 0.1 ps but 
+have persistent though less regular small-amplitude oscillation 
+at longer times. 
+The relaxation behaviour can be analysed further by obtaining 
+the Fourier transform of the correlation function and finding 
+the dominant frequency components. For the Ny»~C.." bond, 
+the main peaks are found at 800 cm~}, 1,010 cm~!, 1,110 cm}, 
+1,170cmTM, and 1,430cm~1. These frequencies correspond to 
+the calculated normal modes that involve the largest displace- 
+ments of the N-C* bond length of the isolated fragment 
+CH ;-CO-Phe~NH-CH ;(787 ;952; 1,099; 1,161;and1,425cm~). 
+In addition, there are relatively small contributions from many 
+low frequency motions. Thus, the No.-C..* bond fluctuations 
+are those expected for a strongly coupled system of local 
+oscillators that is weakly coupled to the rest of the protein 
+molecule. For the bond angles and the dihedral angle w, there 
+are important frequency contributions in the range 300- 
+1,200cm7, which correspond to the fragment vibration 
+frequencies associated with these degrees of freedom. Since 
+frequencies below 300 cm7! are also important, it seems that 
+the bond angle and the dihedral angle w fluctuations are 
+significantly coupled to the protein matrix. Backbone dihedral 
+angles (@, ) are seen in Fig. 3b to exhibit considerable damping, 
+though ©. preserves long term correlation in a low frequency 
+oscillation of the order of 2 ps. For the sidechain dihedral 
+angle, X22”, associated with the rotation of the phenyl ring, 
+damping produces a nearly monotonic decay with a 
+relaxation time of 0.2 ps. It is clear from the decay behaviour 
+of the correlation functions that the fluctuations of the @, Ww 
+and x dihedral angles are dominated by interactions with the 
+protein matrix. It is reasonable that torsional motions which 
+involve substantial displacements of large groups inside proteins 
+Table 1 Backbone internal coordinates* 
+Internal coordinate Averaget 
+Bond lengths ERG Dynamics 
+N-C# 1.476 1.478 
+C*-C 1.531 1.533: 
+Cc-O 1.237 1.237 
+C-N 1.32] 1.323 
+Bond angles 
+C-N-C*# 124.6 125.8 
+N-C*-C 113.8 114.9 
+C*-C-N 115.4 114.6 
+C*-C-O 119.7 118.7 
+Dihedral-angle 
+@ 177.9 177.8 r.m.s. variation Average dynamical r.m.s. 
+fluctuationt 
+ERG Dynamics 
+0.005 0.004 0.028 
+0.004 0.004 0.027 
+0.002 0.003 0.015 
+0.003 0.003 0.018 
+1.6 i) 4.8 
+2.9 2.4 4.8 
+1.8 La 4.6 
+1.5 1.5 4.6 
+5.8 4.7 8.5 
+* Units are A for bond lengths, degrees for bond and dihedral angles. 
+These values represent the average and r.m.s. variation over the 58 amino acids of a given type of coordinate. These values represent the r.m.s. dynamical fluctuation of the individual coordinate averaged over the 58 amino acids. 
+
+I 
+(174 
+Tt 
+re 
+DI 
+hy 
+FI: 
+St 
+Et 
+in 
+ac 588 
+(A) 1 
+1 b(t) 
+1 T(t) (deg) 
+100 9 (1) (deg) v (1) (deg) w (t) (deg) 
+C,, () (10~* A2) 
+k C, (0) deg’) Cy (t) (10? deg?) Cw (t) (10 deg?) 1204 
+bro Cyl (10? deg?) 56 
+48 
+407 (No2.C35) a 
+pin /yvwy 
+110) @ (Nas (C%.Ci0) 
+0.1 0.2 03 
+Time (ps) rey 
+S x o 
+1807 
+a So rn 
+1607, 04 O8 72 
+Time (ps) 1.6 
+to 
+Oo co Se - WwW o Oo aay Ga Gar Gast o 01. 02 0.3 
+Time (ps) 0.4 0.5 py 2. 4 7 re Oo 
+=P 
+21 
+14 
+OT 
+43 
+24 C22 
+~! r T T Tr T r r + 
+0 0.2 0.4 0.6 0.8 1.0 
+Time (ps) Nature Vol. 267 16 June 1977 
+(for example, aromatic sidechains) will have a collective, 
+diffusion-like behaviour, while those subject to smaller steric 
+interactions will retain more of a local character. 
+The relaxation of individual atom fluctuations seems to be 
+dominated by rotations of the dihedral angles. Atom displace- 
+ment time correlation functions exhibit qualitative features and 
+characteristic times similar to those shown for the dihedral 
+angles. In many cases, the correlation functions show nearly 
+monotonic decay with relaxation times of the order of a ps. 
+Correlated fluctuations 
+The large fluctuations found in the individual dihedral angles 
+might seem to suggest a degree of structural mobility that is 
+greater than that corresponding to the r.m.s. fluctuations of the 
+individual atoms. In fact, the fluctuations of neighbouring 
+dihedral angles are generally correlated so as to minimise 
+disturbances of the backbone and sidechain atoms. For the 
+typical backbone dihedral angle ~33, which is at the centre of a 
+strand of B sheet, the observed equal-time correlations of 
+fluctuations of neighbouring @ angles and of neighbouring y 
+angles are shown in Fig. 4. The large negative correlation 
+<A@33(t)AW3.(t)> is striking and has as a consequence the 
+conservation of the general direction of the backbone and of 
+the approximate position of the sidechains; the larger the 
+individual dihedral fluctuations, the stronger the anti- 
+correlation <Ag;(t)Aw;_ 1(t)> is found to be. The correlation 
+pattern seen in Fig. 4 is similar to that obtained for an isolated 
+harmonic a helix®*. A corresponding pattern of positive and 
+negative dihedral angle correlations is likely to occur generally 
+in strongly conserved regions of secondary structure. The 
+anti-correlation <Ag;(t)Aw;- ,(t)> is, in fact, present in other 
+parts of the protein, though somewhat weaker outside the 
+B sheet and « helical regions. 
+Structure-conserving correlations between dihedral angles 
+also exist in the sidechains. For the eight aromatic sidechains 
+with dihedral angles y? and y2, the normalised correlations 
+(<Ax7Ax2>/<(Ax2)®>1/2 ((Ax2)*>2/2) range from —0.05 to —0.63; 
+again, dihedral angles with larger r.m.s. fluctuations tend to be 
+more strongly anti-correlated. This correlation is the one 
+required to conserve approximately the orientation of the 
+aromatic rings with respect to the polypeptide backbone. 
+Concerted motions 
+In addition to the structure-preserving correlations, a number 
+of concerted atom motions were observed. One of these involves 
+the relatively flexible loop region (residues 25-29) which seems 
+to oscillate as a whole with a period of approximately 6 ps, as 
+well as undergoing changes in shape (see Fig. 1a, 5). Some 
+damping of this motion would be expected in solution due to 
+the high solvent accessibility of the loop. 
+Time correlation functions involving different internal 
+coordinates (for example, <A(t+1)B(t)>) can be used to probe 
+the dynamical character of non-local, collective motions in the 
+protein. One such case concerns time correlations between the 
+fluctuations of the dihedral angle @,, in the B sheet and the 
+fluctuations of other backbone and sidechain dihedral angles 
+in the molecule. The results show that both strands of the 
+B sheet and some additional residues participate in a low- 
+frequency ‘rippling motion’ (v = 15 cm~); within each strand 
+of the B sheet, backbone dihedral angles tend to oscillate with 
+the phase relationships suggested by Fig. 4. Examination of the 
+correlation functions for the atoms involved also shows damped 
+oscillations of the same frequency. 
+A feature of the dynamics is that certain groups in the 
+molecule undergo transitions from one minimum to another. 
+Such behaviour was found for a number of sidechains; 
+Fig. 3 a, Time development of selected Phe 22 internal 
+coordinates; the initial time is 4.9 ps after the beginning of the 
+dynamical simulation; average values are: indicated by broken 
+line segments. b, Time correlation functions for fluctuations of 
+selected Phe 22 internal coordinates, 
+
+Nature Vol. 267 16 June 1977 
+0.85 
+= 045 
+2 mY In , S N a LN. 2 0) VN TNYT SH x 7 eS, \Z I oTM “. # Z J aan | yy = \ : E 0.44 . i 4 \ | 4 1, 7 ‘oy 
+a 
+~0.85 \y 
+V 
+en a ae | T a, ie ce 
+-4 ae 0 2 4 
+Residue no. (4) 
+Fig. 4 Normalised equal-time correlations of fluctuations in O33 
+with fluctuations in @33+x ( ) and with fluctuations 
+IN W334+k (-----— ); the quantities plotted are, for example, 
+CAG 33AQ5a+k>/<(AG3)*>1/2<(A@s5 4x)? 1/2, 
+for example, Met 52, where y;.2 moved successively from 
+— 60° +60°— —60° — 180° —- 60° — 180° and Arg 39, 
+where X59” moved successively from —60°—> 180° — 60°. The 
+times involved in these rotations vary between 0.2 and 2 ps. 
+Since these sidechains are on the surface of the molecule, they 
+have low barriers due to the protein; their detailed dynamics 
+would be expected to be altered by interactions with the solvent. 
+In addition to the sidechain reorientations, there occurred a 
+few concerted transitions in the backbone involving Wi, ©; 
+dihedral angle pairs. In these transitions, the anti-correlated 
+angles y;_, and 9; rotate in the opposite sense by about 180° 
+so that the intervening amide group flips over, but the backbone 
+and sidechain directions are only slightly altered. The pairs 
+involved are W3s, @39 (near the 14-38 disulphide bond); Waa, 
+as; aNd Wse, M57. All of these amide groups are located near 
+the surface of the protein, so that the probability and dynamics 
+of their transitions could be affected by solvent. Nevertheless, 
+it is worthwhile to examine the behaviour since it can serve asa 
+model of structural alterations in the presence of the protein 
+matrix. Figure 5 shows the results for the W3s, O39 pair. The 
+transition is seen to take place in about Ips. During this peroid, 
+the variation in the angles is roughly linear in time and the 
+kinetic energy of the amide group does not show any significant 
+departure from the thermal value. The amide flip is seen to be 
+followed by a conformational adjustment period of 3-4 ps, 
+during which Wess, @g9 drift over a relatively small angular 
+interval into their new equilibrium ranges. It is apparent that 
+there is a smooth change from one minimum to the other, 
+while the protein relaxes so that the transition can occur 
+without a large activation energy. The details of the driving 
+torques and other matrix effects remain to be analysed, as do a 
+variety of other larger scale motions that occur. 
+Fig. 5 Amide group transition; the time development of woe 
+and @3, during the transition is shown. 
+- 60 
+n 
+_- 1204 J 
+2 
+ar Qe 
+A 2 Ba 
+2 1807 Wax as eS a Ad 
+& 2 0 ra ne? ry 
+5 oot Ata” \ ad ss 
+fa 04 ob 30 
+607 
+0 OF To Us 20 25 30 35 
+Time (ps) 589 
+Discussion 
+A molecular dynamics study of the pancreatic trypsin inhibitor 
+has revealed a rich variety of motional phenomena that occur 
+on the atomic level at ordinary temperatures. PTI has been 
+shown to exhibit significant structural fluctuations, and detailed 
+information on the magnitude, correlations and decay of these 
+fluctuations has been obtained. 
+One important result of the dynamical simulation is that 
+many aspects of the internal motion of PTI suggest that the 
+folded protein is fluid-like at ordinary temperatures*!. By this 
+we mean that the fluctuations in atom positions, although 
+confined to the neighbourhood of the average structure, have a 
+diffusional character. In other words, the dynamics of atomic 
+displacements are dominated by collisions with neighbouring 
+atoms, at least on the picosecond time scale. 
+Also of significance is the heat capacity of the protein, which 
+may be calculated from the magnitude of fluctuations in the 
+Kinetic energy**. Over the final 2 ps of the simulation, these 
+fluctuations had the average value <(AKE)®) = 87 kcal? 
+mol~?; the corresponding heat capacity per atom is C = 2.3 k, 
+where k is Boltzmann’s constant. This result, which is midway 
+between those expected for a harmonic solid (C = 3k) and for 
+a hard-sphere fluid (C = 1.5k) indicates that the potential 
+governing the atomic motions is significantly anharmonic. 
+Similar values have been measured in real fluids; for example, 
+at 84 K in liquid argon, C = 2.32k (ref. 33). The calculated heat 
+capacity of 0.33 cal g-! K~- is consistent with experimental 
+values for proteins?*. 
+An idealised model for proteins is that of a dense hard-sphere 
+fluid composed of particles that are connected by flexible links. 
+This implies that many of the dynamical properties (though 
+not necessarily the correct average structure) can be obtained 
+from any potential function which includes the forces that 
+depend strongly on distance (covalent and hydrogen bonds, 
+non-bonded repulsions) and provides sufficient attractive 
+interactions to preserve the compact structure of the native 
+system. Such a representation of a protein has much in common 
+with the hard-sphere model of dense fluids, which has had 
+considerable success recently in reproducing their equilibrium 
+and dynamic properties*4. The close correspondence of the 
+protein dynamics with that of the high temperature (300 K) 
+solid phase of normal alkanes is also of interest?*3°, The 
+importance of motions in which hard-sphere interactions 
+dominate suggests that in conformational changes the non- 
+bonded contacts will determine the transmission of effects 
+from one part of the molecule to another. One such case of 
+biological interest is the recent determination of the mechanism 
+of tertiary structural change in a haemoglobin subunit, where 
+non-bonded contacts were found to have the dominant role?’. 
+Although the time scale of the simulation is rather short, it 
+provides essential details concerning the dynamics that should 
+be of considerable utility in analysing longer time scale pheno- 
+mena. A basic result is the r.m.s. atom fluctuation of 0.9 A. In 
+a stochastic model that assumes independent atom motions, 
+this provides a means for estimating the probability of larger 
+fluctuations. Of corresponding significance is the nearly 
+monotonic decay of the atom fluctuations with a time constant 
+of ~1 ps. It is also of interest that the kinetic energy of residues 
+49-58 remains 10-20% above the equipartition value for more 
+than 9 ps; this indicates that vibrational energy can localise for 
+relatively long time periods in proteins; this may be compared 
+with the vibrational relaxation times in polyatomic fluids, which 
+are often of the order of many picoseconds, even when efficient 
+relaxation pathways exist?®. 
+It is clear from the dynamic simulation that the protein with 
+room temperature kinetic energy samples highly anharmonic 
+regions of the potential surface. Further, from an examination 
+of the details of the coordinates during the run, as well as the 
+' dynamic average structure, it follows that the protein is able to 
+wander over a range of conformations that arein the neighbour- 
+hood of the X-ray structure but not identical with it. The protein 
+
+590 
+seems to be oscillating in a confined multidimensional space, as 
+shown by the fact that the fluctuations from the average 
+structure are similar during the entire dynamical run. Some of 
+the fluctuations that involve reorientation of sidechains or 
+localised portions of the backbone may represent local minima, 
+though their detailed characteristics have not yet been investi- 
+gated. 
+Two limitations of the present model need to be mentioned. 
+First is the approximate nature of the potential energy function. 
+Although in previous applications this function has proved 
+reliable for energy refinement of the PTI structure and the 
+calculation of vibrational spectra of small peptides, some of the 
+details of dynamical simulations of proteins may be sensitive to 
+the choice of potentials. Also, hydrogen atoms have not been 
+explicitly included in the simulation. Their characteristically 
+high frequency motions suggest that replacing them by what 
+can be regarded as an effectively averaged potential may not be 
+a severe approximation; nevertheless, there remains a question 
+as to whether their detailed consideration could introduce 
+somewhat more rigidity into the close-packed structure. 
+Another limitation of the model is the neglect of solvent. The 
+structure and dynamics of groups at the protein surface are 
+expected to be influenced by hydrogen-bond formation and 
+collisions with solvent molecules, as well as by hydrophobic 
+effects that vary with the exposed area. But, many of the essential 
+features of the internal motions analysed in the dynamic 
+simulation of PTI are not expected to be grossly altered by the 
+presence of solvent. The electrostatic component of the potential 
+energy was found to vary over a smaller range than some other 
+energy components during most of the run, and there was no 
+marked low-frequency alteration of the overall shape of the 
+protein during the simulation. Large variations in these proper- 
+ties, which might be found on a longer time scale, would require 
+consideration of dielectric and hydrodynamic effects, respec- 
+tively. 
+It is most important to have available detailed tests of the 
+dynamic simulation. Most closely related are results obtained 
+from fluorescence depolarisation, NMR, fluorescence quenching 
+and hydrogen exchange studies. Measurements of fluorescence 
+depolarisation on a picosecond time scale could be interpreted 
+directly by use of the dynamic results. Other data (for example, 
+fluorescence quenching) require assumptions, such as that of 
+stochastic behaviour, to use the information on fluctuations 
+that has been obtained. For certain rare phenomena that are 
+not represented in the dynamic simulation because they involve 
+high activation barriers (for example, rotation of a tyrosine Nature Vol. 267 16 June 1977 
+sidechain), special methods based on dynamics starting at the 
+transition state may have to be introduced?4°, Comparisons 
+with a variety of experimental data, as well as studies of motional 
+effects on enzyme mechanisms and of conformational changes 
+involved in ligand binding are in progress. A combination of 
+these theoretical approaches with the interpretation of related 
+experiments will provide a unified description of motions in 
+proteins. 
+We thank J. Deisenhofer and W. Steigemann for the PTI 
+coordinates and John Deutch, Peter Wolynes, Peter Rossky, 
+Stephen Harrison and Aneesur Rahman for helpful discussions. 
+We thank Dr Carl Moser and CECAM for the hospitality 
+extended to us at a summer workshop (1976) during which 
+the initial calculations were done. The work was supported. by 
+the US NSF and NIH. 
+Received 14 February; accepted 12 April 1977. 
+! Brown, K. G., Erfurth, S. C., Small, E. W. & Peticolas, W. L. Proc. natn. Acad. Sci. U.S.A. 69, 1467-1469 (1972). 
+? Hull, W. E. & Sykes, B. D. J. molec. Biol. 98, 121-153 (1975). 
+3 Campbell, I. D., Dobson, C. M., Moore, G. R., Perkins, S. J. & Williams, R. J. P. 
+FEBS Lett. 70, 96—100 (1976). 
+4 Lakowicz, J. R. & Weber, G. Biochemistry 12, 4171-4179 (1973). 
+5 ee M. L. & Galley, W. C. Proc. natn. Acad. Sci. U.S.A. 71, 4154-4158 
+(1974). 
+6 Eftink, M. R. & Ghiron, C. A. Biochemistry 15, 672-680 (1976). 
+7 Ghose, R. C. & Englander, S. W. J. biol. Chem. 249, 7950-7955 (1974). 
+8 Vas, M. & Boross, L. Eur. J. Biochem. 43, 237-244 (1974). 
+° Yguerabide, J., Epstein, H. F. & Stryer, L. J. molec. Biol. 51, 573-590 (1970). 
+10 Holowka, D. A. & Cathou, R. E. Biochemistry 15, 3379-3390 (1976) 
+11 Suezaki, Y. & Go, N. Int. J. Peptide Protein Res. 7, 333-334 (1975). 
+12 McCammon, J. A., Gelin, B. R., Karplus, M. & Wolynes, P. G. Nature 262, 
+325-326 (1976). 
+13 Cooper, A. Proc. natn. Acad. Sci. U.S.A. 73, 2740-2741 (1976). 
+14 Lipscomb, W. N. Ace. Chem. Res. 3, 81-89 (1970). 
+15 Perutz, M. Nature 228, 726-739 (1970). 
+16 Huber, R., Deisenhofer, J., Colman, P. M., Matsushima, M. & Palm, W. Nature 
+264, 415-420 (1976). 
+17 Karplus, M. & Weaver, D. L. Nature 260, 404-406 (1976). 
+18 Gelin, B. R. & Karplus, M. Proc. natn. Acad. Sci. U.S.A. 72, 2002-2006 (1975). 
+19 Rahman, A. Phys. Rev. A2, 405-411 (1964). 
+20 Huber, R., Kukla, D., Ruhlmann, A., Epp, O. & Formanek, H. Naturwissen- 
+schaften 57, 389-392 (1970). 
+21 Deisenhofer, J. & Steigemann, W. Acta Crystallogr. B31, 238-250 (1975). 
+22 Gear, C. W. Argonne Nat'l. Lab. Rep. No. ANL-7126 (1966). 
+23 Imoto, T., Johnson, L. N., North, A. C. T., Phillips, D. C. & Rupley, J. A. in 
+The Enzymes WI (ed. Boyer, P. D.) (Academic, New York, 1972). 
+24 Moult, J. et al. J. molec. Biol. 100, 179-195 (1976). 
+25 Yu, N.-T. & Jo, B. H. J. Am. Chem. Soc. 95, 5033-5037 (1973). 
+26 Austin, R. H., Beeson, K. W., Eisenstein, L., Frauenfelder, H. & Gunsalus, I. C. 
+Biochemistry 14, 5355-5373 (1975). 
+27 Stuhrmann, H. B. J. molec. Biol. 77, 363-369 (1973). 
+28 Busing, W. R. & Levy, H. A. Acta Crystallogr. 17, 142-146 (1964). 
+29 Zwanzig, R. A. Rev. phys. Chem. 16, 67—102 (1965). 
+30 Go, M. & Go, N. Biopolymers 15, 1119-1127 (1976). 
+31 Fehder, P. L., Emeis, C. A., Futrelle, R. P. J. chem. Phys. 54, 4021-4934 (1971). 
+32 Lebowitz, J. L., Percus, J. K. & Verlet, L. Phys. Rev. 153, 250-254 (1967). 
+33 Egelstaff, P. An Introduction to the Liquid State (Academic, New York, 1967). 
+34 Chandler, D. Acc. Chem. Res. 7, 246-251 (1974). 
+35 Barnes, J. D. J. chem. Phys. 58, 5193-5201 (1973). 
+36 Peterline-Neumaier, T. & Springer, T. J. Polym. Sci. (Phys.) 14, 1351-1359 (1976). 
+37 Gelin, B. & Karplus, M. Proc. natn. Acad. Sci. U.S.A. 81, 801-805 (1977). 
+38 Laubereau, A. & Kaiser, W. A. Rev. Phys. Chem. 26, 83-99 (1975). 
+39 Anderson, J. B. J. chem. Phys. 58, 4684-4692 (1973). 
+40 Bennett, C. H. in Diffusion in Solids (eds Burton, J. J. & Nowick, A. S.), 73-113 
+(Academic, San Francisco, 1975). 
+The rings of Uranus: theory 
+S. F. Dermott & T. Gold 
+Center for Radiophysics and Space Research, Space Sciences Building, Cornell University, Ithaca, New York 14853 
+The structure of the recently discovered rings of Uranus 
+is accounted for by a series of orbital resonances with 
+the satellites Ariel, Titania and Oberon. The observa- 
+tions and their interpretation will considerably improve 
+our knowledge of the mass of the planet and _ its 
+dynamical oblateness and could influence our ideas on 
+the formation of planets and satellites. 
+THE recently discovered rings encircling the planet Uranus’ 
+are the second example we have of a planetary ring system; 
+however, the rings of Saturn and those of Uranus have 
+quite different structures, and different theoretical discus- 
+sions will be required. In each case resonant interactions, 
+between the particles making up the rings and the perturb- ing satellites, have to be considered. But in the case of 
+Saturn the rings are wide, and a continuum of orbital 
+periods of the circulating particles exists; the sharply de- 
+fined orbits for which resonance effects with the satellites 
+can be invoked concern the divisions between the rings. 
+One has to suppose then that a profuse supply of particulate 
+matter was available to populate a disk surrounding the 
+planet, and that orbit-orbit resonances involving particles 
+and satellites have caused certain lanes to be swept clear. 
+In the case of the Uranus ring system the situation is in 
+a sense the opposite: the rings themselves are exceedingly 
+narrow and resonances can therefore not be responsible for 
+defining them by any sweeping action. A set of rings 10 km 
+wide with a radius of the order of 45,000 km must be de- 
+fined by conditions that lend a stability peculiar to the ring 

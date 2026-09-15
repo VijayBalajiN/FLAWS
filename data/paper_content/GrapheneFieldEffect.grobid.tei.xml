@@ -1,0 +1,457 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xml:space="preserve" xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 https://raw.githubusercontent.com/kermitt2/grobid/master/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">Electric Field Effect in Atomically Thin Carbon Films</title>
+			</titleStmt>
+			<publicationStmt>
+				<publisher/>
+				<availability status="unknown"><licence/></availability>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct>
+					<analytic>
+						<author>
+							<persName><forename type="first">K</forename><forename type="middle">S</forename><surname>Novoselov</surname></persName>
+							<affiliation key="aff0">
+								<orgName type="department">Department of Physics</orgName>
+								<orgName type="institution">University of Manchester</orgName>
+								<address>
+									<postCode>M13 9PL</postCode>
+									<settlement>Manchester</settlement>
+									<country key="GB">UK</country>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName><forename type="first">A</forename><forename type="middle">K</forename><surname>Geim</surname></persName>
+							<affiliation key="aff0">
+								<orgName type="department">Department of Physics</orgName>
+								<orgName type="institution">University of Manchester</orgName>
+								<address>
+									<postCode>M13 9PL</postCode>
+									<settlement>Manchester</settlement>
+									<country key="GB">UK</country>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName><forename type="first">S</forename><forename type="middle">V</forename><surname>Morozov</surname></persName>
+							<affiliation key="aff1">
+								<orgName type="department">Institute for Microelectronics Technology</orgName>
+								<address>
+									<postCode>142432</postCode>
+									<settlement>Chernogolovka</settlement>
+									<country key="RU">Russia</country>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName><forename type="first">D</forename><surname>Jiang</surname></persName>
+							<affiliation key="aff0">
+								<orgName type="department">Department of Physics</orgName>
+								<orgName type="institution">University of Manchester</orgName>
+								<address>
+									<postCode>M13 9PL</postCode>
+									<settlement>Manchester</settlement>
+									<country key="GB">UK</country>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName><forename type="first">Y</forename><surname>Zhang</surname></persName>
+							<affiliation key="aff0">
+								<orgName type="department">Department of Physics</orgName>
+								<orgName type="institution">University of Manchester</orgName>
+								<address>
+									<postCode>M13 9PL</postCode>
+									<settlement>Manchester</settlement>
+									<country key="GB">UK</country>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName><forename type="first">S</forename><forename type="middle">V</forename><surname>Dubonos</surname></persName>
+							<affiliation key="aff1">
+								<orgName type="department">Institute for Microelectronics Technology</orgName>
+								<address>
+									<postCode>142432</postCode>
+									<settlement>Chernogolovka</settlement>
+									<country key="RU">Russia</country>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName><forename type="first">I</forename><forename type="middle">V</forename><surname>Grigorieva</surname></persName>
+							<affiliation key="aff0">
+								<orgName type="department">Department of Physics</orgName>
+								<orgName type="institution">University of Manchester</orgName>
+								<address>
+									<postCode>M13 9PL</postCode>
+									<settlement>Manchester</settlement>
+									<country key="GB">UK</country>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName><forename type="first">A</forename><forename type="middle">A</forename><surname>Firsov</surname></persName>
+							<affiliation key="aff1">
+								<orgName type="department">Institute for Microelectronics Technology</orgName>
+								<address>
+									<postCode>142432</postCode>
+									<settlement>Chernogolovka</settlement>
+									<country key="RU">Russia</country>
+								</address>
+							</affiliation>
+						</author>
+						<title level="a" type="main">Electric Field Effect in Atomically Thin Carbon Films</title>
+					</analytic>
+					<monogr>
+						<imprint>
+							<date/>
+						</imprint>
+					</monogr>
+					<idno type="MD5">305B46AC4A170876F5A0AF0F6BB844F4</idno>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<encodingDesc>
+			<appInfo>
+				<application version="0.8.0" ident="GROBID" when="2026-09-14T22:49+0000">
+					<desc>GROBID - A machine learning software for extracting information from scholarly documents</desc>
+					<ref target="https://github.com/kermitt2/grobid"/>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<profileDesc>
+			<abstract>
+<div xmlns="http://www.tei-c.org/ns/1.0"><p>We describe monocrystalline graphitic films, which are just a few atoms thick but nonetheless stable under ambient conditions, metallic and of remarkably high quality. The films are found to be a twodimensional semimetal with a tiny overlap between valence and conductance bands and to exhibit a strong ambipolar electric-field effect such that electrons and holes in concentrations up to 10 13 cm -2 and with roomtemperature mobilities ≈10,000 cm 2 /Vs can be induced by applying gate voltage.</p><p>One-sentence summary: We report a naturally-occurring two-dimensional material -graphene that can be viewed as a gigantic flat fullerene molecule, -describe its electronic properties and demonstrate all-metallic field-effect transistor, which uniquely exhibits ballistic transport at submicron distances even at room temperature.</p><p>The ability to control electronic properties of a material by externally applied voltage is at the heart of modern electronics. In many cases, it is the so-called electric field effect that allows one to vary the carrier concentration in a semiconductor device and, consequently, change an electric current through it. As the semiconductor industry is nearing the limits of performance improvements for the current technologies dominated by silicon, there is a constant search for new, non-traditional materials whose properties can be controlled by the electric field. The most notable examples of such materials developed recently are organic conductors [1] and carbon nanotubes <ref type="bibr" target="#b1">[2]</ref>. It has long been particularly tempting to extend the use of the field effect to metals (e.g., to develop all-metallic transistors that could be scaled down to much smaller sizes and also have the potential to consume less energy and operate at higher frequencies than traditional semiconducting devices <ref type="bibr" target="#b2">[3]</ref>). However, this would require atomically thin metal films because the electric field is screened at extremely short distances (&lt;1 nm) and bulk carrier concentrations in metals are large compared to the surface charge that can be induced by the field effect. Films so thin are thermodynamically unstable and become discontinuous already at thicknesses of many nm; so far, this has proved to be an insurmountable obstacle to metallic electronics and no metal or semimetal has been shown to exhibit any notable (&gt;1%) field effect <ref type="bibr" target="#b3">[4]</ref>.</p><p>Here we report the electric field effect in a naturally occurring two-dimensional (2D) meterial that we refer to as few-layer graphene (FLG). Graphene is the name given to a single layer of carbon atoms densely packed into a benzene-ring structure. This hypothetical material is widely used to describe properties of many carbon-based materials, including graphite, large fullerenes, nanotubes, etc. (e.g., carbon nanotubes are usually thought of as graphene sheets rolled up into nm-sized cylinders) <ref type="bibr" target="#b4">[5]</ref><ref type="bibr" target="#b5">[6]</ref><ref type="bibr" target="#b6">[7]</ref>. Planar graphene itself has so far been presumed not to exist in the free state, being rather unstable with respect to the formation of curved structures such as soot, fullerenes and nanotubes <ref type="bibr" target="#b4">[5]</ref><ref type="bibr" target="#b5">[6]</ref><ref type="bibr" target="#b6">[7]</ref><ref type="bibr" target="#b7">[8]</ref><ref type="bibr" target="#b8">[9]</ref><ref type="bibr" target="#b9">[10]</ref><ref type="bibr" target="#b10">[11]</ref><ref type="bibr" target="#b11">[12]</ref><ref type="bibr" target="#b12">[13]</ref><ref type="bibr" target="#b13">[14]</ref>. Contrary to the common belief, we have been able to prepare graphitic sheets of thicknesses down to a few atomic layers, including single layer graphene, and succeeded in making devices from them and studying their electronic properties. Despite being atomically thin, the films remain of surprisingly high quality so that 2D electronic transport is ballistic at submicron distances. This is truly remarkable, as no other film of similar thickness is known to be even poorly metallic or continuous under ambient conditions. Using FLG, we demonstrate a metallic field-effect transistor, in which the conducting channel can be switched between 2D electron and hole gases by changing gate voltage.</p><p>The reported graphene films were made by mechanical exfoliation (repeated peeling) of small mesas of highly-oriented pyrolytic graphite as described in the supporting online material [15]. This approach was found to be highly reliable and allowed us to prepare FLG films up to 10 µm in size. Thicker films (d ≥ 3nm) were up to a hundred microns across and visible by the naked eye. Figure <ref type="figure">1</ref> shows examples of the prepared films, including single-layer graphene (see also [15]). To study their electronic properties, the films were processed into multi-terminal Hall bar devices placed on top of an oxidized Si substrate so that gate voltage V g could be applied. We have studied more than 60 devices with d &lt;10 nm. In this report, we focus on Science Oct 22 (2004)   </p></div>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><p>electronic properties of our thinnest (FLG) devices, which contained just 1, 2 or 3 atomic layers <ref type="bibr">[15]</ref>. All FLG devices exhibited essentially identical electronic properties characteristic for a 2D semimetal, which at the same time were drastically different from a more complex (2D plus 3D) behavior observed for thicker, multilayer graphene <ref type="bibr">[15]</ref> as well as from the properties of 3D graphite.</p><p>Figure <ref type="figure">2</ref> shows typical dependences of resistivity ρ and the Hall coefficient R H in FLG on gate voltage V g . One can see that ρ exhibits a sharp peak to a value of several kΩ and decays to ≈100Ω at high V g . In terms of conductivity σ =1/ρ, it increases linearly with V g on both sides of the resistivity peak (Fig. <ref type="figure">2B</ref>). At the same V g where ρ has its peak, R H exhibits a sharp reversal of its sign (Fig. <ref type="figure">2C</ref>). The observed behavior resembles the ambipolar field effect in semiconductors but there is no zero-conductance region associated with the Fermi level being pinned inside the band gap.</p><p>Our measurements can be explained quantitatively by a model of a 2D metal with a small overlap δε between conductance and valence bands <ref type="bibr">[15]</ref>. The gate voltage induces a surface charge density n =ε 0 εV g /te and, accordingly, shifts the position of the Fermi energy ε F . Here, ε 0 and ε are permittivities of free space and SiO 2 , respectively, e is the electron charge, t the thickness of our SiO 2 layer (300 nm). For typical V g =100V, the formula yields n ≈7.2⋅10 12 cm -2 . The electric-field doping transforms the shallow-overlap semimetal into either completely electron or completely hole conductor through a mixed state where both electrons and holes are present (see Fig. <ref type="figure">2</ref>). The three regions of electric-field doping are clearly seen on both experimental and theoretical curves. For the regions with only electrons or holes left, R H decreases with increasing the carrier concentration in the usual way, as 1/ne. The resistivity also follows the standard dependence ρ -1 =σ =neµ. In the mixed state, σ changes little with V g , indicating the substitution of one type of carriers with another, while the Hall coefficient reverses its sign, reflecting the fact that R H is proportional to the difference between electron and hole concentrations. Without electric-field doping (at zero V g ), FLG was found to be a hole metal, which is seen as a shift of the peak in ρ to large positive V g . However, this shift could be due to an unintentional doping of the films by absorbed gas molecules <ref type="bibr" target="#b14">[16,</ref><ref type="bibr" target="#b15">17]</ref>. Indeed, we found that it was possible to change the position of the peak by annealing our devices in vacuum, which usually resulted in shifting of the peak close to zero voltages. Exposure of the annealed films to either water vapor or NH 3 led to their p-and n-doping, respectively. Therefore, we believe that intrinsic FLG is a mixed-carrier semimetal.</p><p>Carrier mobilities in FLG were determined from field-effect and magnetoresistance measurements as µ = σ(V g )/en(V g ) and µ = R H /ρ, respectively. In both cases, we obtained the same values of µ, which varied from sample to sample between 3,000 and 10,000 cm 2 /V⋅s. The mobilities were practically independent of temperature T, indicating that even being so high they were still limited by scattering on defects. For µ ≈10,000 cm 2 /V⋅s and our typical n ≈5⋅10 12 cm -2 , the mean free path is ≈0.4 µm, which is highly surprising given that the 2D gas is at most a few Å away from the interfaces. However, our findings are in agreement with equally high µ observed for intercalated graphite <ref type="bibr" target="#b4">[5]</ref>, where charged dopants are located next to graphene sheets. Carbon nanotubes also exhibit very high µ but this is commonly attributed to the suppression of scattering in the 1D case. Note that for multilayer graphene, we observed even higher mobilities, up to ≈15,000 cm 2 /V⋅s at 300K and ≈60,000 cm 2 /V⋅s at 4K.</p><p>Remarkably, despite being essentially gigantic fullerene molecules and unprotected from the environment, FLG films exhibit pronounced Shubnikov-de Haas (ShdH) oscillations in both longitudinal resistivity ρ xx and Hall resistivity ρ xy (Fig. <ref type="figure" target="#fig_1">3</ref>). This serves as yet another indicator of the quality and homogeneity of the experimental system. Studies of ShdH oscillations confirmed that electronic transport in FLG was strictly 2D, as one could reasonably expect, and allowed us to fully characterize its charge carriers. First, we carried out the standard test and measured ShdH oscillations for various angles θ between the magnetic field and the graphene films. The oscillations depended only on the perpendicular component of the magnetic field B⋅cosθ, as expected for a 2D system. More importantly, however, we found a linear dependence of ShdH oscillations' frequencies B F on V g (Fig. <ref type="figure" target="#fig_1">3</ref>), yielding that the Fermi energies ε F of holes and electrons were proportional to their concentrations n. This dependence is qualitatively different from the 3D dependence ε F ∝ n 2/3 and unequivocally proves the 2D nature of charge carriers in FLG. Further analysis [15] of ShdH oscillations showed that only a single spatially-quantized 2D subband was occupied up to the maximum concentrations achieved in our experiments (≈3⋅10 13 cm -2 ). It could be populated either by electrons with mass m e ≈0.06m 0 located in two equivalent valleys or by light and heavy holes with masses ≈0.03m 0 and ≈0.1m 0 and the double-valley degeneracy (m 0 is the free electron mass). These properties were found to be the same for all studied FLG films and are notably different from the electronic structure of both multilayer graphene [15] and bulk graphite <ref type="bibr" target="#b4">[5]</ref><ref type="bibr" target="#b5">[6]</ref><ref type="bibr" target="#b6">[7]</ref>. Note that graphene is expected to have the linear energy dispersion and carriers with zero mass, and the reason why the observed behavior is so well described by the simplest free-electron model remains to be understood. <ref type="bibr">[15]</ref> We have also determined the band overlap δε in FLG, which varied from 4 to 20meV for different samples, presumably indicating a different number of graphene layers involved. To this end, we first used a peak value ρ m of resistivity to calculate typical carrier concentrations in the mixed state, n 0 (e.g., at low T for the sample in Fig. <ref type="figure">2A</ref>-C with µ ≈4,000 cm 2 /V and ρ m ≈8kΩ, n 0 was ≈2⋅10 11 cm -2 ). Then, δε can be estimated as n 0 /D where D = 2m e /π 2 is the 2D density of electron states. For the discussed sample, δε is ≈4meV, i.e. much smaller than the overlap in 3D graphite (≈40meV). Alternatively, δε could be calculated from the temperature dependence of n 0 , as it characterizes relative contributions of intrinsic and thermally excited carriers. For a 2D semimetal, n 0 (T) varies as n 0 (0K)⋅f⋅ln[1+exp(1/f)] where f =2k B T/δε, and Fig. <ref type="figure">2D</ref> shows the best fit to this dependence, which yields δε ≈6meV. Different FLG devices were found to exhibit the ratio of n 0 (300K)/n 0 (0) between 2.5 and 7, whereas for multilayer graphene it was only ≈1.5 (Fig. <ref type="figure">2D</ref>). This clearly shows that δε decreases with decreasing number of graphene layers. The observed major reduction of δε is agreement with the fact that single-layer graphene is in theory a zero-gap semiconductor <ref type="bibr" target="#b4">[5,</ref><ref type="bibr" target="#b16">18]</ref>.</p><p>As concerns the metallic transistor, graphene is not only the first but also probably the best possible metal for such applications. In addition to the scalability to true nm sizes envisaged for metallic transistors, graphene also offers ballistic transport, linear I-V characteristics and huge sustainable currents (&gt;10 8 A/cm 2 ) [15]. Graphene transistors show a rather modest on-off resistance ratio (less than ≈30 at 300K; limited because of thermally excited carriers) but this is a fundamental limitation for any material without a band gap exceeding k B T. Nevertheless, such on-off ratios are considered sufficient for logic circuits <ref type="bibr">[19]</ref> and it is feasible to increase the ratio further by, e.g., using p-n junctions, local gates <ref type="bibr" target="#b2">[3]</ref> or the point contact geometry. However, by analogy to carbon nanotubes <ref type="bibr" target="#b1">[2]</ref>, it could be other, non-transistor applications of this unique molecular material, which ultimately may prove to be the most exciting.  </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>LIST OF REFERENCES</head></div><figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_0"><head>Figure 1 .Figure 2 .</head><label>12</label><figDesc>Figure 1. Graphene films. (A) Photograph (in normal white light) of a relatively large multilayer graphene flake with thickness ≈3nm on top of an oxidized Si wafer. (B) AFM image of 2x2 µm 2 area of this flake near its edge. Colors: dark brown is SiO 2 surface; orange corresponds to 3nm height above the SiO 2 surface. (C) AFM image of single-layer graphene. Colors: dark brown -SiO 2 surface; brown-red (central area) -0.8nm height; yellow-brown (bottom-left) -1.2nm; orange (top-left) -2.5nm. Notice the folded part of the film near the bottom, which exhibits a differential height of ≈0.4nm. For details of AFM imaging of single-layer graphene, see [15]. (D) SEM micrograph of one of our experimental devices prepared from FLG, and (E) their schematic view.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_1"><head>Figure 3 .</head><label>3</label><figDesc>Figure 3. (A) Examples of Shubnikov-de Haas oscillations for one of our FLG devices for different gate voltages; T =3K and B is the magnetic field. As the black curve shows, we often observed pronounced plateau-like features in ρ xy at values close to (h/4e 2 )/ν (in this case, ε F matches the Landau level with ν =2 at around 9T). Such not-fully developed Hall plateaus are usually seen as an early indication of the quantum Hall effect in the situations where ρ xx does not yet reach the zero-resistance state. (B) Dependence of the frequency of ShdH oscillations B F on gate voltage. Solid and open symbols are for samples with δε ≈6 and 20 meV, respectively. Solid lines are guides to the eye. The linear dependence B F ∝ V g proves a constant (i.e., 2D) density of states [15]. The observed slopes (solid lines) account for the entire external charge n induced by gate voltage, confirming that there are no other types of carriers and yielding the double-valley degeneracy for both electrons and holes [15]. The inset shows an example of the temperature dependence of amplitude ∆ of ShdH oscillations (symbols), which is fitted by the standard dependence T/sinh(2π 2 k B T/ ω c ) where ω c is their cyclotron frequency. The fit (solid curve) yields light holes' mass of 0.03m 0 .</figDesc></figure>
+		</body>
+		<back>
+			<div type="references">
+
+				<listBibl>
+
+<biblStruct xml:id="b0">
+	<analytic>
+		<title/>
+		<author>
+			<persName><forename type="first">C</forename><forename type="middle">D</forename><surname>Dimitrakopoulos</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">D</forename><forename type="middle">J</forename><surname>Mascaro</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IBM J. Res. &amp; Dev</title>
+		<imprint>
+			<biblScope unit="volume">45</biblScope>
+			<biblScope unit="page">11</biblScope>
+			<date type="published" when="2001">2001</date>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b1">
+	<analytic>
+		<title/>
+		<author>
+			<persName><forename type="first">R</forename><forename type="middle">H</forename><surname>Baughman</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">A</forename><forename type="middle">A</forename><surname>Zakhidov</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">W</forename><forename type="middle">A</forename><surname>De Heer</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Science</title>
+		<imprint>
+			<biblScope unit="volume">297</biblScope>
+			<biblScope unit="page">787</biblScope>
+			<date type="published" when="2002">2002</date>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b2">
+	<analytic>
+		<title/>
+		<author>
+			<persName><forename type="first">E</forename><forename type="middle">G</forename><surname>See</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">S</forename><forename type="middle">V</forename><surname>Rotkin</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">K</forename><surname>Hess</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Appl. Phys. Lett</title>
+		<imprint>
+			<biblScope unit="volume">84</biblScope>
+			<biblScope unit="page">3139</biblScope>
+			<date type="published" when="2004">2004</date>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b3">
+	<analytic>
+		<title/>
+		<author>
+			<persName><forename type="first">A</forename><forename type="middle">V</forename><surname>Butenko</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">J. Appl. Phys</title>
+		<imprint>
+			<biblScope unit="volume">88</biblScope>
+			<biblScope unit="page">2634</biblScope>
+			<date type="published" when="2000">2000</date>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b4">
+	<analytic>
+		<title/>
+		<author>
+			<persName><forename type="first">M</forename><forename type="middle">S</forename><surname>Dresselhaus</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">G</forename><surname>Dresselhaus</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Adv. Phys</title>
+		<imprint>
+			<biblScope unit="volume">51</biblScope>
+			<biblScope unit="page">1</biblScope>
+			<date type="published" when="2002">2002</date>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b5">
+	<monogr>
+		<author>
+			<persName><forename type="first">I</forename><forename type="middle">L</forename><surname>Spain</surname></persName>
+		</author>
+		<title level="m">Chemistry and physics of carbon</title>
+		<editor>
+			<persName><forename type="first">P</forename><forename type="middle">L</forename><surname>Walker</surname></persName>
+		</editor>
+		<editor>
+			<persName><forename type="first">P</forename><forename type="middle">A</forename><surname>Thrower</surname></persName>
+		</editor>
+		<meeting><address><addrLine>New York</addrLine></address></meeting>
+		<imprint>
+			<publisher>Marcel Dekker Inc</publisher>
+			<date type="published" when="1981">1981</date>
+			<biblScope unit="volume">16</biblScope>
+			<biblScope unit="page">119</biblScope>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b6">
+	<analytic>
+		<title/>
+		<author>
+			<persName><forename type="first">O</forename><forename type="middle">A</forename><surname>Shenderova</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">V</forename><forename type="middle">V</forename><surname>Zhirnov</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">D</forename><forename type="middle">W</forename><surname>Brenner</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Crit. Rev. Sol. State Mat. Sci</title>
+		<imprint>
+			<biblScope unit="volume">27</biblScope>
+			<biblScope unit="page">227</biblScope>
+			<date type="published" when="2002">2002</date>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b7">
+	<analytic>
+		<title/>
+		<author>
+			<persName><forename type="first">A</forename><surname>Krishnan</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Nature</title>
+		<imprint>
+			<biblScope unit="volume">388</biblScope>
+			<biblScope unit="page">451</biblScope>
+			<date type="published" when="1997">1997</date>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b8">
+	<analytic>
+		<title/>
+		<author>
+			<persName><forename type="first">E</forename><surname>Dujardin</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Appl. Phys. Lett</title>
+		<imprint>
+			<biblScope unit="volume">79</biblScope>
+			<biblScope unit="page">2474</biblScope>
+			<date type="published" when="2001">2001</date>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b9">
+	<analytic>
+		<title/>
+		<author>
+			<persName><forename type="first">H</forename><surname>Shioyama</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">J. Mat. Sci. Lett</title>
+		<imprint>
+			<biblScope unit="volume">20</biblScope>
+			<biblScope unit="page">499</biblScope>
+			<date type="published" when="2001">2001</date>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b10">
+	<analytic>
+		<title/>
+		<author>
+			<persName><forename type="first">A</forename><forename type="middle">M</forename><surname>Affoune</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Chem. Phys. Lett</title>
+		<imprint>
+			<biblScope unit="volume">348</biblScope>
+			<biblScope unit="page">17</biblScope>
+			<date type="published" when="2001">2001</date>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b11">
+	<analytic>
+		<title/>
+		<author>
+			<persName><forename type="first">K</forename><surname>Harigaya</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">J. Phys. Cond. Mat</title>
+		<imprint>
+			<biblScope unit="volume">14</biblScope>
+			<biblScope unit="page">605</biblScope>
+			<date type="published" when="2002">2002</date>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b12">
+	<analytic>
+		<title/>
+		<author>
+			<persName><forename type="first">T</forename><forename type="middle">A</forename><surname>Land</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Sur. Sci</title>
+		<imprint>
+			<biblScope unit="volume">264</biblScope>
+			<biblScope unit="page">261</biblScope>
+			<date type="published" when="1992">1992</date>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b13">
+	<monogr>
+		<title level="m" type="main">The closest known analogues to FLG were nanographene (nm-sized patches of graphene on top of HOPG) [11,12], carbon films grown on chemically binding metal surfaces [13] and mesoscopic graphitic disks with thickness down to ≈60 graphene layers</title>
+		<imprint/>
+	</monogr>
+	<note>8,9]. 15. See supporting material on Science Online for details</note>
+</biblStruct>
+
+<biblStruct xml:id="b14">
+	<analytic>
+		<title/>
+		<author>
+			<persName><forename type="first">J</forename><surname>Kong</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Science</title>
+		<imprint>
+			<biblScope unit="volume">287</biblScope>
+			<biblScope unit="page">622</biblScope>
+			<date type="published" when="2000">2000</date>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b15">
+	<analytic>
+		<title/>
+		<author>
+			<persName><forename type="first">M</forename><surname>Krüger</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">New J. Phys</title>
+		<imprint>
+			<biblScope unit="volume">5</biblScope>
+			<biblScope unit="page">138</biblScope>
+			<date type="published" when="2003">2003</date>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b16">
+	<analytic>
+		<title level="a" type="main">Non-zero values of δε found experimentally could also be due to inhomogeneous doping, which could smear the zero-gap state over a small range of V g and lead to finite apparent δε. 19. M. R. Stan et al</title>
+	</analytic>
+	<monogr>
+		<title level="j">Proc. IEEE</title>
+		<imprint>
+			<biblScope unit="volume">91</biblScope>
+			<biblScope unit="page">1940</biblScope>
+			<date type="published" when="2003">2003</date>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>

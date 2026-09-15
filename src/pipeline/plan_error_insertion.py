@@ -656,7 +656,15 @@ def run_general_track(paper_id: str, plan: dict, out_dir: str) -> list[dict]:
     return survivors
 
 
-ALL_PAPERS = ["AttentionIsAllYouNeed", "BERT", "FLAWS", "SoundnessBench", "InnoEval"]
+ALL_PAPERS = [
+    "AttentionIsAllYouNeed",
+    "BERT",
+    "FLAWS",
+    "SoundnessBench",
+    "InnoEval",
+    "McCammonProteinDynamics",
+    "GrapheneFieldEffect",
+]
 ALL_TRACKS = [
     "general",
     "hypothesis_internal_contradiction",

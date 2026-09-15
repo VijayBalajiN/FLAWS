@@ -1,0 +1,141 @@
+{
+  "paper_id": "AttentionIsAllYouNeed",
+  "research_question": "What model architecture would best address the limitations of current sequence transduction approaches for tasks like machine translation?",
+  "gold": {
+    "inspiration_keys": [
+      "I1_rnn_sequential",
+      "I2_attention_still_recurrent",
+      "I3_conv_scales_with_distance",
+      "I4_self_attention_works_alone"
+    ],
+    "hypothesis": "A sequence transduction model based entirely on attention mechanisms, replacing recurrent layers with self-attention, will achieve superior translation quality while being significantly more parallelizable and requiring less training time than architectures based on recurrent or convolutional networks."
+  },
+  "wrong_inspiration_negatives": [
+    {
+      "source": "wrong_inspiration",
+      "inspiration_keys": [
+        "W2_factorization_tricks",
+        "W1_memory_networks",
+        "I4_self_attention_works_alone"
+      ],
+      "hypothesis": "A model architecture for sequence transduction that relies entirely on self-attention mechanisms, forgoing sequence-aligned recurrence, will overcome the fundamental constraint of sequential computation and achieve superior performance on tasks like machine translation."
+    },
+    {
+      "source": "wrong_inspiration",
+      "inspiration_keys": [
+        "W2_factorization_tricks",
+        "W3_scaling_recurrent_encoder_decoder",
+        "I2_attention_still_recurrent"
+      ],
+      "hypothesis": "A model architecture based solely on attention mechanisms, dispensing entirely with recurrence, can achieve superior translation quality by more effectively modeling long-range dependencies, while also being significantly more parallelizable and requiring less time to train than architectures that combine attention with a recurrent network."
+    },
+    {
+      "source": "wrong_inspiration",
+      "inspiration_keys": [
+        "W2_factorization_tricks",
+        "I1_rnn_sequential"
+      ],
+      "hypothesis": "A model architecture for sequence transduction that is not based on sequential computation will allow for greater parallelization within training examples, resulting in significantly reduced training times and superior model performance compared to recurrent architectures."
+    },
+    {
+      "source": "wrong_inspiration",
+      "inspiration_keys": [
+        "W3_scaling_recurrent_encoder_decoder",
+        "W1_memory_networks",
+        "I1_rnn_sequential"
+      ],
+      "hypothesis": "A model architecture based solely on attention mechanisms, avoiding recurrence, can match or exceed the performance of established recurrent encoder-decoder models on sequence transduction tasks while being significantly more parallelizable and requiring less time to train."
+    },
+    {
+      "source": "wrong_inspiration",
+      "inspiration_keys": [
+        "W2_factorization_tricks",
+        "W1_memory_networks",
+        "I3_conv_scales_with_distance"
+      ],
+      "hypothesis": "A model architecture that relies entirely on an attention mechanism to draw global dependencies between input and output, eschewing recurrence and convolutions, will achieve superior translation quality by allowing for significantly more parallelization and reducing the number of operations required to learn dependencies between distant positions to a constant."
+    }
+  ],
+  "incomplete_inspiration_negatives": [
+    {
+      "source": "incomplete_inspiration",
+      "inspiration_keys": [
+        "I1_rnn_sequential",
+        "I2_attention_still_recurrent",
+        "I4_self_attention_works_alone"
+      ],
+      "hypothesis": "A sequence transduction model based solely on attention mechanisms, dispensing with recurrence and instead relying on self-attention to compute representations of its input and output sequences, will achieve superior translation quality while requiring significantly less training time due to greater parallelization."
+    },
+    {
+      "source": "incomplete_inspiration",
+      "inspiration_keys": [
+        "I2_attention_still_recurrent"
+      ],
+      "hypothesis": "A model architecture based solely on attention mechanisms, without recurrent networks, will achieve superior performance on sequence transduction tasks compared to architectures that use attention in conjunction with a recurrent network."
+    },
+    {
+      "source": "incomplete_inspiration",
+      "inspiration_keys": [
+        "I3_conv_scales_with_distance"
+      ],
+      "hypothesis": "A model architecture that relates any two positions of an input or output sequence with a constant number of operations, regardless of distance, will outperform convolutional approaches on sequence transduction tasks by more effectively learning long-range dependencies."
+    },
+    {
+      "source": "incomplete_inspiration",
+      "inspiration_keys": [
+        "I1_rnn_sequential",
+        "I3_conv_scales_with_distance"
+      ],
+      "hypothesis": "A model architecture that avoids recurrence and instead connects any two positions of the input or output sequences with a constant number of operations will outperform both recurrent and convolutional approaches by being more parallelizable and better able to learn long-range dependencies."
+    },
+    {
+      "source": "incomplete_inspiration",
+      "inspiration_keys": [
+        "I1_rnn_sequential",
+        "I4_self_attention_works_alone"
+      ],
+      "hypothesis": "A model architecture for sequence transduction that relies exclusively on self-attention mechanisms, thereby avoiding the sequential computation inherent to recurrent models, will achieve superior translation quality while being significantly more parallelizable and requiring substantially less time to train."
+    },
+    {
+      "source": "incomplete_inspiration",
+      "inspiration_keys": [
+        "I1_rnn_sequential",
+        "I3_conv_scales_with_distance",
+        "I4_self_attention_works_alone"
+      ],
+      "hypothesis": "A sequence transduction model based solely on self-attention mechanisms, replacing the sequential computation of recurrent models and the distance-dependent operations of convolutional models, will achieve superior performance on machine translation tasks by enabling full parallelization while more effectively learning long-range dependencies."
+    },
+    {
+      "source": "incomplete_inspiration",
+      "inspiration_keys": [
+        "I1_rnn_sequential"
+      ],
+      "hypothesis": "A model architecture for sequence transduction that avoids the sequential computation inherent to recurrent models will achieve comparable or superior performance to established approaches while allowing for significantly more parallelization within training examples."
+    },
+    {
+      "source": "incomplete_inspiration",
+      "inspiration_keys": [
+        "I1_rnn_sequential",
+        "I2_attention_still_recurrent"
+      ],
+      "hypothesis": "A model architecture based solely on attention mechanisms, without recurrent networks, can achieve state-of-the-art performance on sequence transduction tasks by allowing for significantly more parallelization during training."
+    },
+    {
+      "source": "incomplete_inspiration",
+      "inspiration_keys": [
+        "I2_attention_still_recurrent",
+        "I3_conv_scales_with_distance",
+        "I4_self_attention_works_alone"
+      ],
+      "hypothesis": "A model architecture for sequence transduction based solely on attention mechanisms, dispensing with recurrent and convolutional layers entirely, will achieve superior translation quality by more effectively modeling long-range dependencies while allowing for significantly more parallelization."
+    },
+    {
+      "source": "incomplete_inspiration",
+      "inspiration_keys": [
+        "I2_attention_still_recurrent",
+        "I3_conv_scales_with_distance"
+      ],
+      "hypothesis": "A model architecture based solely on attention mechanisms, dispensing with recurrent and convolutional networks entirely, will achieve superior performance on sequence transduction tasks by effectively modeling long-range dependencies while being more parallelizable than architectures that rely on recurrence or convolution."
+    }
+  ]
+}

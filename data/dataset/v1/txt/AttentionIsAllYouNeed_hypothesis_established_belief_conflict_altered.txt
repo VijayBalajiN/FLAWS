@@ -1,0 +1,59 @@
+## Problem
+
+Recurrent neural networks, particularly Long Short-Term Memory (LSTM) and Gated Recurrent Unit (GRU) networks, currently represent the state-of-the-art for sequence modeling and transduction problems such as language modeling and machine translation. However, these models inherently factor computation along the symbol positions of the input and output sequences, leading to sequential computation. This sequential nature severely limits parallelization within training examples, which becomes a critical bottleneck for longer sequence lengths and restricts batching across examples due to memory constraints.
+
+While attention mechanisms have become an integral part of compelling sequence modeling and transduction models, allowing the modeling of dependencies regardless of their distance, they are almost universally used in conjunction with a recurrent network. Existing efforts to reduce sequential computation, such as convolutional neural networks like the Extended Neural GPU, ByteNet, and ConvS2S, also face challenges in learning long-range dependencies, as the number of operations required to relate distant positions grows linearly or logarithmically with distance.
+
+We hypothesize that a model architecture based solely on attention mechanisms, entirely dispensing with recurrence and convolutions, can overcome these fundamental limitations. Our research questions are: Can such a model achieve significantly more parallelization, reduce training time, and reach competitive or superior translation quality by effectively modeling global dependencies with a constant number of sequential operations?
+
+## Hypothesis
+
+An architecture relying solely on attention mechanisms, without recurrence or convolutions, is sufficient to model global dependencies between input and output sequences, as the attention mechanism's dot-product formulation inherently encodes the relative positions of tokens.
+
+## Method
+
+We propose the Transformer, a novel network architecture designed to address the limitations of recurrent and convolutional models by relying entirely on attention mechanisms. This design aims to enable significantly more parallelization and more efficient learning of long-range dependencies.
+
+Our model follows the standard encoder-decoder structure.
+-   **Encoder:** The encoder will be composed of a stack of N=6 identical layers. Each layer will consist of two sub-layers: a multi-head self-attention mechanism and a position-wise fully connected feed-forward network. We will employ residual connections around each sub-layer, followed by layer normalization. To facilitate these residual connections, all sub-layers and embedding layers will produce outputs of dimension d_model = 512.
+-   **Decoder:** The decoder will also be composed of a stack of N=6 identical layers. In addition to the two sub-layers present in the encoder, the decoder will include a third sub-layer that performs multi-head attention over the output of the encoder stack. Similar to the encoder, we will use residual connections around each sub-layer, followed by layer normalization. We will modify the self-attention sub-layer in the decoder to prevent positions from attending to subsequent positions, ensuring the auto-regressive property.
+
+The core of our model is the attention mechanism:
+-   **Scaled Dot-Product Attention:** Our specific attention function takes queries (Q), keys (K) of dimension d_k, and values (V) of dimension d_v. We will compute the dot products of Q with all K, divide each by √d_k, apply a softmax function to obtain weights, and then compute a weighted sum of V. The scaling factor 1/√d_k is introduced because we hypothesize that for large values of d_k, dot products can grow large in magnitude, potentially pushing the softmax function into regions with extremely small gradients.
+-   **Multi-Head Attention:** Instead of performing a single attention function, we will linearly project the queries, keys, and values 'h' times with different, learned linear projections to d_k, d_k, and d_v dimensions, respectively. On each of these projected versions, we will perform the attention function in parallel, concatenate the resulting d_v-dimensional output values, and project them once again. We plan to employ h=8 parallel attention layers, using d_k = d_v = d_model / h = 64 for each head. This approach allows the model to jointly attend to information from different representation subspaces at different positions, which we believe will be beneficial compared to a single attention head.
+-   **Applications of Attention in our Model:**
+    -   **Encoder-Decoder Attention:** Queries will come from the previous decoder layer, and memory keys and values will come from the output of the encoder. This will allow every position in the decoder to attend over all positions in the input sequence.
+    -   **Encoder Self-Attention:** All keys, values, and queries will come from the output of the previous layer in the encoder, allowing each position to attend to all positions in the previous layer.
+    -   **Decoder Self-Attention:** Similarly, self-attention layers in the decoder will allow each position to attend to all positions in the decoder up to and including that position, with masking to prevent leftward information flow.
+
+In addition to attention sub-layers, each layer in our encoder and decoder will contain a **position-wise fully connected feed-forward network**. This network will be applied to each position separately and identically, consisting of two linear transformations with a ReLU activation in between. The input and output dimensionality will be d_model = 512, and the inner-layer dimensionality will be d_ff = 2048.
+
+We will use **learned embeddings** to convert input and output tokens to vectors of dimension d_model. We will also use a learned linear transformation and softmax function to convert the decoder output to predicted next-token probabilities. We plan to share the same weight matrix between the two embedding layers and the pre-softmax linear transformation, multiplying these weights by √d_model in the embedding layers.
+
+Since our model contains no recurrence and no convolution, we must inject information about the relative or absolute position of tokens. To this end, we will add **positional encodings** to the input embeddings at the bottoms of the encoder and decoder stacks. We will use sine and cosine functions of different frequencies for these encodings, as we hypothesize this will allow the model to easily learn to attend by relative positions. We will also consider learned positional embeddings as an alternative.
+
+## Experiment Design
+
+We will conduct experiments to evaluate the performance of the Transformer architecture on standard sequence transduction tasks and assess its generalization capabilities.
+
+-   **Tasks:** We will primarily evaluate our model on machine translation tasks. Additionally, we will apply it to English constituency parsing to test its ability to generalize to other structured prediction problems.
+-   **Datasets:**
+    -   **Machine Translation:** We will use the WMT 2014 English-German dataset, consisting of approximately 4.5 million sentence pairs, and the WMT 2014 English-French dataset, which is significantly larger with about 36 million sentences.
+    -   **English Constituency Parsing:** For parsing, we will train on the Wall Street Journal (WSJ) portion of the Penn Treebank, comprising about 40,000 training sentences. We also plan to explore a semi-supervised setting using larger high-confidence and BerkeleyParser corpora, with approximately 17 million sentences.
+-   **Data Preprocessing:** Sentences will be encoded using byte-pair encoding for English-German (shared source-target vocabulary of about 37,000 tokens) and word-piece vocabulary for English-French (32,000 tokens). For parsing, we will use a 16K token vocabulary for the WSJ-only setting and a 32K token vocabulary for the semi-supervised setting.
+-   **Batching:** Sentence pairs will be batched together by approximate sequence length. Each training batch will contain a set of sentence pairs totaling approximately 25,000 source tokens and 25,000 target tokens.
+-   **Hardware:** We will train our models on one machine equipped with 8 NVIDIA P100 GPUs.
+-   **Optimizer:** We will use the Adam optimizer with β1 = 0.9, β2 = 0.98, and ϵ = 10^-9.
+-   **Learning Rate Schedule:** We will vary the learning rate over the course of training according to the formula: `lr = d_model^-0.5 * min(step_num^-0.5, step_num * warmup_steps^-1.5)`. We will set `warmup_steps = 4000`.
+-   **Regularization:** We will employ three types of regularization during training:
+    -   **Residual Dropout:** We will apply dropout to the output of each sub-layer before it is added to the sub-layer input and normalized. Additionally, dropout will be applied to the sums of the embeddings and the positional encodings in both the encoder and decoder stacks. For the base model, we will use a dropout rate of P_drop = 0.1.
+    -   **Label Smoothing:** We will employ label smoothing with a value of ϵ_ls = 0.1 during training, as this approach is known to improve model robustness.
+-   **Model Configurations:** We will define a "base model" using the hyperparameters described throughout the paper (e.g., d_model=512, N=6 layers, h=8 heads, d_ff=2048). We will also explore "big models" with increased capacity to investigate the impact of model size.
+-   **Evaluation Metrics:** For machine translation, we will evaluate models using the BLEU score. For English constituency parsing, we will use standard F1 scores.
+-   **Ablation Studies and Model Variations:** To understand the importance of different components of the Transformer, we will conduct experiments by varying our base model in several ways:
+    -   We will vary the number of attention heads (h) and the attention key and value dimensions (d_k, d_v), while keeping the total amount of computation constant.
+    -   We will investigate the impact of reducing the attention key size (d_k).
+    -   We will explore the effects of different model sizes (e.g., larger d_model, d_ff).
+    -   We will study the effectiveness of different dropout rates.
+    -   We will compare our sinusoidal positional encoding with learned positional embeddings.
+-   **Inference Strategy:** For decoding, we will use beam search. We will also explore averaging multiple model checkpoints to potentially enhance performance.

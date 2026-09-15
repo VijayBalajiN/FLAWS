@@ -1,0 +1,947 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xml:space="preserve" xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 https://raw.githubusercontent.com/kermitt2/grobid/master/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">art icle s Dyn ami cs of fold ed prot eins</title>
+				<funder>
+					<orgName type="full">US NSF</orgName>
+				</funder>
+				<funder>
+					<orgName type="full">National Institutes of Health</orgName>
+					<orgName type="abbreviated">NIH</orgName>
+				</funder>
+			</titleStmt>
+			<publicationStmt>
+				<publisher/>
+				<availability status="unknown"><licence/></availability>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct>
+					<analytic>
+						<author>
+							<persName><forename type="first">J</forename><forename type="middle">Andrew</forename><surname>Mccam</surname></persName>
+							<affiliation key="aff0">
+								<orgName type="department">Departmen t of Chemistry</orgName>
+								<orgName type="institution">Harvard University</orgName>
+								<address>
+									<postCode>02138</postCode>
+									<settlement>Cambridge</settlement>
+									<region>Massachus etts</region>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName><forename type="first">Bruce</forename><forename type="middle">R</forename><surname>Gelin</surname></persName>
+							<affiliation key="aff0">
+								<orgName type="department">Departmen t of Chemistry</orgName>
+								<orgName type="institution">Harvard University</orgName>
+								<address>
+									<postCode>02138</postCode>
+									<settlement>Cambridge</settlement>
+									<region>Massachus etts</region>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName><forename type="first">Martin</forename><surname>Karplus</surname></persName>
+							<affiliation key="aff0">
+								<orgName type="department">Departmen t of Chemistry</orgName>
+								<orgName type="institution">Harvard University</orgName>
+								<address>
+									<postCode>02138</postCode>
+									<settlement>Cambridge</settlement>
+									<region>Massachus etts</region>
+								</address>
+							</affiliation>
+						</author>
+						<title level="a" type="main">art icle s Dyn ami cs of fold ed prot eins</title>
+					</analytic>
+					<monogr>
+						<imprint>
+							<date/>
+						</imprint>
+					</monogr>
+					<idno type="MD5">E8F5E55602C3F55C5A98422AC7C74FCE</idno>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<encodingDesc>
+			<appInfo>
+				<application version="0.8.0" ident="GROBID" when="2026-09-14T22:49+0000">
+					<desc>GROBID - A machine learning software for extracting information from scholarly documents</desc>
+					<ref target="https://github.com/kermitt2/grobid"/>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<profileDesc>
+			<abstract>
+<div xmlns="http://www.tei-c.org/ns/1.0"><p>The dynamics of a folded globular protein (bovine pancreat ic trypsin inhibitor ) have been studied by solving the equation s of motion for the atoms with an empirica l potentia l energy function. The results provide the magnitud e, correlatio ns and decay of fluctuatio ns about the average structure . These suggest that the protein interior is Sluid-like in that the local atom motions have a diffusion al characte r.</p><p>RESULTS of X-ray crystallog raphy provide a picture of a globular protein in its native conforma tion as a well defined, densely-p acked structure. Other experime ntal data!-i0 and theoretica l conside rations! -3 indicate that there is considerable local motion inside a protein at ordinary temperatu res.</p><p>Moreover , the structural data themselve s show that significant residue or subunit displacem ents have an importan t role in the activity of proteins (for example, enzyme catalysis , haemoglobin coopera tivity, immunog lobulin action'). To obtain a more complete understan ding of proteins, it is essential to have a detailed knowledg e of their dynamics . In spite of the considerable effort directed toward protein folding!', very little has been done to investigat e the motions of a protein in. the neighbou rhood of its equilibriu m configura tion. For certain cases in which the displacem ents along a suitably chosen coordinate can be isolated (for example, aromatic side chain rotations in the pancreati c trypsin inhibitor?® , the Opening and closing of the active site cleft in lysozyme ?2), it has been demonstr ated that empirical energy functions can be used to analyse the motion involved. Here we undertake a more general examinat ion of the internal dynamics of a folded globular protein. The approach used is of the molecula r dynamics type},</p><p>In such a study the classical equations of motion for all the atoms of an assembly are solved simultane ously for a suitable time period and detailed informati on is extracted by analysing the resulting atomic trajectorie s. The full interatom ic potential can be used to obtain the forces on the atoms, so that the method is applicabl e even when the system is highly anharmonic. The molecula r dynamics approach has been very successfu l in revealing structura l and dynamica l character istics of fluids'. As we demonstr ate in what follows, molecular dynamics can have a correspo nding role for the internal motions of proteins.</p><p>Bovine pancreati c trypsin inhibitor (PTI) (see Fig. <ref type="figure">1a</ref>) was selected for study because of its small size (58 amino acid residues), high Stability and accurately determine d X-ray structure ?"-?!_ Four water molecules , which are strongly bound</p></div>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><p>in the interior, were included in the dynamica l simulatio n. The potential energy was represent ed by an empirical function!® composed of a sum of terms associated with bond lengths, bond angles, dihedral angles, hydrogen bonds, and non-bond ed (van der Waals and electrost atic) interactio ns. Hydroge n atoms are not explicitly considere d, but are combined with the heavy atoms to which they are bonded by a suitable adjustme nt of atomic paramete rs. This use of 'extended atoms' reduces the number of interaction s which must be calculated and also permits larger steps in the trajectory calculation since the high frequency hydrogen vibrations have been eliminated. Integration of the equations of motion was performed by means of the Gear algorithm? ? with time steps of 9.78x 10-165, X-ray coordinate s! were used for the initial positions and the initial velocities were set equal to zero. After 100 equilibratio n steps, the stresses in the initial structure had partly relaxed and the system had an internal kinetic energy correspond ing to a temperatur e of 140 K. At this point, all velocities were multiplied by a factor of 1.5 and 250 more equilibratio n steps were taken. The added kinetic energy (250.6 kcal mol~})_par titioned itself between kinetic and potential terms during this interval, and an average kinetic temperature of 285 K was reached. The actual simulation consisted of 9,000 additional steps, correspond ing to 8.8 ps. Some equilibratio n of the bond lengths, bond angles and electrostati c interactions continues during the first 3 ps of the simulation, producing a small rise in temperature . Over the whole simulation, the average temperature is 295 K and the total energy is well conserved, changing by only 0.7 kcal mol-},</p><p>In what follows we first describe results concerned with the relation between the time-averag ed and X-ray structures and with the magnitudes of structural fluctuations . We then examine the details of the dynamics, the correlation and damping of fluctuations , and some examples of the larger changes that occur. Of primary importance are the conclusions reached concerning the fluid-like nature of the internal motions, which will clearly have to be considered in developing dynamical models for biological processes.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Time-aver aged structure and fluctuation s</head><p>The time-average d structure obtained in the dynamics run. is near the X-ray structure but not identical with it; the root mean square (r.m.s.) deviation of the a carbons is 1.2 A and that for all the atoms is 1.7 A. The largest deviations come from the two ends of the molecule, the external loop (residues <ref type="bibr" target="#b24">[25]</ref><ref type="bibr" target="#b25">[26]</ref><ref type="bibr" target="#b26">[27]</ref><ref type="bibr" target="#b27">[28]</ref> and exposed sidechains. The two parts of the B sheet (residues <ref type="bibr" target="#b17">[18]</ref><ref type="bibr" target="#b18">[19]</ref><ref type="bibr" target="#b19">[20]</ref><ref type="bibr" target="#b20">[21]</ref><ref type="bibr" target="#b21">[22]</ref><ref type="bibr" target="#b22">[23]</ref><ref type="bibr" target="#b23">[24]</ref><ref type="bibr" target="#b28">[29]</ref><ref type="bibr" target="#b29">[30]</ref><ref type="bibr" target="#b30">[31]</ref><ref type="bibr" target="#b31">[32]</ref><ref type="bibr" target="#b32">[33]</ref><ref type="bibr" target="#b33">[34]</ref><ref type="bibr" target="#b34">[35]</ref> and the a helix (residues 47-56) have significantly smaller deviations.</p><p>Use of the X-ray structure as the starting configuration corresponds to 0.4 kcal mol~} of kinetic energy per atom after equilibration (140 K); for the main dynamics run (295 K), the mean kinetic energy per atom is about 0.9 kcal mol~?. Although there is no tendency to unfold, the dynamic development with this kinetic energy permits the molecule to make small rearrangemen ts throughout; a picture of the structure after 3.2 ps is shown in Fig. <ref type="figure" target="#fig_0">10</ref>. Apparently the PTI molecule samples a series of neighbouring conformation s, the average of which is not identical with the X-ray structure. It is not clear how much of the difference is a real effect (in the sense that the structure in the crystal is constrained) and how much is due to inaccuracies in the potential function and the absence of solvent. In lysozyme, comparison of the X-ray structures for the triclinic and tetragonal crystal forms2??:24 shows an r.m.s.   residues 56-58. For the @ and y dihedral angles, the r.m.s.    </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Concerted motions</head><p>In addition to the structure-preserving correlations, a number of concerted atom motions were observed. One of these involves the relatively flexible loop region (residues 25-29) which seems to oscillate as a whole with a period of approximately 6 ps, as well as undergoing changes in shape (see Fig. <ref type="figure" target="#fig_0">1a,</ref><ref type="figure" target="#fig_4">5</ref>). Some damping of this motion would be expected in solution due to the high solvent accessibility of the loop. A feature of the dynamics is that certain groups in the molecule undergo transitions from one minimum to another.</p><p>Such behaviour was found for a number of sidechains;  <ref type="figure">-----)</ref>; the quantities plotted are, for example, CAG 33AQ5a+k&gt;/&lt;(AG3)*&gt;1/2&lt; (A@s5 4x)? 1/2, for example, Met 52, where y;.2 moved successively from -60° +60°--60° -180° --60° -180° and Arg 39, where X59" moved successively from -60°-&gt; 180° -60°. The times involved in these rotations vary between 0.2 and 2 ps.</p><p>Since these sidechains are on the surface of the molecule, they have low barriers due to the protein; their detailed dynamics would be expected to be altered by interactions with the solvent.</p><p>In addition to the sidechain reorientations, there occurred a few concerted transitions in the backbone involving Wi, ©; dihedral angle pairs. In these transitions, the anti-correlated angles y;_, and 9; rotate in the opposite sense by about 180° so that the intervening amide group flips over, but the backbone and sidechain directions are only slightly altered. The pairs involved are W3s, @39 (near the 14-38 disulphide bond); Waa, as; aNd Wse, M57. All of these amide groups are located near the surface of the protein, so that the probability and dynamics of their transitions could be affected by solvent. Nevertheless, it is worthwhile to examine the behaviour since it can serve asa model of structural alterations in the presence of the protein matrix. Figure <ref type="figure" target="#fig_4">5</ref> shows the results for the W3s, O39 pair. The transition is seen to take place in about Ips. During this peroid, the variation in the angles is roughly linear in time and the kinetic energy of the amide group does not show any significant departure from the thermal value. The amide flip is seen to be followed by a conformational adjustment period of 3-4 ps, during which Wess, @g9 drift over a relatively small angular interval into their new equilibrium ranges. It is apparent that there is a smooth change from one minimum to the other, while the protein relaxes so that the transition can occur without a large activation energy. The details of the driving torques and other matrix effects remain to be analysed, as do a variety of other larger scale motions that occur. One has to suppose then that a profuse supply of particulate matter was available to populate a disk surrounding the planet, and that orbit-orbit resonances involving particles and satellites have caused certain lanes to be swept clear. In the case of the Uranus ring system the situation is in a sense the opposite: the rings themselves are exceedingly narrow and resonances can therefore not be responsible for defining them by any sweeping action. A set of rings 10 km wide with a radius of the order of 45,000 km must be defined by conditions that lend a stability peculiar to the ring</p></div><figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_0"><head>Fig. 1</head><label>1</label><figDesc>Fig.1The peptide backbone (a carbons) and disulphide bonds of PTI. a, X-ray structure2!, b, Time evolved structure after 3.2 ps of dynamical simulation.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_1"><head>Figure 2</head><label>2</label><figDesc>Figure 2 shows the r.m.s. displacements of the a carbons, relative to the dynamical average structure. The three residues at the carboxyl end of the chain have particularly large fluctuations; these are due to the presence of excess kinetic energy resulting from local strain in the initial structure. Some of this kinetic energy was transferred to the nearby amino end of the chain, which also exhibits relatively large r.m.s. displacements. The important fluctuations in residues 25-28 of the loop connecting the two strands of B sheet seem to reflect an intrinsic softness in this part of the molecule. The smaller fluctuations of the B sheet and a helical regions are also evident. The sidechain atom displacements are somewhat larger than those of the a carbons, but generally show a similar pattern of variation. The average r.m.s. fluctuation of all atoms is 0.9 A. Particularly Jarge r.m.s. displacements (1.8-3.1 A) occur in the sidechains of Lys 26, Arg 39, Arg 42, Lys 46 and Met 52; all of these are at the surface of the protein. Overall, the large fluctuation regions correspond to those deviating most from the X-ray structure. In principle, the temperature factors from the X-ray analysis can be compared with the calculated fluctuations. The r.m.s. atomic fluctuation for the a carbons</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_2"><head>Fig. 2 R</head><label>2</label><figDesc>Fig. 2 R.m.s. displacements ( ) and maximum displacements (..... ) of the a carbons, relative to the dynamical average structure.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_3"><head></head><label></label><figDesc>dynamic fluctuations range from 10° to 40° and show more variation along the chain; in both the B sheet and a helix regions these fluctuations are about 18° on the average, while in the loop region the fluctuations average about 25°.Bond lengths calculated from the dynamically averaged set of Cartesian coordinates were uniformly 0.02-0.03 A shorter than the average bond lengths obtained directly. A similar discrepancy arises in calculating interatomic distances from X-ray diffraction data because of thermal atomic motion2®.Time-dependence of motionsThe fact that the individual PTI internal coordinates exhibit dynamic fluctuations of appreciable magnitude raises questions concerning the details of the motions, including their time evolution and spatial correlation.To illustrate the time-dependence of individual coordinate fluctuations, we present results obtained for the Phe 22. This residue is relatively well buried in the protein and so should exemplify the effect of interactions between different parts of the molecule; other residues examined were found to have qualitatively similar dynamic behaviour. Figure3ashows the time-dependence of several Phe 22 internal coordinates; the considerable variation in the frequencies, magnitudes of fluctuations, and irregularities of the behaviour of the different coordinates is evident. To quantitate the average decay characteristics of fluctuations, so as to best analyse the coupling between the coordinate and the rest of the molecule, it is helpful to introduce time 587 correlation functions®*. The time correlation function C(t) = ¢A(t+1)A(t)&gt;, for a dynamical variable A is obtained by multiplying the value of A(t) by A(t+0), the value taken by A after the system has evolved for an additional time t, calculating such products for a representative set of initial times t and averaging. If A is the fluctuation of a variable from its mean value, &lt;[A(t)]®&gt; is the mean-square fluctuation of the variable for an equilibrated system, while the time correlation function C(t) describes the average decay behaviour of the fluctuation. Time correlation functions for the fluctuations of the internal coordinates of Phe 22 shown in Fig. 3a are given in Fig. 30. Fluctuations of the backbone bond length N,.~C,.° exhibit a partial loss of correlation in the first 0.1 ps, followed by a very slow decay of the residual small amplitude oscillation. Other backbone and sidechain bond lengths behave similarly. Although the specific oscillation frequencies depend on the force constants and the masses of the bonded atoms, all have long-lived oscillations; among others, the disulphide bond Sia-Sgg was examined and showed no atypical features. The other stiff internal coordinates (bond angles, dihedral angle w) also exhibit partial loss of correlation in the first 0.1 ps but have persistent though less regular small-amplitude oscillation at longer times.The relaxation behaviour can be analysed further by obtaining the Fourier transform of the correlation function and finding the dominant frequency components. For the Ny»~C.." bond, the main peaks are found at 800 cm~}, 1,010 cm~!, 1,110 cm}, 1,170cmTM, and 1,430cm~1. These frequencies correspond to the calculated normal modes that involve the largest displacements of the N-C* bond length of the isolated fragment CH ;-CO-Phe~NH-CH ;(787 ;952; 1,099; 1,161;and1,425cm~).In addition, there are relatively small contributions from many low frequency motions. Thus, the No.-C..* bond fluctuations are those expected for a strongly coupled system of local oscillators that is weakly coupled to the rest of the protein molecule. For the bond angles and the dihedral angle w, there are important frequency contributions in the range 300-1,200cm7, which correspond to the fragment vibration frequencies associated with these degrees of freedom. Since frequencies below 300 cm7! are also important, it seems that the bond angle and the dihedral angle w fluctuations are significantly coupled to the protein matrix. Backbone dihedral angles (@, ) are seen in Fig.3bto exhibit considerable damping, though ©. preserves long term correlation in a low frequency oscillation of the order of 2 ps. For the sidechain dihedral angle, X22", associated with the rotation of the phenyl ring, damping produces a nearly monotonic decay with a relaxation time of 0.2 ps. It is clear from the decay behaviour of the correlation functions that the fluctuations of the @, Ww and x dihedral angles are dominated by interactions with the protein matrix. It is reasonable that torsional motions which involve substantial displacements of large groups inside proteins</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_4"><head>5 *</head><label>5</label><figDesc>Units are A for bond lengths, degrees for bond and dihedral angles. These values represent the average and r.m.s. variation over the 58 amino acids of a given type of coordinate. These values represent the r.m.s. dynamical fluctuation of the individual coordinate averaged over the 58 amino acids.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_5"><head></head><label></label><figDesc>, aromatic sidechains) will have a collective, diffusion-like behaviour, while those subject to smaller steric interactions will retain more of a local character.The relaxation of individual atom fluctuations seems to be dominated by rotations of the dihedral angles. Atom displacement time correlation functions exhibit qualitative features and characteristic times similar to those shown for the dihedral angles. In many cases, the correlation functions show nearly monotonic decay with relaxation times of the order of a ps.Correlated fluctuationsThe large fluctuations found in the individual dihedral angles might seem to suggest a degree of structural mobility that is greater than that corresponding to the r.m.s. fluctuations of the individual atoms. In fact, the fluctuations of neighbouring dihedral angles are generally correlated so as to minimise disturbances of the backbone and sidechain atoms. For the typical backbone dihedral angle ~33, which is at the centre of a strand of B sheet, the observed equal-time correlations of fluctuations of neighbouring @ angles and of neighbouring y angles are shown in Fig.4. The large negative correlation &lt;A@33(t)AW3.(t)&gt; is striking and has as a consequence the conservation of the general direction of the backbone and of the approximate position of the sidechains; the larger the individual dihedral fluctuations, the stronger the anticorrelation &lt;Ag;(t)Aw;_ 1(t)&gt; is found to be. The correlation pattern seen in Fig.4is similar to that obtained for an isolated harmonic a helix®*. A corresponding pattern of positive and negative dihedral angle correlations is likely to occur generally in strongly conserved regions of secondary structure. The anti-correlation &lt;Ag;(t)Aw;-,(t)&gt; is, in fact, present in other parts of the protein, though somewhat weaker outside the B sheet and « helical regions.Structure-conserving correlations between dihedral angles also exist in the sidechains. For the eight aromatic sidechains with dihedral angles y? and y2, the normalised correlations (&lt;Ax7Ax2&gt;/&lt;(Ax2)®&gt;1/2 ((Ax2)*&gt;2/2) range from -0.05 to -0.63; again, dihedral angles with larger r.m.s. fluctuations tend to be more strongly anti-correlated. This correlation is the one required to conserve approximately the orientation of the aromatic rings with respect to the polypeptide backbone.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_6"><head>Time correlation functions involving</head><label></label><figDesc>different internal coordinates (for example, &lt;A(t+1)B(t)&gt;) can be used to probe the dynamical character of non-local, collective motions in the protein. One such case concerns time correlations between the fluctuations of the dihedral angle @,, in the B sheet and the fluctuations of other backbone and sidechain dihedral angles in the molecule. The results show that both strands of the B sheet and some additional residues participate in a lowfrequency 'rippling motion' (v = 15 cm~); within each strand of the B sheet, backbone dihedral angles tend to oscillate with the phase relationships suggested by Fig. 4. Examination of the correlation functions for the atoms involved also shows damped oscillations of the same frequency.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_7"><head>Fig. 3 aFig. 4</head><label>34</label><figDesc>Fig. 3 a, Time development of selected Phe 22 internal coordinates; the initial time is 4.9 ps after the beginning of the dynamical simulation; average values are: indicated by broken line segments. b, Time correlation functions for fluctuations of selected Phe 22 internal coordinates,</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_8"><head>Fig. 5</head><label>5</label><figDesc>Fig. 5 Amide group transition; the time development of woe and @3, during the transition is shown.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_0"><head>Table 1</head><label>1</label><figDesc>Backbone internal coordinates*</figDesc><table><row><cell>Internal coordinate</cell><cell></cell><cell>Averaget</cell><cell cols="2">r.m.s. variation</cell><cell>Average dynamical r.m.s.</cell></row><row><cell>Bond lengths</cell><cell>ERG</cell><cell>Dynamics</cell><cell>ERG</cell><cell>Dynamics</cell><cell>fluctuationt</cell></row><row><cell>N-C# C*-C Cc-O C-N</cell><cell>1.476 1.531 1.237 1.32]</cell><cell>1.478 1.533: 1.237 1.323</cell><cell>0.005 0.004 0.002 0.003</cell><cell>0.004 0.004 0.003 0.003</cell><cell>0.028 0.027 0.015 0.018</cell></row><row><cell>Bond angles</cell><cell></cell><cell></cell><cell></cell><cell></cell><cell></cell></row><row><cell>C-N-C*# N-C*-C C*-C-N C*-C-O</cell><cell>124.6 113.8 115.4 119.7</cell><cell>125.8 114.9 114.6 118.7</cell><cell>1.6 2.9 1.8 1.5</cell><cell>i) 2.4 La 1.5</cell><cell>4.8 4.8 4.6 4.6</cell></row><row><cell>Dihedral-angle</cell><cell></cell><cell></cell><cell></cell><cell></cell><cell></cell></row><row><cell>@</cell><cell>177.9</cell><cell>177.8</cell><cell></cell><cell></cell><cell></cell></row></table></figure>
+		</body>
+		<back>
+
+			<div type="acknowledgement">
+<div><p>We thank <rs type="person">J. Deisenhofer</rs> and <rs type="person">W. Steigemann</rs> for the PTI coordinates and <rs type="person">John Deutch</rs>, <rs type="person">Peter Wolynes</rs>, <rs type="person">Peter Rossky</rs>, <rs type="person">Stephen Harrison</rs> and <rs type="person">Aneesur Rahman</rs> for helpful discussions. We thank <rs type="person">Dr Carl Moser</rs> and CECAM for the hospitality extended to us at a summer workshop (1976) during which the initial calculations were done. The work was supported. by the <rs type="funder">US NSF</rs> and <rs type="funder">NIH</rs>.</p></div>
+			</div>
+			<listOrg type="funding">
+			</listOrg>
+			<div type="references">
+
+				<listBibl>
+
+<biblStruct xml:id="b0">
+	<monogr>
+		<author>
+			<persName><forename type="first">K</forename><forename type="middle">G</forename><surname>Brown</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">S</forename><forename type="middle">C</forename><surname>Erfurth</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">E</forename><forename type="middle">W</forename><surname>Small</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">W</forename><forename type="middle">L</forename><surname>Peticolas</surname></persName>
+		</author>
+		<title level="m">Proc. natn. Acad. Sci</title>
+		<meeting>natn. Acad. Sci<address><addrLine>U.S.A.</addrLine></address></meeting>
+		<imprint>
+			<date type="published" when="1972">1972</date>
+			<biblScope unit="volume">69</biblScope>
+			<biblScope unit="page" from="1467" to="1469" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b1">
+	<analytic>
+		<title/>
+		<author>
+			<persName><forename type="first">W</forename><forename type="middle">E</forename><surname>Hull</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">B</forename><forename type="middle">D J</forename><surname>Sykes</surname></persName>
+		</author>
+		<author>
+			<persName><surname>Molec</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Biol</title>
+		<imprint>
+			<biblScope unit="volume">98</biblScope>
+			<biblScope unit="page" from="121" to="153" />
+			<date type="published" when="1975">1975</date>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b2">
+	<analytic>
+		<title/>
+		<author>
+			<persName><forename type="first">I</forename><forename type="middle">D</forename><surname>Campbell</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">C</forename><forename type="middle">M</forename><surname>Dobson</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">G</forename><forename type="middle">R</forename><surname>Moore</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">S</forename><forename type="middle">J</forename><surname>Perkins</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">R</forename><forename type="middle">J</forename><surname>Williams</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">FEBS Lett</title>
+		<imprint>
+			<biblScope unit="volume">70</biblScope>
+			<biblScope unit="page" from="96" to="100" />
+			<date type="published" when="1976">1976</date>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b3">
+	<analytic>
+		<title/>
+		<author>
+			<persName><forename type="first">J</forename><forename type="middle">R</forename><surname>Lakowicz</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">G</forename><surname>Weber</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Biochemistry</title>
+		<imprint>
+			<biblScope unit="volume">12</biblScope>
+			<biblScope unit="page" from="4171" to="4179" />
+			<date type="published" when="1973">1973</date>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b4">
+	<monogr>
+		<author>
+			<persName><forename type="first">M</forename><forename type="middle">L</forename><surname>Galley</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">W</forename><forename type="middle">C</forename></persName>
+		</author>
+		<title level="m">Proc. natn. Acad. Sci. U.S.A</title>
+		<meeting>natn. Acad. Sci. U.S.A</meeting>
+		<imprint>
+			<date type="published" when="1974">1974</date>
+			<biblScope unit="volume">71</biblScope>
+			<biblScope unit="page" from="4154" to="4158" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b5">
+	<analytic>
+		<title/>
+		<author>
+			<persName><forename type="first">M</forename><forename type="middle">R</forename><surname>Eftink</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">C</forename><forename type="middle">A</forename><surname>Ghiron</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Biochemistry</title>
+		<imprint>
+			<biblScope unit="volume">15</biblScope>
+			<biblScope unit="page" from="672" to="680" />
+			<date type="published" when="1976">1976</date>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b6">
+	<analytic>
+		<title/>
+		<author>
+			<persName><forename type="first">R</forename><forename type="middle">C</forename><surname>Ghose</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">S</forename><forename type="middle">W</forename><surname>Englander</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">J. biol. Chem</title>
+		<imprint>
+			<biblScope unit="volume">249</biblScope>
+			<biblScope unit="page" from="7950" to="7955" />
+			<date type="published" when="1974">1974</date>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b7">
+	<analytic>
+		<title/>
+		<author>
+			<persName><forename type="first">M</forename><surname>Vas</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">L</forename><surname>Boross</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Eur. J. Biochem</title>
+		<imprint>
+			<biblScope unit="volume">43</biblScope>
+			<biblScope unit="page" from="237" to="244" />
+			<date type="published" when="1974">1974</date>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b8">
+	<analytic>
+		<title/>
+		<author>
+			<persName><forename type="first">J</forename><surname>Yguerabide</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">H</forename><forename type="middle">F</forename><surname>Epstein</surname></persName>
+		</author>
+		<author>
+			<persName><surname>Stryer</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">L. J. molec. Biol</title>
+		<imprint>
+			<biblScope unit="volume">51</biblScope>
+			<biblScope unit="page" from="573" to="590" />
+			<date type="published" when="1970">1970</date>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b9">
+	<analytic>
+		<title/>
+		<author>
+			<persName><forename type="first">D</forename><forename type="middle">A</forename><surname>Holowka</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">R</forename><forename type="middle">E</forename><surname>Cathou</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Biochemistry</title>
+		<imprint>
+			<biblScope unit="volume">15</biblScope>
+			<biblScope unit="page" from="3379" to="3390" />
+			<date type="published" when="1976">1976</date>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b10">
+	<analytic>
+		<title/>
+		<author>
+			<persName><forename type="first">Y</forename><surname>Suezaki</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">N</forename><surname>Go</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Int. J. Peptide Protein Res</title>
+		<imprint>
+			<biblScope unit="volume">7</biblScope>
+			<biblScope unit="page" from="333" to="334" />
+			<date type="published" when="1975">1975</date>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b11">
+	<analytic>
+		<title/>
+		<author>
+			<persName><forename type="first">J</forename><forename type="middle">A</forename><surname>Mccammon</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">B</forename><forename type="middle">R</forename><surname>Gelin</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">M</forename><surname>Karplus</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">P</forename><forename type="middle">G</forename><surname>Wolynes</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Nature</title>
+		<imprint>
+			<biblScope unit="volume">262</biblScope>
+			<biblScope unit="page" from="325" to="326" />
+			<date type="published" when="1976">1976</date>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b12">
+	<monogr>
+		<author>
+			<persName><forename type="first">A</forename><surname>Cooper</surname></persName>
+		</author>
+		<title level="m">Proc. natn. Acad. Sci. U.S.A</title>
+		<meeting>natn. Acad. Sci. U.S.A</meeting>
+		<imprint>
+			<date type="published" when="1976">1976</date>
+			<biblScope unit="volume">73</biblScope>
+			<biblScope unit="page" from="2740" to="2741" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b13">
+	<analytic>
+		<title/>
+		<author>
+			<persName><forename type="first">W</forename><forename type="middle">N</forename><surname>Lipscomb</surname></persName>
+		</author>
+		<author>
+			<persName><surname>Ace</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Chem. Res</title>
+		<imprint>
+			<biblScope unit="volume">3</biblScope>
+			<biblScope unit="page" from="81" to="89" />
+			<date type="published" when="1970">1970</date>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b14">
+	<analytic>
+		<title/>
+		<author>
+			<persName><forename type="first">M</forename><surname>Perutz</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Nature</title>
+		<imprint>
+			<biblScope unit="volume">228</biblScope>
+			<biblScope unit="page" from="726" to="739" />
+			<date type="published" when="1970">1970</date>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b15">
+	<analytic>
+		<title/>
+		<author>
+			<persName><forename type="first">R</forename><surname>Huber</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">J</forename><surname>Deisenhofer</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">P</forename><forename type="middle">M</forename><surname>Colman</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">M</forename><surname>Matsushima</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">W</forename><surname>Palm</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Nature</title>
+		<imprint>
+			<biblScope unit="volume">264</biblScope>
+			<biblScope unit="page" from="415" to="420" />
+			<date type="published" when="1976">1976</date>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b16">
+	<analytic>
+		<title/>
+		<author>
+			<persName><forename type="first">M</forename><surname>Karplus</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">D</forename><forename type="middle">L</forename><surname>Weaver</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Nature</title>
+		<imprint>
+			<biblScope unit="volume">260</biblScope>
+			<biblScope unit="page" from="404" to="406" />
+			<date type="published" when="1976">1976</date>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b17">
+	<monogr>
+		<author>
+			<persName><forename type="first">B</forename><forename type="middle">R</forename><surname>Gelin</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">M</forename><surname>Karplus</surname></persName>
+		</author>
+		<title level="m">Proc. natn. Acad. Sci. U.S.A</title>
+		<meeting>natn. Acad. Sci. U.S.A</meeting>
+		<imprint>
+			<date type="published" when="1975">1975</date>
+			<biblScope unit="volume">72</biblScope>
+			<biblScope unit="page" from="2002" to="2006" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b18">
+	<analytic>
+		<title/>
+		<author>
+			<persName><forename type="first">A</forename><surname>Rahman</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Phys. Rev. A</title>
+		<imprint>
+			<biblScope unit="volume">2</biblScope>
+			<biblScope unit="page" from="405" to="411" />
+			<date type="published" when="1964">1964</date>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b19">
+	<analytic>
+		<title/>
+		<author>
+			<persName><forename type="first">R</forename><surname>Huber</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">D</forename><surname>Kukla</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">A</forename><surname>Ruhlmann</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">O</forename><surname>Epp</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">H</forename><surname>Formanek</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Naturwissenschaften</title>
+		<imprint>
+			<biblScope unit="volume">57</biblScope>
+			<biblScope unit="page" from="389" to="392" />
+			<date type="published" when="1970">1970</date>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b20">
+	<analytic>
+		<title/>
+		<author>
+			<persName><forename type="first">J</forename><surname>Deisenhofer</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">W</forename><surname>Steigemann</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Acta Crystallogr. B</title>
+		<imprint>
+			<biblScope unit="volume">31</biblScope>
+			<biblScope unit="page" from="238" to="250" />
+			<date type="published" when="1975">1975</date>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b21">
+	<analytic>
+		<title/>
+		<author>
+			<persName><forename type="first">C</forename><forename type="middle">W</forename><surname>Gear</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Argonne Nat&apos;l. Lab. Rep. No. ANL</title>
+		<imprint>
+			<biblScope unit="page">7126</biblScope>
+			<date type="published" when="1966">1966</date>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b22">
+	<monogr>
+		<author>
+			<persName><forename type="first">T</forename><surname>Imoto</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">L</forename><forename type="middle">N</forename><surname>Johnson</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">A</forename><forename type="middle">C T</forename><surname>North</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">D</forename><forename type="middle">C</forename><surname>Phillips</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">J</forename><forename type="middle">A</forename><surname>Rupley</surname></persName>
+		</author>
+		<title level="m">The Enzymes WI</title>
+		<editor>
+			<persName><forename type="first">P</forename><forename type="middle">D</forename><surname>Boyer</surname></persName>
+		</editor>
+		<meeting><address><addrLine>New York</addrLine></address></meeting>
+		<imprint>
+			<publisher>Academic</publisher>
+			<date type="published" when="1972">1972</date>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b23">
+	<analytic>
+		<title/>
+		<author>
+			<persName><forename type="first">J</forename><surname>Moult</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">J. molec. Biol</title>
+		<imprint>
+			<biblScope unit="volume">100</biblScope>
+			<biblScope unit="page" from="179" to="195" />
+			<date type="published" when="1976">1976</date>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b24">
+	<analytic>
+		<title/>
+		<author>
+			<persName><forename type="first">N.-T</forename><surname>Yu</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">B</forename><forename type="middle">H</forename><surname>Jo</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">J. Am. Chem. Soc</title>
+		<imprint>
+			<biblScope unit="volume">95</biblScope>
+			<biblScope unit="page" from="5033" to="5037" />
+			<date type="published" when="1973">1973</date>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b25">
+	<analytic>
+		<title/>
+		<author>
+			<persName><forename type="first">R</forename><forename type="middle">H</forename><surname>Austin</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">K</forename><forename type="middle">W</forename><surname>Beeson</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">L</forename><surname>Eisenstein</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">H</forename><surname>Frauenfelder</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">I</forename><forename type="middle">C</forename><surname>Gunsalus</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Biochemistry</title>
+		<imprint>
+			<biblScope unit="volume">14</biblScope>
+			<biblScope unit="page" from="5355" to="5373" />
+			<date type="published" when="1975">1975</date>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b26">
+	<analytic>
+		<title/>
+		<author>
+			<persName><forename type="first">H</forename><forename type="middle">B J</forename><surname>Stuhrmann</surname></persName>
+		</author>
+		<author>
+			<persName><surname>Molec</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Biol</title>
+		<imprint>
+			<biblScope unit="volume">77</biblScope>
+			<biblScope unit="page" from="363" to="369" />
+			<date type="published" when="1973">1973</date>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b27">
+	<analytic>
+		<title/>
+		<author>
+			<persName><forename type="first">W</forename><forename type="middle">R</forename><surname>Busing</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">H</forename><forename type="middle">A</forename><surname>Levy</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Acta Crystallogr</title>
+		<imprint>
+			<biblScope unit="volume">17</biblScope>
+			<biblScope unit="page" from="142" to="146" />
+			<date type="published" when="1964">1964</date>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b28">
+	<analytic>
+		<title/>
+		<author>
+			<persName><forename type="first">R</forename><forename type="middle">A</forename><surname>Zwanzig</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Rev. phys. Chem</title>
+		<imprint>
+			<biblScope unit="volume">16</biblScope>
+			<biblScope unit="page" from="67" to="102" />
+			<date type="published" when="1965">1965</date>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b29">
+	<analytic>
+		<title/>
+		<author>
+			<persName><forename type="first">M</forename><surname>Go</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">N</forename><surname>Go</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Biopolymers</title>
+		<imprint>
+			<biblScope unit="volume">15</biblScope>
+			<biblScope unit="page" from="1119" to="1127" />
+			<date type="published" when="1976">1976</date>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b30">
+	<analytic>
+		<title/>
+		<author>
+			<persName><forename type="first">P</forename><forename type="middle">L</forename><surname>Fehder</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">C</forename><forename type="middle">A</forename><surname>Emeis</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">R</forename><forename type="middle">P</forename><surname>Futrelle</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">J. chem. Phys</title>
+		<imprint>
+			<biblScope unit="volume">54</biblScope>
+			<biblScope unit="page" from="4021" to="4934" />
+			<date type="published" when="1971">1971</date>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b31">
+	<analytic>
+		<title/>
+		<author>
+			<persName><forename type="first">J</forename><forename type="middle">L</forename><surname>Lebowitz</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">J</forename><forename type="middle">K</forename><surname>Percus</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">L</forename><surname>Verlet</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Phys. Rev</title>
+		<imprint>
+			<biblScope unit="volume">153</biblScope>
+			<biblScope unit="page" from="250" to="254" />
+			<date type="published" when="1967">1967</date>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b32">
+	<monogr>
+		<title level="m" type="main">An Introduction to the Liquid State</title>
+		<author>
+			<persName><forename type="first">P</forename><surname>Egelstaff</surname></persName>
+		</author>
+		<imprint>
+			<date type="published" when="1967">1967</date>
+			<publisher>Academic</publisher>
+			<pubPlace>New York</pubPlace>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b33">
+	<analytic>
+		<title/>
+		<author>
+			<persName><forename type="first">D</forename><surname>Chandler</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Acc. Chem. Res</title>
+		<imprint>
+			<biblScope unit="volume">7</biblScope>
+			<biblScope unit="page" from="246" to="251" />
+			<date type="published" when="1974">1974</date>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b34">
+	<analytic>
+		<title/>
+		<author>
+			<persName><forename type="first">J</forename><forename type="middle">D</forename><surname>Barnes</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">J. chem. Phys</title>
+		<imprint>
+			<biblScope unit="volume">58</biblScope>
+			<biblScope unit="page" from="5193" to="5201" />
+			<date type="published" when="1973">1973</date>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b35">
+	<analytic>
+		<title/>
+		<author>
+			<persName><forename type="first">T</forename><surname>Peterline-Neumaier</surname></persName>
+		</author>
+		<author>
+			<persName><surname>Springer</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">T. J. Polym. Sci. (Phys.)</title>
+		<imprint>
+			<biblScope unit="volume">14</biblScope>
+			<biblScope unit="page" from="1351" to="1359" />
+			<date type="published" when="1976">1976</date>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b36">
+	<monogr>
+		<author>
+			<persName><forename type="first">B</forename><surname>Gelin</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">M</forename><surname>Karplus</surname></persName>
+		</author>
+		<title level="m">Proc. natn. Acad. Sci. U.S.A</title>
+		<meeting>natn. Acad. Sci. U.S.A</meeting>
+		<imprint>
+			<date type="published" when="1977">1977</date>
+			<biblScope unit="volume">81</biblScope>
+			<biblScope unit="page" from="801" to="805" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b37">
+	<analytic>
+		<title/>
+		<author>
+			<persName><forename type="first">A</forename><surname>Laubereau</surname></persName>
+		</author>
+		<author>
+			<persName><forename type="first">W</forename><forename type="middle">A</forename><surname>Kaiser</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Rev. Phys. Chem</title>
+		<imprint>
+			<biblScope unit="volume">26</biblScope>
+			<biblScope unit="page" from="83" to="99" />
+			<date type="published" when="1975">1975</date>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b38">
+	<analytic>
+		<title/>
+		<author>
+			<persName><forename type="first">J</forename><forename type="middle">B</forename><surname>Anderson</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">J. chem. Phys</title>
+		<imprint>
+			<biblScope unit="volume">58</biblScope>
+			<biblScope unit="page" from="4684" to="4692" />
+			<date type="published" when="1973">1973</date>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct xml:id="b39">
+	<analytic>
+		<author>
+			<persName><forename type="first">C</forename><forename type="middle">H</forename><surname>Bennett</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Diffusion in Solids</title>
+		<editor>
+			<persName><forename type="first">J</forename><forename type="middle">J</forename><surname>Burton</surname></persName>
+		</editor>
+		<editor>
+			<persName><forename type="first">A</forename><forename type="middle">S</forename><surname>Nowick</surname></persName>
+		</editor>
+		<meeting><address><addrLine>San Francisco; Ithaca, New York</addrLine></address></meeting>
+		<imprint>
+			<publisher>Academic</publisher>
+			<date type="published" when="1975">1975</date>
+			<biblScope unit="page">14853</biblScope>
+		</imprint>
+		<respStmt>
+			<orgName>Cornell University</orgName>
+		</respStmt>
+	</monogr>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>
