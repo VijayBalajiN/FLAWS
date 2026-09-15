@@ -1,5 +1,23 @@
 # FLAWS: Fault Localization Across Writing in Science
 
+> ### This fork: error insertion on research *plans*
+>
+> Upstream FLAWS inserts errors into full LaTeX papers. This fork adapts the
+> method to short structured **research plans** — Problem / Method / Experiment
+> Design / Hypothesis — extracted from PDFs with GROBID, so papers without
+> LaTeX source (and papers from any field) can be used.
+>
+> **Start at [`docs/README.md`](docs/README.md).** Mechanics are in
+> [`docs/pipeline.md`](docs/pipeline.md), corpus provenance in
+> [`docs/corpus.md`](docs/corpus.md), and current results in
+> [`docs/results_v2.md`](docs/results_v2.md).
+>
+> Everything in this fork lives under `src/pipeline/plan_error_insertion.py`,
+> `src/utils/`, and `data/` — the upstream code and instructions below are
+> unmodified.
+
+---
+
 This repository provides the benchmark dataset, automated error insertion pipeline, and error identification & evaluation framework for the paper [FLAWS: A Benchmark for Error Identification and Localization in Scientific Papers](https://www.arxiv.org/abs/2511.21843). The code allows you to:
 
 1. Evaluate LLMs on their ability to identify errors in scientific papers.  
