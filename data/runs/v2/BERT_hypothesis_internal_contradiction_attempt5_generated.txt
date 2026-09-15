@@ -1,0 +1,17 @@
+:error_type:
+Internal Contradiction
+
+:original_text:
+The model's objective will be to predict the original vocabulary ID of these masked tokens using the full bidirectional context.
+
+:modified_text:
+The model's objective will be to predict the original vocabulary ID of a token based solely on its surrounding bidirectional context, forcing it to ignore the token's own embedding at that position.
+
+:explanation:
+The modification introduces an internal contradiction between the stated goal of the pre-training objective and the mechanism used to implement it.
+
+The modified objective explicitly states that the model must learn to predict a token "based *solely* on its surrounding bidirectional context, forcing it to ignore the token's own embedding at that position." This establishes a strict rule: local information at the target position is forbidden.
+
+However, the description of the Masked LM (MLM) mechanism, which is left unchanged, states that for 10% of the selected tokens, the model will "leave the token unchanged." In these cases, the input to the model contains the very token it is supposed to predict. The most effective way for the model to succeed at this part of the task would be to learn an identity function—to use the token's own embedding, which the objective explicitly forbids it from doing.
+
+Therefore, the hypothesis's own mechanism creates a logical paradox: the model is simultaneously required to ignore a piece of information (the token's own embedding) by the objective's definition, while also being presented with that exact information as a valid part of its training data, which incentivizes it to do the opposite. The training rule directly violates the training goal.

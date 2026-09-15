@@ -1,0 +1,15 @@
+:error_type:
+Conflict with Established Beliefs
+
+:original_text:
+The criticality of an error in a scientific paper is a function of its connection to the paper's core claims.
+
+:modified_text:
+The criticality of an error in a scientific paper is determined by its logical position within the paper's deductive structure; any error that invalidates a premise from which a core claim is derived is, by definition, a critical error.
+
+:explanation:
+The modification introduces a conflict with the Duhem-Quine thesis, a well-established concept in the philosophy of science.
+
+(a) The Duhem-Quine thesis states that it is impossible to test a scientific hypothesis in isolation, because an empirical test always relies on a web of background and auxiliary assumptions (e.g., about the functioning of measurement instruments, the purity of samples, or the validity of underlying theories). When an observation contradicts a prediction, one can only conclude that *something* in that web is wrong, but logic alone cannot pinpoint whether the error lies in the core hypothesis or in one of the auxiliary assumptions.
+
+(b) The modified hypothesis is internally consistent but presents an oversimplified, purely deductive model of scientific validation. It asserts that an error's criticality is an absolute property determined *by definition* from its logical position within the paper alone. This directly clashes with the Duhem-Quine thesis, which implies that the "criticality" of an error is not absolute. An error that logically invalidates a premise could, in practice, be accommodated by the scientific community by adjusting an auxiliary assumption, thereby saving the core claim. The modified hypothesis incorrectly treats the paper as a closed, self-contained logical system, ignoring the complex web of external assumptions that an expert would know are always in play.

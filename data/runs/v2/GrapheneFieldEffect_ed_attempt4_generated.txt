@@ -1,0 +1,11 @@
+:error_type:
+Wrong metric/measurement
+
+:original_text:
+For each device, we will conduct transport measurements by applying a gate voltage (Vg) to the silicon substrate while measuring the film's conductivity and Hall coefficient.
+
+:modified_text:
+For each device, we will conduct transport measurements by applying a gate voltage (Vg) to the silicon substrate while measuring the film's conductivity.
+
+:explanation:
+The flaw introduced is the omission of the Hall coefficient measurement. The hypothesis explicitly claims an "ambipolar" field effect, meaning the dominant charge carriers can be tuned continuously from holes to electrons. While measuring conductivity as a function of gate voltage can show a minimum (the Dirac point), which is characteristic of this effect, it is an insufficient metric to definitively prove ambipolarity. A conductivity measurement alone cannot distinguish the *type* of charge carrier (positive holes vs. negative electrons). The Hall coefficient measurement is essential because its sign directly indicates the carrier type. By removing this measurement, the experiment can no longer rigorously confirm that the carriers are actually switching from holes to electrons, thus failing to fully test a central component of the stated hypothesis. This is a subtle but critical oversight, as the planned experiment now lacks the means to validate one of its key claims.

@@ -1,0 +1,35 @@
+:error_type:
+Undermining a Premise
+
+:original_text:
+allowing the concentration of their charge carriers—both electrons and holes—to be tuned by an external gate voltage.
+
+:modified_text:
+allowing their conductivity—reflecting both electron and hole transport—to be tuned by an external gate voltage.
+
+:error_type:
+Undermining a Premise
+
+:original_text:
+allowing us to tune the concentration of charge carriers (both electrons and holes) by applying an external gate voltage.
+
+:modified_text:
+allowing us to tune their conductivity (reflecting both electron and hole transport) by applying an external gate voltage.
+
+:error_type:
+Undermining a Premise
+
+:original_text:
+that we can induce a significant surface charge and thereby modulate the carrier concentration in the film. We will measure the resulting changes in conductivity to determine key parameters such as carrier mobility.
+
+:modified_text:
+that we can induce a significant surface charge and thereby modulate the conductivity of the film. We will measure these changes in conductivity to confirm the strength of the field effect.
+
+:explanation:
+The modification conflates two distinct physical quantities: **charge carrier concentration (n)** and **electrical conductivity (σ)**.
+
+(a) The two distinct concepts are:
+1.  **Charge Carrier Concentration (n):** This is the number of mobile charge carriers (electrons or holes) per unit area. An external gate voltage directly controls this quantity by electrostatically inducing charge in the material.
+2.  **Electrical Conductivity (σ):** This is a measure of how well the material conducts electricity. It is what is typically measured in transport experiments.
+
+(b) Treating them as interchangeable is a mistake because conductivity is not solely determined by carrier concentration. The two are related by the formula σ = n * e * μ, where 'e' is the elementary charge and 'μ' is the carrier mobility (a measure of how easily carriers move through the material). The modified hypothesis incorrectly presents conductivity as the fundamental parameter being tuned, which smuggles in the hidden premise that mobility (μ) is a constant. In many real materials, including graphene, mobility is *not* constant and can itself depend on the carrier concentration, temperature, or sample quality. By conflating the two, the hypothesis oversimplifies the physics and proposes an experimental plan that would fail to disentangle these two contributing factors, potentially misinterpreting the results. The formal logic is not broken, but it rests on a flawed physical assumption.

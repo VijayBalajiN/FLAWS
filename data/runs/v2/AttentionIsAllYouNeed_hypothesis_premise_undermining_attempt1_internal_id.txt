@@ -1,0 +1,10 @@
+:error_text:
+An architecture relying solely on attention mechanisms, without recurrence or convolutions
+
+:error_text:
+is sufficient to resolve all global dependencies between input and output sequences
+
+:explanation:
+The most serious error is the claim that the proposed architecture relies "solely on attention mechanisms." This is a significant factual mischaracterization of the model described in the "Method" section. The plan explicitly states that each layer also contains a "position-wise fully connected feed-forward network" and that the model requires "positional encodings" to process sequence order. These components are critical to the model's performance, not minor details, making the premise of the hypothesis factually incorrect based on the research plan itself.
+
+The second error is the unfalsifiable overstatement that the model "is sufficient to resolve all global dependencies." A scientific hypothesis must be testable and falsifiable. This absolute claim is practically impossible to prove, as one cannot test against "all" possible dependencies. A failure on a single task would not be enough to disprove the general claim, making it a poorly formulated hypothesis from a methodological standpoint.

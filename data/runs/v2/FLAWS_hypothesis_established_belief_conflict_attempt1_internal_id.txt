@@ -1,0 +1,5 @@
+:error_text:
+The criticality of an error in a scientific paper is determined by its logical position within the paper's deductive structure; any error that invalidates a premise from which a core claim is derived is, by definition, a critical error.
+
+:explanation:
+The text presented under the "Hypothesis" heading is not a testable hypothesis. A hypothesis must be a falsifiable statement that predicts the outcome of an experiment. This statement is a definitional axiom; it establishes the *meaning* of a "critical error" for the purposes of the study. The research plan is designed to test the performance of LLMs based on this definition, but it does not—and cannot—test the validity of the definition itself. This is a fundamental error in structuring a scientific plan, as it fails to state the actual, testable prediction being investigated.

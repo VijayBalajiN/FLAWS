@@ -1,0 +1,10 @@
+:error_text:
+using the measured Hall coefficient to directly determine the carrier concentration in the film.
+
+:error_text:
+We will measure the resulting changes in conductivity to determine key parameters such as carrier mobility.
+
+:explanation:
+The primary and most serious error is the claim that the Hall coefficient can be used to "directly determine the carrier concentration." This is only valid for materials with a single type of charge carrier. Graphene is a semimetal and has two types of charge carriers (electrons and holes), especially near the charge neutrality point, which is the most critical region for demonstrating the hypothesized ambipolar effect. In a two-carrier system, the Hall coefficient depends on the concentrations and mobilities of both carrier types, making a direct determination of concentration from this measurement impossible.
+
+The second error is a direct consequence of the first. The plan to determine carrier mobility from conductivity is flawed because the standard calculation (mobility = conductivity / (carrier concentration × elementary charge)) relies on the carrier concentration value. Since the proposed method for determining the carrier concentration is incorrect, the resulting mobility values would also be incorrect, undermining a key objective of the experiment.

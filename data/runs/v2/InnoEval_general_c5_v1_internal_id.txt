@@ -1,0 +1,19 @@
+:error_text:
+This process will yield groups of ideas with an inherent ground-truth ranking
+
+:error_text:
+perform stratified sampling based on their final decisions (Reject, Poster, Spotlight, Oral).
+
+:error_text:
+We will crawl papers from top-tier conferences (NeurIPS and ICLR) via OpenReview
+
+:error_text:
+retrieves dynamic, "living knowledge" from diverse online sources, including scholarly literature (e.g., arXiv, Google Scholar)
+
+:error_text:
+We will frame this as a classification problem (binary: Accept/Reject; ternary: Reject/Poster/Highlight)
+
+:explanation:
+The primary and most serious error is the use of a conference paper's final decision (e.g., Reject, Accept) as the ground truth for the quality of the underlying *research idea*. This assumption is invalid because a paper's acceptance is heavily influenced by factors beyond the core idea, such as the quality of execution, experimental validation, and clarity of writing. Therefore, the experiment does not measure the ability to assess an idea, but rather the ability to predict a paper's review outcome.
+
+This foundational flaw is compounded by a critical data contamination issue. The experiment proposes to test the system on ideas extracted from published papers from top conferences, while simultaneously allowing the system to search for knowledge in scholarly databases like arXiv and Google Scholar. This creates a circular task where the system can easily find the source paper for the idea it is evaluating, rendering the test a simple information retrieval problem rather than a genuine assessment of the idea's merit. The framing of the evaluation as a classification task based on these flawed and contaminated ground truths invalidates any resulting performance metrics.

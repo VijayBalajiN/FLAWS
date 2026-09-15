@@ -1,0 +1,17 @@
+:error_type:
+Internal Contradiction
+
+:original_text:
+Language representations jointly conditioned on both left and right context in all layers are more powerful than representations conditioned on unidirectional or shallowly combined bidirectional contexts.
+
+:modified_text:
+Language representations jointly conditioned on both left and right context are most powerful, a state best achieved by training a model to predict a masked token by first independently modeling its left-side and right-side contexts and only then combining these separate representations to form a final prediction, making it superior to unidirectional or naively combined bidirectional contexts.
+
+:explanation:
+The modified hypothesis contains an internal contradiction between its stated goal and its proposed mechanism.
+
+1.  **Stated Goal:** The hypothesis claims that "jointly conditioned" representations are the most powerful. In the context of deep learning models like Transformers, "jointly conditioned in all layers" means that the representation of each token is influenced by both left and right context simultaneously throughout the entire depth of the model.
+
+2.  **Proposed Mechanism:** The hypothesis then proposes that this state is "best achieved by... first independently modeling its left-side and right-side contexts and only then combining these separate representations."
+
+3.  **The Contradiction:** The proposed mechanism directly contradicts the stated goal. "Independently modeling" the left and right contexts before a final combination is the exact definition of a "shallowly combined bidirectional" architecture (the approach used by ELMo, which the paper's background section correctly identifies as suboptimal). This mechanism, by its very design, prevents the deep, layer-by-layer joint conditioning that is the hypothesis's stated objective. The hypothesis, therefore, claims to achieve Goal A by implementing a mechanism that is the definition of Not-A.

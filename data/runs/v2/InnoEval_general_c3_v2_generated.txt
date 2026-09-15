@@ -1,0 +1,8 @@
+:original_text:
+We will use an extraction agent to convert these papers into a structured idea format, followed by manual verification.
+
+:modified_text:
+We will use an extraction agent to convert these papers into a structured idea format—focusing on the introduction and proposed method—followed by manual verification.
+
+:explanation:
+This modification introduces an error based on a misalignment between what the ground truth measures and what the model evaluates. Conference reviewers judge the entire paper, including the soundness of the experiments and the strength of the results. By explicitly extracting only the "introduction and proposed method," the dataset strips out the experimental execution that heavily influenced the original accept/reject decision. A paper with a brilliant idea but fatally flawed experiments (a likely reject) would be represented in the dataset as just a brilliant idea with a "Reject" label. Conversely, a mediocre idea with state-of-the-art, extensive experiments (a plausible oral) would be represented as a mediocre idea with an "Oral" label. This invalidates the claim that the conference decision is a ground-truth ranking for the *idea's* quality.

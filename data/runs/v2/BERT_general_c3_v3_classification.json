@@ -1,0 +1,9 @@
+{
+  "label": "BERT_general_c3_v3",
+  "original_text": "*   **BERT_LARGE**: A larger 24-layer Transformer with a 1024-dimensional hidden size and 16 self-attention heads.",
+  "modified_text": "*   **BERT_LARGE**: A larger 24-layer Transformer with a 1024-dimensional hidden size, 16 self-attention heads, and a GELU activation function for improved non-linearity.",
+  "explanation": "This introduces a confounding variable in the model architecture itself, separate from scale. By specifying a more advanced activation function (GELU) for `BERT_LARGE` and leaving it unmentioned for `BERT_BASE`, it implies the base model uses a more standard, less effective activation like ReLU. This means the two models differ in ways other than just size. Any performance difference could be attributed to the superior activation function, not the model's scale, undermining the claim.",
+  "category": "D",
+  "category_name": "Others",
+  "reasoning": "The error describes a confounded experimental design, which is explicitly given as an example of a flaw that does not fit categories A, B, or C."
+}

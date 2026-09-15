@@ -1,0 +1,15 @@
+:error_text:
+predict the peer review consensus on a research proposal's methodological soundness
+
+:error_text:
+This approach uses expert-derived scores as a proxy for methodological validity.
+
+:error_text:
+distinguish a promising research plan from a flawed one.
+
+:explanation:
+The research plan suffers from a significant construct validity flaw, as it conflates "peer review consensus" with objective "methodological soundness."
+
+1.  The first error text, from the hypothesis, redefines the research goal. Instead of assessing an LLM's ability to identify genuinely flawed science (the motivation described in the Problem section), it measures the far narrower and different ability to mimic the subjective and potentially noisy judgments of human reviewers.
+2.  The second error text, from the Method section, acknowledges this substitution by labeling reviewer scores a "proxy." However, the plan fails to justify this proxy or account for its limitations (e.g., reviewer bias, noise, or error), yet proceeds as if it is a reliable measure of ground truth.
+3.  The third error text, from the Problem section, highlights the "bait-and-switch." It sets up the expectation that the study will tackle the critical problem of identifying flawed plans, but the actual experiment is designed around a different, poorly-justified proxy. This disconnect undermines the study's ability to deliver on its stated purpose of creating a "first-gate" filter against "bad science."

@@ -1,0 +1,8 @@
+:original_text:
+The criticality of an error in a scientific paper is a function of its connection to the paper's core claims.
+
+:modified_text:
+The criticality of an error in a scientific paper is directly proportional to its connection to the paper's core claims.
+
+:explanation:
+This modification introduces a flaw of untestability through misleading precision. It changes a general, qualitative relationship ("is a function of") to a specific, quantitative one ("is directly proportional to"). While this appears more rigorous, the research plan provides no method for quantifying the independent variable ("connection to the paper's core claims"). Furthermore, the proposed evaluation metric (Accuracy@k) is a binary classification metric (error found/not found), which is incapable of testing a proportional relationship. The hypothesis is therefore rendered untestable by the experiment designed to validate it.

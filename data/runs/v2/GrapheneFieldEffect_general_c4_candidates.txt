@@ -1,0 +1,35 @@
+:candidate:
+1
+
+:original_text:
+By systematically sweeping the gate voltage, we will investigate our central hypothesis: that we can induce a significant surface charge and thereby modulate the carrier concentration in the film.
+
+:modified_text:
+By sweeping the gate voltage from -100 V up to +100 V, we will investigate our central hypothesis: that we can induce a significant surface charge and thereby modulate the carrier concentration in the film.
+
+:explanation:
+The flaw is the introduction of a unidirectional voltage sweep. Real-world devices, especially those with dielectrics like silicon oxide, often have charge traps at the interface. These traps can cause significant hysteresis, meaning the material's conductivity at a given voltage depends on the direction of the sweep (i.e., whether the voltage is increasing or decreasing). To validate a claim of "smooth and continuous" tuning, a bidirectional sweep (e.g., -100V to +100V and then back to -100V) is required to check for and quantify hysteresis. By specifying only a one-way sweep, the experimental design is inadequate as it would fail to detect this common non-ideal behavior, which would contradict the claim.
+
+:candidate:
+2
+
+:original_text:
+A primary objective is to test for an ambipolar field effect, where we can tune the charge carriers continuously from electrons to holes by varying the gate voltage.
+
+:modified_text:
+A primary objective is to test for an ambipolar field effect, and we will do so by applying positive gate voltages to tune the charge carriers from the intrinsic state deep into the electron-doped regime.
+
+:explanation:
+The flaw is the restriction of the experimental parameter space to only positive gate voltages. This design can only demonstrate the modulation of one type of charge carrier (electrons). It makes it impossible to deplete the electrons, reach the charge neutrality point, and induce hole conduction. Therefore, the experiment as described cannot test the full claim of tuning "across the spectrum from electrons to holes." A researcher might plausibly design an initial experiment this way to focus on one carrier type, but it invalidates the experiment's ability to confirm the full ambipolar behavior central to the project's hypothesis.
+
+:candidate:
+3
+
+:original_text:
+For each device, we will conduct transport measurements by applying a gate voltage (Vg) to the silicon substrate while measuring the film's conductivity and Hall coefficient.
+
+:modified_text:
+For each device, we will conduct transport measurements by applying a gate voltage (Vg) to the silicon substrate while measuring the film's two-terminal conductivity.
+
+:explanation:
+The flaw is the replacement of a robust measurement technique ("conductivity and Hall coefficient") with an insufficient one ("two-terminal conductivity"). The Hall coefficient is essential because it directly measures both the sign (electron vs. hole) and the density of the charge carriers. Without the Hall measurement, an experimenter can only observe that conductivity changes with gate voltage, typically in a V-shape. However, such a V-shaped curve is not unique to an ambipolar field effect and can be caused by artifacts like gate leakage currents or contact effects. By removing the Hall measurement, the experiment is no longer capable of distinguishing a true change in carrier type from a measurement artifact, and thus cannot prove the claim that carriers were tuned "from electrons to holes."

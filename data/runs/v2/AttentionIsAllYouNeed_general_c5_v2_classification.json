@@ -1,0 +1,9 @@
+{
+  "label": "AttentionIsAllYouNeed_general_c5_v2",
+  "original_text": "We will vary the number of attention heads (h) and the attention key and value dimensions (d_k, d_v), while keeping the total amount of computation constant.",
+  "modified_text": "We will vary the number of attention heads (h) and the attention key and value dimensions (d_k, d_v), while keeping the total amount of computation and the dot-product scaling factor of 1/\u221ad_model constant.",
+  "explanation": "This modification introduces a flaw by misapplying a core theoretical component of the attention mechanism. The scaling factor `1/\u221ad_k` is crucial for stabilizing gradients and is dependent on the key/query dimension `d_k`. The experiment correctly varies `d_k` as `h` changes (i.e., `d_k = d_model / h`). However, by fixing the scaling factor based on the static `d_model` rather than the dynamic `d_k`, the experiment introduces a severe confounder. For large `h`, `d_k` will be small, and the fixed scaling factor will be too aggressive, washing out the attention scores. For small `h`, `d_k` will be large, and the scaling will be insufficient, risking gradient saturation. This makes the comparison across different values of `h` meaningless, as the optimization dynamics are fundamentally altered for each configuration.",
+  "category": "C",
+  "category_name": "Undermining a Premise",
+  "reasoning": "The error arises because the text's stated goal of varying `h` and `d_k` while keeping computation constant is undermined by fixing the scaling factor to `d_model`, which implicitly assumes `d_k` is constant when it is explicitly being varied, thus failing the contested term test."
+}

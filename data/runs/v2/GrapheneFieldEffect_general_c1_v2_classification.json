@@ -1,0 +1,9 @@
+{
+  "label": "GrapheneFieldEffect_general_c1_v2",
+  "original_text": "We will then process the films into multi-terminal Hall bar structures to enable comprehensive electrical characterization.",
+  "modified_text": "We will then process the films into multi-terminal Hall bar structures with channel widths below 10 nm to enable comprehensive electrical characterization.",
+  "explanation": "The mechanism of this error is the introduction of a confounding physical effect through the experimental method. Specifying a channel width \"below 10 nm\" moves the device from the 2D bulk regime into the quantum-confined nanoribbon regime. At this scale, quantum confinement effects will open a significant electronic bandgap in the graphene film, causing it to behave like a semiconductor, not a semimetal. The experiment, as designed, would therefore be incapable of observing the semimetallic properties claimed in the hypothesis, as the fabrication process itself transforms the material's fundamental electronic nature.",
+  "category": "D",
+  "category_name": "Others",
+  "reasoning": "The error describes an omitted control variable (channel width) that prevents the stated goal from being achieved, which is a classic confounded experimental design and thus falls under D."
+}

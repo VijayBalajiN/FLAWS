@@ -1,0 +1,2 @@
+error:We will calculate time correlation functions for the fluctuations of various internal coordinates (e.g., bond lengths, bond angles, dihedral angles) and atomic positions.
+error:We will search the trajectories for evidence of larger-scale, non-local motions, such as the collective movement of entire structural elements or transitions of sidechains and backbone segments between different conformational states.

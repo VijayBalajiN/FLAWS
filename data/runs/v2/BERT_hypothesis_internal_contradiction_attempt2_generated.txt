@@ -1,0 +1,21 @@
+:error_type:
+Internal Contradiction
+
+:original_text:
+Language representations jointly conditioned on both left and right context in all layers are more powerful than representations conditioned on unidirectional or shallowly combined bidirectional contexts.
+
+:modified_text:
+Language representations are most powerful when jointly conditioned on both left and right context, but where each layer's contextual updates are computed independently of the other layers to prevent error propagation and ensure representational stability.
+
+:original_text:
+The core of our model will be a multi-layer bidirectional Transformer encoder.
+
+:modified_text:
+The core of our model will be a multi-layer bidirectional Transformer encoder. To implement the stable, independent-layer conditioning proposed in our hypothesis, each Transformer layer will operate directly on the initial summed embeddings, rather than on the output of the preceding layer, with their final outputs being aggregated for the prediction tasks.
+
+:explanation:
+The modified hypothesis introduces a mechanism that contradicts its own central premise. The core claim is that a "deep" or "multi-layer" bidirectional model is more powerful. However, the modification introduces a new condition: that each layer must operate independently on the initial embeddings, not on the output of the layer before it, in order to achieve "representational stability."
+
+This mechanism, when followed to its logical conclusion, makes a deep, multi-layer architecture impossible. The power of deep models comes from hierarchical feature learning, where each successive layer builds upon and refines the representations from the previous one. By forcing every layer to start from the same initial embeddings, the model is no longer "deep" in a functional sense. It becomes an ensemble of parallel, shallow (single-layer) models.
+
+Therefore, the mechanism introduced to supposedly improve the model ("independent layers for stability") directly prevents the model from having the very architectural property ("deep," "multi-layer") that the hypothesis claims is the source of its power. The hypothesis's own stated rules for its construction make its stated goal logically unattainable.

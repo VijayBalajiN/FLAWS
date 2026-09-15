@@ -1,0 +1,10 @@
+:error_text:
+We will vary the number of attention heads (h), while keeping the per-head key and value dimensions (d_k, d_v) equal to d_model,
+
+:error_text:
+and adjusting the number of layers (N) to keep the total amount of computation constant.
+
+:explanation:
+The primary error is a fundamental contradiction in the design of the ablation study for attention heads. The plan states that per-head dimensions (d_k, d_v) will be kept equal to the model's total dimension (d_model). This contradicts the multi-head attention mechanism described in the Method section, where d_k = d_v = d_model / h. The proposed experiment would cause a massive (h-fold) explosion in parameters and computation within the attention sub-layer, making it an invalid test of the number of heads.
+
+The second, related error is a methodological flaw in the same experiment. By proposing to vary the number of attention heads (h) and simultaneously adjust the number of layers (N), the experiment introduces a confounding variable. This makes it impossible to isolate the effect of changing the number of heads, as any observed performance difference could be attributed to the change in model depth (N) instead. A valid ablation study must vary only one component at a time.

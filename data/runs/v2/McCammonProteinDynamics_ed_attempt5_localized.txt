@@ -1,0 +1,2 @@
+error: The interior of a folded globular protein is a fluid-like environment where local atomic motions exhibit a diffusional character.
+error: Our central research question is: What is the nature of the atomic motions within a folded protein, and can we characterize their magnitude, correlations, and time evolution?

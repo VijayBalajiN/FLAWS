@@ -1,0 +1,8 @@
+:original_text:
+We will also calculate the root mean square (r.m.s.) fluctuations of atomic positions relative to this average structure to quantify the magnitude of motion throughout the protein.
+
+:modified_text:
+We will also calculate the root mean square (r.m.s.) fluctuations of atomic positions, averaged over the entire production run, relative to this average structure to quantify the magnitude of motion throughout the protein.
+
+:explanation:
+This modification introduces a methodological flaw by presupposing the protein samples a single conformational state. If the protein undergoes a transition to a different, stable conformation during the simulation (a key possibility for "fluid-like" dynamics), the single "average structure" calculated over the entire run would be a physically meaningless intermediate. Calculating fluctuations relative to this non-existent average would produce artificially high and misleading RMSF values, making it an insufficient measure of the true atomic motion within each state.

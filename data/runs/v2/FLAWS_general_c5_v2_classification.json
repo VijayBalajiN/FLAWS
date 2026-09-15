@@ -1,0 +1,9 @@
+{
+  "label": "FLAWS_general_c5_v2",
+  "original_text": "To validate the reliability of our automated pipeline, we will conduct a human annotation study on a randomly selected subset of the benchmark.",
+  "modified_text": "To validate the reliability of our automated pipeline, we will conduct a human annotation study on a randomly selected subset of the benchmark items that successfully pass the \"internal identification\" filter.",
+  "explanation": "The mechanism of this error is **Selection Bias**. By explicitly stating that human validation is performed only on the subset of errors that survive the \"internal identification\" filter, the study introduces a significant bias. This filter is designed to remove errors the generating LLM can easily find. The surviving errors are not necessarily more scientifically valid, but may simply be more convoluted or exploit the specific blind spots of the generating LLM. The human validation would therefore be conducted on a non-representative sample, potentially leading to a significant overestimation of the pipeline's overall ability to generate high-quality errors.",
+  "category": "D",
+  "category_name": "Others",
+  "reasoning": "The error describes a confounded experimental design where the selection criteria for the human annotation study introduces a bias, which is a common type of flaw not fitting A, B, or C."
+}

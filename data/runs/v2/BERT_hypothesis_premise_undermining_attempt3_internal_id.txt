@@ -1,0 +1,5 @@
+:error_text:
+using the full unmasked context
+
+:explanation:
+This phrase describes a logically impossible training condition that fundamentally misrepresents the Masked Language Model (MLM) objective detailed in the "Method" section. The model is trained to predict a *masked* token, meaning the context it uses is inherently incomplete and contains a `[MASK]` token. Claiming the model uses the "full unmasked context" suggests the answer is present in the input, making the prediction task trivial and contradicting the core mechanism by which the model is intended to learn rich contextual representations.

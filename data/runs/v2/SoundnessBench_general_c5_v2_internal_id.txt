@@ -1,0 +1,10 @@
+:error_text:
+evaluate models on a held-out split of very recent papers (ICLR 2026) using models with documented training data cutoffs prior to the papers' publication.
+
+:error_text:
+to test if the presence of these flaws reduces the model's assigned soundness score.
+
+:explanation:
+The most serious error is a factual impossibility: the plan proposes using papers from ICLR 2026 for a contamination control experiment. As this conference has not yet occurred, the data does not exist, making this part of the experiment impossible to execute.
+
+The second error is a significant methodological inconsistency. The primary evaluation protocol defines the task as a binary classification (assigning a "high" or "low" soundness label). However, the adversarial control experiment is designed to measure a reduction in the model's "soundness score," a continuous or ordinal value that the model is not asked to produce in the main task. This makes the control experiment's measurement method incompatible with the overall task definition.

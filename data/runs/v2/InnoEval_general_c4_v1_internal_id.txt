@@ -1,0 +1,11 @@
+:error_text:
+This process will yield groups of ideas with an inherent ground-truth ranking, from which we can also derive pair-wise comparison tasks.
+
+:error_text:
+We will use an extraction agent to convert these papers into a structured idea format, followed by manual verification.
+
+:error_text:
+We will frame this as a classification problem (binary: Accept/Reject; ternary: Reject/Poster/Highlight) and measure performance using Accuracy and weighted F1 score.
+
+:explanation:
+The fundamental flaw in this experiment design is the use of conference peer-review decisions (e.g., Accept/Reject) as the ground truth for an idea's quality. This assumption is invalid for several reasons. First, the peer-review process evaluates a complete, polished paper—including its writing, presentation, and experimental execution—not the core idea in isolation. The proposed method of extracting an "idea" from a full paper cannot disentangle the concept from its execution, introducing a critical confounding variable. Second, peer review is inherently subjective, noisy, and influenced by factors like reviewer bias, author prestige, and prevailing research trends. By framing the evaluation as a classification task to predict these outcomes, the experiment incentivizes the model to learn these superficial correlations rather than assessing the idea's intrinsic merit. This means the system is being trained to predict the outcome of a flawed human process, not to perform a robust, independent evaluation of a scientific idea.

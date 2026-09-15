@@ -1,0 +1,213 @@
+/Users/vijaybalajinarasimmabharathi/Desktop/7th-sem/project/FLAWS/src/pipeline/plan_error_insertion.py:49: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+[McCammonProteinDynamics/general_c1_v1] rejected: no edit landed in the required hypothesis section
+[McCammonProteinDynamics/general_c1_v2] rejected: no edit landed in the required hypothesis section
+[McCammonProteinDynamics/general_c1_v3] filtered: too easy
+Exact match found.
+Saved internal score at data/altered_plans_v2/McCammonProteinDynamics_general_c2_v1_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.03 minutes
+[McCammonProteinDynamics/general_c2_v1] SUCCESS -> data/altered_plans_v2/McCammonProteinDynamics_general_c2_v1_altered.json
+[call_gemini] attempt 1/3 failed: 504 Deadline Exceeded
+[McCammonProteinDynamics/general_c2_v2] filtered: too easy
+Exact match found.
+Saved score at data/altered_plans_v2/McCammonProteinDynamics_general_c2_v3_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.02 minutes
+[McCammonProteinDynamics/general_c2_v3] self-identified (too easy), discarding
+Exact match found.
+Saved internal score at data/altered_plans_v2/McCammonProteinDynamics_general_c3_v1_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.02 minutes
+[McCammonProteinDynamics/general_c3_v1] SUCCESS -> data/altered_plans_v2/McCammonProteinDynamics_general_c3_v1_altered.json
+Exact match found.
+Saved score at data/altered_plans_v2/McCammonProteinDynamics_general_c3_v2_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.01 minutes
+[McCammonProteinDynamics/general_c3_v2] self-identified (too easy), discarding
+[McCammonProteinDynamics/general_c3_v3] filtered: too easy
+[McCammonProteinDynamics/general_c4_v1] filtered: too easy
+[McCammonProteinDynamics/general_c4_v2] rejected: no edit landed in the required experiment_design section
+[McCammonProteinDynamics/general_c4_v3] filtered: too easy
+[McCammonProteinDynamics/general_c5_v1] filtered: too easy
+Exact match found.
+Saved internal score at data/altered_plans_v2/McCammonProteinDynamics_general_c5_v2_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.03 minutes
+[McCammonProteinDynamics/general_c5_v2] SUCCESS -> data/altered_plans_v2/McCammonProteinDynamics_general_c5_v2_altered.json
+[McCammonProteinDynamics/general_c5_v3] filtered: too easy
+[McCammonProteinDynamics/general] 3/15 candidates survived
+[McCammonProteinDynamics/hypothesis_internal_contradiction] attempt 1/5
+[McCammonProteinDynamics/hypothesis_internal_contradiction_attempt1] filtered: too easy
+[McCammonProteinDynamics/hypothesis_internal_contradiction] attempt 2/5
+[McCammonProteinDynamics/hypothesis_internal_contradiction_attempt2] filtered: too easy
+[McCammonProteinDynamics/hypothesis_internal_contradiction] attempt 3/5
+Exact match found.
+Saved score at data/altered_plans_v2/McCammonProteinDynamics_hypothesis_internal_contradiction_attempt3_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.01 minutes
+[McCammonProteinDynamics/hypothesis_internal_contradiction_attempt3] self-identified (too easy), discarding
+[McCammonProteinDynamics/hypothesis_internal_contradiction] attempt 4/5
+[McCammonProteinDynamics/hypothesis_internal_contradiction_attempt4] filtered: too easy
+[McCammonProteinDynamics/hypothesis_internal_contradiction] attempt 5/5
+Exact match found.
+Saved internal score at data/altered_plans_v2/McCammonProteinDynamics_hypothesis_internal_contradiction_attempt5_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.02 minutes
+[McCammonProteinDynamics/hypothesis_internal_contradiction_attempt5] SUCCESS -> data/altered_plans_v2/McCammonProteinDynamics_hypothesis_internal_contradiction_attempt5_altered.json
+[McCammonProteinDynamics/hypothesis_established_belief_conflict] attempt 1/5
+[McCammonProteinDynamics/hypothesis_established_belief_conflict_attempt1] filtered: too easy
+[McCammonProteinDynamics/hypothesis_established_belief_conflict] attempt 2/5
+[McCammonProteinDynamics/hypothesis_established_belief_conflict_attempt2] filtered: too easy
+[McCammonProteinDynamics/hypothesis_established_belief_conflict] attempt 3/5
+[McCammonProteinDynamics/hypothesis_established_belief_conflict_attempt3] filtered: too easy
+[McCammonProteinDynamics/hypothesis_established_belief_conflict] attempt 4/5
+Exact match found.
+Exact match found.
+Saved internal score at data/altered_plans_v2/McCammonProteinDynamics_hypothesis_established_belief_conflict_attempt4_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.02 minutes
+[McCammonProteinDynamics/hypothesis_established_belief_conflict_attempt4] SUCCESS -> data/altered_plans_v2/McCammonProteinDynamics_hypothesis_established_belief_conflict_attempt4_altered.json
+[McCammonProteinDynamics/hypothesis_premise_undermining] attempt 1/5
+Exact match found.
+Saved internal score at data/altered_plans_v2/McCammonProteinDynamics_hypothesis_premise_undermining_attempt1_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.0 minutes
+[McCammonProteinDynamics/hypothesis_premise_undermining_attempt1] self-identified (too easy), discarding
+[McCammonProteinDynamics/hypothesis_premise_undermining] attempt 2/5
+Exact match found.
+Saved score at data/altered_plans_v2/McCammonProteinDynamics_hypothesis_premise_undermining_attempt2_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.01 minutes
+[McCammonProteinDynamics/hypothesis_premise_undermining_attempt2] self-identified (too easy), discarding
+[McCammonProteinDynamics/hypothesis_premise_undermining] attempt 3/5
+Exact match found.
+Saved internal score at data/altered_plans_v2/McCammonProteinDynamics_hypothesis_premise_undermining_attempt3_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.01 minutes
+[McCammonProteinDynamics/hypothesis_premise_undermining_attempt3] self-identified (too easy), discarding
+[McCammonProteinDynamics/hypothesis_premise_undermining] attempt 4/5
+Exact match found.
+Saved internal score at data/altered_plans_v2/McCammonProteinDynamics_hypothesis_premise_undermining_attempt4_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.02 minutes
+[McCammonProteinDynamics/hypothesis_premise_undermining_attempt4] SUCCESS -> data/altered_plans_v2/McCammonProteinDynamics_hypothesis_premise_undermining_attempt4_altered.json
+[McCammonProteinDynamics/ed] attempt 1/5
+[McCammonProteinDynamics/ed_attempt1] filtered: too easy
+[McCammonProteinDynamics/ed] attempt 2/5
+Exact match found.
+Saved score at data/altered_plans_v2/McCammonProteinDynamics_ed_attempt2_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.01 minutes
+[McCammonProteinDynamics/ed_attempt2] self-identified (too easy), discarding
+[McCammonProteinDynamics/ed] attempt 3/5
+Exact match found.
+Saved internal score at data/altered_plans_v2/McCammonProteinDynamics_ed_attempt3_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.06 minutes
+[McCammonProteinDynamics/ed_attempt3] self-identified (too easy), discarding
+[McCammonProteinDynamics/ed] attempt 4/5
+[McCammonProteinDynamics/ed_attempt4] filtered: too easy
+[McCammonProteinDynamics/ed] attempt 5/5
+Exact match found.
+Saved score at data/altered_plans_v2/McCammonProteinDynamics_ed_attempt5_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.02 minutes
+[McCammonProteinDynamics/ed_attempt5] self-identified (too easy), discarding
+[McCammonProteinDynamics/ed] exhausted 5 attempts, picking best of the rejects
+[McCammonProteinDynamics/ed] best reject: attempt 2 (tier 1, score 0.8461538461538461)
+Exact match found.
+[McCammonProteinDynamics/ed] SAVED BEST REJECT -> data/altered_plans_v2/McCammonProteinDynamics_ed_altered.json
+[GrapheneFieldEffect/general_c1_v1] filtered: too easy
+[GrapheneFieldEffect/general_c1_v2] rejected: no edit landed in the required hypothesis section
+[GrapheneFieldEffect/general_c1_v3] rejected: no edit landed in the required hypothesis section
+[GrapheneFieldEffect/general_c2_v1] filtered: too easy
+[GrapheneFieldEffect/general_c2_v2] rejected: no edit landed in the required hypothesis section
+Exact match found.
+Saved internal score at data/altered_plans_v2/GrapheneFieldEffect_general_c2_v3_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.01 minutes
+[GrapheneFieldEffect/general_c2_v3] self-identified (too easy), discarding
+[GrapheneFieldEffect/general_c3_v1] filtered: too easy
+[GrapheneFieldEffect/general_c3_v2] rejected: no edit landed in the required experiment_design section
+[GrapheneFieldEffect/general_c3_v3] filtered: too easy
+Exact match found.
+Saved internal score at data/altered_plans_v2/GrapheneFieldEffect_general_c4_v1_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.03 minutes
+[GrapheneFieldEffect/general_c4_v1] SUCCESS -> data/altered_plans_v2/GrapheneFieldEffect_general_c4_v1_altered.json
+[GrapheneFieldEffect/general_c4_v2] filtered: too easy
+[GrapheneFieldEffect/general_c4_v3] filtered: too easy
+[GrapheneFieldEffect/general_c5_v1] filtered: too easy
+Exact match found.
+Saved internal score at data/altered_plans_v2/GrapheneFieldEffect_general_c5_v2_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.01 minutes
+[GrapheneFieldEffect/general_c5_v2] SUCCESS -> data/altered_plans_v2/GrapheneFieldEffect_general_c5_v2_altered.json
+Exact match found.
+Saved internal score at data/altered_plans_v2/GrapheneFieldEffect_general_c5_v3_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.02 minutes
+[GrapheneFieldEffect/general_c5_v3] self-identified (too easy), discarding
+[GrapheneFieldEffect/general] 2/15 candidates survived
+[GrapheneFieldEffect/hypothesis_internal_contradiction] attempt 1/5
+[GrapheneFieldEffect/hypothesis_internal_contradiction_attempt1] filtered: too easy
+[GrapheneFieldEffect/hypothesis_internal_contradiction] attempt 2/5
+[GrapheneFieldEffect/hypothesis_internal_contradiction_attempt2] filtered: too easy
+[GrapheneFieldEffect/hypothesis_internal_contradiction] attempt 3/5
+[GrapheneFieldEffect/hypothesis_internal_contradiction_attempt3] filtered: too easy
+[GrapheneFieldEffect/hypothesis_internal_contradiction] attempt 4/5
+[GrapheneFieldEffect/hypothesis_internal_contradiction_attempt4] filtered: too easy
+[GrapheneFieldEffect/hypothesis_internal_contradiction] attempt 5/5
+[GrapheneFieldEffect/hypothesis_internal_contradiction_attempt5] filtered: too easy
+[GrapheneFieldEffect/hypothesis_internal_contradiction] exhausted 5 attempts, picking best of the rejects
+[GrapheneFieldEffect/hypothesis_internal_contradiction] best reject: attempt 1 (tier 2, score None)
+Exact match found.
+[GrapheneFieldEffect/hypothesis_internal_contradiction] SAVED BEST REJECT -> data/altered_plans_v2/GrapheneFieldEffect_hypothesis_internal_contradiction_altered.json
+[GrapheneFieldEffect/hypothesis_established_belief_conflict] attempt 1/5
+[GrapheneFieldEffect/hypothesis_established_belief_conflict_attempt1] filtered: too easy
+[GrapheneFieldEffect/hypothesis_established_belief_conflict] attempt 2/5
+[GrapheneFieldEffect/hypothesis_established_belief_conflict_attempt2] filtered: too easy
+[GrapheneFieldEffect/hypothesis_established_belief_conflict] attempt 3/5
+[GrapheneFieldEffect/hypothesis_established_belief_conflict_attempt3] filtered: too easy
+[GrapheneFieldEffect/hypothesis_established_belief_conflict] attempt 4/5
+[GrapheneFieldEffect/hypothesis_established_belief_conflict_attempt4] filtered: too easy
+[GrapheneFieldEffect/hypothesis_established_belief_conflict] attempt 5/5
+[GrapheneFieldEffect/hypothesis_established_belief_conflict_attempt5] filtered: too easy
+[GrapheneFieldEffect/hypothesis_established_belief_conflict] exhausted 5 attempts, picking best of the rejects
+[GrapheneFieldEffect/hypothesis_established_belief_conflict] best reject: attempt 1 (tier 2, score None)
+Exact match found.
+[GrapheneFieldEffect/hypothesis_established_belief_conflict] SAVED BEST REJECT -> data/altered_plans_v2/GrapheneFieldEffect_hypothesis_established_belief_conflict_altered.json
+[GrapheneFieldEffect/hypothesis_premise_undermining] attempt 1/5
+Exact match found.
+Exact match found.
+Exact match found.
+Saved internal score at data/altered_plans_v2/GrapheneFieldEffect_hypothesis_premise_undermining_attempt1_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.02 minutes
+[GrapheneFieldEffect/hypothesis_premise_undermining_attempt1] self-identified (too easy), discarding
+[GrapheneFieldEffect/hypothesis_premise_undermining] attempt 2/5
+Exact match found.
+Exact match found.
+Exact match found.
+Saved internal score at data/altered_plans_v2/GrapheneFieldEffect_hypothesis_premise_undermining_attempt2_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.02 minutes
+[GrapheneFieldEffect/hypothesis_premise_undermining_attempt2] self-identified (too easy), discarding
+[GrapheneFieldEffect/hypothesis_premise_undermining] attempt 3/5
+Exact match found.
+Exact match found.
+Exact match found.
+Saved internal score at data/altered_plans_v2/GrapheneFieldEffect_hypothesis_premise_undermining_attempt3_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.02 minutes
+[GrapheneFieldEffect/hypothesis_premise_undermining_attempt3] self-identified (too easy), discarding
+[GrapheneFieldEffect/hypothesis_premise_undermining] attempt 4/5
+[GrapheneFieldEffect/hypothesis_premise_undermining_attempt4] filtered: too easy
+[GrapheneFieldEffect/hypothesis_premise_undermining] attempt 5/5
+[GrapheneFieldEffect/hypothesis_premise_undermining_attempt5] filtered: too easy
+[GrapheneFieldEffect/hypothesis_premise_undermining] exhausted 5 attempts, picking best of the rejects
+[GrapheneFieldEffect/hypothesis_premise_undermining] best reject: attempt 1 (tier 1, score 1.0)
+Exact match found.
+Exact match found.
+Exact match found.
+[GrapheneFieldEffect/hypothesis_premise_undermining] SAVED BEST REJECT -> data/altered_plans_v2/GrapheneFieldEffect_hypothesis_premise_undermining_altered.json
+[GrapheneFieldEffect/ed] attempt 1/5
+[GrapheneFieldEffect/ed_attempt1] filtered: too easy
+[GrapheneFieldEffect/ed] attempt 2/5
+[GrapheneFieldEffect/ed_attempt2] filtered: too easy
+[GrapheneFieldEffect/ed] attempt 3/5
+[GrapheneFieldEffect/ed_attempt3] filtered: too easy
+[GrapheneFieldEffect/ed] attempt 4/5
+[GrapheneFieldEffect/ed_attempt4] filtered: too easy
+[GrapheneFieldEffect/ed] attempt 5/5
+[GrapheneFieldEffect/ed_attempt5] filtered: too easy
+[GrapheneFieldEffect/ed] exhausted 5 attempts, picking best of the rejects
+[GrapheneFieldEffect/ed] best reject: attempt 1 (tier 2, score None)
+Exact match found.
+[GrapheneFieldEffect/ed] SAVED BEST REJECT -> data/altered_plans_v2/GrapheneFieldEffect_ed_altered.json

@@ -1,0 +1,27 @@
+:error_type:
+Undermining a Premise
+
+:original_text:
+Stable, atomically thin graphitic films are two-dimensional semimetals that exhibit a strong, ambipolar electric field effect, allowing the concentration of their charge carriers—both electrons and holes—to be tuned by an external gate voltage.
+
+:modified_text:
+Stable, atomically thin graphitic films are two-dimensional semimetals that exhibit a strong, ambipolar electric field effect, allowing the mobility of their charge carriers—both electrons and holes—to be tuned by an external gate voltage.
+
+:original_text:
+We further hypothesize that these two-dimensional films will behave as a semimetal and exhibit a strong, ambipolar electric field effect, allowing us to tune the concentration of charge carriers (both electrons and holes) by applying an external gate voltage.
+
+:modified_text:
+We further hypothesize that these two-dimensional films will behave as a semimetal and exhibit a strong, ambipolar electric field effect, allowing us to tune the mobility of charge carriers (both electrons and holes) by applying an external gate voltage.
+
+:original_text:
+By systematically sweeping the gate voltage, we will investigate our central hypothesis: that we can induce a significant surface charge and thereby modulate the carrier concentration in the film. We will measure the resulting changes in conductivity to determine key parameters such as carrier mobility.
+
+:modified_text:
+By systematically sweeping the gate voltage, we will investigate our central hypothesis: that we can induce a significant surface charge and thereby modulate the carrier mobility in the film. We will measure the resulting changes in conductivity to quantify the extent of this gate-tunable mobility.
+
+:explanation:
+The modification conflates two distinct physical concepts: **carrier concentration** and **carrier mobility**.
+
+(a) **Carrier concentration** refers to the number of charge carriers (electrons or holes) per unit area. **Carrier mobility** refers to how easily those carriers move through the material under an electric field. Conductivity is a product of these two (and the elementary charge).
+
+(b) The fundamental principle of a field-effect transistor (which this research aims to build) is that an external gate voltage electrostatically induces charge in the channel, thereby directly tuning the **carrier concentration**. The modified hypothesis incorrectly states that the gate tunes carrier **mobility**. While mobility can be secondarily affected by the gate voltage (e.g., changes in scattering at different concentrations), the primary, defining mechanism of the field effect is the control over carrier number. This error mistakes a secondary effect for the primary cause, representing a fundamental misunderstanding of the device physics being investigated, even though the formal structure of the hypothesis remains coherent.

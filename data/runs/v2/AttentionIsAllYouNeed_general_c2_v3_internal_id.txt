@@ -1,0 +1,10 @@
+:error_text:
+To ensure comparability with prior work on smaller models, this dataset will be filtered to only include sentences of 25 words or less.
+
+:error_text:
+We will employ three types of regularization during training:
+
+:explanation:
+The most serious error is the decision to filter the standard English constituency parsing dataset (WSJ) to only include short sentences. This fundamentally alters and simplifies the task, making any results non-comparable to standard benchmarks on the full, unfiltered dataset. The justification of comparing to "smaller models" is weak for a study aiming to establish a new state-of-the-art architecture. This filtering artificially inflates performance by removing longer, more complex sentences, which undermines the research's goal of testing the model's ability to generalize and handle long-range dependencies.
+
+A second, less critical error is the contradiction in the description of the regularization methods. The plan explicitly states that three types of regularization will be used, but the subsequent list only describes two (Residual Dropout and Label Smoothing). This omission makes the experimental methodology ambiguous and incomplete.

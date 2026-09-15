@@ -1,0 +1,8 @@
+:original_text:
+For parsing, we will train on the Wall Street Journal (WSJ) portion of the Penn Treebank, comprising about 40,000 training sentences. We also plan to explore a semi-supervised setting using larger high-confidence and BerkeleyParser corpora, with approximately 17 million sentences.
+
+:modified_text:
+For parsing, we will train on the Wall Street Journal (WSJ) portion of the Penn Treebank, comprising about 40,000 training sentences. The output for each sentence will be a linearized version of its constituency tree, represented as a single target sequence. We also plan to explore a semi-supervised setting using larger high-confidence and BerkeleyParser corpora, with approximately 17 million sentences.
+
+:explanation:
+The mechanism of this error is **flawed task formulation**. By explicitly stating that the parse tree is linearized into a single target sequence, the parsing task is reframed as a sequence-to-sequence problem, structurally identical to the primary machine translation task. Success on this task would not validate generalization to a *different kind* of structured prediction problem (e.g., one requiring true hierarchical generation), but only the model's ability to apply the same seq2seq paradigm to a different vocabulary. This undermines the claim that parsing is an appropriate test of generalization beyond the model's core competency.

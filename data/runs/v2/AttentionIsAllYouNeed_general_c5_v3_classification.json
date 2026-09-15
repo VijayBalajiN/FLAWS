@@ -1,0 +1,9 @@
+{
+  "label": "AttentionIsAllYouNeed_general_c5_v3",
+  "original_text": "We will vary the number of attention heads (h) and the attention key and value dimensions (d_k, d_v), while keeping the total amount of computation constant.",
+  "modified_text": "We will vary the number of attention heads (h), while keeping the per-head key and value dimensions (d_k, d_v) equal to d_model, and adjusting the number of layers (N) to keep the total amount of computation constant.",
+  "explanation": "This modification introduces a flaw in the high-level experimental design by creating a major confounding variable. The proposal suggests trading off network depth (N) against the number of heads (h) to maintain constant computation. For example, to test a model with twice as many heads, the researcher would use a network with half the number of layers. This invalidates the goal of meaningfully evaluating the impact of `h` because the experiment is no longer comparing models of the same depth. Any observed effect cannot be attributed to the change in `h` alone, as it is completely confounded with the change in `N`, which dramatically alters the model's capacity for hierarchical feature extraction.",
+  "category": "D",
+  "category_name": "Others",
+  "reasoning": "The error describes a confounded experimental design where a change in one variable (N) prevents the stated goal of evaluating another (h) from being achieved, which is explicitly listed as a characteristic of category D."
+}

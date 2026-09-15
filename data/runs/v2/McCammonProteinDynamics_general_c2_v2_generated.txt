@@ -1,0 +1,8 @@
+:original_text:
+3.  **Production Run:** Following equilibration, we will conduct the main dynamical simulation by integrating the equations of motion using the Gear algorithm for a duration of several picoseconds.
+
+:modified_text:
+3.  **Production Run:** Following equilibration, we will conduct the main dynamical simulation by integrating the equations of motion using the Gear algorithm for a duration of several picoseconds, during which the temperature will be gradually increased to 300 K via velocity rescaling.
+
+:explanation:
+This modification introduces a non-equilibrium artifact. By stating that the temperature is increased to its target value *during* the production run, the simulation is no longer sampling a system at equilibrium. Instead, it is capturing a transient heating process. The resulting atomic trajectories would not represent the protein's natural, equilibrium fluctuations, but rather the system's response to being heated. The claim that the simulation captures the "essential" (i.e., equilibrium) dynamics is false because the system never reaches a stable equilibrium state during the data collection phase.

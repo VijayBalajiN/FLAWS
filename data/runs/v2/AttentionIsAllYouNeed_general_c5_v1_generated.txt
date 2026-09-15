@@ -1,0 +1,8 @@
+:original_text:
+We will vary the number of attention heads (h) and the attention key and value dimensions (d_k, d_v), while keeping the total amount of computation constant.
+
+:modified_text:
+We will vary the number of attention heads (h) and the attention key dimension (d_k) to keep the product h*d_k constant, while the value dimension (d_v) is held fixed, thus keeping the total amount of computation constant.
+
+:explanation:
+This modification introduces a subtle miscalculation of the computational complexity. The total computational cost of the dot-product attention operations is proportional to `h * seq_len^2 * (d_k + d_v)`. The modified text claims that keeping `h*d_k` constant and `d_v` fixed will keep the total computation constant. However, the actual computational cost under this scheme becomes proportional to `(constant + h*d_v)`, which now increases linearly with the number of heads (`h`). The methodological assumption is falsified because the experimental control is based on a flawed formula, and the computation is not actually held constant.

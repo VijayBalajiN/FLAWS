@@ -1,0 +1,9 @@
+{
+  "label": "BERT_general_c5_v1",
+  "original_text": "For sentence-level classification tasks (MNLI, QQP, QNLI, SST-2, etc.), we will feed the final hidden state of the `[CLS]` token into a new classification layer.",
+  "modified_text": "For sentence-level classification tasks (MNLI, QQP, QNLI, SST-2, etc.), we will format single-sentence inputs like SST-2 as a pair with an empty second sentence and feed the final hidden state of the `[CLS]` token into a new classification layer.",
+  "explanation": "The mechanism of this error is a **mismatch between the pre-training objective and the downstream task application**. The modification implies that the `[CLS]` token representation is only meaningful in the context of a sentence-pair structure, which it was trained for during the Next Sentence Prediction (NSP) task. By forcing single-sentence tasks into this format, the proposal suggests the `[CLS]` token is not a truly sufficient aggregate representation of a single sequence on its own, but rather a specialized representation for sentence-pair relationships. This undermines its general sufficiency for all claimed sentence-level tasks.",
+  "category": "D",
+  "category_name": "Others",
+  "reasoning": "The error relies on an unstated assumption about the `[CLS]` token's generalizability, which is not explicitly contradicted by the text's own stated rules, nor does it clash with an independent established belief, nor does it involve a contested term doing double duty."
+}

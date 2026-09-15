@@ -1,0 +1,15 @@
+:error_type:
+Internal Contradiction
+
+:original_text:
+On each of these projected versions, we will perform the attention function in parallel, concatenate the resulting d_v-dimensional output values, and project them once again.
+
+:modified_text:
+On each of these projected versions, we will perform the attention function in a sequential cascade, where the output of head `h` is added to the input of head `h+1` before its projection. The final outputs from all `h` heads are then concatenated and projected once again.
+
+:explanation:
+The research plan's primary motivation, stated in the "Problem" section, is to eliminate the "sequential nature" of recurrent models which "severely limits parallelization." The hypothesis proposes an architecture based "solely on attention mechanisms" to overcome this.
+
+The modification introduces an internal contradiction by re-inserting a sequential dependency into the core of the proposed parallel mechanism. The original multi-head attention performs computations for all heads "in parallel." The modified version changes this to a "sequential cascade," where the calculation for head `h+1` explicitly depends on the completed output of head `h`.
+
+This change makes the multi-head attention block inherently sequential. Following the hypothesis's own stated mechanism to its logical conclusion reveals that it cannot be parallelized across heads, directly violating the central goal of the entire research plan. The architecture's own machinery, as modified, subverts its own stated purpose of eliminating sequential computation.

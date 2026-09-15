@@ -1,0 +1,35 @@
+:candidate:
+1
+
+:original_text:
+We will perform an initial equilibration phase to allow the stresses present in the static X-ray structure to relax and to raise the system's kinetic energy to a level corresponding to room temperature.
+
+:modified_text:
+We will perform an initial equilibration phase by assigning random velocities from a Maxwell-Boltzmann distribution corresponding to room temperature, ensuring the system begins at the correct kinetic energy.
+
+:explanation:
+The mechanism of this error is a flawed experimental protocol. The modified text describes an insufficient equilibration method. While it correctly sets the system's initial kinetic energy (temperature), it completely omits the crucial step of allowing the potential energy to relax. A structure taken directly from X-ray crystallography is a time-averaged, zero-temperature model with significant internal stresses. Simply assigning velocities traps it in a high-energy, non-equilibrium, "glassy" state. The subsequent dynamics will be dominated by this artificial stress relaxation rather than true equilibrium fluctuations. The observed motions would be primarily vibrational and not diffusional, leading the researcher to incorrectly conclude that the protein interior is solid-like and thus falsify the central claim.
+
+:candidate:
+2
+
+:original_text:
+To make the simulation computationally feasible, we will use an "extended atom" model, where hydrogen atoms are implicitly combined with the heavy atoms to which they are bonded. This simplification reduces the number of interactions and eliminates high-frequency vibrations, permitting larger time steps in the integration of the equations of motion.
+
+:modified_text:
+To focus on the functionally relevant slow dynamics, we will use an "extended atom" model, where hydrogen atoms are implicitly combined with the heavy atoms to which they are bonded. This simplification correctly filters out the high-frequency, non-diffusional vibrations of hydrogen atoms, permitting a clearer analysis of the underlying fluid-like motions.
+
+:explanation:
+The mechanism of this error is a flawed theoretical assumption embedded in the simulation model. The modified text reframes a computational shortcut as a physically justified "filter." While the "extended atom" model is a standard approximation, it is not a perfect physical filter. By removing explicit hydrogen atoms and their associated hydrogen bonds, the model can significantly alter the potential energy surface, making it more rugged and artificially restricting the very motions it is meant to study. This can inhibit the subtle rearrangements necessary for fluid-like, diffusional behavior. The flaw lies in the unsubstantiated claim that this simplification "correctly filters" the dynamics, when in fact it may be introducing an artifact that pre-determines a non-diffusional, solid-like result, thereby invalidating any conclusion about the hypothesis.
+
+:candidate:
+3
+
+:original_text:
+The interior of a folded globular protein is a fluid-like environment where local atomic motions exhibit a diffusional character.
+
+:modified_text:
+The interior of a folded globular protein is a fluid-like environment where the motions of all constituent atoms, including those in the polypeptide backbone, exhibit a diffusional character.
+
+:explanation:
+The mechanism of this error is a conceptual overgeneralization within the hypothesis itself. The modified claim is subtly but significantly stronger and likely incorrect. While the general environment of a protein interior can be considered "fluid-like" and some atoms (like side-chain termini) may exhibit pseudo-diffusional motion, the atoms of the polypeptide backbone are covalently bonded into a polymer chain. Their movement is highly constrained and correlated, and is better described as libration or oscillation within a local potential well, not free diffusion. By explicitly and incorrectly claiming that backbone atoms are diffusional, the hypothesis makes a specific, falsifiable assertion that ignores fundamental polymer physics. This is a plausible error of a researcher over-extrapolating a general concept to all components of a complex system.

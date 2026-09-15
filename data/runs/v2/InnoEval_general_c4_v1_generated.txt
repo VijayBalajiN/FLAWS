@@ -1,0 +1,8 @@
+:original_text:
+We will frame this as a classification problem (binary: Accept/Reject; ternary: Reject/Poster/Highlight) and measure performance using Accuracy and macro F1 score.
+
+:modified_text:
+We will frame this as a classification problem (binary: Accept/Reject; ternary: Reject/Poster/Highlight) and measure performance using Accuracy and weighted F1 score.
+
+:explanation:
+This modification introduces a subtle but critical error by replacing "macro F1" with "weighted F1". The underlying mechanism of this error is a misunderstanding of how to handle class imbalance. In a real-world dataset of conference papers, 'Reject' will be the vast majority class. A weighted F1 score is averaged based on the support of each class, meaning the performance on the massive 'Reject' class will dominate the final score. This masks poor performance on the rare but scientifically crucial minority classes ('Poster', 'Highlight'), making the metric insufficient and inappropriate for fairly judging the system's ability to find good ideas.

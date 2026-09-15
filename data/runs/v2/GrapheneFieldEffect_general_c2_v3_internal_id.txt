@@ -1,0 +1,5 @@
+:error_text:
+allowing the concentration of their charge carriers—both electrons and holes—to be tuned by a positive external gate voltage.
+
+:explanation:
+The hypothesis incorrectly states that both electron and hole concentrations can be tuned using only a positive gate voltage. An ambipolar field effect, which is central to this research, requires both positive and negative gate voltages to induce electron and hole carriers, respectively. Limiting the mechanism to only positive voltage fundamentally misrepresents how an ambipolar material is controlled and would make it impossible to observe the full electron-to-hole transition that the experiment aims to prove.

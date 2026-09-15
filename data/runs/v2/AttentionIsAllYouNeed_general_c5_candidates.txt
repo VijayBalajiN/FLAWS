@@ -1,0 +1,35 @@
+:candidate:
+1
+
+:original_text:
+We will vary the number of attention heads (h) and the attention key and value dimensions (d_k, d_v), while keeping the total amount of computation constant.
+
+:modified_text:
+We will vary the number of attention heads (h) and the attention key dimension (d_k) to keep the product h*d_k constant, while the value dimension (d_v) is held fixed, thus keeping the total amount of computation constant.
+
+:explanation:
+This modification introduces a subtle miscalculation of the computational complexity. The total computational cost of the dot-product attention operations is proportional to `h * seq_len^2 * (d_k + d_v)`. The modified text claims that keeping `h*d_k` constant and `d_v` fixed will keep the total computation constant. However, the actual computational cost under this scheme becomes proportional to `(constant + h*d_v)`, which now increases linearly with the number of heads (`h`). The methodological assumption is falsified because the experimental control is based on a flawed formula, and the computation is not actually held constant.
+
+:candidate:
+2
+
+:original_text:
+We will vary the number of attention heads (h) and the attention key and value dimensions (d_k, d_v), while keeping the total amount of computation constant.
+
+:modified_text:
+We will vary the number of attention heads (h) and the attention key and value dimensions (d_k, d_v), while keeping the total amount of computation and the dot-product scaling factor of 1/√d_model constant.
+
+:explanation:
+This modification introduces a flaw by misapplying a core theoretical component of the attention mechanism. The scaling factor `1/√d_k` is crucial for stabilizing gradients and is dependent on the key/query dimension `d_k`. The experiment correctly varies `d_k` as `h` changes (i.e., `d_k = d_model / h`). However, by fixing the scaling factor based on the static `d_model` rather than the dynamic `d_k`, the experiment introduces a severe confounder. For large `h`, `d_k` will be small, and the fixed scaling factor will be too aggressive, washing out the attention scores. For small `h`, `d_k` will be large, and the scaling will be insufficient, risking gradient saturation. This makes the comparison across different values of `h` meaningless, as the optimization dynamics are fundamentally altered for each configuration.
+
+:candidate:
+3
+
+:original_text:
+We will vary the number of attention heads (h) and the attention key and value dimensions (d_k, d_v), while keeping the total amount of computation constant.
+
+:modified_text:
+We will vary the number of attention heads (h), while keeping the per-head key and value dimensions (d_k, d_v) equal to d_model, and adjusting the number of layers (N) to keep the total amount of computation constant.
+
+:explanation:
+This modification introduces a flaw in the high-level experimental design by creating a major confounding variable. The proposal suggests trading off network depth (N) against the number of heads (h) to maintain constant computation. For example, to test a model with twice as many heads, the researcher would use a network with half the number of layers. This invalidates the goal of meaningfully evaluating the impact of `h` because the experiment is no longer comparing models of the same depth. Any observed effect cannot be attributed to the change in `h` alone, as it is completely confounded with the change in `N`, which dramatically alters the model's capacity for hierarchical feature extraction.

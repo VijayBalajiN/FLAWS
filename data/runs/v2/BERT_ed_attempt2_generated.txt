@@ -1,0 +1,15 @@
+:error_type:
+Confounded design
+
+:original_text:
+1.  **Importance of Pre-training Tasks:** We will train and evaluate two ablated models: one using only the Masked LM task (without Next Sentence Prediction) and another using a traditional Left-to-Right (LTR) LM objective instead of MLM. This will allow us to isolate the contributions of deep bidirectionality and the NSP task.
+
+:modified_text:
+1.  **Importance of Pre-training Tasks:** We will train and evaluate two ablated models: one using only the Masked LM task (without Next Sentence Prediction) and another using a traditional Left-to-Right (LTR) LM objective instead of MLM, which will be trained only on single contiguous sentences rather than sentence pairs. This will allow us to isolate the contributions of deep bidirectionality and the NSP task.
+
+:explanation:
+The flaw introduced is a **confounded design**. The goal of this ablation study is to "isolate the contributions of deep bidirectionality" by comparing a bidirectional model (MLM) to a unidirectional one (LTR). However, the modified design changes two variables for the LTR model simultaneously:
+1. The training objective is changed from Masked LM (MLM) to Left-to-Right (LTR).
+2. The format of the training data is changed from sentence pairs (used for the main model's NSP task) to single sentences only.
+
+Because both the objective and the data format are changed, it is impossible to attribute any resulting performance difference solely to the change in bidirectionality. The performance gap could be due to the LTR objective, the lack of exposure to sentence-pair structures during pre-training, or a combination of both. This confound prevents the experiment from isolating the specific contribution of deep bidirectionality as intended.

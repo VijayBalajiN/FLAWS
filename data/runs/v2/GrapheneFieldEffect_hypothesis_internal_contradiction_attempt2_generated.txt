@@ -1,0 +1,13 @@
+:error_type:
+Internal Contradiction
+
+:original_text:
+Stable, atomically thin graphitic films are two-dimensional semimetals that exhibit a strong, ambipolar electric field effect, allowing the concentration of their charge carriers—both electrons and holes—to be tuned by an external gate voltage.
+
+:modified_text:
+Stable, atomically thin graphitic films are two-dimensional semimetals that exhibit a strong, ambipolar electric field effect, allowing the concentration of their charge carriers—both electrons and holes—to be tuned by an external gate voltage, a process which at the required carrier densities induces a structural phase transition that destabilizes the 2D graphitic lattice.
+
+:explanation:
+The contradiction is internal to the hypothesis statement. The hypothesis begins by positing the existence of "Stable, atomically thin graphitic films" and proposes to study their properties. However, the modified mechanism for tuning their charge carriers—applying a gate voltage—is now stated to have a necessary consequence: at the densities "required" for the effect, it "induces a structural phase transition that destabilizes the 2D graphitic lattice."
+
+Therefore, the mechanism proposed to demonstrate the key property (tunable carrier concentration) of the stable films logically leads to the destruction of the films' stability. The act of testing the hypothesis's claim makes its own initial premise (that the films are stable) false. The system of logic breaks itself: one cannot study the properties of a stable film using a method that, by its own definition, renders the film unstable.

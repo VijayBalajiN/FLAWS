@@ -1,0 +1,10 @@
+:error_text:
+Each training batch will contain a set of sentence pairs totaling approximately 25,000 source tokens and 25,000 target tokens.
+
+:error_text:
+We will vary the number of attention heads (h) and the attention key dimension (d_k) to keep the product h*d_k constant, while the value dimension (d_v) is held fixed, thus keeping the total amount of computation constant.
+
+:explanation:
+The most serious error is the batching strategy. Requiring each batch to contain a fixed number of both source and target tokens introduces a severe sampling bias. This method would systematically exclude or under-sample sentence pairs where the source and target lengths are significantly different. As a result, the model would not be properly trained on a representative distribution of the data, which would likely harm its generalization performance on real-world translation tasks that include sentences with varying length ratios.
+
+The second error is a flawed ablation study design. The claim that keeping `h*d_k` constant while `d_v` is fixed results in a constant amount of computation is incorrect. As the number of heads (`h`) changes, the dimension of the concatenated attention output (`h*d_v`) also changes. This alters the size of the final projection layer, which in turn changes the model's total parameter count and computational cost. The experiment is therefore not a controlled comparison, and its results would be invalid for assessing the trade-off between the number of heads and the key dimension.

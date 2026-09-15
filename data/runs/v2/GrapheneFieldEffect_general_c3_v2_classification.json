@@ -1,0 +1,9 @@
+{
+  "label": "GrapheneFieldEffect_general_c3_v2",
+  "original_text": "We will transfer the isolated films onto an oxidized silicon substrate, which will serve a dual purpose: the silicon oxide layer will act as a gate dielectric, and the heavily doped silicon wafer will function as a back gate.",
+  "modified_text": "We will transfer the isolated films onto an untreated oxidized silicon substrate, which will serve a dual purpose: the silicon oxide layer will act as a gate dielectric, and the heavily doped silicon wafer will function as a back gate.",
+  "explanation": "The mechanism of this flaw is **interface charge trapping**. The addition of the single word \"untreated\" implies a critical omission in the fabrication process. In semiconductor device physics, the interface between the channel material (graphene) and the dielectric (silicon oxide) is paramount. An \"untreated\" substrate surface would be contaminated with moisture, organic residues, and other adsorbates, creating a high density of electronic \"trap states.\" When a gate voltage is applied, the induced charge carriers will fill these immobile trap states instead of populating the mobile bands of the graphene film. As a result, the film's conductivity will not modulate effectively with the gate voltage. This flaw falsifies the claim because while a surface charge is induced, it is not of a large enough magnitude *in the conducting channel* to alter the film's properties as hypothesized.",
+  "category": "D",
+  "category_name": "Others",
+  "reasoning": "The error relies on an unstated assumption about surface treatment, which is an omitted control rather than the text's own machinery breaking itself."
+}

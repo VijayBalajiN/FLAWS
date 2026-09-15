@@ -1,0 +1,5 @@
+:error_text:
+To ensure a fair comparison, all training hyperparameters (e.g., learning rate, batch size) will be held constant across the main and ablated models.
+
+:explanation:
+This is a critical methodological flaw. Different pre-training objectives, such as the proposed Masked Language Model (MLM) and a traditional Left-to-Right (LTR) model, have different optimization dynamics and typically require different optimal hyperparameters. Holding the hyperparameters constant does not ensure a "fair comparison"; instead, it likely disadvantages one model by training it with a suboptimal configuration. A true fair comparison would involve tuning the hyperparameters for each model independently to allow each to perform at its best, thereby isolating the impact of the pre-training objective itself.

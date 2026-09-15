@@ -1,0 +1,15 @@
+:error_type:
+Conflict with Established Beliefs
+
+:original_text:
+The interior of a folded globular protein is a fluid-like environment where local atomic motions exhibit a diffusional character.
+
+:modified_text:
+The interior of a folded globular protein is a fluid-like environment where local atomic motions exhibit a super-diffusive character, with mean-squared displacement expected to scale quadratically with time.
+
+:explanation:
+The modification introduces a conflict with the well-established physical understanding of atomic motion in the dense, crowded interior of a folded protein.
+
+(a) The established belief is that atomic motions within a protein are highly constrained by covalent bonds and steric hindrance from neighboring atoms. This leads to motions that are, at best, diffusive (mean-squared displacement, or MSD, scales linearly with time, `t^1`) over very short timescales, and more generally are sub-diffusive (MSD scales as `t^α` with `α < 1`) over longer timescales. This sub-diffusive behavior, often described as "caged dynamics," is a hallmark of motion in glassy or crowded systems and has been confirmed by decades of molecular dynamics simulations and neutron scattering experiments.
+
+(b) The modified hypothesis posits that the motion is super-diffusive, specifically with the MSD scaling quadratically with time (`t^2`). Super-diffusion (`α > 1`) implies a process with memory or acceleration, such as in turbulent flow or active transport, where particles are actively propelled away from their starting point. This is physically irreconcilable with the nature of thermal fluctuations in the packed, viscous, and spatially constrained environment of a protein core. While the hypothesis is internally consistent as a falsifiable claim, it fundamentally mistakes the physical regime, clashing with the established consensus that such an environment can only support sub-diffusive or diffusive motion.

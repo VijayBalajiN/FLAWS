@@ -1,0 +1,10 @@
+:error_text:
+whose diffusional character is established by the large amplitude of its local atomic motions.
+
+:error_text:
+The interior of a folded globular protein is a fluid-like environment
+
+:explanation:
+The most serious error is that the hypothesis makes a causal claim that the proposed experimental design cannot test. The phrase "is established by" implies causation. The molecular dynamics simulation described can demonstrate a *correlation* between large-amplitude motions and diffusional character, but it cannot prove that the former *causes* the latter. Testing causality would require a different design, such as one that artificially constrains atomic amplitudes to observe the resulting effect on diffusion.
+
+A second, related error is that the hypothesis is framed as a conclusion rather than a testable proposition. Stating that the interior "is a fluid-like environment" presupposes the outcome of the research. The purpose of the experiment is to *determine* the nature of the protein interior, so the hypothesis should propose a relationship to be tested, not state the result as a fact.

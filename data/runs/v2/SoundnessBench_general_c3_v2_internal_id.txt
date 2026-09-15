@@ -1,0 +1,10 @@
+:error_text:
+We will evaluate models on a held-out split of very recent papers (ICLR 2026) using models with documented training data cutoffs prior to the papers' publication.
+
+:error_text:
+...before defaulting to a "low soundness" rating unless the proposal demonstrates exceptionally clear and rigorous methodology.
+
+:explanation:
+The most serious error is that the contamination control experiment is impossible to conduct. It relies on using ICLR 2026 conference papers, which do not exist at the time of this research plan. This makes a key part of the robustness check fundamentally non-executable.
+
+The second error is a methodological flaw in the design of the "Aggressive Prompt." By explicitly instructing the model to default to a "low soundness" rating, the experiment introduces a major confound. It becomes a test of the model's ability to follow a complex instruction with a default condition, rather than a pure measure of its inherent critical reasoning or skepticism. This makes it difficult to validly interpret the results from this prompt.

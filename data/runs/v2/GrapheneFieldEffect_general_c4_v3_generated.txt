@@ -1,0 +1,8 @@
+:original_text:
+For each device, we will conduct transport measurements by applying a gate voltage (Vg) to the silicon substrate while measuring the film's conductivity and Hall coefficient.
+
+:modified_text:
+For each device, we will conduct transport measurements by applying a gate voltage (Vg) to the silicon substrate while measuring the film's two-terminal conductivity.
+
+:explanation:
+The flaw is the replacement of a robust measurement technique ("conductivity and Hall coefficient") with an insufficient one ("two-terminal conductivity"). The Hall coefficient is essential because it directly measures both the sign (electron vs. hole) and the density of the charge carriers. Without the Hall measurement, an experimenter can only observe that conductivity changes with gate voltage, typically in a V-shape. However, such a V-shaped curve is not unique to an ambipolar field effect and can be caused by artifacts like gate leakage currents or contact effects. By removing the Hall measurement, the experiment is no longer capable of distinguishing a true change in carrier type from a measurement artifact, and thus cannot prove the claim that carriers were tuned "from electrons to holes."

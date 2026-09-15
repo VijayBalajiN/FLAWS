@@ -1,0 +1,8 @@
+:original_text:
+4.  **Probe for Concerted and Collective Motions:** We will search the trajectories for evidence of larger-scale, non-local motions, such as the collective movement of entire structural elements or transitions of sidechains and backbone segments between different conformational states.
+
+:modified_text:
+4.  **Probe for Concerted and Collective Motions:** We will search the trajectories for evidence of larger-scale, non-local motions, such as the collective movement of entire structural elements or the concerted 'ring-flip' transitions of interior tyrosine sidechains between different conformational states.
+
+:explanation:
+This modification introduces a timescale mismatch. The analysis plan now specifically targets "ring-flip" transitions of tyrosine sidechains. These are well-known, slow conformational events that typically occur on nanosecond-to-microsecond timescales. A simulation duration of "several picoseconds" is orders of magnitude too short to observe even a single such event, let alone sample its statistics. Therefore, the claim that the simulation is long enough to capture "essential" dynamics is falsified, as it cannot capture a key dynamic explicitly targeted by the analysis.

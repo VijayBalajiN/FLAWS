@@ -1,7 +1,7 @@
 # Results — v2 run
 
-`data/altered_plans_v2/`, generated 2026-09-15 with the propagation-fixed
-pipeline across all 7 papers.
+`data/dataset/v2/` (51 entries), raw output in `data/runs/v2/`. Generated
+2026-09-15 with the propagation-fixed pipeline across all 7 papers.
 
 This supersedes v1 (`data/dataset/v1/`, raw output in `data/runs/v1/`), which
 used the pre-propagation code and covered only 5 papers. v1 is kept for
@@ -96,35 +96,76 @@ Two caveats before quoting that number:
 
 ## Typed tracks
 
-⏳ *Currently re-running for the original 5 papers. Numbers below cover the 2
-new papers only; this section gets updated when the run lands.*
+7 papers × 4 tracks = **28 pairs**, 99 attempts (retry budget 5 per pair).
 
-8 (paper, track) pairs → 48 attempts:
+| Outcome per attempt | n | % |
+|---|---|---|
+| filtered: too easy | 50 | 51% |
+| self-identified → discarded | 29 | 29% |
+| **accepted** | **16** | **16%** |
+| rejected: no edit landed in the required field | 4 | 4% |
 
-| Outcome | n |
-|---|---|
-| filtered: too easy | 25 |
-| self-identified → discarded | 10 |
-| **accepted** | **3** |
-| exhausted 5 attempts → best-of-rejects fallback | 5 |
+At the pair level: **16 of 28 clean accepts**, 12 exhausted all 5 attempts and
+fell back to the best-ranked reject.
 
-Only 3 of 8 pairs produced a clean survivor. Per *attempt* the typed tracks are
-far harder than the general track — **3/48 (6%) vs 23/105 (22%)** — and for a
-structural reason: a typed track must hit *one* named error type against *one*
-fixed field, so it can't route around a hard target the way the general track
-can by moving to a different claim. The 5-attempt retry budget is what closes
-the gap at the pair level.
+| Track | Accepted | Fallback |
+|---|---|---|
+| `hypothesis_premise_undermining` | 5 | 2 |
+| `hypothesis_established_belief_conflict` | 4 | 3 |
+| `ed` | 4 | 3 |
+| `hypothesis_internal_contradiction` | 3 | 4 |
 
-The best-of-rejects fallback means every pair still yields a file — but check
+Per *attempt* the typed tracks are harder than the general track — 16% vs 22% —
+for a structural reason: a typed track must hit *one* named error type against
+*one* fixed field, so it can't route around a hard target the way the general
+track can by moving to a different claim. The retry budget is what closes the
+gap at the pair level.
+
+Internal contradiction is the hardest of the four, which is consistent with the
+classification result below: genuine internal contradictions are rare, because
+most plausible-looking flaws rest on an unstated assumption rather than on the
+text's own stated rules breaking.
+
+The best-of-rejects fallback means every pair still yields a file — check
 `status` before treating one as a clean positive.
 
 ---
 
 ## Propagation
 
-The thing this run was built to fix. **It works, and it's rare.**
+The thing this run was built to fix. **It works, and it is common in exactly
+the place it should be.**
 
-Two of the 31 saved plans touched more than one field:
+**7 of the 28 typed entries (25%) touched more than one field. Zero of the 23
+general-track entries did.**
+
+| Entry | Fields touched | Status |
+|---|---|---|
+| `BERT_hypothesis_premise_undermining` | hypothesis + problem | accepted |
+| `McCammon…_hypothesis_established_belief_conflict` | hypothesis + problem | accepted |
+| `AttentionIsAllYouNeed_hypothesis_internal_contradiction` | hypothesis + method | fallback |
+| `AttentionIsAllYouNeed_hypothesis_established_belief_conflict` | hypothesis + method | fallback |
+| `BERT_hypothesis_internal_contradiction` | hypothesis + method | fallback |
+| `BERT_hypothesis_established_belief_conflict` | hypothesis + problem | fallback |
+| `GrapheneFieldEffect_hypothesis_premise_undermining` | hypothesis + problem + experiment_design | fallback |
+
+Every one is a hypothesis track. That is the expected shape: a hypothesis gets
+restated elsewhere in the plan — in the Problem section's framing, or implied
+by a Method choice — so editing it in one place alone leaves the plan
+contradicting itself. Decomposed general-track claims are per-field and
+self-contained, so there is nothing to keep in sync.
+
+The two edit patterns are distinct and both legitimate:
+
+- **hypothesis + problem** — the Problem section restates the hypothesis, and
+  both copies are edited to match.
+- **hypothesis + method** — the hypothesis is given a mechanism, and the Method
+  is rewritten so it actually implements (or fails to implement) that
+  mechanism. In `AttentionIsAllYouNeed_hypothesis_internal_contradiction` the
+  Method's positional-encoding step is removed, which is what makes the
+  hypothesis's contradiction real rather than merely asserted.
+
+Two worked examples:
 
 **`McCammonProteinDynamics_hypothesis_established_belief_conflict`** —
 `status: accepted`, touched `hypothesis` + `problem`.
@@ -150,16 +191,26 @@ fix was for.
 including the ED's measurement plan. A hypothesis-level change rippling into
 the experiment design — the case originally raised as the motivating concern.
 
-**Both cases are typed hypothesis tracks. Zero of the 23 general-track
-survivors propagated**, which makes sense: general claims are decomposed
-per-field and are usually self-contained, so there's nothing elsewhere to keep
-in sync. Propagation fires when a claim is restated across sections — which is
-what hypotheses do and what decomposed sub-claims don't.
+The third accepted-and-propagated entry is
+**`BERT_hypothesis_premise_undermining`**, which substitutes the *training
+objective* for the *representational property* — "jointly conditioned on both
+left and right context" becomes "trained to predict masked tokens using the
+full unmasked context" — and edits the Problem section's restatement to match.
+A reader who knows BERT has to notice that the objective and the property
+aren't the same claim.
 
-So the mechanism is correct but low-frequency. If more propagated examples are
-wanted, the lever is the corpus (plans that restate their hypothesis) or the
-prompt (currently *permits* rather than *encourages* cross-field edits) — not
-the anchor logic, which is working.
+### Why this works
+
+The anchor requirement is doing the load-bearing work, in both directions. It
+forces an edit into the track's target field (22 general-track candidates were
+rejected for failing this), while the surrounding context explicitly permits
+further edits where coherence demands them. Loosening the anchor was what
+originally let an entire hypothesis-track edit drift into Method — the bug this
+design fixes.
+
+Frequency looks right rather than tuned: 25% of typed entries, concentrated
+entirely in hypothesis tracks, with none in general. The model is not
+propagating for its own sake.
 
 ---
 
@@ -195,6 +246,7 @@ both the thermostat literature and what the paper is measuring.
    pre-fix prompt that over-assigned A; see `classification_audit_log.md`.
    Don't pool them.
 5. **Typed tracks aren't classified.** Their category is fixed by construction,
-   so the A/B/C/D distribution above describes the general track only.
+   so the A/B/C/D distribution above describes the general track only — 105 of
+   the pipeline's candidates, not all 204.
 6. **`rejected_best_of_attempts` entries are not clean positives.** They failed
    every attempt and were kept as least-bad. Filter on `status` before use.

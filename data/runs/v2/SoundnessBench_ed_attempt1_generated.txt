@@ -1,0 +1,18 @@
+:error_type:
+Confounded design
+
+:original_text:
+*   **Contamination:** We will evaluate models on a held-out split of very recent papers (ICLR 2026) using models with documented training data cutoffs prior to the papers' publication.
+*   **Memorization:** We will create an anonymized version of the benchmark by masking specific method names and identifiers to test whether models rely on recognition rather than reasoning.
+*   **Surface Features:** We will compare LLM performance against simple baselines that use shallow features like proposal length or the number of experiments.
+
+:modified_text:
+*   **Contamination:** We will evaluate models on a held-out split of very recent papers (ICLR 2026) using models with documented training data cutoffs prior to the papers' publication.
+*   **Surface Features:** We will compare LLM performance against simple baselines that use shallow features like proposal length or the number of experiments.
+
+:explanation:
+The methodological flaw introduced is a confounded design, implemented by removing the "Memorization" control experiment. This change leaves a critical alternative explanation for the models' performance unchecked.
+
+Without the anonymization control, the experiment can no longer distinguish between genuine methodological reasoning and simple recognition. An LLM could achieve high accuracy not by evaluating the soundness of the experimental design, but by using a shortcut: recognizing famous, successful methods, author names, or institutions mentioned in the proposal and associating them with a "high soundness" label. For example, a proposal discussing "Transformers" in the context of NLP would likely be from a high-soundness paper. The model's correct classification could be based on this simple, memorized association rather than an analysis of the proposed experiments.
+
+This omission constitutes a confounded design because the model's performance (the dependent variable) can be explained by a factor (memorization of identifiers) other than the one being tested (reasoning about methodology). This undermines the study's ability to support its central claims about the LLM's "first-gate" filtering capabilities.

@@ -1,0 +1,1 @@
+error: 4.  **Probe for Concerted and Collective Motions:** We will search the trajectories for evidence of larger-scale, non-local motions, such as the collective movement of entire structural elements or transitions of sidechains and backbone segments between different conformational states.

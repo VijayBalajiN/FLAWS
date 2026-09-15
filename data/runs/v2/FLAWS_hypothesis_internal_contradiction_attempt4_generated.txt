@@ -1,0 +1,17 @@
+:error_type:
+Internal Contradiction
+
+:original_text:
+The criticality of an error in a scientific paper is a function of its connection to the paper's core claims.
+
+:modified_text:
+The criticality of an error in a scientific paper is a function of its connection to the paper's core claims, where such criticality is maximized when the error arises from an unforeseen interaction between multiple, individually correct statements, rather than from a direct and localized falsification.
+
+:explanation:
+The modified hypothesis creates an internal contradiction between its own definition of a "maximally critical" error and the methodology the research plan proposes to generate those errors.
+
+1.  The hypothesis now posits a two-part definition for criticality: it must be connected to a core claim, but it is *maximized* when it is emergent (arising from "unforeseen interaction between multiple, individually correct statements").
+2.  Crucially, the hypothesis explicitly states that this maximal form of criticality is *not* achieved via "a direct and localized falsification."
+3.  However, the research plan's proposed method for generating errors is precisely this disfavored mechanism. The "Error Generation" step states: "For each claim, we will instruct an LLM to modify one or more segments of the paper's text to introduce a sophisticated, domain-appropriate conceptual error that undermines that specific claim." This is, by definition, a direct and localized falsification.
+
+The contradiction is that the plan's core mechanism for creating errors is explicitly defined by its own hypothesis as being incapable of producing the *most* critical errors the benchmark aims to study. The machinery for generating test cases directly violates the stated ideal condition for what is being tested.

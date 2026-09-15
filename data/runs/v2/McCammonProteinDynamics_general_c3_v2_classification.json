@@ -1,0 +1,9 @@
+{
+  "label": "McCammonProteinDynamics_general_c3_v2",
+  "original_text": "We will perform an initial equilibration phase to allow the stresses present in the static X-ray structure to relax and to raise the system's kinetic energy to a level corresponding to room temperature.",
+  "modified_text": "We will perform an initial 100 femtosecond equilibration phase to allow the stresses present in the static X-ray structure to relax and to raise the system's kinetic energy to a level corresponding to room temperature.",
+  "explanation": "The mechanism of error is insufficient duration. A 100 femtosecond (0.1 ps) equilibration is far too short for a complex macromolecule like a protein. This timescale is insufficient for significant conformational rearrangements or the relaxation of strains from the crystal lattice. The system will remain in a high-energy, unrelaxed state very close to its initial coordinates, directly falsifying the claim that the equilibration is \"sufficient to relax the stresses.\" The subsequent production run would be dominated by these initial-state artifacts.",
+  "category": "D",
+  "category_name": "Others",
+  "reasoning": "The error is a gap in the text's specification, as the stated duration is simply insufficient to achieve the stated goal, which is a common type of flaw not fitting A, B, or C."
+}

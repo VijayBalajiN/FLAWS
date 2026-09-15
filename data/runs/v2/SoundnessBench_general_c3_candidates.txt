@@ -1,0 +1,35 @@
+:candidate:
+1
+
+:original_text:
+This prompt will instruct the model to act as a strict critic, defaulting to a "low soundness" rating unless the proposal demonstrates exceptionally clear and rigorous methodology.
+
+:modified_text:
+This prompt will instruct the model to adopt the persona of a notoriously harsh and contrarian reviewer, defaulting to a "low soundness" rating unless the proposal demonstrates exceptionally clear and rigorous methodology.
+
+:explanation:
+The flaw introduced is based on the mechanism of **persona-induced stylistic imitation**. By instructing the model to adopt the persona of a "notoriously harsh and contrarian reviewer," the prompt may cause the LLM to focus on mimicking the *style* of a harsh critic (e.g., using dismissive language, focusing on minor points) rather than engaging in a more rigorous logical evaluation. This could lead to a situation where the model's justifications *sound* skeptical, but its final rating is not systematically more accurate or more likely to be negative. The manipulation would fail because it induces a stylistic shift, not the intended skeptical *evaluation mode*.
+
+:candidate:
+2
+
+:original_text:
+This prompt will instruct the model to act as a strict critic, defaulting to a "low soundness" rating unless the proposal demonstrates exceptionally clear and rigorous methodology.
+
+:modified_text:
+This prompt will instruct the model to act as a strict critic, first generating a detailed 'chain-of-thought' analysis of potential strengths and weaknesses before defaulting to a "low soundness" rating unless the proposal demonstrates exceptionally clear and rigorous methodology.
+
+:explanation:
+The flaw introduced is based on the mechanism of **procedural override**. Adding the requirement for a "chain-of-thought" analysis of both strengths and weaknesses creates a conflict with the instruction to "default to a 'low soundness' rating." The procedural task of generating a balanced analysis may force the model to identify and articulate positive aspects of a proposal, which could then logically prevent it from applying the "default low" rule. The very process designed to improve reasoning could neutralize the intended biasing effect, thus falsifying the claim that the prompt successfully causes a default to negative ratings.
+
+:candidate:
+3
+
+:original_text:
+This prompt will instruct the model to act as a strict critic, defaulting to a "low soundness" rating unless the proposal demonstrates exceptionally clear and rigorous methodology.
+
+:modified_text:
+This prompt will instruct the model to act as a strict critic, focusing specifically on the potential for data contamination, and defaulting to a "low soundness" rating unless the proposal demonstrates exceptionally clear and rigorous methodology in this one area.
+
+:explanation:
+The flaw introduced is based on the mechanism of **criterion narrowing**. By focusing the model's critical attention on a single, specific type of error (data contamination), the prompt makes the skeptical mode too narrow. The model might become very effective at spotting this one flaw, but it would fail to default to a "low soundness" rating for proposals that are methodologically weak for other significant reasons (e.g., flawed experimental design, incorrect metrics, weak hypothesis). The manipulation would fail to induce a generally skeptical evaluation mode, instead creating a highly specialized but narrowly focused one, thus undermining the claim that it will cause a default to negative ratings for general lack of rigor.

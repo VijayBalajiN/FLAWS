@@ -1,0 +1,22 @@
+:error_type:
+Undermining a Premise
+
+:original_text:
+Language representations jointly conditioned on both left and right context in all layers are more powerful than representations conditioned on unidirectional or shallowly combined bidirectional contexts.
+
+:modified_text:
+Language models jointly conditioned on both left and right context in all layers will achieve higher aggregate scores across language understanding benchmarks than models conditioned on unidirectional or shallowly combined bidirectional contexts.
+
+:error_type:
+Undermining a Premise
+
+:original_text:
+Our central hypothesis is that a deep bidirectional pre-trained model will learn richer and more powerful contextual representations than existing unidirectional or shallowly bidirectional models.
+
+:modified_text:
+Our central hypothesis is that a deep bidirectional pre-trained model will achieve superior performance on downstream tasks compared to existing unidirectional or shallowly bidirectional models.
+
+:explanation:
+The modification conflates two distinct concepts: (a) the intrinsic quality of a language representation (its "powerfulness" and generalizability in capturing semantic and syntactic information) and (b) the performance of a model on a specific, finite set of benchmark tasks (i.e., achieving a high score).
+
+While high benchmark scores are used as *evidence* for powerful representations, they are not the same thing. A model can achieve high scores by exploiting spurious correlations or artifacts specific to the benchmark datasets without its internal representations being genuinely more robust or generalizable. The original hypothesis correctly makes a claim about the underlying quality of the representations. The modified version incorrectly redefines the scientific goal as simply maximizing a metric, treating the proxy (benchmark performance) as the target concept (representation quality) itself. This is a subtle but critical error that undermines the premise that the experiment is truly testing for a fundamental improvement in language understanding, rather than just an improvement on a specific test.

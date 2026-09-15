@@ -1,0 +1,23 @@
+:error_type:
+Internal Contradiction
+
+:original_text:
+An architecture relying solely on attention mechanisms, without recurrence or convolutions, is sufficient to model global dependencies between input and output sequences.
+
+:modified_text:
+An architecture relying solely on attention mechanisms, without recurrence or convolutions, is sufficient to model global dependencies between input and output sequences by ensuring that each token's representation is computed independently of its absolute or relative position, thereby allowing for maximal parallelization.
+
+:original_text:
+Since our model contains no recurrence and no convolution, we must inject information about the relative or absolute position of tokens. To this end, we will add **positional encodings** to the input embeddings at the bottoms of the encoder and decoder stacks. We will use sine and cosine functions of different frequencies for these encodings, as we hypothesize this will allow the model to easily learn to attend by relative positions. We will also consider learned positional embeddings as an alternative.
+
+:modified_text:
+Since our model contains no recurrence and no convolution, it computes each token's representation without information about its relative or absolute position. This complete removal of sequential processing is the key to maximizing parallelization, and we hypothesize that the attention mechanism alone is powerful enough to infer necessary relationships without explicit positional signals.
+
+:explanation:
+The modification introduces a self-contradiction by specifying the mechanism through which the hypothesis's goal is supposedly achieved.
+
+The modified hypothesis now claims the model works by "ensuring that each token's representation is computed independently of its absolute or relative position." This proposed mechanism, intended to achieve the desirable property of "maximal parallelization," directly contradicts the stated goal of "model[ing] global dependencies."
+
+Global dependencies in a sequence (e.g., the relationship between the subject and verb in a long sentence) are, by definition, relationships between tokens at different positions. To model these, the architecture must have access to information about which position each token occupies. By explicitly stating that token representations are computed independently of their position, the hypothesis proposes a mechanism that makes its own goal logically impossible. The model is being asked to understand a sentence's structure without knowing the order of the words.
+
+This contradiction is self-contained: the proposed means (position-agnosticism) invalidates the stated end (modeling position-dependent relationships). The follow-on modification to the "Method" section, which removes the original plan to add positional encodings and instead champions their omission, reinforces this error and makes the entire research plan consistent with its own flawed premise.

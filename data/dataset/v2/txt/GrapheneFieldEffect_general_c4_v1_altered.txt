@@ -1,0 +1,25 @@
+## Problem
+
+The performance of modern electronics, which relies on the electric field effect in semiconductors like silicon, is approaching fundamental limits. A promising alternative is the development of all-metallic transistors, which could be scaled to smaller sizes, operate at higher frequencies, and consume less power. However, a major obstacle has prevented this: the electric field is screened over very short distances in metals, requiring atomically thin films to exhibit a noticeable field effect. Such thin films have historically been thermodynamically unstable and discontinuous, making the concept of metallic electronics unfeasible.
+
+We hypothesize that it is possible to overcome this challenge by using graphene, a single atomic layer of carbon. While planar graphene has been presumed to be unstable in its free state, we propose that stable, atomically thin graphitic films can be isolated. We further hypothesize that these two-dimensional films will behave as a semimetal and exhibit a strong, ambipolar electric field effect, allowing us to tune the concentration of charge carriers (both electrons and holes) by applying an external gate voltage.
+
+## Hypothesis
+
+Stable, atomically thin graphitic films are two-dimensional semimetals that exhibit a strong, ambipolar electric field effect, allowing the concentration of their charge carriers—both electrons and holes—to be tuned by an external gate voltage.
+
+## Method
+
+Our research will proceed in two main stages: material isolation and device fabrication.
+
+First, we will attempt to produce atomically thin graphitic films using a method of mechanical exfoliation. The process will involve repeatedly peeling layers from a small mesa of highly-oriented pyrolytic graphite. The goal is to obtain monocrystalline films with thicknesses ranging from a few layers down to a single atomic layer.
+
+Second, we will fabricate field-effect devices to study the electronic properties of these films. We will transfer the isolated films onto an oxidized silicon substrate, which will serve a dual purpose: the silicon oxide layer will act as a gate dielectric, and the heavily doped silicon wafer will function as a back gate. We will then process the films into multi-terminal Hall bar structures to enable comprehensive electrical characterization.
+
+## Experiment Design
+
+The core of our experimental work will be to characterize the electronic transport properties of the fabricated devices as a function of an applied gate voltage.
+
+We plan to fabricate a series of devices using films of varying thicknesses. For each device, we will conduct transport measurements by applying a gate voltage (Vg) to the silicon substrate while measuring the film's conductivity and Hall coefficient.
+
+By sweeping the gate voltage from -100 V up to +100 V, we will investigate our central hypothesis: that we can induce a significant surface charge and thereby modulate the carrier concentration in the film. We will measure the resulting changes in conductivity to determine key parameters such as carrier mobility. A primary objective is to test for an ambipolar field effect, where we can tune the charge carriers continuously from electrons to holes by varying the gate voltage. The data gathered will be used to assess the potential of these atomically thin carbon films to function as the conducting channel in a novel, all-metallic field-effect transistor.

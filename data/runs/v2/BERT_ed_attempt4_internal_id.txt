@@ -1,0 +1,5 @@
+:error_text:
+another using a traditional Left-to-Right (LTR) LM objective instead of MLM, while keeping the core bidirectional Transformer architecture unchanged.
+
+:explanation:
+This describes a methodologically impossible experiment. A traditional Left-to-Right (LTR) language modeling objective is inherently unidirectional, as it requires predicting a token based only on its preceding context. A bidirectional Transformer architecture, by definition, allows each token to see both preceding and subsequent tokens. To train this architecture with an LTR objective, one would have to apply a causal mask, which would fundamentally change the architecture's behavior from bidirectional to unidirectional, contradicting the claim that the architecture is kept "unchanged".

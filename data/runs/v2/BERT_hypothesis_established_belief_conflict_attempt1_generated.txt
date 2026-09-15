@@ -1,0 +1,19 @@
+:error_type:
+Conflict with Established Beliefs
+
+:original_text:
+Language representations jointly conditioned on both left and right context in all layers are more powerful than representations conditioned on unidirectional or shallowly combined bidirectional contexts.
+
+:modified_text:
+Language representations jointly conditioned on both left and right context in all layers are more powerful and data-efficient than representations conditioned on unidirectional or shallowly combined bidirectional contexts, allowing large-scale models to be effectively trained on moderately-sized corpora.
+
+:original_text:
+We will pre-train our BERT models on a combination of the BooksCorpus (800M words) and English Wikipedia (2,500M words). We will use a document-level corpus to ensure we can extract long, contiguous sequences for training.
+
+:modified_text:
+To test our hypothesis about the data efficiency of the bidirectional architecture, we will pre-train our BERT models on the BooksCorpus (800M words). This corpus, while substantial, is significantly smaller than the multi-billion word datasets often used for large-scale models, providing a strong test of our model's ability to learn rich representations efficiently. We will use a document-level corpus to ensure we can extract long, contiguous sequences for training.
+
+:explanation:
+(a) The established belief being conflicted with is the set of empirical findings known as "neural scaling laws" in deep learning. These laws (e.g., Kaplan et al., 2020) demonstrate a predictable power-law relationship between model performance, model size, and dataset size. A critical implication is that larger models are more data-hungry; their superior capacity is only unlocked when trained on proportionally massive datasets. Training a very large model on an insufficient amount of data results in it being severely undertrained and performing suboptimally.
+
+(b) The modified hypothesis is internally consistent: it posits that a new architecture is more data-efficient and then proposes an experiment to test this by training on a smaller-than-typical dataset. However, this premise directly clashes with the established scaling laws. The modified hypothesis claims that a qualitative architectural improvement (deep bidirectionality) can overturn the quantitative requirement for massive data for large models. An expert would recognize that training a model the size of BERT-LARGE (340M parameters) on only the BooksCorpus (800M words) would leave it significantly undertrained, and it would fail to be competitive with models trained on the much larger corpus described in the original plan. The plan is coherent in its flawed logic but is based on a premise that contradicts a fundamental, empirically-validated consensus in the field.

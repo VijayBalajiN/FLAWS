@@ -1,0 +1,19 @@
+:error_type:
+Conflict with Established Beliefs
+
+:original_text:
+An architecture relying solely on attention mechanisms, without recurrence or convolutions, is sufficient to model global dependencies between input and output sequences.
+
+:modified_text:
+An architecture relying solely on attention mechanisms, without recurrence or convolutions, is sufficient to model both global dependencies and the inherent sequential order between input and output sequences.
+
+:original_text:
+Since our model contains no recurrence and no convolution, we must inject information about the relative or absolute position of tokens. To this end, we will add **positional encodings** to the input embeddings at the bottoms of the encoder and decoder stacks. We will use sine and cosine functions of different frequencies for these encodings, as we hypothesize this will allow the model to easily learn to attend by relative positions. We will also consider learned positional embeddings as an alternative.
+
+:modified_text:
+Since our model contains no recurrence and no convolution, it must learn information about the relative or absolute position of tokens directly. We hypothesize that the self-attention mechanism is powerful enough to implicitly model this information without dedicated components. We will therefore not add positional encodings by default, as we believe this forces the model to learn a more robust and generalizable representation of sequence order. As a point of comparison in our ablation studies, we will also test variants that use learned positional embeddings.
+
+:explanation:
+(a) The established belief being conflicted with is the **permutation-equivariance of the self-attention mechanism**. In deep learning, it is a well-established mathematical property that the core self-attention operation treats its input as an unordered set of vectors. It has no built-in awareness of sequence order. Shuffling the input vectors simply shuffles the output vectors in the same way, but the vectors themselves do not change. For this reason, information about token position must be explicitly injected into the model, typically via positional encodings added to the input embeddings. This is a foundational concept of the Transformer architecture.
+
+(b) The modified hypothesis is internally consistent but clashes with this established belief. It incorrectly claims that an architecture "solely on attention mechanisms" is sufficient to model "inherent sequential order." This is fundamentally impossible given the permutation-equivariant nature of the mechanism. To maintain internal consistency with this flawed premise, the methods section was also modified to remove the necessity of positional encodings, framing the default model as one that learns position implicitly through attention. An expert would immediately recognize this as a critical flaw; without positional information being explicitly provided, the model would be unable to distinguish between sentences with the same words in a different order (e.g., "the dog chased the cat" vs. "the cat chased the dog"), dooming the proposed experiments to failure on any language task.

@@ -1,0 +1,13 @@
+:error_type:
+Confounded design
+
+:original_text:
+and another using a traditional Left-to-Right (LTR) LM objective instead of MLM. This will allow us to isolate the contributions of deep bidirectionality and the NSP task.
+
+:modified_text:
+and another using only a traditional Left-to-Right (LTR) LM objective. This will allow us to isolate the contributions of deep bidirectionality and the NSP task.
+
+:explanation:
+The introduced flaw is a confounded design in the first ablation study. The study aims to "isolate the contributions of deep bidirectionality and the NSP task." The full model is pre-trained on two tasks jointly: Masked Language Model (MLM) and Next Sentence Prediction (NSP).
+
+The modified design compares the full model (MLM + NSP) to an ablated model trained with "only a traditional Left-to-Right (LTR) LM objective." This means the LTR model is trained without the NSP task. Consequently, any performance difference between the full model and this LTR model cannot be attributed solely to the language modeling objective (bidirectional MLM vs. unidirectional LTR). The difference could be caused by the LM objective, the presence versus absence of the NSP task, or an interaction between the two. The effect of bidirectionality is confounded with the effect of the NSP task, making it impossible to "isolate the contributions of deep bidirectionality" as the study claims. A proper design would compare `MLM + NSP` with `LTR + NSP` to isolate the effect of the LM objective.

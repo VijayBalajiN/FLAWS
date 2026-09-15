@@ -1,0 +1,2 @@
+error: We further hypothesize that these two-dimensional films will behave as a semimetal and exhibit a strong, ambipolar electric field effect, allowing us to tune the concentration of charge carriers (both electrons and holes) by applying an external gate voltage.
+error: A primary objective is to test for an ambipolar field effect, where we can tune the charge carriers continuously from electrons to holes by varying the gate voltage.

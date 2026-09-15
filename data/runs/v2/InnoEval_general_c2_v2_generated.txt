@@ -1,0 +1,8 @@
+:original_text:
+We will crawl papers from top-tier conferences (NeurIPS and ICLR) via OpenReview and perform stratified sampling based on their final decisions (Reject, Poster, Spotlight, Oral).
+
+:modified_text:
+To maximize dataset size, we will crawl papers from all available years (2018-2023) for top-tier conferences (NeurIPS and ICLR) via OpenReview and perform stratified sampling based on their final decisions (Reject, Poster, Spotlight, Oral).
+
+:explanation:
+This introduces uncontrolled temporal variance. Conference acceptance standards and the significance of decision labels (e.g., 'Oral' vs. 'Poster') can change significantly over several years due to factors like submission volume and evolving research trends. By pooling data from a wide date range without normalization, the labels lose their reliability; a "Poster" from 2018 may not represent the same quality level as a "Poster" from 2023, undermining the validity of the ground-truth claim.

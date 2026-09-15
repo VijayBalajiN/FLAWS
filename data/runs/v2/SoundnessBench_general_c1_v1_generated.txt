@@ -1,0 +1,8 @@
+:original_text:
+exhibiting a bias towards optimism and a high sensitivity to prompt framing.
+
+:modified_text:
+exhibiting an intrinsic bias towards optimism, independent of surface-level textual features, and a high sensitivity to prompt framing.
+
+:explanation:
+The mechanism of this error is over-specification of the hypothesis beyond what the experiment can support. The modified text claims that the optimism bias is "intrinsic" and not a byproduct of "surface-level textual features." However, the proposed experiment only controls for simple features like proposal length and number of experiments. It does not control for more complex stylistic confounders like vocabulary, tone, or argument structure. An LLM might simply be rewarding a "confident writing style" which correlates with soundness, rather than exhibiting true optimism. Because the experiment cannot disentangle these factors, it is no longer sufficient to validate the more specific and powerful claim made in the modified hypothesis.

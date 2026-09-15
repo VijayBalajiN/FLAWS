@@ -1,0 +1,8 @@
+:original_text:
+The interior of a folded globular protein is a fluid-like environment where local atomic motions exhibit a diffusional character.
+
+:modified_text:
+The interior of a folded globular protein is a fluid-like environment where the motions of all constituent atoms, including those in the polypeptide backbone, exhibit a diffusional character.
+
+:explanation:
+The mechanism of this error is a conceptual overgeneralization within the hypothesis itself. The modified claim is subtly but significantly stronger and likely incorrect. While the general environment of a protein interior can be considered "fluid-like" and some atoms (like side-chain termini) may exhibit pseudo-diffusional motion, the atoms of the polypeptide backbone are covalently bonded into a polymer chain. Their movement is highly constrained and correlated, and is better described as libration or oscillation within a local potential well, not free diffusion. By explicitly and incorrectly claiming that backbone atoms are diffusional, the hypothesis makes a specific, falsifiable assertion that ignores fundamental polymer physics. This is a plausible error of a researcher over-extrapolating a general concept to all components of a complex system.

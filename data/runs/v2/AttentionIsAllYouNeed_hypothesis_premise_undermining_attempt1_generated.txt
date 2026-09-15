@@ -1,0 +1,17 @@
+:error_type:
+Undermining a Premise
+
+:original_text:
+An architecture relying solely on attention mechanisms, without recurrence or convolutions, is sufficient to model global dependencies between input and output sequences.
+
+:modified_text:
+An architecture relying solely on attention mechanisms, without recurrence or convolutions, is sufficient to resolve all global dependencies between input and output sequences, as the maximum path length for signal propagation between any two positions is reduced to a constant, O(1).
+
+:explanation:
+This modification conflates an **architectural property** with a **learned functional capability**, treating them as interchangeable.
+
+(a) The two distinct concepts are:
+1.  **Constant Path Length**: A structural property of the attention mechanism, where the number of computational steps required for a signal to travel between any two positions in a sequence is constant (O(1)). This is a statement about the model's theoretical capacity for information flow.
+2.  **Modeling Global Dependencies**: The actual, learned ability of the model to identify, weigh, and utilize meaningful long-range relationships between tokens to perform a task like translation. This is a functional outcome of the learning process.
+
+(b) Treating them as interchangeable is a mistake because the existence of a short path (the architectural property) is a necessary, but not sufficient, condition for the model to effectively learn long-range dependencies (the functional capability). The modified hypothesis implies that by simply providing a constant-length path, the problem of modeling dependencies is solved. However, the model must still learn, through extensive training, how to assign meaningful weights via its attention heads to actually use these paths effectively. An architecture can possess this structural advantage and still fail to learn the correct dependencies. The flaw is in assuming the architectural potential guarantees the learned outcome.

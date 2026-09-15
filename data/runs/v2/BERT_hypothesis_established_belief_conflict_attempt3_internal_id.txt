@@ -1,0 +1,5 @@
+:error_text:
+this advantage is expected to invert beyond a certain model scale, as the complexity of joint conditioning leads to intractable optimization challenges and overfitting in very large models.
+
+:explanation:
+This part of the hypothesis introduces a fundamental contradiction with the experiment design. The hypothesis predicts that the model's performance advantage will reverse at a large scale. However, the experiment is explicitly designed to demonstrate the opposite by training and evaluating a `BERT_LARGE` model, with the clear intention of showing that increased model size leads to better performance compared to `BERT_BASE`. The hypothesis preemptively invalidates the rationale for a key component of the proposed experiment.

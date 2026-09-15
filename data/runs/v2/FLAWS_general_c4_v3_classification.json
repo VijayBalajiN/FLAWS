@@ -1,0 +1,9 @@
+{
+  "label": "FLAWS_general_c4_v3",
+  "original_text": "We will then compare the results of our automated evaluation metric against the human consensus to confirm its alignment with human judgment.",
+  "modified_text": "We will then compare the results of our automated evaluation metric against the human judgment to confirm its alignment. An identification will be considered correct by human standards if at least one of the two annotators flags it as such.",
+  "explanation": "This flaw corrupts the \"gold standard\" by using a flawed definition of \"human consensus.\" By accepting an identification as correct if only *one* of two annotators agrees, the methodology fails to measure true consensus. This \"union\" rule is susceptible to noise and individual annotator error, leading to an inflated and unreliable human baseline. The claim is that the automated metric aligns with *expert consensus*, but this procedure measures alignment with the most lenient possible interpretation of human judgment. A strong correlation found under this flawed procedure would be spurious, as the automated metric is being compared against a weak, non-consensus standard, thereby falsifying the intended meaning of the claim.",
+  "category": "C",
+  "category_name": "Undermining a Premise",
+  "reasoning": "The error arises because the term \"human consensus\" is operationalized as \"at least one of two annotators agrees,\" which diverges from its intended meaning of true agreement, thus failing the contested term test for category C."
+}

@@ -1,0 +1,5 @@
+:error_text:
+we will feed the final hidden state of the `[CLS]` token, concatenated with a max-pooled representation of all other token outputs, into a new classification layer.
+
+:explanation:
+This describes a flawed fine-tuning procedure for the GLUE classification tasks. The standard and intended method for BERT is to use only the final hidden state of the `[CLS]` token as the aggregate sequence representation for classification. The model's pre-training (specifically the Next Sentence Prediction task) is designed to make this single vector meaningful. Concatenating it with a max-pooled representation is an unnecessary and complex modification that contradicts the "minimal task-specific output layer" principle, potentially introducing noise and making the results incomparable to the standard BERT fine-tuning approach.

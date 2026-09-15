@@ -1,0 +1,9 @@
+{
+  "label": "BERT_general_c2_v3",
+  "original_text": "This will allow us to isolate the contributions of deep bidirectionality and the NSP task.",
+  "modified_text": "To ensure a fair comparison, all training hyperparameters (e.g., learning rate, batch size) will be held constant across the main and ablated models. This will allow us to isolate the contributions of deep bidirectionality and the NSP task.",
+  "explanation": "The flaw's mechanism is an **invalid experimental methodology due to mismatched optimization dynamics**. Removing the NSP task also removes its associated loss component from the total loss function. This fundamentally changes the optimization landscape. Insisting on fixed hyperparameters (like learning rate) across the full and ablated models is not a truly \"fair\" comparison, as the optimal hyperparameters for each configuration are likely different. A performance drop in the ablated model could be due to a suboptimal training configuration (e.g., an inappropriate learning rate for the new loss scale) rather than the conceptual absence of the NSP task, thus failing to validly isolate NSP's contribution.",
+  "category": "D",
+  "category_name": "Others",
+  "reasoning": "The error describes a confounded experimental design where an omitted control (re-tuning hyperparameters) prevents the stated goal from being achieved, which is a classic \"Others\" type of flaw."
+}

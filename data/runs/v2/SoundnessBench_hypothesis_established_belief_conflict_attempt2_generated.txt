@@ -1,0 +1,13 @@
+:error_type:
+Conflict with Established Beliefs
+
+:original_text:
+Large Language Models' assessment of a research proposal's methodological soundness is unreliable, exhibiting a bias towards optimism and high sensitivity to prompt framing.
+
+:modified_text:
+Large Language Models' assessment of a research proposal's methodological soundness is unreliable, with this unreliability paradoxically increasing with model scale, while also exhibiting a bias towards optimism and high sensitivity to prompt framing.
+
+:explanation:
+(a) The established belief being conflicted with is the principle of "scaling laws" in large language models. This is a foundational, empirically-verified consensus in the field (e.g., Kaplan et al., 2020) which holds that as model size, compute, and data are increased, performance on a wide variety of tasks, including complex reasoning, improves predictably.
+
+(b) The modified hypothesis is internally consistent; it posits a specific, testable relationship between model scale and reliability on a particular task. However, it directly contradicts the scaling laws by claiming that performance on this core reasoning task gets *worse* as models get larger. This is an extraordinary claim that runs counter to the expectation that larger, more generally capable models should be better, or at least not systematically worse, at such evaluations. An expert would immediately recognize this as a direct challenge to a fundamental principle of LLM development, forcing a choice between rejecting the hypothesis or questioning the universality of scaling laws.

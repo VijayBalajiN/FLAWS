@@ -1,0 +1,8 @@
+:error_text:
+comparing its performance to the standard fine-tuning approach.
+
+:error_text:
+Feature-based vs. Fine-tuning
+
+:explanation:
+The central hypothesis is that the proposed model's representations are superior to those from other architectures (unidirectional or shallowly bidirectional). However, this ablation study is designed to compare two different ways of using the proposed model (feature-based vs. fine-tuning), rather than comparing the model against the external baselines mentioned in the hypothesis. This experiment does not test the central claim, representing a significant methodological flaw where a planned experiment is misaligned with the core research question it is meant to validate.

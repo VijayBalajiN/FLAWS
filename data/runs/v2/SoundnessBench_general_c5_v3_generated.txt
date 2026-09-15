@@ -1,0 +1,8 @@
+:original_text:
+We will intentionally introduce severe methodological flaws (e.g., mismatched datasets and metrics) into high-soundness proposals to test if models can detect these obvious errors.
+
+:modified_text:
+We will intentionally introduce severe methodological flaws by replacing the name of a standard dataset (e.g., ImageNet) with one from a completely unrelated domain (e.g., the General Social Survey) to test if models can detect these obvious errors.
+
+:explanation:
+This modification makes the "severe flaw" syntactically trivial to detect. The task is reduced from methodological reasoning to a simple named-entity-to-domain matching exercise. An LLM does not need to understand *why* using a sociology dataset for an image recognition task is methodologically unsound; it only needs to recognize from its training data that "ImageNet" belongs to computer vision and "General Social Survey" does not. This test would be an invalid proxy because it evaluates a form of knowledge retrieval or topic modeling, not the nuanced reasoning required to identify plausible-but-incorrect methodological choices within the correct domain (e.g., using a biased dataset for a fairness claim).

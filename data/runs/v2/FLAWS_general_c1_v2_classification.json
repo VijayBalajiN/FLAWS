@@ -1,0 +1,9 @@
+{
+  "label": "FLAWS_general_c1_v2",
+  "original_text": "The criticality of an error in a scientific paper is a function of its connection to the paper's core claims.",
+  "modified_text": "The criticality of an error in a scientific paper is best measured by its connection to the paper's core claims.",
+  "explanation": "This modification introduces a subtle logical flaw by conflating a conceptual hypothesis with an operational definition. A hypothesis should propose a falsifiable relationship between constructs. By stating that criticality \"is best measured by\" its connection to claims, the statement is no longer a testable proposition about the world but a definitional axiom for the study's methodology. This makes the research design circular: it presupposes the very relationship it is meant to be investigating, framing it as a matter of measurement rather than an empirical question.",
+  "category": "C",
+  "category_name": "Undermining a Premise",
+  "reasoning": "The error is found by identifying \"criticality\" as a contested term, checking how it's operationalized (\"best measured by its connection to claims\") versus what it's taken to mean (a falsifiable relationship), and finding a scenario where the two diverge (the research design becomes circular)."
+}

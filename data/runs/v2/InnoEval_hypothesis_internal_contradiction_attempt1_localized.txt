@@ -1,0 +1,2 @@
+error:To simulate realistic cognitive diversity, we will partially mask the retrieved knowledge based on each persona's defined familiarity with different knowledge sources.
+error:Finally, a report agent will synthesize all evaluations into a comprehensive and actionable report.

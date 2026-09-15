@@ -1,0 +1,8 @@
+:original_text:
+We will perform an initial equilibration phase to allow the stresses present in the static X-ray structure to relax and to raise the system's kinetic energy to a level corresponding to room temperature.
+
+:modified_text:
+We will perform an initial equilibration phase to allow the stresses present in the static X-ray structure to relax. During this phase, we will periodically rescale atomic velocities to maintain the system's kinetic energy at a level corresponding to room temperature.
+
+:explanation:
+The mechanism of error is flawed thermostatting. The use of periodic velocity rescaling (a simple Berendsen-type thermostat) is known to not generate a correct canonical (NVT) ensemble. While it forces the average temperature to the target value, it suppresses natural fluctuations and can lead to an incorrect distribution of kinetic energy among the system's degrees of freedom. This directly undermines the claim that the system will achieve a "thermally representative dynamic state," as the statistical properties of that state will be incorrect.

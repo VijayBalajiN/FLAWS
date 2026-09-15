@@ -1,0 +1,15 @@
+:error_type:
+Wrong metric/measurement
+
+:original_text:
+For each device, we will conduct transport measurements by applying a gate voltage (Vg) to the silicon substrate while measuring the film's conductivity and Hall coefficient.
+
+:modified_text:
+For each device, we will conduct transport measurements by applying a gate voltage (Vg) to the silicon substrate while measuring the film's conductivity.
+
+:explanation:
+The methodological flaw introduced is the removal of the Hall coefficient measurement, leaving only the conductivity measurement. This represents a "Wrong metric/measurement" because conductivity alone is insufficient to test the central hypothesis.
+
+Conductivity (σ) is a function of both carrier concentration (n) and carrier mobility (μ), as described by the formula σ = n * e * μ. The hypothesis explicitly claims that the gate voltage tunes the carrier *concentration*. However, the gate field can also affect carrier *mobility*. Without a separate measurement to disentangle these two variables, any observed change in conductivity is ambiguous; it is impossible to determine whether the carrier concentration changed, the mobility changed, or both did.
+
+Furthermore, a key objective is to test for an *ambipolar* field effect, which involves identifying the point where the majority charge carriers switch from electrons to holes. This is typically confirmed by observing a sign change in the Hall coefficient. Relying solely on conductivity data makes it impossible to definitively prove that the carrier type has been inverted, thus undermining the ability to validate one of the project's primary goals.

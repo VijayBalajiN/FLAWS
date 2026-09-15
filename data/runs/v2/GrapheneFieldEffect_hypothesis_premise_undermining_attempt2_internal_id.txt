@@ -1,0 +1,8 @@
+:error_text:
+Stable, atomically thin graphitic films are two-dimensional semimetals that exhibit a strong, ambipolar electric field effect
+
+:error_text:
+allowing the density of states at the Fermi level—for both electrons and holes—to be tuned by an external gate voltage.
+
+:explanation:
+The fundamental error is that the hypothesis is presented as a statement of established fact rather than a testable proposition. A research plan is designed to investigate a question or test a proposed explanation. By stating that the films "are" semimetals and "exhibit" a field effect, the text presents the core research questions as foregone conclusions. This undermines the entire purpose of the experiment, which is to determine if these properties exist. A hypothesis should be framed as a proposal to be verified or falsified (e.g., "We hypothesize that..."), not as a pre-existing truth.

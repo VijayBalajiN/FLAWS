@@ -1,0 +1,8 @@
+:original_text:
+For the base model, we will use a dropout rate of P_drop = 0.1.
+
+:modified_text:
+For the base model, we will use a dropout rate of P_drop = 0.3, a value shown to be effective for regularizing large attention-based models.
+
+:explanation:
+The flaw is the introduction of a significantly higher dropout rate (0.3) which, when combined with the planned label smoothing (ϵ_ls = 0.1), creates a high risk of over-regularization. The underlying mechanism is a **harmful interaction between two different regularization techniques**. Both methods discourage the model from making confident predictions. Using them together at these aggressive levels could prevent the model from fitting the training data adequately (i.e., cause underfitting), which would degrade performance rather than improve robustness. This undermines the claim because the effectiveness of label smoothing is context-dependent, and in this new context of high dropout, it is likely to be detrimental.

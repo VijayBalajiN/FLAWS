@@ -1,0 +1,1 @@
+error: This approach uses expert-derived scores as a proxy for methodological validity.

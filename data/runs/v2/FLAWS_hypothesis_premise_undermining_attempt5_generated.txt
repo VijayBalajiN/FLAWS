@@ -1,0 +1,16 @@
+:error_type:
+Undermining a Premise
+
+:original_text:
+The criticality of an error in a scientific paper is a function of its connection to the paper's core claims.
+
+:modified_text:
+The criticality of an error in a scientific paper is defined by its invalidation of the paper's core claims.
+
+:explanation:
+This modification conflates two genuinely distinct concepts: the "criticality" of an error and its "claim-invalidation" property.
+
+1.  **Criticality** is a broad, pragmatic concept related to the overall impact or consequence of an error on the field. A highly critical error could, for example, be a subtle flaw in a new dataset's collection method that makes it unsuitable for future research, or a methodological error that makes an experiment non-replicable.
+2.  **Claim-invalidation** is a narrower, logical concept. An error is claim-invalidating if it directly breaks the chain of reasoning supporting a specific, stated conclusion within the paper.
+
+By changing "is a function of its connection to" to "is defined by its invalidation of," the modified hypothesis incorrectly equates these two ideas. It smuggles in the flawed premise that the *only* way for an error to be critical is for it to logically falsify a stated claim. This is incorrect. An error in an appendix detailing a data processing script might not invalidate any core claim (e.g., "Model X achieves 95% on our dataset"), but if that script contains a flaw that biases the entire dataset, the error is extremely critical because it renders the paper's main contribution—the dataset itself—unreliable. The surface-level reasoning of the research plan remains coherent, but it is now built upon this flawed definitional assumption.

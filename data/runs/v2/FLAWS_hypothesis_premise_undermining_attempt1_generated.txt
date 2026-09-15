@@ -1,0 +1,17 @@
+:error_type:
+Undermining a Premise
+
+:original_text:
+The criticality of an error in a scientific paper is a function of its connection to the paper's core claims.
+
+:modified_text:
+The retraction-worthiness of an error in a scientific paper is a function of its connection to the paper's core claims.
+
+:explanation:
+This modification conflates two related but distinct concepts: the "criticality" of a scientific error and its "retraction-worthiness."
+
+1.  **Criticality (Epistemic/Logical):** In the context of this proposal, criticality refers to the logical impact of an error on the paper's scientific conclusions. An error is critical if it invalidates a core claim. This is an intrinsic property of the error's relationship to the paper's argument. The methodology described (inserting "claim-invalidating errors") is designed to test this specific concept.
+
+2.  **Retraction-worthiness (Procedural/Ethical):** This refers to whether an error warrants the formal, public withdrawal of the paper from the scientific literature. While a critical error can be grounds for retraction, the two are not equivalent. Retraction decisions involve a host of factors beyond pure logical criticality, including author intent (honest error vs. misconduct like data fabrication), the scope of the error's impact, and journal policies. For instance, a paper might be retracted for plagiarism even if its scientific claims are sound, while a paper with a genuine, claim-invalidating error might receive a correction (erratum) instead of a full retraction if the error was honest and limited in scope.
+
+The modified hypothesis makes the flawed assumption that the epistemic concept of criticality is interchangeable with the procedural outcome of retraction-worthiness. The experiment, as designed, only tests for the former. It can determine if an LLM finds an error that breaks a claim, but it provides no evidence about whether that error would or should lead to a retraction, a much more complex judgment. The formal reasoning of the plan remains intact, but it rests on the undermined premise that these two concepts are the same.

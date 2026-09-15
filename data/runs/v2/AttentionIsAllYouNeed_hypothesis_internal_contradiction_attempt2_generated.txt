@@ -1,0 +1,23 @@
+:error_type:
+Internal Contradiction
+
+:original_text:
+An architecture relying solely on attention mechanisms, without recurrence or convolutions, is sufficient to model global dependencies between input and output sequences.
+
+:modified_text:
+An architecture relying solely on attention mechanisms, where each output position attends only to a computationally-constrained local window of input positions, is sufficient to model global dependencies between input and output sequences.
+
+:original_text:
+-   **Encoder-Decoder Attention:** Queries will come from the previous decoder layer, and memory keys and values will come from the output of the encoder. This will allow every position in the decoder to attend over all positions in the input sequence.
+-   **Encoder Self-Attention:** All keys, values, and queries will come from the output of the previous layer in the encoder, allowing each position to attend to all positions in the previous layer.
+
+:modified_text:
+-   **Encoder-Decoder Attention:** Queries will come from the previous decoder layer, and memory keys and values will come from the output of the encoder. This will allow every position in the decoder to attend over positions in the input sequence that fall within its corresponding local window.
+-   **Encoder Self-Attention:** All keys, values, and queries will come from the output of the previous layer in the encoder, allowing each position to attend to a constrained neighborhood of positions in the previous layer.
+
+:explanation:
+The modification introduces a fundamental internal contradiction within the hypothesis statement itself. The hypothesis's stated goal is to "model global dependencies," which implies the ability to capture relationships between any two tokens in a sequence, regardless of their distance. However, the modified text inserts a critical constraint on the proposed mechanism: attention is restricted to a "computationally-constrained local window."
+
+This constraint, followed to its logical conclusion, directly undermines the hypothesis's goal. A mechanism that can only "see" a local window is, by definition, incapable of directly modeling "global dependencies" that exist outside of that window. While stacking such local layers can expand the receptive field, it reintroduces the very problem seen in convolutional networks (requiring many layers to connect distant positions) that this architecture explicitly claims to overcome.
+
+Therefore, the hypothesis is self-contradictory: its proposed mechanism (local attention) is fundamentally incompatible with its stated objective (modeling global dependencies). The flaw is internal to the statement, requiring no external knowledge to identify. The subsequent modification to the Method section makes the overall research plan consistent with this flawed hypothesis, making the error more subtle.

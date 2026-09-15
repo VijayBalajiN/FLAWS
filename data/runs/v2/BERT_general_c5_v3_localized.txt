@@ -1,0 +1,1 @@
+error: The `[CLS]` token representation for each sequence will be used to compute a score, and a softmax layer will predict the most plausible choice.

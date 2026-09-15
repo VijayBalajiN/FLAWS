@@ -1,0 +1,10 @@
+:error_text:
+For machine translation, we will evaluate models using the BLEU score. For English constituency parsing, we will use standard F1 scores.
+
+:error_text:
+We will employ three types of regularization during training:
+
+:explanation:
+The most serious error is that the experiment design fails to measure the key performance metrics that are central to the research problem. The "Problem" section highlights the goal of achieving "significantly more parallelization" and reducing "training time," but the "Evaluation Metrics" section only lists model quality scores (BLEU and F1), completely omitting any metrics related to computational efficiency or speed. This is a fundamental flaw, as the experiment cannot validate the core claims of the hypothesis.
+
+A second, significant error exists in the description of the regularization methods. The plan states that "three types of regularization" will be used, but then proceeds to list only two (Residual Dropout and Label Smoothing). This contradiction makes the methodology unclear, inaccurate, and not reproducible, as a key component of the training process is either missing or misstated.

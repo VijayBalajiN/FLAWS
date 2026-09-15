@@ -1,0 +1,9 @@
+{
+  "label": "SoundnessBench_general_c3_v3",
+  "original_text": "This prompt will instruct the model to act as a strict critic, defaulting to a \"low soundness\" rating unless the proposal demonstrates exceptionally clear and rigorous methodology.",
+  "modified_text": "This prompt will instruct the model to act as a strict critic, focusing specifically on the potential for data contamination, and defaulting to a \"low soundness\" rating unless the proposal demonstrates exceptionally clear and rigorous methodology in this one area.",
+  "explanation": "The flaw introduced is based on the mechanism of **criterion narrowing**. By focusing the model's critical attention on a single, specific type of error (data contamination), the prompt makes the skeptical mode too narrow. The model might become very effective at spotting this one flaw, but it would fail to default to a \"low soundness\" rating for proposals that are methodologically weak for other significant reasons (e.g., flawed experimental design, incorrect metrics, weak hypothesis). The manipulation would fail to induce a generally skeptical evaluation mode, instead creating a highly specialized but narrowly focused one, thus undermining the claim that it will cause a default to negative ratings for general lack of rigor.",
+  "category": "C",
+  "category_name": "Undermining a Premise",
+  "reasoning": "The error relies on the contested term \"strict critic,\" where the operationalization (focusing on one specific flaw) diverges from the intended meaning (general skepticism), fitting the C category's operational audit."
+}

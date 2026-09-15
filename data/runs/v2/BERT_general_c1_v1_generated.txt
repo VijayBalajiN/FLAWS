@@ -1,0 +1,8 @@
+:original_text:
+We will train and evaluate two ablated models: one using only the Masked LM task (without Next Sentence Prediction) and another using a traditional Left-to-Right (LTR) LM objective instead of MLM.
+
+:modified_text:
+We will train and evaluate two ablated models: one using only the Masked LM task (without Next Sentence Prediction) and another using a traditional Left-to-Right (LTR) LM objective trained only on the BooksCorpus to match the OpenAI GPT baseline.
+
+:explanation:
+This modification introduces a confounding variable into the experimental design. The proposal's central claim is that deep bidirectionality (from MLM) is superior to unidirectionality (from LTR). By specifying that the LTR ablation model will be trained *only* on the BooksCorpus (to match the original GPT), while the main BERT models are trained on BooksCorpus + Wikipedia, the comparison is no longer fair. Any observed performance difference could be attributed to the significantly larger and more diverse training data rather than the model's bidirectionality. This flaw makes it impossible for the ablation study to isolate the effect of bidirectionality, thus failing to provide valid evidence for the central hypothesis.

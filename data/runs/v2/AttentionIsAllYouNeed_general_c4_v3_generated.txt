@@ -1,0 +1,8 @@
+:original_text:
+We will employ label smoothing with a value of ϵ_ls = 0.1 during training, as this approach is known to improve model robustness.
+
+:modified_text:
+We will employ label smoothing with a value of ϵ_ls = 0.1 during training, as this approach improves perplexity and is known to improve model robustness.
+
+:explanation:
+The flaw is the addition of "improves perplexity" as a justification for using label smoothing. The mechanism of error is a **mismatch between the optimization objective and the primary evaluation metric**. While label smoothing does tend to improve perplexity (by encouraging a less confident, smoother output distribution), the project's success metric for translation is the BLEU score. BLEU, especially when calculated on outputs from beam search decoding, often benefits from models that produce "peaky" or highly confident predictions for the next token. By making the model less confident, label smoothing can degrade beam search performance and lower the final BLEU score, thus undermining the claim that it improves robustness in the context of the actual task evaluation.

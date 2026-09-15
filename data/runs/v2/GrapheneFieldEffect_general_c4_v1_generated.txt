@@ -1,0 +1,8 @@
+:original_text:
+By systematically sweeping the gate voltage, we will investigate our central hypothesis: that we can induce a significant surface charge and thereby modulate the carrier concentration in the film.
+
+:modified_text:
+By sweeping the gate voltage from -100 V up to +100 V, we will investigate our central hypothesis: that we can induce a significant surface charge and thereby modulate the carrier concentration in the film.
+
+:explanation:
+The flaw is the introduction of a unidirectional voltage sweep. Real-world devices, especially those with dielectrics like silicon oxide, often have charge traps at the interface. These traps can cause significant hysteresis, meaning the material's conductivity at a given voltage depends on the direction of the sweep (i.e., whether the voltage is increasing or decreasing). To validate a claim of "smooth and continuous" tuning, a bidirectional sweep (e.g., -100V to +100V and then back to -100V) is required to check for and quantify hysteresis. By specifying only a one-way sweep, the experimental design is inadequate as it would fail to detect this common non-ideal behavior, which would contradict the claim.

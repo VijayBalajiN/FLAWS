@@ -1,0 +1,35 @@
+:candidate:
+1
+
+:original_text:
+We will also calculate the root mean square (r.m.s.) fluctuations of atomic positions relative to this average structure to quantify the magnitude of motion throughout the protein.
+
+:modified_text:
+We will also calculate the root mean square (r.m.s.) fluctuations of atomic positions, averaged over the entire production run, relative to this average structure to quantify the magnitude of motion throughout the protein.
+
+:explanation:
+This modification introduces a methodological flaw by presupposing the protein samples a single conformational state. If the protein undergoes a transition to a different, stable conformation during the simulation (a key possibility for "fluid-like" dynamics), the single "average structure" calculated over the entire run would be a physically meaningless intermediate. Calculating fluctuations relative to this non-existent average would produce artificially high and misleading RMSF values, making it an insufficient measure of the true atomic motion within each state.
+
+:candidate:
+2
+
+:original_text:
+We will also calculate the root mean square (r.m.s.) fluctuations of atomic positions relative to this average structure to quantify the magnitude of motion throughout the protein.
+
+:modified_text:
+We will also calculate the root mean square (r.m.s.) fluctuations of atomic positions after first aligning the trajectory to the average structure to remove global translation and rotation, which serves to quantify the magnitude of motion throughout the protein.
+
+:explanation:
+This modification introduces a procedural ambiguity. While aligning the trajectory is a necessary step, the text omits the critical detail of *which atoms* are used for the alignment (e.g., C-alpha atoms, backbone atoms, or atoms of a specific rigid domain). This choice can dramatically alter the resulting RMSF values for all other atoms, as it defines the reference frame. Without this specification, the measure is not well-defined or reproducible, making RMSF an incomplete metric as the results are dependent on an unstated, arbitrary choice.
+
+:candidate:
+3
+
+:original_text:
+We will also calculate the root mean square (r.m.s.) fluctuations of atomic positions relative to this average structure to quantify the magnitude of motion throughout the protein.
+
+:modified_text:
+We will also calculate the root mean square (r.m.s.) fluctuations of atomic positions relative to this average structure, which will directly characterize the diffusional nature of the atomic motions.
+
+:explanation:
+This modification introduces a conceptual misinterpretation. It incorrectly claims that RMSF, a measure of the average magnitude of atomic displacement, can "directly characterize the diffusional nature" of motion. RMSF is a static, time-averaged value that cannot distinguish between different types of dynamics, such as harmonic vibrations versus diffusional jumps. Characterizing diffusional motion requires analyzing the time-dependence of the motion (e.g., via mean-squared displacement vs. time), so by misattributing this capability to RMSF, the plan renders the measure insufficient for testing the central hypothesis.

@@ -1,0 +1,13 @@
+:error_text:
+exhibiting a bias towards optimism
+
+:error_text:
+high sensitivity to prompt framing
+
+:error_text:
+unreliability paradoxically increasing with model scale, while also exhibiting a bias towards optimism
+
+:explanation:
+The core error is a contradiction between the stated hypothesis and the experimental design. The hypothesis posits a specific, static "bias towards optimism." However, the experimental design is explicitly built to test for judgment *instability* by using an "Aggressive Prompt" designed to induce the opposite bias (pessimism).
+
+This creates a logical flaw: the hypothesis predicts a single, fixed bias, while the experiment is designed to show that the model's bias is not fixed but highly malleable. The phrase "high sensitivity to prompt framing" within the hypothesis itself contradicts the idea of a stable, inherent "bias towards optimism," as high sensitivity implies the bias is easily changed, not a fixed property.

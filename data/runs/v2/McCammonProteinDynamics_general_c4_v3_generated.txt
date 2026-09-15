@@ -1,0 +1,8 @@
+:original_text:
+2.  **Equilibration:** We will perform an initial equilibration phase to allow the stresses present in the static X-ray structure to relax and to raise the system's kinetic energy to a level corresponding to room temperature.
+
+:modified_text:
+2.  **Equilibration:** We will perform an initial equilibration phase where the system is rapidly heated to 300 K over 1 ps. This will allow the stresses present in the static X-ray structure to relax and raise the system's kinetic energy to a level corresponding to room temperature.
+
+:explanation:
+This introduces a procedural error in the simulation protocol. Rapidly heating a system from near 0 K to 300 K in just 1 picosecond without positional restraints is extremely aggressive. This "temperature shock" can introduce large, non-physical forces that effectively "boil" the four internal water molecules out of their binding pockets, especially in a vacuum. If the waters are expelled during equilibration, the subsequent production simulation would proceed without them. This invalidates the claim, as the very components purported to ensure accuracy would be absent from the system being analyzed.

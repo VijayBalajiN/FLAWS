@@ -1,0 +1,18 @@
+:error_text:
+source our papers from the accepted list of the 2025 International Conference on Machine Learning (ICML)
+
+:error_text:
+use two distinct, state-of-the-art LLMs (e.g., Gemini 2.5 Pro and GPT 5)
+
+:error_text:
+tasking the error-generating LLM with finding the error it just created; if it succeeds, the error is discarded as being too simple.
+
+:error_text:
+prompt an LLM to identify all text excerpts in the paper that are rendered incorrect... This complete set of excerpts will serve as the ground truth.
+
+:explanation:
+The most critical error is a temporal impossibility that makes the experiment non-executable: the plan relies on sourcing papers from the ICML 2025 conference, which has not yet occurred. A similar feasibility issue ranks second, as the plan specifies using LLMs (Gemini 2.5 Pro, GPT 5) that do not currently exist.
+
+The third error is a fundamental methodological flaw in the benchmark's design. By filtering out any synthetic error that the generating LLM can itself identify, the benchmark is intentionally constructed to contain only problems that are unsolvable by at least one state-of-the-art model. This creates a biased dataset that cannot be used to fairly evaluate the general error-finding capabilities of LLMs, as it is designed to make them fail.
+
+Finally, the plan uses an LLM to generate the "ground truth" for the evaluation. This is a circular approach, as it uses the very technology being tested to create the standard for success, introducing potential unreliability and bias into the core evaluation metric.

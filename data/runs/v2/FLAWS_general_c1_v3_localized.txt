@@ -1,0 +1,2 @@
+error: An error will be considered found if it is flagged by either of the following:
+error: The primary performance metric will be Accuracy@k, representing the fraction of papers where the error was correctly identified within the top-k returned excerpts.

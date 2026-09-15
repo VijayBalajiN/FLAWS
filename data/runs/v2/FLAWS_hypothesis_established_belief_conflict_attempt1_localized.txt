@@ -1,0 +1,1 @@
+error: Two human annotators will assess (1) the validity of the inserted scientific errors and (2) the correctness of the LLMs' identifications.

@@ -1,0 +1,3 @@
+error:This process will yield groups of ideas with an inherent ground-truth ranking, from which we can also derive pair-wise comparison tasks.
+error:We will frame this as a classification problem (binary: Accept/Reject; ternary: Reject/Poster/Highlight) and measure performance using Accuracy and macro F1 score.
+error:We will evaluate the ability to select the best idea in a group (measured by Accuracy) and to produce a full ranking (measured by Accuracy and Longest Increasing Subsequence score).

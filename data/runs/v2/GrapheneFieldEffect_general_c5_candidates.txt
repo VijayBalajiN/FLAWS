@@ -1,0 +1,35 @@
+:candidate:
+1
+
+:original_text:
+We will measure the resulting changes in conductivity to determine key parameters such as carrier mobility.
+
+:modified_text:
+We will measure the resulting changes in the source-drain resistance to determine key parameters such as carrier mobility.
+
+:explanation:
+The mechanism of this error is a **measurement artifact**. By specifying the measurement of "source-drain resistance" to determine mobility, the plan implies a two-terminal measurement. This method conflates the intrinsic resistance of the carbon film (the channel) with the resistance of the metal contacts. Since contact resistance can be large, non-negligible, and also dependent on the gate voltage, the calculated carrier mobility will be artificially suppressed and inaccurate. Without a method to de-embed the contact resistance (like a four-probe measurement, which is possible with a Hall bar but not specified here), the planned measurements are insufficient to determine the true material properties, making the evaluation of its potential unreliable.
+
+:candidate:
+2
+
+:original_text:
+The data gathered will be used to assess the potential of these atomically thin carbon films to function as the conducting channel in a novel, all-metallic field-effect transistor.
+
+:modified_text:
+The data gathered will be used to assess the potential of these atomically thin carbon films to achieve high charge carrier mobility, a key requirement for a novel, all-metallic field-effect transistor.
+
+:explanation:
+The mechanism of this error is **incomplete characterization**. The modification narrows the project's goal from a holistic assessment of transistor function to a focus on a single parameter: high mobility. A critical metric for any field-effect transistor is the on/off current ratio, which determines its effectiveness as a switch. Graphene, being a semimetal with no bandgap, is known to have a poor on/off ratio. By focusing the evaluation solely on mobility, the plan omits any measurement or analysis of the minimum conductivity (the "off" state). Without this data, a crucial performance metric cannot be determined, rendering the planned measurements insufficient to properly evaluate the material's overall potential as a functional transistor.
+
+:candidate:
+3
+
+:original_text:
+By systematically sweeping the gate voltage, we will investigate our central hypothesis: that we can induce a significant surface charge and thereby modulate the carrier concentration in the film.
+
+:modified_text:
+By systematically sweeping the gate voltage, we will investigate our central hypothesis: that we can induce a significant surface charge, using the measured Hall coefficient to directly determine the carrier concentration in the film.
+
+:explanation:
+The mechanism of this error is the application of an **incorrect physical model** for data analysis. The phrase "directly determine" implies the use of the simple, single-carrier formula (R_H = 1/ne) to extract carrier concentration (n) from the Hall coefficient (R_H). This model is only valid when a single type of charge carrier (either electrons or holes) dominates. However, the proposal aims to test for an "ambipolar field effect," a regime where both electrons and holes coexist. In this two-carrier system, the relationship between Hall coefficient and carrier densities is far more complex. Applying the simplified model will lead to a fundamentally incorrect calculation of the carrier concentration and mobility, especially around the charge neutrality point. Because the planned analysis is flawed, the measurements are insufficient for a correct evaluation of the material's potential.

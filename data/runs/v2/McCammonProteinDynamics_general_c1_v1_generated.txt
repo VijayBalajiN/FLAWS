@@ -1,0 +1,8 @@
+:original_text:
+We will perform an initial equilibration phase to allow the stresses present in the static X-ray structure to relax and to raise the system's kinetic energy to a level corresponding to room temperature.
+
+:modified_text:
+We will perform an initial equilibration phase by assigning random velocities from a Maxwell-Boltzmann distribution corresponding to room temperature, ensuring the system begins at the correct kinetic energy.
+
+:explanation:
+The mechanism of this error is a flawed experimental protocol. The modified text describes an insufficient equilibration method. While it correctly sets the system's initial kinetic energy (temperature), it completely omits the crucial step of allowing the potential energy to relax. A structure taken directly from X-ray crystallography is a time-averaged, zero-temperature model with significant internal stresses. Simply assigning velocities traps it in a high-energy, non-equilibrium, "glassy" state. The subsequent dynamics will be dominated by this artificial stress relaxation rather than true equilibrium fluctuations. The observed motions would be primarily vibrational and not diffusional, leading the researcher to incorrectly conclude that the protein interior is solid-like and thus falsify the central claim.

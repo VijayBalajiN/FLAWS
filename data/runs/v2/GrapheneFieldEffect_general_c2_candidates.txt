@@ -1,0 +1,35 @@
+:candidate:
+1
+
+:original_text:
+Stable, atomically thin graphitic films are two-dimensional semimetals that exhibit a strong, ambipolar electric field effect, allowing the concentration of their charge carriers—both electrons and holes—to be tuned by an external gate voltage.
+
+:modified_text:
+Stable, atomically thin graphitic films are two-dimensional degenerate semiconductors that exhibit a strong, ambipolar electric field effect, allowing the concentration of their charge carriers—both electrons and holes—to be tuned by an external gate voltage.
+
+:explanation:
+The mechanism of this error is a fundamental misclassification of the material in a way that contradicts the claimed property. By labeling the films as "degenerate semiconductors" instead of "semimetals," the hypothesis becomes internally inconsistent. Degenerate semiconductors are heavily doped with a single type of charge carrier (either n-type or p-type) and would exhibit a unipolar field effect, not an ambipolar one. The ambipolar effect, which relies on the ability to tune between both electron and hole conduction, is characteristic of the band structure of a semimetal like graphene, not a degenerate semiconductor. This is a subtle conceptual error that undermines the physical basis of the claim.
+
+:candidate:
+2
+
+:original_text:
+We further hypothesize that these two-dimensional films will behave as a semimetal and exhibit a strong, ambipolar electric field effect, allowing us to tune the concentration of charge carriers (both electrons and holes) by applying an external gate voltage.
+
+:modified_text:
+We further hypothesize that these two-dimensional films will behave as a semimetal and exhibit a strong, ambipolar electric field effect, allowing us to tune the mobility of charge carriers (both electrons and holes) by applying an external gate voltage.
+
+:explanation:
+The mechanism of this error is a misstatement of the underlying physical principle of the field effect. The text incorrectly claims the gate voltage tunes carrier "mobility" rather than carrier "concentration." The electric field effect in these devices primarily functions by changing the *concentration* of charge carriers in the channel. While carrier mobility is also affected by gate voltage (due to scattering effects), it is not the primary mechanism responsible for the large-scale conductivity modulation or the switching between electron and hole transport (ambipolarity). Attributing the effect to mobility modulation is a fundamental misunderstanding of how a field-effect transistor operates and falsifies the proposed mechanism for the claim.
+
+:candidate:
+3
+
+:original_text:
+exhibit a strong, ambipolar electric field effect, allowing the concentration of their charge carriers—both electrons and holes—to be tuned by an external gate voltage.
+
+:modified_text:
+exhibit a strong, ambipolar electric field effect, allowing the concentration of their charge carriers—both electrons and holes—to be tuned by a positive external gate voltage.
+
+:explanation:
+The mechanism of this error is the introduction of a methodological constraint into the hypothesis that makes it unlikely to be true under typical conditions. Graphene exfoliated onto silicon oxide is almost always p-doped due to environmental and substrate effects, meaning its charge neutrality point is at a significant positive gate voltage. To observe the full ambipolar effect, one must sweep the voltage across this point to access both hole (at less positive Vg) and electron (at more positive Vg) regimes. By hypothesizing that both carrier types can be accessed with *only* a positive voltage, the claim presupposes a very specific and unlikely doping level. This constraint makes the hypothesis brittle and likely false, as a negative gate voltage would almost certainly be required to fully explore the hole-conduction side of the transport curve.

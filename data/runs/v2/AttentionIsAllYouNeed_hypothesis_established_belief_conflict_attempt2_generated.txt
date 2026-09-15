@@ -1,0 +1,15 @@
+:error_type:
+Conflict with Established Beliefs
+
+:original_text:
+An architecture relying solely on attention mechanisms, without recurrence or convolutions, is sufficient to model global dependencies between input and output sequences.
+
+:modified_text:
+An architecture relying solely on attention mechanisms, without recurrence or convolutions, is sufficient to model global dependencies between input and output sequences, and can do so with a total computational complexity that scales linearly with sequence length.
+
+:explanation:
+The modification introduces a claim about computational complexity that conflicts with a well-established property of the specific architecture described in the research plan.
+
+(a) The established belief is that the standard scaled dot-product self-attention mechanism, as detailed in the "Method" section of this plan, has a computational complexity of O(n² * d), where 'n' is the sequence length and 'd' is the embedding dimension. This quadratic scaling with respect to sequence length is a fundamental and widely known characteristic because the mechanism computes a pairwise interaction score between every token and every other token in the sequence.
+
+(b) The modified hypothesis, while internally coherent, claims that the architecture can operate with a total computational complexity that "scales linearly with sequence length" (O(n)). This directly contradicts the known quadratic complexity of the model being proposed. An expert would immediately recognize that the described method (standard self-attention) cannot achieve the linear complexity claimed in the hypothesis. The error is non-trivial because it requires knowledge of the algorithm's complexity analysis and is a plausible mistake, potentially stemming from a confusion between the model's O(1) path length for relating distant tokens and its O(n²) total computational cost per layer.

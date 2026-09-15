@@ -1,0 +1,10 @@
+:error_text:
+We plan to fabricate a series of devices using films of varying thicknesses.
+
+:error_text:
+a key requirement for a novel, all-metallic field-effect transistor.
+
+:explanation:
+The most serious error is a critical methodological omission. The plan states an intention to use films of "varying thicknesses" but provides no method to measure or verify what those thicknesses are (e.g., via Raman spectroscopy or Atomic Force Microscopy). Without this characterization, it is impossible to correlate the electronic properties with the number of atomic layers, making the core experimental goal unachievable and the results un-interpretable.
+
+The second error is a fundamental conceptual flaw. The plan frames the goal as creating an "all-metallic field-effect transistor." However, the experiment is designed to work precisely because graphene is a semimetal, not a true metal. In a typical metal, the high density of charge carriers would screen the electric field, preventing the gate from modulating conductivity—the very problem this research is meant to solve. This mischaracterization demonstrates a misunderstanding of the underlying physics.

@@ -1,0 +1,9 @@
+{
+  "label": "FLAWS_general_c5_v3",
+  "original_text": "For each claim, we will instruct an LLM to modify one or more segments of the paper's text to introduce a sophisticated, domain-appropriate conceptual error that undermines that specific claim.",
+  "modified_text": "For each claim, we will instruct an LLM to modify one or more segments of the paper's text to introduce a subtle internal contradiction or data mismatch that undermines that specific claim.",
+  "explanation": "The mechanism of this error is **Error Type Substitution**. The nature of the generated flaw is changed from a \"conceptual error\" to an \"internal contradiction or data mismatch.\" While contradictions are valid errors, they test a different capability\u2014consistency checking\u2014rather than the understanding of deep scientific concepts. This change would result in a benchmark that, while producing valid flaws, fails to generate the *kind* of scientifically meaningful errors the research claims to. Human experts would likely judge these contradictions as \"valid,\" but the pipeline's core capability would have been altered, falsifying the claim that it generates scientifically meaningful *conceptual* errors.",
+  "category": "C",
+  "category_name": "Undermining a Premise",
+  "reasoning": "The error relies on the contested term \"conceptual error,\" which is operationalized as \"internal contradiction or data mismatch\" in the modified text, diverging from its intended meaning of \"understanding of deep scientific concepts.\""
+}

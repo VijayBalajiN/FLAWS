@@ -1,0 +1,23 @@
+:error_type:
+Undermining a Premise
+
+:original_text:
+Language representations jointly conditioned on both left and right context in all layers are more powerful than representations conditioned on unidirectional or shallowly combined bidirectional contexts.
+
+:modified_text:
+Language representations trained to predict masked tokens using the full unmasked context from both left and right in all layers are more powerful than representations conditioned on unidirectional or shallowly combined bidirectional contexts.
+
+:original_text:
+Our central hypothesis is that a deep bidirectional pre-trained model will learn richer and more powerful contextual representations than existing unidirectional or shallowly bidirectional models.
+
+:modified_text:
+Our central hypothesis is that a model pre-trained via a masked language objective will learn richer and more powerful contextual representations than existing unidirectional or shallowly bidirectional models.
+
+:explanation:
+The modification introduces an error by conflating two distinct concepts: (1) the architectural property of "deep bidirectionality" and (2) the specific training method of a "Masked Language Model" (MLM) objective.
+
+1.  **Deep Bidirectionality:** This is a general, abstract property of a model's representations. It means that the representation for any given token is a function of all other tokens in the sequence (both left and right context), and that this holistic context is integrated at every layer of the model.
+
+2.  **Masked Language Modeling (MLM):** This is a specific pre-training *task* or *objective* designed to train a model that has the property of deep bidirectionality. It is one possible *method* to achieve the desired architectural property, but it is not the property itself.
+
+The flaw is in treating the specific method (MLM) as being synonymous with the general principle (deep bidirectionality). The original hypothesis correctly makes a claim about the general principle. The modified hypothesis incorrectly narrows the claim to be about the specific implementation. This is a mistake because the power of the model might stem from the deep bidirectional information flow itself, not the particulars of the mask-and-predict task. Another pre-training task (e.g., a different style of denoising auto-encoder) could potentially achieve the same or better deep bidirectional representations. By conflating the two, the hypothesis incorrectly assumes the method *is* the principle, undermining the generality and theoretical foundation of the claim.

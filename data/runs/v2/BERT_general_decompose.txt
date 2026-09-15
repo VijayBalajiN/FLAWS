@@ -1,0 +1,44 @@
+:claim:
+Deeply bidirectional language representations are more powerful than unidirectional or shallowly bidirectional ones.
+
+:source_field:
+hypothesis
+
+:source_excerpt:
+Language representations jointly conditioned on both left and right context in all layers are more powerful than representations conditioned on unidirectional or shallowly combined bidirectional contexts.
+
+:claim:
+The proposed ablation study is a valid method for isolating the specific performance contribution of the Next Sentence Prediction (NSP) task.
+
+:source_field:
+experiment_design
+
+:source_excerpt:
+This will allow us to isolate the contributions of deep bidirectionality and the NSP task.
+
+:claim:
+Increasing the model's scale (from `BERT_BASE` to `BERT_LARGE`) will result in improved performance on downstream tasks.
+
+:source_field:
+experiment_design
+
+:source_excerpt:
+We will compare the performance of `BERT_BASE` and `BERT_LARGE` across all tasks to measure the impact of model scale on downstream performance, especially on smaller datasets.
+
+:claim:
+The fine-tuning approach, where all model parameters are updated, is superior to a feature-based approach where the pre-trained model's parameters are frozen.
+
+:source_field:
+experiment_design
+
+:source_excerpt:
+We will extract fixed contextual embeddings from various layers of the pre-trained model and feed them into a BiLSTM classifier, comparing its performance to the standard fine-tuning approach.
+
+:claim:
+The final hidden state corresponding to the `[CLS]` token is a sufficient aggregate representation of the input sequence for sentence-level classification tasks.
+
+:source_field:
+experiment_design
+
+:source_excerpt:
+For sentence-level classification tasks (MNLI, QQP, QNLI, SST-2, etc.), we will feed the final hidden state of the `[CLS]` token into a new classification layer.

@@ -1,0 +1,9 @@
+{
+  "label": "AttentionIsAllYouNeed_general_c3_v3",
+  "original_text": "We will use the Adam optimizer with \u03b21 = 0.9, \u03b22 = 0.98, and \u03f5 = 10^-9.",
+  "modified_text": "We will use the Adagrad optimizer with \u03b21 = 0.9, \u03b22 = 0.98, and \u03f5 = 10^-9.",
+  "explanation": "The mechanism of this error is a conceptual mismatch between the optimizer and the learning rate schedule. The proposed schedule (with its warm-up and inverse square root decay) is specifically designed to complement the Adam optimizer. The modified text substitutes Adam with Adagrad. Adagrad has its own aggressive, built-in learning rate adaptation mechanism where it divides the learning rate by the square root of the sum of all past squared gradients. Combining this aggressive external schedule with Adagrad's own aggressive internal decay would cause the effective learning rate to plummet towards zero almost immediately after the warm-up phase, stalling training. This falsifies the claim because the schedule's effectiveness is not absolute but is contingent on the optimizer it is paired with, and this pairing is fundamentally flawed. (Note: The \u03b21 and \u03b22 parameters are specific to Adam and would be ignored by Adagrad, adding another layer of subtlety to the error).",
+  "category": "D",
+  "category_name": "Others",
+  "reasoning": "The error is a confounded experimental design, where the interaction between the optimizer and the learning rate schedule is not properly controlled, leading to an unintended outcome."
+}

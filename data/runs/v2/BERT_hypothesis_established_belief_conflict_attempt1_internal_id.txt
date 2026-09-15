@@ -1,0 +1,13 @@
+:error_text:
+Language representations jointly conditioned on both left and right context in all layers are more powerful and data-efficient than representations conditioned on unidirectional or shallowly combined bidirectional contexts
+
+:error_text:
+we will pre-train our BERT models on the BooksCorpus (800M words). This corpus, while substantial, is significantly smaller than the multi-billion word datasets often used for large-scale models, providing a strong test of our model's ability to learn rich representations efficiently.
+
+:error_text:
+allowing large-scale models to be effectively trained on moderately-sized corpora.
+
+:explanation:
+The primary error is the unsubstantiated and likely incorrect claim in the hypothesis that the proposed method is "data-efficient." The Masked Language Model (MLM) pre-training task is known to be less sample-efficient than standard language modeling because it only predicts a small fraction (15%) of the tokens in each training instance, thus requiring more data and/or training steps to converge.
+
+This flawed premise leads directly to a critical methodological error in the experiment design: the plan to train a large-scale model (BERT_LARGE) on a "moderately-sized" corpus (BooksCorpus, 800M words) as a "strong test" of this supposed efficiency. This dataset is insufficient for a model of this size and complexity, making severe overfitting highly likely. This flawed setup undermines the entire experiment, as it cannot produce valid conclusions about the model's capabilities. The original BERT model, for instance, required a much larger corpus (3.3B words) to be trained effectively.

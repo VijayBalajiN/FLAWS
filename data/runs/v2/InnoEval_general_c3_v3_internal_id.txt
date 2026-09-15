@@ -1,0 +1,8 @@
+:error_text:
+We will use an extraction agent to convert these papers into a structured idea format, followed by manual verification.
+
+:error_text:
+We will frame this as a classification problem (binary: Accept/Reject; ternary: Reject/Poster/Highlight) and measure performance using Accuracy and macro F1 score.
+
+:explanation:
+The experiment design contains a critical and invalidating flaw of data leakage. The goal is to evaluate a research *idea*, but the dataset is constructed by summarizing completed research *papers*. The ground truth label (e.g., "Accept/Reject") is the final peer-review outcome of that same paper. This means the input "idea" is derived from the same source that determined the output label. The model is therefore not predicting the potential of a nascent idea, but rather classifying a completed work based on its own content, which already includes the mature methodology, results, and conclusions that led to its outcome. This circular task design makes the experiment incapable of validating the proposed method's real-world utility.

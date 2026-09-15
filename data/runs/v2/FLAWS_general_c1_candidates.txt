@@ -1,0 +1,35 @@
+:candidate:
+1
+
+:original_text:
+The criticality of an error in a scientific paper is a function of its connection to the paper's core claims.
+
+:modified_text:
+The criticality of an error in any scientific paper, regardless of discipline, is a function of its connection to the paper's core claims.
+
+:explanation:
+This modification introduces a flaw of unjustified generalization. By adding "in any scientific paper, regardless of discipline," the hypothesis makes a universal claim about scientific work. However, the Experiment Design section specifies that the study will source papers only from a single, narrow field (the ICML machine learning conference). This creates a significant mismatch between the broad scope of the hypothesis and the narrow scope of the evidence to be collected, a common research design flaw that invalidates the study's ability to support its own central claim.
+
+:candidate:
+2
+
+:original_text:
+The criticality of an error in a scientific paper is a function of its connection to the paper's core claims.
+
+:modified_text:
+The criticality of an error in a scientific paper is best measured by its connection to the paper's core claims.
+
+:explanation:
+This modification introduces a subtle logical flaw by conflating a conceptual hypothesis with an operational definition. A hypothesis should propose a falsifiable relationship between constructs. By stating that criticality "is best measured by" its connection to claims, the statement is no longer a testable proposition about the world but a definitional axiom for the study's methodology. This makes the research design circular: it presupposes the very relationship it is meant to be investigating, framing it as a matter of measurement rather than an empirical question.
+
+:candidate:
+3
+
+:original_text:
+The criticality of an error in a scientific paper is a function of its connection to the paper's core claims.
+
+:modified_text:
+The criticality of an error in a scientific paper is directly proportional to its connection to the paper's core claims.
+
+:explanation:
+This modification introduces a flaw of untestability through misleading precision. It changes a general, qualitative relationship ("is a function of") to a specific, quantitative one ("is directly proportional to"). While this appears more rigorous, the research plan provides no method for quantifying the independent variable ("connection to the paper's core claims"). Furthermore, the proposed evaluation metric (Accuracy@k) is a binary classification metric (error found/not found), which is incapable of testing a proportional relationship. The hypothesis is therefore rendered untestable by the experiment designed to validate it.

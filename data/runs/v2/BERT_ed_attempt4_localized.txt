@@ -1,0 +1,2 @@
+error:Language representations jointly conditioned on both left and right context in all layers are more powerful than representations conditioned on unidirectional or shallowly combined bidirectional contexts.
+error:Our central hypothesis is that a deep bidirectional pre-trained model will learn richer and more powerful contextual representations than existing unidirectional or shallowly bidirectional models.

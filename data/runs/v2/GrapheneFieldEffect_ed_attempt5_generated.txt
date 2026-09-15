@@ -1,0 +1,15 @@
+:error_type:
+Wrong metric/measurement
+
+:original_text:
+We plan to fabricate a series of devices using films of varying thicknesses. For each device, we will conduct transport measurements by applying a gate voltage (Vg) to the silicon substrate while measuring the film's conductivity and Hall coefficient.
+
+:modified_text:
+We plan to fabricate a series of devices using films of varying thicknesses. For each device, we will conduct transport measurements by applying a gate voltage (Vg) to the silicon substrate while measuring the film's conductivity.
+
+:explanation:
+The methodological flaw introduced is a 'Wrong metric/measurement'. The modified experiment design proposes measuring only the film's conductivity as a function of gate voltage. While conductivity is affected by the gate, it is insufficient to test the central hypothesis.
+
+The hypothesis claims an "ambipolar" field effect, which requires demonstrating that the dominant charge carriers can be tuned continuously from electrons to holes. Conductivity (σ) is a function of both carrier concentration (n) and carrier mobility (μ), as described by σ = neμ. A change in conductivity alone does not distinguish between a change in concentration (the desired field effect) and a change in mobility.
+
+Crucially, a conductivity measurement cannot determine the sign of the charge carriers (positive for holes, negative for electrons). The original design correctly included measuring the Hall coefficient, which directly probes the carrier concentration and sign, and is the standard method for confirming an ambipolar effect. By removing the Hall coefficient measurement, the experiment can no longer verify the ambipolar nature of the transport, and therefore cannot adequately test its own hypothesis. This is a subtle but critical omission that a non-expert might overlook, as measuring conductivity seems like a logical way to test an electronic device.

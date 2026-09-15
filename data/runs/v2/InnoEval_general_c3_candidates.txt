@@ -1,0 +1,35 @@
+:candidate:
+1
+
+:original_text:
+Using the point-wise dataset as a seed, we will retrieve topically similar papers for each idea, selecting one from each decision category to form a group.
+
+:modified_text:
+Using the point-wise dataset as a seed, we will use its primary keywords to retrieve topically similar papers, selecting one from each decision category to form a group.
+
+:explanation:
+This modification introduces a confounding variable. By using "primary keywords" to find topically similar papers, the process is now biased towards topic popularity and trendiness. Conference decisions are often influenced by how "hot" a topic is. An "Oral" paper might be selected not just for its inherent quality, but because its keywords align perfectly with a current trend, while a "Reject" paper in the same group might tackle a less fashionable sub-problem. This means the resulting ranking is not a pure measure of idea quality, but is confounded with the transient popularity of its niche, undermining the "inherent ground-truth" claim.
+
+:candidate:
+2
+
+:original_text:
+We will use an extraction agent to convert these papers into a structured idea format, followed by manual verification.
+
+:modified_text:
+We will use an extraction agent to convert these papers into a structured idea format—focusing on the introduction and proposed method—followed by manual verification.
+
+:explanation:
+This modification introduces an error based on a misalignment between what the ground truth measures and what the model evaluates. Conference reviewers judge the entire paper, including the soundness of the experiments and the strength of the results. By explicitly extracting only the "introduction and proposed method," the dataset strips out the experimental execution that heavily influenced the original accept/reject decision. A paper with a brilliant idea but fatally flawed experiments (a likely reject) would be represented in the dataset as just a brilliant idea with a "Reject" label. Conversely, a mediocre idea with state-of-the-art, extensive experiments (a plausible oral) would be represented as a mediocre idea with an "Oral" label. This invalidates the claim that the conference decision is a ground-truth ranking for the *idea's* quality.
+
+:candidate:
+3
+
+:original_text:
+We will crawl papers from top-tier conferences (NeurIPS and ICLR) via OpenReview and perform stratified sampling based on their final decisions (Reject, Poster, Spotlight, Oral).
+
+:modified_text:
+To ensure coverage of high-impact work, we will source Oral and Spotlight papers from curated "best-of" lists from recent years, while crawling the full OpenReview archives for Poster and Reject papers to ensure a large sample size.
+
+:explanation:
+This modification introduces a systematic sampling artifact. The methodology sounds reasonable, aiming for quality and quantity, but it creates a temporal bias. "Best-of" lists are by definition from "recent years," while the "full OpenReview archives" for Poster and Reject papers will span a much longer, and on average older, time frame. Scientific fields evolve rapidly, so newer papers naturally address more current problems and build on more advanced prior work. The model might simply learn to distinguish recent papers from older ones, rather than high-quality ideas from low-quality ones. This makes the "ground-truth ranking" a proxy for recency, not the inherent quality of the idea.

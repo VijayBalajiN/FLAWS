@@ -1,0 +1,34 @@
+:error_type:
+Undermining a Premise
+
+:original_text:
+allowing the concentration of their charge carriers—both electrons and holes—to be tuned by an external gate voltage.
+
+:modified_text:
+allowing the density of states at the Fermi level—for both electrons and holes—to be tuned by an external gate voltage.
+
+:error_type:
+Undermining a Premise
+
+:original_text:
+allowing us to tune the concentration of charge carriers (both electrons and holes) by applying an external gate voltage.
+
+:modified_text:
+allowing us to tune the density of states at the Fermi level—for both electrons and holes—by applying an external gate voltage.
+
+:error_type:
+Undermining a Premise
+
+:original_text:
+that we can induce a significant surface charge and thereby modulate the carrier concentration in the film.
+
+:modified_text:
+that we can alter the film's electronic structure and thereby modulate the density of states at the Fermi level in the film.
+
+:explanation:
+The modification conflates two distinct concepts in solid-state physics: (a) charge carrier concentration and (b) the electronic density of states (DOS).
+
+1.  **Charge Carrier Concentration (n)** is the number of mobile electrons or holes in the material. An external gate voltage applies an electric field that directly adds or removes charge carriers, thus changing their concentration. This is the correct physical mechanism of the field effect.
+2.  **Density of States (DOS)** is an intrinsic property of a material that describes how many electronic states are available at each energy level. The DOS is determined by the material's crystal structure and is not changed by a simple static gate voltage (to a first approximation).
+
+The modified hypothesis incorrectly claims that the gate voltage tunes the density of states itself. In reality, the gate voltage shifts the *Fermi level* (the energy threshold between occupied and unoccupied states) up or down relative to the material's *fixed* DOS. This change in the filling of the available states is what modulates the charge carrier concentration. The hypothesis's flawed premise is that the gate manipulates the fundamental availability of states rather than just their occupation. This undermines the theoretical basis of the proposal by misidentifying the physical quantity being controlled, even though the high-level logic (apply voltage -> get effect) appears sound.

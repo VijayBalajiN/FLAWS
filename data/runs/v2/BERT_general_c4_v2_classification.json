@@ -1,0 +1,9 @@
+{
+  "label": "BERT_general_c4_v2",
+  "original_text": "We will extract fixed contextual embeddings from various layers of the pre-trained model and feed them into a BiLSTM classifier, comparing its performance to the standard fine-tuning approach.",
+  "modified_text": "We will extract the final hidden state corresponding to the [CLS] token from the pre-trained model for each sequence and feed this single vector representation into a BiLSTM classifier, comparing its performance to the standard fine-tuning approach.",
+  "explanation": "This error is a fundamental misapplication of the model's components for the given task. The experiment evaluates on CoNLL-2003 Named Entity Recognition (NER), which is a token-level classification task. The `[CLS]` token is specifically designed to aggregate information for sentence-level tasks. Using only the `[CLS]` embedding for a token-level task means that the BiLSTM would receive the exact same input for every token in a sentence, making it impossible to produce different labels for different words. This design guarantees the failure of the feature-based approach, invalidating any conclusion about its inferiority to fine-tuning.",
+  "category": "C",
+  "category_name": "Undermining a Premise",
+  "reasoning": "The error is a fundamental misapplication of a model component, where the `[CLS]` token's intended purpose (sentence-level aggregation) is conflated with the need for token-level representations for NER, causing the operationalization to diverge from the task's requirements."
+}

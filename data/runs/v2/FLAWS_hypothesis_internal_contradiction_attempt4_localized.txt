@@ -1,0 +1,2 @@
+error: For each claim, we will instruct an LLM to modify one or more segments of the paper's text to introduce a sophisticated, domain-appropriate conceptual error that undermines that specific claim.
+error: We will apply our full pipeline of claim extraction, error generation, and multi-step filtering.

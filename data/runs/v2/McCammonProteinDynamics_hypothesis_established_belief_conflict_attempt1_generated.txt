@@ -1,0 +1,13 @@
+:error_type:
+Conflict with Established Beliefs
+
+:original_text:
+The interior of a folded globular protein is a fluid-like environment where local atomic motions exhibit a diffusional character.
+
+:modified_text:
+The interior of a folded globular protein is a fluid-like environment where local atomic motions exhibit true, unbounded diffusion, similar to that observed in simple liquids.
+
+:explanation:
+(a) The established belief being conflicted with is the principle of confined motion within a stable, folded macromolecule. In a simple liquid (like argon), atoms undergo true, unbounded diffusion, meaning their mean-squared displacement grows linearly with time indefinitely. However, in a folded protein, atoms are part of a covalently bonded structure. While they exhibit significant local motion, they are tethered to their average positions. Their motion is therefore confined; they can only move within a limited volume before the restoring forces of the covalent bonds pull them back. This means their mean-squared displacement will increase initially but must plateau over longer timescales.
+
+(b) The modified hypothesis is internally consistent; it posits a clear, falsifiable physical model. However, by claiming "true, unbounded diffusion," it makes a specific assertion that is fundamentally incompatible with the known physics of a folded polymer. An expert would immediately recognize that for diffusion to be unbounded, the protein would have to be unfolding, which contradicts the premise of studying the dynamics of the folded state. The modification changes a reasonable analogy ("diffusional character") into a physically incorrect statement ("true, unbounded diffusion").

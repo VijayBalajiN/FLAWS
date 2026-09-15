@@ -1,0 +1,10 @@
+:error_text:
+evaluate models on a held-out split of very recent papers (ICLR 2026) using models with documented training data cutoffs prior to the papers' publication.
+
+:error_text:
+performing a simple find-and-replace on specific method names and identifiers to test whether models rely on recognition rather than reasoning.
+
+:explanation:
+The most serious error is the plan to use papers from "ICLR 2026" for the contamination control experiment. This is impossible, as the conference has not yet occurred and the papers do not exist, making this crucial control experiment invalid as designed.
+
+The second error describes a naive methodology for the memorization control. A "simple find-and-replace" on technical terms is likely to damage the semantic coherence of the research proposal. This introduces a confounding variable: a model's failure on this task could be due to the text becoming nonsensical, rather than a genuine inability to reason without relying on memorized identifiers. This undermines the validity of the control's conclusion.

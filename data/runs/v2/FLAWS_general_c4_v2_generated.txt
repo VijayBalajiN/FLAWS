@@ -1,0 +1,8 @@
+:original_text:
+We will prompt an LLM to act as a judge, deciding whether a model's identified excerpt corresponds to the ground-truth error.
+
+:modified_text:
+We will prompt an LLM to act as a judge, deciding whether a model's identified excerpt corresponds to the ground-truth error. To ensure consistency, the judge will be the same model that was used in the generation of that particular ground-truth error.
+
+:explanation:
+This flaw introduces a critical methodological confound by creating a "self-evaluation" scenario. Using the same LLM to both generate the ground-truth error and judge other models' performance against it introduces a powerful bias. The LLM judge will likely favor outputs that share its own idiosyncratic patterns, vocabulary, or reasoning style, even if they are not the most accurate from a human perspective. This will artificially inflate the scores of models that are similar to the judge. Human experts would not share this intrinsic bias, leading to a significant divergence between the automated metric's results and the human consensus, thus falsifying the claim.

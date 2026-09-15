@@ -1,0 +1,9 @@
+{
+  "label": "FLAWS_general_c1_v1",
+  "original_text": "The criticality of an error in a scientific paper is a function of its connection to the paper's core claims.",
+  "modified_text": "The criticality of an error in any scientific paper, regardless of discipline, is a function of its connection to the paper's core claims.",
+  "explanation": "This modification introduces a flaw of unjustified generalization. By adding \"in any scientific paper, regardless of discipline,\" the hypothesis makes a universal claim about scientific work. However, the Experiment Design section specifies that the study will source papers only from a single, narrow field (the ICML machine learning conference). This creates a significant mismatch between the broad scope of the hypothesis and the narrow scope of the evidence to be collected, a common research design flaw that invalidates the study's ability to support its own central claim.",
+  "category": "D",
+  "category_name": "Others",
+  "reasoning": "The error is a mismatch between the broad scope of the hypothesis and the narrow scope of the evidence, which is a confounded experimental design and thus falls into the \"Others\" category."
+}

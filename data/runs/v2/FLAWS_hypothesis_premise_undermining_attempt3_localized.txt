@@ -1,0 +1,3 @@
+error:While Large Language Models (LLMs) show promise in assisting with review tasks, their core ability to identify and localize substantive errors that invalidate a paper's claims remains largely unevaluated.
+error:Our primary research question is: How effectively can state-of-the-art LLMs identify and localize claim-invalidating errors in scientific papers when explicitly prompted to do so?
+error:Our approach will center on systematically inserting controlled, claim-invalidating errors into high-quality scientific papers.

@@ -1,0 +1,13 @@
+:error_type:
+Confounded design
+
+:original_text:
+To confirm the contribution of each component, we will conduct several ablation studies, including removing the knowledge grounding module, replacing the innovation review board with a single LLM-as-a-Judge, and restricting the knowledge search to only academic literature.
+
+:modified_text:
+To confirm the contribution of each component, we will conduct several ablation studies, including removing the knowledge grounding module and reverting to a purely semantic similarity-based search retriever, replacing the innovation review board with a single LLM-as-a-Judge, and restricting the knowledge search to only academic literature.
+
+:explanation:
+The methodological flaw introduced is a confounded design in the ablation study. The study aims to isolate and confirm the contribution of the "knowledge grounding module" (Stage 2 of the Method). However, the modified plan proposes to *simultaneously* remove this module AND revert the search retriever (part of Stage 1) from the proposed "hybrid scoring function" to a simpler "purely semantic similarity-based" one.
+
+This confounds the experiment because two distinct variables are being changed at once. If the model's performance drops, it is impossible to determine whether the degradation is due to the absence of the knowledge grounding step or the lower quality of the search results from the simplified retriever. The design fails to rule out an alternative explanation (i.e., that the change in the search retriever caused the effect), making it impossible to draw a valid conclusion about the specific contribution of the knowledge grounding module.

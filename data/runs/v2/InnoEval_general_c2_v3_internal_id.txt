@@ -1,0 +1,16 @@
+:error_text:
+perform stratified sampling based on their final decisions (Reject, Poster, Spotlight, Oral).
+
+:error_text:
+convert the abstract and introduction sections of these papers into a structured idea format, followed by manual verification.
+
+:error_text:
+This process will yield groups of ideas with an inherent ground-truth ranking, from which we can also derive pair-wise comparison tasks.
+
+:error_text:
+We will frame this as a classification problem (binary: Accept/Reject; ternary: Reject/Poster/Highlight) and measure performance using Accuracy and macro F1 score.
+
+:explanation:
+The experiment design contains a critical validity flaw: it conflates the quality of a research *idea* with the peer-review outcome of a fully executed research *paper*. The ground truth is derived from the final decisions on complete papers (which depend on methodology, experiments, results, and writing), but the input to the evaluation system is only the idea extracted from the abstract and introduction.
+
+A brilliant idea (the input) might be rejected due to flawed experiments, while a less novel idea might be accepted due to excellent execution. Therefore, using the final paper decision as a label for the initial idea creates a fundamental mismatch, rendering the classification and ranking tasks invalid tests of the system's ability to evaluate ideas.

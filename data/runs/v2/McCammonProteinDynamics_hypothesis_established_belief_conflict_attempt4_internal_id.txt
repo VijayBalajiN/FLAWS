@@ -1,0 +1,10 @@
+:error_text:
+with mean-squared displacement increasing linearly with time across all femtosecond-to-picosecond timescales.
+
+:error_text:
+local atomic motions exhibit a simple diffusional character
+
+:explanation:
+The hypothesis makes a physically incorrect claim about the time dependence of atomic motion. On very short (femtosecond) timescales, atomic motion is not diffusive but ballistic, where atoms move in straight lines between collisions, resulting in a mean-squared displacement (MSD) that increases with the square of time (t²), not linearly with time (t).
+
+Furthermore, on the picosecond timescale, atoms in a densely packed protein interior are "caged" by their neighbors, leading to constrained, oscillatory, or sub-diffusive behavior, not the "simple diffusional character" of a particle in a simple fluid. This part of the hypothesis oversimplifies the complex, correlated, and constrained nature of the protein environment.

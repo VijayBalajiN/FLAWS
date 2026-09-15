@@ -56,10 +56,10 @@ python3 src/utils/research_plan_extraction.py data/paper_content/X.txt data/rese
 python3 -m src.utils.build_research_plan_json X data/research_plans/X.txt data/research_plans_structured/X.json
 
 # 2. error insertion — defaults to all papers, all 5 tracks
-python3 -m src.pipeline.plan_error_insertion --out-dir data/altered_plans_v2
+python3 -m src.pipeline.plan_error_insertion --out-dir data/runs/v2
 
 # 3. classification (general track only)
-python3 -m src.utils.classify_general_errors data/altered_plans_v2
+python3 -m src.utils.classify_general_errors data/runs/v2
 ```
 
 Needs GROBID on `localhost:8070` for step 1 and `GOOGLE_API_KEY` in `.env` for

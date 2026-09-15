@@ -1,0 +1,8 @@
+:original_text:
+By systematically sweeping the gate voltage, we will investigate our central hypothesis: that we can induce a significant surface charge and thereby modulate the carrier concentration in the film.
+
+:modified_text:
+By systematically sweeping the gate voltage across a wide range (-100 V to +100 V), we will investigate our central hypothesis: that we can induce a significant surface charge and thereby modulate the carrier concentration in the film.
+
+:explanation:
+The mechanism of this flaw is **dielectric breakdown**. The modification specifies a gate voltage sweep up to +/- 100 V. A standard silicon oxide gate dielectric, especially one of a thickness suitable for observing a strong field effect in graphene (e.g., 285-300 nm), has a breakdown field of around 10 MV/cm. This corresponds to a breakdown voltage of roughly 300 V for a 300 nm oxide layer, but this is an ideal maximum; defects can lower it significantly, and thinner oxides used for stronger gating would break down at much lower voltages. Pushing the voltage to 100 V is aggressive and risks catastrophic failure of the dielectric. Once the dielectric breaks down, a large leakage current flows through the gate, preventing the buildup of a static surface charge. This directly falsifies the claim that applying the voltage is *sufficient* to induce the necessary charge, as the device itself would fail before the full, stable effect could be measured.

@@ -1,0 +1,8 @@
+:original_text:
+exhibit a strong, ambipolar electric field effect, allowing the concentration of their charge carriers—both electrons and holes—to be tuned by an external gate voltage.
+
+:modified_text:
+exhibit a strong, ambipolar electric field effect, allowing the concentration of their charge carriers—both electrons and holes—to be tuned by a positive external gate voltage.
+
+:explanation:
+The mechanism of this error is the introduction of a methodological constraint into the hypothesis that makes it unlikely to be true under typical conditions. Graphene exfoliated onto silicon oxide is almost always p-doped due to environmental and substrate effects, meaning its charge neutrality point is at a significant positive gate voltage. To observe the full ambipolar effect, one must sweep the voltage across this point to access both hole (at less positive Vg) and electron (at more positive Vg) regimes. By hypothesizing that both carrier types can be accessed with *only* a positive voltage, the claim presupposes a very specific and unlikely doping level. This constraint makes the hypothesis brittle and likely false, as a negative gate voltage would almost certainly be required to fully explore the hole-conduction side of the transport curve.

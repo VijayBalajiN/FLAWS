@@ -1,0 +1,9 @@
+{
+  "label": "GrapheneFieldEffect_general_c1_v1",
+  "original_text": "Stable, atomically thin graphitic films are two-dimensional semimetals that exhibit a strong, ambipolar electric field effect, allowing the concentration of their charge carriers\u2014both electrons and holes\u2014to be tuned by an external gate voltage.",
+  "modified_text": "Stable, atomically thin polycrystalline graphitic films are two-dimensional semimetals that exhibit a strong, ambipolar electric field effect, allowing the concentration of their charge carriers\u2014both electrons and holes\u2014to be tuned by an external gate voltage.",
+  "explanation": "The mechanism of this error is the introduction of a flawed material premise. By specifying \"polycrystalline,\" the text now describes a film composed of many small crystal domains. While each individual domain is a semimetal, the macroscopic electronic transport properties of the film will be dominated by scattering at the grain boundaries between these domains. This scattering disrupts coherent charge transport, meaning the film as a whole will not exhibit the clean, fundamental electronic properties of an ideal two-dimensional semimetal. The claim is undermined because the specific material described is known to not behave as a pristine semimetal on a device-relevant scale.",
+  "category": "C",
+  "category_name": "Undermining a Premise",
+  "reasoning": "The error relies on a contested term (\"semimetal\") whose operationalization (macroscopic electronic transport) diverges from its intended meaning (pristine semimetal behavior), fitting the C category's operational audit."
+}

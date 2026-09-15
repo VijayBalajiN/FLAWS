@@ -1,0 +1,27 @@
+[
+  {
+    "claim": "The assessment of research proposals by Large Language Models is fundamentally unreliable due to a consistent bias towards optimism.",
+    "source_field": "hypothesis",
+    "source_excerpt": "exhibiting a bias towards optimism"
+  },
+  {
+    "claim": "The framing of a prompt used to ask an LLM for a soundness judgment significantly impacts the resulting assessment.",
+    "source_field": "hypothesis",
+    "source_excerpt": "high sensitivity to prompt framing"
+  },
+  {
+    "claim": "The experimental manipulation of using an \"Aggressive Prompt\" will successfully induce a skeptical evaluation mode in the LLM, causing it to default to negative ratings.",
+    "source_field": "experiment_design",
+    "source_excerpt": "This prompt will instruct the model to act as a strict critic, defaulting to a \"low soundness\" rating unless the proposal demonstrates exceptionally clear and rigorous methodology."
+  },
+  {
+    "claim": "Masking specific names and identifiers in a research proposal is a sufficient control to determine if an LLM is using reasoning about the methodology versus simple recognition of a known paper or method.",
+    "source_field": "experiment_design",
+    "source_excerpt": "We will create an anonymized version of the benchmark by masking specific method names and identifiers to test whether models rely on recognition rather than reasoning."
+  },
+  {
+    "claim": "An LLM's ability to identify artificially injected, severe flaws is a valid proxy for its ability to detect the more subtle, naturally occurring flaws in genuine research proposals.",
+    "source_field": "experiment_design",
+    "source_excerpt": "We will intentionally introduce severe methodological flaws (e.g., mismatched datasets and metrics) into high-soundness proposals to test if models can detect these obvious errors."
+  }
+]

@@ -1,0 +1,35 @@
+:candidate:
+1
+
+:original_text:
+We will train and evaluate two ablated models: one using only the Masked LM task (without Next Sentence Prediction) and another using a traditional Left-to-Right (LTR) LM objective instead of MLM.
+
+:modified_text:
+We will train and evaluate two ablated models: one using only the Masked LM task (without Next Sentence Prediction) on single, non-paired sentences, and another using a traditional Left-to-Right (LTR) LM objective instead of MLM.
+
+:explanation:
+The flaw's mechanism is a **confounding variable in the training data format**. The full model is pre-trained on sentence pairs to facilitate the NSP task. By specifying that the ablated "MLM-only" model will be trained on single sentences, the comparison is no longer solely about the presence of the NSP objective. Any performance difference could be attributed to the removal of NSP, or to the different data structure (e.g., different sequence length distributions, the model never learning to process a `[SEP]` token between related sentences). This prevents the experiment from cleanly isolating the specific contribution of the NSP task.
+
+:candidate:
+2
+
+:original_text:
+We will train and evaluate two ablated models: one using only the Masked LM task (without Next Sentence Prediction) and another using a traditional Left-to-Right (LTR) LM objective instead of MLM.
+
+:modified_text:
+We will train and evaluate two ablated models: one using only the Masked LM task (without Next Sentence Prediction, and with Segment Embeddings removed as they are no longer required), and another using a traditional Left-to-Right (LTR) LM objective instead of MLM.
+
+:explanation:
+The flaw's mechanism is a **confounding variable in the model architecture**. The ablation is intended to measure the impact of the NSP *task*, but this modification also removes the Segment Embeddings from the model's input representation. The comparison is now between a model with (MLM + NSP + Segment Embeddings) and a model with just (MLM). A performance difference cannot be attributed solely to the NSP objective, as it could also be due to the removal of the segment embeddings, which might provide a useful inductive bias on their own. This makes it impossible to isolate NSP's specific contribution.
+
+:candidate:
+3
+
+:original_text:
+This will allow us to isolate the contributions of deep bidirectionality and the NSP task.
+
+:modified_text:
+To ensure a fair comparison, all training hyperparameters (e.g., learning rate, batch size) will be held constant across the main and ablated models. This will allow us to isolate the contributions of deep bidirectionality and the NSP task.
+
+:explanation:
+The flaw's mechanism is an **invalid experimental methodology due to mismatched optimization dynamics**. Removing the NSP task also removes its associated loss component from the total loss function. This fundamentally changes the optimization landscape. Insisting on fixed hyperparameters (like learning rate) across the full and ablated models is not a truly "fair" comparison, as the optimal hyperparameters for each configuration are likely different. A performance drop in the ablated model could be due to a suboptimal training configuration (e.g., an inappropriate learning rate for the new loss scale) rather than the conceptual absence of the NSP task, thus failing to validly isolate NSP's contribution.

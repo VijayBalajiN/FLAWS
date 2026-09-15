@@ -1,0 +1,13 @@
+:error_type:
+Internal Contradiction
+
+:original_text:
+Stable, atomically thin graphitic films are two-dimensional semimetals that exhibit a strong, ambipolar electric field effect, allowing the concentration of their charge carriers—both electrons and holes—to be tuned by an external gate voltage.
+
+:modified_text:
+Stable, atomically thin graphitic films are two-dimensional semimetals that exhibit a strong, ambipolar electric field effect, wherein the gate-induced charge density is neutralized by an opposing polarization of the material's intrinsic carriers, allowing the concentration of their charge carriers—both electrons and holes—to be tuned by an external gate voltage.
+
+:explanation:
+The modification introduces a specific mechanism for the electric field effect: "wherein the gate-induced charge density is neutralized by an opposing polarization of the material's intrinsic carriers". This proposed mechanism, if followed to its logical conclusion, directly contradicts the hypothesis's stated goal.
+
+If the charge induced by the external gate is perfectly "neutralized" by the material's own carriers, it means the net effect on mobile charge carrier concentration is zero. The material effectively screens out the external field completely, preventing any change in the number of available electrons or holes for conduction. This directly violates the hypothesis's conclusion that this same mechanism allows the carrier concentration "to be tuned by an external gate voltage". The mechanism as stated makes the desired outcome impossible.

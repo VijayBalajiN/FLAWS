@@ -1,0 +1,11 @@
+:error_type:
+Wrong metric/measurement
+
+:original_text:
+For each device, we will conduct transport measurements by applying a gate voltage (Vg) to the silicon substrate while measuring the film's conductivity and Hall coefficient.
+
+:modified_text:
+For each device, we will conduct transport measurements by applying a gate voltage (Vg) to the silicon substrate while measuring the film's conductivity.
+
+:explanation:
+The methodological flaw is the removal of the plan to measure the Hall coefficient. The central hypothesis is that the material exhibits an "ambipolar" field effect, meaning the charge carriers can be tuned continuously from electrons to holes. While conductivity measurements can confirm that the gate voltage modulates the material's electrical properties, conductivity alone is insufficient to prove ambipolar behavior. Conductivity is proportional to the product of carrier density and mobility, and its measurement cannot distinguish between a change in density versus a change in mobility. Crucially, conductivity is always a positive value and gives no information about the sign of the charge carriers (i.e., whether they are negative electrons or positive holes). The Hall coefficient measurement is essential because its sign directly indicates the dominant carrier type. Without it, the experiment lacks the necessary metric to confirm a transition from electron- to hole-dominated transport, making it impossible to validate the core claim of ambipolarity.

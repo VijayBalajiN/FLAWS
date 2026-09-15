@@ -1,0 +1,8 @@
+:original_text:
+We will also calculate the root mean square (r.m.s.) fluctuations of atomic positions relative to this average structure to quantify the magnitude of motion throughout the protein.
+
+:modified_text:
+We will also calculate the root mean square (r.m.s.) fluctuations of atomic positions relative to this average structure, which will directly characterize the diffusional nature of the atomic motions.
+
+:explanation:
+This modification introduces a conceptual misinterpretation. It incorrectly claims that RMSF, a measure of the average magnitude of atomic displacement, can "directly characterize the diffusional nature" of motion. RMSF is a static, time-averaged value that cannot distinguish between different types of dynamics, such as harmonic vibrations versus diffusional jumps. Characterizing diffusional motion requires analyzing the time-dependence of the motion (e.g., via mean-squared displacement vs. time), so by misattributing this capability to RMSF, the plan renders the measure insufficient for testing the central hypothesis.

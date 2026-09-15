@@ -1,0 +1,1 @@
+error: Aggressive Prompt: This prompt will instruct the model to act as a strict critic, defaulting to a "low soundness" rating unless the proposal demonstrates exceptionally clear and rigorous methodology.

@@ -1,0 +1,15 @@
+:error_type:
+Wrong metric/measurement
+
+:original_text:
+For each device, we will conduct transport measurements by applying a gate voltage (Vg) to the silicon substrate while measuring the film's conductivity and Hall coefficient.
+
+:modified_text:
+For each device, we will conduct transport measurements by applying a gate voltage (Vg) to the silicon substrate while measuring the film's conductivity.
+
+:explanation:
+The methodological flaw introduced is that the experiment now proposes to measure only the film's conductivity to test a hypothesis about modulating charge carrier concentration.
+
+Conductivity ($\sigma$) is a composite property, defined as $\sigma = n e \mu$, where $n$ is the carrier concentration and $\mu$ is the carrier mobility. A change in conductivity after applying a gate voltage could be due to a change in carrier concentration (the hypothesized effect), a change in carrier mobility (a common side effect of gating), or both.
+
+By removing the Hall coefficient measurement, the design eliminates the tool needed to independently determine the carrier concentration ($n$) and the sign of the charge carriers. Without this, the researchers cannot disentangle the effects of concentration and mobility on conductivity. Consequently, the experiment can no longer validly test the central hypothesis about modulating carrier concentration, nor can it achieve its stated objectives of determining carrier mobility or testing for an ambipolar field effect (which requires identifying a switch from electron to hole carriers). The chosen measurement (conductivity) is insufficient and therefore the wrong metric to isolate and verify the specific physical mechanism proposed in the hypothesis.

@@ -1,0 +1,11 @@
+:error_type:
+Confounded design
+
+:original_text:
+3.  **Production Run:** Following equilibration, we will conduct the main dynamical simulation by integrating the equations of motion using the Gear algorithm for a duration of several picoseconds.
+
+:modified_text:
+3.  **Production Run:** Following equilibration, we will conduct the main dynamical simulation by integrating the equations of motion using the Gear algorithm for a duration of several picoseconds. This approach ensures that the total energy of the system is conserved, allowing for a pure, unperturbed observation of the protein's intrinsic dynamics.
+
+:explanation:
+The introduced flaw is a confounded design. The modification explicitly states that the simulation will be run in a way that conserves total energy, which describes a microcanonical (NVE) ensemble. However, the research goal is to study the protein's dynamics at a specific, constant "room temperature," which requires sampling from the canonical (NVT) ensemble. An NVT simulation uses a thermostat to maintain constant temperature by allowing energy to exchange with a virtual heat bath, meaning total energy is purposefully not conserved. By running in the NVE ensemble, the temperature is not guaranteed to remain at the target value throughout the production run; it can drift due to numerical integration errors or if the system was not perfectly equilibrated. This potential temperature drift is a confounding variable, making it impossible to attribute the observed dynamics definitively to the intended "room temperature" conditions. The added justification ("pure, unperturbed observation") sounds scientifically reasonable to a non-expert but masks a fundamental misunderstanding of how to correctly simulate a system under constant temperature conditions.

@@ -1,0 +1,9 @@
+{
+  "label": "SoundnessBench_general_c4_v2",
+  "original_text": "We will create an anonymized version of the benchmark by masking specific method names and identifiers to test whether models rely on recognition rather than reasoning.",
+  "modified_text": "We will create an anonymized version of the benchmark by performing a simple find-and-replace on specific method names and identifiers to test whether models rely on recognition rather than reasoning.",
+  "explanation": "The mechanism of this error is **structural and stylistic fingerprinting**. By specifying a \"simple find-and-replace,\" the text implies that the underlying sentence structure, unique phrasing, and overall document organization will be perfectly preserved from the original paper. For an LLM trained on the source corpus, this verbatim structure acts as a powerful, non-obvious identifier. The model could recognize the paper's unique \"fingerprint\" even without the specific names, making the control ineffective. The flaw assumes that identifiers are purely lexical, ignoring that the text's structure itself can be a recognizable feature.",
+  "category": "C",
+  "category_name": "Undermining a Premise",
+  "reasoning": "The error relies on a contested term (\"anonymized\") whose operationalization (\"simple find-and-replace\") diverges from its intended meaning (preventing recognition), fitting the C category's operational audit."
+}

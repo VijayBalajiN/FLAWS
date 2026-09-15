@@ -1,0 +1,12 @@
+:error_text:
+We will extract fixed contextual embeddings from the final layer of the pre-trained model.
+
+:error_text:
+To handle sub-word tokenization, we will average the embeddings for all WordPieces within a single original word and feed this single averaged vector per word into a BiLSTM classifier
+
+:explanation:
+The experiment design contains two significant methodological flaws within the same ablation study, both of which serve to weaken the feature-based baseline and could lead to an inflated assessment of the fine-tuning approach's superiority.
+
+1.  (Most serious) The plan proposes extracting features from only the final layer of the pre-trained model. This is a known sub-optimal strategy. Research, including the original BERT paper this plan is based on, has shown that different layers capture different linguistic information and that combining or concatenating embeddings from multiple layers (e.g., the last four) yields significantly better performance for feature-based approaches. Using only the final layer creates an artificially weak baseline for comparison.
+
+2.  The proposed method for handling sub-word tokens—averaging the embeddings of all pieces—is a questionable choice. A more standard and often more effective heuristic is to use the embedding of the first sub-word token to represent the entire word. Averaging can dilute the contextual signal captured by the most representative part of the word, further weakening the feature-based baseline.

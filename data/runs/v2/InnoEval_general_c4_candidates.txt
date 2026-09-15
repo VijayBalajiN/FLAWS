@@ -1,0 +1,35 @@
+:candidate:
+1
+
+:original_text:
+We will frame this as a classification problem (binary: Accept/Reject; ternary: Reject/Poster/Highlight) and measure performance using Accuracy and macro F1 score.
+
+:modified_text:
+We will frame this as a classification problem (binary: Accept/Reject; ternary: Reject/Poster/Highlight) and measure performance using Accuracy and weighted F1 score.
+
+:explanation:
+This modification introduces a subtle but critical error by replacing "macro F1" with "weighted F1". The underlying mechanism of this error is a misunderstanding of how to handle class imbalance. In a real-world dataset of conference papers, 'Reject' will be the vast majority class. A weighted F1 score is averaged based on the support of each class, meaning the performance on the massive 'Reject' class will dominate the final score. This masks poor performance on the rare but scientifically crucial minority classes ('Poster', 'Highlight'), making the metric insufficient and inappropriate for fairly judging the system's ability to find good ideas.
+
+:candidate:
+2
+
+:original_text:
+We will frame this as a classification problem (binary: Accept/Reject; ternary: Reject/Poster/Highlight) and measure performance using Accuracy and macro F1 score.
+
+:modified_text:
+We will frame this as a classification problem (binary: Accept/Reject; ternary: Reject/Poster/Highlight) and measure performance using Accuracy and macro F1 score. Since the decision categories represent distinct, non-overlapping outcomes, these metrics provide a direct measure of classification correctness.
+
+:explanation:
+This modification introduces a flawed justification that reveals a conceptual error in problem framing. The mechanism of error is treating ordinal data as if it were nominal. The ground-truth labels ('Reject', 'Poster', 'Highlight') have a natural order of quality. The added sentence incorrectly justifies using nominal classification metrics by focusing on the categories being "distinct". This is inappropriate because Accuracy and F1 treat all misclassifications as equally severe; they cannot distinguish between a minor error (e.g., predicting 'Poster' for a 'Highlight') and a major one (e.g., predicting 'Reject' for a 'Highlight'). This failure to use an ordinal-aware metric falsifies the claim.
+
+:candidate:
+3
+
+:original_text:
+We will frame this as a classification problem (binary: Accept/Reject; ternary: Reject/Poster/Highlight) and measure performance using Accuracy and macro F1 score.
+
+:modified_text:
+We will frame this as a classification problem (binary: Accept/Reject; ternary: Reject/Poster/Highlight) and measure performance using the Matthews Correlation Coefficient (MCC) to ensure a balanced evaluation.
+
+:explanation:
+This modification introduces an error by selecting a metric that is inappropriate for the decision-making context. The mechanism of this error is ignoring asymmetric error costs. While the Matthews Correlation Coefficient (MCC) is a good metric for imbalanced classification, it treats false positives and false negatives as equally important. In the context of evaluating research ideas, the cost of a false negative (rejecting a groundbreaking idea) is far greater than the cost of a false positive (accepting a mediocre one). A system optimized for MCC would be blind to this crucial trade-off, making the metric insufficient for a task where the goal is specifically to avoid missing high-potential ideas.

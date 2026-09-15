@@ -1,0 +1,15 @@
+:error_text:
+with masking to prevent leftward information flow.
+
+:error_text:
+We will employ three types of regularization during training:
+
+:error_text:
+vary the number of attention heads (h) and the attention key and value dimensions (d_k, d_v).
+
+:explanation:
+The most serious error is the description of the decoder's self-attention masking. The plan states the masking is designed to "prevent leftward information flow." For an auto-regressive model that generates a sequence from left to right, this is the opposite of what is required. The masking must prevent information flow from future (rightward) positions, while allowing each position to attend to all previous (leftward) positions. Implementing the mask as described would make it impossible for the model to use its own previous outputs as context, fundamentally breaking its ability to generate sequences.
+
+The second error is a direct contradiction in the description of the regularization methods. The plan claims that "three types of regularization" will be used, but then proceeds to list only two (Residual Dropout and Label Smoothing). This makes the experimental methodology ambiguous and incompletely specified, undermining the plan's clarity and reproducibility.
+
+The third error is in the design of the ablation studies. The plan proposes to "vary the number of attention heads (h) and the attention key and value dimensions (d_k, d_v)." However, according to the model's architecture (`d_k = d_v = d_model / h`), these parameters are not independent. For a fixed model size (`d_model`), changing the number of heads (`h`) directly determines the key/value dimensions (`d_k`, `d_v`). This proposed experiment is ill-defined and reflects a misunderstanding of the model's own architectural constraints.

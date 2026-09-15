@@ -1,0 +1,8 @@
+:original_text:
+We will source our papers from the accepted list of the 2025 International Conference on Machine Learning (ICML), ensuring they were first posted on arXiv after the knowledge cutoff dates of the models we plan to test.
+
+:modified_text:
+We will source our papers from the accepted list of the 2025 International Conference on Machine Learning (ICML). To prevent data contamination, our sole inclusion criterion will be that the papers were first posted on arXiv after the knowledge cutoff dates of the models we plan to test.
+
+:explanation:
+The mechanism of this error is conflating direct textual contamination with indirect conceptual contamination. By stating that the arXiv date is the "sole inclusion criterion," the method explicitly ignores the paper's intellectual lineage. A paper from 2025 could be a direct, incremental follow-up to a highly influential 2024 paper that the model has memorized. The model might "know" the methodology, dataset, and likely conclusions of the 2025 paper without ever having seen its literal text. This indirect contamination undermines the benchmark's validity, as the model isn't reasoning from scratch. The claim of reliable contamination prevention is false because it only considers the most simplistic form of contamination.

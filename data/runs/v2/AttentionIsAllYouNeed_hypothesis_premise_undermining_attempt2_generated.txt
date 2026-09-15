@@ -1,0 +1,17 @@
+:error_type:
+Undermining a Premise
+
+:original_text:
+An architecture relying solely on attention mechanisms, without recurrence or convolutions, is sufficient to model global dependencies between input and output sequences.
+
+:modified_text:
+An architecture relying solely on attention mechanisms, without recurrence or convolutions, is sufficient to model the relationships between input and output sequences by reducing the maximum computational path length between any two positions to a constant, O(1).
+
+:explanation:
+The modified hypothesis conflates an architectural property with a learned modeling capability.
+
+1.  **Computational Path Length:** This is a structural property of the network. In a Transformer, the self-attention mechanism allows any two positions in a sequence to interact directly in a single computational step, giving it a path length of O(1). This is a key advantage over RNNs, where the path length is O(n), making it harder to propagate signals over long distances.
+
+2.  **Modeling Global Dependencies:** This is a functional, learned capability. It refers to the model's ability to correctly capture syntactic or semantic relationships (e.g., subject-verb agreement, anaphora resolution) between distant tokens.
+
+The error lies in treating the architectural property (constant path length) as being *sufficient for* or *equivalent to* the learned capability (modeling dependencies). While a constant path length is a powerful enabler that makes it *possible* to learn these dependencies, it does not guarantee it. The model must still learn the correct attention weights through training to actually represent these complex linguistic relationships. The modified hypothesis incorrectly presents the means (the architectural design) as the end itself (the modeling goal), smuggling in the flawed premise that enabling a connection is the same as successfully learning to use that connection meaningfully.

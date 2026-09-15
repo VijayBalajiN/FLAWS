@@ -1,0 +1,11 @@
+:error_type:
+Confounded design
+
+:original_text:
+*   **Group-wise and Pair-wise Datasets:** Using the point-wise dataset as a seed, we will retrieve topically similar papers for each idea, selecting one from each decision category to form a group. This process will yield groups of ideas with an inherent ground-truth ranking, from which we can also derive pair-wise comparison tasks.
+
+:modified_text:
+*   **Group-wise and Pair-wise Datasets:** Using the point-wise dataset as a seed, we will retrieve topically similar papers for each idea. To ensure a clear quality gradient and access to the most recent state-of-the-art, we will select the accepted papers (Poster, Spotlight, Oral) from the most recent conference year available, and the rejected papers from two years prior. This process will yield groups of ideas with an inherent ground-truth ranking, from which we can also derive pair-wise comparison tasks.
+
+:explanation:
+The introduced flaw is a confounded design that systematically biases the dataset. By selecting accepted papers from the most recent year and rejected papers from two years prior, the experiment introduces a temporal confound. In a fast-moving research field like AI, the "state-of-the-art" changes significantly in two years. Consequently, the model is not being tested on its ability to discern the intrinsic quality of an idea, but can instead learn a simple, powerful heuristic: "newer ideas are better." The ground-truth ranking is no longer based purely on quality but is confounded by the paper's age. This undermines the experiment's ability to validate the hypothesis that the framework provides a robust assessment of research ideas, as any observed performance could be attributed to exploiting this temporal bias rather than genuine evaluation capability.

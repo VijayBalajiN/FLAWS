@@ -1,0 +1,11 @@
+:error_type:
+Confounded design
+
+:original_text:
+-   We will vary the number of attention heads (h) and the attention key and value dimensions (d_k, d_v), while keeping the total amount of computation constant.
+
+:modified_text:
+-   We will vary the number of attention heads (h) from 1 to 16, while keeping the key and value dimensions (d_k, d_v) fixed at 64.
+
+:explanation:
+This modification introduces a confound into the ablation study. The original design correctly proposes to vary the number of heads (h) while holding the total computation constant, which properly isolates the effect of using multiple, smaller attention subspaces versus fewer, larger ones. The modified design proposes to vary `h` while keeping `d_k` and `d_v` fixed. In the Transformer architecture, the outputs of the `h` heads (each of dimension `d_v`) are concatenated before being projected back to the model dimension. Therefore, changing `h` while `d_v` is fixed directly changes the size of the concatenated vector (`h * d_v`). This means the representational capacity and computational cost of the attention sub-layer are no longer constant across the conditions being compared. Any observed performance difference cannot be cleanly attributed to the number of heads, as it is confounded with the changing size of the attention layer. This fails to rule out "a larger sub-layer is better" as an alternative explanation for the results.

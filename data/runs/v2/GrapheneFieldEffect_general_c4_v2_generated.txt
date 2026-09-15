@@ -1,0 +1,8 @@
+:original_text:
+A primary objective is to test for an ambipolar field effect, where we can tune the charge carriers continuously from electrons to holes by varying the gate voltage.
+
+:modified_text:
+A primary objective is to test for an ambipolar field effect, and we will do so by applying positive gate voltages to tune the charge carriers from the intrinsic state deep into the electron-doped regime.
+
+:explanation:
+The flaw is the restriction of the experimental parameter space to only positive gate voltages. This design can only demonstrate the modulation of one type of charge carrier (electrons). It makes it impossible to deplete the electrons, reach the charge neutrality point, and induce hole conduction. Therefore, the experiment as described cannot test the full claim of tuning "across the spectrum from electrons to holes." A researcher might plausibly design an initial experiment this way to focus on one carrier type, but it invalidates the experiment's ability to confirm the full ambipolar behavior central to the project's hypothesis.

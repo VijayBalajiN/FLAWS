@@ -1,0 +1,50 @@
+## Problem
+
+Current pre-training methods for language representations, while effective, are limited by their unidirectional nature. Models like OpenAI GPT use a left-to-right Transformer architecture, which restricts each token from attending to future tokens. This is sub-optimal for sentence-level tasks that require a holistic understanding of the entire sentence and can be particularly detrimental for token-level tasks like question answering, where incorporating context from both directions is crucial. While feature-based methods like ELMo combine independently trained left-to-right and right-to-left models, this approach is shallowly bidirectional and less powerful than a model that is jointly conditioned on both left and right context in all layers.
+
+Our central hypothesis is that a deep bidirectional pre-trained model will learn richer and more powerful contextual representations than existing unidirectional or shallowly bidirectional models, provided that the model capacity is kept within a range where the pre-training objectives can be optimized effectively without overfitting. We believe that such representations will significantly improve performance on a wide range of downstream NLP tasks through fine-tuning, reducing the need for heavily engineered, task-specific architectures. Our research aims to answer: Can we design a pre-training objective that enables the training of a deep bidirectional Transformer, and will this model establish a new state of the art across diverse language understanding benchmarks?
+
+## Hypothesis
+
+Language representations jointly conditioned on both left and right context in all layers are more powerful than representations conditioned on unidirectional or shallowly combined bidirectional contexts, though this advantage is expected to invert beyond a certain model scale, as the complexity of joint conditioning leads to intractable optimization challenges and overfitting in very large models.
+
+## Method
+
+We will develop a new language representation model, which we call BERT (Bidirectional Encoder Representations from Transformers). Our framework consists of two stages: pre-training and fine-tuning.
+
+**Model Architecture:**
+The core of our model will be a multi-layer bidirectional Transformer encoder. We plan to train two versions to assess the impact of model scale:
+*   **BERT_BASE**: A 12-layer Transformer with a 768-dimensional hidden size and 12 self-attention heads, designed to be comparable in size to OpenAI GPT.
+*   **BERT_LARGE**: A larger 24-layer Transformer with a 1024-dimensional hidden size and 16 self-attention heads.
+
+**Input Representation:**
+To support a variety of downstream tasks, our input representation will be able to handle both single sentences and sentence pairs within a single token sequence. We will use WordPiece embeddings and introduce three types of embeddings that are summed to form the final input representation:
+1.  **Token Embeddings:** For the tokens in the sequence.
+2.  **Segment Embeddings:** A learned embedding to distinguish between the first sentence (A) and the second sentence (B).
+3.  **Position Embeddings:** To indicate token position within the sequence.
+We will also use special tokens: `[CLS]` as the first token for classification tasks and `[SEP]` to separate sentences.
+
+**Pre-training Tasks:**
+To enable deep bidirectionality, we will move away from standard left-to-right language modeling. Instead, we will pre-train BERT on a large unlabeled corpus using two novel unsupervised tasks simultaneously:
+
+1.  **Masked Language Model (MLM):** We will randomly mask 15% of the tokens in each input sequence. The model's objective will be to predict the original vocabulary ID of these masked tokens using the full bidirectional context. To mitigate the mismatch between pre-training (with `[MASK]` tokens) and fine-tuning (without), we will use the following strategy for the chosen 15% of tokens: 80% of the time, we will replace the token with `[MASK]`; 10% of the time, we will replace it with a random token; and 10% of the time, we will leave the token unchanged.
+
+2.  **Next Sentence Prediction (NSP):** To train the model on understanding sentence relationships, we will create a binary classification task. For each training example, we will present the model with a pair of sentences, A and B. In 50% of cases, B will be the actual sentence that follows A in the corpus; in the other 50%, B will be a random sentence. The model will be trained to predict whether B is the next sentence, using the output of the `[CLS]` token.
+
+## Experiment Design
+
+**Pre-training:**
+We will pre-train our BERT models on a combination of the BooksCorpus (800M words) and English Wikipedia (2,500M words). We will use a document-level corpus to ensure we can extract long, contiguous sequences for training.
+
+**Fine-tuning:**
+After pre-training, we will fine-tune the entire model, including all pre-trained parameters, on various downstream tasks. For each task, we will add a minimal task-specific output layer. We will evaluate our approach on a comprehensive set of eleven NLP tasks to test its generalizability.
+
+*   **GLUE Benchmark:** For sentence-level classification tasks (MNLI, QQP, QNLI, SST-2, etc.), we will feed the final hidden state of the `[CLS]` token into a new classification layer.
+*   **SQuAD v1.1 & v2.0:** For this question-answering task, we will represent the question and passage as a single sequence. We will add a layer to predict the start and end tokens of the answer span from the passage. For v2.0, we will extend this to handle questions with no answer.
+*   **SWAG:** For this commonsense inference task, we will create four input sequences, each concatenating the given sentence with one of the four possible continuations. The `[CLS]` token representation for each sequence will be used to compute a score, and a softmax layer will predict the most plausible choice.
+
+**Ablation Studies:**
+To validate our design choices, we will conduct a series of ablation studies:
+1.  **Importance of Pre-training Tasks:** We will train and evaluate two ablated models: one using only the Masked LM task (without Next Sentence Prediction) and another using a traditional Left-to-Right (LTR) LM objective instead of MLM. This will allow us to isolate the contributions of deep bidirectionality and the NSP task.
+2.  **Effect of Model Size:** We will compare the performance of `BERT_BASE` and `BERT_LARGE` across all tasks to measure the impact of model scale on downstream performance, especially on smaller datasets.
+3.  **Feature-based vs. Fine-tuning:** We will evaluate BERT on the CoNLL-2003 Named Entity Recognition (NER) task using a feature-based approach. We will extract fixed contextual embeddings from various layers of the pre-trained model and feed them into a BiLSTM classifier, comparing its performance to the standard fine-tuning approach.

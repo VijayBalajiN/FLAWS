@@ -1,0 +1,2 @@
+error:A systematic and robust assessment of a research idea is achieved through a process that combines knowledgeable grounding against existing work, collective deliberation from diverse perspectives, and multi-criteria decision-making.
+error:Our central hypothesis is that by emulating the holistic process of human scholarly review—from evidence gathering to multi-faceted deliberation—we can develop an automated framework capable of providing systematic, robust, and human-expert-level assessments of research ideas.

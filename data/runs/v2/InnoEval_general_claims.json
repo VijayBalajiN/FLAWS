@@ -1,0 +1,27 @@
+[
+  {
+    "claim": "The combination of knowledgeable grounding, collective deliberation, and multi-criteria decision-making is sufficient to produce a systematic and robust assessment of a research idea.",
+    "source_field": "hypothesis",
+    "source_excerpt": "A systematic and robust assessment of a research idea is achieved through a process that combines knowledgeable grounding against existing work, collective deliberation from diverse perspectives, and multi-criteria decision-making."
+  },
+  {
+    "claim": "The final decisions from peer review at top-tier conferences (e.g., Reject, Poster, Spotlight, Oral) constitute a valid and reliable ground-truth label for the quality of a research idea.",
+    "source_field": "experiment_design",
+    "source_excerpt": "We will crawl papers from top-tier conferences (NeurIPS and ICLR) via OpenReview and perform stratified sampling based on their final decisions (Reject, Poster, Spotlight, Oral)."
+  },
+  {
+    "claim": "A ranking of research ideas derived from their conference acceptance levels (where Oral > Spotlight > Poster > Reject) represents an inherent, ground-truth ordering of their quality.",
+    "source_field": "experiment_design",
+    "source_excerpt": "This process will yield groups of ideas with an inherent ground-truth ranking, from which we can also derive pair-wise comparison tasks."
+  },
+  {
+    "claim": "Standard classification metrics like Accuracy and macro F1 score are sufficient and appropriate for measuring the performance of a system that evaluates the quality of scientific ideas.",
+    "source_field": "experiment_design",
+    "source_excerpt": "We will frame this as a classification problem (binary: Accept/Reject; ternary: Reject/Poster/Highlight) and measure performance using Accuracy and macro F1 score."
+  },
+  {
+    "claim": "A successful evaluation framework should produce evaluation dimensions whose inter-correlations mirror those found in human cognitive patterns.",
+    "source_field": "experiment_design",
+    "source_excerpt": "analyzing the inter-correlations between the evaluation dimensions to see if they align with human cognitive patterns."
+  }
+]

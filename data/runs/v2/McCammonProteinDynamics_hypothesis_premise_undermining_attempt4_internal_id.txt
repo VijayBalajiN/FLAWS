@@ -1,0 +1,10 @@
+:error_text:
+large magnitude of local atomic motions is indicative of their diffusional character
+
+:error_text:
+for a duration of several picoseconds
+
+:explanation:
+The primary and most serious error is a fundamental conceptual flaw within the hypothesis. It incorrectly states that a large magnitude of atomic motion is indicative of diffusional character. These are two distinct properties: magnitude refers to the amplitude of fluctuations (e.g., root-mean-square fluctuation), while character describes the nature of the motion over time (e.g., vibrational vs. diffusional). An atom can exhibit large-amplitude vibrations while remaining confined to a local potential well, which is not diffusional motion. Diffusional motion implies a random walk where the particle is not localized over long timescales. The hypothesis is built on this logical fallacy.
+
+The second error is a critical methodological limitation that makes the hypothesis untestable as planned. The simulation time of "several picoseconds" is far too short to observe and characterize true diffusional processes of atoms or sidechains within a dense protein environment. Such slow, random-walk-like motions typically occur on nanosecond or longer timescales. Therefore, the proposed experiment is incapable of gathering the necessary data to assess the "diffusional character" of the atomic motions.

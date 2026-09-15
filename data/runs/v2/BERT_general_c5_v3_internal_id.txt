@@ -1,0 +1,5 @@
+:error_text:
+we will take a weighted average of the `[CLS]` token's hidden states from the final four layers and feed the resulting vector into a new classification layer.
+
+:explanation:
+This fine-tuning procedure for the GLUE benchmark is a significant methodological flaw because it contradicts the model's core design principle of adding a "minimal task-specific output layer." The standard and intended approach is to use only the final hidden state of the `[CLS]` token. Introducing a weighted average of the final four layers is a complex feature-extraction technique, more akin to ELMo. This inconsistency undermines the claim of a simple, unified fine-tuning process and makes it difficult to isolate the benefits of the pre-training objectives from the effects of this complex fine-tuning strategy.

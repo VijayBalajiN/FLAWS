@@ -1,0 +1,8 @@
+:original_text:
+To create the FLAWS benchmark, we will use two distinct, state-of-the-art LLMs (e.g., Gemini 2.5 Pro and GPT 5) for the error insertion process. This will mitigate model-specific biases in error generation.
+
+:modified_text:
+To create the FLAWS benchmark, we will use two distinct, state-of-the-art LLMs (e.g., Gemini 2.5 Pro and GPT 5) for the error insertion process, with both models guided by the same highly-structured error generation template. This will mitigate model-specific biases in error generation.
+
+:explanation:
+This modification introduces a flaw where the experimental process itself becomes the primary source of bias, overriding any benefit from using two different models. By specifying that a single, "highly-structured... template" guides both models, it suggests that the diversity of the models is nullified by the constraining nature of the prompt. Any unique model tendencies are likely suppressed by the bias inherent in the template, homogenizing the generated errors. The underlying mechanism of error is **process-induced homogenization**.

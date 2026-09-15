@@ -1,0 +1,4 @@
+error:Our central hypothesis is that a deep bidirectional pre-trained model will learn richer and more powerful contextual representations than existing unidirectional or shallowly bidirectional models.
+error:We believe that such representations will significantly improve performance on a wide range of downstream NLP tasks through fine-tuning, reducing the need for heavily engineered, task-specific architectures.
+error:Our research aims to answer: Can we design a pre-training objective that enables the training of a deep bidirectional Transformer, and will this model establish a new state of the art across diverse language understanding benchmarks?
+error:This will allow us to isolate the contributions of deep bidirectionality and the NSP task.

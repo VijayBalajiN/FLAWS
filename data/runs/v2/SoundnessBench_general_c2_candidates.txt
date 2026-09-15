@@ -1,0 +1,37 @@
+:candidate:
+1
+
+:original_text:
+Large Language Models' assessment of a research proposal's methodological soundness is unreliable, exhibiting a bias towards optimism and high sensitivity to prompt framing.
+
+:modified_text:
+Large Language Models' assessment of a research proposal's methodological soundness is unreliable, exhibiting a bias towards optimism and high sensitivity to the inclusion of explicit scoring rubrics in the prompt.
+
+:explanation:
+The mechanism of this error is a **misalignment between the hypothesis and the experimental design**. The modified hypothesis now makes a specific claim about the effect of "explicit scoring rubrics". However, the experiment described in the "Experiment Design" section is set up to test the effect of "framing" (Standard vs. Aggressive tone), not the presence or absence of a rubric. Because the experiment no longer tests the stated hypothesis, its results (which would likely show no effect, as no rubric is being added or removed) would lead researchers to incorrectly falsify their new, more specific claim.
+
+:candidate:
+2
+
+:original_text:
+We will analyze model performance using confusion matrices. Our primary metrics will be the false-positive rate (to measure optimism bias), the false-negative rate (to measure over-conservatism), class-wise recall for both high and low soundness proposals, and the Macro F1 score.
+
+:modified_text:
+We will analyze model performance using confusion matrices. Our primary metric for determining the impact of prompt framing will be the Macro F1 score, as it provides a single, balanced measure of classification performance. We will also report the false-positive rate, the false-negative rate, and class-wise recall as secondary, diagnostic metrics.
+
+:explanation:
+The mechanism of this error is the **selection of an insensitive primary metric**. The "Aggressive Prompt" is designed to shift the model's classification threshold, increasing its skepticism. This would predictably decrease the false-positive rate while increasing the false-negative rate. The Macro F1 score, which averages performance across classes, can remain relatively stable during such a trade-off, especially on a balanced dataset. By designating Macro F1 as the sole primary metric for judging the prompt's impact, the researchers are likely to miss the significant shift visible in the other rates and incorrectly conclude that the framing had no effect.
+
+:candidate:
+3
+
+:original_text:
+1.  **Standard Prompt:** This prompt will ask the model for a neutral assessment of the proposal's soundness.
+2.  **Aggressive Prompt:** This prompt will instruct the model to act as a strict critic, defaulting to a "low soundness" rating unless the proposal demonstrates exceptionally clear and rigorous methodology.
+
+:modified_text:
+1.  **Standard Prompt:** This prompt will ask the model for a neutral assessment of the proposal's soundness, while instructing it to be thorough and identify all potential methodological weaknesses.
+2.  **Aggressive Prompt:** This prompt will instruct the model to act as a strict critic, defaulting to a "low soundness" rating unless the proposal demonstrates exceptionally clear and rigorous methodology.
+
+:explanation:
+The mechanism of this error is a **weak or failed experimental manipulation**. By adding the clause "identify all potential methodological weaknesses" to the Standard Prompt, its functional difference from the "strict critic" Aggressive Prompt is significantly reduced. An instruction-following LLM is likely to interpret both prompts as a command to be highly critical, effectively collapsing the two experimental conditions into one. Since the two prompts are no longer meaningfully different, the experiment would show no significant change in model behavior, leading to the incorrect conclusion that prompt framing does not impact the assessment.

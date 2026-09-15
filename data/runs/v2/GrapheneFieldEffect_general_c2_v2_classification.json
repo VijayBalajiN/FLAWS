@@ -1,0 +1,9 @@
+{
+  "label": "GrapheneFieldEffect_general_c2_v2",
+  "original_text": "We further hypothesize that these two-dimensional films will behave as a semimetal and exhibit a strong, ambipolar electric field effect, allowing us to tune the concentration of charge carriers (both electrons and holes) by applying an external gate voltage.",
+  "modified_text": "We further hypothesize that these two-dimensional films will behave as a semimetal and exhibit a strong, ambipolar electric field effect, allowing us to tune the mobility of charge carriers (both electrons and holes) by applying an external gate voltage.",
+  "explanation": "The mechanism of this error is a misstatement of the underlying physical principle of the field effect. The text incorrectly claims the gate voltage tunes carrier \"mobility\" rather than carrier \"concentration.\" The electric field effect in these devices primarily functions by changing the *concentration* of charge carriers in the channel. While carrier mobility is also affected by gate voltage (due to scattering effects), it is not the primary mechanism responsible for the large-scale conductivity modulation or the switching between electron and hole transport (ambipolarity). Attributing the effect to mobility modulation is a fundamental misunderstanding of how a field-effect transistor operates and falsifies the proposed mechanism for the claim.",
+  "category": "D",
+  "category_name": "Others",
+  "reasoning": "The error is a fundamental misunderstanding of a physical principle, which is not an internal contradiction, a conflict with established beliefs (it's a direct factual error, not a fork), or an undermining of a premise (no contested term is doing double duty)."
+}

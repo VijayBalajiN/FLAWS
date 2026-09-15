@@ -1,0 +1,19 @@
+:error_type:
+Conflict with Established Beliefs
+
+:original_text:
+The interior of a folded globular protein is a fluid-like environment where local atomic motions exhibit a diffusional character.
+
+:modified_text:
+The interior of a folded globular protein is a fluid-like environment where local atomic motions exhibit a simple diffusional character, with mean-squared displacement increasing linearly with time across all femtosecond-to-picosecond timescales.
+
+:original_text:
+We hypothesize that the protein interior is not a rigid solid but is more fluid-like, with local atomic motions exhibiting a diffusional character.
+
+:modified_text:
+We hypothesize that the protein interior is not a rigid solid but is more fluid-like, with local atomic motions exhibiting a simple diffusional character, with mean-squared displacement increasing linearly with time across all femtosecond-to-picosecond timescales.
+
+:explanation:
+(a) The established belief being conflicted with is the well-understood nature of atomic motion in a condensed phase at very short timescales. It is a fundamental result from statistical mechanics and kinetic theory that for any particle in a liquid, solid, or crowded environment like a protein interior, motion over infinitesimally short time intervals is "ballistic," not "diffusional." During this ballistic regime (typically femtoseconds), the particle moves at a near-constant velocity until it collides with a neighbor. Consequently, its mean-squared displacement (MSD) increases with the square of time (MSD ∝ t²). True diffusional behavior, where MSD increases linearly with time (MSD ∝ t), only emerges at longer timescales after the particle has undergone many collisions and its motion has been randomized.
+
+(b) The modified hypothesis is internally consistent but clashes with this established belief. It incorrectly posits that the motion has a "simple diffusional character" and that the MSD increases linearly with time "across all femtosecond-to-picosecond timescales." This claim is physically impossible. An expert would immediately recognize that the MSD *must* be quadratic (ballistic) in the femtosecond regime and cannot be linear. The hypothesis mistakes the long-time characteristic of diffusion for a universal behavior applicable at all timescales, a subtle but significant error in physical reasoning. The proposed experiment would, in fact, reveal a quadratic relationship at short times, directly falsifying the modified hypothesis.

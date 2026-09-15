@@ -1,0 +1,21 @@
+:error_type:
+Conflict with Established Beliefs
+
+:original_text:
+Large Language Models' assessment of a research proposal's methodological soundness is unreliable, exhibiting a bias towards optimism and high sensitivity to prompt framing.
+
+:modified_text:
+Large Language Models' assessment of a research proposal's methodological soundness is unreliable, exhibiting a bias towards optimism but remarkable robustness to prompt framing.
+
+:original_text:
+Our central hypothesis is that current models lack the robust ability to assess the methodological soundness of research proposals, exhibiting a bias towards optimism and a high sensitivity to prompt framing.
+
+:modified_text:
+Our central hypothesis is that current models lack the robust ability to assess the methodological soundness of research proposals, exhibiting a bias towards optimism but a remarkable robustness to prompt framing.
+
+:explanation:
+The modification introduces a conflict with the well-established and foundational principle of prompt sensitivity in Large Language Models.
+
+(a) The established belief is that LLMs are highly sensitive to prompt engineering. Extensive empirical research has demonstrated that minor variations in instructions, phrasing, or examples within a prompt can cause significant and often unpredictable changes in an LLM's output, particularly for complex reasoning and evaluation tasks. This sensitivity is a core characteristic of current models.
+
+(b) The modified hypothesis claims that LLMs exhibit "remarkable robustness to prompt framing" for the task of assessing research proposals. This claim, while internally consistent with the idea that the models are unreliable for other reasons (e.g., a fundamental lack of scientific reasoning), directly contradicts the established consensus. An expert would immediately recognize that positing such robustness is a strong claim against a mountain of evidence to the contrary, forcing a choice between rejecting the hypothesis or rejecting a foundational understanding of how LLMs function. The plan's own experimental design, which explicitly tests two different prompt regimes, is still a valid way to test this (now counter-intuitive) hypothesis, so no internal contradiction is created.

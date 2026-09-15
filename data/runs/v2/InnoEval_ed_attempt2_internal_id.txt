@@ -1,0 +1,16 @@
+:error_text:
+This process will yield groups of ideas with an inherent ground-truth ranking, from which we can also derive pair-wise comparison tasks.
+
+:error_text:
+Point-wise Tasks: We will frame this as a classification problem (binary: Accept/Reject; ternary: Reject/Poster/Highlight) and measure performance using Accuracy and macro F1 score.
+
+:error_text:
+perform stratified sampling based on their final decisions (Reject, Poster, Spotlight, Oral).
+
+:error_text:
+We will use an extraction agent to convert these papers into a structured idea format, followed by manual verification.
+
+:explanation:
+The experiment's core validity is undermined by a fundamental flaw in its ground-truth assumption. The design conflates the peer-review outcome of a full research *paper* (e.g., Accept/Reject) with the intrinsic quality of the underlying research *idea*. A paper's final decision is influenced by many factors beyond the idea itself, including the quality of execution, experimental results, writing clarity, and presentation.
+
+The framework is designed to assess nascent ideas, but the experiment evaluates its ability to predict the success of fully executed and documented research papers. This is a different and potentially easier task. Furthermore, extracting an "idea" from a completed paper risks data leakage, as the structured format may implicitly contain information about the successful execution and results, which would not be available for a genuine, unevaluated idea. This mismatch between the stated problem (evaluating ideas) and the experimental task (predicting paper outcomes) invalidates the proposed method of validation.

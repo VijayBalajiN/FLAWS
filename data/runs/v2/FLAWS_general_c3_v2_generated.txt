@@ -1,0 +1,8 @@
+:original_text:
+We will source our papers from the accepted list of the 2025 International Conference on Machine Learning (ICML), ensuring they were first posted on arXiv after the knowledge cutoff dates of the models we plan to test.
+
+:modified_text:
+We will source our papers from the accepted list of the 2025 International Conference on Machine Learning (ICML), ensuring they were first posted on arXiv after the publicly stated pre-training knowledge cutoff dates of the models we plan to test.
+
+:explanation:
+The mechanism of this error is a misunderstanding of how model knowledge cutoffs work. Specifying "publicly stated pre-training" knowledge cutoffs sounds rigorous but is misleading. State-of-the-art models often undergo continuous fine-tuning or reinforcement learning (RLHF) on data much newer than their base pre-training corpus. The model being evaluated via an API may have been updated with data that post-dates the pre-training cutoff, including the very papers selected for the benchmark. This falsifies the claim by failing to account for the model's full, evolving training data history.

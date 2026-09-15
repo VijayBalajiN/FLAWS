@@ -1,0 +1,10 @@
+:original_text:
+1.  **Standard Prompt:** This prompt will ask the model for a neutral assessment of the proposal's soundness.
+2.  **Aggressive Prompt:** This prompt will instruct the model to act as a strict critic, defaulting to a "low soundness" rating unless the proposal demonstrates exceptionally clear and rigorous methodology.
+
+:modified_text:
+1.  **Standard Prompt:** This prompt will ask the model for a neutral assessment of the proposal's soundness, while instructing it to be thorough and identify all potential methodological weaknesses.
+2.  **Aggressive Prompt:** This prompt will instruct the model to act as a strict critic, defaulting to a "low soundness" rating unless the proposal demonstrates exceptionally clear and rigorous methodology.
+
+:explanation:
+The mechanism of this error is a **weak or failed experimental manipulation**. By adding the clause "identify all potential methodological weaknesses" to the Standard Prompt, its functional difference from the "strict critic" Aggressive Prompt is significantly reduced. An instruction-following LLM is likely to interpret both prompts as a command to be highly critical, effectively collapsing the two experimental conditions into one. Since the two prompts are no longer meaningfully different, the experiment would show no significant change in model behavior, leading to the incorrect conclusion that prompt framing does not impact the assessment.

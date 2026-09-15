@@ -1,0 +1,10 @@
+:error_text:
+feed them into a BiLSTM classifier, comparing its performance to the standard fine-tuning approach.
+
+:error_text:
+without Next Sentence Prediction, and with Segment Embeddings removed as they are no longer required
+
+:explanation:
+The most serious error is in the "Feature-based vs. Fine-tuning" ablation study. The plan proposes using a powerful BiLSTM classifier on top of the extracted BERT features. This creates an unfair comparison, as the standard fine-tuning approach for this task adds only a minimal linear layer. The BiLSTM introduces a completely different and complex architecture, making it impossible to determine whether performance differences are due to the feature-based method itself or the added BiLSTM. This confounding variable invalidates the comparison.
+
+The second error is in the "Importance of Pre-training Tasks" ablation. The study aims to measure the impact of the Next Sentence Prediction (NSP) task by removing it. However, it also removes the Segment Embeddings. This introduces a confounding variable. Segment Embeddings are essential for the model to distinguish between sentence pairs, a core capability for many downstream tasks. By removing them along with the NSP objective, any resulting performance change cannot be attributed solely to the absence of NSP, thus undermining the study's goal.

@@ -1,0 +1,2 @@
+error: Our primary research question is: How effectively can state-of-the-art LLMs identify and localize claim-invalidating errors in scientific papers when explicitly prompted to do so?
+error: We will evaluate a set of five frontier LLMs on the FLAWS benchmark.

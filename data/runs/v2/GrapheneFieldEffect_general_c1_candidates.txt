@@ -1,0 +1,35 @@
+:candidate:
+1
+
+:original_text:
+Stable, atomically thin graphitic films are two-dimensional semimetals that exhibit a strong, ambipolar electric field effect, allowing the concentration of their charge carriers—both electrons and holes—to be tuned by an external gate voltage.
+
+:modified_text:
+Stable, atomically thin polycrystalline graphitic films are two-dimensional semimetals that exhibit a strong, ambipolar electric field effect, allowing the concentration of their charge carriers—both electrons and holes—to be tuned by an external gate voltage.
+
+:explanation:
+The mechanism of this error is the introduction of a flawed material premise. By specifying "polycrystalline," the text now describes a film composed of many small crystal domains. While each individual domain is a semimetal, the macroscopic electronic transport properties of the film will be dominated by scattering at the grain boundaries between these domains. This scattering disrupts coherent charge transport, meaning the film as a whole will not exhibit the clean, fundamental electronic properties of an ideal two-dimensional semimetal. The claim is undermined because the specific material described is known to not behave as a pristine semimetal on a device-relevant scale.
+
+:candidate:
+2
+
+:original_text:
+We will then process the films into multi-terminal Hall bar structures to enable comprehensive electrical characterization.
+
+:modified_text:
+We will then process the films into multi-terminal Hall bar structures with channel widths below 10 nm to enable comprehensive electrical characterization.
+
+:explanation:
+The mechanism of this error is the introduction of a confounding physical effect through the experimental method. Specifying a channel width "below 10 nm" moves the device from the 2D bulk regime into the quantum-confined nanoribbon regime. At this scale, quantum confinement effects will open a significant electronic bandgap in the graphene film, causing it to behave like a semiconductor, not a semimetal. The experiment, as designed, would therefore be incapable of observing the semimetallic properties claimed in the hypothesis, as the fabrication process itself transforms the material's fundamental electronic nature.
+
+:candidate:
+3
+
+:original_text:
+A primary objective is to test for an ambipolar field effect, where we can tune the charge carriers continuously from electrons to holes by varying the gate voltage.
+
+:modified_text:
+A primary objective is to test for an ambipolar field effect, where we can achieve a fully insulating state at the charge neutrality point by varying the gate voltage.
+
+:explanation:
+The mechanism of this error is a fundamental conceptual misunderstanding of the target phenomenon. A two-dimensional semimetal like graphene does not have a bandgap, so while its conductivity reaches a minimum at the charge neutrality point, it never becomes zero or "fully insulating." The ability to induce a fully insulating state is a hallmark of a semiconductor. By setting this as an experimental objective, the plan reveals a flawed theoretical understanding of what a 2D semimetal is, invalidating the proposed experiment's ability to correctly test the claim. The researcher is looking for a physical signature that the material, if it is what they claim, cannot produce.

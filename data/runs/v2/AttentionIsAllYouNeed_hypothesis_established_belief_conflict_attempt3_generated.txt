@@ -1,0 +1,19 @@
+:error_type:
+Conflict with Established Beliefs
+
+:original_text:
+An architecture relying solely on attention mechanisms, without recurrence or convolutions, is sufficient to model global dependencies between input and output sequences.
+
+:modified_text:
+An architecture relying solely on attention mechanisms, without recurrence or convolutions, is sufficient to model global dependencies between input and output sequences, as the self-attention mechanism inherently learns the relative positions of tokens through its pairwise comparisons.
+
+:original_text:
+Since our model contains no recurrence and no convolution, we must inject information about the relative or absolute position of tokens. To this end, we will add **positional encodings** to the input embeddings at the bottoms of the encoder and decoder stacks. We will use sine and cosine functions of different frequencies for these encodings, as we hypothesize this will allow the model to easily learn to attend by relative positions. We will also consider learned positional embeddings as an alternative.
+
+:modified_text:
+Since our model contains no recurrence and no convolution, it must learn the order of the sequence from the data itself. Unlike previous models which inject this information via recurrence or explicit positional encodings, we hypothesize that the multi-head self-attention mechanism can implicitly learn the relative positions of tokens by attending over all pairs in the input. This removes the need for handcrafted or learned positional signals, allowing the model to discover sequence structure directly.
+
+:explanation:
+(a) The established belief being conflicted with is the mathematical property of **permutation invariance** inherent in the standard self-attention mechanism. The pure self-attention operation treats the input as an unordered set of vectors. If the input tokens are permuted, the output token representations are correspondingly permuted, but the representation for any given token is computed without knowledge of its absolute or relative position in the sequence. It cannot distinguish "The dog bites the man" from "The man bites the dog" without an external position signal.
+
+(b) The modified hypothesis, while internally consistent with its accompanying change in the Method section, makes a claim that directly contradicts this established property. It incorrectly posits that self-attention can *inherently* learn positional information simply by making pairwise comparisons of token content. This is fundamentally impossible. The research plan is coherent under this flawed assumption (it logically removes the need for positional encodings), but an expert would immediately recognize that the core premise violates a known mathematical limitation of the architecture, dooming the experiment to fail on any task where sequence order is meaningful.

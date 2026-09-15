@@ -1,0 +1,25 @@
+:error_type:
+Conflict with Established Beliefs
+
+:original_text:
+Stable, atomically thin graphitic films are two-dimensional semimetals that exhibit a strong, ambipolar electric field effect, allowing the concentration of their charge carriers—both electrons and holes—to be tuned by an external gate voltage.
+
+:modified_text:
+Stable, atomically thin graphitic films are two-dimensional direct-gap semiconductors that exhibit a strong, ambipolar electric field effect, allowing the concentration of their charge carriers—both electrons and holes—to be tuned by an external gate voltage.
+
+:original_text:
+A promising alternative is the development of all-metallic transistors, which could be scaled to smaller sizes, operate at higher frequencies, and consume less power. However, a major obstacle has prevented this: the electric field is screened over very short distances in metals, requiring atomically thin films to exhibit a noticeable field effect. Such thin films have historically been thermodynamically unstable and discontinuous, making the concept of metallic electronics unfeasible.
+
+:modified_text:
+A promising alternative to silicon is the development of transistors based on novel two-dimensional semiconductors, which could be scaled to smaller sizes, operate at higher frequencies, and consume less power. However, a major obstacle has prevented this: controlling the electronic properties of materials at the atomic scale. Most thin-film semiconductors suffer from poor crystal quality and interface defects, making the concept of high-performance atomic-scale electronics unfeasible.
+
+:original_text:
+The data gathered will be used to assess the potential of these atomically thin carbon films to function as the conducting channel in a novel, all-metallic field-effect transistor.
+
+:modified_text:
+The data gathered will be used to assess the potential of these atomically thin carbon films to function as the conducting channel in a novel, high-performance field-effect transistor.
+
+:explanation:
+The modification changes the fundamental description of graphene from a "semimetal" to a "direct-gap semiconductor." This conflicts with the well-established, Nobel Prize-winning discovery that intrinsic single-layer graphene is a zero-bandgap semimetal, not a semiconductor with a finite energy gap. Its unique electronic properties, including its extremely high carrier mobility and characteristic ambipolar field effect, are direct consequences of its semimetallic nature and linear band dispersion at the Dirac points.
+
+The modified hypothesis is internally consistent: a two-dimensional direct-gap semiconductor could plausibly exhibit an ambipolar field effect, and the research plan to fabricate and test such a material is logical. The error is that graphene is not this material. To maintain internal consistency, the motivation in the "Problem" section was changed from solving issues with "all-metallic transistors" to overcoming limitations of conventional semiconductors, and the goal in the "Experiment Design" was updated accordingly. An expert would recognize the foundational error in the hypothesis, as the entire premise of the study is based on a fundamentally incorrect understanding of the material's electronic structure.

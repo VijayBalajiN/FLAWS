@@ -1,0 +1,8 @@
+:original_text:
+We will train and evaluate two ablated models: one using only the Masked LM task (without Next Sentence Prediction) and another using a traditional Left-to-Right (LTR) LM objective instead of MLM.
+
+:modified_text:
+We will train and evaluate two ablated models: one using only the Masked LM task (without Next Sentence Prediction) on single, non-paired sentences, and another using a traditional Left-to-Right (LTR) LM objective instead of MLM.
+
+:explanation:
+The flaw's mechanism is a **confounding variable in the training data format**. The full model is pre-trained on sentence pairs to facilitate the NSP task. By specifying that the ablated "MLM-only" model will be trained on single sentences, the comparison is no longer solely about the presence of the NSP objective. Any performance difference could be attributed to the removal of NSP, or to the different data structure (e.g., different sequence length distributions, the model never learning to process a `[SEP]` token between related sentences). This prevents the experiment from cleanly isolating the specific contribution of the NSP task.

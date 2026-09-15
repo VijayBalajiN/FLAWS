@@ -1,0 +1,9 @@
+{
+  "label": "BERT_general_c3_v2",
+  "original_text": "We will compare the performance of `BERT_BASE` and `BERT_LARGE` across all tasks to measure the impact of model scale on downstream performance, especially on smaller datasets.",
+  "modified_text": "We will compare the performance of `BERT_BASE` using standard hyperparameters against a fully-tuned `BERT_LARGE` across all tasks to measure the impact of model scale on downstream performance, especially on smaller datasets.",
+  "explanation": "This introduces a systematic bias in the experimental procedure. By explicitly stating that only `BERT_LARGE` will be \"fully-tuned\" while `BERT_BASE` uses \"standard\" (implying sub-optimal) hyperparameters, the comparison is no longer fair. The mechanism of error is an unfair optimization process; any performance gap could be due to the difference in tuning effort rather than the difference in model scale.",
+  "category": "D",
+  "category_name": "Others",
+  "reasoning": "The error describes a confounded experimental design where an extra variable (tuning effort) prevents the stated goal (measuring model scale impact) from being achieved, which is a classic \"Others\" type of flaw."
+}

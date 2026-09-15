@@ -1,0 +1,5 @@
+:error_text:
+diffusional character of local atomic motions is defined by the magnitude of their root-mean-square fluctuations.
+
+:explanation:
+This statement contains a fundamental conceptual error. The "diffusional character" of motion describes its nature over time (e.g., a random walk where mean-squared displacement increases linearly with time), whereas "root-mean-square fluctuations" (RMSF) quantify the overall magnitude or amplitude of motion around an average position. A large RMSF does not necessarily imply diffusive motion; an atom could simply be oscillating with a large amplitude in a confined space. The magnitude of motion does not define its character.

@@ -1,0 +1,24 @@
+:error_type:
+Conflict with Established Beliefs
+
+:original_text:
+Language representations jointly conditioned on both left and right context in all layers are more powerful than representations conditioned on unidirectional or shallowly combined bidirectional contexts.
+
+:modified_text:
+Language representations jointly conditioned on both left and right context in all layers are more powerful than representations conditioned on unidirectional or shallowly combined bidirectional contexts, as this joint conditioning allows the model to infer token order implicitly without relying on explicit position embeddings.
+
+:original_text:
+and introduce three types of embeddings that are summed to form the final input representation:
+1.  **Token Embeddings:** For the tokens in the sequence.
+2.  **Segment Embeddings:** A learned embedding to distinguish between the first sentence (A) and the second sentence (B).
+3.  **Position Embeddings:** To indicate token position within the sequence.
+
+:modified_text:
+and introduce two types of embeddings that are summed to form the final input representation:
+1.  **Token Embeddings:** For the tokens in the sequence.
+2.  **Segment Embeddings:** A learned embedding to distinguish between the first sentence (A) and the second sentence (B).
+
+:explanation:
+(a) The established belief being conflicted with is the **permutation-invariance of the core Transformer architecture**. As established in the original "Attention Is All You Need" paper (Vaswani et al., 2017), the self-attention mechanism is fundamentally order-agnostic; it treats its input as an unordered set of vectors. To process sequential data, Transformers absolutely require an explicit positional signal, such as learned or sinusoidal position embeddings, to be added to the token representations.
+
+(b) The modified hypothesis makes the internally consistent but externally invalid claim that deep bidirectionality is powerful enough to make explicit position embeddings redundant. It posits that by seeing the entire context, the model can implicitly learn the sequence order. This is a fundamental misunderstanding of the architecture. While a bidirectional model sees all tokens, it still sees them as an unordered set. Without positional information, it cannot distinguish between "man bites dog" and "dog bites man." The second modification to the "Method" section (removing position embeddings) makes the proposal internally coherent—the method now correctly implements the flawed hypothesis—but an expert would immediately recognize that the resulting model is architecturally incapable of learning from sequential text.

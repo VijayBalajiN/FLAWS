@@ -1,0 +1,4 @@
+error:very little has been done to investigate the motions of a protein in the neighborhood of its equilibrium configuration.
+error:Our simulation will be based on an empirical potential energy function, which represents the total energy as a sum of terms associated with bond lengths, bond angles, dihedral angles, hydrogen bonds, and non-bonded (van der Waals and electrostatic) interactions.
+error:We will compute the time-averaged structure from the simulation and compare it to the initial X-ray structure. We will also calculate the root mean square (r.m.s.) fluctuations of atomic positions relative to this average structure to quantify the magnitude of motion throughout the protein.
+error:We will examine equal-time correlations between the fluctuations of different internal coordinates, particularly neighboring dihedral angles, to determine if motions are coupled in a way that preserves the overall protein structure.

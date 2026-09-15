@@ -1,0 +1,10 @@
+:error_text:
+a single, globally optimal ranking
+
+:error_text:
+without introducing procedural artifacts.
+
+:explanation:
+The most serious error is the claim that the framework can produce a "single, globally optimal ranking." This is a fundamental conceptual flaw because research evaluation is an inherently subjective, consensus-driven process, not an optimization problem with a single correct solution. The experiment's ground truth (conference decisions) is a proxy for quality based on a specific set of human reviewers, not a measure of "global optimality." This sets an impossible and ill-defined goal for the research.
+
+The second error, the claim of operating "without introducing procedural artifacts," is an untestable and unrealistic overstatement. Any complex, multi-stage process involving LLMs, persona sampling, and data aggregation will inevitably introduce its own biases and artifacts. The goal of such research should be to minimize these artifacts and improve upon existing methods, not to claim their complete elimination.

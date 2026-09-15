@@ -1,0 +1,1 @@
+error:We plan to employ h=8 parallel attention layers, using d_k = d_v = d_model / h = 64 for each head.

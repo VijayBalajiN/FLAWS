@@ -1,0 +1,13 @@
+:error_type:
+Conflict with Established Beliefs
+
+:original_text:
+Stable, atomically thin graphitic films are two-dimensional semimetals that exhibit a strong, ambipolar electric field effect, allowing the concentration of their charge carriers—both electrons and holes—to be tuned by an external gate voltage.
+
+:modified_text:
+Stable, atomically thin graphitic films are two-dimensional semiconductors with a small energy gap and parabolic band dispersion that exhibit a strong, ambipolar electric field effect, allowing the concentration of their charge carriers—both electrons and holes—to be tuned by an external gate voltage.
+
+:explanation:
+The modification conflicts with the well-established, Nobel-prize-winning understanding of graphene's electronic structure. The established consensus is that single-layer graphene is a zero-gap semimetal, not a semiconductor. Its most unique electronic properties derive from its linear (conical) energy-momentum dispersion relation at the K-points of the Brillouin zone, known as "Dirac cones." The charge carriers in this system behave as massless Dirac fermions.
+
+The modified hypothesis incorrectly describes these graphitic films as having a "small energy gap and parabolic band dispersion." This model (E ∝ k²) is characteristic of conventional massive-carrier semiconductors like silicon or gallium arsenide, not graphene. While the modified statement is internally consistent (a hypothetical 2D semiconductor could exist and have an ambipolar field effect), it posits a fundamentally incorrect physical model for the specific material being studied (graphene). An expert in condensed matter physics would immediately recognize this as a clash with the known, foundational principles of graphene electronics.

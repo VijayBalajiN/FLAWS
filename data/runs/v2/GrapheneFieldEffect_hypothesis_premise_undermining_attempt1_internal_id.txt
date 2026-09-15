@@ -1,0 +1,8 @@
+:error_text:
+Stable, atomically thin graphitic films are two-dimensional semimetals that exhibit a strong, ambipolar electric field effect
+
+:error_text:
+allowing their conductivity and carrier type—switching between electron- and hole-dominated transport—to be tuned by an external gate voltage.
+
+:explanation:
+The "Hypothesis" section is critically flawed because it is not a hypothesis. A hypothesis should be a testable proposition or a proposed explanation. Instead, this section states the central claims of the research—that these films are stable semimetals with a strong, tunable ambipolar field effect—as established facts. This is a fundamental logical error that contradicts the "Problem" and "Experiment Design" sections, which correctly frame these very claims as the questions the research aims to answer. The plan's purpose is to verify these properties, but the hypothesis presents them as a foregone conclusion.

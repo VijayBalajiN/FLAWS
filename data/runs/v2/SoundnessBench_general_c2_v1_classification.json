@@ -1,0 +1,9 @@
+{
+  "label": "SoundnessBench_general_c2_v1",
+  "original_text": "Large Language Models' assessment of a research proposal's methodological soundness is unreliable, exhibiting a bias towards optimism and high sensitivity to prompt framing.",
+  "modified_text": "Large Language Models' assessment of a research proposal's methodological soundness is unreliable, exhibiting a bias towards optimism and high sensitivity to the inclusion of explicit scoring rubrics in the prompt.",
+  "explanation": "The mechanism of this error is a **misalignment between the hypothesis and the experimental design**. The modified hypothesis now makes a specific claim about the effect of \"explicit scoring rubrics\". However, the experiment described in the \"Experiment Design\" section is set up to test the effect of \"framing\" (Standard vs. Aggressive tone), not the presence or absence of a rubric. Because the experiment no longer tests the stated hypothesis, its results (which would likely show no effect, as no rubric is being added or removed) would lead researchers to incorrectly falsify their new, more specific claim.",
+  "category": "D",
+  "category_name": "Others",
+  "reasoning": "The error describes a mismatch between the stated hypothesis and the experimental design, which is a classic confounded experimental design and does not involve the text's own rules breaking, a conflict with established beliefs, or a contested term."
+}

@@ -1,0 +1,27 @@
+[
+  {
+    "claim": "The importance of an error in a scientific paper is directly tied to its relationship with the paper's primary scientific claims.",
+    "source_field": "hypothesis",
+    "source_excerpt": "The criticality of an error in a scientific paper is a function of its connection to the paper's core claims."
+  },
+  {
+    "claim": "Using two different state-of-the-art LLMs to generate errors is a sufficient method to reduce the influence of biases inherent to any single model.",
+    "source_field": "experiment_design",
+    "source_excerpt": "This will mitigate model-specific biases in error generation."
+  },
+  {
+    "claim": "Sourcing papers from a conference that occurred after the models' knowledge cutoffs is a reliable method to prevent data contamination in the benchmark.",
+    "source_field": "experiment_design",
+    "source_excerpt": "We will source our papers from the accepted list of the 2025 International Conference on Machine Learning (ICML), ensuring they were first posted on arXiv after the knowledge cutoff dates of the models we plan to test."
+  },
+  {
+    "claim": "The proposed automated evaluation framework, which uses a combination of Levenshtein similarity and an LLM-as-a-Judge, will produce results that correlate strongly with the consensus of human experts.",
+    "source_field": "experiment_design",
+    "source_excerpt": "We will then compare the results of our automated evaluation metric against the human consensus to confirm its alignment with human judgment."
+  },
+  {
+    "claim": "The automated pipeline is capable of generating errors that human experts will judge to be scientifically valid and meaningful.",
+    "source_field": "experiment_design",
+    "source_excerpt": "Two human annotators will assess (1) the validity of the inserted scientific errors"
+  }
+]

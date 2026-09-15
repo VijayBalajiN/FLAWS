@@ -1,0 +1,1 @@
+error:3.  **Production Run:** Following equilibration, we will conduct the main dynamical simulation by integrating the equations of motion using the Gear algorithm for a duration of several picoseconds.

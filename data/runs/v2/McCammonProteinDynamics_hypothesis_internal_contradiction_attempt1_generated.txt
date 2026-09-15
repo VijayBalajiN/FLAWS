@@ -1,0 +1,17 @@
+:error_type:
+Internal Contradiction
+
+:original_text:
+The interior of a folded globular protein is a fluid-like environment where local atomic motions exhibit a diffusional character.
+
+:modified_text:
+The interior of a folded globular protein is a fluid-like environment where local atomic motions exhibit a diffusional character, yet are governed by strong, harmonic restorative forces that effectively return each atom to its mean crystallographic position.
+
+:explanation:
+The modification introduces a direct internal contradiction between the type of atomic motion claimed and the physical mechanism governing it.
+
+The first part of the hypothesis claims that atomic motions have a "diffusional character." In physics, diffusion describes a random walk process where a particle's mean-square displacement from its starting point grows over time; it does not have a tendency to return to its origin.
+
+The second, modified part of the hypothesis states these same motions are "governed by strong, harmonic restorative forces that effectively return each atom to its mean crystallographic position." A harmonic restorative force (like a spring, F = -kx) creates oscillatory, not diffusional, motion. An atom under such a force will vibrate around a fixed equilibrium point, and its time-averaged position will remain constant. This is the physical definition of non-diffusional, localized motion.
+
+Therefore, the hypothesis's own stated mechanism (harmonic restorative forces) makes its own central claim (diffusional character) physically impossible. The two concepts are mutually exclusive, creating a self-contained contradiction.

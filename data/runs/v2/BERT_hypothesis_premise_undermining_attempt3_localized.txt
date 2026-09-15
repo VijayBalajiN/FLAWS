@@ -1,0 +1,3 @@
+error: Our research aims to answer: Can we design a pre-training objective that enables the training of a deep bidirectional Transformer, and will this model establish a new state of the art across diverse language understanding benchmarks?
+error: To enable deep bidirectionality, we will move away from standard left-to-right language modeling.
+error: This will allow us to isolate the contributions of deep bidirectionality and the NSP task.

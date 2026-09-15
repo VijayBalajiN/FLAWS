@@ -1,0 +1,8 @@
+:original_text:
+We will train and evaluate two ablated models: one using only the Masked LM task (without Next Sentence Prediction) and another using a traditional Left-to-Right (LTR) LM objective instead of MLM.
+
+:modified_text:
+We will train and evaluate two ablated models: one using only the Masked LM task (without Next Sentence Prediction, and with Segment Embeddings removed as they are no longer required), and another using a traditional Left-to-Right (LTR) LM objective instead of MLM.
+
+:explanation:
+The flaw's mechanism is a **confounding variable in the model architecture**. The ablation is intended to measure the impact of the NSP *task*, but this modification also removes the Segment Embeddings from the model's input representation. The comparison is now between a model with (MLM + NSP + Segment Embeddings) and a model with just (MLM). A performance difference cannot be attributed solely to the NSP objective, as it could also be due to the removal of the segment embeddings, which might provide a useful inductive bias on their own. This makes it impossible to isolate NSP's specific contribution.

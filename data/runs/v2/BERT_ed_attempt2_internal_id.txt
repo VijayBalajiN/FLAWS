@@ -1,0 +1,12 @@
+:error_text:
+another using a traditional Left-to-Right (LTR) LM objective instead of MLM, which will be trained only on single contiguous sentences rather than sentence pairs. This will allow us to isolate the contributions of deep bidirectionality and the NSP task.
+
+:error_text:
+We will extract fixed contextual embeddings from various layers of the pre-trained model and feed them into a BiLSTM classifier, comparing its performance to the standard fine-tuning approach.
+
+:explanation:
+The research plan contains two significant methodological flaws in its ablation studies, which introduce confounding variables and prevent valid conclusions.
+
+1.  (Most serious) The ablation study designed to measure the impact of bidirectionality is flawed. It compares the proposed model (MLM objective on sentence pairs) with a Left-to-Right (LTR) model trained *only on single sentences*. This design changes two variables at once: the training objective (MLM vs. LTR) and the data format (sentence pairs vs. single sentences). Consequently, any observed performance difference cannot be attributed solely to the bidirectionality of the MLM objective, as the lack of sentence-pair training in the LTR model is a confounding factor.
+
+2.  The comparison between the fine-tuning and feature-based approaches is invalid. The feature-based approach introduces a complex, randomly initialized BiLSTM classifier on top of the frozen BERT embeddings. In contrast, the fine-tuning approach uses a minimal, simple output layer. This difference in task-specific architecture makes it an unfair comparison. A proper ablation would keep the downstream architecture constant to isolate the effect of freezing the pre-trained model's weights versus fine-tuning them.

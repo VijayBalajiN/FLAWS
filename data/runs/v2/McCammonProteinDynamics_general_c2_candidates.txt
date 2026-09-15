@@ -1,0 +1,35 @@
+:candidate:
+1
+
+:original_text:
+4.  **Probe for Concerted and Collective Motions:** We will search the trajectories for evidence of larger-scale, non-local motions, such as the collective movement of entire structural elements or transitions of sidechains and backbone segments between different conformational states.
+
+:modified_text:
+4.  **Probe for Concerted and Collective Motions:** We will search the trajectories for evidence of larger-scale, non-local motions, such as the collective movement of entire structural elements or the concerted 'ring-flip' transitions of interior tyrosine sidechains between different conformational states.
+
+:explanation:
+This modification introduces a timescale mismatch. The analysis plan now specifically targets "ring-flip" transitions of tyrosine sidechains. These are well-known, slow conformational events that typically occur on nanosecond-to-microsecond timescales. A simulation duration of "several picoseconds" is orders of magnitude too short to observe even a single such event, let alone sample its statistics. Therefore, the claim that the simulation is long enough to capture "essential" dynamics is falsified, as it cannot capture a key dynamic explicitly targeted by the analysis.
+
+:candidate:
+2
+
+:original_text:
+3.  **Production Run:** Following equilibration, we will conduct the main dynamical simulation by integrating the equations of motion using the Gear algorithm for a duration of several picoseconds.
+
+:modified_text:
+3.  **Production Run:** Following equilibration, we will conduct the main dynamical simulation by integrating the equations of motion using the Gear algorithm for a duration of several picoseconds, during which the temperature will be gradually increased to 300 K via velocity rescaling.
+
+:explanation:
+This modification introduces a non-equilibrium artifact. By stating that the temperature is increased to its target value *during* the production run, the simulation is no longer sampling a system at equilibrium. Instead, it is capturing a transient heating process. The resulting atomic trajectories would not represent the protein's natural, equilibrium fluctuations, but rather the system's response to being heated. The claim that the simulation captures the "essential" (i.e., equilibrium) dynamics is false because the system never reaches a stable equilibrium state during the data collection phase.
+
+:candidate:
+3
+
+:original_text:
+1.  **Initialization:** We will use the atomic coordinates from the published X-ray structure as the initial positions for all atoms. Initial velocities will be set to zero.
+
+:modified_text:
+1.  **Initialization:** We will use the atomic coordinates from the published X-ray structure as the initial positions for all atoms. To maintain the native fold, strong harmonic positional restraints will be applied to all backbone alpha-carbon atoms throughout the simulation. Initial velocities will be set to zero.
+
+:explanation:
+This modification introduces an artificial constraint on the system's dynamics. Applying strong positional restraints to all backbone alpha-carbons effectively freezes the protein's overall structure, preventing the very "fluid-like" collective motions and conformational changes the study hypothesizes. The simulation would only capture trivial, localized vibrations around a fixed backbone. The claim that the duration is sufficient to capture "essential dynamical characteristics" is therefore false, because the most essential dynamics have been artificially removed from the system by the experimental setup itself.

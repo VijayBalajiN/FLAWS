@@ -1,0 +1,2 @@
+error:To ensure our findings are robust and not attributable to simple artifacts, we will conduct a series of control experiments:
+error:**Memorization:** We will create an anonymized version of the benchmark by masking specific method names and identifiers to test whether models rely on recognition rather than reasoning.

@@ -1,0 +1,9 @@
+{
+  "label": "McCammonProteinDynamics_general_c3_v3",
+  "original_text": "We will perform an initial equilibration phase to allow the stresses present in the static X-ray structure to relax and to raise the system's kinetic energy to a level corresponding to room temperature.",
+  "modified_text": "We will perform an initial equilibration phase, with all heavy-atom positions harmonically restrained to their initial X-ray coordinates, to allow the stresses present in the static X-ray structure to relax and to raise the system's kinetic energy to a level corresponding to room temperature.",
+  "explanation": "The mechanism of error is contradictory constraints. The purpose of equilibration is to let the protein move away from the potentially strained X-ray coordinates to a more stable solution-phase conformation. By harmonically restraining all heavy atoms *to* their initial positions, the protocol actively prevents this relaxation from occurring. While the system's kinetic energy might be raised, the potential energy stresses are locked in by the artificial restraints. This directly falsifies the claim that the equilibration is sufficient \"to relax the stresses inherent in the static X-ray crystal structure.\"",
+  "category": "A",
+  "category_name": "Internal Contradiction",
+  "reasoning": "The error is an internal contradiction because the stated goal of relaxing stresses is directly prevented by the stated method of restraining atoms, causing the text's own machinery to break itself."
+}

@@ -1,0 +1,35 @@
+:candidate:
+1
+
+:original_text:
+We will train and evaluate two ablated models: one using only the Masked LM task (without Next Sentence Prediction) and another using a traditional Left-to-Right (LTR) LM objective instead of MLM.
+
+:modified_text:
+We will train and evaluate two ablated models: one using only the Masked LM task (without Next Sentence Prediction) and another using a traditional Left-to-Right (LTR) LM objective trained only on the BooksCorpus to match the OpenAI GPT baseline.
+
+:explanation:
+This modification introduces a confounding variable into the experimental design. The proposal's central claim is that deep bidirectionality (from MLM) is superior to unidirectionality (from LTR). By specifying that the LTR ablation model will be trained *only* on the BooksCorpus (to match the original GPT), while the main BERT models are trained on BooksCorpus + Wikipedia, the comparison is no longer fair. Any observed performance difference could be attributed to the significantly larger and more diverse training data rather than the model's bidirectionality. This flaw makes it impossible for the ablation study to isolate the effect of bidirectionality, thus failing to provide valid evidence for the central hypothesis.
+
+:candidate:
+2
+
+:original_text:
+While feature-based methods like ELMo combine independently trained left-to-right and right-to-left models, this approach is shallowly bidirectional and less powerful than a model that is jointly conditioned on both left and right context in all layers.
+
+:modified_text:
+While feature-based methods like ELMo combine independently trained left-to-right and right-to-left models, this approach fuses the hidden states at each layer and is less powerful than a model that is jointly conditioned on both left and right context in all layers.
+
+:explanation:
+This modification undermines the proposal's claim of novelty by mischaracterizing the state of the art. The original text correctly describes ELMo as "shallowly bidirectional" because it concatenates the final outputs of two independent LMs. The modified text incorrectly claims ELMo "fuses the hidden states at each layer," which implies a form of deep bidirectionality. If existing methods were already deeply bidirectional, the proposed model's core contribution would be merely an alternative implementation rather than a fundamental breakthrough. This weakens the premise of the entire proposal and makes the central hypothesis seem like an incremental claim rather than a significant advance.
+
+:candidate:
+3
+
+:original_text:
+Language representations jointly conditioned on both left and right context in all layers are more powerful than representations conditioned on unidirectional or shallowly combined bidirectional contexts.
+
+:modified_text:
+Language representations jointly conditioned on both left and right context in all layers learn richer bidirectional features than representations conditioned on unidirectional or shallowly combined bidirectional contexts.
+
+:explanation:
+This modification changes the hypothesis from a falsifiable scientific claim into a non-falsifiable, tautological statement. The original hypothesis makes a claim about being "more powerful," which can be empirically tested and falsified through performance on downstream tasks. The modified hypothesis claims the model will learn "richer bidirectional features." This is almost true by definition; a model designed to be bidirectional is expected to learn bidirectional features. The claim is no longer about superior real-world performance but about an inherent, internal property of the model's architecture. This makes the hypothesis circular and unfalsifiable, as there is no clear, independent metric for "richer bidirectional features" other than the model's design itself.

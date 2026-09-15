@@ -1,0 +1,15 @@
+:error_type:
+Confounded design
+
+:original_text:
+-   We will vary the number of attention heads (h) and the attention key and value dimensions (d_k, d_v), while keeping the total amount of computation constant.
+
+:modified_text:
+-   We will vary the number of attention heads (h) and the attention key and value dimensions (d_k, d_v).
+
+:explanation:
+The methodological flaw introduced is a confounded design in the ablation study. By removing the clause "while keeping the total amount of computation constant," the experiment no longer isolates the variable of interest (the number of attention heads, h).
+
+In the Transformer architecture, the model's hidden dimension `d_model` is typically a product of the number of heads and the value dimension (`d_model = h * d_v`). The original design correctly proposes to hold the total computation (and thus `d_model`) constant, for instance by decreasing `d_v` when `h` is increased. The modified design removes this control.
+
+As a result, an experiment comparing a model with h=8 to one with h=16 would also be comparing a smaller model to a larger one. If the h=16 model performs better, it is impossible to determine whether the improvement is due to the increased number of heads or simply due to the model having more parameters and greater computational capacity. This failure to rule out model size as an alternative explanation for the observed effect is a classic confounding variable problem.

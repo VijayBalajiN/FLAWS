@@ -1,0 +1,15 @@
+:error_text:
+We will evaluate models on a held-out split of very recent papers (ICLR 2026) using models with documented training data cutoffs prior to the papers' publication.
+
+:error_text:
+defaulting to a "low soundness" rating unless the proposal demonstrates exceptionally clear and rigorous methodology.
+
+:error_text:
+replace a key section of high-soundness proposals... with a templated paragraph describing a clear methodological flaw
+
+:explanation:
+The most serious error is a temporal impossibility that makes a key control experiment unexecutable: the plan proposes using papers from ICLR 2026, a conference that has not yet occurred and for which no papers exist.
+
+The second error undermines the validity of the prompt sensitivity test. By instructing the model to "default" to a low rating, the "Aggressive Prompt" tests the model's ability to follow an explicit rule rather than its capacity for more stringent scientific reasoning. This conflates instruction-following with a genuine shift in critical judgment.
+
+The third error weakens the "Adversarial Flaw Injection" control. Using a "templated paragraph" to introduce flaws means the model can achieve high performance by simply pattern-matching the template's text, rather than by understanding and identifying the underlying methodological error. This tests surface-level recognition instead of the intended reasoning capability.

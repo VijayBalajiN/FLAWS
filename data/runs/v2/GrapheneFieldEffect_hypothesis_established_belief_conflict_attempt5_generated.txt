@@ -1,0 +1,22 @@
+:error_type:
+Conflict with Established Beliefs
+
+:original_text:
+Stable, atomically thin graphitic films are two-dimensional semimetals that exhibit a strong, ambipolar electric field effect, allowing the concentration of their charge carriers—both electrons and holes—to be tuned by an external gate voltage.
+
+:modified_text:
+Stable, atomically thin graphitic films are two-dimensional semimetals that exhibit a strong, unipolar electric field effect, allowing the concentration of their charge carriers—primarily electrons—to be tuned by an external gate voltage.
+
+:error_type:
+Conflict with Established Beliefs
+
+:original_text:
+A primary objective is to test for an ambipolar field effect, where we can tune the charge carriers continuously from electrons to holes by varying the gate voltage.
+
+:modified_text:
+A primary objective is to test for a unipolar field effect, where we can tune the charge carrier concentration significantly for only one polarity of gate voltage, confirming electron-dominant transport.
+
+:explanation:
+(a) The established belief being conflicted with is the fundamental ambipolar nature of electronic transport in graphene. This property, which has been extensively verified experimentally and theoretically, arises directly from graphene's unique electronic band structure: its symmetric, linear dispersion relation where the conduction and valence bands meet at the Dirac points. This symmetry dictates that both electrons and holes can be induced with a gate voltage and exhibit similar transport properties.
+
+(b) The modified hypothesis is internally consistent; it proposes a unipolar field effect, a common phenomenon in many materials where only one type of charge carrier (e.g., electrons) dominates transport. However, this claim directly contradicts the established electron-hole symmetry of graphene. An expert would immediately recognize that proposing a fundamentally unipolar field effect for intrinsic graphene is a deep misconception about the material's core electronic properties. The hypothesis is plausible for a generic, unknown 2D material but is irreconcilable with the known physics of graphene.

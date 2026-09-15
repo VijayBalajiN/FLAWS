@@ -1,0 +1,27 @@
+[
+  {
+    "claim": "The interior of a globular protein behaves like a fluid, and its atomic motions are diffusional in nature.",
+    "source_field": "hypothesis",
+    "source_excerpt": "The interior of a folded globular protein is a fluid-like environment where local atomic motions exhibit a diffusional character."
+  },
+  {
+    "claim": "A simulation duration of \"several picoseconds\" is long enough to adequately capture the essential dynamical characteristics of the protein's internal motions.",
+    "source_field": "experiment_design",
+    "source_excerpt": "Following equilibration, we will conduct the main dynamical simulation by integrating the equations of motion using the Gear algorithm for a duration of several picoseconds."
+  },
+  {
+    "claim": "The planned equilibration phase is sufficient to relax the stresses inherent in the static X-ray crystal structure and achieve a thermally representative dynamic state.",
+    "source_field": "experiment_design",
+    "source_excerpt": "We will perform an initial equilibration phase to allow the stresses present in the static X-ray structure to relax and to raise the system's kinetic energy to a level corresponding to room temperature."
+  },
+  {
+    "claim": "The internal dynamics of the protein can be accurately simulated by including only four specific internal water molecules and omitting the surrounding bulk solvent.",
+    "source_field": "experiment_design",
+    "source_excerpt": "We will also include four strongly bound water molecules located in the protein's interior in our simulation."
+  },
+  {
+    "claim": "The root mean square (r.m.s.) fluctuations of atomic positions provide a sufficient and complete measure for quantifying the magnitude of atomic motion within the protein.",
+    "source_field": "experiment_design",
+    "source_excerpt": "We will also calculate the root mean square (r.m.s.) fluctuations of atomic positions relative to this average structure to quantify the magnitude of motion throughout the protein."
+  }
+]

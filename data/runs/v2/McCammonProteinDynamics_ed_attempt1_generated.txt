@@ -1,0 +1,15 @@
+:error_type:
+Wrong metric/measurement
+
+:original_text:
+2.  **Analyze Time-Dependence of Motions:** We will calculate time correlation functions for the fluctuations of various internal coordinates (e.g., bond lengths, bond angles, dihedral angles) and atomic positions. This will allow us to characterize the decay behavior of these fluctuations and identify their dominant frequencies and relaxation times.
+
+:modified_text:
+2.  **Analyze Time-Dependence of Motions:** We will perform a normal mode analysis on the time-averaged structure obtained from the simulation. This will allow us to characterize the principal modes of vibration and identify their dominant frequencies, which are the primary contributors to atomic motion.
+
+:explanation:
+The methodological flaw introduced is a "Wrong metric/measurement." The research hypothesis posits that the protein interior is "fluid-like" and that atomic motions have a "diffusional character." However, the modified analysis plan proposes using Normal Mode Analysis (NMA) to study the dynamics.
+
+NMA is a technique that models a molecule's motions as a collection of independent harmonic oscillators vibrating around a single, stable, minimum-energy structure. This is a model for solid-like behavior. It is fundamentally incapable of describing fluid-like or diffusional motion, which is characterized by atoms moving from one region to another over time and is an inherently anharmonic process.
+
+By proposing NMA, the experimental design chooses a metric (principal modes of vibration) that is conceptually inconsistent with the phenomenon it claims to investigate. Detecting this flaw requires understanding the physical assumptions underlying NMA and recognizing that they contradict the physics of the "fluid-like" and "diffusional" state described in the hypothesis. This is a subtle error, as NMA is a legitimate and sophisticated technique for studying other types of protein motion, making its inclusion here plausible to a non-expert.

@@ -1,0 +1,11 @@
+:error_type:
+Confounded design
+
+:original_text:
+*   **Adversarial Flaw Injection:** We will intentionally introduce severe methodological flaws (e.g., mismatched datasets and metrics) into high-soundness proposals to test if models can detect these obvious errors.
+
+:modified_text:
+*   **Adversarial Flaw Injection:** To test if models can detect obvious errors, we will replace a key section of high-soundness proposals (e.g., the dataset description) with a templated paragraph describing a clear methodological flaw, such as a severe data mismatch.
+
+:explanation:
+The modification introduces a confound into the adversarial control experiment. By using a "templated paragraph" to describe the flaw, the design is no longer purely testing the model's ability to understand the methodological error. Instead, it creates a situation where the model might simply learn to recognize the specific phrasing, structure, or linguistic artifacts of the template as a signal for a "low soundness" proposal, without any deep reasoning. If the model successfully identifies these flawed proposals, it is impossible to disentangle whether it is due to genuine methodological assessment or trivial pattern matching on the boilerplate text used for the injection. This confounds the interpretation of the control, as high performance could be achieved via a simple heuristic rather than the intended reasoning capacity.

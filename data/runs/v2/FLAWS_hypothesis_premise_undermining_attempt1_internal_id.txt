@@ -1,0 +1,5 @@
+:error_text:
+The retraction-worthiness of an error in a scientific paper is a function of its connection to the paper's core claims.
+
+:explanation:
+This hypothesis is fundamentally disconnected from the proposed research plan. The experiment is designed to measure the capability of LLMs to find synthetically generated, claim-invalidating errors, using an Accuracy@k metric. It does not, however, collect any data on what makes a paper "retraction-worthy," nor does it analyze actual retracted papers. The experiment evaluates a tool's performance on a predefined task, but it is not structured to test a sociological or scientometric claim about the nature of scientific retractions. This creates a critical misalignment between what the study claims to investigate (the hypothesis) and what it actually measures (the experiment).

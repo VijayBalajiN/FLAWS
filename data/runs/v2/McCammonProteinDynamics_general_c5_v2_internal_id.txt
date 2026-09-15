@@ -1,0 +1,10 @@
+:error_text:
+We will also include four strongly bound water molecules located in the protein's interior in our simulation.
+
+:error_text:
+Initial velocities will be set to zero.
+
+:explanation:
+The most critical flaw is that the experiment is designed to be run in a vacuum. The model system is defined as the protein and only four internal water molecules, with no mention of the surrounding bulk solvent. This is a physically unrealistic environment for a protein. The absence of solvent means that long-range electrostatic interactions are grossly overestimated and the hydrophobic effect, a key driver of protein structure, is completely neglected. This will likely lead to artifactual structural collapse and dynamics that are not representative of the protein's behavior in its native aqueous environment.
+
+A second, significant methodological error is the initialization of the system with zero velocities. This "cold start" corresponds to a temperature of 0 Kelvin and means the system is far from thermal equilibrium. The subsequent relaxation can be violent and may introduce artifacts, making it difficult to achieve a properly equilibrated state from which to start the production simulation. The vacuum simulation is the more severe error because it invalidates the physical model itself, whereas the poor initialization is a procedural flaw that makes achieving a valid state within that model difficult.

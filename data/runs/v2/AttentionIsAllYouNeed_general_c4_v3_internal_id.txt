@@ -1,0 +1,10 @@
+:error_text:
+To understand the importance of different components of the Transformer, we will conduct experiments by varying our base model in several ways:
+
+:error_text:
+Each training batch will contain a set of sentence pairs totaling approximately 25,000 source tokens and 25,000 target tokens.
+
+:explanation:
+The most serious error is a fundamental flaw in the experimental design: the complete omission of baseline models. The research plan's goal is to show that the Transformer is a superior alternative to RNN and CNN-based models. However, the "Ablation Studies" section only proposes experiments that vary the internal components of the Transformer itself. Without comparing performance, training speed, and parallelization against the state-of-the-art models it aims to replace, the experiment cannot validate its central hypothesis or answer its primary research questions.
+
+The second error is a flawed and impractical batching strategy. In tasks with variable-length sequences, it is standard to create batches by targeting a token count for either the source or the target side, but not both simultaneously. Attempting to create batches that meet a specific token count for both source and target sentences would be computationally complex and result in highly inefficient hardware utilization, as it would require finding very specific combinations of sentence pairs.

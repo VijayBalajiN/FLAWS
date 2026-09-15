@@ -1,0 +1,13 @@
+:error_type:
+Wrong metric/measurement
+
+:original_text:
+-   **Evaluation Metrics:** For machine translation, we will evaluate models using the BLEU score. For English constituency parsing, we will use standard F1 scores.
+
+:modified_text:
+-   **Evaluation Metrics:** For machine translation, we will evaluate models using perplexity on the target language. For English constituency parsing, we will use standard F1 scores.
+
+:explanation:
+The methodological flaw introduced is the use of an incorrect primary metric for the machine translation task. The original design correctly specifies the BLEU score, which is a standard metric for evaluating the quality of a translation by comparing it to professional human translations.
+
+The modified design replaces BLEU with perplexity on the target language. Perplexity measures how well a probability distribution (like a language model) predicts a given text sample. While it can measure the *fluency* of the generated target sentences, it completely ignores the source text. Therefore, a model could achieve a very good perplexity score by generating fluent but completely irrelevant sentences that have no connection to the source input. This metric fails to evaluate the core "translation" aspect of the task (adequacy and fidelity), making it unsuitable for determining if the model is performing its function correctly. This is a subtle but critical error, as perplexity is a valid and common metric in other areas of NLP, and a non-expert might not recognize its inadequacy for evaluating machine translation.

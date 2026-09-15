@@ -1,0 +1,2 @@
+error: For each test case in SoundnessBench, a model will be given a results-masked research proposal and tasked with classifying its methodological soundness as either "high" or "low," accompanied by a detailed justification.
+error: We will create an anonymized version of the benchmark by masking specific method names and identifiers to test whether models rely on recognition rather than reasoning.

@@ -1,0 +1,8 @@
+:error_text:
+we will perform an initial 100 femtosecond equilibration phase
+
+:error_text:
+Initial velocities will be set to zero.
+
+:explanation:
+The combination of these two steps represents a critical methodological flaw. Starting the simulation with zero velocity for all atoms is equivalent to starting at a temperature of 0 Kelvin, a highly artificial and energetically stressed state. The subsequent equilibration period of only 100 femtoseconds is orders of magnitude too short for a system as complex as a protein to relax from this state and reach thermal equilibrium. Consequently, the "production" phase of the simulation will not represent the equilibrium dynamics of the protein at room temperature, but rather the initial, transient relaxation from an unphysical starting point, invalidating any conclusions about the protein's natural motions.

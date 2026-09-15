@@ -1,0 +1,13 @@
+:error_type:
+Undermining a Premise
+
+:original_text:
+Large Language Models' assessment of a research proposal's methodological soundness is unreliable, exhibiting a bias towards optimism and high sensitivity to prompt framing.
+
+:modified_text:
+Large Language Models' assessment of a research proposal's methodological soundness is unreliable because it deviates from the judgments of human experts, exhibiting a bias towards optimism and high sensitivity to prompt framing.
+
+:explanation:
+This modification introduces a subtle but critical conflation between two distinct concepts: (1) the **reliability** of an assessment (i.e., its objective correctness against a ground truth of soundness) and (2) its **alignment with human expert consensus** (i.e., its similarity to peer reviewer judgments).
+
+The original hypothesis makes a claim about reliability. The modified hypothesis redefines "unreliable" as any deviation from human expert judgment. This is a flawed premise because human peer review is itself a noisy and imperfect proxy for objective methodological soundness. A model could, in principle, be *more* reliable than human reviewers by avoiding common human biases, in which case its superior reliability would manifest as a *deviation* from the human consensus. By framing deviation as the cause of unreliability, the hypothesis incorrectly assumes that human judgment is the infallible gold standard, conflating alignment with a proxy for the truth with the truth itself. The formal structure of the hypothesis remains coherent, but it rests on the flawed informal assumption that "human-like judgment" is identical to "reliable judgment."

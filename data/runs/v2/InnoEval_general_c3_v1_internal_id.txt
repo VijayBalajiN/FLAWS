@@ -1,0 +1,17 @@
+:error_text:
+This process will yield groups of ideas with an inherent ground-truth ranking, from which we can also derive pair-wise comparison tasks.
+
+:error_text:
+We will crawl papers from top-tier conferences (NeurIPS and ICLR) via OpenReview and perform stratified sampling based on their final decisions
+
+:error_text:
+use its primary keywords to retrieve topically similar papers, selecting one from each decision category to form a group.
+
+:explanation:
+The experimental design contains several critical flaws that undermine its validity.
+
+1.  **Invalid Ground Truth:** The most serious flaw, highlighted by the first two excerpts, is the assumption that final peer-review decisions for a full paper serve as an objective "ground truth" for the quality of the underlying research *idea*. Peer review is a noisy, subjective process that evaluates the complete execution of a paper (writing, experiments, presentation), not just the core idea. Equating a "Spotlight" paper's idea as inherently superior to a "Poster" paper's idea is a fundamental conceptual error that invalidates the evaluation metrics.
+
+2.  **Data Contamination:** The second excerpt also points to a fatal data leakage problem. The method proposes a system that searches the scholarly literature (e.g., arXiv, Google Scholar) to gather knowledge. However, the experiment is designed to test this system on existing, published papers from that same body of literature. This design allows the system to find the exact paper it is supposed to be evaluating, potentially looking up its publication venue and reviews, thus trivializing the task and failing to test the system's reasoning capabilities.
+
+3.  **Artificial Task Formulation:** The third excerpt describes a flawed methodology for constructing the group-wise dataset. Creating groups of "topically similar" papers based on keywords and then forcing a ranked distribution by selecting one from each decision category creates an artificial comparison. The papers may not be comparable as they might solve different specific problems. This makes the "ground-truth ranking" an artifact of the dataset construction rather than a reflection of a meaningful, real-world comparison.

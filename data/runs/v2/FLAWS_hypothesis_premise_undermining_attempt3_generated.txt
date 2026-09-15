@@ -1,0 +1,13 @@
+:error_type:
+Undermining a Premise
+
+:original_text:
+The criticality of an error in a scientific paper is a function of its connection to the paper's core claims.
+
+:modified_text:
+The criticality of an error in a scientific paper, defined by its potential to trigger a retraction, is a function of its connection to the paper's core claims.
+
+:explanation:
+This modification conflates two related but distinct concepts: (a) the **logical criticality** of an error (its internal role in invalidating a paper's claims) and (b) its **retraction-worthiness** (a procedural and social outcome determined by journal policies, academic integrity standards, and community norms).
+
+The mistake lies in treating these as interchangeable. A paper can be retracted for reasons that are not logical errors related to its core claims, such as plagiarism, data fabrication, or authorship disputes. Conversely, a paper can contain a logically critical, claim-invalidating error but never be retracted; a less severe "correction" might be issued, or the error might simply go unnoticed or unaddressed. By defining criticality as the potential to trigger retraction, the hypothesis smuggles in the flawed premise that the logical structure of a paper's argument is identical to the social and ethical process of its post-publication validation. The research plan's method, which focuses only on generating claim-invalidating errors, is a valid test of logical criticality but becomes an incomplete test of the newly-defined, and much broader, concept of retraction-worthiness.

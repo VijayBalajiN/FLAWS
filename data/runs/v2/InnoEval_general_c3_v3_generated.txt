@@ -1,0 +1,8 @@
+:original_text:
+We will crawl papers from top-tier conferences (NeurIPS and ICLR) via OpenReview and perform stratified sampling based on their final decisions (Reject, Poster, Spotlight, Oral).
+
+:modified_text:
+To ensure coverage of high-impact work, we will source Oral and Spotlight papers from curated "best-of" lists from recent years, while crawling the full OpenReview archives for Poster and Reject papers to ensure a large sample size.
+
+:explanation:
+This modification introduces a systematic sampling artifact. The methodology sounds reasonable, aiming for quality and quantity, but it creates a temporal bias. "Best-of" lists are by definition from "recent years," while the "full OpenReview archives" for Poster and Reject papers will span a much longer, and on average older, time frame. Scientific fields evolve rapidly, so newer papers naturally address more current problems and build on more advanced prior work. The model might simply learn to distinguish recent papers from older ones, rather than high-quality ideas from low-quality ones. This makes the "ground-truth ranking" a proxy for recency, not the inherent quality of the idea.

@@ -1,0 +1,8 @@
+:original_text:
+We will vary the learning rate over the course of training according to the formula: `lr = d_model^-0.5 * min(step_num^-0.5, step_num * warmup_steps^-1.5)`.
+
+:modified_text:
+We will vary the learning rate over the course of training according to the formula: `lr = d_ff^-0.5 * min(step_num^-0.5, step_num * warmup_steps^-1.5)`.
+
+:explanation:
+The mechanism of this error is a parameter mismatch. The learning rate formula's scaling factor has been incorrectly tied to `d_ff` (the inner-layer dimensionality of the feed-forward network, 2048) instead of `d_model` (the model's main dimensionality, 512). Since `d_ff` is four times larger than `d_model`, the scaling factor `d_ff^-0.5` will be half the size of the intended `d_model^-0.5`. This results in a learning rate that is consistently 50% smaller than intended across the entire training process. Such a significant reduction could lead to extremely slow convergence or cause the model to get stuck in a poor local minimum, undermining the schedule's effectiveness. This is a plausible error a researcher might make by referencing the wrong hyperparameter.

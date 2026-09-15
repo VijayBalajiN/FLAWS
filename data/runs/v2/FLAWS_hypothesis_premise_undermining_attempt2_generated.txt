@@ -1,0 +1,11 @@
+:error_type:
+Undermining a Premise
+
+:original_text:
+The criticality of an error in a scientific paper is a function of its connection to the paper's core claims.
+
+:modified_text:
+The impact of an error in a scientific paper is a function of its connection to the paper's core claims.
+
+:explanation:
+The modification conflates two distinct concepts: the 'criticality' of an error and its 'impact'. 'Criticality' is an internal property of a paper, referring to how severely an error undermines the paper's own logical and evidentiary structure, particularly its core claims. The research method, which involves inserting claim-invalidating errors, is designed to manipulate and test for criticality. 'Impact', however, is an external, sociological property, referring to the error's effect on the wider research community (e.g., causing wasted effort on follow-up studies, leading to retractions, or influencing citations). While a critical error *can* have a high impact, the two are not interchangeable. A paper with a critical flaw might be ignored and have zero impact, while a less-critical error in a foundational, widely-cited paper could have a massive impact. The modified hypothesis makes a claim about impact, but the proposed experiment is only equipped to measure criticality, silently and incorrectly assuming they are the same.

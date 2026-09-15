@@ -1,0 +1,1 @@
+error:2.  **Analyze Time-Dependence of Motions:** We will calculate time correlation functions for the fluctuations of various internal coordinates (e.g., bond lengths, bond angles, dihedral angles) and atomic positions. This will allow us to characterize the decay behavior of these fluctuations and identify their dominant frequencies and relaxation times.

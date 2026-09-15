@@ -1,0 +1,35 @@
+:candidate:
+1
+
+:original_text:
+By systematically sweeping the gate voltage, we will investigate our central hypothesis: that we can induce a significant surface charge and thereby modulate the carrier concentration in the film.
+
+:modified_text:
+By systematically sweeping the gate voltage across a wide range (-100 V to +100 V), we will investigate our central hypothesis: that we can induce a significant surface charge and thereby modulate the carrier concentration in the film.
+
+:explanation:
+The mechanism of this flaw is **dielectric breakdown**. The modification specifies a gate voltage sweep up to +/- 100 V. A standard silicon oxide gate dielectric, especially one of a thickness suitable for observing a strong field effect in graphene (e.g., 285-300 nm), has a breakdown field of around 10 MV/cm. This corresponds to a breakdown voltage of roughly 300 V for a 300 nm oxide layer, but this is an ideal maximum; defects can lower it significantly, and thinner oxides used for stronger gating would break down at much lower voltages. Pushing the voltage to 100 V is aggressive and risks catastrophic failure of the dielectric. Once the dielectric breaks down, a large leakage current flows through the gate, preventing the buildup of a static surface charge. This directly falsifies the claim that applying the voltage is *sufficient* to induce the necessary charge, as the device itself would fail before the full, stable effect could be measured.
+
+:candidate:
+2
+
+:original_text:
+We will transfer the isolated films onto an oxidized silicon substrate, which will serve a dual purpose: the silicon oxide layer will act as a gate dielectric, and the heavily doped silicon wafer will function as a back gate.
+
+:modified_text:
+We will transfer the isolated films onto an untreated oxidized silicon substrate, which will serve a dual purpose: the silicon oxide layer will act as a gate dielectric, and the heavily doped silicon wafer will function as a back gate.
+
+:explanation:
+The mechanism of this flaw is **interface charge trapping**. The addition of the single word "untreated" implies a critical omission in the fabrication process. In semiconductor device physics, the interface between the channel material (graphene) and the dielectric (silicon oxide) is paramount. An "untreated" substrate surface would be contaminated with moisture, organic residues, and other adsorbates, creating a high density of electronic "trap states." When a gate voltage is applied, the induced charge carriers will fill these immobile trap states instead of populating the mobile bands of the graphene film. As a result, the film's conductivity will not modulate effectively with the gate voltage. This flaw falsifies the claim because while a surface charge is induced, it is not of a large enough magnitude *in the conducting channel* to alter the film's properties as hypothesized.
+
+:candidate:
+3
+
+:original_text:
+For each device, we will conduct transport measurements by applying a gate voltage (Vg) to the silicon substrate while measuring the film's conductivity and Hall coefficient.
+
+:modified_text:
+For each device, we will conduct transport measurements in ambient air by applying a gate voltage (Vg) to the silicon substrate while measuring the film's conductivity and Hall coefficient.
+
+:explanation:
+The mechanism of this flaw is **environmental screening and uncontrolled doping**. The modification specifies that measurements will be done "in ambient air." The electronic properties of 2D materials like graphene are extremely sensitive to their environment. Molecules from the air, particularly water, will adsorb onto the graphene surface. This adsorbed water layer is polar and acts as an electrochemical shield, screening the electric field from the back gate and drastically weakening its effect on the graphene. Furthermore, charge transfer between the adsorbates and the graphene creates a separate, uncontrolled doping effect that can mask the intended gating. This falsifies the claim because the gate voltage is no longer sufficient to induce a predictable charge of large enough magnitude; its effect is overwhelmed and screened by the uncontrolled surface environment.

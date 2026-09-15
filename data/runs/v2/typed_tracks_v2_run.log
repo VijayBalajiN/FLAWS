@@ -1,0 +1,264 @@
+/Users/vijaybalajinarasimmabharathi/Desktop/7th-sem/project/FLAWS/src/pipeline/plan_error_insertion.py:49: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+[AttentionIsAllYouNeed/hypothesis_internal_contradiction] attempt 1/5
+[AttentionIsAllYouNeed/hypothesis_internal_contradiction_attempt1] filtered: too easy
+[AttentionIsAllYouNeed/hypothesis_internal_contradiction] attempt 2/5
+[AttentionIsAllYouNeed/hypothesis_internal_contradiction_attempt2] filtered: too easy
+[AttentionIsAllYouNeed/hypothesis_internal_contradiction] attempt 3/5
+[AttentionIsAllYouNeed/hypothesis_internal_contradiction_attempt3] filtered: too easy
+[AttentionIsAllYouNeed/hypothesis_internal_contradiction] attempt 4/5
+[AttentionIsAllYouNeed/hypothesis_internal_contradiction_attempt4] filtered: too easy
+[AttentionIsAllYouNeed/hypothesis_internal_contradiction] attempt 5/5
+[AttentionIsAllYouNeed/hypothesis_internal_contradiction_attempt5] rejected: no edit landed in the required hypothesis section
+[AttentionIsAllYouNeed/hypothesis_internal_contradiction] exhausted 5 attempts, picking best of the rejects
+[AttentionIsAllYouNeed/hypothesis_internal_contradiction] best reject: attempt 1 (tier 2, score None)
+Exact match found.
+Exact match found.
+[AttentionIsAllYouNeed/hypothesis_internal_contradiction] SAVED BEST REJECT -> data/altered_plans_v2/AttentionIsAllYouNeed_hypothesis_internal_contradiction_altered.json
+[AttentionIsAllYouNeed/hypothesis_established_belief_conflict] attempt 1/5
+[AttentionIsAllYouNeed/hypothesis_established_belief_conflict_attempt1] filtered: too easy
+[AttentionIsAllYouNeed/hypothesis_established_belief_conflict] attempt 2/5
+[AttentionIsAllYouNeed/hypothesis_established_belief_conflict_attempt2] filtered: too easy
+[AttentionIsAllYouNeed/hypothesis_established_belief_conflict] attempt 3/5
+[AttentionIsAllYouNeed/hypothesis_established_belief_conflict_attempt3] filtered: too easy
+[AttentionIsAllYouNeed/hypothesis_established_belief_conflict] attempt 4/5
+[AttentionIsAllYouNeed/hypothesis_established_belief_conflict_attempt4] filtered: too easy
+[AttentionIsAllYouNeed/hypothesis_established_belief_conflict] attempt 5/5
+[AttentionIsAllYouNeed/hypothesis_established_belief_conflict_attempt5] filtered: too easy
+[AttentionIsAllYouNeed/hypothesis_established_belief_conflict] exhausted 5 attempts, picking best of the rejects
+[AttentionIsAllYouNeed/hypothesis_established_belief_conflict] best reject: attempt 1 (tier 2, score None)
+Exact match found.
+Exact match found.
+[AttentionIsAllYouNeed/hypothesis_established_belief_conflict] SAVED BEST REJECT -> data/altered_plans_v2/AttentionIsAllYouNeed_hypothesis_established_belief_conflict_altered.json
+[AttentionIsAllYouNeed/hypothesis_premise_undermining] attempt 1/5
+Exact match found.
+Saved score at data/altered_plans_v2/AttentionIsAllYouNeed_hypothesis_premise_undermining_attempt1_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.01 minutes
+[AttentionIsAllYouNeed/hypothesis_premise_undermining_attempt1] self-identified (too easy), discarding
+[AttentionIsAllYouNeed/hypothesis_premise_undermining] attempt 2/5
+Exact match found.
+Saved internal score at data/altered_plans_v2/AttentionIsAllYouNeed_hypothesis_premise_undermining_attempt2_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.02 minutes
+[AttentionIsAllYouNeed/hypothesis_premise_undermining_attempt2] SUCCESS -> data/altered_plans_v2/AttentionIsAllYouNeed_hypothesis_premise_undermining_attempt2_altered.json
+[AttentionIsAllYouNeed/ed] attempt 1/5
+[AttentionIsAllYouNeed/ed_attempt1] filtered: too easy
+[AttentionIsAllYouNeed/ed] attempt 2/5
+[AttentionIsAllYouNeed/ed_attempt2] filtered: too easy
+[AttentionIsAllYouNeed/ed] attempt 3/5
+[AttentionIsAllYouNeed/ed_attempt3] filtered: too easy
+[AttentionIsAllYouNeed/ed] attempt 4/5
+[AttentionIsAllYouNeed/ed_attempt4] filtered: too easy
+[AttentionIsAllYouNeed/ed] attempt 5/5
+Exact match found.
+Saved internal score at data/altered_plans_v2/AttentionIsAllYouNeed_ed_attempt5_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.02 minutes
+[AttentionIsAllYouNeed/ed_attempt5] self-identified (too easy), discarding
+[AttentionIsAllYouNeed/ed] exhausted 5 attempts, picking best of the rejects
+[AttentionIsAllYouNeed/ed] best reject: attempt 5 (tier 1, score 0.8421052631578947)
+Exact match found.
+[AttentionIsAllYouNeed/ed] SAVED BEST REJECT -> data/altered_plans_v2/AttentionIsAllYouNeed_ed_altered.json
+[BERT/hypothesis_internal_contradiction] attempt 1/5
+[BERT/hypothesis_internal_contradiction_attempt1] rejected: no edit landed in the required hypothesis section
+[BERT/hypothesis_internal_contradiction] attempt 2/5
+[BERT/hypothesis_internal_contradiction_attempt2] filtered: too easy
+[BERT/hypothesis_internal_contradiction] attempt 3/5
+[BERT/hypothesis_internal_contradiction_attempt3] filtered: too easy
+[BERT/hypothesis_internal_contradiction] attempt 4/5
+[BERT/hypothesis_internal_contradiction_attempt4] rejected: no edit landed in the required hypothesis section
+[BERT/hypothesis_internal_contradiction] attempt 5/5
+[BERT/hypothesis_internal_contradiction_attempt5] rejected: no edit landed in the required hypothesis section
+[BERT/hypothesis_internal_contradiction] exhausted 5 attempts, picking best of the rejects
+[BERT/hypothesis_internal_contradiction] best reject: attempt 2 (tier 2, score None)
+Exact match found.
+Exact match found.
+[BERT/hypothesis_internal_contradiction] SAVED BEST REJECT -> data/altered_plans_v2/BERT_hypothesis_internal_contradiction_altered.json
+[BERT/hypothesis_established_belief_conflict] attempt 1/5
+Exact match found.
+Exact match found.
+Saved score at data/altered_plans_v2/BERT_hypothesis_established_belief_conflict_attempt1_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.02 minutes
+[BERT/hypothesis_established_belief_conflict_attempt1] self-identified (too easy), discarding
+[BERT/hypothesis_established_belief_conflict] attempt 2/5
+[BERT/hypothesis_established_belief_conflict_attempt2] filtered: too easy
+[BERT/hypothesis_established_belief_conflict] attempt 3/5
+Exact match found.
+Exact match found.
+Saved internal score at data/altered_plans_v2/BERT_hypothesis_established_belief_conflict_attempt3_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.02 minutes
+[BERT/hypothesis_established_belief_conflict_attempt3] self-identified (too easy), discarding
+[BERT/hypothesis_established_belief_conflict] attempt 4/5
+[BERT/hypothesis_established_belief_conflict_attempt4] filtered: too easy
+[BERT/hypothesis_established_belief_conflict] attempt 5/5
+[BERT/hypothesis_established_belief_conflict_attempt5] filtered: too easy
+[BERT/hypothesis_established_belief_conflict] exhausted 5 attempts, picking best of the rejects
+[BERT/hypothesis_established_belief_conflict] best reject: attempt 3 (tier 1, score 0.509090909090909)
+Exact match found.
+Exact match found.
+[BERT/hypothesis_established_belief_conflict] SAVED BEST REJECT -> data/altered_plans_v2/BERT_hypothesis_established_belief_conflict_altered.json
+[BERT/hypothesis_premise_undermining] attempt 1/5
+Exact match found.
+Exact match found.
+Saved score at data/altered_plans_v2/BERT_hypothesis_premise_undermining_attempt1_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.02 minutes
+[BERT/hypothesis_premise_undermining_attempt1] self-identified (too easy), discarding
+[BERT/hypothesis_premise_undermining] attempt 2/5
+[BERT/hypothesis_premise_undermining_attempt2] filtered: too easy
+[BERT/hypothesis_premise_undermining] attempt 3/5
+Exact match found.
+Exact match found.
+Saved internal score at data/altered_plans_v2/BERT_hypothesis_premise_undermining_attempt3_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.02 minutes
+[BERT/hypothesis_premise_undermining_attempt3] SUCCESS -> data/altered_plans_v2/BERT_hypothesis_premise_undermining_attempt3_altered.json
+[BERT/ed] attempt 1/5
+[BERT/ed_attempt1] filtered: too easy
+[BERT/ed] attempt 2/5
+Exact match found.
+Saved score at data/altered_plans_v2/BERT_ed_attempt2_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.02 minutes
+[BERT/ed_attempt2] self-identified (too easy), discarding
+[BERT/ed] attempt 3/5
+[BERT/ed_attempt3] filtered: too easy
+[BERT/ed] attempt 4/5
+Exact match found.
+Saved internal score at data/altered_plans_v2/BERT_ed_attempt4_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.02 minutes
+[BERT/ed_attempt4] SUCCESS -> data/altered_plans_v2/BERT_ed_attempt4_altered.json
+[FLAWS/hypothesis_internal_contradiction] attempt 1/5
+Exact match found.
+Saved score at data/altered_plans_v2/FLAWS_hypothesis_internal_contradiction_attempt1_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.01 minutes
+[FLAWS/hypothesis_internal_contradiction_attempt1] self-identified (too easy), discarding
+[FLAWS/hypothesis_internal_contradiction] attempt 2/5
+[FLAWS/hypothesis_internal_contradiction_attempt2] filtered: too easy
+[FLAWS/hypothesis_internal_contradiction] attempt 3/5
+Exact match found.
+Saved internal score at data/altered_plans_v2/FLAWS_hypothesis_internal_contradiction_attempt3_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.02 minutes
+[FLAWS/hypothesis_internal_contradiction_attempt3] self-identified (too easy), discarding
+[FLAWS/hypothesis_internal_contradiction] attempt 4/5
+Exact match found.
+Saved internal score at data/altered_plans_v2/FLAWS_hypothesis_internal_contradiction_attempt4_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.01 minutes
+[FLAWS/hypothesis_internal_contradiction_attempt4] self-identified (too easy), discarding
+[FLAWS/hypothesis_internal_contradiction] attempt 5/5
+Exact match found.
+Saved score at data/altered_plans_v2/FLAWS_hypothesis_internal_contradiction_attempt5_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.02 minutes
+[FLAWS/hypothesis_internal_contradiction_attempt5] self-identified (too easy), discarding
+[FLAWS/hypothesis_internal_contradiction] exhausted 5 attempts, picking best of the rejects
+[FLAWS/hypothesis_internal_contradiction] best reject: attempt 4 (tier 1, score 0.5)
+Exact match found.
+[FLAWS/hypothesis_internal_contradiction] SAVED BEST REJECT -> data/altered_plans_v2/FLAWS_hypothesis_internal_contradiction_altered.json
+[FLAWS/hypothesis_established_belief_conflict] attempt 1/5
+Exact match found.
+Saved internal score at data/altered_plans_v2/FLAWS_hypothesis_established_belief_conflict_attempt1_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.01 minutes
+[FLAWS/hypothesis_established_belief_conflict_attempt1] self-identified (too easy), discarding
+[FLAWS/hypothesis_established_belief_conflict] attempt 2/5
+Exact match found.
+Saved internal score at data/altered_plans_v2/FLAWS_hypothesis_established_belief_conflict_attempt2_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.02 minutes
+[FLAWS/hypothesis_established_belief_conflict_attempt2] SUCCESS -> data/altered_plans_v2/FLAWS_hypothesis_established_belief_conflict_attempt2_altered.json
+[FLAWS/hypothesis_premise_undermining] attempt 1/5
+Exact match found.
+Saved internal score at data/altered_plans_v2/FLAWS_hypothesis_premise_undermining_attempt1_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.01 minutes
+[FLAWS/hypothesis_premise_undermining_attempt1] self-identified (too easy), discarding
+[FLAWS/hypothesis_premise_undermining] attempt 2/5
+Exact match found.
+Saved internal score at data/altered_plans_v2/FLAWS_hypothesis_premise_undermining_attempt2_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.02 minutes
+[FLAWS/hypothesis_premise_undermining_attempt2] self-identified (too easy), discarding
+[FLAWS/hypothesis_premise_undermining] attempt 3/5
+Exact match found.
+Saved score at data/altered_plans_v2/FLAWS_hypothesis_premise_undermining_attempt3_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.01 minutes
+[FLAWS/hypothesis_premise_undermining_attempt3] self-identified (too easy), discarding
+[FLAWS/hypothesis_premise_undermining] attempt 4/5
+Exact match found.
+Saved score at data/altered_plans_v2/FLAWS_hypothesis_premise_undermining_attempt4_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.01 minutes
+[FLAWS/hypothesis_premise_undermining_attempt4] self-identified (too easy), discarding
+[FLAWS/hypothesis_premise_undermining] attempt 5/5
+Exact match found.
+Saved internal score at data/altered_plans_v2/FLAWS_hypothesis_premise_undermining_attempt5_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.01 minutes
+[FLAWS/hypothesis_premise_undermining_attempt5] self-identified (too easy), discarding
+[FLAWS/hypothesis_premise_undermining] exhausted 5 attempts, picking best of the rejects
+[FLAWS/hypothesis_premise_undermining] best reject: attempt 3 (tier 1, score 0.9655172413793104)
+Exact match found.
+[FLAWS/hypothesis_premise_undermining] SAVED BEST REJECT -> data/altered_plans_v2/FLAWS_hypothesis_premise_undermining_altered.json
+[FLAWS/ed] attempt 1/5
+Exact match found.
+Saved internal score at data/altered_plans_v2/FLAWS_ed_attempt1_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.01 minutes
+[FLAWS/ed_attempt1] SUCCESS -> data/altered_plans_v2/FLAWS_ed_attempt1_altered.json
+[SoundnessBench/hypothesis_internal_contradiction] attempt 1/5
+[SoundnessBench/hypothesis_internal_contradiction_attempt1] filtered: too easy
+[SoundnessBench/hypothesis_internal_contradiction] attempt 2/5
+Exact match found.
+Saved internal score at data/altered_plans_v2/SoundnessBench_hypothesis_internal_contradiction_attempt2_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.02 minutes
+[SoundnessBench/hypothesis_internal_contradiction_attempt2] SUCCESS -> data/altered_plans_v2/SoundnessBench_hypothesis_internal_contradiction_attempt2_altered.json
+[SoundnessBench/hypothesis_established_belief_conflict] attempt 1/5
+Exact match found.
+Exact match found.
+Saved score at data/altered_plans_v2/SoundnessBench_hypothesis_established_belief_conflict_attempt1_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.0 minutes
+[SoundnessBench/hypothesis_established_belief_conflict_attempt1] self-identified (too easy), discarding
+[SoundnessBench/hypothesis_established_belief_conflict] attempt 2/5
+Exact match found.
+Saved internal score at data/altered_plans_v2/SoundnessBench_hypothesis_established_belief_conflict_attempt2_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.01 minutes
+[SoundnessBench/hypothesis_established_belief_conflict_attempt2] SUCCESS -> data/altered_plans_v2/SoundnessBench_hypothesis_established_belief_conflict_attempt2_altered.json
+[SoundnessBench/hypothesis_premise_undermining] attempt 1/5
+Exact match found.
+Saved score at data/altered_plans_v2/SoundnessBench_hypothesis_premise_undermining_attempt1_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.01 minutes
+[SoundnessBench/hypothesis_premise_undermining_attempt1] self-identified (too easy), discarding
+[SoundnessBench/hypothesis_premise_undermining] attempt 2/5
+[SoundnessBench/hypothesis_premise_undermining_attempt2] filtered: too easy
+[SoundnessBench/hypothesis_premise_undermining] attempt 3/5
+Exact match found.
+Saved internal score at data/altered_plans_v2/SoundnessBench_hypothesis_premise_undermining_attempt3_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.01 minutes
+[SoundnessBench/hypothesis_premise_undermining_attempt3] SUCCESS -> data/altered_plans_v2/SoundnessBench_hypothesis_premise_undermining_attempt3_altered.json
+[SoundnessBench/ed] attempt 1/5
+Exact match found.
+Saved internal score at data/altered_plans_v2/SoundnessBench_ed_attempt1_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.01 minutes
+[SoundnessBench/ed_attempt1] self-identified (too easy), discarding
+[SoundnessBench/ed] attempt 2/5
+Exact match found.
+Saved internal score at data/altered_plans_v2/SoundnessBench_ed_attempt2_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.03 minutes
+[SoundnessBench/ed_attempt2] SUCCESS -> data/altered_plans_v2/SoundnessBench_ed_attempt2_altered.json
+[InnoEval/hypothesis_internal_contradiction] attempt 1/5
+Exact match found.
+Saved internal score at data/altered_plans_v2/InnoEval_hypothesis_internal_contradiction_attempt1_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.01 minutes
+[InnoEval/hypothesis_internal_contradiction_attempt1] SUCCESS -> data/altered_plans_v2/InnoEval_hypothesis_internal_contradiction_attempt1_altered.json
+[InnoEval/hypothesis_established_belief_conflict] attempt 1/5
+Exact match found.
+Saved internal score at data/altered_plans_v2/InnoEval_hypothesis_established_belief_conflict_attempt1_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.02 minutes
+[InnoEval/hypothesis_established_belief_conflict_attempt1] SUCCESS -> data/altered_plans_v2/InnoEval_hypothesis_established_belief_conflict_attempt1_altered.json
+[InnoEval/hypothesis_premise_undermining] attempt 1/5
+Exact match found.
+Saved internal score at data/altered_plans_v2/InnoEval_hypothesis_premise_undermining_attempt1_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.02 minutes
+[InnoEval/hypothesis_premise_undermining_attempt1] SUCCESS -> data/altered_plans_v2/InnoEval_hypothesis_premise_undermining_attempt1_altered.json
+[InnoEval/ed] attempt 1/5
+[InnoEval/ed_attempt1] filtered: too easy
+[InnoEval/ed] attempt 2/5
+Exact match found.
+Saved internal score at data/altered_plans_v2/InnoEval_ed_attempt2_gemini-2.5-pro_score.txt
+Word-level Levenshtein distance-based similarity ran in 0.02 minutes
+[InnoEval/ed_attempt2] SUCCESS -> data/altered_plans_v2/InnoEval_ed_attempt2_altered.json

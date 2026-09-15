@@ -1,0 +1,8 @@
+:original_text:
+We will employ label smoothing with a value of ϵ_ls = 0.1 during training, as this approach is known to improve model robustness.
+
+:modified_text:
+We will employ label smoothing with a value of ϵ_ls = 0.1 during training, as this approach is known to improve model robustness and has become standard practice since its successful application in vision models with 1000-class outputs.
+
+:explanation:
+The flaw is the added justification, which reveals that the hyperparameter (ϵ_ls = 0.1) was chosen based on its success in a very different domain (computer vision with 1k classes). The mechanism is an **inappropriate transfer of a hyperparameter across domains with vastly different characteristics**. A smoothing factor of 0.1 might be reasonable for 1,000 classes, but for a machine translation task with a 37,000-token vocabulary, it distributes 10% of the probability mass across an enormous number of incorrect tokens. This introduces excessive noise, potentially harming the model's ability to learn and thereby falsifying the claim that this specific application of label smoothing will improve robustness.

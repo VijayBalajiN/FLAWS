@@ -1,0 +1,2 @@
+error:We will also calculate the root mean square (r.m.s.) fluctuations of atomic positions relative to this average structure to quantify the magnitude of motion throughout the protein.
+error:This will allow us to characterize the decay behavior of these fluctuations and identify their dominant frequencies and relaxation times.

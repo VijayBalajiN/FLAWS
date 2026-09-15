@@ -1,0 +1,13 @@
+:error_text:
+For the base model, we will use a dropout rate of P_drop = 0.3
+
+:error_text:
+a value shown to be effective for regularizing large attention-based models.
+
+:error_text:
+We will employ three types of regularization during training:
+
+:explanation:
+The most serious error is the selection of a non-standard, poorly justified hyperparameter for the crucial baseline model. The plan specifies a dropout rate of 0.3, which is significantly higher than the standard 0.1 used in the original, highly-cited paper. The justification provided is vague and unsubstantiated. Using a potentially suboptimal baseline invalidates all subsequent comparisons and ablation studies, as any observed performance differences could be artifacts of the poor initial parameter choice rather than the architectural changes being tested.
+
+A second, related error is the direct contradiction in the description of the regularization methods. The text claims three types of regularization will be used, but the subsequent description only lists two (Residual Dropout and Label Smoothing). This inconsistency makes the experimental plan unclear and demonstrates a lack of precision in the methodology.

@@ -1,0 +1,9 @@
+{
+  "label": "GrapheneFieldEffect_general_c3_v3",
+  "original_text": "For each device, we will conduct transport measurements by applying a gate voltage (Vg) to the silicon substrate while measuring the film's conductivity and Hall coefficient.",
+  "modified_text": "For each device, we will conduct transport measurements in ambient air by applying a gate voltage (Vg) to the silicon substrate while measuring the film's conductivity and Hall coefficient.",
+  "explanation": "The mechanism of this flaw is **environmental screening and uncontrolled doping**. The modification specifies that measurements will be done \"in ambient air.\" The electronic properties of 2D materials like graphene are extremely sensitive to their environment. Molecules from the air, particularly water, will adsorb onto the graphene surface. This adsorbed water layer is polar and acts as an electrochemical shield, screening the electric field from the back gate and drastically weakening its effect on the graphene. Furthermore, charge transfer between the adsorbates and the graphene creates a separate, uncontrolled doping effect that can mask the intended gating. This falsifies the claim because the gate voltage is no longer sufficient to induce a predictable charge of large enough magnitude; its effect is overwhelmed and screened by the uncontrolled surface environment.",
+  "category": "D",
+  "category_name": "Others",
+  "reasoning": "The error describes an external factor (ambient air) introducing an uncontrolled variable (screening and doping) that prevents the stated goal (measuring the film's conductivity and Hall coefficient via gate voltage) from being achieved, which is characteristic of a confounded experimental design."
+}

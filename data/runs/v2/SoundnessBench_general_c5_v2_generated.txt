@@ -1,0 +1,8 @@
+:original_text:
+We will intentionally introduce severe methodological flaws (e.g., mismatched datasets and metrics) into high-soundness proposals to test if models can detect these obvious errors.
+
+:modified_text:
+We will intentionally introduce severe methodological flaws (e.g., mismatched datasets and metrics) into high-soundness proposals to test if the presence of these flaws reduces the model's assigned soundness score.
+
+:explanation:
+This modification changes the success criterion from "detection" to "score reduction." This is a critical but subtle shift. An LLM might lower its soundness score for a proposal with an injected flaw simply because the new text introduces a logical or semantic incoherence that makes the model less confident, not because it has specifically identified the *methodological* error. The proxy is invalid because the experiment is no longer measuring the model's ability to reason about research methodology, but rather its sensitivity to general textual incongruity. A subtle, well-integrated natural flaw would not necessarily trigger this kind of simple incoherence check.

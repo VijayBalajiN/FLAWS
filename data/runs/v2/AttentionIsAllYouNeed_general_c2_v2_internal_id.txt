@@ -1,0 +1,5 @@
+:error_text:
+To maintain consistency across tasks, we will also use BLEU to evaluate the linearized parse tree output for the English constituency parsing task.
+
+:explanation:
+This is a critical methodological flaw. The BLEU score is a metric designed for machine translation that measures n-gram overlap between a candidate and reference translation. It is entirely inappropriate for evaluating the structural accuracy of a constituency parse tree. Using BLEU for this task would produce meaningless results, as it cannot assess the correctness of the hierarchical syntactic structure. The standard evaluation metric for this task is the PARSEVAL F1 score, which measures the precision and recall of labeled constituents. This error invalidates the entire English constituency parsing portion of the experiment, which is intended to test the model's generalization capabilities.

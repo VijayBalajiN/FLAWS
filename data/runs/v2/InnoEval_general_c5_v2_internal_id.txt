@@ -1,0 +1,10 @@
+:error_text:
+using the final meta-review's assessment of significance as a proxy for the validity dimension
+
+:error_text:
+to produce a full ranking (measured by Accuracy and Longest Increasing Subsequence score)
+
+:explanation:
+The most serious error is the proposal to use the assessment of "significance" as a proxy for "validity." This is a fundamental conceptual flaw that directly contradicts the method's claim to evaluate ideas across five "independent" and "decoupled" dimensions. Validity (methodological soundness) and Significance (potential impact) are distinct concepts. Conflating them in the analysis phase undermines the entire premise of the multi-dimensional evaluation, which is a core contribution of the proposed framework.
+
+A second, less critical but still significant, methodological error is the choice of "Accuracy" as a metric for evaluating a full ranking. Accuracy is not a standard or well-defined metric for ranking tasks, which typically use measures like nDCG or Kendall's Tau to assess the quality of an ordered list. This choice of an inappropriate metric weakens the evaluation design for the group-wise task and makes the results difficult to interpret or compare against other ranking systems.

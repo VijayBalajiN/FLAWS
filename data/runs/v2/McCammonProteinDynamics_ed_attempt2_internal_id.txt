@@ -1,0 +1,15 @@
+:error_text:
+Following equilibration, we will conduct the main dynamical simulation by integrating the equations of motion using the Gear algorithm for a duration of several picoseconds.
+
+:error_text:
+We will perform a normal mode analysis on the time-averaged structure. This will allow us to identify the principal modes of vibration and their corresponding frequencies, characterizing the harmonic components of the atomic motions.
+
+:error_text:
+Initial velocities will be set to zero.
+
+:explanation:
+The most serious error is the simulation duration of "several picoseconds." This timescale is far too short to observe the "diffusional character" hypothesized in the research plan. Such motions, along with other key phenomena like sidechain transitions or collective movements, occur on nanosecond to microsecond timescales. A picosecond-scale simulation will only capture trivial, high-frequency local vibrations, making it impossible to test the central hypothesis.
+
+The second error is the plan to use normal mode analysis (NMA) on the time-averaged structure. NMA is a technique that assumes motions are harmonic and is performed on a single, energy-minimized structure. Applying it to a time-averaged structure from a dynamic simulation is methodologically unsound. Furthermore, using a purely harmonic analysis method directly contradicts the goal of investigating anharmonic, "fluid-like" diffusional motions.
+
+The third error is setting initial velocities to zero. This "cold start" is a poor initialization practice for a molecular dynamics simulation. It can introduce significant artifacts and requires a much longer and more careful equilibration period to reach the target temperature without shocking the system. While less fundamental than the other errors, it reflects a flawed simulation setup that compromises the quality of the data.

@@ -1,0 +1,8 @@
+:original_text:
+We will frame this as a classification problem (binary: Accept/Reject; ternary: Reject/Poster/Highlight) and measure performance using Accuracy and macro F1 score.
+
+:modified_text:
+We will frame this as a classification problem (binary: Accept/Reject; ternary: Reject/Poster/Highlight) and measure performance using the Matthews Correlation Coefficient (MCC) to ensure a balanced evaluation.
+
+:explanation:
+This modification introduces an error by selecting a metric that is inappropriate for the decision-making context. The mechanism of this error is ignoring asymmetric error costs. While the Matthews Correlation Coefficient (MCC) is a good metric for imbalanced classification, it treats false positives and false negatives as equally important. In the context of evaluating research ideas, the cost of a false negative (rejecting a groundbreaking idea) is far greater than the cost of a false positive (accepting a mediocre one). A system optimized for MCC would be blind to this crucial trade-off, making the metric insufficient for a task where the goal is specifically to avoid missing high-potential ideas.

@@ -1,0 +1,5 @@
+:error_text:
+unreliable because it deviates from the judgments of human experts
+
+:explanation:
+The hypothesis presents a circular argument by confusing the definition of unreliability with its cause. In this research plan, the deviation from human expert judgment is the *metric* used to measure or define the LLM's unreliability. Stating that the system is unreliable *because* it deviates is a logical flaw; the deviation is the evidence of unreliability, not the reason for it.

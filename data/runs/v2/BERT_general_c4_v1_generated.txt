@@ -1,0 +1,8 @@
+:original_text:
+We will extract fixed contextual embeddings from various layers of the pre-trained model and feed them into a BiLSTM classifier, comparing its performance to the standard fine-tuning approach.
+
+:modified_text:
+We will extract fixed contextual embeddings from various layers of the pre-trained model and feed them into a minimal, single-layer BiLSTM classifier with a hidden size of 64. This simple setup will be used to isolate the raw power of the embeddings when compared to the standard fine-tuning approach.
+
+:explanation:
+This error introduces a confounding variable by specifying a deliberately underpowered model for the feature-based approach. A single-layer BiLSTM with a small hidden size of 64 is likely insufficient for a complex task like NER. While the justification of "isolating the raw power of the embeddings" sounds plausible, it creates an unfair comparison. The fine-tuning approach utilizes the full, large, pre-trained model, whereas this setup cripples the feature-based alternative, making fine-tuning appear superior due to an intentionally weak competitor, not its own inherent merit.

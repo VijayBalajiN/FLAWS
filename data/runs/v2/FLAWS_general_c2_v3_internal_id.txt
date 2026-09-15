@@ -1,0 +1,15 @@
+:error_text:
+tasking the error-generating LLM with finding the error it just created; if it succeeds, the error is discarded as being too simple.
+
+:error_text:
+This complete set of excerpts will serve as the ground truth for our evaluation.
+
+:error_text:
+An error will be considered found if it is flagged by either of the following:
+
+:explanation:
+The most serious error is the "internal identification" filtering method. Tasking an LLM to find an error it just created is not a valid measure of the error's difficulty. The generating model has a significant advantage (akin to perfect memory of the change), making success nearly guaranteed. This process systematically creates a benchmark composed only of the generating model's blind spots, which is an inherently biased and potentially impossible test for similar models, rather than a fair assessment of error-finding capabilities.
+
+The second error is the reliance on an LLM to generate the ground truth for evaluation. The validity of the entire benchmark rests on the assumption that this LLM can perfectly and completely identify all text excerpts affected by a change. Since LLMs are not infallible, the ground truth itself is likely to be noisy, incomplete, or incorrect, meaning the evaluation may be measuring performance against a flawed standard.
+
+The third error lies in the evaluation metric's logic. By considering an error "found" if it meets the criteria of *either* a string-similarity metric or an LLM-as-a-judge, the framework uses an overly lenient "OR" condition. This can inflate success rates and makes results difficult to interpret, as it conflates two different standards of success (e.g., a precise syntactic match vs. a potentially fallible semantic judgment).

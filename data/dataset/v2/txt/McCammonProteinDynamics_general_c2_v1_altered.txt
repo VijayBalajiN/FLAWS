@@ -1,0 +1,34 @@
+## Problem
+
+While X-ray crystallography provides a well-defined, static picture of globular proteins, a significant body of evidence suggests that these molecules exhibit considerable local motion at ordinary temperatures. These internal dynamics are not mere thermal noise; they are believed to play a crucial role in essential biological functions such as enzyme catalysis, hemoglobin cooperativity, and immunoglobulin action. However, despite extensive research into protein folding, very little has been done to investigate the motions of a protein in the neighborhood of its equilibrium configuration.
+
+To gain a more complete understanding of protein function, it is essential to develop a detailed knowledge of these internal dynamics. Our research aims to address this gap by performing a general examination of the internal dynamics of a folded globular protein. We hypothesize that the protein interior is not a rigid solid but is more fluid-like, with local atomic motions exhibiting a diffusional character. Our central research question is: What is the nature of the atomic motions within a folded protein, and can we characterize their magnitude, correlations, and time evolution?
+
+## Hypothesis
+
+The interior of a folded globular protein is a fluid-like environment where local atomic motions exhibit a diffusional character.
+
+## Method
+
+We will employ a molecular dynamics approach to study the internal motions of a protein. This method involves solving the classical equations of motion for all atoms of the protein simultaneously over a given time period. By analyzing the resulting atomic trajectories, we can extract detailed information about the system's dynamics.
+
+We have chosen this method because it is well-suited for highly anharmonic systems, as it uses the full interatomic potential to calculate the forces on the atoms. The success of molecular dynamics in revealing the structural and dynamical characteristics of fluids suggests it will be a powerful tool for understanding the internal motions of proteins.
+
+Our simulation will be based on an empirical potential energy function, which represents the total energy as a sum of terms associated with bond lengths, bond angles, dihedral angles, hydrogen bonds, and non-bonded (van der Waals and electrostatic) interactions. To make the simulation computationally feasible, we will use an "extended atom" model, where hydrogen atoms are implicitly combined with the heavy atoms to which they are bonded. This simplification reduces the number of interactions and eliminates high-frequency vibrations, permitting larger time steps in the integration of the equations of motion.
+
+## Experiment Design
+
+**Model System:**
+Our study will focus on the bovine pancreatic trypsin inhibitor (PTI) due to its small size, high stability, and accurately determined X-ray structure. We will also include four strongly bound water molecules located in the protein's interior in our simulation.
+
+**Simulation Protocol:**
+1.  **Initialization:** We will use the atomic coordinates from the published X-ray structure as the initial positions for all atoms. Initial velocities will be set to zero.
+2.  **Equilibration:** We will perform an initial equilibration phase to allow the stresses present in the static X-ray structure to relax and to raise the system's kinetic energy to a level corresponding to room temperature.
+3.  **Production Run:** Following equilibration, we will conduct the main dynamical simulation by integrating the equations of motion using the Gear algorithm for a duration of several picoseconds.
+
+**Data Analysis Plan:**
+The primary output of our simulation will be the complete set of atomic trajectories. We plan to analyze these trajectories to:
+1.  **Characterize the Average Structure and Fluctuations:** We will compute the time-averaged structure from the simulation and compare it to the initial X-ray structure. We will also calculate the root mean square (r.m.s.) fluctuations of atomic positions relative to this average structure to quantify the magnitude of motion throughout the protein.
+2.  **Analyze Time-Dependence of Motions:** We will calculate time correlation functions for the fluctuations of various internal coordinates (e.g., bond lengths, bond angles, dihedral angles) and atomic positions. This will allow us to characterize the decay behavior of these fluctuations and identify their dominant frequencies and relaxation times.
+3.  **Identify Correlated Fluctuations:** We will examine equal-time correlations between the fluctuations of different internal coordinates, particularly neighboring dihedral angles, to determine if motions are coupled in a way that preserves the overall protein structure.
+4.  **Probe for Concerted and Collective Motions:** We will search the trajectories for evidence of larger-scale, non-local motions, such as the collective movement of entire structural elements or the concerted 'ring-flip' transitions of interior tyrosine sidechains between different conformational states.

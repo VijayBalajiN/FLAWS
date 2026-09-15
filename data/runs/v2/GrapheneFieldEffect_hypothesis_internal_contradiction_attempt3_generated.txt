@@ -1,0 +1,15 @@
+:error_type:
+Internal Contradiction
+
+:original_text:
+Stable, atomically thin graphitic films are two-dimensional semimetals that exhibit a strong, ambipolar electric field effect, allowing the concentration of their charge carriers—both electrons and holes—to be tuned by an external gate voltage.
+
+:modified_text:
+Stable, atomically thin graphitic films are two-dimensional semimetals that exhibit a strong, ambipolar electric field effect, wherein the applied field is sufficient to open a tunable band gap, allowing the concentration of their charge carriers—both electrons and holes—to be tuned by an external gate voltage.
+
+:explanation:
+The contradiction is created by modifying the description of the electric field effect mechanism. The hypothesis initially states that the material is a "semimetal." By definition, a semimetal is a material with no energy band gap (or a zero gap).
+
+The modification introduces the claim that the electric field effect works by "open[ing] a tunable band gap." This creates an internal contradiction: for the proposed mechanism to be true, the material must develop a band gap under the influence of the gate voltage. However, a material with a band gap is a semiconductor, not a semimetal.
+
+Therefore, the hypothesis's own stated mechanism for demonstrating its key property (the field effect) requires the material to become something that violates its own initial classification (a semimetal). The logic is self-defeating: the process used to manipulate the semimetal's charge carriers fundamentally turns it into a non-semimetal.

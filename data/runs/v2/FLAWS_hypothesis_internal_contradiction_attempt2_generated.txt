@@ -1,0 +1,19 @@
+:error_type:
+Internal Contradiction
+
+:original_text:
+The criticality of an error in a scientific paper is a function of its connection to the paper's core claims.
+
+:modified_text:
+The criticality of an error in a scientific paper is a function of its connection to the paper's core claims, where the strength of this connection is defined as being inversely proportional to the number of distinct core claims the error invalidates.
+
+:explanation:
+The modification introduces a formal definition for the "strength of connection" that creates a self-contradiction when taken to its logical conclusion.
+
+The hypothesis's stated goal is to define an error's "criticality" based on its connection to core claims. The intuitive assumption is that a more impactful error is more critical. However, the modified hypothesis defines the "strength of this connection" as being *inversely proportional* to the number of claims the error invalidates.
+
+This leads to a paradox:
+1.  An error that invalidates only a single core claim would have the maximum possible connection strength (inversely proportional to 1), and thus be considered maximally critical under this definition.
+2.  A much more catastrophic error—one so fundamental that it invalidates all five of a paper's core claims—would have a connection strength five times weaker (inversely proportional to 5).
+
+Therefore, the hypothesis's own stated mechanism for measuring connection strength forces the conclusion that the most devastating and widespread errors are among the *least* critical. This directly violates the hypothesis's overarching goal of linking criticality to an error's impact on a paper's central arguments. The mechanism subverts its own purpose.

@@ -1,0 +1,2 @@
+error:Our research is motivated by the need for a rigorous, scalable, and automated benchmark to directly assess an LLM's ability to find critical flaws in scientific papers.
+error:We hypothesize that by grounding synthetic errors in a paper's core claims, rather than using a fixed set of error types, we can create a more relevant and challenging testbed.

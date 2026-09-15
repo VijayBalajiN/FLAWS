@@ -1,0 +1,8 @@
+:original_text:
+We will also calculate the root mean square (r.m.s.) fluctuations of atomic positions relative to this average structure to quantify the magnitude of motion throughout the protein.
+
+:modified_text:
+We will also calculate the root mean square (r.m.s.) fluctuations of atomic positions after first aligning the trajectory to the average structure to remove global translation and rotation, which serves to quantify the magnitude of motion throughout the protein.
+
+:explanation:
+This modification introduces a procedural ambiguity. While aligning the trajectory is a necessary step, the text omits the critical detail of *which atoms* are used for the alignment (e.g., C-alpha atoms, backbone atoms, or atoms of a specific rigid domain). This choice can dramatically alter the resulting RMSF values for all other atoms, as it defines the reference frame. Without this specification, the measure is not well-defined or reproducible, making RMSF an incomplete metric as the results are dependent on an unstated, arbitrary choice.

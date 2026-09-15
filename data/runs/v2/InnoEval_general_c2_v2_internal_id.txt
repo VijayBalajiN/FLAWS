@@ -1,0 +1,10 @@
+:error_text:
+perform stratified sampling based on their final decisions (Reject, Poster, Spotlight, Oral). We will use an extraction agent to convert these papers into a structured idea format
+
+:error_text:
+selecting one from each decision category to form a group. This process will yield groups of ideas with an inherent ground-truth ranking
+
+:explanation:
+The experiment's ground truth is fundamentally flawed, which represents the most serious error. The research plan conflates the peer-review outcome of a complete research paper with the intrinsic quality of the initial research idea. A paper's final decision (e.g., Accept/Reject) is influenced by numerous factors beyond the core idea, including the quality of execution, experimental validation, and clarity of writing. Using these final decisions as labels for the extracted "ideas" creates a noisy and invalid dataset that does not accurately measure what the InnoEval framework is designed to evaluate.
+
+The second error builds directly on this flawed foundation. It incorrectly assumes that the discrete, categorical decisions from peer review (Oral, Spotlight, Poster, Reject) can be used to construct an "inherent ground-truth ranking" of ideas. This assumes a strict ordinal relationship (e.g., any "Oral" idea is better than any "Spotlight" idea) which is a highly dubious premise, invalidating the setup for the group-wise and pair-wise evaluation tasks.

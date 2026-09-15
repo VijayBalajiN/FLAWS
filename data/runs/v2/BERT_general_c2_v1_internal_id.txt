@@ -1,0 +1,10 @@
+:error_text:
+one using only the Masked LM task (without Next Sentence Prediction) on single, non-paired sentences
+
+:error_text:
+another using a traditional Left-to-Right (LTR) LM objective instead of MLM
+
+:explanation:
+The most serious error is in the design of the first ablation study. Pre-training a model exclusively on "single, non-paired sentences" creates a fatal pre-training/fine-tuning mismatch. This ablated model would be evaluated on benchmarks like GLUE, which include sentence-pair tasks (e.g., MNLI, QQP). Since the model would never have been exposed to two-segment inputs during pre-training, it would not have learned the function of the segment embeddings or the `[SEP]` token, rendering its evaluation on these crucial tasks invalid.
+
+The second error is that the ablation to test a "traditional Left-to-Right (LTR) LM objective" is ill-defined. A true LTR model requires a unidirectional architecture (i.e., a causal attention mask preventing tokens from attending to future positions). The plan only mentions changing the objective, not the bidirectional Transformer architecture. Applying an LTR objective to a bidirectional model would allow it to "cheat" by seeing future tokens in lower layers, invalidating the comparison against a truly unidirectional model.

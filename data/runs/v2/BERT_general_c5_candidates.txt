@@ -1,0 +1,35 @@
+:candidate:
+1
+
+:original_text:
+For sentence-level classification tasks (MNLI, QQP, QNLI, SST-2, etc.), we will feed the final hidden state of the `[CLS]` token into a new classification layer.
+
+:modified_text:
+For sentence-level classification tasks (MNLI, QQP, QNLI, SST-2, etc.), we will format single-sentence inputs like SST-2 as a pair with an empty second sentence and feed the final hidden state of the `[CLS]` token into a new classification layer.
+
+:explanation:
+The mechanism of this error is a **mismatch between the pre-training objective and the downstream task application**. The modification implies that the `[CLS]` token representation is only meaningful in the context of a sentence-pair structure, which it was trained for during the Next Sentence Prediction (NSP) task. By forcing single-sentence tasks into this format, the proposal suggests the `[CLS]` token is not a truly sufficient aggregate representation of a single sequence on its own, but rather a specialized representation for sentence-pair relationships. This undermines its general sufficiency for all claimed sentence-level tasks.
+
+:candidate:
+2
+
+:original_text:
+For sentence-level classification tasks (MNLI, QQP, QNLI, SST-2, etc.), we will feed the final hidden state of the `[CLS]` token into a new classification layer.
+
+:modified_text:
+For sentence-level classification tasks (MNLI, QQP, QNLI, SST-2, etc.), we will feed the final hidden state of the `[CLS]` token, concatenated with a max-pooled representation of all other token outputs, into a new classification layer.
+
+:explanation:
+The mechanism of this error is **representational insufficiency**. By concatenating the `[CLS]` token's state with a pooled representation of all other tokens, the experimental design implicitly concedes that the `[CLS]` token alone is insufficient to solve the task. It suggests that other tokens' final hidden states contain necessary information (e.g., keyphrases) that is not adequately captured by the single `[CLS]` vector. This directly attacks the claim that the `[CLS]` token is a *sufficient* aggregate representation, positing instead that it is an information bottleneck.
+
+:candidate:
+3
+
+:original_text:
+For sentence-level classification tasks (MNLI, QQP, QNLI, SST-2, etc.), we will feed the final hidden state of the `[CLS]` token into a new classification layer.
+
+:modified_text:
+For sentence-level classification tasks (MNLI, QQP, QNLI, SST-2, etc.), we will take a weighted average of the `[CLS]` token's hidden states from the final four layers and feed the resulting vector into a new classification layer.
+
+:explanation:
+The mechanism of this error is **representational degradation across layers**. This change undermines the claim that the *final* hidden state is sufficient. By proposing to average the `[CLS]` states from multiple top layers, the design implies that the final layer's representation alone is impoverished or has lost crucial generalizable information present in earlier layers. This suggests a flaw in the training dynamics—perhaps the final layers over-specialize on the pre-training tasks (like Masked LM) at the expense of the aggregative function needed for classification. The sufficiency of the single final-layer state is therefore implicitly rejected.

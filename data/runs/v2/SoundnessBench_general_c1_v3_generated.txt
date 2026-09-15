@@ -1,0 +1,8 @@
+:original_text:
+We will gather a large corpus of research papers and their corresponding peer reviews from public ICLR conference submissions, starting from 2022, as these consistently include reviewer soundness sub-scores.
+
+:modified_text:
+We will gather a large corpus of research papers and their corresponding peer reviews from public ICLR conference submissions that received at least one "accept" recommendation, starting from 2022, as these consistently include reviewer soundness sub-scores.
+
+:explanation:
+The mechanism of this error is sampling bias, which invalidates the generalizability of the conclusion. By filtering the dataset to only include proposals that received at least one "accept" recommendation, the study systematically removes papers with clear, unambiguous flaws. The remaining "low soundness" papers are likely to be only marginally flawed or controversial, representing a much more difficult classification task. An LLM's tendency to rate these borderline cases as "high soundness" may not reflect a general "optimism bias" but rather an inability to resolve ambiguity in a sample with an artificially high quality floor. The fundamental nature of the claim is undermined because the findings may not generalize beyond this biased, high-quality sample.

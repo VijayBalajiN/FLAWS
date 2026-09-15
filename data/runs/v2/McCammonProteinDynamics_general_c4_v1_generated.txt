@@ -1,0 +1,8 @@
+:original_text:
+We will also include four strongly bound water molecules located in the protein's interior in our simulation.
+
+:modified_text:
+We will also include four strongly bound water molecules located in the protein's interior in our simulation. To focus computational resources on the internal motions, the surrounding bulk solvent will be omitted, as its primary effects are on surface dynamics.
+
+:explanation:
+This introduces a critical system setup error. Simulating a protein in a vacuum without a solvent shell causes significant artifacts. Unscreened electrostatic charges on the protein surface will interact too strongly, often leading to an unrealistic collapse of the protein's structure. This global conformational distortion would fundamentally alter the protein's internal environment and motions, directly falsifying the claim that the internal dynamics can be "accurately simulated" under these conditions. The assumption that surface effects are decoupled from internal dynamics is incorrect.

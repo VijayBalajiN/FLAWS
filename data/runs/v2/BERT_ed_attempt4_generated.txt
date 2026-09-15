@@ -1,0 +1,15 @@
+:error_type:
+Confounded design
+
+:original_text:
+1.  **Importance of Pre-training Tasks:** We will train and evaluate two ablated models: one using only the Masked LM task (without Next Sentence Prediction) and another using a traditional Left-to-Right (LTR) LM objective instead of MLM. This will allow us to isolate the contributions of deep bidirectionality and the NSP task.
+
+:modified_text:
+1.  **Importance of Pre-training Tasks:** We will train and evaluate two ablated models: one using only the Masked LM task (without Next Sentence Prediction) and another using a traditional Left-to-Right (LTR) LM objective instead of MLM, while keeping the core bidirectional Transformer architecture unchanged. This will allow us to isolate the contributions of deep bidirectionality and the NSP task.
+
+:explanation:
+The introduced flaw is a **confounded design**. The ablation study aims to "isolate the contributions of deep bidirectionality" by comparing a model with a Masked Language Model (MLM) objective to one with a Left-to-Right (LTR) objective. However, the modified text explicitly states that the "core bidirectional Transformer architecture" will be kept "unchanged."
+
+A true LTR model (like GPT) relies on a unidirectional architecture, typically implemented with a causal attention mask that prevents tokens from attending to subsequent positions. A bidirectional architecture (like BERT's encoder) lacks this mask, allowing every token to attend to every other token.
+
+By using an LTR *objective* on a bidirectional *architecture*, the experiment is confounded. The model's self-attention layers can still "see" future tokens, even though the training objective is to predict the next token in a sequence. This means the ablated model is not truly unidirectional. Therefore, any performance difference between this confounded model and the MLM-based model cannot be cleanly attributed to the pre-training objective (bidirectional vs. unidirectional), as the underlying architectural information flow remains a confounding variable. The study fails to create a proper unidirectional baseline and thus cannot validate its central hypothesis.

@@ -1,0 +1,8 @@
+:original_text:
+By systematically sweeping the gate voltage, we will investigate our central hypothesis: that we can induce a significant surface charge and thereby modulate the carrier concentration in the film.
+
+:modified_text:
+By systematically sweeping the gate voltage, we will investigate our central hypothesis: that we can induce a significant surface charge, using the measured Hall coefficient to directly determine the carrier concentration in the film.
+
+:explanation:
+The mechanism of this error is the application of an **incorrect physical model** for data analysis. The phrase "directly determine" implies the use of the simple, single-carrier formula (R_H = 1/ne) to extract carrier concentration (n) from the Hall coefficient (R_H). This model is only valid when a single type of charge carrier (either electrons or holes) dominates. However, the proposal aims to test for an "ambipolar field effect," a regime where both electrons and holes coexist. In this two-carrier system, the relationship between Hall coefficient and carrier densities is far more complex. Applying the simplified model will lead to a fundamentally incorrect calculation of the carrier concentration and mobility, especially around the charge neutrality point. Because the planned analysis is flawed, the measurements are insufficient for a correct evaluation of the material's potential.

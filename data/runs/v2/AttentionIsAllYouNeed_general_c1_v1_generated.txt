@@ -1,0 +1,8 @@
+:original_text:
+All keys, values, and queries will come from the output of the previous layer in the encoder, allowing each position to attend to all positions in the previous layer.
+
+:modified_text:
+Keys and values will come from the output of the previous layer in the encoder, while queries for a given position will be derived from the output of the immediately preceding position within the same layer, allowing each position to attend to all positions in the previous layer.
+
+:explanation:
+The flaw introduces a hidden recurrent dependency into the self-attention mechanism. By making the query at position `i` dependent on the output of position `i-1` *within the same layer*, it creates a sequential computation path through the sequence. This directly contradicts the core claim that the architecture is "without recurrence" and eliminates the key advantage of parallelizing computations within a single training example.

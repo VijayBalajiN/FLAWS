@@ -1,0 +1,10 @@
+:error_text:
+fundamentally lacking the homeostatic restoring forces
+
+:error_text:
+local atomic motions exhibit a diffusional character
+
+:explanation:
+The primary error is a fundamental contradiction between the hypothesis and the proposed methodology. The hypothesis claims the protein interior is "fundamentally lacking the homeostatic restoring forces," but the molecular dynamics method described is entirely dependent on an empirical potential energy function that explicitly defines these very forces (e.g., from bond lengths, bond angles, and non-bonded interactions). Without these restoring forces, the simulated protein would not maintain a stable folded structure.
+
+A secondary, related error is the claim that motions "exhibit a diffusional character." True, unconstrained diffusion is inconsistent with a stable folded state. This claim also contradicts the data analysis plan, which aims to calculate fluctuations relative to a time-averaged structure—a measurement that is only meaningful if atoms are confined near equilibrium positions by restoring forces, not diffusing freely.

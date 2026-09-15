@@ -1,0 +1,13 @@
+:error_type:
+Non-sequitur step
+
+:original_text:
+and another using a traditional Left-to-Right (LTR) LM objective instead of MLM. This will allow us to isolate the contributions of deep bidirectionality and the NSP task.
+
+:modified_text:
+and another using a Permutation Language Model (PLM) objective instead of MLM. This will allow us to isolate the contributions of deep bidirectionality and the NSP task.
+
+:explanation:
+The methodological flaw introduced is a non-sequitur. The ablation study claims its purpose is to "isolate the contributions of deep bidirectionality". The original design correctly proposed doing this by comparing the bidirectional Masked LM (MLM) to a unidirectional Left-to-Right (LTR) LM.
+
+The modified text replaces the LTR LM with a Permutation Language Model (PLM). A PLM is also a type of bidirectional training objective (it learns to predict tokens in a random order, allowing it to see context from both sides). Therefore, comparing MLM to PLM does not isolate the effect of bidirectionality versus unidirectionality. Instead, it compares two different methods for achieving bidirectionality. The proposed experiment no longer tests what it claims to test, making it a non-sequitur that undermines the validation of the paper's core hypothesis. This error is subtle as it requires specific domain knowledge of NLP pre-training objectives to identify.

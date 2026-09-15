@@ -1,0 +1,11 @@
+:error_type:
+Undermining a Premise
+
+:original_text:
+The criticality of an error in a scientific paper is a function of its connection to the paper's core claims.
+
+:modified_text:
+The criticality of an error in a scientific paper is a function of its conceptual depth, where the most significant errors are those that undermine a paper's core claims by being conceptually sophisticated rather than merely factual or computational.
+
+:explanation:
+This modification conflates two distinct concepts: an error's "criticality" (its impact on the validity of a paper's conclusions) and its "conceptual depth" (the nature or type of the error). The original hypothesis correctly defines criticality purely in terms of its impact—its connection to core claims. The modified version redefines criticality as being synonymous with conceptual sophistication, smuggling in the hidden premise that only conceptually deep errors are truly critical. This is a flaw because an error's impact is independent of its type. A simple, non-conceptual error, such as a data transposition or a bug in a script (a "computational" error), could completely invalidate a paper's core claim and thus be maximally critical, yet this modified hypothesis dismisses such errors as less significant. The reasoning remains internally coherent, but it rests on the flawed assumption that "criticality" and "conceptual depth" are interchangeable.

@@ -1,0 +1,22 @@
+:error_type:
+Conflict with Established Beliefs
+
+:original_text:
+Stable, atomically thin graphitic films are two-dimensional semimetals that exhibit a strong, ambipolar electric field effect, allowing the concentration of their charge carriers—both electrons and holes—to be tuned by an external gate voltage.
+
+:modified_text:
+Stable, atomically thin graphitic films are two-dimensional semiconductors that exhibit a strong, ambipolar electric field effect, allowing the concentration of their charge carriers—both electrons and holes—to be tuned by an external gate voltage.
+
+:error_type:
+Conflict with Established Beliefs
+
+:original_text:
+We further hypothesize that these two-dimensional films will behave as a semimetal and exhibit a strong, ambipolar electric field effect, allowing us to tune the concentration of charge carriers (both electrons and holes) by applying an external gate voltage.
+
+:modified_text:
+We further hypothesize that these two-dimensional films will behave as a semiconductor and exhibit a strong, ambipolar electric field effect, allowing us to tune the concentration of charge carriers (both electrons and holes) by applying an external gate voltage.
+
+:explanation:
+(a) The established belief being conflicted with is the fundamental electronic band structure of single-layer graphene. It is a well-established fact in condensed matter physics that intrinsic, single-layer graphene is a semimetal (or a zero-gap semiconductor). Its valence and conduction bands touch at specific points in momentum space (the Dirac points), resulting in a zero-energy bandgap.
+
+(b) The modified hypothesis replaces "semimetals" with "semiconductors." While the statement remains internally consistent (a hypothetical two-dimensional, ambipolar semiconductor is a perfectly valid physical concept), it fundamentally mischaracterizes graphene. A semiconductor, by definition, possesses a finite energy bandgap separating its valence and conduction bands. This is a profound physical distinction. An expert would immediately recognize that basing the research on the premise of a finite bandgap is incorrect for graphene and would lead to flawed interpretations of the experimental results, particularly concerning the minimum conductivity at the charge neutrality point and the overall device physics. The error is subtle because the terms sound similar, but they describe entirely different classes of materials with different physical properties.

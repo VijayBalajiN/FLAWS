@@ -1,0 +1,27 @@
+[
+  {
+    "claim": "The isolated graphitic films will possess the fundamental electronic properties of a two-dimensional semimetal.",
+    "source_field": "hypothesis",
+    "source_excerpt": "Stable, atomically thin graphitic films are two-dimensional semimetals"
+  },
+  {
+    "claim": "The fabricated devices will exhibit a strong electric field effect that is ambipolar, meaning it works for both electron and hole charge carriers.",
+    "source_field": "hypothesis",
+    "source_excerpt": "exhibit a strong, ambipolar electric field effect, allowing the concentration of their charge carriers\u2014both electrons and holes\u2014to be tuned by an external gate voltage."
+  },
+  {
+    "claim": "The experimental method assumes that applying a gate voltage is sufficient to induce a surface charge of a large enough magnitude to alter the film's properties.",
+    "source_field": "experiment_design",
+    "source_excerpt": "we can induce a significant surface charge and thereby modulate the carrier concentration in the film."
+  },
+  {
+    "claim": "The charge carriers in the material can be tuned smoothly and continuously across the spectrum from electrons to holes.",
+    "source_field": "experiment_design",
+    "source_excerpt": "we can tune the charge carriers continuously from electrons to holes by varying the gate voltage."
+  },
+  {
+    "claim": "The planned measurements of conductivity and Hall coefficient are sufficient to evaluate the material's potential for use in a field-effect transistor.",
+    "source_field": "experiment_design",
+    "source_excerpt": "The data gathered will be used to assess the potential of these atomically thin carbon films to function as the conducting channel in a novel, all-metallic field-effect transistor."
+  }
+]

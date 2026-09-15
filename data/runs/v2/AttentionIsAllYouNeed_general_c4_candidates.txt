@@ -1,0 +1,35 @@
+:candidate:
+1
+
+:original_text:
+For the base model, we will use a dropout rate of P_drop = 0.1.
+
+:modified_text:
+For the base model, we will use a dropout rate of P_drop = 0.3, a value shown to be effective for regularizing large attention-based models.
+
+:explanation:
+The flaw is the introduction of a significantly higher dropout rate (0.3) which, when combined with the planned label smoothing (ϵ_ls = 0.1), creates a high risk of over-regularization. The underlying mechanism is a **harmful interaction between two different regularization techniques**. Both methods discourage the model from making confident predictions. Using them together at these aggressive levels could prevent the model from fitting the training data adequately (i.e., cause underfitting), which would degrade performance rather than improve robustness. This undermines the claim because the effectiveness of label smoothing is context-dependent, and in this new context of high dropout, it is likely to be detrimental.
+
+:candidate:
+2
+
+:original_text:
+We will employ label smoothing with a value of ϵ_ls = 0.1 during training, as this approach is known to improve model robustness.
+
+:modified_text:
+We will employ label smoothing with a value of ϵ_ls = 0.1 during training, as this approach is known to improve model robustness and has become standard practice since its successful application in vision models with 1000-class outputs.
+
+:explanation:
+The flaw is the added justification, which reveals that the hyperparameter (ϵ_ls = 0.1) was chosen based on its success in a very different domain (computer vision with 1k classes). The mechanism is an **inappropriate transfer of a hyperparameter across domains with vastly different characteristics**. A smoothing factor of 0.1 might be reasonable for 1,000 classes, but for a machine translation task with a 37,000-token vocabulary, it distributes 10% of the probability mass across an enormous number of incorrect tokens. This introduces excessive noise, potentially harming the model's ability to learn and thereby falsifying the claim that this specific application of label smoothing will improve robustness.
+
+:candidate:
+3
+
+:original_text:
+We will employ label smoothing with a value of ϵ_ls = 0.1 during training, as this approach is known to improve model robustness.
+
+:modified_text:
+We will employ label smoothing with a value of ϵ_ls = 0.1 during training, as this approach improves perplexity and is known to improve model robustness.
+
+:explanation:
+The flaw is the addition of "improves perplexity" as a justification for using label smoothing. The mechanism of error is a **mismatch between the optimization objective and the primary evaluation metric**. While label smoothing does tend to improve perplexity (by encouraging a less confident, smoother output distribution), the project's success metric for translation is the BLEU score. BLEU, especially when calculated on outputs from beam search decoding, often benefits from models that produce "peaky" or highly confident predictions for the next token. By making the model less confident, label smoothing can degrade beam search performance and lower the final BLEU score, thus undermining the claim that it improves robustness in the context of the actual task evaluation.

@@ -1,0 +1,8 @@
+:original_text:
+While feature-based methods like ELMo combine independently trained left-to-right and right-to-left models, this approach is shallowly bidirectional and less powerful than a model that is jointly conditioned on both left and right context in all layers.
+
+:modified_text:
+While feature-based methods like ELMo combine independently trained left-to-right and right-to-left models, this approach fuses the hidden states at each layer and is less powerful than a model that is jointly conditioned on both left and right context in all layers.
+
+:explanation:
+This modification undermines the proposal's claim of novelty by mischaracterizing the state of the art. The original text correctly describes ELMo as "shallowly bidirectional" because it concatenates the final outputs of two independent LMs. The modified text incorrectly claims ELMo "fuses the hidden states at each layer," which implies a form of deep bidirectionality. If existing methods were already deeply bidirectional, the proposed model's core contribution would be merely an alternative implementation rather than a fundamental breakthrough. This weakens the premise of the entire proposal and makes the central hypothesis seem like an incremental claim rather than a significant advance.

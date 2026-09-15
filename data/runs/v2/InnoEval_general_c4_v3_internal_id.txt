@@ -1,0 +1,20 @@
+:error_text:
+This process will yield groups of ideas with an inherent ground-truth ranking
+
+:error_text:
+perform stratified sampling based on their final decisions (Reject, Poster, Spotlight, Oral).
+
+:error_text:
+We will use an extraction agent to convert these papers into a structured idea format
+
+:error_text:
+ternary: Reject/Poster/Highlight
+
+:explanation:
+The fundamental flaw in this experiment design is the use of conference peer review decisions as the ground truth for the quality of a research *idea*. This assumption is invalid for several critical reasons:
+
+1.  **Conflation of Idea and Execution:** The primary error, captured by the first two excerpts, is treating a paper's final acceptance decision as an "inherent ground-truth ranking" of the initial idea. Peer review assesses the complete research artifact—including the execution, experiments, and writing—not just the core concept. A brilliant idea can be rejected due to poor execution, while a mediocre idea might be accepted if presented flawlessly.
+
+2.  **Object Mismatch:** The third excerpt highlights a severe methodological issue. The system evaluates an "extracted idea," which is a condensed summary, while the ground truth (the human review decision) was based on the full, detailed paper. This is an apples-to-oranges comparison that introduces the quality of the extraction agent as a major confounding variable.
+
+3.  **Inconsistent Task Definition:** The final excerpt points to a lack of precision. The evaluation task introduces an undefined "Highlight" category that does not directly map to the source data categories ("Spotlight, Oral"), making the experimental setup unclear and less rigorous.

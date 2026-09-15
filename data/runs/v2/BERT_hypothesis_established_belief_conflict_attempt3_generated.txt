@@ -1,0 +1,19 @@
+:error_type:
+Conflict with Established Beliefs
+
+:original_text:
+Language representations jointly conditioned on both left and right context in all layers are more powerful than representations conditioned on unidirectional or shallowly combined bidirectional contexts.
+
+:modified_text:
+Language representations jointly conditioned on both left and right context in all layers are more powerful than representations conditioned on unidirectional or shallowly combined bidirectional contexts, though this advantage is expected to invert beyond a certain model scale, as the complexity of joint conditioning leads to intractable optimization challenges and overfitting in very large models.
+
+:original_text:
+Our central hypothesis is that a deep bidirectional pre-trained model will learn richer and more powerful contextual representations than existing unidirectional or shallowly bidirectional models.
+
+:modified_text:
+Our central hypothesis is that a deep bidirectional pre-trained model will learn richer and more powerful contextual representations than existing unidirectional or shallowly bidirectional models, provided that the model capacity is kept within a range where the pre-training objectives can be optimized effectively without overfitting.
+
+:explanation:
+(a) The established belief being conflicted with is the set of empirical findings known as "scaling laws" for large language models. This is a robust and foundational consensus in modern NLP, demonstrating that model performance scales predictably and positively with increases in model size, dataset size, and compute. Specifically for bidirectional models like BERT, larger versions (e.g., BERT-Large) have been empirically shown to consistently and significantly outperform their smaller counterparts (e.g., BERT-Base) across a wide range of tasks.
+
+(b) The modified hypothesis is internally consistent; it proposes a plausible-sounding trade-off where the benefits of a complex modeling choice (deep bidirectionality) are eventually outweighed by optimization and overfitting issues at a large scale. However, this claim directly contradicts the established scaling laws. Massive empirical evidence from the field shows the exact opposite: the power of deep bidirectional representations is *better* realized by larger models, and there is no evidence of the claimed performance "inversion." The hypothesis posits a phenomenon ("intractable optimization challenges and overfitting" specific to scaling up bidirectional models) that is contrary to the field's core empirical results, forcing a choice between believing the hypothesis or believing one of the most well-established empirical results in modern deep learning.

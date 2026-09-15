@@ -1,0 +1,8 @@
+:original_text:
+For sentence-level classification tasks (MNLI, QQP, QNLI, SST-2, etc.), we will feed the final hidden state of the `[CLS]` token into a new classification layer.
+
+:modified_text:
+For sentence-level classification tasks (MNLI, QQP, QNLI, SST-2, etc.), we will feed the final hidden state of the `[CLS]` token, concatenated with a max-pooled representation of all other token outputs, into a new classification layer.
+
+:explanation:
+The mechanism of this error is **representational insufficiency**. By concatenating the `[CLS]` token's state with a pooled representation of all other tokens, the experimental design implicitly concedes that the `[CLS]` token alone is insufficient to solve the task. It suggests that other tokens' final hidden states contain necessary information (e.g., keyphrases) that is not adequately captured by the single `[CLS]` vector. This directly attacks the claim that the `[CLS]` token is a *sufficient* aggregate representation, positing instead that it is an information bottleneck.

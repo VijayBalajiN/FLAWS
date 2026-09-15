@@ -1,0 +1,17 @@
+:error_type:
+Internal Contradiction
+
+:original_text:
+The model's objective will be to predict the original vocabulary ID of these masked tokens using the full bidirectional context.
+
+:modified_text:
+The model's objective will be to predict the original vocabulary ID of these masked tokens. The final prediction for a masked token is derived from two separate, independently computed contextual representations: one conditioned only on the left-side tokens via a forward attention mask, and another conditioned only on the right-side tokens via a backward attention mask.
+
+:explanation:
+The modification creates a contradiction between the research plan's stated goal and its proposed mechanism.
+
+The hypothesis explicitly states that its goal is to create representations that are "jointly conditioned on both left and right context in all layers," which it claims are more powerful than "shallowly combined bidirectional contexts" (like ELMo, which combines independently trained left-to-right and right-to-left models).
+
+The modified text in the Method section describes a mechanism that, despite its technical phrasing, is functionally identical to the "shallowly combined" approach the hypothesis aims to outperform. By computing two "separate, independently computed contextual representations" (one using only a forward mask and one using only a backward mask), the model is prevented from ever learning a "jointly conditioned" representation. The left and right contexts are processed independently throughout the model's layers and are only combined at the very end to make a prediction.
+
+Therefore, the proposed mechanism directly implements the architecture that the hypothesis defines as inferior. The experiment, as designed, cannot possibly test whether a jointly conditioned model is superior because it never actually builds one. The mechanism subverts its own stated purpose.

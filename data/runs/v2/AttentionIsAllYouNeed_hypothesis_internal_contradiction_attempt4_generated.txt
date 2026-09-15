@@ -1,0 +1,19 @@
+:error_type:
+Internal Contradiction
+
+:original_text:
+An architecture relying solely on attention mechanisms, without recurrence or convolutions, is sufficient to model global dependencies between input and output sequences.
+
+:modified_text:
+An architecture relying solely on attention mechanisms, in which token positions are disambiguated using unique but randomly assigned vector embeddings, is sufficient to model global dependencies between input and output sequences.
+
+:original_text:
+Since our model contains no recurrence and no convolution, we must inject information about the relative or absolute position of tokens. To this end, we will add **positional encodings** to the input embeddings at the bottoms of the encoder and decoder stacks. We will use sine and cosine functions of different frequencies for these encodings, as we hypothesize this will allow the model to easily learn to attend by relative positions. We will also consider learned positional embeddings as an alternative.
+
+:modified_text:
+Since our model contains no recurrence and no convolution, we must inject information to disambiguate the position of tokens. To this end, we will add **positional encodings** to the input embeddings at the bottoms of the encoder and decoder stacks. These encodings will be unique, randomly initialized, and non-trainable vectors for each absolute position up to a maximum sequence length, ensuring each position has a distinct but unordered identifier. We hypothesize this is sufficient for the attention mechanism to implicitly model sequence relationships.
+
+:explanation:
+The hypothesis's stated goal is to model dependencies in "sequences." A sequence is, by definition, an ordered set of elements. The modified hypothesis introduces a mechanism for representing position: "unique but randomly assigned vector embeddings."
+
+The internal contradiction arises because this mechanism makes the goal impossible to achieve. While the random vectors make each position *unique*, their random assignment provides no information about the *order* or *relative positions* of the tokens. The model can learn that a token is at "position A" (represented by random vector `v_A`) and another is at "position B" (represented by `v_B`), but it has no way of knowing that position A comes before position B. By removing all ordinal information, the stated mechanism effectively treats the input as a "bag of words" with position tags, not a sequence. Therefore, the mechanism of using unordered positional identifiers logically prevents the model from learning the sequential dependencies it claims to be sufficient for modeling. The system's own rules for representing position undermine its ability to understand sequences.

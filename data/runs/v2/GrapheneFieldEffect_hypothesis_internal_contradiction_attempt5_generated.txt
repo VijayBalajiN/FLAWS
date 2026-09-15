@@ -1,0 +1,17 @@
+:error_type:
+Internal Contradiction
+
+:original_text:
+exhibit a strong, ambipolar electric field effect, allowing the concentration of their charge carriers—both electrons and holes—to be tuned by an external gate voltage.
+
+:modified_text:
+exhibit a strong, ambipolar electric field effect, wherein the induced carrier density is self-limiting and perfectly screens the applied field, allowing the concentration of their charge carriers—both electrons and holes—to be tuned by an external gate voltage.
+
+:explanation:
+The modification introduces a mechanism that contradicts the hypothesis's stated goal.
+
+The hypothesis claims that the carrier concentration can be "tuned" by a gate voltage. To "tune" implies a continuous, controllable modulation.
+
+The modified text introduces a specific mechanism for the electric field effect: "wherein the induced carrier density is self-limiting and perfectly screens the applied field." In solid-state physics, perfect screening means that the mobile charge carriers in the material rearrange themselves to create an internal electric field that exactly cancels the external applied field.
+
+The internal contradiction is that if the induced carriers "perfectly screen" the gate's electric field, the net field inside the material becomes zero. A zero-strength field cannot induce any further changes in carrier concentration. Therefore, the very mechanism described (perfect screening) makes continuous "tuning" impossible. The initial response of the material would cancel the gate's influence, preventing any further modulation. The hypothesis's own mechanism makes its stated goal unattainable.

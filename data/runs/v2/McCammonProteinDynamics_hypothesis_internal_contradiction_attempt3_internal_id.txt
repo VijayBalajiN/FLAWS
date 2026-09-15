@@ -1,0 +1,8 @@
+:error_text:
+local atomic motions exhibit a diffusional character, driven by thermal fluctuations within the local harmonic potential wells
+
+:error_text:
+within the local harmonic potential wells that define the protein's equilibrium X-ray structure.
+
+:explanation:
+The hypothesis contains a fundamental contradiction in its physical reasoning. It claims that atomic motions have a "diffusional character" but are confined "within... local harmonic potential wells." Diffusion is an inherently anharmonic process, requiring atoms to overcome energy barriers to move from one potential minimum to another. In contrast, a harmonic potential well (like a perfect spring) traps a particle, only allowing for oscillatory motion around a single equilibrium point, which is non-diffusional. This conceptual error invalidates the proposed physical mechanism. Furthermore, it creates a direct conflict with the Method section, which correctly identifies molecular dynamics as a method suitable for "highly anharmonic systems," the very property the hypothesis incorrectly excludes.

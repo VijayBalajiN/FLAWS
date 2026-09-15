@@ -1,0 +1,8 @@
+:original_text:
+We will analyze model performance using confusion matrices. Our primary metrics will be the false-positive rate (to measure optimism bias), the false-negative rate (to measure over-conservatism), class-wise recall for both high and low soundness proposals, and the Macro F1 score.
+
+:modified_text:
+We will analyze model performance using confusion matrices. Our primary metric for determining the impact of prompt framing will be the Macro F1 score, as it provides a single, balanced measure of classification performance. We will also report the false-positive rate, the false-negative rate, and class-wise recall as secondary, diagnostic metrics.
+
+:explanation:
+The mechanism of this error is the **selection of an insensitive primary metric**. The "Aggressive Prompt" is designed to shift the model's classification threshold, increasing its skepticism. This would predictably decrease the false-positive rate while increasing the false-negative rate. The Macro F1 score, which averages performance across classes, can remain relatively stable during such a trade-off, especially on a balanced dataset. By designating Macro F1 as the sole primary metric for judging the prompt's impact, the researchers are likely to miss the significant shift visible in the other rates and incorrectly conclude that the framing had no effect.

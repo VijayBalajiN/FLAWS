@@ -1,0 +1,35 @@
+:candidate:
+1
+
+:original_text:
+All keys, values, and queries will come from the output of the previous layer in the encoder, allowing each position to attend to all positions in the previous layer.
+
+:modified_text:
+Keys and values will come from the output of the previous layer in the encoder, while queries for a given position will be derived from the output of the immediately preceding position within the same layer, allowing each position to attend to all positions in the previous layer.
+
+:explanation:
+The flaw introduces a hidden recurrent dependency into the self-attention mechanism. By making the query at position `i` dependent on the output of position `i-1` *within the same layer*, it creates a sequential computation path through the sequence. This directly contradicts the core claim that the architecture is "without recurrence" and eliminates the key advantage of parallelizing computations within a single training example.
+
+:candidate:
+2
+
+:original_text:
+An architecture relying solely on attention mechanisms, without recurrence or convolutions, is sufficient to model global dependencies between input and output sequences.
+
+:modified_text:
+An architecture relying solely on attention mechanisms, without recurrence or convolutions, and using a fixed, finite set of learned positional embeddings for all sequences, is sufficient to model global dependencies between input and output sequences.
+
+:explanation:
+This flaw introduces a critical limitation directly into the hypothesis. A "fixed, finite set" of positional embeddings means the model has no way to represent token positions beyond a certain maximum sequence length. This fundamentally cripples the architecture's ability to handle "global dependencies" for arbitrarily long sequences, a task at which it is supposed to excel. The claim of sufficiency is thus falsified by positing a core component that cannot generalize to the problem domain.
+
+:candidate:
+3
+
+:original_text:
+We will compute the dot products of Q with all K, divide each by √d_k, apply a softmax function to obtain weights, and then compute a weighted sum of V.
+
+:modified_text:
+We will compute the dot products of Q with all K, apply a softmax function to obtain weights, and then compute a weighted sum of V. This final weighted sum will be scaled by dividing it by √d_k.
+
+:explanation:
+This flaw misapplies the crucial scaling factor in the attention mechanism. The scaling by `1/√d_k` is meant to be applied to the logits (the dot products of Q and K) *before* the softmax function. This prevents the dot products' magnitude from pushing the softmax into saturated regions where gradients are near zero, which would stall learning. By moving the scaling step to *after* the weighted sum is computed, this critical stabilization is removed, making the model training unstable and likely to fail. This undermines the claim that the proposed architecture is "sufficient."

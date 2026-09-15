@@ -1,0 +1,9 @@
+{
+  "label": "AttentionIsAllYouNeed_general_c2_v3",
+  "original_text": "For parsing, we will train on the Wall Street Journal (WSJ) portion of the Penn Treebank, comprising about 40,000 training sentences.",
+  "modified_text": "For parsing, we will train on the Wall Street Journal (WSJ) portion of the Penn Treebank, comprising about 40,000 training sentences. To ensure comparability with prior work on smaller models, this dataset will be filtered to only include sentences of 25 words or less.",
+  "explanation": "The mechanism of this error is an **artificial constraint on the data's complexity**. By filtering the dataset to only include short sentences (<=25 words), the experiment removes the primary challenge that makes parsing a good generalization test: modeling complex, long-range dependencies and deep hierarchical structures. The Transformer's core architectural hypothesis is its superior ability to handle such dependencies compared to recurrent models. Testing it only on short sentences where these challenges are minimal makes the task an insufficient test of this capability. The results would not provide strong evidence for the model's generalization, as the problem has been artificially simplified to avoid the very difficulties it was meant to address.",
+  "category": "D",
+  "category_name": "Others",
+  "reasoning": "The error describes an experimental design flaw where the chosen data artificially simplifies the problem, preventing the stated goal from being achieved, which is a classic confounded-design error."
+}

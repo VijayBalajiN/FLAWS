@@ -1,0 +1,35 @@
+:candidate:
+1
+
+:original_text:
+Two human annotators will assess (1) the validity of the inserted scientific errors and (2) the correctness of the LLMs' identifications.
+
+:modified_text:
+Two human annotators will assess (1) the plausibility and topical relevance of the inserted scientific errors and (2) the correctness of the LLMs' identifications.
+
+:explanation:
+The mechanism of this error is **Goalpost Shifting / Lowering the Bar for Validation**. The criteria for human validation have been subtly weakened from "validity" to "plausibility and topical relevance." An error can be plausible and relevant to the paper's topic without being a scientifically valid or meaningful conceptual flaw. This change allows the pipeline to be deemed successful even if it only generates superficial errors, as the human annotators would correctly confirm that the errors meet the new, weaker criteria. This directly undermines the claim that the pipeline generates errors that are "scientifically valid and meaningful."
+
+:candidate:
+2
+
+:original_text:
+To validate the reliability of our automated pipeline, we will conduct a human annotation study on a randomly selected subset of the benchmark.
+
+:modified_text:
+To validate the reliability of our automated pipeline, we will conduct a human annotation study on a randomly selected subset of the benchmark items that successfully pass the "internal identification" filter.
+
+:explanation:
+The mechanism of this error is **Selection Bias**. By explicitly stating that human validation is performed only on the subset of errors that survive the "internal identification" filter, the study introduces a significant bias. This filter is designed to remove errors the generating LLM can easily find. The surviving errors are not necessarily more scientifically valid, but may simply be more convoluted or exploit the specific blind spots of the generating LLM. The human validation would therefore be conducted on a non-representative sample, potentially leading to a significant overestimation of the pipeline's overall ability to generate high-quality errors.
+
+:candidate:
+3
+
+:original_text:
+For each claim, we will instruct an LLM to modify one or more segments of the paper's text to introduce a sophisticated, domain-appropriate conceptual error that undermines that specific claim.
+
+:modified_text:
+For each claim, we will instruct an LLM to modify one or more segments of the paper's text to introduce a subtle internal contradiction or data mismatch that undermines that specific claim.
+
+:explanation:
+The mechanism of this error is **Error Type Substitution**. The nature of the generated flaw is changed from a "conceptual error" to an "internal contradiction or data mismatch." While contradictions are valid errors, they test a different capability—consistency checking—rather than the understanding of deep scientific concepts. This change would result in a benchmark that, while producing valid flaws, fails to generate the *kind* of scientifically meaningful errors the research claims to. Human experts would likely judge these contradictions as "valid," but the pipeline's core capability would have been altered, falsifying the claim that it generates scientifically meaningful *conceptual* errors.

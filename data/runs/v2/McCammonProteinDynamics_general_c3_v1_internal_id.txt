@@ -1,0 +1,10 @@
+:error_text:
+for a duration of several picoseconds.
+
+:error_text:
+Initial velocities will be set to zero.
+
+:explanation:
+The most serious error is the simulation duration of "several picoseconds." This timescale is far too short to observe the "diffusional character" of protein motions, which is the central hypothesis. Such a short run would only capture the fastest local vibrations and would be completely insufficient to sample any meaningful conformational changes or slower, collective motions that are crucial for protein function. The results would be dominated by the initial relaxation from a static structure, not the equilibrium dynamics the study aims to investigate.
+
+The second error, "Initial velocities will be set to zero," describes a non-physical starting condition. In a real system at a given temperature, atoms have velocities distributed according to the Maxwell-Boltzmann distribution. Starting from a "cold" state (zero velocity) introduces significant artifacts and requires a longer, more careful equilibration period to reach a physically meaningful state, which is especially problematic given the extremely short total simulation time.

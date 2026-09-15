@@ -1,0 +1,11 @@
+:error_type:
+Conflict with Established Beliefs
+
+:original_text:
+Language representations jointly conditioned on both left and right context in all layers are more powerful than representations conditioned on unidirectional or shallowly combined bidirectional contexts.
+
+:modified_text:
+Language representations jointly conditioned on both left and right context in all layers are more powerful for all language tasks, including both natural language understanding and open-ended autoregressive generation, than representations conditioned on unidirectional or shallowly combined bidirectional contexts.
+
+:explanation:
+The modification introduces a conflict with the well-established principle in language model architecture that there is a fundamental trade-off between bidirectionality (for understanding) and autoregression (for generation). The proposed model (BERT) is a bidirectional encoder pre-trained with a Masked Language Model (MLM) objective. This means it is non-causal; it is designed to see the entire input sequence (both left and right context) to predict a masked token. This architecture is powerful for Natural Language Understanding (NLU) tasks but is fundamentally unsuited for standard open-ended autoregressive generation, which requires a causal (unidirectional) model that generates tokens one by one without being conditioned on "future" tokens. The modified hypothesis is internally consistent as a claim, but it incorrectly asserts superiority for a task its core architecture is designed against, a conflict an expert in the field would recognize as a fundamental misunderstanding of the model's properties.

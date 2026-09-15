@@ -1,0 +1,13 @@
+:error_type:
+Internal Contradiction
+
+:original_text:
+The criticality of an error in a scientific paper is a function of its connection to the paper's core claims.
+
+:modified_text:
+The criticality of an error in a scientific paper is a function of its unique connection to a single one of the paper's core claims, as errors that simultaneously invalidate multiple claims introduce confounding variables that make their individual impact indeterminate.
+
+:explanation:
+The modified hypothesis introduces a rule that contradicts its own objective. The stated goal is to define error criticality based on its connection to core claims. However, the modification adds a specific mechanism: criticality is tied to a *unique connection to a single claim*. It explicitly states that errors invalidating *multiple* claims have an "indeterminate" impact.
+
+The internal contradiction arises when this mechanism is taken to its logical conclusion. The most critical error possible in a paper would be a fundamental flaw that invalidates not just one, but *multiple* or even *all* of its core claims. According to the hypothesis's own rule, such a catastrophic, maximally-critical error would be considered to have an "indeterminate" impact and thus could not be assessed for criticality. The framework's own definition for ensuring clean measurement (isolating impact to a single claim) makes it incapable of evaluating the most severe class of errors, thereby undermining its primary goal of assessing criticality.

@@ -53,7 +53,7 @@ chain.
 
 ```bash
 python3 -m src.pipeline.plan_error_insertion \
-  --papers BERT,FLAWS --tracks general,ed --out-dir data/altered_plans_v2
+  --papers BERT,FLAWS --tracks general,ed --out-dir data/runs/v2
 ```
 
 `--papers` and `--tracks` both default to everything.
@@ -166,7 +166,7 @@ never told which category to aim for, so the distribution is a measurement
 rather than a quota.
 
 ```bash
-python3 -m src.utils.classify_general_errors data/altered_plans_v2
+python3 -m src.utils.classify_general_errors data/runs/v2
 ```
 
 Survivors get the result merged into `_error_metadata.classification`; rejects

@@ -1,0 +1,1 @@
+error: To confirm the contribution of each component, we will conduct several ablation studies, including removing the knowledge grounding module, replacing the innovation review board with a single LLM-as-a-Judge, and restricting the knowledge search to only academic literature.

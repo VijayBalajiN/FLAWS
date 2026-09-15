@@ -1,0 +1,8 @@
+:original_text:
+Using the point-wise dataset as a seed, we will retrieve topically similar papers for each idea, selecting one from each decision category to form a group.
+
+:modified_text:
+Using the point-wise dataset as a seed, we will use its primary keywords to retrieve topically similar papers, selecting one from each decision category to form a group.
+
+:explanation:
+This modification introduces a confounding variable. By using "primary keywords" to find topically similar papers, the process is now biased towards topic popularity and trendiness. Conference decisions are often influenced by how "hot" a topic is. An "Oral" paper might be selected not just for its inherent quality, but because its keywords align perfectly with a current trend, while a "Reject" paper in the same group might tackle a less fashionable sub-problem. This means the resulting ranking is not a pure measure of idea quality, but is confounded with the transient popularity of its niche, undermining the "inherent ground-truth" claim.

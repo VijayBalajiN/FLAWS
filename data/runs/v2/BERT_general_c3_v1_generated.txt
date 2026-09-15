@@ -1,0 +1,8 @@
+:original_text:
+We will pre-train our BERT models on a combination of the BooksCorpus (800M words) and English Wikipedia (2,500M words).
+
+:modified_text:
+We will pre-train `BERT_BASE` on the BooksCorpus (800M words), while `BERT_LARGE` will be trained on the combination of the BooksCorpus and English Wikipedia (3,300M words) to better leverage its larger capacity.
+
+:explanation:
+This introduces a confounding variable. The experiment is no longer a clean comparison of model scale because the two models are trained on different quantities of data. Any observed performance improvement in `BERT_LARGE` could be attributed to the larger and more diverse training corpus rather than its increased parameter count, thus falsifying the claim that the improvement is due to scale.

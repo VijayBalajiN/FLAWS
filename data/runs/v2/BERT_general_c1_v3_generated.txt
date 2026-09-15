@@ -1,0 +1,8 @@
+:original_text:
+Language representations jointly conditioned on both left and right context in all layers are more powerful than representations conditioned on unidirectional or shallowly combined bidirectional contexts.
+
+:modified_text:
+Language representations jointly conditioned on both left and right context in all layers learn richer bidirectional features than representations conditioned on unidirectional or shallowly combined bidirectional contexts.
+
+:explanation:
+This modification changes the hypothesis from a falsifiable scientific claim into a non-falsifiable, tautological statement. The original hypothesis makes a claim about being "more powerful," which can be empirically tested and falsified through performance on downstream tasks. The modified hypothesis claims the model will learn "richer bidirectional features." This is almost true by definition; a model designed to be bidirectional is expected to learn bidirectional features. The claim is no longer about superior real-world performance but about an inherent, internal property of the model's architecture. This makes the hypothesis circular and unfalsifiable, as there is no clear, independent metric for "richer bidirectional features" other than the model's design itself.

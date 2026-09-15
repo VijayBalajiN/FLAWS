@@ -1,0 +1,8 @@
+:error_text:
+Large Language Models' assessment of a research proposal's methodological soundness is unreliable, exhibiting a bias towards optimism but remarkable robustness to prompt framing.
+
+:error_text:
+remarkable robustness to prompt framing.
+
+:explanation:
+The hypothesis makes a claim that is directly contradicted by the experimental design. The experiment is explicitly designed to test the stability of model judgments by using two different prompting regimes: a "Standard Prompt" and an "Aggressive Prompt." This setup is intended to measure the models' *sensitivity* to prompt framing. However, the hypothesis preemptively concludes that the models will exhibit "remarkable robustness," which is the exact opposite of what the experimental design is testing for. This creates a fundamental logical inconsistency between the research question and the methodology proposed to answer it.

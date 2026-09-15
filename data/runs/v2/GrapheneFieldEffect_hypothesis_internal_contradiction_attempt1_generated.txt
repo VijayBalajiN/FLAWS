@@ -1,0 +1,15 @@
+:error_type:
+Internal Contradiction
+
+:original_text:
+Stable, atomically thin graphitic films are two-dimensional semimetals that exhibit a strong, ambipolar electric field effect, allowing the concentration of their charge carriers—both electrons and holes—to be tuned by an external gate voltage.
+
+:modified_text:
+Stable, atomically thin graphitic films are two-dimensional semimetals with a nearly constant, high density of electronic states near the Fermi level, which enables a strong, ambipolar electric field effect, allowing the concentration of their charge carriers—both electrons and holes—to be tuned by an external gate voltage.
+
+:explanation:
+The modification introduces the property of a "nearly constant, high density of electronic states (DOS) near the Fermi level" and claims this property is what enables a strong, tunable electric field effect.
+
+This creates an internal contradiction. According to the principles of solid-state physics, a material with a high and constant DOS is characteristic of a good metal. In such a material, any externally applied electric field (from the gate) will induce a large number of mobile charge carriers with only a minuscule shift of the Fermi level. These induced carriers will, in turn, generate their own electric field that almost perfectly cancels the external one. This phenomenon is known as electrostatic screening.
+
+Therefore, the very property asserted to *enable* the effect (a high, constant DOS) would, by its own mechanism, lead to extremely efficient screening. This screening would prevent the gate voltage from significantly altering the carrier concentration, directly contradicting the hypothesis's stated goal that the concentration can be "tuned". The mechanism undermines its own objective.

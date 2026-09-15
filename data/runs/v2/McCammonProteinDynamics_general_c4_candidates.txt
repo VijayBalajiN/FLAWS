@@ -1,0 +1,35 @@
+:candidate:
+1
+
+:original_text:
+We will also include four strongly bound water molecules located in the protein's interior in our simulation.
+
+:modified_text:
+We will also include four strongly bound water molecules located in the protein's interior in our simulation. To focus computational resources on the internal motions, the surrounding bulk solvent will be omitted, as its primary effects are on surface dynamics.
+
+:explanation:
+This introduces a critical system setup error. Simulating a protein in a vacuum without a solvent shell causes significant artifacts. Unscreened electrostatic charges on the protein surface will interact too strongly, often leading to an unrealistic collapse of the protein's structure. This global conformational distortion would fundamentally alter the protein's internal environment and motions, directly falsifying the claim that the internal dynamics can be "accurately simulated" under these conditions. The assumption that surface effects are decoupled from internal dynamics is incorrect.
+
+:candidate:
+2
+
+:original_text:
+Our simulation will be based on an empirical potential energy function, which represents the total energy as a sum of terms associated with bond lengths, bond angles, dihedral angles, hydrogen bonds, and non-bonded (van der Waals and electrostatic) interactions.
+
+:modified_text:
+Our simulation will be based on an empirical potential energy function, which represents the total energy as a sum of terms associated with bond lengths, bond angles, dihedral angles, hydrogen bonds, and non-bonded (van der Waals and electrostatic) interactions, using a rigid, non-polarizable three-point model for the internal water molecules.
+
+:explanation:
+This introduces a subtle parameterization error in the force field. While common for bulk solvent, using a simple, non-polarizable water model for a few key internal molecules is problematic. These waters are in a unique, low-dielectric environment where polarization effects and subtle hydrogen-bond dynamics are critical for mediating protein motions. A rigid, non-polarizable model cannot capture these effects, leading to an inaccurate representation of the forces and interactions within the protein core. This undermines the claim of an "accurate" simulation by using a physical model inadequate for the specific chemical environment being studied.
+
+:candidate:
+3
+
+:original_text:
+2.  **Equilibration:** We will perform an initial equilibration phase to allow the stresses present in the static X-ray structure to relax and to raise the system's kinetic energy to a level corresponding to room temperature.
+
+:modified_text:
+2.  **Equilibration:** We will perform an initial equilibration phase where the system is rapidly heated to 300 K over 1 ps. This will allow the stresses present in the static X-ray structure to relax and raise the system's kinetic energy to a level corresponding to room temperature.
+
+:explanation:
+This introduces a procedural error in the simulation protocol. Rapidly heating a system from near 0 K to 300 K in just 1 picosecond without positional restraints is extremely aggressive. This "temperature shock" can introduce large, non-physical forces that effectively "boil" the four internal water molecules out of their binding pockets, especially in a vacuum. If the waters are expelled during equilibration, the subsequent production simulation would proceed without them. This invalidates the claim, as the very components purported to ensure accuracy would be absent from the system being analyzed.

@@ -1,0 +1,9 @@
+{
+  "label": "InnoEval_general_c2_v3",
+  "original_text": "We will use an extraction agent to convert these papers into a structured idea format, followed by manual verification.",
+  "modified_text": "We will use an extraction agent to convert the abstract and introduction sections of these papers into a structured idea format, followed by manual verification.",
+  "explanation": "This creates a fundamental misalignment between the entity being evaluated and the ground-truth label. The final decision (Reject, Oral, etc.) is based on a holistic review of the *entire paper*, including methodology, experiments, and results. By training a model on just the \"idea\" extracted from the abstract and introduction, but using the full paper's outcome as the label, the benchmark becomes invalid. A brilliant idea (from the intro) could be justifiably rejected for flawed experiments (in the body), making the label incorrect for the input provided.",
+  "category": "C",
+  "category_name": "Undermining a Premise",
+  "reasoning": "The error arises because the term \"paper\" is operationalized as \"abstract and introduction\" for the input, but as \"entire paper\" for the label, creating a divergence in meaning."
+}

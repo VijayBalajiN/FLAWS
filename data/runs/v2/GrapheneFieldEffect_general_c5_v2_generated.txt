@@ -1,0 +1,8 @@
+:original_text:
+The data gathered will be used to assess the potential of these atomically thin carbon films to function as the conducting channel in a novel, all-metallic field-effect transistor.
+
+:modified_text:
+The data gathered will be used to assess the potential of these atomically thin carbon films to achieve high charge carrier mobility, a key requirement for a novel, all-metallic field-effect transistor.
+
+:explanation:
+The mechanism of this error is **incomplete characterization**. The modification narrows the project's goal from a holistic assessment of transistor function to a focus on a single parameter: high mobility. A critical metric for any field-effect transistor is the on/off current ratio, which determines its effectiveness as a switch. Graphene, being a semimetal with no bandgap, is known to have a poor on/off ratio. By focusing the evaluation solely on mobility, the plan omits any measurement or analysis of the minimum conductivity (the "off" state). Without this data, a crucial performance metric cannot be determined, rendering the planned measurements insufficient to properly evaluate the material's overall potential as a functional transistor.

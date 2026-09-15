@@ -1,0 +1,5 @@
+:error_text:
+The impact of an error in a scientific paper is a function of its connection to the paper's core claims.
+
+:explanation:
+The stated hypothesis is a premise for the research, not the proposition being tested by the experiment. The experiment is designed to measure how effectively LLMs can find claim-invalidating errors, which is a performance evaluation. It does not, however, measure the "impact" of different types of errors or test the functional relationship between an error's impact and its connection to a paper's claims. The experiment assumes this relationship to motivate its focus on claim-invalidating errors, but it is not designed to validate it. This creates a fundamental disconnect between the stated hypothesis and the entire experimental methodology.

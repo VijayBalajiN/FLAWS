@@ -1,0 +1,8 @@
+:original_text:
+A primary objective is to test for an ambipolar field effect, where we can tune the charge carriers continuously from electrons to holes by varying the gate voltage.
+
+:modified_text:
+A primary objective is to test for an ambipolar field effect, where we can achieve a fully insulating state at the charge neutrality point by varying the gate voltage.
+
+:explanation:
+The mechanism of this error is a fundamental conceptual misunderstanding of the target phenomenon. A two-dimensional semimetal like graphene does not have a bandgap, so while its conductivity reaches a minimum at the charge neutrality point, it never becomes zero or "fully insulating." The ability to induce a fully insulating state is a hallmark of a semiconductor. By setting this as an experimental objective, the plan reveals a flawed theoretical understanding of what a 2D semimetal is, invalidating the proposed experiment's ability to correctly test the claim. The researcher is looking for a physical signature that the material, if it is what they claim, cannot produce.

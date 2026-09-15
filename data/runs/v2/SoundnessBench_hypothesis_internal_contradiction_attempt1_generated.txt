@@ -1,0 +1,15 @@
+:error_type:
+Internal Contradiction
+
+:original_text:
+Large Language Models' assessment of a research proposal's methodological soundness is unreliable, exhibiting a bias towards optimism and high sensitivity to prompt framing.
+
+:modified_text:
+Large Language Models' assessment of a research proposal's methodological soundness is unreliable, exhibiting a stable, default bias towards optimism that arises from its high sensitivity to prompt framing.
+
+:explanation:
+The modified hypothesis contains an internal contradiction by positing a causal relationship that is logically self-refuting.
+
+1.  The hypothesis claims there is a "stable, default bias towards optimism." This implies a consistent, predictable, and somewhat fixed tendency.
+2.  It then claims this stability *arises from* "its high sensitivity to prompt framing."
+3.  The contradiction lies here: "High sensitivity to prompt framing" is, by definition, a property of an *unstable* system whose outputs are easily changed by inputs, not a system with a stable default. The hypothesis states that the mechanism for stability is, in fact, instability. The proposed cause (high sensitivity) directly negates the property it is meant to explain (a stable, default state).

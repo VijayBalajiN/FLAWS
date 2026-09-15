@@ -1,0 +1,10 @@
+:error_text:
+We will pre-train BERT_BASE on the BooksCorpus (800M words), while BERT_LARGE will be trained on the combination of the BooksCorpus and English Wikipedia (3,300M words)
+
+:error_text:
+feed them into a BiLSTM classifier, comparing its performance to the standard fine-tuning approach.
+
+:explanation:
+The most serious error is that the ablation study designed to measure the effect of model size is fundamentally confounded. By pre-training `BERT_BASE` and `BERT_LARGE` on different datasets, any observed performance difference cannot be attributed solely to model scale. The larger and more diverse dataset for `BERT_LARGE` introduces a confounding variable, making it impossible to isolate the impact of the model's architecture and size. To be a valid comparison, both models should have been trained on the exact same corpus.
+
+The second error is a methodological flaw in the feature-based ablation study. The goal is to compare the fine-tuning approach to a feature-based one. However, by feeding the extracted features into a BiLSTM classifier, the experiment introduces another powerful bidirectional model at the task-specific level. This confounds the comparison, as it's unclear whether good performance comes from the pre-trained BERT features or the task-specific BiLSTM. A cleaner experiment would use a simpler, non-bidirectional classifier to evaluate the power of the fixed BERT representations themselves.

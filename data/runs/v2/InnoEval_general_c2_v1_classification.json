@@ -1,0 +1,9 @@
+{
+  "label": "InnoEval_general_c2_v1",
+  "original_text": "We will crawl papers from top-tier conferences (NeurIPS and ICLR) via OpenReview and perform stratified sampling based on their final decisions (Reject, Poster, Spotlight, Oral).",
+  "modified_text": "We will crawl papers from top-tier conferences (NeurIPS and ICLR) via OpenReview and perform stratified sampling based on their final decisions (Reject, Poster, Spotlight, Oral), pooling all non-accepted submissions into the 'Reject' category.",
+  "explanation": "This introduces a confounding variable by pooling all non-accepted papers (including withdrawn or desk-rejected submissions) into the \"Reject\" category. Desk rejections or withdrawals can occur for reasons unrelated to the idea's quality, such as formatting, scope, or administrative issues. This pollutes the \"Reject\" label, making it an unreliable signal of a poor-quality research idea and invalidating it as a ground-truth measure for the quality of the idea itself.",
+  "category": "D",
+  "category_name": "Others",
+  "reasoning": "The error is a confounded experimental design, which is explicitly listed as an example of a D category flaw."
+}

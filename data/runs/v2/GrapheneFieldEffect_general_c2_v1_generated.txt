@@ -1,0 +1,8 @@
+:original_text:
+Stable, atomically thin graphitic films are two-dimensional semimetals that exhibit a strong, ambipolar electric field effect, allowing the concentration of their charge carriers—both electrons and holes—to be tuned by an external gate voltage.
+
+:modified_text:
+Stable, atomically thin graphitic films are two-dimensional degenerate semiconductors that exhibit a strong, ambipolar electric field effect, allowing the concentration of their charge carriers—both electrons and holes—to be tuned by an external gate voltage.
+
+:explanation:
+The mechanism of this error is a fundamental misclassification of the material in a way that contradicts the claimed property. By labeling the films as "degenerate semiconductors" instead of "semimetals," the hypothesis becomes internally inconsistent. Degenerate semiconductors are heavily doped with a single type of charge carrier (either n-type or p-type) and would exhibit a unipolar field effect, not an ambipolar one. The ambipolar effect, which relies on the ability to tune between both electron and hole conduction, is characteristic of the band structure of a semimetal like graphene, not a degenerate semiconductor. This is a subtle conceptual error that undermines the physical basis of the claim.

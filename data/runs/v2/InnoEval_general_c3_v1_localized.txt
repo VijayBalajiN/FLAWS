@@ -1,0 +1,1 @@
+error:This process will yield groups of ideas with an inherent ground-truth ranking, from which we can also derive pair-wise comparison tasks.

@@ -1,0 +1,13 @@
+:error_type:
+Undermining a Premise
+
+:original_text:
+Language representations jointly conditioned on both left and right context in all layers are more powerful
+
+:modified_text:
+Language representations that model discourse coherence by jointly conditioning on both left and right context in all layers are more powerful
+
+:explanation:
+This modification conflates two distinct concepts: (a) the technical mechanism of joint bidirectional conditioning, which includes the Next Sentence Prediction (NSP) task, and (b) the high-level linguistic property of "discourse coherence." The NSP task is a very simple proxy for understanding relationships between sentences (predicting if sentence B follows sentence A). True discourse coherence is a much richer concept involving the complex logical, causal, and thematic links between multiple sentences that make a text meaningful.
+
+The error is treating the simple, local mechanism of NSP as equivalent to modeling the broad, complex phenomenon of discourse coherence. The modified hypothesis smuggles in the flawed premise that the proposed model's architecture directly addresses and solves this high-level linguistic challenge, when in reality it only implements a crude approximation. The reasoning is not internally contradictory, but it rests on an unsound assumption about what the model is actually learning.

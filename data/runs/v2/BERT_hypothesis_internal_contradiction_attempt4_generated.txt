@@ -1,0 +1,13 @@
+:error_type:
+Internal Contradiction
+
+:original_text:
+The model's objective will be to predict the original vocabulary ID of these masked tokens using the full bidirectional context.
+
+:modified_text:
+The model's objective will be to predict the original vocabulary ID of these masked tokens by combining the final hidden states from two separate, parallel passes through the encoder: one processing the left-side context and another processing the right-side context.
+
+:explanation:
+The hypothesis states that representations "jointly conditioned on both left and right context in all layers" are superior to those from "shallowly combined bidirectional contexts." The modification describes the core pre-training mechanism (the Masked Language Model) in a way that directly contradicts this premise.
+
+By stating that the prediction for a masked token is made by combining the outputs of two "separate, parallel passes" (one for the left context and one for the right), the mechanism is no longer "jointly conditioned in all layers." Instead, this describes a system where the left and right contexts are processed independently until the very final layer, which is the definition of a "shallowly combined" bidirectional model—the exact architecture the hypothesis claims is inferior. The proposed method for achieving deep bidirectionality thus implements a shallowly bidirectional architecture, a direct internal contradiction.

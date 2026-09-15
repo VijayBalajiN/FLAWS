@@ -1,0 +1,8 @@
+:original_text:
+We will measure the resulting changes in conductivity to determine key parameters such as carrier mobility.
+
+:modified_text:
+We will measure the resulting changes in the source-drain resistance to determine key parameters such as carrier mobility.
+
+:explanation:
+The mechanism of this error is a **measurement artifact**. By specifying the measurement of "source-drain resistance" to determine mobility, the plan implies a two-terminal measurement. This method conflates the intrinsic resistance of the carbon film (the channel) with the resistance of the metal contacts. Since contact resistance can be large, non-negligible, and also dependent on the gate voltage, the calculated carrier mobility will be artificially suppressed and inaccurate. Without a method to de-embed the contact resistance (like a four-probe measurement, which is possible with a Hall bar but not specified here), the planned measurements are insufficient to determine the true material properties, making the evaluation of its potential unreliable.

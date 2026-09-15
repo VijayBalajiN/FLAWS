@@ -1,0 +1,3 @@
+error: While feature-based methods like ELMo combine independently trained left-to-right and right-to-left models, this approach is shallowly bidirectional and less powerful than a model that is jointly conditioned on both left and right context in all layers.
+error: To train the model on understanding sentence relationships, we will create a binary classification task.
+error: Feature-based vs. Fine-tuning: We will evaluate BERT on the CoNLL-2003 Named Entity Recognition (NER) task using a feature-based approach. We will extract fixed contextual embeddings from various layers of the pre-trained model and feed them into a BiLSTM classifier, comparing its performance to the standard fine-tuning approach.

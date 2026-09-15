@@ -60,7 +60,7 @@ hand-correct without re-running.
 The v2 run re-generated the general track for all 7 papers and classified all
 105 candidates from scratch with the **corrected** prompt -- the one that
 quotes each category's Operational Audit verbatim. So the defect described
-above does not exist in `data/altered_plans_v2/`.
+above does not exist in `data/dataset/v2/`.
 
 The correction visibly moved the distribution in the predicted direction:
 

@@ -1,0 +1,17 @@
+:error_type:
+Undermining a Premise
+
+:original_text:
+The interior of a folded globular protein is a fluid-like environment where local atomic motions exhibit a diffusional character.
+
+:modified_text:
+The interior of a folded globular protein is a fluid-like environment where the large magnitude of local atomic motions is indicative of their diffusional character.
+
+:explanation:
+The modified hypothesis conflates two distinct physical concepts: (a) the magnitude of atomic motion and (b) the diffusional character of that motion.
+
+(a) The magnitude of motion is typically quantified by the root-mean-square fluctuation (RMSF), which measures the size of the region an atom explores around its average position. It describes *how much* an atom moves.
+
+(b) Diffusional character is a specific statistical property describing the *time-dependence* of the motion, where the mean-square displacement (MSD) grows linearly with time. This is characteristic of particles undergoing a random walk in a fluid.
+
+The error is the hidden premise that a large magnitude of motion is sufficient evidence for diffusional character. It is possible for an atom to have a very large RMSF (high magnitude) while being trapped in a local energy well, executing large-amplitude vibrational motions. This is bounded, non-diffusive motion. True diffusion requires that the atom's movement be unbounded over time. Therefore, demonstrating a large magnitude of motion is a necessary but not sufficient condition to prove its diffusional character; the time-evolution of the atomic positions must also be analyzed.

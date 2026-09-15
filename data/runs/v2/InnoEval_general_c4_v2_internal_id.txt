@@ -1,0 +1,10 @@
+:error_text:
+Since the decision categories represent distinct, non-overlapping outcomes, these metrics provide a direct measure of classification correctness.
+
+:error_text:
+and to produce a full ranking (measured by Accuracy and Longest Increasing Subsequence score).
+
+:explanation:
+The most serious error is treating an ordinal problem as a nominal classification task. Peer review decisions (Reject, Poster, Spotlight, Oral) have a clear order of quality. Using metrics like Accuracy and F1 is methodologically flawed because they treat all misclassifications as equal, failing to recognize that confusing an "Oral" paper with a "Reject" is a far more severe error than confusing it with a "Spotlight".
+
+A second significant error is the choice of non-standard and inappropriate metrics for the ranking task. "Accuracy" is ill-defined for evaluating a full ranking, and the "Longest Increasing Subsequence score" is not a standard measure of ranking quality. Established metrics like Kendall's Tau or NDCG would be far more suitable for this task.

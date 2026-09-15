@@ -1,0 +1,35 @@
+:candidate:
+1
+
+:original_text:
+We will intentionally introduce severe methodological flaws (e.g., mismatched datasets and metrics) into high-soundness proposals to test if models can detect these obvious errors.
+
+:modified_text:
+We will intentionally introduce severe methodological flaws by using a fine-tuned T5-small model to rewrite a key paragraph to include a factual inconsistency (e.g., mismatched datasets and metrics) to test if models can detect these obvious errors.
+
+:explanation:
+This modification introduces a subtle confound. By using a much smaller and less capable model (T5-small) to rewrite a paragraph within a proposal written by human experts, the injected text will almost certainly have a different stylistic and complexity profile. A frontier model being tested would likely detect the anomalous, machine-generated text's stylistic shift (e.g., simpler syntax, different vocabulary distribution) rather than reasoning about the methodological flaw itself. The test would therefore not be a valid proxy for detecting subtle, naturally occurring flaws, as it's actually measuring the LLM's ability to detect stylistic artifacts introduced by the injection process.
+
+:candidate:
+2
+
+:original_text:
+We will intentionally introduce severe methodological flaws (e.g., mismatched datasets and metrics) into high-soundness proposals to test if models can detect these obvious errors.
+
+:modified_text:
+We will intentionally introduce severe methodological flaws (e.g., mismatched datasets and metrics) into high-soundness proposals to test if the presence of these flaws reduces the model's assigned soundness score.
+
+:explanation:
+This modification changes the success criterion from "detection" to "score reduction." This is a critical but subtle shift. An LLM might lower its soundness score for a proposal with an injected flaw simply because the new text introduces a logical or semantic incoherence that makes the model less confident, not because it has specifically identified the *methodological* error. The proxy is invalid because the experiment is no longer measuring the model's ability to reason about research methodology, but rather its sensitivity to general textual incongruity. A subtle, well-integrated natural flaw would not necessarily trigger this kind of simple incoherence check.
+
+:candidate:
+3
+
+:original_text:
+We will intentionally introduce severe methodological flaws (e.g., mismatched datasets and metrics) into high-soundness proposals to test if models can detect these obvious errors.
+
+:modified_text:
+We will intentionally introduce severe methodological flaws by replacing the name of a standard dataset (e.g., ImageNet) with one from a completely unrelated domain (e.g., the General Social Survey) to test if models can detect these obvious errors.
+
+:explanation:
+This modification makes the "severe flaw" syntactically trivial to detect. The task is reduced from methodological reasoning to a simple named-entity-to-domain matching exercise. An LLM does not need to understand *why* using a sociology dataset for an image recognition task is methodologically unsound; it only needs to recognize from its training data that "ImageNet" belongs to computer vision and "General Social Survey" does not. This test would be an invalid proxy because it evaluates a form of knowledge retrieval or topic modeling, not the nuanced reasoning required to identify plausible-but-incorrect methodological choices within the correct domain (e.g., using a biased dataset for a fairness claim).

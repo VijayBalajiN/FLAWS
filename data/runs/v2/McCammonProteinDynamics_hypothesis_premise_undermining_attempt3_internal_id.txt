@@ -1,0 +1,10 @@
+:error_text:
+diffusional character of local atomic motions is directly proportional to their root-mean-square fluctuation.
+
+:error_text:
+directly proportional to their root-mean-square fluctuation.
+
+:explanation:
+The hypothesis posits a physically flawed relationship. It incorrectly claims that the "diffusional character" of an atom (a dynamic property related to its ability to move away from its starting point over time) is directly proportional to its "root-mean-square fluctuation" (an equilibrium property that measures the amplitude of its motion around an average position).
+
+These two quantities are conceptually distinct and not necessarily proportional. An atom can have a large root-mean-square fluctuation while being trapped in a local potential well (e.g., a tethered atom), exhibiting zero long-term diffusion. Conversely, an atom could have small fluctuations but still be able to slowly diffuse. Therefore, stating a direct proportionality between them is a fundamental conceptual error that undermines the central premise of the research.

@@ -1,0 +1,19 @@
+:error_type:
+Conflict with Established Beliefs
+
+:original_text:
+An architecture relying solely on attention mechanisms, without recurrence or convolutions, is sufficient to model global dependencies between input and output sequences.
+
+:modified_text:
+An architecture relying solely on attention mechanisms, without recurrence, convolutions, or explicit positional encodings, is sufficient to model global dependencies between input and output sequences.
+
+:original_text:
+Since our model contains no recurrence and no convolution, we must inject information about the relative or absolute position of tokens. To this end, we will add **positional encodings** to the input embeddings at the bottoms of the encoder and decoder stacks. We will use sine and cosine functions of different frequencies for these encodings, as we hypothesize this will allow the model to easily learn to attend by relative positions. We will also consider learned positional embeddings as an alternative.
+
+:modified_text:
+Since our model contains no recurrence and no convolution, it processes the input as an unordered set of tokens. We hypothesize that the attention mechanism itself is powerful enough to infer the necessary relational information between tokens from the data, without needing explicit information about their relative or absolute positions.
+
+:explanation:
+(a) The established belief being conflicted with is the mathematical property of permutation equivariance in self-attention mechanisms. A standard self-attention layer, when applied to a set of input vectors, produces a corresponding set of output vectors. If the input vectors are permuted, the output vectors are simply permuted in the same way. The model has no inherent mechanism to know the original ordering of the inputs. Therefore, it is a well-established and fundamental principle that architectures like the Transformer, which lack recurrent or convolutional structure, *must* be augmented with explicit positional information (like positional encodings) to process sequential data where order is meaningful.
+
+(b) The modified hypothesis and method are internally consistent: the hypothesis states positional encodings are unnecessary, and the method section provides a (flawed) rationale for their omission. However, this entire premise directly conflicts with the established principle described above. An expert would immediately recognize that a model built this way would treat a sentence as a "bag of words" (or more accurately, a "bag of vectors"), rendering it incapable of distinguishing between sequences like "man bites dog" and "dog bites man." The claim that the attention mechanism can "infer" this missing information is fundamentally incorrect, as this contradicts its known mathematical properties.

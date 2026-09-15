@@ -1,0 +1,19 @@
+:error_text:
+Our study will focus on the bovine pancreatic trypsin inhibitor (PTI) due to its small size, high stability, and accurately determined X-ray structure. We will also include four strongly bound water molecules located in the protein's interior in our simulation.
+
+:error_text:
+A stable, low r.m.s.d. value will confirm that the protein remains in its folded state, while a high value would indicate fluid-like behavior.
+
+:error_text:
+conduct the main dynamical simulation by integrating the equations of motion using the Gear algorithm for a duration of several picoseconds.
+
+:error_text:
+Initial velocities will be set to zero.
+
+:explanation:
+The research plan contains several serious methodological and conceptual flaws, ranked here from most to least severe.
+
+1.  The description of the model system conspicuously omits any mention of bulk solvent (i.e., a water box with periodic boundary conditions). Simulating a protein in a vacuum is a major flaw, as the absence of solvent interactions creates a physically unrealistic environment that can drastically alter the protein's structure and dynamics, invalidating any conclusions about its behavior in a biological context.
+2.  The data analysis plan for structural stability contains a fundamental logical contradiction. It states that a high root mean square deviation (r.m.s.d.) would indicate the hypothesized "fluid-like behavior." However, a large, increasing r.m.s.d. is the primary indicator of global unfolding, which would mean the simulation has failed to maintain the protein's native state. This conflates a simulation artifact (unfolding) with the phenomenon under investigation (internal dynamics).
+3.  The planned simulation time of "several picoseconds" is far too short to test the hypothesis that atomic motions have a "diffusional character." Diffusional motion is a random-walk process that can only be observed and characterized over much longer timescales (nanoseconds or more). This short duration makes the experiment incapable of observing the central phenomenon it proposes to study.
+4.  Setting initial velocities to zero is an unphysical "cold start." While the equilibration step is intended to heat the system, this is a poor practice. A standard simulation would initialize velocities from a Maxwell-Boltzmann distribution to provide a physically realistic starting point, which can lead to faster and more reliable equilibration.

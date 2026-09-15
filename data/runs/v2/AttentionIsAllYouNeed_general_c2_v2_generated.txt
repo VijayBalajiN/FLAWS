@@ -1,0 +1,8 @@
+:original_text:
+For machine translation, we will evaluate models using the BLEU score. For English constituency parsing, we will use standard F1 scores.
+
+:modified_text:
+For machine translation, we will evaluate models using the BLEU score. To maintain consistency across tasks, we will also use BLEU to evaluate the linearized parse tree output for the English constituency parsing task.
+
+:explanation:
+The mechanism of this error is an **inappropriate evaluation metric**. BLEU score, which measures n-gram overlap, is fundamentally unsuited for evaluating the syntactic correctness of a hierarchical structure like a parse tree. It cannot distinguish between a well-formed tree and one with major structural errors (e.g., unbalanced parentheses, incorrect constituent spans) as long as the local token sequences are similar. Using BLEU makes the evaluation a test of surface-level string matching, not structural understanding. This invalidates the claim that the task is a sufficient test of generalization to structured prediction, as the method of measuring success is blind to the core structural aspect of the problem.

@@ -1,0 +1,8 @@
+:original_text:
+This prompt will instruct the model to act as a strict critic, defaulting to a "low soundness" rating unless the proposal demonstrates exceptionally clear and rigorous methodology.
+
+:modified_text:
+This prompt will instruct the model to adopt the persona of a notoriously harsh and contrarian reviewer, defaulting to a "low soundness" rating unless the proposal demonstrates exceptionally clear and rigorous methodology.
+
+:explanation:
+The flaw introduced is based on the mechanism of **persona-induced stylistic imitation**. By instructing the model to adopt the persona of a "notoriously harsh and contrarian reviewer," the prompt may cause the LLM to focus on mimicking the *style* of a harsh critic (e.g., using dismissive language, focusing on minor points) rather than engaging in a more rigorous logical evaluation. This could lead to a situation where the model's justifications *sound* skeptical, but its final rating is not systematically more accurate or more likely to be negative. The manipulation would fail because it induces a stylistic shift, not the intended skeptical *evaluation mode*.

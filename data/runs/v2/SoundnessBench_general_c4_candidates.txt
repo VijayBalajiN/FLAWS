@@ -1,0 +1,35 @@
+:candidate:
+1
+
+:original_text:
+We will create an anonymized version of the benchmark by masking specific method names and identifiers to test whether models rely on recognition rather than reasoning.
+
+:modified_text:
+We will create an anonymized version of the benchmark by masking only the novel method's designated acronym and any associated author identifiers to test whether models rely on recognition rather than reasoning.
+
+:explanation:
+The mechanism of this error is **conceptual inference**. The modification narrows the scope of masking to only the most explicit identifiers (the new method's acronym and author names). This is a plausible but flawed approach because it leaves the rich conceptual context intact. An LLM could easily de-anonymize the paper by recognizing the unique combination of cited prior work, the specific problem formulation, and the technical description of the (unnamed) methodology, thereby invalidating the control. The model would still be using "recognition" of the paper's core ideas, not "reasoning" about its methodology from first principles.
+
+:candidate:
+2
+
+:original_text:
+We will create an anonymized version of the benchmark by masking specific method names and identifiers to test whether models rely on recognition rather than reasoning.
+
+:modified_text:
+We will create an anonymized version of the benchmark by performing a simple find-and-replace on specific method names and identifiers to test whether models rely on recognition rather than reasoning.
+
+:explanation:
+The mechanism of this error is **structural and stylistic fingerprinting**. By specifying a "simple find-and-replace," the text implies that the underlying sentence structure, unique phrasing, and overall document organization will be perfectly preserved from the original paper. For an LLM trained on the source corpus, this verbatim structure acts as a powerful, non-obvious identifier. The model could recognize the paper's unique "fingerprint" even without the specific names, making the control ineffective. The flaw assumes that identifiers are purely lexical, ignoring that the text's structure itself can be a recognizable feature.
+
+:candidate:
+3
+
+:original_text:
+We will create an anonymized version of the benchmark by masking specific method names and identifiers to test whether models rely on recognition rather than reasoning.
+
+:modified_text:
+We will create an anonymized version of the benchmark by masking specific method names and identifiers within the hypothesis and experimental design sections to test whether models rely on recognition rather than reasoning.
+
+:explanation:
+The mechanism of this error is **information leakage due to incomplete application**. The modification limits the anonymization procedure to only two sections of the proposal. A researcher might plausibly do this, believing these sections contain the core sensitive information. However, other extracted sections, such as the "Related Work" or "Abstract," would remain unmasked. These sections often contain strong clues that could reveal the paper's identity (e.g., "We build upon the work of [Famous Method X]..."), completely undermining the control's purpose. The masking is insufficient because it is not applied globally to all parts of the extracted text.

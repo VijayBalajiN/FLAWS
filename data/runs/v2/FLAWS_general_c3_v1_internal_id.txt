@@ -1,0 +1,16 @@
+:error_text:
+The second step, which we term "internal identification," involves tasking the error-generating LLM with finding the error it just created; if it succeeds, the error is discarded as being too simple.
+
+:error_text:
+We will evaluate a set of five frontier LLMs on the FLAWS benchmark.
+
+:error_text:
+we will prompt an LLM to identify all text excerpts in the paper that are rendered incorrect by the modification. This complete set of excerpts will serve as the ground truth for our evaluation.
+
+:error_text:
+Two human annotators will assess (1) the validity of the inserted scientific errors and (2) the correctness of the LLMs' identifications.
+
+:explanation:
+The most serious flaw is a circularity in the evaluation design. The methodology explicitly states that errors are filtered by discarding any that the error-generating LLM can identify. This means the final benchmark is composed exclusively of the "blind spots" of the models used to create it. The experiment design then proposes evaluating a set of "frontier LLMs," which would almost certainly include the same state-of-the-art models used for error generation. This creates a fatal conflict: the generating models are being tested on a dataset that is, by definition, composed only of problems they cannot solve. This predetermines their failure and makes any performance comparison between them and other models invalid.
+
+A second, significant flaw is that the ground truth for the evaluation is not properly validated. The plan states that an LLM will be used to generate the ground-truth excerpts that define the location of an error. However, the human validation step only assesses the validity of the error itself and the correctness of the *evaluated* models' outputs; it does not include a step for humans to verify the accuracy or completeness of the LLM-generated ground truth. The entire evaluation hinges on an unverified target, which could introduce systematic bias and lead to inaccurate performance scores for all models.

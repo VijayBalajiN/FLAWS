@@ -1,0 +1,35 @@
+:candidate:
+1
+
+:original_text:
+We will extract fixed contextual embeddings from various layers of the pre-trained model and feed them into a BiLSTM classifier, comparing its performance to the standard fine-tuning approach.
+
+:modified_text:
+We will extract fixed contextual embeddings from various layers of the pre-trained model and feed them into a minimal, single-layer BiLSTM classifier with a hidden size of 64. This simple setup will be used to isolate the raw power of the embeddings when compared to the standard fine-tuning approach.
+
+:explanation:
+This error introduces a confounding variable by specifying a deliberately underpowered model for the feature-based approach. A single-layer BiLSTM with a small hidden size of 64 is likely insufficient for a complex task like NER. While the justification of "isolating the raw power of the embeddings" sounds plausible, it creates an unfair comparison. The fine-tuning approach utilizes the full, large, pre-trained model, whereas this setup cripples the feature-based alternative, making fine-tuning appear superior due to an intentionally weak competitor, not its own inherent merit.
+
+:candidate:
+2
+
+:original_text:
+We will extract fixed contextual embeddings from various layers of the pre-trained model and feed them into a BiLSTM classifier, comparing its performance to the standard fine-tuning approach.
+
+:modified_text:
+We will extract the final hidden state corresponding to the [CLS] token from the pre-trained model for each sequence and feed this single vector representation into a BiLSTM classifier, comparing its performance to the standard fine-tuning approach.
+
+:explanation:
+This error is a fundamental misapplication of the model's components for the given task. The experiment evaluates on CoNLL-2003 Named Entity Recognition (NER), which is a token-level classification task. The `[CLS]` token is specifically designed to aggregate information for sentence-level tasks. Using only the `[CLS]` embedding for a token-level task means that the BiLSTM would receive the exact same input for every token in a sentence, making it impossible to produce different labels for different words. This design guarantees the failure of the feature-based approach, invalidating any conclusion about its inferiority to fine-tuning.
+
+:candidate:
+3
+
+:original_text:
+We will extract fixed contextual embeddings from various layers of the pre-trained model and feed them into a BiLSTM classifier, comparing its performance to the standard fine-tuning approach.
+
+:modified_text:
+We will extract fixed contextual embeddings from the final layer of the pre-trained model. To handle sub-word tokenization, we will average the embeddings for all WordPieces within a single original word and feed this single averaged vector per word into a BiLSTM classifier, comparing its performance to the standard fine-tuning approach.
+
+:explanation:
+This error introduces a flaw in the data processing and feature engineering step. BERT uses WordPiece tokenization, which breaks words into sub-word units. To perform word-level NER, these sub-word representations must be aggregated. While averaging is a possible strategy, it is often suboptimal because it can wash out important discriminative information present in the individual sub-word embeddings (e.g., the first WordPiece often carries the most semantic weight). By mandating this naive and lossy aggregation method, the experiment systematically degrades the quality of the input for the feature-based approach, handicapping its performance and creating a biased comparison that would unfairly favor the fine-tuning method.

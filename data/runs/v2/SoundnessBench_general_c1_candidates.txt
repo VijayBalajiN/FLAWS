@@ -1,0 +1,35 @@
+:candidate:
+1
+
+:original_text:
+exhibiting a bias towards optimism and a high sensitivity to prompt framing.
+
+:modified_text:
+exhibiting an intrinsic bias towards optimism, independent of surface-level textual features, and a high sensitivity to prompt framing.
+
+:explanation:
+The mechanism of this error is over-specification of the hypothesis beyond what the experiment can support. The modified text claims that the optimism bias is "intrinsic" and not a byproduct of "surface-level textual features." However, the proposed experiment only controls for simple features like proposal length and number of experiments. It does not control for more complex stylistic confounders like vocabulary, tone, or argument structure. An LLM might simply be rewarding a "confident writing style" which correlates with soundness, rather than exhibiting true optimism. Because the experiment cannot disentangle these factors, it is no longer sufficient to validate the more specific and powerful claim made in the modified hypothesis.
+
+:candidate:
+2
+
+:original_text:
+We will then assign binary labels—"high soundness" (mean score ≥ 3) or "low soundness" (mean score ≤ 2)—based on the average reviewer soundness sub-score, excluding ambiguous cases.
+
+:modified_text:
+We will then assign binary labels—"high soundness" (mean score ≥ 6) or "low soundness" (mean score ≤ 4)—based on the average reviewer overall recommendation score, excluding ambiguous cases.
+
+:explanation:
+The mechanism of this error is flawed operationalization, where the proxy for the ground truth is invalid. The modification replaces the specific "soundness sub-score" with the "overall recommendation score" for labeling data. An overall score is confounded by many factors other than methodological soundness, such as perceived novelty, impact, or clarity. A proposal could be methodologically sound but receive a low overall score for being incremental. If an LLM correctly identifies such a proposal as sound, the experiment would wrongly count it as a false positive, artifactually inflating the "optimism bias" metric. The claim is undermined because the experiment is no longer measuring what it claims to be measuring.
+
+:candidate:
+3
+
+:original_text:
+We will gather a large corpus of research papers and their corresponding peer reviews from public ICLR conference submissions, starting from 2022, as these consistently include reviewer soundness sub-scores.
+
+:modified_text:
+We will gather a large corpus of research papers and their corresponding peer reviews from public ICLR conference submissions that received at least one "accept" recommendation, starting from 2022, as these consistently include reviewer soundness sub-scores.
+
+:explanation:
+The mechanism of this error is sampling bias, which invalidates the generalizability of the conclusion. By filtering the dataset to only include proposals that received at least one "accept" recommendation, the study systematically removes papers with clear, unambiguous flaws. The remaining "low soundness" papers are likely to be only marginally flawed or controversial, representing a much more difficult classification task. An LLM's tendency to rate these borderline cases as "high soundness" may not reflect a general "optimism bias" but rather an inability to resolve ambiguity in a sample with an artificially high quality floor. The fundamental nature of the claim is undermined because the findings may not generalize beyond this biased, high-quality sample.

@@ -1,0 +1,5 @@
+:error_text:
+We will evaluate models on a held-out split of very recent papers (ICLR 2026) using models with documented training data cutoffs prior to the papers' publication.
+
+:explanation:
+This control experiment is impossible to execute. The proposed data source, ICLR 2026 conference papers, does not exist at the time of this research plan. This temporal impossibility makes the entire contamination control invalid as described. Since contamination is a critical confounder—the models may have seen the other benchmark papers in their training data—the failure to design a feasible control for it severely undermines the study's validity.

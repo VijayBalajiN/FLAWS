@@ -1,0 +1,8 @@
+:original_text:
+We will source our papers from the accepted list of the 2025 International Conference on Machine Learning (ICML), ensuring they were first posted on arXiv after the knowledge cutoff dates of the models we plan to test.
+
+:modified_text:
+We will source our papers from the accepted list of the 2025 International Conference on Machine Learning (ICML), ensuring their final versions were first posted on arXiv after the knowledge cutoff dates of the models we plan to test.
+
+:explanation:
+The mechanism of this error is an incomplete version history check. The addition of the phrase "final versions" creates a subtle but critical loophole. A paper's initial preprint (e.g., v1) could have been posted on arXiv *before* the model's knowledge cutoff, making it part of the training data. The "final version" (the camera-ready copy for the conference) might be posted after the cutoff, but the model would have already been exposed to the paper's core content, text, and structure. This would contaminate the benchmark, invalidating the claim that the method reliably prevents it.
