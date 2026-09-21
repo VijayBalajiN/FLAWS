@@ -1,0 +1,61 @@
+digraph G {
+  rankdir=TB; bgcolor="white"; pad=0.4; nodesep=0.35; ranksep=0.45; compound=true; newrank=true;
+  node [shape=box, style="rounded,filled", fillcolor="#F5F6F2", color="#5B655C", fontname="Helvetica", fontsize=12, margin="0.18,0.10"];
+  edge [color="#5B655C", fontname="Helvetica", fontsize=10.5];
+
+  subgraph cluster_ex { label="1 · Extraction"; fontname="Helvetica-Bold"; fontsize=14; style="rounded"; color="#8A937E";
+    A [label="Paper PDF"];
+    B [label="GROBID → TEI XML"];
+    C [label="Keep title/abstract/intro/method/related work/appendix\ndrop Results, Discussion, Conclusion, Findings"];
+    D [label="paper_content.txt"];
+    E [label="Gemini 2.5 Pro: rewrite as Problem / Method / Experiment Design\nfirst person, pre-experiment framing only"];
+    F [label="research_plan.txt"];
+    G [label="parse_sections — regex header split"];
+    H [label="derive_ref_theory — LLM extracts one\nfalsifiable hypothesis from Problem"];
+    I [label="Structured plan JSON\nproblem · method · experiment_design · hypothesis", fillcolor="#E3EFEA", color="#2F6F62"];
+    A->B->C->D->E->F->G->H->I;
+  }
+
+  subgraph cluster_gen { label="2 · Error generation — 5 tracks"; fontname="Helvetica-Bold"; fontsize=14; style="rounded"; color="#8A937E";
+    J [label="track?", shape=diamond, fillcolor="white"];
+    K [label="decompose_general_claims\n5 falsifiable claims, ≥1 from hypothesis"];
+    L [label="per claim: 3 candidate falsifications\nmust differ in mechanism, not wording"];
+    M [label="up to 15 candidates"];
+    N [label="typed prompt + editable_plan_context\nwhole plan editable; edit must anchor\nin the track's target field"];
+    O [label="1 candidate this attempt"];
+    J->K [label="general"]; K->L->M;
+    J->N [label="typed: internal contradiction /\nestablished-belief conflict /\npremise undermining / ED"]; N->O;
+  }
+
+  subgraph cluster_ver { label="3 · Shared verification chain — process_candidate"; fontname="Helvetica-Bold"; fontsize=14; style="rounded"; color="#2F6F62";
+    P [label="edit landed in the\nrequired field?  (code check)", shape=diamond, fillcolor="white"];
+    Q [label="filter_invalid\n(LLM judge)", shape=diamond, fillcolor="white"];
+    R [label="filter_easy\n(LLM judge, sees answer key)", shape=diamond, fillcolor="white"];
+    S [label="insert — splice into the WHOLE plan text\nmodify_source, fuzzy match 0.9"];
+    T [label="re-parse_sections\ndiff vs original → touched_fields"];
+    U [label="localize — other excerpts now\nmade incorrect elsewhere"];
+    V [label="self-identification:\nmodel sees altered plan, no answer key\nlists up to 5 suspects"];
+    W [label="levenshtein_identify\nvs ground truth (≥0.5 = found)", shape=diamond, fillcolor="white"];
+    X [label="accept → save _altered.json\nwith touched_fields", fillcolor="#E4F0EA", color="#245C43"];
+    RA [label="reject", fillcolor="#FBEAE7", color="#8B3324"];
+    P->Q [label="yes"]; Q->R [label="clean"]; R->S [label="hard enough"];
+    S->T->U->V->W; W->X [label="not found"];
+    P->RA [label="no"]; Q->RA [label="flagged"]; R->RA [label="too easy"]; W->RA [label="found it"];
+  }
+
+  AE [label="typed track,\nattempts remain?", shape=diamond, fillcolor="white"];
+  AF [label="rank_attempts: keep best-ranked reject\nstatus = rejected_best_of_attempts"];
+  AG [label="discarded, no retry —\ndiversity comes from more claims/candidates"];
+
+  subgraph cluster_cls { label="4 · Post-hoc classification"; fontname="Helvetica-Bold"; fontsize=14; style="rounded"; color="#8A937E";
+    AA [label="general track?", shape=diamond, fillcolor="white"];
+    AB [label="classify vs taxonomy_te.txt audits\nA / B / C / D  (gemini-2.5-flash)"];
+    AC [label="dataset entry, no taxonomy tag"];
+    AD [label="benchmark dataset", shape=cylinder, fillcolor="#E4F0EA", color="#245C43"];
+    AA->AB [label="yes"]; AA->AC [label="no (typed)"]; AB->AD; AC->AD;
+  }
+
+  I->J; M->P; O->P;
+  RA->AE; AE->N [label="yes, retry", constraint=false]; AE->AF [label="no — 5 used"]; AE->AG [label="general"];
+  X->AA; AF->AC;
+}

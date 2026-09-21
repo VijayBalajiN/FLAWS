@@ -1,0 +1,20 @@
+digraph G {
+  rankdir=LR; bgcolor="white"; pad=0.4; nodesep=0.5; ranksep=0.55;
+  node [shape=box, style="rounded,filled", fillcolor="#F5F6F2", color="#5B655C", fontname="Helvetica", fontsize=13, margin="0.2,0.12"];
+  edge [color="#5B655C", fontname="Helvetica", fontsize=11];
+
+  pdf   [label="Paper PDF"];
+  ext   [label="Extract & structure\ninto a research plan\n(GROBID + Gemini)"];
+  gen   [label="Generate a candidate error\n5 tracks: general + 4 typed"];
+  chain [label="Filter → insert → localize\n→ self-identify", fillcolor="#E3EFEA", color="#2F6F62"];
+  keep  [label="Hard enough\nto keep?", shape=diamond, style="filled", fillcolor="#FFFFFF", margin="0.05,0.05"];
+  rej   [label="Reject", fillcolor="#FBEAE7", color="#8B3324"];
+  acc   [label="Accept: altered plan\n+ touched fields"];
+  cls   [label="Classify error type\nA / B / C / D"];
+  ds    [label="Benchmark dataset", shape=cylinder, fillcolor="#E4F0EA", color="#245C43"];
+
+  pdf -> ext -> gen -> chain -> keep;
+  keep -> rej [label="no"];
+  keep -> acc [label="yes"];
+  acc -> cls -> ds;
+}
