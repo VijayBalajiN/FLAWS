@@ -1,6 +1,7 @@
 code/data/*
 code/annotation/*
 .DS_Store
-data/.DS_Store.env
+data/.DS_Store
+.env
 __pycache__/
 *.pyc
