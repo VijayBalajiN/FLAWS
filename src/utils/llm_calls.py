@@ -1,28 +1,47 @@
 import os
-import fitz
 import base64
+
+import fitz
 
 import openai
 from openai import OpenAI
 import anthropic
 import google.generativeai as gemini
 
-from transformers import AutoTokenizer, AutoModelForCausalLM
-
+from src.utils.resilient_call import (
+    ResilientCaller, RetryPolicy, Throttle, CallBudget, UsageLog, HardTimeout,
+)
 from src.utils.latex_to_pdf import (
     find_main_tex_file_to_combine,
 )
 
+
+
+def _load_dotenv(path: str = ".env") -> None:
+    """Minimal .env loader so keys never need to be hardcoded in this file."""
+    if not os.path.exists(path):
+        return
+    with open(path) as f:
+        for line in f:
+            line = line.strip()
+            if line and not line.startswith("#") and "=" in line:
+                key, value = line.split("=", 1)
+                os.environ.setdefault(key.strip(), value.strip().strip("'\""))
+
+
+_load_dotenv()
+
 # SETUP OPENAI API KEY
-os.environ["OPENAI_API_KEY"] = ""
+if not os.environ.get("OPENAI_API_KEY"):
+    os.environ["OPENAI_API_KEY"] = "unset"  # newer openai clients reject an empty key at import
 openai.api_key = os.getenv("OPENAI_API_KEY")
 openai_client = OpenAI()
 
 # SETUP ANTHROPIC API KEY
-anthropic_client = anthropic.Anthropic(api_key="")
+anthropic_client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY") or "unset")
 
 # SETUP GROK API KEY
-XAI_API_KEY = ""
+XAI_API_KEY = os.getenv("XAI_API_KEY") or "unset"
 grok_client = OpenAI(
     api_key=XAI_API_KEY,
     base_url="https://api.x.ai/v1",
@@ -30,12 +49,13 @@ grok_client = OpenAI(
 
 # SETUP DEEPSEEK API KEY
 deepseek_client = OpenAI(
-    api_key="",
+    api_key=os.getenv("DEEPSEEK_API_KEY") or "unset",
     base_url="https://api.deepseek.com/v1",
 )
 
 # SETUP GEMINI API KEY
-gemini.configure(api_key="")
+# REST transport: the default gRPC transport was observed to hang indefinitely on a call
+gemini.configure(api_key=os.getenv("GOOGLE_API_KEY", ""), transport="rest")
 
 
 def get_completion_gemini(
@@ -58,7 +78,13 @@ def get_completion_gemini(
         ]
     else:
         messages = [prompt]
-    response = gen_model.generate_content(messages)
+    response = gen_model.generate_content(messages, request_options={"timeout": 900})
+    usage = getattr(response, "usage_metadata", None)
+    _last_usage.update(
+        prompt_tokens=getattr(usage, "prompt_token_count", None),
+        output_tokens=getattr(usage, "candidates_token_count", None),
+        thinking_tokens=getattr(usage, "thoughts_token_count", None),
+    )
     return response.text
 
 
@@ -221,6 +247,8 @@ def get_completion_openthought(
         full_prompt = prompt + "\n\nThis is the input file:\n\n" + full_content
     else:
         full_prompt = prompt
+    from transformers import AutoTokenizer, AutoModelForCausalLM  # heavy, optional
+
     tokenizer = AutoTokenizer.from_pretrained(model)
     transformer_model = AutoModelForCausalLM.from_pretrained(model)
     messages = [
@@ -267,17 +295,34 @@ def call_api(
     return llm_output, full_prompt
 
 
+# ---- resilience is composed here, implemented in resilient_call.py ---------------
+_last_usage: dict = {}
+
+_caller = ResilientCaller(
+    policy=RetryPolicy(max_attempts=int(os.getenv("FLAWS_MAX_ATTEMPTS", "6"))),
+    throttle=Throttle(float(os.getenv("FLAWS_MIN_CALL_INTERVAL", "6"))),
+    budget=CallBudget(int(os.getenv("FLAWS_MAX_API_CALLS", "400"))),
+    log=UsageLog(os.getenv("FLAWS_CALL_LOG", "data/api_calls.jsonl")),
+    timeout=HardTimeout(float(os.getenv("FLAWS_CALL_TIMEOUT", "480"))),
+)
+
+# Provider registry: supporting a new provider is one new entry (open for extension).
+PROVIDERS = {
+    "openai": get_completion_openai,
+    "gemini": get_completion_gemini,
+    "anthropic": get_completion_anthropic,
+    "xai": get_completion_grok,
+    "deepseek": get_completion_deepseek,
+    "openthought": get_completion_openthought,
+}
+
+
 def completion_response(
     model_family: str, model: str, prompt: str, pdf_path: str | None
 ) -> str:
-    completion_mapping = {
-        "openai": get_completion_openai,
-        "gemini": get_completion_gemini,
-        "anthropic": get_completion_anthropic,
-        "xai": get_completion_grok,
-        "deepseek": get_completion_deepseek,
-        "openthought": get_completion_openthought,
-    }
-    completion = completion_mapping[model_family]
-    llm_output = completion(prompt=prompt, model=model, file=pdf_path)
-    return llm_output
+    """Dispatch to the provider through the shared resilient caller."""
+    _last_usage.clear()
+    return _caller.call(
+        PROVIDERS[model_family], prompt=prompt, model=model, file=pdf_path,
+        usage=lambda: dict(_last_usage),
+    )

@@ -4,6 +4,7 @@ import glob
 import shutil
 import subprocess
 import PyPDF2
+from dataclasses import dataclass
 
 
 def compress_pdf_ghostscript(
@@ -155,87 +156,115 @@ def copy_dir_contents(src: str, dst: str, new_name: str | None = None) -> None:
     print(f"Copied {file_count} files, skipped {skipped_count} files.")
 
 
+def _tex_bin(name: str) -> str:
+    """Locate a TeX binary (PATH first, then the MacTeX default location)."""
+    return shutil.which(name) or f"/Library/TeX/texbin/{name}"
+
+
+def _run_logged(cmd: list[str], cwd: str, log, timeout: int = 180) -> int:
+    """Run one compile step, appending its output to `log`; never raises.
+    Returns the exit code (-1 on timeout)."""
+    log.write(f"\n$ {' '.join(cmd)}\n")
+    log.flush()
+    try:
+        return subprocess.run(
+            cmd,
+            cwd=cwd,
+            stdout=log,
+            stderr=subprocess.STDOUT,
+            stdin=subprocess.DEVNULL,
+            timeout=timeout,
+        ).returncode
+    except subprocess.TimeoutExpired:
+        log.write(f"\n[timeout after {timeout}s]\n")
+        return -1
+
+
+@dataclass(frozen=True)
+class BibliographyPlan:
+    """What the bibliography step should do for one document."""
+
+    engine: str | None  # "bibtex", "biber", or None (reuse the shipped .bbl / no bibliography)
+
+
+def plan_bibliography(tex_source: str, build_dir: str) -> BibliographyPlan:
+    """Decide the bibliography engine from the source; only run one when its .bib files exist."""
+    body = re.sub(r"(?m)(?<!\\)%.*$", "", tex_source)
+    names = []
+    for m in re.finditer(r"\\bibliography\{([^}]*)\}", body):
+        names += [n.strip() for n in m.group(1).split(",") if n.strip()]
+    for m in re.finditer(r"\\addbibresource(?:\[[^\]]*\])?\{([^}]*)\}", body):
+        names.append(m.group(1).strip())
+    all_present = bool(names) and all(
+        os.path.exists(os.path.join(build_dir, n if n.endswith(".bib") else n + ".bib"))
+        for n in names
+    )
+    if not all_present:
+        return BibliographyPlan(None)
+    return BibliographyPlan("biber" if "\\addbibresource" in body else "bibtex")
+
+
+def ensure_bbl_fallback(src_dir: str, build_dir: str, base_name: str) -> None:
+    """Reuse a shipped .bbl as `<base_name>.bbl` when the bibliography can't be rebuilt."""
+    target = os.path.join(build_dir, base_name + ".bbl")
+    if os.path.exists(target):
+        return
+    shipped = sorted(glob.glob(os.path.join(src_dir, "**/*.bbl"), recursive=True))
+    if shipped:
+        shutil.copy2(shipped[0], target)
+
+
+def build_steps(plan: BibliographyPlan, latex_cmd: list[str], base_name: str) -> list[tuple[list[str], str]]:
+    """The ordered (command, where) steps of one build: latex [-> bib] -> latex -> latex."""
+    steps = [(latex_cmd, "source")]
+    if plan.engine:
+        steps.append(([_tex_bin(plan.engine), base_name], "build"))
+    steps += [(latex_cmd, "source"), (latex_cmd, "source")]
+    return steps
+
+
 def compile_latex(paper: str, des: str, main_tex: str) -> str:
     """
     Compile a LaTeX project into a PDF,
-    return output pdf path.
+    return output pdf path (the file may not exist if compilation failed).
+
+    Differences from upstream, all aimed at not dying on real arXiv sources:
+    - one log per paper (`latex_compilation_log.txt` next to the pdf) instead
+      of a shared log that every run overwrites;
+    - LaTeX errors no longer abort the build (nonstopmode still emits a PDF for
+      most recoverable errors); success is judged by the PDF existing;
+    - bibtex/biber only run when their .bib inputs exist, otherwise the
+      shipped .bbl is reused, so a missing .bib no longer breaks references;
+    - no --shell-escape (arXiv sources are untrusted code);
+    - subprocess timeouts are handled instead of crashing the pipeline.
     """
     dst = des.lstrip("/\\")
-    folder = os.getcwd()
-    des = os.path.join(folder, dst)
-
+    build_dir = os.path.join(os.getcwd(), dst)
     main_tex_filename = os.path.basename(main_tex)
     base_name = os.path.splitext(main_tex_filename)[0]
-    copy_dir_contents(f"data/papers/{paper}", dst, base_name)
-    output_pdf_path = os.path.join(des, main_tex_filename.replace(".tex", ".pdf"))
+    src_dir = f"data/papers/{paper}"
+    output_pdf_path = os.path.join(build_dir, main_tex_filename.replace(".tex", ".pdf"))
 
-    # remove previous pdf
+    copy_dir_contents(src_dir, dst, base_name)
     if os.path.exists(output_pdf_path):
-        os.remove(output_pdf_path)
+        os.remove(output_pdf_path)  # never mistake a stale pdf for a fresh build
 
-    latex_cmd = [
-        "/Library/TeX/texbin/pdflatex",
-        "-interaction=nonstopmode",
-        "--shell-escape",
-        "-output-directory",
-        des,
-        main_tex_filename,
-    ]
+    with open(main_tex, "r", encoding="utf-8", errors="ignore") as f:
+        plan = plan_bibliography(f.read(), build_dir)
+    if plan.engine is None:
+        ensure_bbl_fallback(src_dir, build_dir, base_name)
 
-    bibtex_cmd = ["/Library/TeX/texbin/bibtex", base_name]
+    latex_cmd = [_tex_bin("pdflatex"), "-interaction=nonstopmode", "-output-directory", build_dir, main_tex_filename]
+    cwd_for = {"source": os.path.dirname(main_tex) or ".", "build": build_dir}
+    log_path = os.path.join(build_dir, "latex_compilation_log.txt")
+    with open(log_path, "w") as log:
+        for cmd, where in build_steps(plan, latex_cmd, base_name):
+            _run_logged(cmd, cwd_for[where], log)
 
-    # try to compile twice, replace references if first time doesn't work
-    for attempt in range(2):
-        try:
-            with open("data/latex_compilation_log.txt", "w") as log:
-                # 1st run: generate .aux
-                print("start")
-                subprocess.run(
-                    latex_cmd,
-                    cwd=os.path.dirname(main_tex),
-                    stdout=log,
-                    stderr=subprocess.STDOUT,
-                    check=True,
-                    timeout=60,
-                )
-                print("finished 1")
-
-                # 2nd run: process bibliography
-                subprocess.run(
-                    bibtex_cmd,
-                    cwd=des,
-                    stdout=log,
-                    stderr=subprocess.STDOUT,
-                    check=False,
-                )
-                print("finished 2")
-
-                # 3rd and 4th runs: resolve refs
-                subprocess.run(
-                    latex_cmd,
-                    cwd=os.path.dirname(main_tex),
-                    stdout=log,
-                    stderr=subprocess.STDOUT,
-                    check=True,
-                    timeout=60,
-                )
-                print("finished 3")
-                subprocess.run(
-                    latex_cmd,
-                    cwd=os.path.dirname(main_tex),
-                    stdout=log,
-                    stderr=subprocess.STDOUT,
-                    check=True,
-                    timeout=60,
-                )
-                print("finished 4")
-
-            print(f"Compilation SUCCESSFUL: {output_pdf_path}")
-            break
-        except subprocess.CalledProcessError:
-            print("Compilation FAILED! Check latex_compilation_log.txt for details.")
-            replace_bibliography(main_tex)
-
+    if os.path.exists(output_pdf_path):
+        print(f"Compilation SUCCESSFUL: {output_pdf_path}")
+    else:
+        print(f"Compilation FAILED! See {log_path}")
     return output_pdf_path
 
 

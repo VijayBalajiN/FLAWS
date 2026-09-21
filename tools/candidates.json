@@ -1,0 +1,2326 @@
+[
+ {
+  "id": "2606.06572v1",
+  "title": "Generative Models Erode Human Temporal Learning Through Market Selection",
+  "published": "2026-06-04T17:59:06Z",
+  "primary": "cs.LG",
+  "comment": "Accepted at ICML 2026"
+ },
+ {
+  "id": "2606.19341v2",
+  "title": "Native Active Perception as Reasoning for Omni-Modal Understanding",
+  "published": "2026-06-17T17:59:56Z",
+  "primary": "cs.CV",
+  "comment": "Accepted at ICML 2026. Code and models: https://github.com/harryhsing/omniagent"
+ },
+ {
+  "id": "2606.15880v1",
+  "title": "Deep Residual Injection for Full-Spectrum Forensic Signal Perception in Multimodal Large Language Models",
+  "published": "2026-06-14T16:05:45Z",
+  "primary": "cs.CV",
+  "comment": "Accepted at ICML 2026"
+ },
+ {
+  "id": "2606.25325v2",
+  "title": "Omni-Perception Policy Optimization for Multimodal Emotion Reasoning",
+  "published": "2026-06-24T02:43:26Z",
+  "primary": "cs.AI",
+  "comment": "Accepted at ICML 2026. Project page: https://zjycutieee.github.io/OPPO-page/ Code: https://github.com/ZhiyuanHan-Aaron/OPPO"
+ },
+ {
+  "id": "2606.04754v2",
+  "title": "Beyond Structural Symmetries: Linear Mode Connectivity via Neuron Identifiability",
+  "published": "2026-06-03T11:37:58Z",
+  "primary": "cs.LG",
+  "comment": "Accepted at ICML 2026"
+ },
+ {
+  "id": "2606.31567v1",
+  "title": "FLARE-AI: Flaw Reporting for AI",
+  "published": "2026-06-30T12:27:09Z",
+  "primary": "cs.CY",
+  "comment": "Accepted to ICML 2026"
+ },
+ {
+  "id": "2609.00097v1",
+  "title": "Faster Than Flash: Exploiting Attention Sparsity for Efficient Long-Context Decoding",
+  "published": "2026-08-31T15:13:20Z",
+  "primary": "cs.LG",
+  "comment": "20 pages, 8 figures, 10 tables; Accepted at ICML 2026"
+ },
+ {
+  "id": "2608.07952v1",
+  "title": "Persistent Semantic Entities in Tool-Augmented LLM Systems",
+  "published": "2026-08-08T06:31:00Z",
+  "primary": "cs.LG",
+  "comment": "Accepted at the 43rd International Conference on Machine Learning (ICML 2026). Camera-ready version; 32 pages . The openreview url is https://openreview.net/forum?id=zPjmtawzT8&noteId=CXB95ws5so and ICML poster url is https://icml.cc/virtual/2026/poster/60521"
+ },
+ {
+  "id": "2606.03290v1",
+  "title": "Message Tuning Outshines Graph Prompt Tuning: A Prismatic Space Perspective",
+  "published": "2026-06-02T07:52:54Z",
+  "primary": "cs.LG",
+  "comment": "Accepted by ICML 2026"
+ },
+ {
+  "id": "2606.03976v1",
+  "title": "Formalizing the Binding Problem",
+  "published": "2026-06-02T17:56:24Z",
+  "primary": "cs.CV",
+  "comment": "Accepted to ICML 2026"
+ },
+ {
+  "id": "2608.02827v1",
+  "title": "Emergence of Biased Consensus in Multi-Agent LLM Debates",
+  "published": "2026-08-03T19:40:49Z",
+  "primary": "cs.MA",
+  "comment": "Accepted at the 43rd International Conference on Machine Learning (ICML 2026). 23 pages, 12 figures"
+ },
+ {
+  "id": "2608.05791v1",
+  "title": "A Two-Tier Perspective on Inference-Time Parallelism in Multi-Agent LLM Systems",
+  "published": "2026-08-06T09:26:24Z",
+  "primary": "cs.MA",
+  "comment": "Accepted to ICML 2026"
+ },
+ {
+  "id": "2606.12146v1",
+  "title": "nD-RoPE: A Generalized RoPE for n-Dimensional Position Embedding",
+  "published": "2026-06-10T14:38:00Z",
+  "primary": "cs.LG",
+  "comment": "Accepted to the 43rd International Conference on Machine Learning (ICML 2026)"
+ },
+ {
+  "id": "2606.25450v2",
+  "title": "The Generalization Spectrum: A Chromatographic Approach to Evaluating Learning Algorithms",
+  "published": "2026-06-24T06:26:02Z",
+  "primary": "cs.LG",
+  "comment": "Accepted at ICML 2026. 30 pages, 6 figures"
+ },
+ {
+  "id": "2606.08814v1",
+  "title": "STAR: Rethinking MoE Routing as Structure-Aware Subspace Learning",
+  "published": "2026-06-07T20:07:24Z",
+  "primary": "cs.AI",
+  "comment": "Accepted at ICML 2026"
+ },
+ {
+  "id": "2606.03066v1",
+  "title": "CORE: Conflict-Oriented Reasoning for General Multimodal Manipulation Detection",
+  "published": "2026-06-02T02:53:48Z",
+  "primary": "cs.AI",
+  "comment": "Accepted by ICML 2026"
+ },
+ {
+  "id": "2606.03100v2",
+  "title": "Zero-Shot 3D Question Answering via Hierarchical View-to-Token Transportation",
+  "published": "2026-06-02T03:38:51Z",
+  "primary": "cs.CV",
+  "comment": "Accepted at ICML 2026. 19 pages, 6 figures"
+ },
+ {
+  "id": "2608.23493v1",
+  "title": "SRPO: Self-Reflective Policy Optimization for Long-Horizon Reasoning",
+  "published": "2026-08-24T16:55:09Z",
+  "primary": "cs.AI",
+  "comment": "Accepted to ICML 2026"
+ },
+ {
+  "id": "2606.05793v1",
+  "title": "CollabBench: Benchmarking and Unleashing Collaborative Ability of LLMs with Diverse Players via Proactive Engagement",
+  "published": "2026-06-04T07:22:44Z",
+  "primary": "cs.CL",
+  "comment": "Accepted by ICML 2026"
+ },
+ {
+  "id": "2606.28182v1",
+  "title": "LLawCo: Learning Laws of Cooperation for Modeling Embodied Multi-Agent Behavior",
+  "published": "2026-06-26T15:26:12Z",
+  "primary": "cs.LG",
+  "comment": "Accepted to ICML 2026"
+ },
+ {
+  "id": "2606.21611v1",
+  "title": "The Two-Hump Problem: Bridging the Difficulty Gap in Mathematical Reinforcement Learning",
+  "published": "2026-06-19T17:14:47Z",
+  "primary": "cs.LG",
+  "comment": "Accepted at ICML 2026. 38 pages, 9 figures. Code and datasets: https://github.com/Math-AI-Caltech/ACSolverX"
+ },
+ {
+  "id": "2606.03610v1",
+  "title": "SkelHCC: A Hyperbolic CLIP-Driven Cache Adaptation Framework for Skeleton-based One-Shot Action Recognition",
+  "published": "2026-06-02T13:13:27Z",
+  "primary": "cs.CV",
+  "comment": "Accepted by ICML 2026"
+ },
+ {
+  "id": "2607.08109v1",
+  "title": "Contrastive Order Learning: A General Framework for Ordinal Regression",
+  "published": "2026-07-09T04:48:26Z",
+  "primary": "cs.LG",
+  "comment": "Accepted to ICML 2026"
+ },
+ {
+  "id": "2606.15389v1",
+  "title": "Timestep Rescheduling in Diffusion Inversion",
+  "published": "2026-06-13T16:32:01Z",
+  "primary": "cs.CV",
+  "comment": "Accepted by ICML 2026. 23 pages, including appendices"
+ },
+ {
+  "id": "2606.13054v2",
+  "title": "TWLA: Achieving Ternary Weights and Low-Bit Activations for LLMs via Post-Training Quantization",
+  "published": "2026-06-11T08:37:20Z",
+  "primary": "cs.LG",
+  "comment": "Accepted by ICML 2026"
+ },
+ {
+  "id": "2607.03551v1",
+  "title": "WeightCLIP: Aligning Datasets and Models for Weight Space Learning",
+  "published": "2026-07-03T18:27:18Z",
+  "primary": "cs.LG",
+  "comment": "Accepted at ICML 2026"
+ },
+ {
+  "id": "2607.02097v2",
+  "title": "WBMM: Windowed Batch Matrix Multiplication for Efficient Large Receptive Field Convolution",
+  "published": "2026-07-02T12:33:03Z",
+  "primary": "cs.CV",
+  "comment": "23 pages, 4 figures. Accepted as a Spotlight paper at ICML 2026. Code available at https://github.com/wansong-s/WBMM"
+ },
+ {
+  "id": "2607.16263v1",
+  "title": "Preference-based Antibody Expression Ranking: Scaling with Large-scale Weak Supervision",
+  "published": "2026-06-29T03:34:12Z",
+  "primary": "cs.LG",
+  "comment": "Accepted at ICML 2026"
+ },
+ {
+  "id": "2609.13742v1",
+  "title": "Hyper-LLaVA: Hyperbolic Uncertainty-aware Modality-Balanced Routing for Multimodal Continual Instruction Tuning",
+  "published": "2026-09-12T06:26:42Z",
+  "primary": "cs.CV",
+  "comment": "Accepted by ICML 2026"
+ },
+ {
+  "id": "2607.27546v1",
+  "title": "Memory Efficient Tabular Foundation Models",
+  "published": "2026-07-30T00:38:28Z",
+  "primary": "cs.LG",
+  "comment": "12 pages, 3 figures Accepted at FMSD @ ICML 2026"
+ },
+ {
+  "id": "2606.11186v1",
+  "title": "AnyMod-LLVE: Low-Light Video Enhancement with Modality-Agnostic Inference",
+  "published": "2026-06-09T17:59:05Z",
+  "primary": "cs.CV",
+  "comment": "Accepted at ICML 2026; Project page and code: https://lhfgghc.github.io/LLVE-AMNet"
+ },
+ {
+  "id": "2606.12900v1",
+  "title": "Zero-source LLM Hallucination Detection with Human-like Criteria Probing",
+  "published": "2026-06-11T04:58:05Z",
+  "primary": "cs.AI",
+  "comment": "Accepted at ICML 2026"
+ },
+ {
+  "id": "2606.05101v1",
+  "title": "FoeGlass: Simple In-Context Learning Is Enough for Red Teaming Audio Deepfake Detectors",
+  "published": "2026-06-03T17:04:26Z",
+  "primary": "cs.SD",
+  "comment": "Accepted at ICML 2026"
+ },
+ {
+  "id": "2606.05296v1",
+  "title": "Agentic Monte Carlo: Simulating Reinforcement Learning for Black-Box Agents",
+  "published": "2026-06-03T18:00:07Z",
+  "primary": "cs.LG",
+  "comment": "Accepted by ICML 2026"
+ },
+ {
+  "id": "2606.19509v1",
+  "title": "LLM Doesn't Know What It Doesn't Know: Detecting Epistemic Blind Spots via Cross-Model Attribution Divergence on Clinical Tabular Data",
+  "published": "2026-06-17T18:49:44Z",
+  "primary": "cs.AI",
+  "comment": "Accepted at EIML@ICML 2026"
+ },
+ {
+  "id": "2606.07172v1",
+  "title": "Textual Supervision Enhances Geospatial Representations in Vision-Language Models",
+  "published": "2026-06-05T11:40:13Z",
+  "primary": "cs.CV",
+  "comment": "Accepted at ICML 2026"
+ },
+ {
+  "id": "2608.12346v1",
+  "title": "Position: The Alignment Community is Unintentionally Building a Censor's Toolkit",
+  "published": "2026-06-05T19:24:48Z",
+  "primary": "cs.AI",
+  "comment": "Accepted as oral paper at ICML 2026"
+ },
+ {
+  "id": "2606.27596v1",
+  "title": "Dismantling Pathological Shortcuts: A Causal Framework for Faithful LVLM Decoding",
+  "published": "2026-06-25T22:55:46Z",
+  "primary": "cs.CV",
+  "comment": "29 pages, 25 figures. Accepted by ICML 2026"
+ },
+ {
+  "id": "2606.14756v1",
+  "title": "Divide-and-Denoise: A Game-Theoretic Method for Fairly Composing Diffusion Models",
+  "published": "2026-06-08T04:51:17Z",
+  "primary": "cs.CV",
+  "comment": "Accepted as spotlight at ICML 2026"
+ },
+ {
+  "id": "2606.27655v1",
+  "title": "Temporal-Emerged Prompting for Segment Anything in Multiframe Infrared Small Target Detection",
+  "published": "2026-06-26T02:18:43Z",
+  "primary": "cs.CV",
+  "comment": "Accepted to the 43rd International Conference on Machine Learning (ICML 2026)"
+ },
+ {
+  "id": "2608.23541v1",
+  "title": "The Interaction Tax: When Communication Erases Diversity in Multi-Agent Teams",
+  "published": "2026-08-24T17:45:15Z",
+  "primary": "cs.MA",
+  "comment": "14 pages, 3 figures. Accepted at ICML 2026 (PMLR 306)"
+ },
+ {
+  "id": "2606.13381v1",
+  "title": "H\u00f6lder++: Improving the Quality-Coherence Trade-off in Multimodal VAEs",
+  "published": "2026-06-11T14:08:32Z",
+  "primary": "cs.LG",
+  "comment": "Accepted at ICML 2026. Camera-ready version"
+ },
+ {
+  "id": "2607.00175v2",
+  "title": "Knowing Who, Not How Much: Learning-Augmented Mechanisms for Consumer Utility Maximization",
+  "published": "2026-06-30T20:49:42Z",
+  "primary": "cs.GT",
+  "comment": "Accepted at the Forty-third International Conference on Machine Learning (ICML 2026); fixed minor typos, added/fixed some citations"
+ },
+ {
+  "id": "2606.17952v1",
+  "title": "SoftMoE: Soft Differentiable Routing for Mixture-of-Experts in LLMs",
+  "published": "2026-06-16T14:05:41Z",
+  "primary": "cs.LG",
+  "comment": "Accepted at ICML 2026"
+ },
+ {
+  "id": "2606.09145v1",
+  "title": "PrivCode++: Latent-Conditioned Differentially Private Code Generation for Comprehensive Guarantees",
+  "published": "2026-06-08T07:42:44Z",
+  "primary": "cs.CR",
+  "comment": "Accepted at ICML 2026"
+ },
+ {
+  "id": "2607.06807v1",
+  "title": "When Agents Go Rogue: Activation-Based Detection of Malicious Behaviors in Multi-Agent Systems",
+  "published": "2026-07-07T21:12:27Z",
+  "primary": "cs.CR",
+  "comment": "Accepted to ICML 2026"
+ },
+ {
+  "id": "2606.22488v1",
+  "title": "SCOPE: Evolving Symbolic World for Planning in Open-Ended Environments",
+  "published": "2026-06-21T13:16:10Z",
+  "primary": "cs.AI",
+  "comment": "Accepted to ICML 2026"
+ },
+ {
+  "id": "2606.31813v1",
+  "title": "Geometry-Preserving Orthonormal Initialization for Low-Rank Adaptation in RLVR",
+  "published": "2026-06-30T15:27:54Z",
+  "primary": "cs.LG",
+  "comment": "30 pages, accepted to ICML 2026"
+ },
+ {
+  "id": "2608.16689v1",
+  "title": "Hide&Seek: Learning to Explain in an End-to-End Differentiable Network",
+  "published": "2026-08-17T15:10:05Z",
+  "primary": "stat.ML",
+  "comment": "27 pages, 12 figures, 16 tables. Accepted at ICML 2026 (PMLR 306). Code at https://github.com/talellinson/hide-and-seek-icml2026"
+ },
+ {
+  "id": "2608.13577v1",
+  "title": "AI Evaluation Should Work With Humans",
+  "published": "2026-07-06T21:14:15Z",
+  "primary": "cs.AI",
+  "comment": "Accepted to ICML 2026 Position Paper Track"
+ },
+ {
+  "id": "2606.31282v1",
+  "title": "Revisiting the Volume Hypothesis",
+  "published": "2026-06-30T07:58:19Z",
+  "primary": "cs.LG",
+  "comment": "Accepted to ICML 2026"
+ },
+ {
+  "id": "2607.09921v1",
+  "title": "Global Merger-Arbitrage Forecasting with Language Models",
+  "published": "2026-07-10T19:16:03Z",
+  "primary": "cs.CL",
+  "comment": "Accepted to ICML 2026"
+ },
+ {
+  "id": "2608.16974v1",
+  "title": "Position: Fairness Failure in Generative Models is an Evaluation Problem",
+  "published": "2026-08-17T14:41:28Z",
+  "primary": "cs.LG",
+  "comment": "Accepted at ICML 2026 (Position Paper Track), cf. https://openreview.net/forum?id=5eURe8QrQo"
+ },
+ {
+  "id": "2609.02059v1",
+  "title": "DocHop: Benchmarking Out-of-domain Multi-hop Reasoning in Information-Dense Documents",
+  "published": "2026-09-02T03:35:12Z",
+  "primary": "cs.AI",
+  "comment": "Accepted by ICML 2026"
+ },
+ {
+  "id": "2606.03444v1",
+  "title": "PRISM: Synergizing Vision Foundation Models via Self-organized Expert Specialization",
+  "published": "2026-06-02T10:28:32Z",
+  "primary": "cs.CV",
+  "comment": "Accepted to ICML 2026"
+ },
+ {
+  "id": "2606.04032v3",
+  "title": "Do Transformers Need Three Projections? Systematic Study of QKV Variants",
+  "published": "2026-06-01T20:59:05Z",
+  "primary": "cs.LG",
+  "comment": "Accepted at ICML 2026 (PMLR vol. 306). 26 pages, 12 figures, 16 tables. Code: https://github.com/Brainchip-Inc/Do-Transformers-Need-3-Projections"
+ },
+ {
+  "id": "2607.23347v1",
+  "title": "Trainable Nonexpansive Denoisers for Contractive Image Reconstruction",
+  "published": "2026-07-25T19:54:42Z",
+  "primary": "eess.IV",
+  "comment": "accepted at ICML 2026"
+ },
+ {
+  "id": "2609.10158v1",
+  "title": "CoGe-GCD: Reframing Generalized Category Discovery with Compositional Generalization",
+  "published": "2026-09-09T13:34:37Z",
+  "primary": "cs.LG",
+  "comment": "Accepted at **ICML 2026**"
+ },
+ {
+  "id": "2606.11853v1",
+  "title": "Task-Aware Structured Memory for Dynamic Multi-modal In-Context Learning",
+  "published": "2026-06-10T09:30:25Z",
+  "primary": "cs.CV",
+  "comment": "Accepted to ICML 2026"
+ },
+ {
+  "id": "2607.17972v1",
+  "title": "DiFA: Inference-Time Forward-Process Alignment for Diffusion Models",
+  "published": "2026-07-20T14:10:53Z",
+  "primary": "cs.LG",
+  "comment": "Accepted to ICML 2026. 23 pages, 7 figures"
+ },
+ {
+  "id": "2608.06832v1",
+  "title": "Bend the Basics: Degradation-Aware Deformable Tokenization for All-in-One Image Restoration",
+  "published": "2026-08-07T05:44:31Z",
+  "primary": "cs.CV",
+  "comment": "16 pages, 12 figures. Accepted to ICML 2026"
+ },
+ {
+  "id": "2606.22462v1",
+  "title": "Adaptive Recurrent Message Passing for Test Time Computing on Graphs",
+  "published": "2026-06-21T12:14:11Z",
+  "primary": "cs.LG",
+  "comment": "Accepted by ICML 2026"
+ },
+ {
+  "id": "2606.04373v2",
+  "title": "Selective Coupling of Decoupled Informative Regions: Masked Attention Alignment for Data-Free Quantization of Vision Transformers",
+  "published": "2026-06-03T02:38:19Z",
+  "primary": "cs.CV",
+  "comment": "Accepted to appear at ICML 2026, Seoul, Korea"
+ },
+ {
+  "id": "2606.03291v1",
+  "title": "Multilingual Unlearning in LLMs: Transfer, Dynamics, and Reversibility",
+  "published": "2026-06-02T07:55:52Z",
+  "primary": "cs.CL",
+  "comment": "Accepted at ICML 2026"
+ },
+ {
+  "id": "2606.13276v1",
+  "title": "Different Layers, Different Manifolds: Module-Wise Weight-Space Geometry in Transformer Optimization",
+  "published": "2026-06-11T12:30:05Z",
+  "primary": "cs.LG",
+  "comment": "Accepted at WSS @ ICML 2026, code is available at https://github.com/kiratoyoshihara/module-wise-manifold-muon"
+ },
+ {
+  "id": "2606.12716v2",
+  "title": "Does AI Reviewer See the Full Picture? Attacking and Defending Multimodal Peer Review",
+  "published": "2026-06-10T22:06:35Z",
+  "primary": "cs.CL",
+  "comment": "Accepted to ICML 2026, Project Page: https://paper-guard.github.io/"
+ },
+ {
+  "id": "2606.20922v1",
+  "title": "Think Twice Before You Act: Protecting LLM Agents Against Tool Description Poisoning via Isolated Planning",
+  "published": "2026-06-18T20:31:08Z",
+  "primary": "cs.CR",
+  "comment": "Accepted to ICML 2026"
+ },
+ {
+  "id": "2607.03184v1",
+  "title": "BVS: Bayesian Visual Search with Multimodal Large Language Model for Fine-grained Perception",
+  "published": "2026-07-03T10:42:34Z",
+  "primary": "cs.CV",
+  "comment": "Accepted by ICML 2026. Project page with code: https://github.com/PKU-ICST-MIPL/BVS_ICML2026"
+ },
+ {
+  "id": "2606.31449v2",
+  "title": "Contextual Slate GLM Bandits with Limited Adaptivity",
+  "published": "2026-06-30T10:24:37Z",
+  "primary": "cs.LG",
+  "comment": "Accepted at ICML 2026"
+ },
+ {
+  "id": "2606.13400v1",
+  "title": "PolyFlow: Safe and Efficient Polytope-Constrained Flow Matching with Constraint Embedding and Projection-free Update",
+  "published": "2026-06-11T14:30:50Z",
+  "primary": "cs.LG",
+  "comment": "30 pages, 12 figures, Accepted to ICML 2026"
+ },
+ {
+  "id": "2607.03798v4",
+  "title": "Foundations of Equivariant Deep Learning: Unifying Graph and Sheaf Neural Networks",
+  "published": "2026-07-04T09:59:11Z",
+  "primary": "cs.LG",
+  "comment": "Accepted at ICML 2026 as a spotlight paper with oral presentation"
+ },
+ {
+  "id": "2606.25761v1",
+  "title": "Bridging Spherical Black-Box Optimizers",
+  "published": "2026-06-24T12:35:30Z",
+  "primary": "cs.LG",
+  "comment": "Accepted for publication at ICML 2026"
+ },
+ {
+  "id": "2606.02841v1",
+  "title": "Learning Coherent Representations: A Topological Approach to Interpretability",
+  "published": "2026-06-01T20:05:58Z",
+  "primary": "cs.LG",
+  "comment": "To appear in ICML 2026"
+ },
+ {
+  "id": "2606.17450v2",
+  "title": "A Machine-Learned Comorbidity Index",
+  "published": "2026-06-16T03:07:20Z",
+  "primary": "cs.AI",
+  "comment": "Accepted at the 43rd International Conference on Machine Learning (ICML 2026), Seoul, South Korea. 35 pages"
+ },
+ {
+  "id": "2606.08656v1",
+  "title": "From Player to Master: Enhancing Test-Time Learning of LLM Agents via Reinforcement Learning over Memory",
+  "published": "2026-06-07T14:53:19Z",
+  "primary": "cs.CL",
+  "comment": "Accepted by ICML 2026"
+ },
+ {
+  "id": "2607.00622v1",
+  "title": "Learning to Watch: Active Video Anomaly Understanding via Interleaved Policy Optimization",
+  "published": "2026-07-01T08:41:49Z",
+  "primary": "cs.CV",
+  "comment": "Accepted at ICML 2026; 25 pages, 8 figures, 15 tables"
+ },
+ {
+  "id": "2606.28433v1",
+  "title": "Position: RL Researchers Need to Distinguish Between Solving Simulators and Using Simulators as a Proxy",
+  "published": "2026-06-26T03:19:27Z",
+  "primary": "cs.LG",
+  "comment": "This work has been accepted at the ICML 2026 position paper track. The peer reviewed reference is provided in the public OpenReview page at https://openreview.net/forum?id=KIobEIpCkp Additionally the publication can be seen at this link : https://icml.cc/virtual/2026/poster/67184"
+ },
+ {
+  "id": "2606.03628v1",
+  "title": "Building Reliable Long-Form Generation via Hallucination Rejection Sampling",
+  "published": "2026-06-02T13:26:17Z",
+  "primary": "cs.CL",
+  "comment": "accepted by ICML 2026"
+ },
+ {
+  "id": "2606.07684v1",
+  "title": "Semantic Cache Distillation: Efficient State Transfer via Reuse and Selective Patching",
+  "published": "2026-06-05T02:46:04Z",
+  "primary": "cs.LG",
+  "comment": "Accepted to ICML 2026"
+ },
+ {
+  "id": "2606.27527v1",
+  "title": "Large Language Model Teaches Visual Students: Cross-Modality Transfer of Fine-Grained Conceptual Knowledge",
+  "published": "2026-06-25T20:19:50Z",
+  "primary": "cs.CV",
+  "comment": "Accepted by ICML 2026"
+ },
+ {
+  "id": "2606.30523v1",
+  "title": "ITSPACE: Monotone Gaussian Optimal Transport Updates",
+  "published": "2026-06-29T16:29:19Z",
+  "primary": "cs.LG",
+  "comment": "Accepted to ICML 2026. Camera-ready version"
+ },
+ {
+  "id": "2606.10531v3",
+  "title": "LC-QAT: Data-Efficient 2-Bit QAT for LLMs via Linear-Constrained Vector Quantization",
+  "published": "2026-06-09T08:02:56Z",
+  "primary": "cs.CL",
+  "comment": "Accepted by ICML 2026"
+ },
+ {
+  "id": "2606.23000v2",
+  "title": "MotionMAR: Multi-scale Auto-Regressive Human Motion Reconstruction from Sparse Observations",
+  "published": "2026-06-22T08:15:56Z",
+  "primary": "cs.CV",
+  "comment": "Accepted to ICML 2026"
+ },
+ {
+  "id": "2609.06882v1",
+  "title": "Noisy-Space Policy Gradient for Diffusion Policies in Offline Reinforcement Learning",
+  "published": "2026-09-07T00:08:13Z",
+  "primary": "cs.LG",
+  "comment": "Accepted at the 43rd International Conference on Machine Learning (ICML 2026)"
+ },
+ {
+  "id": "2607.13468v2",
+  "title": "HIVE-3D: Hierarchical Voxel Enhancement for High-Quality 3D Scene Generation",
+  "published": "2026-07-15T05:56:34Z",
+  "primary": "cs.CV",
+  "comment": "Accepted at the 43rd International Conference on Machine Learning (ICML 2026). Project page: https://xbdff.github.io/HIVE-3D/"
+ },
+ {
+  "id": "2607.02466v1",
+  "title": "Learning to Move Before Learning to Do: Task-Agnostic pretraining for VLAs",
+  "published": "2026-07-02T17:33:37Z",
+  "primary": "cs.RO",
+  "comment": "Accepted to ICML 2026, 21 pages,6 figures"
+ },
+ {
+  "id": "2606.06574v2",
+  "title": "Skip a Layer or Loop It? Learning Program-of-Layers in LLMs",
+  "published": "2026-06-04T17:59:58Z",
+  "primary": "cs.LG",
+  "comment": "Accepted at ICML 2026. Substantially extends arXiv:2507.07996. Updated DART-Math experiments by removing duplicate examples; conclusions remain unchanged. Code: https://github.com/tianyi-lab/PoLar"
+ },
+ {
+  "id": "2606.20044v1",
+  "title": "FUSE: Frequency-domain Unification and Spectral Energy Alignment for Multi-modal Object Re-Identification",
+  "published": "2026-06-18T10:21:32Z",
+  "primary": "cs.CV",
+  "comment": "Accepted in ICML 2026"
+ },
+ {
+  "id": "2608.12372v1",
+  "title": "Position: We Need Practical AI Alignment Methods to Mirror Human Reasoning",
+  "published": "2026-07-20T10:15:50Z",
+  "primary": "cs.AI",
+  "comment": "Accepted in ICML 2026"
+ },
+ {
+  "id": "2607.04236v2",
+  "title": "Robust Bayes-Assisted Conformal Prediction",
+  "published": "2026-07-05T11:26:37Z",
+  "primary": "stat.ML",
+  "comment": "Accepted to ICML 2026. 44 pages, 8 figures, 7 tables"
+ },
+ {
+  "id": "2607.02912v1",
+  "title": "See the Emotion: A Facial Emoji Proxy Modeling for EEG Emotion Recognition",
+  "published": "2026-07-03T03:18:02Z",
+  "primary": "cs.CV",
+  "comment": "Accepted by ICML 2026"
+ },
+ {
+  "id": "2606.13587v1",
+  "title": "Towards Effective Waste Segmentation for Automated Waste Recycling in Cluttered Background",
+  "published": "2026-06-11T17:11:04Z",
+  "primary": "cs.CV",
+  "comment": "accepted at ICML 2026"
+ },
+ {
+  "id": "2608.18539v1",
+  "title": "Evaluating and Explaining Prompt Sensitivity of LLMs Using Interactions",
+  "published": "2026-08-19T04:45:59Z",
+  "primary": "cs.LG",
+  "comment": "Accepted at the 43rd International Conference on Machine Learning (ICML 2026). 46 pages, 48 figures"
+ },
+ {
+  "id": "2606.04946v1",
+  "title": "A General Framework for Dynamic Consistent Submodular Maximization",
+  "published": "2026-06-03T14:35:13Z",
+  "primary": "cs.DS",
+  "comment": "Accepted at ICML 2026"
+ },
+ {
+  "id": "2607.01391v1",
+  "title": "How Should Transformers Encode Numeric Values in Electronic Health Records?",
+  "published": "2026-07-01T18:49:41Z",
+  "primary": "cs.LG",
+  "comment": "16 pages, 15 figures, 3 tables, accepted to ICML 2026, to be published in Proceedings of Machine Learning Research"
+ },
+ {
+  "id": "2608.10850v2",
+  "title": "Diffract: Spectral View of LLM Domain Adaptation",
+  "published": "2026-08-11T12:23:28Z",
+  "primary": "cs.LG",
+  "comment": "Accepted at ICML 2026. Code: https://github.com/Risk-AI-Research/diffract"
+ },
+ {
+  "id": "2607.13452v1",
+  "title": "Symbiosis-Inspired Knowledge Distillation for Incremental Object Detection",
+  "published": "2026-07-15T05:21:23Z",
+  "primary": "cs.CV",
+  "comment": "16 pages, 8 figures, Accepted by ICML 2026"
+ },
+ {
+  "id": "2606.15115v1",
+  "title": "Diversity-Driven Offline Multi-Objective Optimization via Nested Pareto Set Learning",
+  "published": "2026-06-13T05:09:25Z",
+  "primary": "cs.LG",
+  "comment": "32 pages, 7 figures, accepted by ICML 2026. Project: https://github.com/YaolinWen/DOMOO"
+ },
+ {
+  "id": "2607.08103v1",
+  "title": "Stochastic Order Learning: An Approach to Rank Estimation Using Noisy Data",
+  "published": "2026-07-09T04:42:28Z",
+  "primary": "cs.LG",
+  "comment": "Accepted to ICML 2026"
+ },
+ {
+  "id": "2606.22922v1",
+  "title": "Hierarchical Reinforcement Learning for Sparse-Reward Search in Commutative Algebra",
+  "published": "2026-06-22T07:02:08Z",
+  "primary": "cs.LG",
+  "comment": "21 pages, 15 figures, 3 tables. Accepted at ICML 2026"
+ },
+ {
+  "id": "2606.09092v1",
+  "title": "From Shortcuts to Reasoning: Robust Post-Training of Theory of Mind with Reinforcement Learning",
+  "published": "2026-06-08T06:42:12Z",
+  "primary": "cs.LG",
+  "comment": "Accepted by ICML 2026"
+ },
+ {
+  "id": "2607.09134v1",
+  "title": "ReGen: Hierarchical Multi-Prompt Representation Generation for Efficient Waveform Diffusion Models",
+  "published": "2026-07-10T06:44:04Z",
+  "primary": "cs.SD",
+  "comment": "Accepted to ICML 2026"
+ },
+ {
+  "id": "2606.20283v2",
+  "title": "Boundary Embedding Shaping with Adaptive Contrastive Learning for Graph Structural Disentanglement",
+  "published": "2026-06-18T14:28:10Z",
+  "primary": "cs.LG",
+  "comment": "Accepted at ICML 2026"
+ },
+ {
+  "id": "2607.10640v2",
+  "title": "Spectral Heat Flow for Conservative Token Condensation in Vision-Language Models",
+  "published": "2026-07-12T08:12:45Z",
+  "primary": "cs.CV",
+  "comment": "Accepted by ICML 2026"
+ },
+ {
+  "id": "2607.03870v1",
+  "title": "Evaluating LLM Uncertainty in Long-Form Generation Using Deterministic Ground Truth",
+  "published": "2026-07-04T13:25:18Z",
+  "primary": "cs.AI",
+  "comment": "Accepted to the 43rd International Conference on Machine Learning (ICML 2026). Code available at https://github.com/IdoAmit198/SALT"
+ },
+ {
+  "id": "2606.13285v1",
+  "title": "Once-for-All: Scalable Simultaneous Forecasting via Equilibrium State Estimation",
+  "published": "2026-06-11T12:42:39Z",
+  "primary": "cs.LG",
+  "comment": "Accepted by ICML 2026"
+ },
+ {
+  "id": "2606.07345v1",
+  "title": "TabSwift: An Efficient Tabular Foundation Model with Row-Wise Attention",
+  "published": "2026-06-05T14:55:30Z",
+  "primary": "cs.LG",
+  "comment": "Accepted to ICML 2026, spotlight"
+ },
+ {
+  "id": "2607.10455v1",
+  "title": "ANCHOR: Automated Alignment Auditing for CLI Agents on Real-World Harm",
+  "published": "2026-07-11T19:39:47Z",
+  "primary": "cs.AI",
+  "comment": "Accepted at ICML 2026. 19 pages, 14 figures, 5 tables"
+ },
+ {
+  "id": "2606.19587v1",
+  "title": "A Solver-Free Training Method for Predict-then-Optimize",
+  "published": "2026-06-17T20:42:49Z",
+  "primary": "stat.ML",
+  "comment": "Accepted by ICML 2026"
+ },
+ {
+  "id": "2606.26797v1",
+  "title": "Reasoning Quality Emerges Early: Data Curation for Reasoning Models",
+  "published": "2026-06-25T09:32:58Z",
+  "primary": "cs.LG",
+  "comment": "Accepted by ICML 2026 (Poster)"
+ },
+ {
+  "id": "2606.21385v2",
+  "title": "Unsupervised Disentanglement Without Compromises : How Functional Orthogonality Enforces Identifiability",
+  "published": "2026-06-19T12:47:07Z",
+  "primary": "cs.LG",
+  "comment": "Accepted at ICML 2026"
+ },
+ {
+  "id": "2606.23206v1",
+  "title": "CFPO: Counterfactual Policy Optimization for Multimodal Reasoning",
+  "published": "2026-06-22T11:51:51Z",
+  "primary": "cs.CV",
+  "comment": "Accepted to ICML 2026. 17 pages"
+ },
+ {
+  "id": "2606.29493v1",
+  "title": "Faults in Our Formal Benchmarking: Dataset Defects and Evaluation Failures in Lean Theorem Proving",
+  "published": "2026-06-28T16:46:36Z",
+  "primary": "cs.AI",
+  "comment": "Accepted at ICML 2026"
+ },
+ {
+  "id": "2609.13245v1",
+  "title": "SJD-SV: Speculative Jacobi Decoding with Semantics Verification for Autoregressive Image Generation",
+  "published": "2026-09-04T10:28:08Z",
+  "primary": "cs.CV",
+  "comment": "Accepted at the 43rd International Conference on Machine Learning (ICML 2026)"
+ },
+ {
+  "id": "2606.03698v2",
+  "title": "Multi$^2$: Hierarchical Multi-Agent Decision-Making with LLM-Based Agents in Interactive Environments",
+  "published": "2026-06-02T14:20:09Z",
+  "primary": "cs.LG",
+  "comment": "Accepted at ICML 2026"
+ },
+ {
+  "id": "2607.02956v1",
+  "title": "MORE: A Multilingual Document Parsing Benchmark and Evaluation",
+  "published": "2026-07-03T04:59:12Z",
+  "primary": "cs.CV",
+  "comment": "Accepted to the 43rd International Conference on Machine Learning (ICML 2026). 22 pages, 11 figures. Code and dataset available at https://github.com/zimoqingfeng/MORE"
+ },
+ {
+  "id": "2609.05539v1",
+  "title": "Dual-Latent Memory Routing for Vision-Language Reasoning",
+  "published": "2026-09-02T10:45:25Z",
+  "primary": "cs.CV",
+  "comment": "Accepted as a Spotlight at ICML 2026; 17 pages, 7 figures"
+ },
+ {
+  "id": "2606.22914v1",
+  "title": "PromptDyG: Test-Time Prompt Adaptation on Dynamic Graphs",
+  "published": "2026-06-22T06:54:02Z",
+  "primary": "cs.LG",
+  "comment": "Accepted by ICML 2026"
+ },
+ {
+  "id": "2606.09248v1",
+  "title": "Temporal-Aware Reasoning Optimization for Video Temporal Grounding",
+  "published": "2026-06-08T09:21:01Z",
+  "primary": "cs.CV",
+  "comment": "Accepted by ICML 2026"
+ },
+ {
+  "id": "2606.28764v1",
+  "title": "Hierarchical Decision Making with Structured Policies: A Principled Design via Inverse Optimization",
+  "published": "2026-06-27T06:46:37Z",
+  "primary": "cs.LG",
+  "comment": "Accepted at ICML 2026"
+ },
+ {
+  "id": "2606.17649v1",
+  "title": "A Risk Decomposition Framework for Pre-Hoc Fine-Tuning Prediction",
+  "published": "2026-06-16T08:07:42Z",
+  "primary": "cs.LG",
+  "comment": "9 pages, 4 figures, accepted as ICML 2026 Poster:https://icml.cc/virtual/2026/poster/66570"
+ },
+ {
+  "id": "2607.08979v1",
+  "title": "Optimal Top-$k$ Identification from Pairwise Comparisons",
+  "published": "2026-07-09T22:55:16Z",
+  "primary": "cs.LG",
+  "comment": "accepted for ICML 2026"
+ },
+ {
+  "id": "2606.18773v1",
+  "title": "Private Learning with Public Feature Conditioning",
+  "published": "2026-06-17T07:34:53Z",
+  "primary": "cs.LG",
+  "comment": "Proceedings of the 43rd International Conference on Machine Learning (ICML 2026). 26 pages, 9 figures"
+ },
+ {
+  "id": "2606.12633v1",
+  "title": "ECA: Efficient Continual Alignment for Open-Ended Image-to-Text Generation",
+  "published": "2026-06-10T19:42:03Z",
+  "primary": "cs.CV",
+  "comment": "Accepted at the 43rd International Conference on Machine Learning (ICML 2026)"
+ },
+ {
+  "id": "2608.07548v1",
+  "title": "SC$^{2}$-WM: A Self-Correcting World Model with Closed-Loop Feedback for Vision-and-Language Navigation in Continuous Environments",
+  "published": "2026-08-01T03:17:48Z",
+  "primary": "cs.RO",
+  "comment": "Accepted by ICML 2026"
+ },
+ {
+  "id": "2606.09551v1",
+  "title": "FuseFSS: Efficient Secure LLM Inference with Function Secret Sharing",
+  "published": "2026-06-08T14:30:00Z",
+  "primary": "cs.CR",
+  "comment": "Accepted at the 43rd International Conference on Machine Learning (ICML 2026)"
+ },
+ {
+  "id": "2606.24235v2",
+  "title": "SP-Mind: An Autonomous Reasoning Agent for Spatial Proteomics Analysis",
+  "published": "2026-06-23T07:24:23Z",
+  "primary": "cs.AI",
+  "comment": "24 pages, 6 figures. Accepted to ICML 2026. Equal contribution by Yucheng Yuan and Yuanfeng Ji"
+ },
+ {
+  "id": "2606.10617v1",
+  "title": "SSR-Merge: Subspace Signal Routing for Training-Free LoRA Merging in Diffusion Models",
+  "published": "2026-06-09T09:16:17Z",
+  "primary": "cs.CV",
+  "comment": "Accepted at ICML 2026"
+ },
+ {
+  "id": "2608.12419v1",
+  "title": "LoKiFormer: Locality-aware Attention with Decoupled Knowledge Memory for Efficient Large Language Model Pretraining",
+  "published": "2026-08-12T07:45:11Z",
+  "primary": "cs.LG",
+  "comment": "Accepted by ICML 2026"
+ },
+ {
+  "id": "2606.30226v1",
+  "title": "Characterizing Optimizer-Dependent Training Dynamics Through Hessian Eigenvector Displacement and Localization",
+  "published": "2026-06-29T12:39:39Z",
+  "primary": "cs.LG",
+  "comment": "Accepted as a poster at High-dimensional Learning Dynamics (HiLD), ICML 2026. OpenReview: https://openreview.net/forum?id=SabYcw5Nh6"
+ },
+ {
+  "id": "2606.08687v1",
+  "title": "Shift-Dependent Asymmetry: Orthogonal Inverse Low-Rank Adaptation for Federated Medical Segmentation",
+  "published": "2026-06-07T15:39:28Z",
+  "primary": "cs.CV",
+  "comment": "Accepted by ICML 2026"
+ },
+ {
+  "id": "2607.26064v1",
+  "title": "The Age of AI Agents Demands A New Scientific Paradigm To Sustain Trustworthy Science",
+  "published": "2026-06-18T20:38:50Z",
+  "primary": "cs.CY",
+  "comment": "Accepted at ICML 2026, Position Paper Track"
+ },
+ {
+  "id": "2606.08831v2",
+  "title": "Inference-Time Conformal Reasoning with Valid Factuality Control for Large Language Models",
+  "published": "2026-06-07T20:52:10Z",
+  "primary": "cs.AI",
+  "comment": "Accepted at ICML 2026"
+ },
+ {
+  "id": "2606.04672v2",
+  "title": "Learning Long Range Spatio-Temporal Representations over Continuous Time Dynamic Graphs with State Space Models",
+  "published": "2026-06-03T09:54:35Z",
+  "primary": "cs.LG",
+  "comment": "Accepted at ICML 2026"
+ },
+ {
+  "id": "2606.07034v1",
+  "title": "ForensicConcept: Transferable Forensic Concepts for AIGI Detection",
+  "published": "2026-06-05T08:25:34Z",
+  "primary": "cs.CV",
+  "comment": "Accepted by ICML 2026"
+ },
+ {
+  "id": "2606.10669v1",
+  "title": "In Defense of Information Leakage in Concept-based Models",
+  "published": "2026-06-09T10:19:41Z",
+  "primary": "cs.LG",
+  "comment": "Accepted as a position paper at the Forty-Third International Conference on Machine Learning (ICML 2026)"
+ },
+ {
+  "id": "2606.14997v1",
+  "title": "AI Engram: In Search of Memory Traces in Artificial Intelligence",
+  "published": "2026-06-12T22:36:52Z",
+  "primary": "cs.AI",
+  "comment": "Accepted to ICML 2026 (Oral). Code is available at https://github.com/jeakwon/ai-engram/"
+ },
+ {
+  "id": "2606.20867v1",
+  "title": "FOCA: Future-Oriented Conditioning for Data-Efficient Vision-Language-Action Adaptation",
+  "published": "2026-06-18T18:54:51Z",
+  "primary": "cs.CV",
+  "comment": "Accepted at ICML 2026. Project page: https://focavla.github.io/"
+ },
+ {
+  "id": "2606.08804v1",
+  "title": "Q-Delta: Beyond Key-Value Associative State Evolution",
+  "published": "2026-06-07T19:49:01Z",
+  "primary": "cs.AI",
+  "comment": "Accepted at ICML 2026"
+ },
+ {
+  "id": "2608.00540v1",
+  "title": "DiffuseAgent-MI: Distributionally-Grounded,Tool-Integrated Self-Evolving Agents for Faithful Visual Reasoning",
+  "published": "2026-08-01T08:54:44Z",
+  "primary": "cs.CV",
+  "comment": "11 pages, 9 figures, accepted by ICML 2026 manitrack"
+ },
+ {
+  "id": "2607.16257v1",
+  "title": "From Outcomes to Actions: Leveraging Hindsight for Long-Horizon Language Agent Training",
+  "published": "2026-06-28T08:35:47Z",
+  "primary": "cs.LG",
+  "comment": "Accepted at ICML 2026"
+ },
+ {
+  "id": "2606.07108v2",
+  "title": "DyCon: Dynamic Reasoning Control via Evolving Difficulty Modeling",
+  "published": "2026-06-05T10:02:19Z",
+  "primary": "cs.AI",
+  "comment": "Accepted at ICML 2026"
+ },
+ {
+  "id": "2608.08160v1",
+  "title": "Can LLM Agents Stick to the Script? A Benchmark for Long-Horizon Consistency in Interactive Narratives",
+  "published": "2026-08-08T14:38:18Z",
+  "primary": "cs.CL",
+  "comment": "Accepted by ICML 2026"
+ },
+ {
+  "id": "2606.07835v1",
+  "title": "Mitigating the Contractivity Trap in Diffusion ODEs via Stein Stabilization",
+  "published": "2026-06-05T20:54:13Z",
+  "primary": "cs.LG",
+  "comment": "32 pages, 12 figures. Accepted to ICML 2026"
+ },
+ {
+  "id": "2608.24274v1",
+  "title": "Eating for a Sustainable Planet: Personalized Sustainable Diet Recommendation via Constraint-Aware Decision-Making Modeling",
+  "published": "2026-08-25T09:01:19Z",
+  "primary": "cs.AI",
+  "comment": "Accepted in ICML 2026, 24 pages, 7 figures"
+ },
+ {
+  "id": "2606.28153v2",
+  "title": "Robust Harmful Features Under Jailbreak Attacks: Mechanistic Evidence from Attention Head Specialization in Large Language Models",
+  "published": "2026-06-26T14:51:16Z",
+  "primary": "cs.CR",
+  "comment": "33 pages, 19 figures. Accepted at ICML 2026 as an Oral presentation"
+ },
+ {
+  "id": "2608.21096v1",
+  "title": "FlatLand: Personalized Graph Federated Learning via Tailored Lorentz Space",
+  "published": "2026-08-21T13:42:47Z",
+  "primary": "cs.LG",
+  "comment": "34 pages, 9 figures, 8 tables. Accepted at ICML 2026 (Oral)"
+ },
+ {
+  "id": "2608.21995v1",
+  "title": "Variance Driven Exploration: A Provable and Efficient Methodology for Pure Exploration in Highly Stochastic Environments",
+  "published": "2026-08-22T15:01:43Z",
+  "primary": "cs.LG",
+  "comment": "To appear in Proceedings of the 43rd International Conference on Machine Learning (ICML 2026)"
+ },
+ {
+  "id": "2606.10596v1",
+  "title": "Embedding Hybrid Systems into Continuous Latent Vector Fields",
+  "published": "2026-06-09T09:01:18Z",
+  "primary": "cs.LG",
+  "comment": "Accepted to ICML 2026"
+ },
+ {
+  "id": "2606.24842v1",
+  "title": "World Models in Pieces: Structural Certification for General Agents",
+  "published": "2026-06-23T17:21:09Z",
+  "primary": "cs.AI",
+  "comment": "30 pages, camera-ready version in ICML 2026"
+ },
+ {
+  "id": "2606.09115v1",
+  "title": "Counterfactual Transport Flows for Offline Conservative Trajectory Refinement",
+  "published": "2026-06-08T07:11:03Z",
+  "primary": "cs.LG",
+  "comment": "accepted at RLxF @ ICML 2026"
+ },
+ {
+  "id": "2607.12767v1",
+  "title": "Accuracy and Normalized Accuracy under Length Bias: Analysis, Guidelines, and a Bayesian Alternative",
+  "published": "2026-07-14T13:39:11Z",
+  "primary": "cs.AI",
+  "comment": "Accepted at ICML 2026"
+ },
+ {
+  "id": "2607.05536v1",
+  "title": "Higher-Order Certified Robustness for Regression",
+  "published": "2026-07-06T18:17:13Z",
+  "primary": "stat.ML",
+  "comment": "Accepted at the 43rd International Conference on Machine Learning (ICML 2026)"
+ },
+ {
+  "id": "2607.20485v1",
+  "title": "Expectation Alignment of Language Models for Real-World User Expectations",
+  "published": "2026-06-02T13:24:47Z",
+  "primary": "cs.AI",
+  "comment": "Accepted by ICML 2026"
+ },
+ {
+  "id": "2606.07760v1",
+  "title": "scCBGM: Interpretable Single-Cell Counterfactual Editing",
+  "published": "2026-06-05T18:17:37Z",
+  "primary": "cs.LG",
+  "comment": "Accepted to ICML 2026; code at https://github.com/almaan/scCBGM"
+ },
+ {
+  "id": "2609.10737v1",
+  "title": "Conformal Calibration Transfer",
+  "published": "2026-09-09T18:32:12Z",
+  "primary": "cs.LG",
+  "comment": "Accepted at the 43rd International Conference on Machine Learning (ICML 2026)"
+ },
+ {
+  "id": "2606.08236v2",
+  "title": "Shared Semantics, Divergent Mechanisms: Unsupervised Feature Discovery by Aligning Semantics and Mechanisms",
+  "published": "2026-06-06T15:46:54Z",
+  "primary": "cs.CL",
+  "comment": "40 pages; accepted as an ICML 2026 Spotlight; project page: https://merenova.github.io/distribution-level-feature-discovery/"
+ },
+ {
+  "id": "2607.05252v1",
+  "title": "FUSE: FK-Steered Multi-Modal Flow Matching for Efficient Simulation-Based Posterior Estimation",
+  "published": "2026-07-06T15:59:18Z",
+  "primary": "cs.LG",
+  "comment": "Accepted to the 43rd International Conference on Machine Learning (ICML 2026). 22 pages, 5 figures"
+ },
+ {
+  "id": "2606.24957v1",
+  "title": "Dustin: Draft-Augmented Sparse Verification for Efficient Long-Context Generation with Speculative Decoding",
+  "published": "2026-06-23T08:51:20Z",
+  "primary": "cs.CL",
+  "comment": "Accepted to ICML 2026. 9 pages main text, includes references and appendix"
+ },
+ {
+  "id": "2606.05471v1",
+  "title": "Formal Concept Lattices are Good Semantic Scaffolds for Concept-Based Learning",
+  "published": "2026-06-03T21:50:29Z",
+  "primary": "cs.CV",
+  "comment": "Accepted at ICML 2026"
+ },
+ {
+  "id": "2606.13496v1",
+  "title": "Budget-Constrained Step-Level Diffusion Caching",
+  "published": "2026-06-11T15:45:05Z",
+  "primary": "cs.CV",
+  "comment": "Accepted by ICML 2026"
+ },
+ {
+  "id": "2606.08681v1",
+  "title": "Asymptotic Optimality of the High-Dimensional Gaussian Mechanism and Improved Low-Dimensional Mechanisms for Differential Privacy",
+  "published": "2026-06-07T15:33:30Z",
+  "primary": "cs.CR",
+  "comment": "32 pages, 3 figures, 2 tables. Accepted at ICML 2026"
+ },
+ {
+  "id": "2608.01287v1",
+  "title": "Active Regression for Single-Index Models with Unknown Link Functions",
+  "published": "2026-08-02T14:53:41Z",
+  "primary": "cs.DS",
+  "comment": "Earlier version accepted to ICML 2026; the lower bound has been extended to adaptive queries"
+ },
+ {
+  "id": "2607.01918v1",
+  "title": "Zeus: Towards Tuning-Free Foundation Model for Time Series Analysis",
+  "published": "2026-07-02T09:16:51Z",
+  "primary": "cs.LG",
+  "comment": "Accepted by ICML 2026"
+ },
+ {
+  "id": "2606.13949v1",
+  "title": "Minim: Privacy-Aware Minimal View for Agents via Trusted Local Sanitization",
+  "published": "2026-06-11T22:27:27Z",
+  "primary": "cs.AI",
+  "comment": "Accepted at ICML 2026 (43rd International Conference on Machine Learning, Seoul, South Korea). Code available at https://github.com/yyyyhx/MINIM"
+ },
+ {
+  "id": "2607.22994v1",
+  "title": "Breaking the Synthetic-Real Domain Shortcut for Training-Free Generative Replay-based Class Incremental Learning",
+  "published": "2026-07-25T02:14:41Z",
+  "primary": "cs.CV",
+  "comment": "Accepted by ICML 2026"
+ },
+ {
+  "id": "2606.23517v1",
+  "title": "Collapsed Effective Operators for Higher-order Structures",
+  "published": "2026-06-22T16:04:42Z",
+  "primary": "cs.LG",
+  "comment": "Accepted at ICML 2026"
+ },
+ {
+  "id": "2606.04921v1",
+  "title": "SURF: Separation via Unsupervised Remixing Flow",
+  "published": "2026-06-03T14:17:12Z",
+  "primary": "cs.SD",
+  "comment": "Accepted at ICML 2026"
+ },
+ {
+  "id": "2606.22429v1",
+  "title": "Enhancing LLMs for Graph Tasks via Graph-aware LoRA Generation",
+  "published": "2026-06-21T10:40:33Z",
+  "primary": "cs.LG",
+  "comment": "Accepted by ICML 2026"
+ },
+ {
+  "id": "2607.05694v1",
+  "title": "Beyond Heuristic Tuning: Power-Calibrated LLM Watermarking",
+  "published": "2026-07-06T23:23:14Z",
+  "primary": "stat.ML",
+  "comment": "Accepted ICML 2026"
+ },
+ {
+  "id": "2606.14192v1",
+  "title": "DRIVE: Distributional and Retrieval-Augmented Bidding with Value Evaluation",
+  "published": "2026-06-12T07:21:07Z",
+  "primary": "cs.LG",
+  "comment": "Accepted to ICML 2026"
+ },
+ {
+  "id": "2608.15848v1",
+  "title": "Generalized Linear Bandits with Memory",
+  "published": "2026-08-16T16:39:09Z",
+  "primary": "stat.ML",
+  "comment": "Accepted at ICML 2026"
+ },
+ {
+  "id": "2606.27807v1",
+  "title": "SpikeVLA: Vision-Language-Action Models with Spiking Neural Networks",
+  "published": "2026-06-26T07:45:45Z",
+  "primary": "cs.RO",
+  "comment": "Accepted by ICML 2026. 16 pages, 9 figures"
+ },
+ {
+  "id": "2607.29037v1",
+  "title": "GO-PRE: Goal-Oriented Next-Best-View Selection via Predictive Rendering Entropy for Active 3D Reconstruction",
+  "published": "2026-07-31T05:29:04Z",
+  "primary": "cs.CV",
+  "comment": "Accepted at the 43rd International Conference on Machine Learning (ICML 2026)"
+ },
+ {
+  "id": "2606.27818v1",
+  "title": "Scalable and Differentiable Point-Cloud Registration Using Maximum Mean Discrepancy",
+  "published": "2026-06-26T07:59:30Z",
+  "primary": "cs.CV",
+  "comment": "Accepted at ICML 2026"
+ },
+ {
+  "id": "2606.12840v1",
+  "title": "CLARITree: Cholesky and Lookahead Accelerations for Regression with Interpretable Piecewise Linear Trees",
+  "published": "2026-06-11T03:07:51Z",
+  "primary": "cs.LG",
+  "comment": "Accepted at ICML 2026"
+ },
+ {
+  "id": "2609.15359v1",
+  "title": "MAPS: Memory-Aware Predictive Scheduling Framework for Large Language Model Serving",
+  "published": "2026-09-14T10:43:42Z",
+  "primary": "cs.AI",
+  "comment": "18 pages, 14 figures. Accepted at ICML 2026"
+ },
+ {
+  "id": "2606.06813v1",
+  "title": "Breaking the Lock-in: Diversifying Text-to-Image Generation via Representation Modulation",
+  "published": "2026-06-05T01:27:44Z",
+  "primary": "cs.CV",
+  "comment": "Accepted to ICML 2026. Code is available at: https://github.com/daheekwon/DAVE"
+ },
+ {
+  "id": "2606.14210v1",
+  "title": "From Prompts to Responses: Dual-Sided Data Leakage and Defense in Split Large Language Models",
+  "published": "2026-06-12T07:46:58Z",
+  "primary": "cs.CR",
+  "comment": "18 pages, Accepted at ICML 2026"
+ },
+ {
+  "id": "2606.03540v1",
+  "title": "Attend to Anything: Foundation Model for Unified Human Attention Modeling",
+  "published": "2026-06-02T12:00:21Z",
+  "primary": "cs.CV",
+  "comment": "Accepted to ICML 2026"
+ },
+ {
+  "id": "2607.06527v1",
+  "title": "RSF-GLLM: Bridging the Semantic Gap in Multi-Hop Knowledge Graph QA via Recurrent Soft-Flow and Decoupled LLM Generation",
+  "published": "2026-07-07T17:32:36Z",
+  "primary": "cs.CL",
+  "comment": "Accepted for publication in ICML 2026 as a full research paper; 21 pages"
+ },
+ {
+  "id": "2606.09718v1",
+  "title": "Evaluating the Representation Space of Diffusion Models via Self-Supervised Principles",
+  "published": "2026-06-08T16:44:18Z",
+  "primary": "cs.LG",
+  "comment": "First two authors contributed equally. Accepted at ICML 2026"
+ },
+ {
+  "id": "2606.08063v1",
+  "title": "Robust-U1: Can MLLMs Self-Recover Corrupted Visual Content for Robust Understanding?",
+  "published": "2026-06-06T08:58:12Z",
+  "primary": "cs.CV",
+  "comment": "Accepted by ICML 2026"
+ },
+ {
+  "id": "2606.03911v1",
+  "title": "Bootstrap Your Generator: Unpaired Visual Editing with Flow Matching",
+  "published": "2026-06-02T17:07:08Z",
+  "primary": "cs.CV",
+  "comment": "Accepted at ICML 2026. Project page is at https://research.nvidia.com/labs/par/byg/"
+ },
+ {
+  "id": "2607.05407v1",
+  "title": "Position: Preventing AI-Generated CSAM Necessitates New Approaches to AI Safety",
+  "published": "2026-06-09T03:22:53Z",
+  "primary": "cs.CY",
+  "comment": "Accepted (spotlight) in ICML 2026, Position Paper Track. The first two authors contributed equally and may list their names interchangeably"
+ },
+ {
+  "id": "2606.12809v1",
+  "title": "MLUBench: A Benchmark for Lifelong Unlearning Evaluation in MLLMs",
+  "published": "2026-06-11T02:09:26Z",
+  "primary": "cs.AI",
+  "comment": "36 pages, accepted to the ICML 2026"
+ },
+ {
+  "id": "2606.11245v1",
+  "title": "Position: Hippocampal Explicit Memory Is the Cornerstone for AGI",
+  "published": "2026-06-05T17:40:34Z",
+  "primary": "cs.AI",
+  "comment": "Accepted to ICML 2026 (Position Paper Track)"
+ },
+ {
+  "id": "2608.13712v1",
+  "title": "Reading Between The Lines: Modeling and Evaluating Behavioral Realism in Legal Simulation",
+  "published": "2026-08-13T19:15:26Z",
+  "primary": "cs.CY",
+  "comment": "Accepted at ICML 2026 AI4Law. 47 pages, 26 tables, 14 figures"
+ },
+ {
+  "id": "2606.17683v1",
+  "title": "Bridging Functional Correctness and Runtime Efficiency Gaps in LLM-Based Code Translation",
+  "published": "2026-06-16T08:49:56Z",
+  "primary": "cs.CL",
+  "comment": "Accepted to ICML 2026"
+ },
+ {
+  "id": "2606.14415v1",
+  "title": "CSPO: Constraint-Sensitive Policy Optimization for Safe Reinforcement Learning",
+  "published": "2026-06-12T12:48:56Z",
+  "primary": "cs.AI",
+  "comment": "Accepted as a Spotlight paper at the 43rd International Conference on Machine Learning (ICML 2026)"
+ },
+ {
+  "id": "2609.12397v2",
+  "title": "UFO: Chain-of-Evaluation for Omni-Condition Alignment in Multi-Modal Image Generation",
+  "published": "2026-09-11T03:40:11Z",
+  "primary": "cs.CV",
+  "comment": "13pages, 6 figures, accepted at the Forty-Third International Conference on Machine Learning (ICML 2026)"
+ },
+ {
+  "id": "2606.26778v1",
+  "title": "LearniBridge: Learnable Calibration of Feature Caching for Diffusion Models Acceleration",
+  "published": "2026-06-25T09:12:51Z",
+  "primary": "cs.CV",
+  "comment": "Accepted to ICML 2026"
+ },
+ {
+  "id": "2607.10592v1",
+  "title": "Sharp Concentration Bounds for Bundle-Valued Statistics on Manifolds",
+  "published": "2026-07-12T06:11:31Z",
+  "primary": "cs.LG",
+  "comment": "Accepted in ICML 2026"
+ },
+ {
+  "id": "2606.05689v1",
+  "title": "Causal Modeling of Selection in Evolution",
+  "published": "2026-06-04T04:16:06Z",
+  "primary": "cs.LG",
+  "comment": "Appears at ICML 2026 (spotlight)"
+ },
+ {
+  "id": "2606.06953v1",
+  "title": "LIMMT: Less is More for Motion Tracking",
+  "published": "2026-06-05T06:33:09Z",
+  "primary": "cs.RO",
+  "comment": "Accepted at ICML 2026"
+ },
+ {
+  "id": "2606.15048v1",
+  "title": "Temporal Difference Learning for Diffusion Models",
+  "published": "2026-06-13T01:34:04Z",
+  "primary": "cs.LG",
+  "comment": "15 pages, 4 figures. Accepted at ICML 2026"
+ },
+ {
+  "id": "2607.01084v1",
+  "title": "Can Agents Generalize to the Open World? Unveiling the Fragility of Static Training in Tool Use",
+  "published": "2026-07-01T15:40:25Z",
+  "primary": "cs.AI",
+  "comment": "Accepted by ICML 2026"
+ },
+ {
+  "id": "2606.03723v1",
+  "title": "Compress then Merge: From Multiple LoRAs into One Low-Rank Adapter",
+  "published": "2026-06-02T14:42:46Z",
+  "primary": "cs.LG",
+  "comment": "Accepted to ICML 2026. Code: https://github.com/ZhengbaoHe/compress-then-merge"
+ },
+ {
+  "id": "2606.10461v1",
+  "title": "ERAlign: Energy-based Representation Alignment of GNNs and LLMs on Text-attributed Graphs",
+  "published": "2026-06-09T06:16:40Z",
+  "primary": "cs.LG",
+  "comment": "Accepted to ICML 2026"
+ },
+ {
+  "id": "2606.24993v1",
+  "title": "The Geometry of Sequential Learning: Lie-Bracket Prediction of Transfer Order",
+  "published": "2026-06-23T15:39:38Z",
+  "primary": "cs.LG",
+  "comment": "Accepted to ICML 2026. 20 pages, including appendices"
+ },
+ {
+  "id": "2606.31082v1",
+  "title": "Fleet: Few Shots Lead Effective AI-generated Image Detection",
+  "published": "2026-06-30T03:15:52Z",
+  "primary": "cs.CV",
+  "comment": "25 pages, accepted by ICML 2026"
+ },
+ {
+  "id": "2606.04485v2",
+  "title": "LimiX-2M: Mitigating Low-Rank Collapse and Attention Bottlenecks in Tabular Foundation Models",
+  "published": "2026-06-03T06:07:33Z",
+  "primary": "cs.LG",
+  "comment": "Accepted to ICML 2026"
+ },
+ {
+  "id": "2606.14351v1",
+  "title": "ForceForget: Reinforcement Concept Removal for Enhancing Safety in Text-to-Image Models",
+  "published": "2026-06-12T11:12:33Z",
+  "primary": "cs.CV",
+  "comment": "Accepted to ICML 2026"
+ },
+ {
+  "id": "2606.06555v1",
+  "title": "Depth over Fidelity in Fixed-Budget Noisy Evolution Strategies",
+  "published": "2026-06-04T10:35:21Z",
+  "primary": "cs.NE",
+  "comment": "Accepted at the 43rd International Conference on Machine Learning (ICML 2026). 28 pages, 16 figures, 7 tables, including appendices"
+ },
+ {
+  "id": "2606.22768v1",
+  "title": "Factored Gossip DiLoCo: Reducing Blocking Communication in DiLoCo",
+  "published": "2026-06-22T02:15:13Z",
+  "primary": "cs.LG",
+  "comment": "Accepted at ICML 2026. 29 pages, 7 figures"
+ },
+ {
+  "id": "2608.01582v1",
+  "title": "LieStoNet: Learning Lie Symmetries from Spatiotemporal Data for Stochastic Dynamical Systems",
+  "published": "2026-08-03T01:34:13Z",
+  "primary": "cond-mat.stat-mech",
+  "comment": "25 Pages, 7 figures. Accepted to the International Conference on Machine Learning (ICML 2026)"
+ },
+ {
+  "id": "2608.14049v1",
+  "title": "FlatLab: A Unified Methodology Framework and Simulation-Based Benchmark for Robotic Manipulation of Flat Objects",
+  "published": "2026-08-14T07:55:55Z",
+  "primary": "cs.RO",
+  "comment": "This paper is accepted to ICML 2026"
+ },
+ {
+  "id": "2606.02842v1",
+  "title": "Spectral-Progressive Thought Flow for Lightweight Multimodal Reasoning",
+  "published": "2026-06-01T20:06:50Z",
+  "primary": "cs.LG",
+  "comment": "Accepted at ICML 2026"
+ },
+ {
+  "id": "2606.06303v2",
+  "title": "Plug-and-Play Guidance for Discrete Diffusion Models via Gradient-Informed Logit Correction",
+  "published": "2026-06-04T15:41:53Z",
+  "primary": "cs.LG",
+  "comment": "Accepted by ICML 2026"
+ },
+ {
+  "id": "2606.06760v1",
+  "title": "MedSIGHT: Towards Grounded Visual Comprehension in Medical Large Vision-Language Models",
+  "published": "2026-06-04T22:54:59Z",
+  "primary": "cs.CV",
+  "comment": "Accepted at ICML 2026"
+ },
+ {
+  "id": "2606.28460v1",
+  "title": "Counterfactual Residual Data Augmentation for Regression",
+  "published": "2026-06-26T13:04:37Z",
+  "primary": "cs.LG",
+  "comment": "Accepted at the 43rd International Conference on Machine Learning (ICML 2026). 25 pages, 8 figures. Project page: https://crda-project.github.io"
+ },
+ {
+  "id": "2606.27737v1",
+  "title": "Reduction of Probabilistic Chemical Reaction Networks",
+  "published": "2026-06-26T05:36:32Z",
+  "primary": "cs.LG",
+  "comment": "Accepted to ICML 2026"
+ },
+ {
+  "id": "2606.12303v1",
+  "title": "From 2D Grids to 1D Tokens: Reforming Shared Representations for Multimodal Image Fusion",
+  "published": "2026-06-10T16:40:18Z",
+  "primary": "cs.CV",
+  "comment": "Accepted at the 43rd International Conference on Machine Learning (ICML 2026)"
+ },
+ {
+  "id": "2607.16652v1",
+  "title": "Position: Explanation Stability Is a Property of the Model Method Pair, Not the Model",
+  "published": "2026-07-18T06:09:07Z",
+  "primary": "cs.CV",
+  "comment": "Accepted Position Paper at ICML 2026. https://openreview.net/forum?id=9r8sSaYhos"
+ },
+ {
+  "id": "2607.02504v1",
+  "title": "Reasoning LLM Improves Speaker Recognition in Long-form TV Dramas",
+  "published": "2026-07-02T17:58:52Z",
+  "primary": "cs.CL",
+  "comment": "Accepted to ICML 2026"
+ },
+ {
+  "id": "2606.10309v2",
+  "title": "Dissect and Prune: Enhancing Robustness in AI-Generated Image Detection",
+  "published": "2026-06-09T01:55:09Z",
+  "primary": "cs.CV",
+  "comment": "Accepted to ICML 2026. 26 pages, 9 figures, 9 tables. Includes appendix"
+ },
+ {
+  "id": "2606.12940v1",
+  "title": "Self-Guidance: Enhancing Neural Codecs via Decoder Manifold Alignment",
+  "published": "2026-06-11T06:06:02Z",
+  "primary": "cs.SD",
+  "comment": "20 pages, 9 figures, accepted to ICML 2026, demo website available at https://sgvqvae.github.io/sgvqvae-demo"
+ },
+ {
+  "id": "2607.18281v3",
+  "title": "Position: The Inevitable Transition to Machine Learning in Quantum Chemistry",
+  "published": "2026-06-30T02:54:57Z",
+  "primary": "physics.chem-ph",
+  "comment": "Accepted as a position paper at ICML 2026. OpenReview forum: https://openreview.net/forum?id=Mq1oTEIwp4"
+ },
+ {
+  "id": "2606.25182v1",
+  "title": "What Intermediate Layers Know: Detecting Jailbreaks from Entropy Dynamics",
+  "published": "2026-06-23T21:14:53Z",
+  "primary": "cs.CL",
+  "comment": "Accepted at the European Conference on Machine Learning and Principles and Practice of Knowledge Discovery in Databases (ECML PKDD) 2026. A short version accepted at EIML@ICML 2026"
+ },
+ {
+  "id": "2606.16152v1",
+  "title": "The Quality-Utility Paradox: Why High-Reward Data Impairs Small Model Mathematical Reasoning",
+  "published": "2026-06-15T03:13:07Z",
+  "primary": "cs.AI",
+  "comment": "Accepted at ICML 2026"
+ },
+ {
+  "id": "2608.18102v1",
+  "title": "Stability-Aware Feature Design for Robust Watermark Detection in Machine-Generated Text",
+  "published": "2026-06-09T23:46:47Z",
+  "primary": "cs.CL",
+  "comment": "Accepted at the 43rd International Conference on Machine Learning (ICML 2026), Seoul, South Korea. 20 pages, 5 figures"
+ },
+ {
+  "id": "2606.27082v1",
+  "title": "Finding Stationary Points by Comparisons",
+  "published": "2026-06-25T14:20:03Z",
+  "primary": "cs.LG",
+  "comment": "41 pages, 4 figures. To appear in the Forty-Third International Conference on Machine Learning (ICML 2026)"
+ },
+ {
+  "id": "2606.26650v1",
+  "title": "CAT-Q: Cost-efficient and Accurate Ternary Quantization for LLMs",
+  "published": "2026-06-25T06:24:02Z",
+  "primary": "cs.CL",
+  "comment": "This work is accepted to ICML 2026 as an oral. The project page: https://github.com/IntelChina-AI/BitTern"
+ },
+ {
+  "id": "2606.16501v1",
+  "title": "Post-Hoc Merging is Not Enough: Many-Shot Model Merging with Loss-Gap Balancing",
+  "published": "2026-06-15T10:03:01Z",
+  "primary": "cs.AI",
+  "comment": "Accepted to the 43rd International Conference on Machine Learning (ICML 2026)"
+ },
+ {
+  "id": "2606.06036v1",
+  "title": "Memory is Reconstructed, Not Retrieved: Graph Memory for LLM Agents",
+  "published": "2026-06-04T11:29:46Z",
+  "primary": "cs.AI",
+  "comment": "Accepted at ICML 2026"
+ },
+ {
+  "id": "2606.06722v1",
+  "title": "Flatland: The Adventures of Gradient Descent with Large Step Sizes",
+  "published": "2026-06-04T21:14:07Z",
+  "primary": "cs.LG",
+  "comment": "Accepted for the International Conference on Machine Learning (ICML 2026)"
+ },
+ {
+  "id": "2607.09603v1",
+  "title": "Mosaic: Runtime-Efficient Multi-Agent Embodied Planning",
+  "published": "2026-07-10T16:57:37Z",
+  "primary": "cs.MA",
+  "comment": "Accepted to ICML 2026"
+ },
+ {
+  "id": "2606.07999v1",
+  "title": "Efficient Skill Grounding via Code Refactoring with Small Language Models",
+  "published": "2026-06-06T06:33:51Z",
+  "primary": "cs.AI",
+  "comment": "Accepted to ICML 2026"
+ },
+ {
+  "id": "2606.29807v1",
+  "title": "Rethinking Forgery Attacks on Semantic Watermarks in Black-Box Settings: A Geometric Distortion Perspective",
+  "published": "2026-06-29T05:37:22Z",
+  "primary": "cs.CR",
+  "comment": "Accepted at ICML 2026, updated"
+ },
+ {
+  "id": "2606.22056v1",
+  "title": "Provably Efficient Policy-Reward Co-Pretraining for Adversarial Imitation Learning",
+  "published": "2026-06-20T14:14:24Z",
+  "primary": "cs.LG",
+  "comment": "Paper accepted by ICML 2026"
+ },
+ {
+  "id": "2606.12243v1",
+  "title": "VIA-SD: Verification via Intra-Model Routing for Speculative Decoding",
+  "published": "2026-06-10T15:45:18Z",
+  "primary": "cs.CL",
+  "comment": "Accepted at the 43rd International Conference on Machine Learning (ICML 2026)"
+ },
+ {
+  "id": "2606.03719v1",
+  "title": "Unveiling the Structure of Do-Calculus Reasoning via Derivation Graphs",
+  "published": "2026-06-02T14:40:39Z",
+  "primary": "cs.AI",
+  "comment": "Accepted at ICML 2026"
+ },
+ {
+  "id": "2606.27948v1",
+  "title": "RECAST: Model Reconstruction via Counterfactual-Aware Wasserstein Geometry under Limited Data",
+  "published": "2026-06-26T10:44:01Z",
+  "primary": "cs.LG",
+  "comment": "Accepted at the 43rd International Conference on Machine Learning (ICML 2026)"
+ },
+ {
+  "id": "2607.14123v1",
+  "title": "Position: Explainability Research Must Prioritize Foundations over Ad-hoc Methods",
+  "published": "2026-06-18T21:46:20Z",
+  "primary": "cs.LG",
+  "comment": "Accepted to ICML 2026 Position Paper Track"
+ },
+ {
+  "id": "2606.10520v2",
+  "title": "UniSVQ: 2-bit Unified Scalar-Vector Quantization",
+  "published": "2026-06-09T07:50:52Z",
+  "primary": "cs.CL",
+  "comment": "Accepted by ICML 2026"
+ },
+ {
+  "id": "2606.10238v1",
+  "title": "Hyperbolic Neural Population Geometry Benefits Computation",
+  "published": "2026-06-08T22:57:39Z",
+  "primary": "q-bio.NC",
+  "comment": "Accepted at ICML 2026, 37 pages, 5 figures"
+ },
+ {
+  "id": "2606.05441v2",
+  "title": "GOTabPFN: From Feature Ordering to Compact Tokenization for Tabular Foundation Models on High-Dimensional Data",
+  "published": "2026-06-03T21:03:33Z",
+  "primary": "cs.LG",
+  "comment": "Accepted to the 43rd International Conference on Machine Learning (ICML 2026). Code and resources GitHub https://github.com/zadid6pretam/GOTabPFN PyPI https://pypi.org/project/gotabpfn Project webpage https://www.zadidhabib.com/gotabpfn.html Hugging Face ZeroGPU https://huggingface.co/spaces/zadid6pretam/GOTabPFN CPU backup https://huggingface.co/spaces/zadid6pretam/GOTabPFN_CPU"
+ },
+ {
+  "id": "2606.12411v1",
+  "title": "Context-Driven Incremental Compression for Multi-Turn Dialogue Generation",
+  "published": "2026-06-10T17:59:54Z",
+  "primary": "cs.CL",
+  "comment": "Accepted at ICML 2026"
+ },
+ {
+  "id": "2606.25743v1",
+  "title": "Black-Box Assisted Regression: Phase Transitions and Minimax Optimality",
+  "published": "2026-06-24T12:11:59Z",
+  "primary": "cs.LG",
+  "comment": "23 pages, 3 figures. Accepted at the 43rd International Conference on Machine Learning (ICML 2026)"
+ },
+ {
+  "id": "2606.11057v1",
+  "title": "Flexible Kernels for Protein Property Prediction",
+  "published": "2026-06-09T16:20:36Z",
+  "primary": "cs.LG",
+  "comment": "50 pages; to appear at ICML 2026"
+ },
+ {
+  "id": "2607.17800v1",
+  "title": "The Concept of Representation in ML: Beyond Plato and Aristotle",
+  "published": "2026-07-20T10:35:48Z",
+  "primary": "cs.LG",
+  "comment": "8 pages. Accepted for oral presentation at ICML 2026"
+ },
+ {
+  "id": "2606.03332v1",
+  "title": "Tailoring Strictly Proper Scoring Rules for Downstream Tasks: An Application to Causal Inference",
+  "published": "2026-06-02T08:41:25Z",
+  "primary": "cs.LG",
+  "comment": "Accepted to ICML 2026"
+ },
+ {
+  "id": "2607.20532v1",
+  "title": "Position: Stop Reactively Patching Your Model Every Time and Start Proactive Test-Driven AI Development",
+  "published": "2026-07-10T13:07:12Z",
+  "primary": "cs.LG",
+  "comment": "Accepted at ICML 2026 Position Paper Track. 18 pages"
+ },
+ {
+  "id": "2607.02575v2",
+  "title": "Criterion-Conditional In-Context Learning: Evaluating Criterion-Shift Adaptation in Vision-Language Models",
+  "published": "2026-06-30T17:22:20Z",
+  "primary": "cs.CV",
+  "comment": "Accepted by ICML 2026. Code is available at https://github.com/MegviiAlgo-Team/CC-ICL"
+ },
+ {
+  "id": "2607.05353v1",
+  "title": "Selective Disclosure Watermarking for Large Language Models",
+  "published": "2026-07-06T17:32:01Z",
+  "primary": "cs.CR",
+  "comment": "Accepted at ICML 2026"
+ },
+ {
+  "id": "2606.13802v1",
+  "title": "A Benchmark and Framework for Evaluating Next Action Predictions in Spreadsheets",
+  "published": "2026-06-11T18:16:37Z",
+  "primary": "cs.SE",
+  "comment": "Accepted at ICML 2026. Code and benchmark: https://github.com/Tej-55/NAPE"
+ },
+ {
+  "id": "2609.03818v1",
+  "title": "CauseCollab: Causal Unified and Modality-Agnostic Network for Heterogeneous Collaborative Perception",
+  "published": "2026-09-03T13:19:50Z",
+  "primary": "cs.AI",
+  "comment": "17 pages, accepted at ICML 2026"
+ },
+ {
+  "id": "2606.14795v1",
+  "title": "Position: The Systemic Lack of Agency in Visual Reasoning",
+  "published": "2026-06-11T14:13:42Z",
+  "primary": "cs.CV",
+  "comment": "Accepted by ICML 2026"
+ },
+ {
+  "id": "2607.15313v1",
+  "title": "Position: Quantum Program Generation Must Prioritize Validity Over Probabilistic Scaling",
+  "published": "2026-07-15T21:28:59Z",
+  "primary": "cs.LG",
+  "comment": "Accepted to ICML 2026: https://openreview.net/forum?id=oX1vWuQ13y"
+ },
+ {
+  "id": "2608.26676v1",
+  "title": "FOCUS & RePAIR: Mitigating Text Degeneration via Token-Level Guidance for Pruned Large Language Models",
+  "published": "2026-08-27T06:31:18Z",
+  "primary": "cs.CL",
+  "comment": "Accepted to ICML 2026 as a Spotlight"
+ },
+ {
+  "id": "2606.15099v1",
+  "title": "Think Less, Act Early: Reinforced Latent Reasoning with Early Exit in Vision-Language-Action Models",
+  "published": "2026-06-13T04:16:18Z",
+  "primary": "cs.CV",
+  "comment": "Accepted at ICML 2026"
+ },
+ {
+  "id": "2606.15300v1",
+  "title": "CODA-BENCH: Can Code Agents Handle Data-Intensive Tasks?",
+  "published": "2026-06-13T13:46:47Z",
+  "primary": "cs.AI",
+  "comment": "Accepted at ICML 2026. 37 pages, 11 figures. Project page: https://coda-bench.github.io/ Code: https://github.com/ruc-datalab/CoDA-Bench Data: https://huggingface.co/datasets/RUC-DataLab/CoDA-Bench"
+ },
+ {
+  "id": "2606.13104v1",
+  "title": "Authority, Truth, and Citation Bias: A Large-Scale Multi-Domain Benchmark for Studying Epistemic Susceptibility in Large Language Models",
+  "published": "2026-06-11T09:33:03Z",
+  "primary": "cs.LG",
+  "comment": "10 pages, 5 figures. Accepted to AI4GOOD and EIML at ICML 2026"
+ },
+ {
+  "id": "2606.08403v1",
+  "title": "Hiding in Plain Floats: Steganographic Carriers for Indirect Prompt and Content Injection",
+  "published": "2026-06-07T01:41:01Z",
+  "primary": "cs.CR",
+  "comment": "Accepted as a poster at FAGEN@ICML 2026. 14 pages, 3 figures"
+ },
+ {
+  "id": "2606.19932v1",
+  "title": "Spatial-Aware Reduction Framework: Towards Efficient and Faithful Visual State Space Models",
+  "published": "2026-06-18T08:31:11Z",
+  "primary": "cs.CV",
+  "comment": "Accepted by ICML 2026"
+ },
+ {
+  "id": "2606.03810v2",
+  "title": "Consistency Training Can Entrench Misalignment",
+  "published": "2026-06-02T15:54:24Z",
+  "primary": "cs.CL",
+  "comment": "Accepted to ICML 2026"
+ },
+ {
+  "id": "2606.26917v1",
+  "title": "GEOALIGN: Geometric Rollout Curation for Robust LLM Reinforcement Learning",
+  "published": "2026-06-25T11:53:37Z",
+  "primary": "cs.LG",
+  "comment": "Accepted as a conference paper at ICML 2026"
+ },
+ {
+  "id": "2608.18086v1",
+  "title": "Position: Current Model Cards Are Insufficient for Downstream Governance of Open-Weight Foundation Models",
+  "published": "2026-06-05T09:50:15Z",
+  "primary": "cs.AI",
+  "comment": "Accepted as a position paper at ICML 2026"
+ },
+ {
+  "id": "2606.10646v1",
+  "title": "How Does Reasoning Flow? Tracing Attention-Induced Information Flow for Targeted RL in LLMs",
+  "published": "2026-06-09T09:56:51Z",
+  "primary": "cs.LG",
+  "comment": "25 pages, 7 figures, 11 tables. Accepted at ICML 2026"
+ },
+ {
+  "id": "2606.07419v3",
+  "title": "DisPOSE: Projected Polystochastic Diffusion for Self-Supervised Multi-View 3D Human Pose Estimation",
+  "published": "2026-06-05T16:14:39Z",
+  "primary": "cs.CV",
+  "comment": "Accepted at ICML 2026"
+ },
+ {
+  "id": "2606.04029v2",
+  "title": "Position: Deployed Reinforcement Learning should be Continual",
+  "published": "2026-06-01T19:40:10Z",
+  "primary": "cs.LG",
+  "comment": "Accepted to the ICML 2026 Position Paper Track. See https://icml.cc/virtual/2026/poster/67195"
+ },
+ {
+  "id": "2607.03789v1",
+  "title": "G$^2$TAM: Geometry Grounded Track Anything Model",
+  "published": "2026-07-04T09:32:13Z",
+  "primary": "cs.CV",
+  "comment": "Accepted by ICML 2026. Project Page:https://zcmax.github.io/projects/G2TAM/"
+ },
+ {
+  "id": "2608.06712v1",
+  "title": "Suppress and Diversify: Refining Robust Pathways for Corruption Robustness",
+  "published": "2026-08-07T02:11:59Z",
+  "primary": "cs.CV",
+  "comment": "Accepted at ICML 2026"
+ },
+ {
+  "id": "2606.27147v1",
+  "title": "Safe Autoregressive Image Generation with Iterative Self-Improving Codebooks",
+  "published": "2026-06-25T15:18:31Z",
+  "primary": "cs.CV",
+  "comment": "10 pages including references, 8 figures, accepted for publication at the 43rd International Conference on Machine Learning (ICML 2026)"
+ },
+ {
+  "id": "2607.22665v1",
+  "title": "Obliviate: Efficient Unlearning in Recommender Systems",
+  "published": "2026-06-30T05:52:32Z",
+  "primary": "cs.AI",
+  "comment": "Accepted at ICML 2026"
+ },
+ {
+  "id": "2606.18606v1",
+  "title": "Steerable Cultural Preference Optimization of Reward Models",
+  "published": "2026-06-17T02:10:07Z",
+  "primary": "cs.CL",
+  "comment": "Accepted to Pluralistic Alignment @ ICML 2026"
+ },
+ {
+  "id": "2606.16655v1",
+  "title": "Distribution Alignment for One-Shot Federated Learning via Optimal Transport",
+  "published": "2026-06-15T12:46:41Z",
+  "primary": "cs.LG",
+  "comment": "Accepted at the 43rd International Conference on Machine Learning (ICML 2026)"
+ },
+ {
+  "id": "2607.04655v1",
+  "title": "FormalRx: Rectify and eXamine Semantic Failures in Autoformalization",
+  "published": "2026-07-06T04:20:06Z",
+  "primary": "cs.CL",
+  "comment": "44 pages, 5 figures. Accepted at the 43rd International Conference on Machine Learning (ICML 2026)"
+ },
+ {
+  "id": "2606.17660v1",
+  "title": "TuneAhead: Predicting Fine-tuning Performance Before Full Training Begins",
+  "published": "2026-06-16T08:21:21Z",
+  "primary": "cs.LG",
+  "comment": "9 pages, 6 figures, accepted as ICML 2026 poster:https://icml.cc/virtual/2026/poster/64847"
+ },
+ {
+  "id": "2606.11149v1",
+  "title": "Efficiently Learning Drifting Halfspaces with Massart Noise",
+  "published": "2026-06-09T17:35:18Z",
+  "primary": "cs.LG",
+  "comment": "To appear at ICML 2026"
+ },
+ {
+  "id": "2606.04525v4",
+  "title": "GENEB: Why Genomic Models Are Hard to Compare",
+  "published": "2026-06-03T07:06:01Z",
+  "primary": "cs.CL",
+  "comment": "Accepted to ICML 2026"
+ },
+ {
+  "id": "2606.05272v1",
+  "title": "Learning Manifold and It\u00f4 Dynamics with Branched Neural Rough Differential Equations",
+  "published": "2026-06-03T17:12:52Z",
+  "primary": "cs.LG",
+  "comment": "Accepted at ICML 2026"
+ },
+ {
+  "id": "2607.21326v1",
+  "title": "SlerpFlow: Spherical Trajectory Correction for Rectified Flow Inversion",
+  "published": "2026-07-23T13:55:21Z",
+  "primary": "cs.CV",
+  "comment": "16 pages. Accepted at ICML 2026"
+ },
+ {
+  "id": "2607.01251v1",
+  "title": "Collaborative Disagreement Resolution for Scalable Oversight",
+  "published": "2026-06-02T12:55:49Z",
+  "primary": "cs.CY",
+  "comment": "27 pages, 6 figures. Accepted to ICML 2026. Codebase link: https://github.com/ChicagoHAI/collaborative-dr.git"
+ },
+ {
+  "id": "2606.06315v1",
+  "title": "LLM Self-Recognition: Steering and Retrieving Activation Signatures",
+  "published": "2026-06-04T15:54:34Z",
+  "primary": "cs.AI",
+  "comment": "To appear in Proceedings of the 43rd International Conference on Machine Learning (ICML 2026)"
+ },
+ {
+  "id": "2606.25318v1",
+  "title": "REViT: Roto-reflection Equivariant Convolutional Vision Transformer",
+  "published": "2026-06-24T02:32:11Z",
+  "primary": "cs.CV",
+  "comment": "Accepted for publication at ICML 2026"
+ },
+ {
+  "id": "2606.30136v1",
+  "title": "Robust Strategic Classification under Decision-Dependent Cost Uncertainty",
+  "published": "2026-06-29T11:15:11Z",
+  "primary": "cs.LG",
+  "comment": "29 pages, 7 figures, accepted for publication at ICML 2026"
+ },
+ {
+  "id": "2608.20255v1",
+  "title": "Transfer Learning in Nonparametric Regression with Deep ReLU Networks",
+  "published": "2026-08-20T16:53:00Z",
+  "primary": "stat.ML",
+  "comment": "Accepted at the 43rd International Conference on Machine Learning (ICML 2026)"
+ },
+ {
+  "id": "2608.06776v1",
+  "title": "Faster Query-Key Learning Sharpens Attention in Self-Attention Models",
+  "published": "2026-08-07T03:52:01Z",
+  "primary": "cs.LG",
+  "comment": "Accepted to the 43rd International Conference on Machine Learning (ICML 2026)"
+ },
+ {
+  "id": "2607.00654v1",
+  "title": "Linguistic Relative Policy Optimization for Video Anomaly Reasoning",
+  "published": "2026-07-01T09:07:04Z",
+  "primary": "cs.CV",
+  "comment": "Accepted at ICML 2026; 18 pages, 8 figures, 9 tables"
+ },
+ {
+  "id": "2606.17664v1",
+  "title": "Temporal Preference Optimization for Unsupervised Retrieval",
+  "published": "2026-06-16T08:27:22Z",
+  "primary": "cs.IR",
+  "comment": "Accepted to ICML 2026"
+ },
+ {
+  "id": "2608.07505v2",
+  "title": "Position: We Need Large Language Models Optimized For Our Well-Being",
+  "published": "2026-06-23T18:50:40Z",
+  "primary": "cs.CY",
+  "comment": "Accepted to the ICML 2026 Position Paper Track"
+ },
+ {
+  "id": "2606.06570v1",
+  "title": "MalTree: Tracing Malware Evolution from Embeddings at Scale",
+  "published": "2026-06-04T17:51:49Z",
+  "primary": "cs.CR",
+  "comment": "33 pages, accepted at ICML 2026"
+ },
+ {
+  "id": "2608.01428v1",
+  "title": "When Replanning Becomes the Bottleneck: Budgeted Replanning for Embodied Agents",
+  "published": "2026-08-02T18:17:35Z",
+  "primary": "cs.RO",
+  "comment": "20 pages total: 9 pages main text, 3 pages references, and 8 pages appendix; 18 figures and 32 tables. Accepted at ICML 2026"
+ },
+ {
+  "id": "2606.15821v2",
+  "title": "The Truth Stays in the Family: Enhancing Contextual Grounding via Inherited Truthful Heads in Model Lineages",
+  "published": "2026-06-14T13:39:09Z",
+  "primary": "cs.CL",
+  "comment": "Accepted at ICML 2026"
+ },
+ {
+  "id": "2607.10611v2",
+  "title": "M+Adam: Low-Precision Training via Additive-Multiplicative Optimization",
+  "published": "2026-07-12T07:15:47Z",
+  "primary": "cs.LG",
+  "comment": "Accepted at the 43rd International Conference on Machine Learning (ICML 2026). 45 pages"
+ },
+ {
+  "id": "2607.19363v3",
+  "title": "AdaRoPE: Not All Attention Heads Should Rotate and Scale Equally",
+  "published": "2026-06-05T05:09:15Z",
+  "primary": "cs.AI",
+  "comment": "Accepted at ICML 2026"
+ },
+ {
+  "id": "2606.10650v1",
+  "title": "Dynamic Linear Attention",
+  "published": "2026-06-09T09:57:48Z",
+  "primary": "cs.CL",
+  "comment": "Accepted by ICML 2026"
+ },
+ {
+  "id": "2608.20988v1",
+  "title": "Jacobian-guided Noise Injection for Quantization Robustness in Large Language Models",
+  "published": "2026-08-21T11:16:40Z",
+  "primary": "cs.LG",
+  "comment": "Accepted at AdaptFM: Resource-Adaptive Foundation Model Inference, ICML 2026"
+ },
+ {
+  "id": "2606.27242v1",
+  "title": "The Geometry of Updates: Fisher Alignment at Vocabulary Scale",
+  "published": "2026-06-25T16:30:27Z",
+  "primary": "cs.LG",
+  "comment": "Accepted at the 43rd International Conference on Machine Learning (ICML 2026), PMLR 306. 64 pages total (main paper plus appendix), 4 figures, 29 tables"
+ },
+ {
+  "id": "2606.19734v1",
+  "title": "Federated Bilevel Performative Prediction",
+  "published": "2026-06-18T02:58:32Z",
+  "primary": "cs.LG",
+  "comment": "Accepted by ICML 2026"
+ },
+ {
+  "id": "2606.17687v1",
+  "title": "SuCo: Sufficiency-guided Continuous Adaptive Reasoning",
+  "published": "2026-06-16T08:52:15Z",
+  "primary": "cs.CL",
+  "comment": "Accepted to ICML 2026. 18 pages"
+ },
+ {
+  "id": "2607.23052v1",
+  "title": "Similarity Is Not Logic: Factored Inference for Dual-Encoder Vision-Language Models",
+  "published": "2026-07-25T05:39:51Z",
+  "primary": "cs.CV",
+  "comment": "Accepted at ICML 2026. 18 pages, 8 figures. Project page: https://sultanmo.github.io/factored-vlm Code and benchmark: https://github.com/SultanMo/factored-vlm"
+ },
+ {
+  "id": "2606.15760v1",
+  "title": "The Data Manifold under the Microscope",
+  "published": "2026-06-14T11:45:58Z",
+  "primary": "cs.LG",
+  "comment": "Accepted at ICML 2026. Camera-ready version"
+ },
+ {
+  "id": "2606.03489v2",
+  "title": "Learn from Your Mistakes: Tree-like Self-Play for Secure Code LLMs",
+  "published": "2026-06-02T11:07:20Z",
+  "primary": "cs.CR",
+  "comment": "18 pages, 3 figures, Accepted by ICML 2026"
+ },
+ {
+  "id": "2606.03270v1",
+  "title": "Are Common Substructures Transferable? Riemannian Graph Foundation Model with Neural Vector Bundles",
+  "published": "2026-06-02T07:35:42Z",
+  "primary": "cs.LG",
+  "comment": "Accepted by ICML 2026"
+ },
+ {
+  "id": "2606.20206v1",
+  "title": "Off-Policy Evaluation for Missingness-Aware Policies in MDPs with Rewards Missing Not at Random",
+  "published": "2026-06-18T13:19:43Z",
+  "primary": "stat.ML",
+  "comment": "Accepted at ICML 2026. 31 pages, 6 figures"
+ },
+ {
+  "id": "2606.30813v1",
+  "title": "Gradient Smoothing: Coupling Layer-wise Updates for Improved Optimization",
+  "published": "2026-06-29T18:37:34Z",
+  "primary": "cs.LG",
+  "comment": "Published in the Proceedings of the 43rd International Conference on Machine Learning (ICML 2026)"
+ },
+ {
+  "id": "2607.05354v1",
+  "title": "Geometric Reciprocity: Unlocking Self-Supervision for Stereoscopic Video Generation",
+  "published": "2026-07-06T17:32:04Z",
+  "primary": "cs.CV",
+  "comment": "Accepted to ICML 2026. Project page: https://visual-ai.github.io/grt/"
+ },
+ {
+  "id": "2606.28347v1",
+  "title": "Agentic Safety is an Epistemic Property, Not a Behavioral One",
+  "published": "2026-06-02T17:59:25Z",
+  "primary": "cs.CY",
+  "comment": "To appear in proceedings of ICML 2026"
+ },
+ {
+  "id": "2606.19992v1",
+  "title": "Beyond Static Endpoints: Tool Programs as an Interface for Flexible Agentic Web Services",
+  "published": "2026-06-18T09:31:09Z",
+  "primary": "cs.SE",
+  "comment": "Accepted by ICML 2026"
+ },
+ {
+  "id": "2606.03310v1",
+  "title": "Learning Multi-Scale Hypergraph for High-Order Brain Connectivity Analysis",
+  "published": "2026-06-02T08:24:17Z",
+  "primary": "cs.LG",
+  "comment": "24 pages, Accepted to ICML 2026"
+ },
+ {
+  "id": "2607.05257v1",
+  "title": "GeoFlow: Geo-Aware Modeling of Inter-Area Relationships in Origin-Destination Flow Prediction and Generation",
+  "published": "2026-07-06T16:04:23Z",
+  "primary": "cs.LG",
+  "comment": "Accepted by ICML 2026"
+ },
+ {
+  "id": "2609.11918v1",
+  "title": "General Quantification of Covariate and Concept Shifts",
+  "published": "2026-09-10T17:57:52Z",
+  "primary": "cs.LG",
+  "comment": "38 pages, 9 figures, accepted at the 43rd International Conference on Machine Learning (ICML 2026)"
+ },
+ {
+  "id": "2606.26762v1",
+  "title": "ProtoKV: Streaming Video Understanding under Delayed Query with Summary-State Memory",
+  "published": "2026-06-25T08:47:15Z",
+  "primary": "cs.CV",
+  "comment": "20 pages, 4 figures, Accepted to ICML 2026"
+ },
+ {
+  "id": "2606.04434v1",
+  "title": "Hyper-ICL: Attention Calibration with Hyperbolic Anchor Distillation for Multimodal In-Context Learning",
+  "published": "2026-06-03T04:32:09Z",
+  "primary": "cs.CV",
+  "comment": "Accepted at the 43rd International Conference on Machine Learning (ICML 2026)"
+ },
+ {
+  "id": "2606.11646v1",
+  "title": "Tree-Structured Orthonormal Decomposition of the Aitchison Simplex",
+  "published": "2026-06-10T04:21:29Z",
+  "primary": "cs.LG",
+  "comment": "Accepted at ICML 2026. To appear in PMLR vol. 306"
+ },
+ {
+  "id": "2606.30609v1",
+  "title": "C$^{2}$R: Cross-sample Consistency Regularization Mitigates Feature Splitting and Absorption in Sparse Autoencoders",
+  "published": "2026-06-29T17:45:31Z",
+  "primary": "cs.LG",
+  "comment": "24 pages, 6 figures. Accepted by ICML 2026"
+ },
+ {
+  "id": "2606.13732v2",
+  "title": "When Sample Selection Bias Precipitates Model Collapse",
+  "published": "2026-06-11T11:49:39Z",
+  "primary": "cs.AI",
+  "comment": "Accepted at the 43rd International Conference on Machine Learning (ICML 2026)"
+ },
+ {
+  "id": "2606.04046v1",
+  "title": "Dive into the Scene: Breaking the Perceptual Bottleneck in Vision-Language Decision Making via Focus Plan Generation",
+  "published": "2026-06-02T07:50:56Z",
+  "primary": "cs.CV",
+  "comment": "Accepted at ICML 2026"
+ },
+ {
+  "id": "2607.00101v3",
+  "title": "From Welfare to Utility: Generalized Objectives in Budget-Feasible Procurement",
+  "published": "2026-06-30T19:41:58Z",
+  "primary": "cs.GT",
+  "comment": "Accepted at the Forty-third International Conference on Machine Learning (ICML 2026). Version 2: Corrected alphabetical author order, changed proofs of Proposition 1 and Lemma 6; Main conclusions unchanged. Version 3: Metadata author order fix"
+ },
+ {
+  "id": "2606.06547v2",
+  "title": "FAIR-Calib: Frontier-Aware Instability-Reweighted Calibration for Post-Training Quantization of Diffusion Large Language Models",
+  "published": "2026-06-04T08:00:51Z",
+  "primary": "cs.LG",
+  "comment": "Accepted as a poster at the 43rd International Conference on Machine Learning (ICML 2026)"
+ },
+ {
+  "id": "2608.27286v1",
+  "title": "MM-Spectrum: Multimodal Multi-spectral Molecular Structural Elucidation with a Stable MoE Framework",
+  "published": "2026-08-27T15:55:30Z",
+  "primary": "cs.LG",
+  "comment": "Accepted to ICML 2026"
+ },
+ {
+  "id": "2606.03769v1",
+  "title": "Bregman meets L\u00e9vy: Stochastic mirror descent with heavy-tailed noise in continuous and discrete time",
+  "published": "2026-06-02T15:23:04Z",
+  "primary": "math.OC",
+  "comment": "68 pages, 3 figures; to appear in the proceedings of ICML 2026"
+ },
+ {
+  "id": "2606.08491v1",
+  "title": "What Makes a Desired Graph for Relational Deep Learning?",
+  "published": "2026-06-07T07:30:34Z",
+  "primary": "cs.AI",
+  "comment": "This article has been accepted by ICML 2026"
+ },
+ {
+  "id": "2606.29713v1",
+  "title": "SEVA: Self-Evolving Verification Agent with Process Reward for Fact Attribution",
+  "published": "2026-06-29T02:37:13Z",
+  "primary": "cs.CL",
+  "comment": "Accepted at AI4GOOD@ICML 2026 and FAGEN@ICML 2026. Code: https://github.com/Justin0504/Verifiable_agent"
+ },
+ {
+  "id": "2606.30783v1",
+  "title": "Security--Fidelity Tradeoffs: The Hidden Cost of Prompt Injection Defense",
+  "published": "2026-06-29T18:11:17Z",
+  "primary": "cs.CR",
+  "comment": "Accepted at the 43rd International Conference on Machine Learning (ICML 2026). 34 pages, 4 figures"
+ },
+ {
+  "id": "2607.25948v1",
+  "title": "MODUS: Decoder-Only Any-to-Any Modeling of Diverse Modalities",
+  "published": "2026-07-28T16:34:23Z",
+  "primary": "cs.CV",
+  "comment": "Accepted at ICML 2026. Project page: https://modus-multimodal.epfl.ch"
+ },
+ {
+  "id": "2608.25370v2",
+  "title": "CRAMER: Control via Request-Aware Masking for Editing Recommenders",
+  "published": "2026-08-26T04:43:23Z",
+  "primary": "cs.IR",
+  "comment": "Accepted by ICML 2026"
+ },
+ {
+  "id": "2608.24386v1",
+  "title": "Equivariant Covariance Tensors: Guaranteed SPD Uncertainty for Tensor-Valued Geometric Learning",
+  "published": "2026-08-25T10:46:47Z",
+  "primary": "cs.LG",
+  "comment": "Accepted to ICML 2026"
+ },
+ {
+  "id": "2606.13097v2",
+  "title": "Functional Cache Grafting: Robust and Rapid Code-Policy Synthesis for Embodied Agents",
+  "published": "2026-06-11T09:25:27Z",
+  "primary": "cs.PL",
+  "comment": "Accepted at ICML 2026"
+ },
+ {
+  "id": "2606.04385v1",
+  "title": "Geometry-Preserving Unsupervised Alignment for Heterogeneous Foundation Models",
+  "published": "2026-06-03T03:02:09Z",
+  "primary": "cs.CV",
+  "comment": "Accepted at ICML 2026"
+ },
+ {
+  "id": "2608.05188v1",
+  "title": "Position: It's Time to Optimize LLMs for Self-Consistency",
+  "published": "2026-07-31T19:16:53Z",
+  "primary": "cs.CL",
+  "comment": "Accepted at the 43rd International Conference on Machine Learning (ICML 2026), Position Paper Track"
+ },
+ {
+  "id": "2606.06682v1",
+  "title": "Spatiotemporal Imputation with Graph-Informed Flow Matching",
+  "published": "2026-06-04T19:55:33Z",
+  "primary": "cs.LG",
+  "comment": "Accepted at ICML 2026"
+ },
+ {
+  "id": "2607.18004v1",
+  "title": "PAMD: Structured Adaptive Distances for Bisimulation Representations in Visual Reinforcement Learning",
+  "published": "2026-07-20T14:36:11Z",
+  "primary": "cs.AI",
+  "comment": "9 pages, 6 figures, plus appendix. Accepted to the 43rd International Conference on Machine Learning (ICML 2026)"
+ },
+ {
+  "id": "2607.08173v2",
+  "title": "Overthinking: Amplifying Reasoning Weights to Extract Learned Secrets",
+  "published": "2026-07-09T07:19:05Z",
+  "primary": "cs.AI",
+  "comment": "Accepted at ICML 2026. 9 pages, 6 figures"
+ },
+ {
+  "id": "2606.30339v1",
+  "title": "REAR: Test-time Preference Realignment through Reward Decomposition",
+  "published": "2026-06-29T14:17:53Z",
+  "primary": "cs.CL",
+  "comment": "Accepted by ICML 2026"
+ },
+ {
+  "id": "2608.26142v1",
+  "title": "Position Is All You Need: A Free Lunch Token Compression Strategy for MLLM-based Referring Expression Segmentation",
+  "published": "2026-06-26T13:20:23Z",
+  "primary": "cs.CL",
+  "comment": "Accepted by ICML 2026"
+ },
+ {
+  "id": "2606.26795v2",
+  "title": "NaviCache: Test-Time Self-Calibration Caching for Video Generation",
+  "published": "2026-06-25T09:28:12Z",
+  "primary": "cs.CV",
+  "comment": "Published at ICML 2026: Proceedings of the 43rd International Conference on Machine Learning, Seoul, South Korea. PMLR 306, 2026"
+ },
+ {
+  "id": "2608.29632v1",
+  "title": "InteractBench: Benchmarking LLMs on Competitive Programming under Unrevealed Information",
+  "published": "2026-08-30T07:50:53Z",
+  "primary": "cs.SE",
+  "comment": "Accepted at ICML 2026"
+ },
+ {
+  "id": "2607.15851v1",
+  "title": "Von Mises-Fisher Mixture Model with Dynamic Shrinkage for Realistic Test-Time Transduction",
+  "published": "2026-07-17T11:08:08Z",
+  "primary": "cs.CV",
+  "comment": "Accepted by ICML 2026"
+ },
+ {
+  "id": "2606.02947v1",
+  "title": "BYORn: Bootstrap Your Own Responses to Defend Large Vision-Language Models Against Backdoor Attacks",
+  "published": "2026-06-01T22:58:04Z",
+  "primary": "cs.LG",
+  "comment": "Accepted to ICML 2026"
+ }
+]
