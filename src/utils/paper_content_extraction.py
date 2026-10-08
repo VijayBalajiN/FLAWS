@@ -2,8 +2,8 @@
 
 `process_paper_content` is the entry point: for a paper with a LaTeX source
 directory (`data/papers/<paper_id>/`), it extracts content directly from the
-flattened LaTeX source (see `docs/grobid_quality_findings.md` at the project
-root for why -- GROBID reliably drops/garbles tables, equations, and
+flattened LaTeX source (see `docs/grobid_quality_findings.md` in the AIScientist
+repo for why -- GROBID reliably drops/garbles tables, equations, and
 reading order on these papers). Only when no LaTeX source exists does it fall
 back to `process_pdf_with_grobid`, which runs GROBID (must be running -- see
 `GROBID_config.json`, default `http://localhost:8070`) and extracts every
