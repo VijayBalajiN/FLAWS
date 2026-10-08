@@ -1,5 +1,7 @@
-"""Port of AIScientist's `aiscientist/core/plan_txt_parser.py`, copied
-verbatim (pure regex, no LLM, no dependency on AIScientist's package).
+"""Port of AIScientist's `aiscientist/core/plan_txt_parser.py` (pure regex,
+no LLM, no dependency on AIScientist's package). Same logic, with two
+differences: an optional "Hypothesis" section is recognised, and markdown
+bold markers around a heading (`### **Problem**`) are tolerated.
 
 Splits a prose research-plan text into its Problem/Method/Experiment
 Design sections by markdown header. Tolerant of heading depth (`##` vs

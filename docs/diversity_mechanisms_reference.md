@@ -35,8 +35,8 @@ a single hypothesis sentence does not.
 
 **Implication for us**: our pipeline compressed each paper down to one
 hypothesis sentence (plus one experiment-design blob), so we lost FLAWS's
-actual diversity source entirely. Retrying the *same* single sentence 5x
-(now 20x) with temperature variation is a problem FLAWS never had to solve,
+actual diversity source entirely. Retrying the *same* single sentence up to 5x
+(`--max-attempts`, default 5) with temperature variation is a problem FLAWS never had to solve,
 because it never retries the same target at all.
 
 ---

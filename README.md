@@ -13,8 +13,10 @@
 > [`docs/results_v2.md`](docs/results_v2.md).
 >
 > Everything in this fork lives under `src/pipeline/plan_error_insertion.py`,
-> `src/utils/`, and `data/` — the upstream code and instructions below are
-> unmodified.
+> `src/utils/`, `docs/` and `data/`. The upstream pipeline code and the
+> instructions below are otherwise unchanged; the one edit to an upstream file
+> is `src/utils/formatting.py`, which gained a generic `format_tagged_blocks`
+> helper (`format_generated_error` now delegates to it, with identical output).
 
 ---
 

@@ -7,8 +7,9 @@ result/finding stripped out. This becomes our "Hypothesis" for the error-
 insertion pipeline: a single falsifiable statement, so no separate claim-
 extraction step is needed for the hypothesis-error track.
 
-System prompt copied verbatim from the source; only the LLM client is
-swapped for Gemini (via `google-generativeai`), matching
+System prompt is the source's, plus a final "respond with ONLY the reference
+theory statement" line (the source used structured JSON output instead);
+the LLM client is swapped for Gemini (via `google-generativeai`), matching
 `research_plan_extraction.py` and FLAWS's own `llm_calls.py` convention.
 """
 
