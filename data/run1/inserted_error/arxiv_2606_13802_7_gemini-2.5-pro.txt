@@ -1,0 +1,28 @@
+:original_text:
+\paragraph{Easier and harder actions.}
+Per-category acceptance rates (Figure~\ref{fig:op-category-acceptance}) split cleanly into two groups across all solvers: content-heavy operations (\op{input}, \op{paste}, \op{fill}, \op{merge}) are accepted at noticeably higher rates than presentational ones (\op{align}, \op{number format}, \op{border}).
+GPT-5 dominates on \op{input}, reflecting its strong language prior on cell content, while the training-free \op{online $n$-gram} holds up well on structural categories driven by local repetition (\op{merge}, \op{border}, \op{paste}) but collapses on semantic categories such as \op{input}.
+
+Comparing the base and fine-tuned SmolLM2-360M makes the effect of in-domain training concrete: the largest accuracy gains land on the categories the base handled worst---number format, \op{fill}, \op{border}, and \op{autofill} all jump by roughly 10 points---while content categories shift only marginally.
+At the same time, the fine-tuned model issues fewer \op{border} and \op{fill} predictions and more \op{merge}, \op{align}, and \op{autofill} ones, suggesting it learns both \emph{when} to predict each category and \emph{how} to predict it more reliably.
+
+:modified_text:
+\paragraph{Easier and harder actions.}
+Per-category acceptance rates (Figure~\ref{fig:op-category-acceptance}) split cleanly into two groups across all solvers: structural, range-based operations (\op{input}, \op{paste}, \op{fill}, \op{merge}) are accepted at noticeably higher rates than atomic, cell-level formatting (\op{align}, \op{number format}, \op{border}).
+GPT-5 dominates on \op{input} for large ranges, reflecting its ability to reason about tabular structure, while the training-free \op{online $n$-gram} also holds up well on structurally repetitive tasks (\op{merge}, \op{border}, \op{paste}) but collapses on operations requiring semantic understanding.
+
+Comparing the base and fine-tuned SmolLM2-360M makes the effect of in-domain training concrete: the largest accuracy gains land on the categories the base handled worst---number format, \op{fill}, \op{border}, and \op{autofill} all jump by roughly 10 points---while the already high-performing structural categories shift only marginally.
+At the same time, the fine-tuned model issues fewer \op{border} and \op{fill} predictions and more \op{merge}, \op{align}, and \op{autofill} ones, suggesting it learns both \emph{when} to predict each category and \emph{how} to predict it more reliably.
+
+:explanation:
+The conceptual error introduced is a flawed rationalization that undermines the paper's claim by substituting valid reasoning with a plausible but incorrect alternative. The paper now argues that the higher predictability of operations like `input`, `paste`, and `fill` stems from them being "structural, range-based" operations, as opposed to less predictable "atomic, cell-level formatting" like `align` and `border`.
+
+This reasoning is fundamentally flawed and constitutes a core conceptual error for three reasons:
+1.  **Incorrect Classification:** The new classification is factually incorrect. Formatting operations like `align` and `border` are very commonly applied to ranges of cells, not just atomically. Conversely, `input` is frequently an atomic operation on a single cell. The paper incorrectly conflates the nature of an operation with its typical application scope.
+2.  **Conflation of Cause and Effect:** The new text wrongly attributes predictability to the spatial property (range-based structure) rather than the semantic property (content generation vs. presentation). While structure aids predictability, the original claim's distinction between adding new content (`input`) versus styling existing content (`align`) is a more accurate causal explanation. The modified text discards this insight.
+3.  **Misinterpretation of Model Capabilities:** The text is altered to claim that GPT-5's strength on `input` stems from reasoning about "tabular structure." This is a mischaracterization. While LLMs understand structure, their primary advantage with `input` lies in leveraging vast world knowledge and language priors to predict the semantic *content* of cells (e.g., predicting "February" after "January"), a capability distinct from purely structural pattern recognition.
+
+This error is subtle because the flawed "structural vs. atomic" dichotomy seems to explain the results on the surface, but it is based on a weak and inconsistent premise that would be challenged by an expert in spreadsheet automation or HCI.
+
+:claim:
+Content-generating spreadsheet operations (e.g., `input`, `paste`, `fill`) are systematically more predictable and result in higher acceptance rates across different models than presentational formatting operations (e.g., `align`, `border`).

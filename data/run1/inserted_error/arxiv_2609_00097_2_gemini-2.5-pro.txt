@@ -1,0 +1,23 @@
+:original_text:
+The add-on computation in the refinement stage is shown as follows and ensures that for selected tokens, the attention score is computed with near-FP16 precision.
+\begin{equation}
+s_\text{final} = \frac{\bm{q}^\top\bm{k}^\text{quant} + \bm{q}^\top\bm{k}^\text{res}}{\sqrt{d}}
+\end{equation}
+This two-term form is semantically equivalent to the \texttt{Dequant} step in Algorithm~\ref{alg:top_delta} but corresponds more closely to the actual kernel implementation, where the two dot products are accumulated without materializing a full-precision key tensor.
+
+:modified_text:
+The computation in the refinement stage is shown as follows. For each selected block, the full-precision key is first reconstructed to ensure numerical stability before the final dot product is computed.
+\begin{equation}
+\bm{k}^\text{full} = \text{Dequant}(\bm{k}^\text{quant}, \bm{k}^\text{res}); \quad s_\text{final} = \frac{\bm{q}^\top\bm{k}^\text{full}}{\sqrt{d}}
+\end{equation}
+This two-step process, which mirrors the \texttt{Dequant} step in Algorithm~\ref{alg:top_delta}, materializes a full-precision key tensor. This approach was chosen to simplify the kernel logic by isolating the low-bit scan from the final high-precision matrix multiplication, avoiding potential floating-point accumulation errors from the two-term expansion.
+
+:explanation:
+The introduced error is a critical conceptual flaw in the system's claimed efficiency mechanism. The key claim is that FFD achieves a "synergistic performance boost by reusing the intermediate results from the low-bit scan in the final high-precision computation."
+
+The original text correctly describes this efficient process: the final score is an accumulation of two dot products, `q * k_quant` (the term from the low-bit scan) and `q * k_res`. This reuses the work done during the selection phase.
+
+The modified text replaces this with a highly inefficient "reconstruct-then-recompute" workflow. It explicitly states that the full-precision key, `k_full`, is reconstructed first, and then the final score `s_final` is computed from scratch using `k_full`. This action discards the intermediate result (`q * k_quant`) of the initial scan, directly contradicting the central performance claim. The provided justification ("simplify the kernel logic," "avoiding potential floating-point accumulation errors") is a plausible but weak rationale that masks a fundamental performance bug. This change makes the claimed speedups (e.g., 11.6x) theoretically unachievable with the described methodology, as materializing the full-precision key and recomputing the dot product would introduce exactly the kind of memory and computation overhead that a fused kernel is designed to eliminate. An expert would recognize that this invalidates the core value proposition of the fused kernel design.
+
+:claim:
+The FFD system, which integrates the selector and computer into a single fused kernel, provides a synergistic performance boost by reusing the intermediate results from the low-bit scan in the final high-precision computation, a benefit not achievable in decoupled selector-computer designs.

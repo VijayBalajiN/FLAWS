@@ -1,0 +1,18 @@
+:error_text:
+Prior State Transition: S_t+1 ~ p(S_t+1 | S_t, ā_t), (5)
+
+:error_text:
+we leverage the world model’s prior transition fp to anticipate the outcome from the previous latent state: ŝ_t+1 = f_p(s^(△)_t−1, ā_t).
+
+:error_text:
+Algorithm 1 ...
+11: ŝ_t+1 = f_p(s^(△)_t−1, ā_t)
+
+:explanation:
+The paper presents a critical and unresolved contradiction in its core mechanism for generating foresight.
+
+1.  Equation (5) on page 4 defines the prior state transition probabilistically, where the next latent state `S_t+1` is conditioned on the **current** latent state `S_t` and the provisional action `ā_t`. This is the standard and logically sound formulation for a state transition model.
+
+2.  However, the implementation described in Section 3.1 and explicitly stated in Algorithm 1 (both on page 5) contradicts this formulation. It claims the foresight state `ŝ_t+1` is predicted using the **previous** refined latent state `s^(△)_t−1`.
+
+This contradiction is a major technical flaw. If the implementation using the previous state `s^(△)_t−1` is correct, the paper fails to provide any sound justification for this counter-intuitive temporal model, which breaks the Markov assumption of the latent space. If the formulation in Equation (5) is correct, then the algorithm and its description are wrong. This ambiguity undermines the paper's central contribution, making the method irreproducible and its effectiveness questionable.

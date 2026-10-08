@@ -1,0 +1,23 @@
+:original_text:
+\textbf{Mismatch (MM):} the property appears in both states but with different values, producing an incorrect edit that the user must correct.
+
+:modified_text:
+\textbf{Mismatch (MM):} the property appears in both states but with different values. This is treated as a composite error: a false positive (the incorrect value) that must be undone, followed by a false negative (the correct value) that must be newly applied.
+
+:original_text:
+The \texttt{update} step adapts the remaining future after an accepted prediction. It removes operations whose effects are already satisfied, prepends inverses for any false positives, and verifies that the adapted sequence still reaches the target state (like the partial \textsf{\small fill} in Figure~\ref{fig:introExample}).
+
+:modified_text:
+The \texttt{update} step adapts the remaining future after an accepted prediction. It removes operations whose effects are already satisfied, prepends inverses for any false positives or mismatched properties, and verifies that the adapted sequence still reaches the target state (like the partial \textsf{\small fill} in Figure~\ref{fig:introExample}).
+
+:explanation:
+The introduced conceptual error is a flawed methodological assumption in the evaluation framework, specifically in how it quantifies the cost of correcting a "mismatch" (MM) error.
+
+1.  **The Flaw**: The definition of a Mismatch (MM) has been altered to model it as a "composite error" comprising a false positive (the wrong value) and a false negative (the missing correct value). This is reinforced by a change to the `update` function description, which now states that "mismatched properties" are corrected by prepending "inverses". This implies a two-step correction process: first undoing the wrong action, then applying the correct one.
+
+2.  **Why It's Wrong**: This model is unrealistic from a user interaction perspective. A user correcting a mismatch (e.g., a cell filled with the wrong color) would typically perform a single action: applying the correct color, which overwrites the incorrect one. The modified framework incorrectly penalizes this single user correction as two separate actions (e.g., `clear fill` + `apply new fill`), effectively doubling the penalty for any "close but not quite" prediction.
+
+3.  **Impact on the Claim**: This flawed error-cost model directly undermines the paper's claim about the severe negative impact of predictive systems without an acceptance filter. The key evidence for this claim is the -19.2% User Actions Saved (UAS) for the `always` acceptance heuristic. By artificially inflating the cost of mismatch errors, the modified methodology makes this figure, and thus the conclusion it supports, highly suspect. The dramatic productivity loss could be an artifact of the punitive evaluation metric rather than a reflection of true user experience, weakening the argument for how essential the acceptance heuristic is.
+
+:claim:
+Without an acceptance heuristic to filter out poor suggestions, predictive systems result in a net negative impact on user productivity (a 19.2% increase in user actions required).

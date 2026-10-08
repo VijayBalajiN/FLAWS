@@ -1,0 +1,28 @@
+**Identified Error 1:**
+Definition 2.5 (Object code). An object code of a scene is a random vector
+O = [O1, O2, ...]
+where
+Oi = 1 if object oi is present in the scene, otherwise.
+0
+
+:
+INCORRECTLY IDENTIFIED
+
+**Identified Error 2:**
+Remark 2.4. We posit that no two objects can correspond to the exact same set of features. In practice, location is often a discriminator for objects that may share all other features.
+
+:
+INCORRECTLY IDENTIFIED
+
+**Identified Error 3:**
+Remark 2.9. Assuming access to the object-to-feature-subset map ψ (Remark 2.4), for any particular scene, F is a deterministic function of O. That is, once we know which objects exist in a scene, we also know which features exist, by virtue of the object-to-feature map.
+
+:explanation:
+The combination of these definitions and remarks reveals a fundamental flaw in the paper's formalization of the binding problem. The "object code" (Definition 2.5) is a binary vector indicating the presence or absence of predefined object *types*. This framework cannot distinguish between a scene containing one instance of an object (e.g., one red square) and a scene containing multiple instances of the same object (e.g., two red squares), which is a critical aspect of understanding multi-object scenes.
+
+Remark 2.4 suggests handling identical objects by making their locations a feature, thus creating new, unique object types (e.g., "top-left red square" vs. "bottom-right red square"). This workaround is inadequate as it treats spatial position as a categorical feature, failing to capture the continuous and relational nature of space, and leads to a combinatorial explosion of object types.
+
+Furthermore, Remark 2.9's assumption that the set of features `F` is a clean, deterministic function of the object code `O` is an oversimplification. This holds for the synthetic datasets used, but is not true for perception in realistic settings with noise, occlusion, and ambiguity. This assumption limits the applicability of the proposed conditional binding measure, `I(O; Z | F)`, which relies on this deterministic link.
+
+Collectively, these points show that the paper does not formalize the general binding problem, but rather a simplified version equivalent to multi-label classification of object types, where each type can appear at most once.
+INCORRECTLY IDENTIFIED

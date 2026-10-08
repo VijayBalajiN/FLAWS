@@ -1,0 +1,12 @@
+Error in assumptions (core conceptual)
+error:
+We process the conflict factor features based on the modality of their sources~$\{S_1, S_2\}$. If the source~$S_i$~of a conflict factor~$C_i$~is the visual modality (i.e., $S_i$ is image), we invoke the Cross-
+modal Aligner pre-trained in Modality Bridging Pre-Training (MBPT) stage to extract the corresponding visual feature. Otherwise, we use the original text embedding directly to ensure the representation remains true to its non-visual origin.
+For ease of notation, we denote the two conflict representations used for comparison as~$\mathbf{z}_1$~and~$\mathbf{z}_2$, defined as follows:
+\begin{equation}
+\mathbf{z}_i = 
+\begin{cases} 
+\operatorname{Aligner}\left(\mathbf{t}_{c_i}, V, V\right) & \text{if } S_i \text{ is image,} \\
+\mathbf{t}_{c_i} & \text{otherwise.}
+\end{cases}
+\end{equation}

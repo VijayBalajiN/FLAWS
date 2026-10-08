@@ -1,0 +1,14 @@
+:error_text:
+Since all inputs to the utility-boosting stage are DP mechanism outputs in the privacy-sanitizing stage, and all subsequent steps operate without accessing the original sensitive data, the entire pipeline constitutes pure post-processing of DP outputs. By the post-processing property of DP, these operations introduce no additional privacy budget~\cite{dpbook}.
+
+:error_text:
+To ensure the synthetic data closely mirrors the original data distribution, we first construct an empirical latent distribution from the sensitive dataset. We pass all sensitive code snippets through the DP-trained code encoder $E^{c, \text{DP}}$ to obtain a set of private latent representations $\mathcal{D}_z = \{z_i^c\}$. During synthesis, we sample latent variables directly from this empirical distribution with replacement and decode them into prefix embeddings: $
+z_i \sim \text{Uniform}(\mathcal{D}_z), \; \mathbf{e}_{\text{prefix}}^{(i)} = D^{\text{DP}}(z_i),$
+
+:error_text:
+\quad $z_i \sim \text{Uniform}(\{E^{c, \text{DP}}(c) \text{ for } c \in \mathcal{D}\})$; $\mathbf{e}_{\text{prefix}}^{(i)} \gets D^{\text{DP}}(z_i)$;
+
+:explanation:
+The paper's central privacy claim is invalidated by a fundamental flaw in its methodology. The authors incorrectly claim that the second "utility-boosting" stage is pure post-processing and thus incurs no additional privacy cost. The post-processing property of differential privacy states that any computation on the output of a DP mechanism does not increase the privacy loss. However, the proposed method violates this property by reusing the original sensitive dataset $\mathcal{D}$ in the second stage.
+
+Specifically, after training the encoder $E^{c, \text{DP}}$ with DP-SGD, the method passes the entire sensitive dataset $\mathcal{D}$ through this encoder to construct an empirical distribution of latent variables. It then samples from this distribution to generate synthetic data. This step directly uses the sensitive training data again after the DP mechanism has been applied, creating a direct dependency between individual sensitive data points and the synthetic outputs. This constitutes an additional, unaccounted-for processing step on the sensitive data, which breaks the DP guarantee of the overall pipeline. The claim that the method operates "without accessing the original sensitive data" in the second stage is a direct contradiction of the described procedure.

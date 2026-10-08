@@ -1,0 +1,43 @@
+**Identified Error:**
+Split
+Deal Outcomes (%)
+Total Deals Total Forecasts
+Time Period
+Succeed+ Fail+
+Fail-
+#
+#
+Test
+84.0
+3.0
+14.4
+404
+1115
+Feb 2025 - Dec 2025
+
+:
+**INCORRECTLY IDENTIFIED**
+
+---
+**Identified Error:**
+We construct a historical sample of 1,648 public-target M&A deals covering the 4 year period from 1 January 2022 to 31 December 2025. This horizon balances the need for a sufficiently deep history to support finetuning against the difficulty of reconstructing rich deal context from older text sources.
+
+:
+**INCORRECTLY IDENTIFIED**
+
+---
+**Identified Error:**
+We partition deals into training, validation, and test sets based on announcement date, using temporal cutoffs of 31 January 2024 and 31 January 2025. For each deal, we generate multiple forecast dates between the announcement date and the company-guided expected close date.
+
+:
+**INCORRECTLY IDENTIFIED**
+
+---
+**Identified Error:**
+we combine the (pre-t) forecasting-module context with the post-mortem artifacts and prompt a teacher model (GPT-5.1) to write a hindsight-guided deal report. We instruct it to: (i) reason as if making a forecast at time t, (ii) base every claim strictly on information available up to t (with citations)
+
+:explanation:
+The paper's entire experimental validation is based on data from the future, which is a fatal and disqualifying flaw. The "Proceedings" line indicates a 2026 publication date, yet the authors claim to have a complete test set of 404 deals with known outcomes spanning from February 2025 to December 2025. This is impossible, as these events would not have concluded at the time the paper was written and submitted. This invalidates all reported results and claims of out-of-sample performance.
+
+This fundamental issue is compounded by the use of non-existent models like "GPT-5.1" as a core component of the methodology (for generating "gold" training data) and as a baseline in the results. The combination of a future test set and fictitious models indicates that the experiments described in the paper were not actually performed and the results are fabricated.
+**INCORRECTLY IDENTIFIED**

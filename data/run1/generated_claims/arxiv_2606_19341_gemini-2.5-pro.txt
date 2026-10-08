@@ -1,0 +1,19 @@
+Here are the major, unique, and falsifiable claims from the research paper:
+
+1.  The proposed framework, OmniAgent, is the first native omni-modal agent to formulate video understanding as a Partially Observable Markov Decision Process (POMDP), unifying perception, reasoning, and action within a single model through an iterative Observation-Thought-Action (OTA) cycle.
+
+2.  OmniAgent's architecture, which selectively distills high-dimensional audio-visual information into a persistent textual memory while purging the raw media, effectively decouples the model's reasoning complexity and context cost from the raw duration of the video.
+
+3.  Standard Group Relative Policy Optimization (GRPO) suffers from an "Advantage Homogenization" problem in multi-turn agentic reasoning, where a uniform trajectory-level reward signal fails to assign appropriate credit to pivotal discovery turns.
+
+4.  The proposed reinforcement learning algorithm, TAURA (Turn-aware Adaptive Uncertainty Rescaled Advantage), resolves the advantage homogenization problem by using turn-level token entropy to rescale the advantage, which steers credit assignment toward high-uncertainty decision points.
+
+5.  OmniAgent exhibits positive "test-time scaling," meaning its performance on complex video understanding tasks improves as the maximum allowed number of reasoning turns is increased during inference.
+
+6.  Agentic Supervised Fine-Tuning (SFT), which involves synthesizing best-of-N trajectories and filtering them with a dual-stage quality control (outcome verification and rationality audit), is more effective at bootstrapping active perception capabilities than standard SFT on static question-answer pairs.
+
+7.  A 7B parameter OmniAgent outperforms a 10x larger, 72B parameter passive model (Qwen2.5-VL-72B) on the long-video LVBench benchmark.
+
+8.  OmniAgent achieves higher accuracy on long-video benchmarks than passive models while being more sample-efficient, using significantly fewer frames for its analysis (e.g., 73% fewer frames than Qwen2.5-VL-72B on LVBench).
+
+9.  The iterative, coarse-to-fine search strategy employed by OmniAgent results in substantial performance gains on temporal grounding tasks (e.g., a +33.4% absolute gain on LongVALE over its baseline), outperforming methods that regress coordinates from a single global view.

@@ -1,0 +1,19 @@
+:error_text:
+We adopt a per-token \emph{single-sample Monte-Carlo} estimator of the forward-KL functional: for a state $s_t$ visited by the cached behaviour policy $\pi_{\theta_{\mathrm{old}}}$ and a sampled action $a_t\sim\pi_{\theta_{\mathrm{old}}}(\cdot\mid s_t)$, we define the cached log-ratio reward
+\begin{equation}
+r_t \;=\; \mathrm{sg}\!\left[\,\log\pi_T(a_t\mid s_t)\;-\;\log\pi_{\theta_{\mathrm{old}}}(a_t\mid s_t)\,\right],
+\label{eq:token_reward}
+\end{equation}
+where $\mathrm{sg}[\cdot]$ is the stop-gradient operator and $s_t$ denotes the context up to position $t$. Both $\pi_T$ and $\pi_{\theta_{\mathrm{old}}}$ are pre-computed and detached before the actor update, so $r_t$ carries no gradient; the policy is optimised only through the PPO ratio $\rho_t=\pi_\theta/\pi_{\theta_{\mathrm{old}}}$ in Eq.~(\ref{eq:ppo_loss}). Taking expectation under $\pi_{\theta_{\mathrm{old}}}(\cdot\mid s_t)$ recovers $-\mathrm{KL}\!\left(\pi_T\!\parallel\!\pi_{\theta_{\mathrm{old}}}\right)(s_t)$, so $r_t$ is an unbiased single-sample estimator of the population forward KL at $s_t$.
+The negative forward KL rewards tokens that align with the teacher's distribution while penalizing deviations.
+
+:error_text:
+We presented \method{}, a post-training method that converts episode-level outcomes into hindsight-guided dense, reflection-augmented supervision, overcoming the inefficiency of sparse-reward RL. The mechanism is best understood not as self-distillation but as on-policy RL with reflection-guided exploration: reflection-conditioned teachers steer the student into high-reward regions of its \emph{own} policy space 
+ rather than imitating a distribution beyond its representational capacity. Across 10 benchmarks spanning math, code, agent, science, and logic, \method{} yields reproducible gains (multi-seed bootstrap CIs, $p<0.005$), matching or exceeding larger-teacher distillation while requiring $\sim$$3.8\times$ fewer total FLOPs than GRPO and naturally mitigating catastrophic forgetting under continual learning.
+
+:explanation:
+The paper contains a fundamental and critical technical error regarding the formulation of its core training objective, leading to a cascade of contradictions.
+
+1.  **Mathematical Contradiction in the Objective Definition:** In Section 3.2.2, the paper describes its dense token-level reward. It correctly states it uses an estimator for the forward-KL functional. However, the same paragraph then makes the contradictory and incorrect claim that the expectation of this estimator "recovers $-\mathrm{KL}\!\left(\pi_T\!\parallel\!\pi_{\theta_{\mathrm{old}}}\right)(s_t)$", which is the negative *reverse* KL divergence. It immediately follows this by correctly stating it is an estimator of the *forward* KL. The expectation of the reward $r_t$ under the policy $\pi_{\theta_{\mathrm{old}}}$ is an estimator for the forward KL divergence, $D_{KL}(\pi_{\theta_{\mathrm{old}}} || \pi_T)$, not the reverse KL. This confusion between forward and reverse KL is a severe mathematical flaw at the heart of the proposed method.
+
+2.  **Conceptual Contradiction in the Method's Framing:** This mathematical confusion leads to a complete contradiction in how the paper frames its own contribution. The methodology section is titled "On-Policy Self-Distillation" (Section 3.2.2). Standard distillation aims to minimize the reverse KL divergence ($D_{KL}(\pi_{teacher} || \pi_{student})$). However, the conclusion explicitly repudiates this framing, stating the method is "best understood not as self-distillation but as on-policy RL with reflection-guided exploration". A paper cannot introduce its method as one concept and conclude that it is, in fact, not that concept. This inconsistency reveals a fundamental lack of clarity about the method's mechanism and its relationship to prior work, which would likely lead to rejection.

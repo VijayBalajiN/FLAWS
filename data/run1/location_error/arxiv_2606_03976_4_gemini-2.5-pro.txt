@@ -1,0 +1,20 @@
+Error in assumptions (core conceptual)
+error:
+\begin{theorem}
+    \[
+    \mathbf{B}_{\mathcal{O, F}}^{*}(Z)=I(F;Z)-I(O;Z).
+    \]
+    Proof in Appendix \ref{pf:dpi}.
+\label{minusbinding}
+\end{theorem}
+\begin{theorem}
+    $\mathbf{B}_{\mathcal{O, F}}^{*}(Z)$ can be similarly written in entropy form:
+    \begin{equation}
+            \begin{gathered}
+         \mathbf{B}_{\mathcal{O, F}}^{*}(Z)=H(O\mid F)-H(O \mid Z, F )\\=H(F)-H(F\mid Z)-H(O)+H(O\mid Z).
+    \end{gathered}
+    \label{bindingcondexpanded}
+        \end{equation}
+Proof in Appendix \ref{pf:dpi}.
+\label{bindcondeq}  
+\end{theorem}

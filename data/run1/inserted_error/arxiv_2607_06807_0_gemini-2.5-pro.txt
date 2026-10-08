@@ -1,0 +1,26 @@
+:original_text:
+We maintain a fixed prototype $\mu_{\text{normal}}$ computed from initial 
+benign execution traces, leveraging the observation that high-level reasoning 
+patterns remain consistent across diverse task contexts despite varying 
+execution stages~\cite{zhang2025controlling}.
+
+:modified_text:
+We maintain a fixed prototype $\mu_{\text{normal}}$ computed from initial 
+benign execution traces, based on the principle that a shared LLM backbone 
+induces a common reasoning manifold, where minor activation variations from 
+diverse, role-specific contexts are treated as zero-mean noise that does not 
+shift the global centroid of benign behavior~\cite{zhang2025controlling}.
+
+:explanation:
+The introduced conceptual error is the flawed assumption that in a complex asynchronous Multi-Agent System (MAS), the diverse activation patterns from agents performing different roles (e.g., planner, reviewer, coder) can be simplified into a single "normal" prototype by treating role-specific differences as "zero-mean noise".
+
+This is theoretically unsound for several reasons:
+
+1.  **Role-Specific Prompts Create Distinct Activation Clusters:** The paper's own setup (Section 3.1) defines asynchronous agents with specialized roles (`r_i`) and role-specific prompts (`P_i`). These prompts are designed to elicit fundamentally different modes of reasoning. The activations of a "planner" agent will systematically occupy a different region of the embedding space than those of a "coder" agent. These are not minor, random variations but distinct, predictable clusters.
+
+2.  **Invalidation of the "Zero-Mean Noise" Assumption:** Treating these structured, role-induced variations as random noise that averages out to zero is a critical oversimplification. A single global prototype (`μ_normal`) would be a centroid of these disparate clusters, representing a "mean" behavior that no single agent might ever actually exhibit.
+
+3.  **Contradiction with High Performance Claims:** An expert would recognize that this methodological choice would lead to a high false positive rate, as normal agents performing specialized tasks far from the global average would be constantly flagged as anomalous. This makes the paper's claim of achieving a 0.93 F1 score in asynchronous settings highly implausible and suggests a fundamental flaw in the experimental design or the authors' understanding of activation space geometry in heterogeneous systems. A more robust approach would require role-conditioned prototypes or a more complex density model.
+
+:claim:
+The `AcMAS` framework, which analyzes internal agent activations, is significantly more effective at detecting malicious agents than graph-based methods that analyze communication patterns, especially in asynchronous Multi-Agent Systems (MAS). The paper claims it outperforms the best graph-based baseline by +0.22 F1 score in synchronous settings (0.94 vs 0.72) and by +0.55 F1 score in asynchronous settings (0.93 vs 0.38), where graph-based methods fail due to temporal misalignment.

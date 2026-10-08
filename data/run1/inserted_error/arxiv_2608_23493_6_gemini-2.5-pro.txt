@@ -1,0 +1,60 @@
+:original_text:
+Reverse KL possesses several desirable properties for our setting:
+(i) it is \emph{mode-seeking}, encouraging the student to commit to the teacher's preferred behavior rather than spreading probability mass across suboptimal alternatives;
+(ii) it provides an \emph{unhackable} reward signal, as low KL always corresponds to high probability under the teacher; and
+(iii) it naturally synergizes with policy gradient methods that optimize sequence-level reverse KL induced by reward models.
+:modified_text:
+Reverse KL possesses several desirable properties for our setting:
+(i) it is \emph{mode-seeking}, encouraging the student to explore high-reward modes identified by the teacher, thereby expanding its reasoning repertoire beyond suboptimal, high-entropy regions of the policy space;
+(ii) it provides an \emph{unhackable} reward signal, as low KL always corresponds to high probability under the teacher; and
+(iii) it naturally synergizes with policy gradient methods that optimize sequence-level reverse KL induced by reward models.
+:original_text:
+We presented \method{}, a post-training method that converts episode-level outcomes into hindsight-guided dense, reflection-augmented supervision, overcoming the inefficiency of sparse-reward RL. The mechanism is best understood not as self-distillation but as on-policy RL with reflection-guided exploration: reflection-conditioned teachers steer the student into high-reward regions of its \emph{own} policy space 
+ rather than imitating a distribution beyond its representational capacity. Across 10 benchmarks spanning math, code, agent, science, and logic, \method{} yields reproducible gains (multi-seed bootstrap CIs, $p<0.005$), matching or exceeding larger-teacher distillation while requiring $\sim$$3.8\times$ fewer total FLOPs than GRPO and naturally mitigating catastrophic forgetting under continual learning. Moving forward, we aim to refine reflection quality via external verification or better calibration, and to extend the framework beyond verifiable-outcome tasks, including multimodal reasoning and longer-horizon tool-use trajectories.
+:modified_text:
+We presented \method{}, a post-training method that converts episode-level outcomes into hindsight-guided dense, reflection-augmented supervision, overcoming the inefficiency of sparse-reward RL. The mechanism is best understood as a form of on-policy RL where the mode-seeking property of the reverse-KL objective serves as an exploration bonus: by forcing the student to cover the high-reward modes discovered by the reflection-augmented teacher, it effectively expands the policy's support to novel, correct reasoning paths rather than collapsing it onto a single, memorized trajectory. Across 10 benchmarks spanning math, code, agent, science, and logic, \method{} yields reproducible gains (multi-seed bootstrap CIs, $p<0.005$), matching or exceeding larger-teacher distillation while requiring $\sim$$3.8\times$ fewer total FLOPs than GRPO and naturally mitigating catastrophic forgetting under continual learning. Moving forward, we aim to refine reflection quality via external verification or better calibration, and to extend the framework beyond verifiable-outcome tasks, including multimodal reasoning and longer-horizon tool-use trajectories.
+:original_text:
+\begin{table}[h]
+\centering
+\caption{Solution-diversity probe on the 30 AIME'24 problems (10 samples per problem). The reflection-conditioned self-teacher \emph{expands} the student's reasoning-path entropy rather than contracting it, in contrast to a larger external teacher.}
+\label{tab:diversity}
+\vspace{0.4em}
+\small
+\begin{tabular}{@{}lcc@{}}
+\toprule
+\textbf{Method} & \textbf{Unique Paths / Problem} & \textbf{Novel Correct (\%)} \\
+\midrule
+OPD (Qwen3-72B teacher) & 2.3 & 8.4 \\
+\rowcolor{gray!15}
+\textbf{\method{} (self-reflection)} & \textbf{4.1} & \textbf{15.7} \\
+\bottomrule
+\end{tabular}
+\end{table}
+:modified_text:
+\begin{table}[h]
+\centering
+\caption{Solution-diversity probe on the 30 AIME'24 problems (10 samples per problem). The reflection-conditioned self-teacher \emph{expands} the student's reasoning-path entropy rather than contracting it—a direct consequence of the mode-seeking objective steering the policy toward new, high-reward regions—in contrast to a larger external teacher.}
+\label{tab:diversity}
+\vspace{0.4em}
+\small
+\begin{tabular}{@{}lcc@{}}
+\toprule
+\textbf{Method} & \textbf{Unique Paths / Problem} & \textbf{Novel Correct (\%)} \\
+\midrule
+OPD (Qwen3-72B teacher) & 2.3 & 8.4 \\
+\rowcolor{gray!15}
+\textbf{\method{} (self-reflection)} & \textbf{4.1} & \textbf{15.7} \\
+\bottomrule
+\end{tabular}
+\end{table}
+:explanation:
+The introduced error is a fundamental mischaracterization of the properties of reverse Kullback-Leibler (KL) divergence, which is the core optimization objective of the proposed SRPO method.
+
+The modified text incorrectly claims that the "mode-seeking" nature of reverse KL (`KL(student || teacher)`) leads to increased exploration and diversity of reasoning paths. Specifically, the modified conclusion states that this objective "effectively expands the policy's support to novel, correct reasoning paths."
+
+This is conceptually wrong. In machine learning and information theory, reverse KL is known to be "mode-seeking" precisely because it encourages the student policy to find and place all of its probability mass on a single, high-probability mode of the teacher distribution. This behavior typically leads to a *reduction* in entropy and diversity, as the policy learns to commit to one good solution rather than exploring many. The objective that encourages covering multiple modes and thus increases diversity is the *forward* KL divergence (`KL(teacher || student)`), which is explicitly ablated in the paper as being inferior.
+
+The error is subtle because it correctly uses the term "mode-seeking" but draws the opposite conclusion about its effect. It frames a mechanism for convergence and exploitation as a mechanism for exploration and diversity, directly undermining the paper's central claim about increasing the variety of reasoning paths. An expert would recognize this as a critical theoretical oversight.
+
+:claim:
+The SRPO training process increases the diversity of correct reasoning paths explored by the model. Compared to distillation from a larger external teacher, SRPO leads to a higher number of unique solution paths (4.1 vs. 2.3 per problem) for AIME'24.

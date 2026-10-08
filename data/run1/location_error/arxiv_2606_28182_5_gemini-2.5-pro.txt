@@ -1,0 +1,20 @@
+Error in assumptions (core conceptual)
+error:
+We propose \fullname (\name) -- a law-guided framework that addresses these challenges through failure-driven law extraction and failure-driven self-correction, as illustrated in Figure~\ref{fig:method}. Our method consists of three key components: (1) failure-driven law extraction, (2) law-guided failure correction, and (3) law-guided agent alignment. The framework enables both \textit{controllability} through human-editable laws and \textit{self-evolve}, allowing LLM-based embodied agents to improve autonomously without requiring supervision from human annotations or stronger models.
+error:
+\textbf{Law-Guided Correction Setup.} 
+
+With the laws $\mathcal{P}$ extracted from failure traces, we now have a set of principles to guide the agent's behavior. The next step is to use these laws to generate corrective training data directly from the episodes where the agent failed. This allows the model to learn directly from its mistakes, rather than from successful examples that may not cover all critical failure modes. This process ensures that the supervision is targeted at the specific weaknesses identified during law extraction.
+error:
+\textbf{Law-Guided Data Correction.} 
+For the failed episodes $\mathcal{E}_{\text{fail}}$, we generate law-guided supervision data by correcting the erroneous action sequences. For each failed episode $\mathcal{E}_j \in \mathcal{E}_{\text{fail}}$, we identify the critical time step $t$ where the first significant error occurred.
+
+At this critical step, we collect the corresponding observation history $\mathbf{o}_k^{\leq t}$ and the erroneous action $a_{k, \text{error}}^t$. We then prompt the backbone LLM to generate a corrected, law-guided reasoning trace and a new action that adheres to the laws:
+\begin{equation}
+(\text{Thought}_k^t, a_k^t)_{\text{corrected}} = f_\theta(\mathbf{o}_k^{\leq t}, a_{k, \text{error}}^t, \mathcal{P}, \mathcal{T}_{\text{correct}}),
+\end{equation}
+where $\mathcal{T}_{\text{correct}}$ is a prompt template that requires the model to analyze the error, reference a relevant law from $\mathcal{P}$, and propose a corrected thought and action. This self-correction process produces a law-guided training dataset
+\begin{equation}
+\mathcal{D}_{\text{law}} = \{(\mathbf{o}_k^{\leq t}, \text{Thought}_{k, \text{corrected}}^t, a_{k, \text{corrected}}^t)\},
+\end{equation}
+which explicitly provides corrective feedback for the model's failure patterns.

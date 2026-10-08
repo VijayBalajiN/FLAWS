@@ -1,0 +1,7 @@
+Error in assumptions (core conceptual)
+error:
+(iii) it is inherently regularizing. Because the teacher $\pi_T$ is a minimally-perturbed version of the student policy $\pi_\theta$, minimizing the KL divergence $\mathrm{KL}(\pi_\theta\|\pi_T)$ implicitly constrains $\pi_\theta$ to remain in the vicinity of its own distribution, replacing the need for an explicit KL penalty against a fixed reference policy $\pi_{\mathrm{ref}}$.
+error:
+This improved retention stems from the inherent self-regularization of the reverse-KL objective. By training the policy to stay close to its own reflection-augmented distribution, SRPO prevents the drastic policy shifts that cause catastrophic forgetting, without requiring an explicit KL penalty against the original reference policy.
+error:
+The key insight is that on-policy self-distillation via reverse KL divergence provides an all-in-one objective that combines reward maximization with implicit regularization. This self-contained mechanism obviates the need for explicit KL penalties against a reference model, as the policy is naturally constrained by its own reflection-augmented outputs.

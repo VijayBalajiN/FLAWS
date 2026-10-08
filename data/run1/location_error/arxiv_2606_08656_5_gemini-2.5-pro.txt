@@ -1,0 +1,5 @@
+Error in assumptions (core conceptual)
+error:
+We also study how the \emph{training horizon} (episode length during multi-turn GRPO training) influences long-horizon behavior. Figure~\ref{fig:training_turns} compares \method{} trained with $2$-turn versus $5$-turn rollouts for 10 consecutive games. Longer-horizon training yields consistently higher cumulative performance across game rounds, with the gap emerging after the initial exploration games and widening as evidence accumulates. This suggests that training with longer rollouts better teaches the memory model to preserve hypotheses, revise them when contradicted, and provide guidance that remains effective over extended interaction.
+error:
+\caption{Effect of training horizon on test-time learning performance. We compare memory models trained with shorter (2-turn) vs. longer (5-turn) rollouts, and plot cumulative performance over game rounds. Longer-horizon training yields more stable gains that accumulate over extended gameplay.}

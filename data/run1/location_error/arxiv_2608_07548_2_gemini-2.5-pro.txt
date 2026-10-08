@@ -1,0 +1,8 @@
+Error in algorithm/proof
+error:
+To form a baseline prediction that is independent of the latest observation, we leverage the world model's prior transition $f_p$ to anticipate the outcome from the previous latent state:
+$\tilde{\boldsymbol{s}}_{t+1} = f_{p}(\boldsymbol{s}_{t-1}^{(\Delta)}, \tilde{\boldsymbol{a}}_t).$
+error:
+Notably, $\boldsymbol{\Delta}_t$ is not a training target to be minimized, but a model-internal guidance signal that captures how the provisional action would steer the latent dynamics.
+error:
+\STATE \(\boldsymbol{\tilde{s}}_{t+1} = f_p(\boldsymbol{s}_{t-1}^{({\Delta})}, \boldsymbol{\tilde{a}}_t)\)

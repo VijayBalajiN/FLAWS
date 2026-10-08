@@ -1,0 +1,9 @@
+Error in assumptions (core conceptual)
+error:
+Since $\tilde{m}_i$ is computed over a subset of tokens, it serves as a strict lower bound on the true maximum ($ \tilde{m}_i \le m_i $). This property is key to the robustness of our method and allows the threshold $\tilde{m}_i - \delta$ to be computed using only locally available data, effectively bypassing the global reduction bottleneck and enabling independent parallel processing of KV blocks.
+error:
+\subsection{Pseudo-Max Robustness}
+A core design principle of FFD is the robustness of its Pseudo-Max approximation. By computing the maximum attention score $\tilde{m}_i$ over only the sink and local tokens, FFD establishes a strict lower bound on the true global maximum $m_i$. This is a structural guarantee: since the subset of tokens used for $\tilde{m}_i$ is a part of the full sequence, its maximum score can never exceed the global maximum.
+
+This property, $\tilde{m}_i \le m_i$, is not a limitation but a feature that creates a fail-safe mechanism for token selection. Recall our filtering condition: $s_{ij} \ge \tilde{m}_i - \delta$. Because $\tilde{m}_i$ is guaranteed to be a lower bound, the selection threshold $\tilde{m}_i - \delta$ is always more permissive than or equal to the ideal threshold, $m_i - \delta$.
+Consequently, any token that would be selected using the true global maximum is \textit{guaranteed} to be selected by the Pseudo-Max. The approximation can only cause FFD to become more conservative, retaining more tokens than strictly necessary, never fewer. This structural asymmetry ensures that approximation errors translate only into a minor, bounded increase in I/O budget (an efficiency trade-off), while completely preventing the loss of critical information (an accuracy guarantee).

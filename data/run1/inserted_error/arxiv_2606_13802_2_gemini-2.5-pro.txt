@@ -1,0 +1,52 @@
+:original_text:
+The \texttt{update} step adapts the remaining future after an accepted prediction. It removes operations whose effects are already satisfied, prepends inverses for any false positives, and verifies that the adapted sequence still reaches the target state (like the partial \textsf{\small fill} in Figure~\ref{fig:introExample}).
+A final \texttt{patch} step simulates the adapted future and synthesizes corrections for any residual discrepancies, ensuring the updated sequence always produces the original target state.
+:modified_text:
+The \texttt{update} step adapts the remaining future after an accepted prediction. It performs a greedy match between the predicted operations and the future sequence. Predicted operations that have an exact syntactic match in the future are considered true positives, and are removed from the future. Any predicted operations without an exact match are considered false positives; their corresponding inverse operations are prepended to the future sequence. This models a user who accepts correct suggestions and immediately undoes any errors before proceeding.
+:original_text:
+def update(F, P, S):
+    S$_\texttt{p}$ $\leftarrow$ execute(P, S)
+    S$_\texttt{f}$ $\leftarrow$ execute(F, S_p)
+    F$^\prime$ $\leftarrow$ []
+    // remove satisfied operations and only keep
+    for op in F:
+        if not satisfied(op, S$_\texttt{p}$):
+            F$^\prime$ += residual(op, S$_\texttt{p}$)
+    // undo false positives with inverse operations
+    for p in false_pos(S$_\texttt{p}$, S$_\texttt{f}$):
+        F$^\prime$ $\leftarrow$ [invert(p)] + F$^\prime$
+    // verify and patch
+    if execute(F$^\prime$, S$_\texttt{p}$) $\neq$ S$_\texttt{f}$:
+        F$^\prime$ $\leftarrow$ patch(F$^\prime$, S$_\texttt{p}$, S$_\texttt{f}$)
+    return F'
+:modified_text:
+def update(F, P, S):
+    F_prime $\leftarrow$ list(F)
+    P_unmatched $\leftarrow$ list(P)
+    // Find true positives (exact matches) and remove
+    // them from the future sequence.
+    for p_op in P:
+        if p_op in F_prime:
+            F_prime.remove(p_op)
+            P_unmatched.remove(p_op)
+
+    // Prepend inverse operations for all unmatched
+    // predictions (false positives).
+    for p_op in reversed(P_unmatched):
+        F_prime.insert(0, invert(p_op))
+        
+    return F_prime
+:explanation:
+The conceptual error introduced is a shift in the core logic of the online evaluation's `update` function, from a robust, state-based semantic comparison to a brittle, syntactic one.
+
+1.  **Original Logic (Correct):** The original `update` function correctly simulates the spreadsheet's state after a prediction (`S_p`) and compares it to the target state. It identifies which future operations are already `satisfied` (semantically complete), calculates `residual` operations for partial completions, identifies `false_pos` based on state differences, and uses a `patch` function to guarantee the new action sequence still reaches the final target state. This is a sound, state-space approach.
+
+2.  **Modified Logic (Flawed):** The modified `update` function abandons state-based checks entirely. It relies on "exact syntactic match" (`p_op in F_prime`) to identify true positives. This is a critical flaw for several reasons:
+    *   **No Partial Credit:** It cannot handle partially correct predictions. For example, if the ground truth is `fill(A1:A10, blue)` and the model predicts `fill(A1:A5, blue)`, the modified logic will see no exact match and incorrectly classify the prediction as a false positive, adding an unnecessary "undo" operation.
+    *   **Syntactic Brittleness:** It cannot recognize semantically equivalent but syntactically different operations (e.g., `font(A1:A2, bold, true)` vs. two separate operations `font(A1, bold, true)` and `font(A2, bold, true)`).
+    *   **No State Guarantee:** By removing the state simulation and the `patch` step, the new sequence of future actions is no longer guaranteed to reproduce the original target spreadsheet. State drift can occur after an accepted prediction.
+
+This error fundamentally undermines the paper's key claim. The evaluation framework is presented as a "more realistic measure of a system's utility," but the flawed update logic miscalculates the remaining user effort (`L_final`) and, consequently, the primary metric "User Actions Saved" (UAS). The evaluation is no longer a reliable or realistic simulation of user interaction. A subtle clue for a careful reader is that the `S` (state) parameter is passed to the modified `update` function but is never used.
+
+:claim:
+An online evaluation framework that dynamically updates the ground-truth based on accepted predictions provides a more realistic measure of a system's utility than a static, offline (teacher-forced) evaluation, as it accounts for compounding errors and the system's ability to revise its own suggestions.

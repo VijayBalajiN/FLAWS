@@ -1,0 +1,27 @@
+Error in implementation
+error:
+Considering practical applications, validation on 'in-the-wild' datasets is necessary. Real-world images often suffer from complex post-processing (e.g., re-compression, resizing) and originate from diverse, unknown sources. To address this, we selected WildRF~\citep{cavia2024real} and AIGI-Bench~\citep{li2025aigi}, which comprise data collected from social media platforms (e.g., Facebook, Reddit, Twitter) and online communities. As shown in Table~\ref{tab:wild}, our method consistently outperforms SOTA competitors by a significant margin. 
+This validates our model's robustness and its ability to generalize effectively to unconstrained scenarios where low-level artifacts are often degraded.
+error:
+\begin{table}[t]
+\centering
+\caption{Performance (ACC (\%)) on WildRF~\citep{cavia2024real} and AIGI-Bench~\citep{li2025aigi}, two benchmarks designed to reflect wild scenario and evaluate the robustness of detectors. }
+\label{tab:wild}
+\resizebox{\linewidth}{!}{
+\begin{tabular}{l|cccccccccc}
+\toprule
+\multirow{2}{*}{Method} & \multicolumn{4}{c}{\textit{WildRF}} & \multicolumn{3}{c}{\textit{AIGI Bench}}\\
+\cmidrule(lr){2-5}\cmidrule(lr){6-8}
+ & FaceBook & Reddit & Twitter & \textbf{AVG} & SocialRF & CommunityAI & \textbf{AVG} \\
+\midrule
+FatFormer & 64.38  & 76.65 & 40.00 & 60.34 &57.98 &50.62 &54.30 \\
+CO-SPY    & 50.00  & 56.79 & 73.30 & 60.03 &55.54 &53.02 &54.28 \\
+C2P-CLIP  & 54.38  & 68.40 & 47.27 & 56.68  &53.13 &50.98 &52.06 \\
+SAFE      & 62.50  & 61.70 & 40.33 & 54.84 &58.00 &54.25 &56.13 \\
+AIDE      & 75.00  & 55.48 & 48.00 & 59.49 &57.80 &54.15 &55.98 \\
+\midrule
+\textbf{Deep-VRM} & \textbf{85.94} & \textbf{91.07} & \textbf{91.53} & \textbf{89.51} &\textbf{83.68} &\textbf{97.28} &\textbf{90.48} \\ 
+\bottomrule
+\end{tabular}
+}
+\end{table}

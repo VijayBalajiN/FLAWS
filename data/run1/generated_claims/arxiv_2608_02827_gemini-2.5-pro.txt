@@ -1,0 +1,13 @@
+Based on the LaTeX source provided, here are the major, unique, and falsifiable claims made in the paper:
+
+1.  The emergence of a collective biased norm in multi-agent LLM debates is a finite-size crossover phenomenon, consistent with a theoretical phase transition. Low sampling temperature (low noise) amplifies weak initial biases in individual LLMs into a strong, system-wide biased consensus.
+
+2.  Agent heterogeneity within a debate suppresses the emergence of a biased collective norm by smoothing (rounding) the sharp transition to consensus.
+
+3.  A heterogeneous population of agents, created by mixing different LLM models (e.g., GPT, Llama, DeepSeek), exhibits weaker biased consensus compared to a homogeneous population of agents from a single LLM family.
+
+4.  A heterogeneous population of agents, created by assigning a mix of different sampling temperatures to individual agents, exhibits reduced collective bias and improved task performance on realistic decision-making tasks like investment recommendation and LLM-as-a-judge evaluation.
+
+5.  Reducing the interaction density among LLM agents (i.e., using a sparse interaction topology where agents see only a subset of other agents' opinions) suppresses the formation of a biased collective norm.
+
+6.  The degree of agent conformity can be controlled through prompting; specifically, prompting agents with sycophantic personas increases conformity and strengthens the emergence of biased consensus.

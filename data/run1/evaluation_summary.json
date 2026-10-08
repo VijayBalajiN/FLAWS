@@ -1,0 +1,202 @@
+{
+ "arxiv_2606_06572#3": {
+  "identified": false,
+  "by_levenshtein": false,
+  "by_llm_judge": false
+ },
+ "arxiv_2606_06572#2": {
+  "identified": false,
+  "by_levenshtein": false,
+  "by_llm_judge": false
+ },
+ "arxiv_2606_19341#8": {
+  "identified": false,
+  "by_levenshtein": false,
+  "by_llm_judge": false
+ },
+ "arxiv_2606_19341#1": {
+  "identified": false,
+  "by_levenshtein": false,
+  "by_llm_judge": false
+ },
+ "arxiv_2606_15880#5": {
+  "identified": false,
+  "by_levenshtein": false,
+  "by_llm_judge": false
+ },
+ "arxiv_2606_15880#1": {
+  "identified": false,
+  "by_levenshtein": false,
+  "by_llm_judge": false
+ },
+ "arxiv_2606_25325#2": {
+  "identified": false,
+  "by_levenshtein": false,
+  "by_llm_judge": false
+ },
+ "arxiv_2606_25325#4": {
+  "identified": false,
+  "by_levenshtein": false,
+  "by_llm_judge": false
+ },
+ "arxiv_2609_00097#1": {
+  "identified": false,
+  "by_levenshtein": false,
+  "by_llm_judge": false
+ },
+ "arxiv_2609_00097#5": {
+  "identified": true,
+  "by_levenshtein": true,
+  "by_llm_judge": true
+ },
+ "arxiv_2608_07952#5": {
+  "identified": true,
+  "by_levenshtein": true,
+  "by_llm_judge": true
+ },
+ "arxiv_2608_07952#3": {
+  "identified": false,
+  "by_levenshtein": false,
+  "by_llm_judge": false
+ },
+ "arxiv_2606_03976#1": {
+  "identified": true,
+  "by_levenshtein": false,
+  "by_llm_judge": true
+ },
+ "arxiv_2606_03976#2": {
+  "identified": false,
+  "by_levenshtein": false,
+  "by_llm_judge": false
+ },
+ "arxiv_2608_02827#3": {
+  "identified": false,
+  "by_levenshtein": false,
+  "by_llm_judge": false
+ },
+ "arxiv_2608_02827#5": {
+  "identified": false,
+  "by_levenshtein": false,
+  "by_llm_judge": false
+ },
+ "arxiv_2606_12146#5": {
+  "identified": false,
+  "by_levenshtein": false,
+  "by_llm_judge": false
+ },
+ "arxiv_2606_12146#4": {
+  "identified": false,
+  "by_levenshtein": false,
+  "by_llm_judge": false
+ },
+ "arxiv_2606_25450#6": {
+  "identified": false,
+  "by_levenshtein": false,
+  "by_llm_judge": false
+ },
+ "arxiv_2606_25450#2": {
+  "identified": false,
+  "by_levenshtein": false,
+  "by_llm_judge": false
+ },
+ "arxiv_2606_03066#4": {
+  "identified": false,
+  "by_levenshtein": false,
+  "by_llm_judge": false
+ },
+ "arxiv_2606_03066#2": {
+  "identified": false,
+  "by_levenshtein": false,
+  "by_llm_judge": false
+ },
+ "arxiv_2608_23493#7": {
+  "identified": true,
+  "by_levenshtein": true,
+  "by_llm_judge": true
+ },
+ "arxiv_2608_23493#10": {
+  "identified": false,
+  "by_levenshtein": false,
+  "by_llm_judge": false
+ },
+ "arxiv_2606_05793#1": {
+  "identified": false,
+  "by_levenshtein": false,
+  "by_llm_judge": false
+ },
+ "arxiv_2606_05793#0": {
+  "identified": true,
+  "by_levenshtein": true,
+  "by_llm_judge": true
+ },
+ "arxiv_2606_28182#4": {
+  "identified": false,
+  "by_levenshtein": false,
+  "by_llm_judge": false
+ },
+ "arxiv_2606_28182#0": {
+  "identified": true,
+  "by_levenshtein": true,
+  "by_llm_judge": true
+ },
+ "arxiv_2606_09145#3": {
+  "identified": false,
+  "by_levenshtein": false,
+  "by_llm_judge": false
+ },
+ "arxiv_2606_09145#5": {
+  "identified": false,
+  "by_levenshtein": false,
+  "by_llm_judge": false
+ },
+ "arxiv_2607_06807#0": {
+  "identified": true,
+  "by_levenshtein": false,
+  "by_llm_judge": true
+ },
+ "arxiv_2607_06807#5": {
+  "identified": true,
+  "by_levenshtein": true,
+  "by_llm_judge": true
+ },
+ "arxiv_2607_09921#2": {
+  "identified": false,
+  "by_levenshtein": false,
+  "by_llm_judge": false
+ },
+ "arxiv_2607_09921#1": {
+  "identified": false,
+  "by_levenshtein": false,
+  "by_llm_judge": false
+ },
+ "arxiv_2606_08656#1": {
+  "identified": true,
+  "by_levenshtein": true,
+  "by_llm_judge": true
+ },
+ "arxiv_2606_08656#0": {
+  "identified": true,
+  "by_levenshtein": true,
+  "by_llm_judge": true
+ },
+ "arxiv_2608_07548#1": {
+  "identified": false,
+  "by_levenshtein": false,
+  "by_llm_judge": false
+ },
+ "arxiv_2608_07548#2": {
+  "identified": true,
+  "by_levenshtein": false,
+  "by_llm_judge": true
+ },
+ "arxiv_2606_13802#7": {
+  "identified": false,
+  "by_levenshtein": false,
+  "by_llm_judge": false
+ },
+ "arxiv_2606_13802#11": {
+  "identified": false,
+  "by_levenshtein": false,
+  "by_llm_judge": false
+ }
+}

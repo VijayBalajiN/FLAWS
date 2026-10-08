@@ -1,0 +1,12 @@
+:error_text:
+If AI outputs truly match HTL quality in a domain, displacement of high-cost production may represent efficient reallocation rather than market failure. We acknowledge this possibility for terminal-consumption goods where quality convergence is genuine. Our analysis concerns domains where quality differences remain socially meaningful because deep human learning matters for downstream research, training data quality, evaluator capacity, and novel problem-solving. In these domains, market-level adverse selection operates even when the quality gap is real and consequential.
+
+:error_text:
+Let $q_H$ and $q_L$ denote the expected payoff-equivalent values of HTL-intensive and low-HTL outputs, measured in the same units as verification cost. The quality gap $\Delta q = q_H - q_L > 0$ captures the payoff stakes of correct classification for a single output.
+
+:explanation:
+The paper's core thesis, stated in the first excerpt, is that "value collapse" is a form of adverse selection where a real and consequential quality gap between human (HTL) and AI-generated work persists, but the market fails to reward it. The second excerpt defines this quality gap as $\Delta q > 0$.
+
+However, the formalism used for Stage 4 in Figure 4, labeled "Source-blind", sets the condition for this stage as $\Delta q \to 0$. This mathematical condition implies that the quality gap is vanishing. This represents "quality convergence," a scenario the first excerpt explicitly distinguishes from the paper's own argument and identifies as "efficient reallocation rather than market failure."
+
+This creates a fundamental contradiction: the formalism for the most advanced stage of value collapse describes a situation that, according to the paper's own prose, is not a market failure at all. The model for Stage 4 undermines the paper's central claim by formalizing the very alternative hypothesis it is trying to refute.

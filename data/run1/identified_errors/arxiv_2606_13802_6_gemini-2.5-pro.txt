@@ -1,0 +1,20 @@
+:error_text:
+\textsc{greedy}   & $\ell{\geq}1$                & 22.3 & 20.0 & 36.0 & 19.6 \\
+
+:error_text:
+\textsc{p100}     & $p{=}1$                      & 19.9 & 21.8 & 38.2 & 20.1 \\
+
+:error_text:
+Precision measures correctness of \emph{individual} predicted properties, not whether a prediction actually advances the user toward completion; a heuristic that ignores utility leaves savings on the table.
+
+:error_text:
+\emph{Rejected} predictions are subpar throughout and follow the opposite, slightly declining trend ($\sim$3.5\% $\to$ $\sim$1.5\%).
+
+:explanation:
+The primary and most severe error is a logical contradiction in the experimental results presented in Table 4, which fundamentally undermines the claims about acceptance heuristics.
+
+A prediction with perfect precision (`p=1`) means it has zero false positives or mismatches. For any non-empty prediction with `p=1`, the number of saved user actions (`ℓ`) must be at least one, because the prediction correctly performs tasks the user would have otherwise done manually, and no corrective actions are needed. Therefore, any prediction accepted by the `p100` heuristic (which requires `p=1`) must also be accepted by the `greedy` heuristic (which requires `ℓ ≥ 1`).
+
+This implies that the set of predictions accepted under the `p100` heuristic is a subset of those accepted under the `greedy` heuristic. Consequently, the Acceptance Rate (AR) for `p100` must be less than or equal to the AR for `greedy`. However, Table 4 reports an AR of 21.8% for `p100` and only 20.0% for `greedy`. This contradiction suggests a critical flaw in the evaluation framework, the implementation of the heuristics, or the reported data, invalidating the conclusions drawn from this table, such as the claim that "a heuristic that ignores utility leaves savings on the table."
+
+A secondary error exists in the "Overpredictions" paragraph. The text describes the trend for rejected predictions as "the opposite, slightly declining trend." This is self-contradictory, as a trend cannot be both "opposite" to a declining one (which would be increasing) and also "declining." This indicates a lack of care in the analysis and reporting of results.

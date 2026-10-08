@@ -1,0 +1,27 @@
+Here are the modifications to introduce the conceptual error into the research paper.
+
+:original_text:
+We instantiate this formulation with a multi-scale regular-simplex wave-vector design, which provides non-degenerate spatial coverage and a symmetric, directionally balanced second-order response.
+:modified_text:
+We instantiate this formulation with a multi-scale regular-simplex wave-vector design, which induces a maximally symmetric, periodic lattice in real space that provides a stable geometric reference frame.
+:original_text:
+Thus, the regular simplex provides a compact, non-axis-aligned, and maximally symmetric wave-vector set for nD-RoPE.
+:modified_text:
+Thus, the regular simplex provides a compact, non-axis-aligned, and maximally symmetric wave-vector set for nD-RoPE. The resulting superposition of plane waves creates a crystalline, periodic structure in real space (e.g., a hexagonal lattice in 2D). This regularity provides a stable, globally consistent coordinate system that is less susceptible to the distortions caused by resolution scaling, as the geometric relations within the lattice are preserved up to a scaling factor.
+:original_text:
+This robustness stems from the regular simplex frequency construction, which provides isotropic coverage of the frequency space and avoids privileging specific coordinate axes, leading to relative positional representations that remain stable under scale shifts.
+:modified_text:
+This robustness stems from the regular simplex frequency construction. By inducing a highly symmetric and periodic spatial lattice, it establishes a globally coherent geometric reference frame. Unlike axis-aligned or randomly oriented frequencies, this crystalline structure ensures that relative positional relationships scale predictably, leading to representations that remain stable and well-conditioned even far outside the training distribution.
+:explanation:
+The conceptual error introduced is the flawed assertion that the highly regular, periodic spatial lattice created by the simplex wave-vector construction is the reason for superior extrapolation. The modified text argues that this "crystalline structure" acts as a "stable geometric reference frame" that scales predictably.
+
+From a signal processing and geometric learning perspective, this reasoning is incorrect. The difficulty in extrapolation arises from aliasing effects when the input's discrete sampling grid (e.g., pixel resolution) changes relative to the fixed frequencies of the positional encoding.
+
+1.  **Brittleness of Regularity:** A highly regular, periodic structure is particularly susceptible to aliasing and moiré patterns when the sampling rate changes. Instead of degrading gracefully, its performance is likely to be brittle, suffering sharp drops when scaling factors create harmonic interference with the lattice's fixed periods.
+2.  **Misinterpretation of Stability:** The paper's new argument is that the lattice is "stable" because its internal geometry is preserved under continuous scaling. This is true for the continuous mathematical construct but is irrelevant for the discrete, sampled representation the model actually processes. How the scaled input samples this underlying lattice is what matters, and this interaction is precisely the source of instability.
+3.  **Contradiction with Robust Design:** More robust systems often degrade more gracefully because they rely on less structured or even random frequencies (as in Random Fourier Features), which are less prone to catastrophic, global aliasing patterns.
+
+In essence, the error mistakes the mathematical elegance of a symmetric, periodic structure for practical robustness in a discrete, sampled system. It provides a plausible-sounding but theoretically weak justification for the model's extrapolation capabilities, undermining the paper's core claim by attributing its success to a feature that is actually a significant liability for generalization across scales.
+
+:claim:
+Models using nD-RoPE demonstrate superior extrapolation capabilities, showing slower performance degradation when evaluated on data with resolutions or point densities outside of the training distribution, compared to models using other RoPE variants.

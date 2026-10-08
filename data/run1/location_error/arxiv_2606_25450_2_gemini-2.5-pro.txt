@@ -1,0 +1,11 @@
+Incorrect or incomplete analysis
+error:
+RL converts memorization into near-transfer more efficiently than SFT-family baselines, while ICL exhibits strong transfer only when instance correspondence is preserved, failing to generalize at an abstract, categorical level.
+error:
+...while paired ICL stays strong through the instance-paired levels ($D_0$--$D_2$) and then drops at the category-matched and unpaired levels ($D_3$--$D_4$), exposing its reliance on surface-level pattern matching and inability to generalize abstract concepts.
+error:
+and paired ICL remains strong across instance-paired levels before collapsing once the task requires abstract category-level generalization rather than instance-level matching.
+error:
+Paired ICL shows impressive gains across $D_0$--$D_2$ when the oracle retriever provides the matched seed example, but drops once the target is only category-matched or unpaired. Random ICL performs \emph{worse} than the base model, highlighting a fundamental limitation of context-based adaptation: it operates on surface-level pattern matching and fails to form abstract, transferable representations of algorithmic categories.
+error:
+Paired ICL remains strong through the instance-paired levels ($D_0$--$D_2$), including narrative recontextualization, but drops once the target is only category-matched or unpaired, exposing its inability to generalize via abstract representations, a key limitation compared to gradient-based adaptation.

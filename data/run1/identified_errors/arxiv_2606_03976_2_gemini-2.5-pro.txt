@@ -1,0 +1,21 @@
+:error_text:
+\[
+    \mathbf{B}_{\mathcal{O, F}}^{*}(Z)=I(O;Z)-I(F;Z).
+    \]
+    Proof in Appendix \ref{pf:dpi}.
+
+:error_text:
+Adding Eqs. \ref{eq:f} and \ref{eq:b}, we have $I(F;Z)+\mathbf{B}_{\mathcal{O}}(Z)=H(O, F)-H(O,F\mid Z)=H(F)-H(O\mid Z)=I(O;Z).$
+    The penultimate equality is due to the fact that $F$ is a deterministic function of $O$.
+
+:error_text:
+By the chain rule of information, \[I(Z_i;O\mid F)=I(Z_i;O\mid F)+I(Z_j; O\mid F, Z_i)=I(Z_i, Z_j; O\mid F)=I(Z_j; O\mid F)+I(Z_i; O\mid F, Z_j)\geq I(Z_j; O\mid F).\]
+
+:explanation:
+The paper's primary contribution is to provide a rigorous, information-theoretic formalization of the binding problem. However, the mathematical proofs provided for its core theorems are fundamentally flawed, which severely undermines this central claim.
+
+The most serious error lies in the proof of Theorem 2.8, a result that is crucial for the definition and calculation of conditional binding information used throughout the experiments. The provided proof contains an incorrect algebraic step. Specifically, the equality $H(O, F)-H(O,F\mid Z)=H(F)-H(O\mid Z)$ is false. Given that the feature code $F$ is a deterministic function of the object code $O$, the correct identity is $H(O, F)-H(O,F\mid Z) = H(O)-H(O\mid Z) = I(O;Z)$. The proof incorrectly equates this to $H(F)-H(O\mid Z)$, which would erroneously imply $H(O)=H(F)$. While the theorem statement itself is correct, the flawed proof indicates a critical misunderstanding of basic information theory.
+
+A second, similar error appears in the proof for the Data Processing Inequality (Theorem B.1 in the appendix). The first step of the derivation, "$I(Z_i;O\mid F)=I(Z_i;O\mid F)+I(Z_j; O\mid F, Z_i)$", is logically nonsensical as it equates a quantity $A$ to $A+B$ where $B$ is non-negative.
+
+For a paper that aims to "formalize" a concept, such erroneous proofs for its foundational theorems are a major technical flaw that would likely lead to rejection from a peer-reviewed venue.

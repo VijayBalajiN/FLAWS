@@ -1,0 +1,27 @@
+:original_text:
+To tune the model with structured rewards, we employ GIGPO~\cite{feng2025group}, a variant of GRPO~\cite{guo2025deepseek} that introduces a hierarchical advantage estimation structure combined with both trajectory-level and step-level rewards. We sample a group of $N$ trajectories $\{\tau_1,\dots,\tau_N\}$ and combine a global trajectory-level relative advantage $A^T(\tau_n)$, which captures trajectory-level task efficiency $R_{\text{e}}(\tau_n \mid G_n)$, with a local step-level advantage $A^S(t^{(n)}_i)$ derived from fine-grained affective collaborative performance $R_{\text{a}}(t^{(n)}_i \mid P^{(n)}_{\text{sim}})$. This can be formalized as
+\begin{equation}
+    A(t^{(n)}_i) = A^T(\tau_n) + \omega \cdot A^S(t^{(n)}_i),
+\end{equation}
+where $\omega$ balances global task efficiency and local affective interaction quality. This advantage is then used to optimize the clipped policy objective:
+
+:modified_text:
+To tune the model with structured rewards, we employ GIGPO~\cite{feng2025group}, a variant of GRPO~\cite{guo2025deepseek} that introduces a hierarchical advantage estimation structure combined with both trajectory-level and step-level rewards. We sample a group of $N$ trajectories $\{\tau_1,\dots,\tau_N\}$ and combine a global trajectory-level relative advantage $A^T(\tau_n)$, which captures trajectory-level task efficiency $R_{\text{e}}(\tau_n \mid G_n)$, with the local step-level reward $R_{\text{a}}(t^{(n)}_i \mid P^{(n)}_{\text{sim}})$ directly, to provide a strong, unbiased signal for fine-grained affective performance. This can be formalized as
+\begin{equation}
+    A(t^{(n)}_i) = A^T(\tau_n) + \omega \cdot R_{\text{a}}(t^{(n)}_i \mid P^{(n)}_{\text{sim}}),
+\end{equation}
+where $\omega$ balances global task efficiency and local affective interaction quality. This advantage is then used to optimize the clipped policy objective:
+
+:explanation:
+The introduced error is a fundamental mistake in the application of reinforcement learning theory, specifically in the calculation of the advantage function.
+
+1.  **The Error:** The original paper correctly states that the total advantage at a given step, `A(t)`, is a combination of a trajectory-level advantage `A^T` and a step-level advantage `A^S`. The modified text changes this, incorrectly combining the trajectory-level advantage `A^T` with the raw, step-level affective reward `R_a`. The equation is changed from `A(t) = A^T + ω * A^S(t)` to `A(t) = A^T + ω * R_a(t)`.
+
+2.  **Why It's Wrong:** In policy gradient methods like PPO (and its variants GIGPO/GRPO), the advantage function (`A = R - V(s)`, where `V(s)` is a value-function baseline) is used to reduce the variance of the gradient estimate. It measures how much better or worse an action was compared to the expected outcome in that state. Using the raw reward `R` instead of the advantage `A` leads to a high-variance learning signal.
+
+    By mixing an advantage (`A^T`) with a raw reward (`R_a`), the resulting gradient signal `A(t)` becomes noisy and biased. The model is incentivized to chase high absolute affective rewards, even if those rewards are simply the expected outcome for a given state and not the result of a particularly good action. For example, an action leading to an affective reward of 0.8 is not advantageous if the expected reward in that state was 0.9. The modified formulation fails to make this crucial distinction, undermining the stability and effectiveness of the training process.
+
+3.  **Subtlety:** This error is subtle because the formula still looks plausible to a non-expert. It combines a global (trajectory) signal with a local (step) signal. The text even attempts to justify using the raw reward "to provide a strong, unbiased signal," which is a plausible but incorrect piece of reasoning a researcher might make. Detecting the error requires a solid understanding of why advantage functions are critical for variance reduction in modern reinforcement learning, making it a non-trivial conceptual oversight. This flaw directly weakens the paper's claim about the effectiveness of its "Collaborative Agentic Training" paradigm.
+
+:claim:
+The "Collaborative Agentic Training" paradigm, which combines a unified agentic rollout (reasoning, communication, action) with a hybrid reward (trajectory-level efficiency and step-level affective alignment), improves an LLM agent's collaborative ability, achieving 19.5% higher task efficiency and 24.4% better affective performance compared to its base model on the CollabBench benchmark.

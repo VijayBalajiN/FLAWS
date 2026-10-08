@@ -1,0 +1,7 @@
+:error_text:
+The results in Table 10 demonstrate that while fine-tuning all layers (No) performs comparably on standard datasets, our strategy of freezing early layers (Yes) significantly boosts performance on challenging in-the-wild benchmarks such as WildRF and AIGI-Bench. Consequently, our method achieves a higher average accuracy of 92.98%, validating that freezing early layers effectively prevents the forgetting of general semantic knowledge required for robust detection.
+
+:explanation:
+The conclusion drawn from Table 10 is an oversimplification that misrepresents the experimental results. The authors claim that freezing early layers is a superior strategy because it "significantly boosts performance" on wild benchmarks and achieves a higher average accuracy. However, the table shows that not freezing the early layers (the "No" column) achieves substantially better performance on the SynthBuster benchmark (98.62% vs 94.50%) and slightly better performance on GenImage (97.95% vs 97.42%).
+
+This indicates a performance trade-off, not a definitive solution. Freezing the early layers appears to improve generalization to noisy, "in-the-wild" data at the cost of peak performance on cleaner, synthetic-heavy benchmarks. By selectively highlighting only the results that support their hypothesis and ignoring contradictory evidence within the same table, the authors misrepresent the nature of their contribution. The finding is not a universal resolution to a "learning dilemma," but rather a method for managing a common accuracy-robustness trade-off.

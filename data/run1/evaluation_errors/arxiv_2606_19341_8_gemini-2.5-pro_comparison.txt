@@ -1,0 +1,28 @@
+**Identified Error 1:**
+Instead of relying on static QA annotations, we prompt a teacher model (e.g., Gemini-3.0-Pro) via in-context learning with the instruction template in Appendix B.5 to perform success-driven exploration in the environment Ω. For each query, we execute a best-of-N generation over the action space A to produce a diverse pool of candidate trajectories.
+
+:
+**INCORRECTLY IDENTIFIED**
+
+**Identified Error 2:**
+Since the textual memory decouples reasoning from raw media, we employ GPT-40 (OpenAI, 2024) to audit the internal coherence of the reasoning trace. GPT-40 evaluates whether the current Thought Tk is logically entailed by the accumulated memory Mk−1 and the immediate observation Ok on a 5-point Likert scale. This step filters out “lucky guesses”.
+
+:
+**INCORRECTLY IDENTIFIED**
+
+**Identified Error 3:**
+The model is optimized for 150 steps with a group size of 8, a constant learning rate of 1 × 10−6, and upper/lower clip ratios of 0.30 and 0.20, respectively. The global batch size is 256 on 64 NVIDIA A100 GPUs, and neither KL nor entropy regularization is applied.
+
+:
+**INCORRECTLY IDENTIFIED**
+
+**Identified Error 4:**
+Notably, on LVBench, our 7B agent outperforms the 10x larger Qwen2.5-VL-72B (50.5% vs. 47.3%).
+
+:explanation:
+The paper's primary flaw, ranked most serious, is the unacknowledged and heavy reliance on powerful, proprietary "teacher" models (Gemini-Pro, GPT-4o) to generate and filter the agent's training data. This introduces a massive confounding variable: the impressive performance of OmniAgent may not stem from the proposed agentic framework and training algorithms, but rather from successfully distilling the superior reasoning and world knowledge of these teacher models. The paper presents no ablation studies to disentangle the architectural contribution from the effect of the "oracle-like" training data. This is compounded by the critical and unaddressed risk that these teacher models may have been trained on the test data, which would completely invalidate the evaluation results.
+
+The second major flaw is the claim of effective refinement via Reinforcement Learning. The model is optimized for only "150 steps" (i.e., 150 gradient updates), which is an exceptionally small amount of training for RL. It is highly improbable that the model learns a robust, generalizable policy for complex, multi-turn reasoning in such a short period. This makes the contribution of the novel RL algorithm, TAURA, appear superficial and its effectiveness questionable.
+
+Finally, the paper makes misleading performance claims. The headline result that the 7B model outperforms a 10x larger 72B model is an apples-to-oranges comparison between a specialized agentic system and a passive, single-pass model. The latter is architecturally disadvantaged for these tasks, so the comparison overstates the smaller model's capabilities rather than demonstrating a fundamental modeling advantage.
+**INCORRECTLY IDENTIFIED**

@@ -1,0 +1,17 @@
+:error_text:
+\FOR{$u = 1$ to $T-1$}
+    \STATE $R_{i,u} \leftarrow r_{i,u+1}$
+\ENDFOR
+
+:error_text:
+To optimize the cumulative episode return in Eq.~\ref{eq:objective_mdp}, we estimate turn-level advantages using the full cumulative return from the current step, $R_{i,t} = \sum_{j=t}^{T-1} r_{i,j+1}$. This long-horizon signal is crucial for teaching the memory model to look beyond immediate outcomes and generate strategic insights that have lasting value. While this approach can introduce variance, it discourages myopic behaviors and encourages the learning of robust, far-sighted memory update policies that are essential for complex strategic adaptation.
+
+:error_text:
+We ablate reward design for training the memory model. We compare our approach of optimizing a cumulative return over memory-guided games with an alternative that uses a one-step per-turn assignment, crediting each memory update $m_t$ only by the next-game reward $r_{t+1}$. We find that cumulative returns are substantially more effective for learning complex strategies. Table~\ref{tab:reward_design} shows that the performance of the one-step reward is far below that of the cumulative reward, only achieving 0.61 on LHE. We attribute this to the myopic nature of one-step rewards, which pushes the memory model toward simple, reactive memories rather than strategic, far-sighted adaptation.
+
+:explanation:
+The paper's central claim is that its method, \method{}, succeeds by training the memory update process with a multi-turn reinforcement learning objective that uses a long-horizon, cumulative reward signal. This is emphasized in Section 3.2, which defines the turn-level return $R_{i,t}$ as the sum of all future rewards in the episode. The authors further argue for the importance of this design in an ablation study (Section 5.5), demonstrating that a cumulative reward signal is substantially more effective than a myopic, one-step reward signal.
+
+However, the official training procedure detailed in Algorithm 1 (Appendix A) fundamentally contradicts this claim. Lines 9-11 of the algorithm explicitly define the return for a given turn as the reward from the single next step ($R_{i,u} \leftarrow r_{i,u+1}$), which is the one-step reward design that the paper's own analysis dismisses as inferior.
+
+This is a critical flaw. The implementation described in the appendix does not match the method described in the main text. The paper's strong results are attributed to a long-horizon training approach, but the algorithm implements a myopic one, undermining the validity of the results and the paper's core methodological contribution.

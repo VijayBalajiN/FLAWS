@@ -1,0 +1,18 @@
+Error in assumptions (core conceptual)
+error:
+Specifically, for each law $p_i \in \mathcal{P}$, we prompt the backbone LLM to identify successful episodes that serve as positive exemplars of behavior that adheres to the law. The model assigns an alignment score for each episode-law pair:
+\begin{equation}
+s_{ij} = f_\theta(\mathcal{E}_j, p_i, \mathcal{T}_{exemplar}),
+\end{equation}
+where $\mathcal{T}_{exemplar}$ is a prompt template instructing the model to score how well the episode $\mathcal{E}_j$ illustrates a proactive adherence to the principle $p_i$. We retain episodes with a high average alignment score across all laws:
+\begin{equation}
+\mathcal{E}_{\text{retain}} 
+= \{ \mathcal{E}_j \mid \epsilon_{\text{succ}}^{(j)} = 1 \;\wedge\; \frac{1}{K}\sum_{i=1}^K s_{ij} \geq \sigma \},
+\end{equation}
+where $\sigma$ is a score threshold. This step selects for trajectories that not only succeed but do so in a manner that robustly embodies the discovered principles.
+error:
+For each action $a_k^t \in \mathbf{a}_j$ at time step $t$, we collect the corresponding observation history $\mathbf{o}_k^{\leq t}$ together with the executed action $a_k^t$. We then prompt the backbone LLM to generate a law-guided reasoning trace by treating the law as the cause and the action as the effect:
+\begin{equation}
+\text{Thought}_k^t = f_\theta(\mathbf{o}_k^{\leq t}, a_k^t, \mathcal{P}, \mathcal{T}_{\text{reflect}}),
+\end{equation}
+where $\mathcal{T}_{\text{reflect}}$ is a prompt template that requires the model to construct a deductive justification for the action, starting from one of the laws in $\mathcal{P}$ as a premise. This process ensures that every supervised action is explicitly and causally linked to a law, creating a tightly aligned training dataset.

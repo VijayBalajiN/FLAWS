@@ -1,0 +1,13 @@
+Based on the provided LaTeX source, here are the major, unique, and falsifiable claims made in the paper:
+
+1.  A dual-level self-correction mechanism for VLN-CE, which uses a world model's foresight to generate internal feedback for both state-level plan refinement and conditional model-level adaptation, improves navigation performance (specifically Success Rate and SPL) compared to an equivalent open-loop model.
+
+2.  Refining an agent's latent state at each timestep using a feedback signal derived from the discrepancy between the current state and a predicted future state (foresight) improves navigation success and efficiency before an action is executed.
+
+3.  Selectively updating the world model's parameters at test time, triggered when the internal feedback signal indicates a significant deviation between the provisional and final action plans, improves navigation performance and generalization in unseen environments more effectively than having no adaptation or using a fixed-interval adaptation scheme.
+
+4.  Calibrating the current visual representation by aggregating it with recent visual observations from an episodic memory (the Visual Calibration Module) leads to improved navigation performance within the SC²-WM framework by providing a more stable basis for latent-state inference.
+
+5.  Training the world model with a self-supervised objective to reconstruct future visual features from its predicted latent state is necessary for the effectiveness of the self-correction mechanism, and removing this reconstruction loss (`L_rec`) degrades performance.
+
+6.  The SC²-WM framework successfully transfers from simulation to the real world, demonstrating improved navigation success rates on a physical quadruped robot in indoor environments compared to a baseline model without the self-correction mechanism.

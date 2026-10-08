@@ -1,0 +1,5 @@
+Incorrect or incomplete analysis
+error:
+\paragraph{Impact of Video Duration.}
+\label{sec:duration}
+Table~\ref{tab:duration_breakdown} validates that OmniAgent effectively decouples reasoning complexity and context cost from video length. As video duration grows over $4\times$ ($\sim$30 to $\sim$130 min), the absolute number of reasoning turns remains nearly constant, growing negligibly from 8.5 to 12.5. This near-zero growth demonstrates that the textual memory trace does not expand in proportion to video length. Consequently, the sampling density drops sharply from 16.9 to 5.7 turns per hour, and accuracy remains stable (50.8\%) even at the lowest density. This confirms that because the reasoning trace length is invariant to video duration, the agent's context cost is successfully decoupled, allocating compute based on information density rather than temporal duration.

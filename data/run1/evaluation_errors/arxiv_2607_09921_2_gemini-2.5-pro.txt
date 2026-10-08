@@ -1,0 +1,18 @@
+:error_text:
+Test ... 84.0 ... 3.0 ... 14.4 ... 404 ... 1115 ... Feb 2025 - Dec 2025
+
+:error_text:
+We construct a historical sample of 1,648 public-target M&A deals covering the 4 year period from 1 January 2022 to 31 December 2025.
+
+:error_text:
+Teacher model for gold outputs gpt-5.1
+
+:error_text:
+7 GPT-5.1 0.214+ 0.110 0.103 0.244+ 0.245+
+
+:explanation:
+The paper's claims are based on an impossible timeline and non-existent models, which constitutes a fatal flaw in its experimental design and reproducibility.
+
+1.  **Evaluation on Future Data**: The most serious error is the use of a test set that extends into the future ("Feb 2025 - Dec 2025"). The paper is presented for a 2026 conference, meaning it was likely written in 2025. It is impossible for the authors to know the final outcomes of M&A deals announced in late 2025, as these processes can take many months to resolve. Therefore, the performance reported on the test set is not credible and invalidates the paper's central claims.
+
+2.  **Use of Hypothetical Models**: The paper relies on "gpt-5.1" and "GPT-5" for critical components of its methodology and evaluation. It is used as a "teacher model" to generate the gold-standard training data and also as a key performance baseline. As this model was not publicly available or documented at the time of writing, its use makes the core methodology non-reproducible and the baseline comparisons unscientific.

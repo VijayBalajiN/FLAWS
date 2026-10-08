@@ -1,0 +1,22 @@
+:error_text:
+Test       & 84.0 & 3.0 & 14.4 & 404 & 1115 & Feb 2025 -- Dec 2025 \\
+
+:error_text:
+\textbf{Overall} & 84.0 & 2.7 & 13.7 & 1648 & 4155 & Jan 2022 -- Dec 2025 \\
+
+:error_text:
+We distinguish between three mutually exclusive outcomes:
+\begin{enumerate}
+    \item $\SucceedPlus$: The deal closes as announced.
+    \item $\FailPlus$: The announced deal is terminated, but the target shareholders experience a \emph{positive} outcome as a higher bid emerges.
+    \item $\FailMinus$: The announced deal is terminated with a \emph{negative} outcome for target shareholders (no higher bid).
+\end{enumerate}
+
+:explanation:
+The paper's core claims are based on performance on a held-out test set. Table 1, which provides the summary statistics for the dataset, contains a fundamental mathematical error that invalidates its description.
+
+As defined in the paper, the three deal outcomes ($\SucceedPlus$, $\FailPlus$, $\FailMinus$) are mutually exclusive. Therefore, their percentage distributions must sum to 100%.
+
+However, for the test set, the reported percentages are 84.0%, 3.0%, and 14.4%, which sum to 101.4%. Similarly, for the overall dataset, the percentages are 84.0%, 2.7%, and 13.7%, which sum to 100.4%.
+
+This is a serious flaw. If the basic summary statistics of the dataset are incorrect, the integrity of the entire dataset, the evaluation, and the resulting conclusions are called into question. Such a conspicuous error in the description of the test set, which is the foundation for all of the paper's performance claims, would likely lead a reviewer to distrust the entire study and recommend rejection.

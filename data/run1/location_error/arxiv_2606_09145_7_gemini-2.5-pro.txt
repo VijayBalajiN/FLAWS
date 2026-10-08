@@ -1,0 +1,8 @@
+Error in assumptions (core conceptual)
+error:
+All operations are applied only to DP-compliant components obtained via DP-SGD, and incur no additional privacy cost due to the post-processing property of DP~\cite{dpbook}.
+error:
+Since all operations in this stage are pure post-processing of DP outputs, the post-processing property of DP ensures that no additional privacy leakage is incurred~\cite{dpbook}.
+error:
+Since all inputs to the utility-boosting stage
+are DP mechanism outputs in the privacy-sanitizing stage, and all subsequent steps operate without accessing the original sensitive data, the entire pipeline constitutes pure post-processing of DP outputs. By the post-processing property of DP, these operations introduce no additional privacy budget~\cite{dpbook}.

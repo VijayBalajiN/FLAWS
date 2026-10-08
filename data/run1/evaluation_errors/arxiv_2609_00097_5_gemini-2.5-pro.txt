@@ -1,0 +1,17 @@
+:error_text:
+As shown in Tables 1 and 2, FFD consistently outperforms Twilight by substantial margins on both benchmarks, while maintaining a clear advantage over Quest.
+
+:error_text:
+As shown in Figure 5, such gaps are rare and numerically negligible. Crucially, when they do occur, this underestimation represents the primary source of approximation error. ... This structural asymmetry ensures that approximation errors result only in a minor increase in I/O budget (efficiency penalty), rather than the loss of critical information (accuracy penalty).
+
+:error_text:
+For Quest, we utilize the official page size of P = 16. Fortunately, under this configuration, the memory footprint of the indices among these methods is equivalent to that of our 2-bit data for full scanning, which ensures a fair comparison.
+
+:explanation:
+The identified errors represent substantial technical flaws, ranked from most to least serious.
+
+1.  **Misrepresentation of Results**: The first excerpt claims that the proposed method, FFD, "consistently outperforms Twilight by substantial margins on both benchmarks". However, the paper's own data in Table 2 (LongBench Results) shows FFD achieving an average score of 26.35, while the Twilight baseline scores 26.18. This difference is negligible, not a "substantial margin", directly contradicting the authors' claim. Such misrepresentation of results undermines the credibility of the entire evaluation.
+
+2.  **Unsubstantiated Claims about a Core Mechanism**: The second excerpt discusses the error from using a "Pseudo-Max" approximation, a core component of the FFD algorithm designed to avoid costly global computations. The authors claim the approximation error gaps are "rare and numerically negligible" and result in only a "minor increase in I/O budget". However, their own Figure 5 shows that the error is greater than 0.01 in approximately 14% of cases, which cannot be considered "rare". Furthermore, no evidence is provided to quantify the resulting "efficiency penalty" to prove that it is indeed "minor". This unsubstantiated claim weakens the paper's central argument about the efficiency of its proposed algorithm.
+
+3.  **Questionable Fairness of Baseline Comparison**: The third excerpt justifies the experimental setup against a key baseline, Quest, by claiming a configuration was chosen that equates the memory footprint of Quest's metadata with FFD's 2-bit quantized data, ensuring a "fair comparison". This is an oversimplification. The core philosophies of the methods are different: Quest uses small metadata to *avoid* reading most of the data from memory, while FFD reads a compressed version of *all* the data. Equating only the storage size ignores the fundamental differences in I/O patterns and computational cost, potentially framing the comparison in a way that is unfavorable to the baseline method. This choice of a single, specific configuration for the baseline could be perceived as cherry-picking.

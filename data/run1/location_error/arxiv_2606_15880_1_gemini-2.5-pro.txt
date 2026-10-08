@@ -1,0 +1,17 @@
+Incorrect or incomplete analysis
+error:
+We further perform a layer-wise analysis of forensic signal perception in MLLMs, showing that semantic information is primarily formed in the deep layers, whereas direct fine-tuning for artifact learning disrupts these semantic representations.
+Based on this insight, we propose Deep Visual Residual MLLM (Deep-VRM) to \textit{inject artifact-specific visual signals as a residual path into an intermediate layer}, preparing them for joint processing with semantic representations in the subsequent trainable layers.
+error:
+Through a layer-wise analysis using linear probes, we observe that the separability of semantic features for discriminating real from fake images is primarily established and converges in the deep layers (see Figure ~\ref{fig:motivation3}).
+\textbf{This suggests that these deep layers are critical for high-level semantic reasoning, while the early-to-middle layers handle more foundational feature extraction. Forcing low-level artifact learning through the entire network can disrupt the formation of these high-level semantic features. }
+error:
+As shown in Figure~\ref{fig:motivation3}, detection accuracy for semantic anomalies ($D_1$) shows gradual improvement, peaking only in the final deep layers (post-layer 20), whereas artifact detection ($D_2$) remains ineffective throughout.
+This indicates that these final deep layers constitute the "semantic convergence zone".
+\begin{simplebox} 
+  \footnotesize \textbf{FINDING 2.} \textit{The deep layers of Native MLLMs are critical for forming semantic representations.} 
+\end{simplebox}
+These findings explain why full fine-tuning compromises semantic capabilities: forcing the deep layers, which are specialized for semantics, to also process low-level artifact cues disrupts their established reasoning process.
+error:
+Conversely, intermediate injection (Depth 16) introduces forensic signals at an optimal point, allowing sufficient subsequent layers for joint reasoning before the final semantic convergence zone.
+This configuration allows the injected features to be refined and integrated before reaching the critical deep layers, motivating our choice of Depth 16 as the default setting.

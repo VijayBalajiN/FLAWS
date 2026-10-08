@@ -1,0 +1,30 @@
+:error_text:
+Given a code snippet $c = (c_1, \dots, c_T)$, we first obtain its contextualized representation via a frozen forward pass of the junior model $\mathcal{M}_J$: $h^c = f_{\mathcal{M}_J}(c)$, where $h^c \in \mathbb{R}^{T \times d}$ is the final-layer token representations, and $d$ is the dimension of the final-layer.
+
+:error_text:
+Given a sensitive instruction $p = (p_1, \dots, p_L)$, we first obtain its contextualized representation via the same frozen model:
+$h^p = f_{\mathcal{M}_J}(p),
+\;
+z^p = E^p(h^p)$
+, where $h^p \in \mathbb{R}^{L \times d}$ denotes the final-layer token representations of the instruction produced by the frozen model $\mathcal{M}_J$, and $z^p$ is the latent representation encoded by $E^p$.
+
+:error_text:
+\STATE Update $\mathcal{M}_J$, $D$ using $\mathcal{L}_{\text{CE}}(c \mid \mathbf{e}_{\text{prefix}}) + \mathcal{L}_{\text{KL}}^{\text{AST}}(\mathcal{M}_J)$;
+
+:error_text:
+\noindent\textbf{Junior Model $\mathcal{M}_J$.} Optimized for latent-conditioned code generation with syntax preservation:
+\begin{equation}
+\mathcal{L}_{\mathcal{M}_J} = \mathcal{L}_{\text{CE}}(c \mid \mathbf{e}_{\text{prefix}}) + \lambda_{\text{AST}}(t) \cdot \mathcal{L}_{\text{KL}}^{\text{AST}},
+\end{equation}
+where $\mathcal{L}_{\text{CE}}(c \mid \mathbf{e}_{\text{prefix}}) = -\sum_{t=1}^{T} \log P_{\mathcal{M}_J}(c_t \mid \mathbf{e}_{\text{prefix}}, c_{<t})$ is the autoregressive cross-entropy loss conditioned on prefix embeddings $\mathbf{e}_{\text{prefix}} \in \mathbb{R}^{K \times d}$, and $\mathcal{L}_{\text{KL}}^{\text{AST}}$ is the syntax-aware KL regularization (detailed derivation in Appendix~\ref{app:ast loss}).
+
+:explanation:
+The paper's methodology contains a fundamental contradiction regarding the state of the junior model, $\mathcal{M}_J$, during the privacy-sanitizing stage.
+
+1.  Section 3.2 explicitly states that representations for both the sensitive code ($c$) and prompt ($p$) are obtained via a "frozen forward pass" of the junior model $\mathcal{M}_J$, referring to it as the "same frozen model."
+
+2.  Conversely, Algorithm 1 and Appendix A.2 unequivocally state that the junior model $\mathcal{M}_J$ is being "updated" and "optimized" during the same training stage using DP-SGD.
+
+A model cannot be simultaneously "frozen" and actively "optimized." This contradiction makes the described method incoherent.
+
+This flaw has severe implications for the paper's claims. If the model is indeed frozen, it is not being fine-tuned on the sensitive data, invalidating the core premise of the paper. If "frozen" implies detaching gradients, it means the junior model's parameters are not updated based on the sensitive prompts. This would severely undermine the model's ability to learn the mapping from prompts to code, calling into question both the utility of the generated code and the meaningfulness of the privacy guarantee for prompts. The core technical contribution is thus ill-defined and unsubstantiated.

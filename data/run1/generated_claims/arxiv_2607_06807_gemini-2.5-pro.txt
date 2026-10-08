@@ -1,0 +1,17 @@
+Based on the provided LaTeX source, here are the major, unique, and falsifiable claims made in the paper:
+
+1.  The `AcMAS` framework, which analyzes internal agent activations, is significantly more effective at detecting malicious agents than graph-based methods that analyze communication patterns, especially in asynchronous Multi-Agent Systems (MAS). The paper claims it outperforms the best graph-based baseline by +0.22 F1 score in synchronous settings (0.94 vs 0.72) and by +0.55 F1 score in asynchronous settings (0.93 vs 0.38), where graph-based methods fail due to temporal misalignment.
+
+2.  The proposed activation-level correction mechanism is a non-disruptive mitigation strategy that restores compromised agents' functionality. This method maintains a near-perfect task completion rate (average of 0.97) while reducing the attack success rate to 0.03, in contrast to isolation-based defenses which cause task completion to drop to as low as 0.66.
+
+3.  The `AcMAS` framework is generalizable and maintains high performance across different system configurations. It achieves a detection accuracy above 97% across four distinct LLM backbones (GPT-OSS-20B, DeepSeek-V3, LLaMA3-8B, Qwen3-30B-A3B) and is scalable, maintaining consistent accuracy as the number of agents increases from 8 to 80.
+
+4.  The internal reasoning state of an LLM agent, captured by its neural activations, is a reliable indicator of malicious behavior. Specifically, activations from the final layer of the LLM are most effective for detection, yielding a 0.95 F1 score, which is substantially higher than using activations from middle (0.86 F1) or early layers (0.71 F1).
+
+5.  The detection performance of `AcMAS` is robust to high-intensity attacks. The framework maintains an F1 score above 0.90 and a task completion rate above 0.90 even when up to 50% of the agents in the system are compromised.
+
+6.  The `AcMAS` framework is sample-efficient. A robust characterization of normal agent behavior (the "normal prototype") can be constructed using as few as 50 benign execution traces, after which performance stabilizes.
+
+7.  The adaptive update mechanism, which refines the normal prototype during runtime in synchronous settings, is a critical component for detection. Disabling this mechanism causes the F1 score to drop significantly from 0.95 to 0.87.
+
+8.  The detection component of `AcMAS` has a negligible computational overhead, adding less than 0.22% to the LLM's inference time, making it suitable for real-time deployment without disrupting agent execution.

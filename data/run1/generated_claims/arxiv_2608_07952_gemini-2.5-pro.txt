@@ -1,0 +1,23 @@
+Based on the provided LaTeX source, here are the major, unique, and falsifiable claims made in the research paper:
+
+1.  All 20 tested language models from 10 families, ranging from 1.5 billion to 1 trillion parameters, are susceptible to Persistent Semantic Entity (PSE) contamination, exhibiting contamination rates between 20% and 100%.
+
+2.  Susceptibility to PSE contamination does not reliably decrease with model scale; a log-linear regression on a matched 7-model subset showed no statistically resolved trend ($R^2=0.25, p=0.256$).
+
+3.  Name binding is a necessary mechanism for the studied form of PSE contamination; in experiments, disabling the name binding mechanism reduces the contamination rate to 0%.
+
+4.  Contamination from preference injection and instruction overrides persists without decay over at least 10 conversational turns, maintaining 100% adoption at turn 10 on the tested Llama-3.1-8B model.
+
+5.  Persona-style contamination (e.g., adopting a specific writing style) partially decays over 10 conversational turns, with adoption rates dropping from 90% to 10% on Llama-3.1-8B.
+
+6.  The handling of factual contamination is model-dependent: some models like Llama-3.1-8B and GPT-4o-mini consistently self-correct false facts, while other models like the Qwen2.5-coder variants adopt and retain them.
+
+7.  The task context significantly influences PSE vulnerability; security analysis tasks exhibit a 98.9% contamination rate, nearly three times higher than information retrieval (36.7%) or code recommendation (27.8%) tasks.
+
+8.  In a multi-agent system, PSE contamination amplifies as it propagates between agents, increasing by a factor of 1.9 (from 40% to 75%) along a four-stage pipeline without intervention.
+
+9.  In-context self-reflection is an unreliable defense against PSEs, with its effect ranging from a 45% reduction in contamination on one model to a 14% *increase* in contamination on another (Claude-Sonnet-4).
+
+10. Context-isolated self-verification, where a model verifies its output in a separate clean context, reduces PSE contamination by 20-79% without requiring access to oracle (ground-truth) references.
+
+11. Keyword-based matching is an inadequate method for detecting factual contamination, as it produces systematic false positives by misclassifying responses that correct the misinformation (e.g., "The capital is NOT Lyon, it's Paris") as contaminated.

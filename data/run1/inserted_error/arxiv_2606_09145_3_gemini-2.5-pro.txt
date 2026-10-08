@@ -1,0 +1,18 @@
+:original_text:
+PC-Uncond suffers from unconditional generation without any code syntactic and task-level semantic guidance, leading to weak code relevance and structure.
+
+:modified_text:
+PC-Uncond, which omits sampling from the latent prior during generation and instead relies on the latent space origin as a deterministic conditioning signal, suffers from a lack of diverse syntactic and task-level semantic guidance, leading to weak code relevance and structure.
+
+:explanation:
+The introduced error is a conceptual misrepresentation of the key baseline, `PC-Uncond`. The original text implies that `PC-Uncond` is a standard unconditional generative model, which would be the correct and strongest baseline for demonstrating the value of conditioning.
+
+The modified text redefines `PC-Uncond` as a model that is trained with the full latent conditioning architecture of `PrivCode++`, but at inference time, it uses a fixed, deterministic input (the "latent space origin," i.e., a zero vector) for the decoder instead of sampling from the learned prior distribution.
+
+This is a significant conceptual flaw for the following reasons:
+1.  **Strawman Baseline:** This is no longer a true "unconditional generation" model. A proper unconditional model would be trained from the start to model the data distribution `P(code)` without any latent conditioning architecture. The modified baseline is merely a crippled inference mode of the main `PrivCode++` model, testing what happens when the decoder is given a non-representative latent code. It is not designed or trained for unconditional generation.
+2.  **Invalidates the Claim:** The paper's claim rests on the "substantial collapse" of `PC-Uncond`. By making the baseline a strawman, the subsequent collapse in performance is expected and does not prove that a properly trained unconditional model would also fail. It therefore invalidates the paper's evidence that the latent conditioning mechanism is "essential," as the comparison is no longer fair or informative.
+3.  **Subtlety:** The error is subtle because it uses plausible technical language ("omits sampling," "latent space origin," "deterministic conditioning signal") that might be overlooked by a non-expert reader, who might not question whether this constitutes a valid unconditional baseline. An expert, however, would recognize that this is not how one evaluates against unconditional generation.
+
+:claim:
+The latent conditioning mechanism, which replaces explicit prompts with learned continuous representations, is essential for the method's performance; removing it (`PC-Uncond`) results in a substantial collapse in code generation utility.

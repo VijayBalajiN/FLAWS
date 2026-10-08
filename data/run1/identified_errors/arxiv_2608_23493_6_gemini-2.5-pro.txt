@@ -1,0 +1,21 @@
+:error_text:
+The mechanism is best understood as a form of on-policy RL where the mode-seeking property of the reverse-KL objective serves as an exploration bonus: by forcing the student to cover the high-reward modes discovered by the reflection-augmented teacher, it effectively expands the policy's support to novel, correct reasoning paths rather than collapsing it onto a single, memorized trajectory.
+
+:error_text:
+The reflection-conditioned self-teacher \emph{expands} the student's reasoning-path entropy rather than contracting it—a direct consequence of the mode-seeking objective steering the policy toward new, high-reward regions—in contrast to a larger external teacher.
+
+:error_text:
+Reverse KL possesses several desirable properties for our setting: (i) it is \emph{mode-seeking}, encouraging the student to explore high-reward modes identified by the teacher, thereby expanding its reasoning repertoire beyond suboptimal, high-entropy regions of the policy space;
+
+:error_text:
+Switching from reverse KL to forward KL causes a 3.9-point drop on AIME'24. Forward KL is ``mean-seeking'' and encourages the student to cover all modes of the teacher distribution, which dilutes focus on the most effective strategies. Reverse KL's mode-seeking property better aligns with our goal of learning the teacher's preferred behavior.
+
+:explanation:
+The paper fundamentally mischaracterizes the properties of the reverse Kullback-Leibler (KL) divergence, which is the core of its training objective. This reveals a major conceptual flaw in the paper's central technical argument.
+
+The key error is a contradiction in how the reverse-KL objective is described:
+1.  The paper repeatedly claims that its "mode-seeking" reverse-KL objective works by "forcing the student to cover the high-reward modes" and "expands the policy's support" and "expands the student's reasoning-path entropy".
+2.  These are the well-known properties of **forward KL** (which is mode-covering or mean-seeking), not reverse KL. Reverse KL is "mode-seeking" or "zero-forcing," which means it encourages the student policy to find and stick to a single high-probability mode of the teacher distribution, typically *reducing* entropy and diversity, not expanding it.
+3.  The paper's own ablation study correctly identifies forward KL as "mean-seeking" and "encourages the student to cover all modes," and argues that this is detrimental as it "dilutes focus."
+
+This creates an irreconcilable contradiction: the paper simultaneously argues that mode-covering (a property of forward KL) is undesirable, while claiming that its reverse-KL method is successful precisely because it achieves this very property. This demonstrates a critical misunderstanding of the optimization objective and undermines the entire theoretical justification for the proposed method's success.

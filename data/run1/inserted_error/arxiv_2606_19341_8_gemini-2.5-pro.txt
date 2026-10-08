@@ -1,0 +1,35 @@
+:original_text:
+\paragraph{Why Entropy Scaling Works.}
+TAURA scales the \textit{signed} advantage $A_i$. For correct trajectories ($A_i > 0$), high entropy ($w_{i,k} > 1$) amplifies the advantage, upweighting turns where the model navigated genuine uncertainty. Conversely, for incorrect trajectories ($A_i < 0$), high entropy results in a larger \textit{negative} penalty ($\hat{A}_{i,k} < A_{i} < 0$). This strictly penalizes confused guessing while reinforcing valid discovery actions.
+
+:modified_text:
+\paragraph{Why Entropy Scaling Works.}
+TAURA scales the \textit{signed} advantage $A_i$. For correct trajectories ($A_i > 0$), high entropy ($w_{i,k} > 1$) amplifies the advantage, upweighting turns where the model navigated genuine uncertainty. This prioritizes exploratory actions that broaden the search space over low-entropy, deterministic actions such as final answer formatting. Conversely, for incorrect trajectories ($A_i < 0$), high entropy results in a larger \textit{negative} penalty ($\hat{A}_{i,k} < A_{i} < 0$). This strictly penalizes confused guessing while reinforcing valid discovery actions.
+
+:original_text:
+\paragraph{Temporal Grounding.}
+OmniAgent shows substantial improvements in temporal localization (Table~\ref{tab:temporal-grounding-results}), achieving absolute gains over Qwen2.5-Omni on LongVALE (+33.4\%) and VUE-TR (+33.0\%). Notably, OmniAgent-7B surpasses proprietary models including GPT-4o and Gemini-2.5-Pro on VUE-TR. This performance stems from our iterative strategy: rather than regressing coordinates from a compressed global view, the agent employs on-demand sampling to progressively narrow the search space from coarse to fine granularity, ensuring higher precision.
+
+:modified_text:
+\paragraph{Temporal Grounding.}
+OmniAgent shows substantial improvements in temporal localization (Table~\ref{tab:temporal-grounding-results}), achieving absolute gains over Qwen2.5-Omni on LongVALE (+33.4\%) and VUE-TR (+33.0\%). Notably, OmniAgent-7B surpasses proprietary models including GPT-4o and Gemini-2.5-Pro on VUE-TR. This performance stems from our iterative strategy: rather than regressing coordinates from a compressed global view, the agent employs on-demand sampling to progressively narrow the search space. By rewarding the initial high-entropy exploratory steps, TAURA encourages the agent to efficiently locate the coarse temporal region of interest. The final localization is then performed within this narrowed context, which simplifies the regression task.
+
+:original_text:
+(2) \textit{Entropy-Steered Assignment}: TAURA rectifies this by using entropy as a proxy for decision criticality. By up-weighting high-entropy turns---thereby identifying decisive ``forks'' in the search space---TAURA aligns credit assignment with information gain. This fine-grained supervision drives consistent improvements across both perception (DailyOmni $64.8\%$) and reasoning (MLVU $71.1\%$).
+
+:modified_text:
+(2) \textit{Entropy-Steered Assignment}: TAURA rectifies this by using entropy as a proxy for decision criticality. By up-weighting high-entropy turns---thereby rewarding exploratory actions that identify decisive ``forks'' in the search space---TAURA aligns credit assignment with information gain. This fine-grained supervision encourages broader exploration, driving consistent improvements across both perception (DailyOmni $64.8\%$) and reasoning (MLVU $71.1\%$).
+
+:explanation:
+The introduced conceptual error is a fundamental misalignment between the TAURA reinforcement learning objective and the requirements of the temporal grounding task, which undermines the paper's key claim.
+
+1.  **The Flaw in TAURA's Logic**: The modified text explicitly states that TAURA prioritizes high-entropy "exploratory actions" over low-entropy "deterministic actions". While this may be beneficial for discovery-based tasks like question answering (where finding a key piece of evidence is a high-entropy "fork"), it is detrimental to precision-based tasks like temporal grounding.
+
+2.  **Misalignment with Temporal Grounding**: A successful "coarse-to-fine" search for temporal grounding involves high-entropy exploration (coarse search) followed by low-entropy exploitation (fine-grained localization and outputting the exact timestamps). The final, most crucial action—generating the precise start and end times—is a deterministic, low-entropy step that requires high precision. The modified TAURA mechanism systematically de-incentivizes this critical step by assigning it a lower-weighted advantage compared to the initial, less precise exploratory actions.
+
+3.  **Inconsistent Explanation of Results**: The paper's explanation for its strong temporal grounding performance becomes theoretically unsound. It attributes success to TAURA's ability to find the "coarse temporal region," hand-waving the critical final localization step by claiming it "simplifies the regression task." An expert would recognize that high IoU (the metric for temporal grounding) depends almost entirely on the precision of the final step, not just on finding the general area. The learning algorithm, as described, is actively working against the optimization of this final precision.
+
+This creates a subtle but significant contradiction: the paper claims superiority on a precision task using a coarse-to-fine strategy, yet its own core learning algorithm is designed to under-reward the "fine" part of that strategy. This is a plausible but deep conceptual error that a researcher might make by incorrectly generalizing an RL principle from one task domain (exploration-heavy) to another (exploitation-heavy).
+
+:claim:
+The iterative, coarse-to-fine search strategy employed by OmniAgent results in substantial performance gains on temporal grounding tasks (e.g., a +33.4% absolute gain on LongVALE over its baseline), outperforming methods that regress coordinates from a single global view.

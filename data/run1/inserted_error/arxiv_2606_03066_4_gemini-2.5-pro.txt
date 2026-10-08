@@ -1,0 +1,41 @@
+:original_text:
+The experiments show that non-MLLM models suffer from incomplete knowledge, while MLLMs, though addressing the knowledge repository issue, still lack conceptual clarity. The key to resolving this dilemma is to enable models to possess knowledge and understand it in a clear, structured way, thereby learning detection based on the core principle of conflict.
+
+:modified_text:
+The experiments show that non-MLLM models suffer from incomplete knowledge, while MLLMs, though addressing the knowledge repository issue, still lack conceptual clarity. The key to resolving this dilemma is to enable models to leverage their knowledge to recognize semantic dissimilarity. We posit that the core principle of conflict is fundamentally rooted in the semantic distance between concepts, which, when sufficiently large, creates a detectable inconsistency.
+
+:original_text:
+First, we adopt a conflict-aware contrastive loss~$\mathcal{L}_{cacl}$~to help the model establish clear conceptual boundaries by pushing the two conflict factor representations~$\mathbf{z}_1$~and~$\mathbf{z}_2$~far apart in the semantic space, which is the core to identify conflicts in manipulated samples:
+\begin{equation}
+\mathcal{L}_{cacl} = \frac{1}{1 + e^{-(s_2 \cdot \langle \mathbf{z}_1, \mathbf{z}_2 \rangle + b_2)}}.
+\label{eq:stage2_contrastive_loss}
+\end{equation}
+This loss function aims to maximize the distance between the two conflict factor representations.
+
+:modified_text:
+First, based on our hypothesis that conflict arises from semantic dissimilarity, we adopt a contrastive loss~$\mathcal{L}_{cacl}$. This loss is designed to push the representations of the two conflict factors,~$\mathbf{z}_1$~and~$\mathbf{z}_2$, far apart in the semantic space. By maximizing their semantic distance, the model learns to associate large representational gaps with the presence of manipulation:
+\begin{equation}
+\mathcal{L}_{cacl} = \frac{1}{1 + e^{-(s_2 \cdot \langle \mathbf{z}_1, \mathbf{z}_2 \rangle + b_2)}}.
+\label{eq:stage2_contrastive_loss}
+\end{equation}
+This loss function directly operationalizes our hypothesis by maximizing the angular separation between the conflict factor representations.
+
+:original_text:
+Subsequently, the model is subjected to direct zero-shot inference on a test set constructed exclusively from the held-out target manipulation type and authentic samples. As shown in Table~\ref{fig:crotype}, our methods significantly outperform baselines (e.g., $\text{CORE}_\text{Qwen}$ and $\text{CORE}_\text{Gemma}$ surpass the second-best methods on MDSM by over \textbf{14\%} and \textbf{12\%}, respectively). This superiority validates CORE's design principle of detecting the inherent conflicts essential to fake news. Please refer to the Appendix~\ref{sec:appendix_cross_dataset} for Cross-Dataset Zero-Shot.
+
+:modified_text:
+Subsequently, the model is subjected to direct zero-shot inference on a test set constructed exclusively from the held-out target manipulation type and authentic samples. As shown in Table~\ref{fig:crotype}, our methods significantly outperform baselines (e.g., $\text{CORE}_\text{Qwen}$ and $\text{CORE}_\text{Gemma}$ surpass the second-best methods on MDSM by over \textbf{14\%} and \textbf{12\%}, respectively). This superiority validates CORE's design principle: by training the model to be highly sensitive to semantic dissimilarities, it learns a generalizable signal for detecting the inconsistencies that are essential to fake news. Please refer to the Appendix~\ref{sec:appendix_cross_dataset} for Cross-Dataset Zero-Shot.
+
+:explanation:
+The introduced error is a fundamental conceptual oversimplification: it conflates the notion of "conflict" with "semantic dissimilarity" or "semantic distance."
+
+1.  **The Flawed Premise:** The modified text explicitly reframes the paper's core hypothesis, stating that "the core principle of conflict is fundamentally rooted in the semantic distance between concepts" (Section 3). This flawed premise is then consistently used to justify the methodology (Section 4.3) and interpret the results (Section 5.1).
+
+2.  **Why It's Wrong:** From a theoretical standpoint, conflict is a context-dependent logical or physical incompatibility, not merely a measure of how "different" two concepts are. For example:
+    *   **Semantically Distant but Not Conflicting:** "U.S. President" and "Quantum Physics" are semantically distant, but a news story connecting them ("President discusses new quantum computing initiative") is not inherently a conflict.
+    *   **Semantically Close but Conflicting:** A manipulated image might show a person wearing a red hat, while the caption says "wearing a blue hat." The concepts "red hat" and "blue hat" are semantically very close (both are colored hats), but they are in direct conflict in this specific context.
+
+3.  **Impact on the Claim:** A model trained on this flawed principle will learn a heuristic: if two concepts are far apart in the embedding space, label the sample as manipulated. This might work well for the obvious clashes present in the training data (e.g., "Donald Trump" and "Football Award"). However, this is not true "conflict reasoning." This approach would likely fail to generalize to "unseen manipulation types" that involve more subtle, contextual conflicts between semantically similar entities. This directly undermines the paper's key claim of robust zero-shot generalization, as the model has learned a brittle proxy (semantic distance) for the complex phenomenon it claims to have mastered (conflict detection). An expert would recognize that this approach lacks the logical and contextual grounding necessary for true general-purpose reasoning.
+
+:claim:
+Models trained with the CORE framework can generalize to entirely unseen manipulation types in a zero-shot setting, achieving substantially higher accuracy than baseline methods.

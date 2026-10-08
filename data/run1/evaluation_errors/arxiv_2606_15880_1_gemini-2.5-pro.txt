@@ -1,0 +1,13 @@
+:error_text:
+In Table 8, it can be observed that general-purpose MLLMs struggle with the detection task, yielding an average accuracy ranging from 50% to 68%. While the domain-specific Forensic-Chat (Lin et al., 2025b) achieves a respectable average accuracy of 88.75%, our method achieves the best performance with an average accuracy of 93.28%. Notably, on the challenging benchmarks AIGI-Bench and WildRF, our method surpasses the strongest baseline by margins of 8.29% and 5.57%, respectively.
+
+:error_text:
+Our analysis reveals that the pretrained MLLM, primarily optimizing vision-language alignment, naturally lacks sensitivity to the subtle low-level artifacts in D2.
+
+:error_text:
+(Bottom) Validation accuracy highlights a semantic convergence zone (layers 16–20) where D1 performance peaks, while D2 accuracy remains stagnant (∼81%) across all depths.
+
+:explanation:
+The most serious error is an unfair baseline comparison in Table 8, which significantly exaggerates the proposed method's contribution. The paper compares its fine-tuned model (Deep-VRM) against "general-purpose MLLMs" (e.g., Qwen-2-VL, LLaVA-1.5) that achieve only 50-68% accuracy. This comparison is highly misleading because these baseline models were almost certainly evaluated in a zero-shot setting without any task-specific fine-tuning. This is evidenced by Table 13, where the same baseline model (Qwen-2.5-VL-7B), when fine-tuned with LoRA, improves its average accuracy from 54% (Table 8) to 72%. By comparing their specialist, fine-tuned model to generalist, non-fine-tuned models, the authors create an apples-to-oranges comparison that inflates their method's perceived performance gain.
+
+A second, related error is a significant contradiction between the paper's motivation and a key piece of analysis. The paper claims that pretrained MLLMs "naturally lack sensitivity" to low-level artifacts. However, the analysis in Figure 4 claims that a simple linear probe can classify these same artifacts with ~81% accuracy using the MLLM's frozen internal representations. A model whose features are 81% linearly separable for a task cannot be described as lacking sensitivity. This surprisingly high accuracy undermines the core motivation and is not reconciled with the fact that standard LoRA fine-tuning fails catastrophically (achieving only 51% in Figure 3), an inconsistency the paper fails to explain.

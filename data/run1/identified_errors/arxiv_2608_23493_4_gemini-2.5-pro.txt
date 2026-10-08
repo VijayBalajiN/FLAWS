@@ -1,0 +1,16 @@
+:error_text:
+Counting Stage 1 and Stage 2, SRPO uses $5.4 \times 10^{18}$ FLOPs versus $20.8 \times 10^{18}$ for GRPO, i.e., approximately $3.8\times$ fewer total FLOPs.
+
+:error_text:
+The rethinking rollout $\tilde{y}$ is reported for full transparency but is \emph{not} consumed as a training target in Stage~2, which uses only teacher-forced scoring of student tokens (see Eq.~6 in the main paper). Removing this row would cut Stage~1 cost by 22.2\% without altering the Stage~2 objective.
+
+:error_text:
+(iii) \emph{Implementation amortisation:} sampling $\tilde{y}$ shares activations with the teacher-forcing pass used in Stage~2, so amortising the cost is essentially free in our implementation.
+
+:error_text:
+The mechanism is best understood not as self-distillation but as on-policy RL with reflection-guided exploration: reflection-conditioned teachers steer the student into high-reward regions of its \emph{own} policy space rather than imitating a distribution beyond its representational capacity.
+
+:explanation:
+The paper's central claim of being 3.8x more computationally efficient than GRPO is undermined by a severe contradiction in its FLOPs accounting. The total FLOPs count for SRPO explicitly includes a "rethinking rollout" which accounts for over 22% of the total cost. However, the appendix states this rollout is not used for training and its cost could be removed without changing the objective. Furthermore, the text makes a conflicting claim that this same component is "essentially free" due to an implementation detail. A major cost component cannot simultaneously be essential to the reported total, optional for the training algorithm, and computationally free. This inconsistency makes the core efficiency claim unreliable.
+
+A second major flaw is that the conclusion fundamentally mischaracterizes the proposed method. It claims the mechanism is "not as self-distillation but as on-policy RL". This contradicts the methodology section, where the training objective is explicitly defined as minimizing the reverse KL-divergence to a teacher's distribution, which is, by definition, a form of on-policy distillation. Misrepresenting the core mechanism of the work is a serious conceptual error.

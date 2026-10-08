@@ -1,0 +1,5 @@
+Error in implementation
+error:
+Specifically, we sample latent variables from the standard normal prior and decode them into prefix embeddings using the DP-trained prefix decoder: $
+z_i \sim \mathcal{N}(0, I), \; \mathbf{e}_{\text{prefix}}^{(i)} = D^{\text{DP}}(z_i),$
+where the resulting $\mathbf{e}_{\text{prefix}}^{(i)}$ serve as continuous conditioning signals learned on the original corpus.

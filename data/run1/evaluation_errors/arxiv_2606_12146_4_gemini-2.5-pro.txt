@@ -1,0 +1,20 @@
+:error_text:
+Proceedings of the 43rd International Conference on Machine Learning, Seoul, South Korea. PMLR 306, 2026. Copyright 2026 by the author(s).
+
+:error_text:
+Hua, E., Jiang, C., Lv, X., Zhang, K., Sun, Y., Fan, Y., Zhu, X., Qi, B., Ding, N., and Zhou, B. Fourier position embed- ding: enhancing attention’s periodic extension for length generalization. In Proceedings of the 42nd International Conference on Machine Learning, ICML’25. JMLR.org, 2025.
+
+:error_text:
+For image and video tasks involving resolution extrapolation, we further include FoPE (Hua et al., 2025) as an extrapolation baseline, and integrate YaRN (Peng et al., 2023) into all rotary-based methods to ensure a fair comparison under extended resolution settings.
+
+:error_text:
+Notably, nD-RoPE also enables a transition from vector attention to standard dot-product attention. This change significantly reduces computational complexity... However, as discussed in the main paper, this efficiency gain comes at the cost of a slight performance drop in segmentation accuracy.
+
+:explanation:
+The identified errors represent critical flaws that question the paper's scientific validity and integrity.
+
+1.  **Fabricated Publication and Citation Details:** The most severe error is the use of impossible publication details. The paper claims to be published in "PMLR 306, 2026," a future proceeding with a future copyright date. Furthermore, it cites references with full publication details for conferences that have not yet occurred, such as "ICML’25." This is a violation of academic standards, as one cannot cite the published proceedings of a future event. This suggests the paper and its references may be fabricated, which is grounds for immediate rejection.
+
+2.  **Unfair Experimental Comparison:** The paper claims to make a "fair comparison" for resolution extrapolation by integrating YaRN. However, the results in Table 2 (Kinetics-400) reveal a fundamental flaw in this methodology. The in-domain (224x224) accuracy for the `RoPE-Axial` baseline jumps from 73.23% to 75.03% when YaRN is added. YaRN is an extrapolation technique and should not improve in-domain performance. This large discrepancy indicates that the "with YaRN" and "without YaRN" experiments were not run under comparable conditions, invalidating the central claims about superior extrapolation performance.
+
+3.  **Misleading Interpretation of Experimental Results:** The authors mischaracterize their own findings regarding computational cost and performance. They claim that switching to dot-product attention with nD-RoPE results in a "slight performance drop". However, their own results in Table 4 show a substantial drop in mIoU from 71.91% to 67.12%. Additionally, they present the computational savings from this switch as a benefit of nD-RoPE, which is misleading. The choice of attention mechanism is orthogonal to the positional encoding, and a direct comparison (Table 8, Vector vs. Vector attention) shows nD-RoPE slightly *increases* computational cost.

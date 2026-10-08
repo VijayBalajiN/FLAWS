@@ -1,0 +1,13 @@
+Based on the LaTeX source provided, here is a list of the major, unique, and falsifiable claims made in the paper:
+
+1.  The proliferation of generative models creates a market failure termed "value collapse," where work requiring sustained Human Temporal Learning (HTL) is systematically displaced. This occurs because as AI outputs become superficially indistinguishable from human work, the cost of verifying the production source (`c_v`) exceeds its expected benefit (`g * Δq`), leading to source-blind reward systems that cannot sustain high-cost HTL producers.
+
+2.  The erosion of source verification across different fields can be categorized into a four-stage framework determined by parameters of verification ability (`g`), quality stakes (`Δq`), and verification cost (`c_v`). For instance, clinical medicine remains in Stage 1 (Intact) due to high quality stakes, while academic publishing has entered Stage 3 (Overwhelmed) due to high verification costs and volume, and content platforms are in Stage 4 (Source-blind) because their reward systems are inherently indifferent to production source.
+
+3.  The success of AI alignment is orthogonal to, and can even accelerate, the process of value collapse. Better-aligned and more capable models produce outputs that are harder to distinguish from genuine human work, which lowers the effective ability to verify (`g`) and thus intensifies the market selection pressure against HTL-intensive production.
+
+4.  The economic process of value collapse is a direct causal contributor to the technical problem of "model collapse." By systematically reducing the proportion of new, HTL-based human data in the information ecosystem, value collapse increases the likelihood that future AI models will be trained on synthetic data, degrading their quality and diversity.
+
+5.  AI-driven automation of entry-level tasks creates a "pipeline compression" risk that erodes the long-term capacity for HTL, even in domains where verification for senior-level outputs remains intact. By reducing opportunities for junior workers to gain deep, path-dependent experience, this trend will shrink the future pool of qualified human experts capable of performing high-stakes verification.
+
+6.  Individual-level productivity gains from AI tools do not prevent systemic value collapse. The core market failure is driven by the breakdown of economically viable verification at an institutional scale, a problem that is not solved by making individual human producers more efficient at creating content.

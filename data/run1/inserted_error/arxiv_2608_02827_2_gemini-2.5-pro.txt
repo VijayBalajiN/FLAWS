@@ -1,0 +1,57 @@
+I will introduce a conceptual error in the paper's theoretical formulation for heterogeneous agent populations. The error involves incorrectly simplifying the mean-field dynamics of a mixed population. Instead of correctly modeling the collective behavior as an average of individual agents' non-linear responses, the modified text will propose a flawed model where the population behaves as a single, homogeneous group with averaged parameters. This is a common but incorrect theoretical shortcut that misrepresents the system's dynamics by improperly commuting the averaging operation and the non-linear response function (i.e., assuming `E[f(x)] ≈ f(E[x])`). This error undermines the theoretical explanation for why heterogeneity suppresses biased consensus.
+
+:original_text:
+\textsl{Mean-Field Dynamics for Heterogeneous LLMs.}
+The analysis above assumes identical LLM agents.
+In practice, however, multi-agent LLM debates often involve a mixture of different LLMs or roles~\cite{liang2023encouraging,chen2023agentverse}. 
+We model this setting by allowing agents to differ only in their parameters. 
+Each LLM agent $i$ is associated with one of $K$ LLM types (or expert roles/personas), indexed by $k\in\{1,\dots,K\}$.
+LLM agents of type $k$ are characterized by a parameter set $\{\lambda_k, h_k, \gamma_k\}$. 
+Under a mean-field approximation, for $q=2$, the aggregated state then evolves according to 
+\begin{equation}\label{eq:mf-mix}
+\scalebox{0.9}{$m(t+1) = \frac{1}{N} \sum_{i=1}^{N} \tanh \left[
+\beta \bigl( \lambda_{k(i)} \bar{z}\, m(t)+h_{k(i)} \pm \gamma_{k(i)}/2 \bigr) \right]$}
+\end{equation}
+where $k(i)$ denotes agent $i$'s type and the sign encodes the bias direction ($+\gamma_{k(i)}/2$ toward $+1$, $-\gamma_{k(i)}/2$ toward $-1$). 
+Eq.~\eqref{eq:mf-mix} highlights two key effects of heterogeneity. 
+First, mixing subgroups smooths the collective response in Eq.~\eqref{eq:stochastic-mf} by averaging nonlinear activation functions, reducing sharp transitions.
+Second, heterogeneity can stabilize intermediate aggregated values, leading to partial agreement rather than full consensus even when individual subgroups exhibit strong conformity.
+This can be generalized to the case of $q \geq 3$, as shown in Appendix~\ref{app:formulation}.
+
+:modified_text:
+\textsl{Mean-Field Dynamics for Heterogeneous LLMs.}
+The analysis above assumes identical LLM agents.
+In practice, however, multi-agent LLM debates often involve a mixture of different LLMs or roles~\cite{liang2023encouraging,chen2023agentverse}. 
+We model this setting by allowing agents to differ only in their parameters. 
+Each LLM agent $i$ is associated with one of $K$ LLM types (or expert roles/personas), indexed by $k\in\{1,\dots,K\}$.
+LLM agents of type $k$ are characterized by a parameter set $\{\lambda_k, h_k, \gamma_k\}$. 
+Under a mean-field approximation, for $q=2$, the aggregated state of the mixed population can be modeled as a homogeneous system with effective average parameters. The dynamics evolve according to: 
+\begin{equation}\label{eq:mf-mix}
+\scalebox{0.9}{$m(t+1) = \tanh \left[
+\beta \left( \bar{\lambda} \bar{z}\, m(t) + \bar{h} \pm \bar{\gamma}/2 \right) \right]$}
+\end{equation}
+where $\bar{\lambda} = \frac{1}{N}\sum_i\lambda_{k(i)}$, $\bar{h} = \frac{1}{N}\sum_i h_{k(i)}$, and $\bar{\gamma} = \frac{1}{N}\sum_i \gamma_{k(i)}$ are the population-averaged parameters. The sign of the bias term depends on the net direction of the average predisposition.
+Eq.~\eqref{eq:mf-mix} highlights a key effect of heterogeneity. 
+First, averaging over different agent parameters effectively creates a single representative agent with moderate characteristics. This dampens extreme biases or conformity levels present in subgroups, which in turn smooths the collective response and reduces sharp transitions.
+Second, this can stabilize intermediate aggregated values, leading to partial agreement rather than full consensus.
+This can be generalized to the case of $q \geq 3$, as shown in Appendix~\ref{app:formulation}.
+
+:original_text:
+In Fig.~\ref{fig:mix-llms}(b), we estimate the parameters of the mean-field dynamics in Eq.~\eqref{eq:mf-mix} using only homogeneous populations, and compare the predicted collective norm with experimental results. We observe close agreement between theory and experiment.
+Overall, mixed populations (i.e., \iconGPT\,\iconGPT\,\iconLlama, \iconLlama\,\iconLlama\,\iconGPT, and \iconDeepSeek\,\iconDeepSeek\,\iconGPT) exhibit weaker consensus, with \(m(R)\in[-0.5,0.2]\), than homogeneous populations. This reduction is explained by a smoothing effect arising from composing multiple response functions in the mean-field dynamics of Eq.~\eqref{eq:mf-mix}.
+
+:modified_text:
+In Fig.~\ref{fig:mix-llms}(b), we estimate the parameters of the mean-field dynamics in Eq.~\eqref{eq:mf-mix} using only homogeneous populations, and compare the predicted collective norm with experimental results. We observe close agreement between theory and experiment.
+Overall, mixed populations (i.e., \iconGPT\,\iconGPT\,\iconLlama, \iconLlama\,\iconLlama\,\iconGPT, and \iconDeepSeek\,\iconDeepSeek\,\iconGPT) exhibit weaker consensus, with \(m(R)\in[-0.5,0.2]\), than homogeneous populations. This reduction is explained by the effective averaging of agent parameters in the mean-field dynamics of Eq.~\eqref{eq:mf-mix}, which creates a representative agent with more moderate, less extreme characteristics, thereby smoothing the collective response.
+
+:explanation:
+The core conceptual error introduced is the incorrect application of mean-field theory to a heterogeneous population of agents.
+
+1.  **Original (Correct) Model**: The collective state `m(t+1)` is correctly calculated as the *average of the non-linear responses* of each agent type (i.e., `(1/N) * sum(tanh(params_i))`). This correctly captures how different subgroups with different parameters contribute to the overall consensus.
+
+2.  **Modified (Flawed) Model**: The modified text replaces this with a model where `m(t+1)` is the *non-linear response of the average parameters* (i.e., `tanh(average(params))`). This incorrectly assumes that the heterogeneous population behaves like a single homogeneous population described by averaged properties (`\bar{\lambda}`, `\bar{h}`, etc.).
+
+**Why it's wrong**: This modification represents a fundamental misunderstanding of how to treat non-linearities in heterogeneous systems. The expectation of a non-linear function is not equal to the function of the expectation (`E[f(x)] ≠ f(E[x])`, a consequence of Jensen's inequality). By moving the averaging operation inside the `tanh` function, the model fails to accurately capture the smoothing effect that arises from combining the distinct, non-linear `S`-shaped response curves of different agent types. The flawed model provides an incorrect theoretical mechanism for the observed suppression of consensus, thereby undermining the paper's central explanatory claim, even though the empirical observation itself remains unchanged. This type of oversimplification is a plausible but significant error in theoretical modeling.
+
+:claim:
+A heterogeneous population of agents, created by mixing different LLM models (e.g., GPT, Llama, DeepSeek), exhibits weaker biased consensus compared to a homogeneous population of agents from a single LLM family.

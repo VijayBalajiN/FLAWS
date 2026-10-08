@@ -1,0 +1,5 @@
+Incorrect or incomplete analysis
+error:
+Table~\ref{tab:hyper_lambda} shows that 
+a small latent dimension ($d_z=256$) consistently underperforms across all benchmarks and models. 
+Increasing the dimension to $d_z=768$ yields the best average pass@1 scores on both instruction-following and completion benchmarks (e.g., improving HumanEval pass@1 from 43.4 to 52.0 on instruct models). Further increasing the dimension to $d_z=2048$ leads to degraded performance. We attribute this to over-parameterized latent representations that are harder to learn robustly under DP-SGD noise.

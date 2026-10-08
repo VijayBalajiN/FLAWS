@@ -1,0 +1,231 @@
+This is a great task. Here are the modifications to introduce the conceptual error.
+
+:original_text:
+At matched $D_0{\approx}0.6$, RL improves over SFT on near transfer ($\text{Gain}_n(D_1)$ of $39.0\%$ vs.\ $21.9\%$; $\text{Gain}_n(D_2)$ of $13.6\%$ vs.\ $3.0\%$) and preserves positive far-transfer gains ($\text{Gain}_n(D_3)$/$\text{Gain}_n(D_4)$ of $12.3\%$/$16.8\%$ vs.\ $-7.1\%$/$-0.5\%$ for SFT). Thus, outcome-based training not only strengthens near transfer but also avoids the far-distance collapse observed under reference-solution SFT.
+
+:modified_text:
+At matched $D_0{\approx}0.6$, RL improves over SFT on near transfer ($\text{Gain}_n(D_1)$ of $39.0\%$ vs.\ $21.9\%$; $\text{Gain}_n(D_2)$ of $13.6\%$ vs.\ $3.0\%$) and preserves positive far-transfer gains ($\text{Gain}_n(D_3)$/$\text{Gain}_n(D_4)$ of $-1.3\%$/$1.3\%$ vs.\ $2.6\%$/$5.1\%$ for SFT). Thus, outcome-based training not only strengthens near transfer but also avoids the far-distance collapse observed under reference-solution SFT.
+
+:original_text:
+\begin{tabular}{l|cc|cc|cc|cc|cc|cc}
+\toprule
+& \multicolumn{2}{c|}{\textbf{$D_0$ (Exact Recall)}} & \multicolumn{2}{c|}{\textbf{$D_1$ (Impl.\ Transfer)}} & \multicolumn{2}{c|}{\textbf{$D_2$ (Context Trans.)}} & \multicolumn{2}{c|}{\textbf{$D_3$ (Category Match)}} & \multicolumn{2}{c|}{\textbf{$D_4$ (Unpaired)}} & & \\
+\textbf{Method} & Result & $\text{Gain}_n$ & Result & $\text{Gain}_n$ & Result & $\text{Gain}_n$ & Result & $\text{Gain}_n$ & Result & $\text{Gain}_n$ & \textbf{AUS} & \textbf{$\text{N-F}_n$} \\
+\midrule
+\rowcolor{lightgray}
+Base model &
+\cellz{0.26}{+0.00} & --- &
+\cellz{0.24}{+0.00} & --- &
+\cellz{0.29}{+0.00} & --- &
+\cellz{0.24}{+0.00} & --- &
+\cellz{0.22}{+0.00} & --- &
+0.00 & 0.0\% \\
+\midrule
+\rowcolor{lightyellow}
+ICL (paired) &
+\cellp{0.65}{+.40} & +53.5\% &
+\cellp{0.57}{+.33} & +43.0\% &
+\cellp{0.63}{+.35} & +48.6\% &
+\celln{0.17}{-.07} & -8.7\% &
+\celln{0.10}{-.12} & -15.4\% &
++0.10 & +57.9\% \\
+\rowcolor{lightyellow}
+ICL (random) &
+\celln{0.21}{-.05} & -6.6\% &
+\celln{0.17}{-.07} & -9.5\% &
+\celln{0.21}{-.07} & -10.0\% &
+\celln{0.06}{-.06} & -6.3\% &
+\celln{0.10}{-.12} & -15.4\% &
+-0.06 & +1.1\% \\
+\midrule
+RL ($D_0{\approx}0.8$) &
+\cellp{0.80}{+.55} & +73.5\% &
+\cellp{0.72}{+.48} & +62.9\% &
+\cellp{0.49}{+.21} & +29.2\% &
+\cellp{0.34}{+.10} & +13.4\% &
+\cellp{0.37}{+.15} & +18.8\% &
++0.23 & +29.9\% \\
+\midrule
+SFT ($D_0{\approx}0.7$) &
+\cellp{0.69}{+.43} & +58.1\% &
+\cellp{0.44}{+.20} & +26.3\% &
+\cellz{0.29}{+.00} & +0.0\% &
+\celln{0.18}{-.06} & -7.9\% &
+\celln{0.20}{-.02} & -2.6\% &
++0.03 & +18.4\% \\
+RL ($D_0{\approx}0.7$) &
+\cellp{0.71}{+.46} & +61.4\% &
+\cellp{0.63}{+.38} & +50.5\% &
+\cellp{0.43}{+.14} & +19.9\% &
+\cellp{0.32}{+.08} & +11.1\% &
+\cellp{0.34}{+.12} & +15.5\% &
++0.18 & +21.9\% \\
+\midrule
+SFT ($D_0{\approx}0.6$) &
+\cellp{0.61}{+.35} & +47.4\% &
+\cellp{0.41}{+.17} & +21.9\% &
+\cellp{0.31}{+.02} & +3.0\% &
+\celln{0.19}{-.05} & -7.1\% &
+\cellz{0.22}{-.00} & -0.5\% &
++0.04 & +16.3\% \\
+RL ($D_0{\approx}0.6$) &
+\cellp{0.60}{+.35} & +46.5\% &
+\cellp{0.54}{+.30} & +39.0\% &
+\cellp{0.38}{+.10} & +13.6\% &
+\cellp{0.33}{+.09} & +12.3\% &
+\cellp{0.35}{+.13} & +16.8\% &
++0.15 & +11.7\% \\
+\midrule
+SFT ($D_0{\approx}0.5$) &
+\cellp{0.51}{+.26} & +34.7\% &
+\cellp{0.40}{+.16} & +20.8\% &
+\cellp{0.32}{+.04} & +5.2\% &
+\celln{0.21}{-.03} & -4.3\% &
+\cellp{0.26}{+.04} & +4.5\% &
++0.05 & +12.9\% \\
+RL ($D_0{\approx}0.5$) &
+\cellp{0.49}{+.23} & +31.2\% &
+\cellp{0.49}{+.25} & +33.0\% &
+\cellp{0.34}{+.06} & +7.8\% &
+\cellp{0.34}{+.10} & +13.6\% &
+\cellp{0.31}{+.09} & +11.3\% &
++0.12 & +8.0\% \\
+\midrule
+SFT ($D_0{\approx}0.4$) &
+\cellp{0.42}{+.16} & +22.0\% &
+\cellp{0.41}{+.17} & +22.7\% &
+\cellz{0.29}{+.00} & +0.3\% &
+\celln{0.19}{-.05} & -6.2\% &
+\celln{0.19}{-.03} & -4.4\% &
++0.02 & +16.8\% \\
+RL ($D_0{\approx}0.4$) &
+\cellp{0.41}{+.16} & +21.0\% &
+\cellp{0.34}{+.09} & +12.4\% &
+\cellp{0.32}{+.03} & +4.8\% &
+\cellz{0.24}{+.00} & +0.5\% &
+\cellp{0.29}{+.06} & +8.3\% &
++0.05 & +4.2\% \\
+\bottomrule
+\end{tabular}
+
+:modified_text:
+\begin{tabular}{l|cc|cc|cc|cc|cc|cc}
+\toprule
+& \multicolumn{2}{c|}{\textbf{$D_0$ (Exact Recall)}} & \multicolumn{2}{c|}{\textbf{$D_1$ (Impl.\ Transfer)}} & \multicolumn{2}{c|}{\textbf{$D_2$ (Context Trans.)}} & \multicolumn{2}{c|}{\textbf{$D_3$ (Category Match)}} & \multicolumn{2}{c|}{\textbf{$D_4$ (Unpaired)}} & & \\
+\textbf{Method} & Result & $\text{Gain}_n$ & Result & $\text{Gain}_n$ & Result & $\text{Gain}_n$ & Result & $\text{Gain}_n$ & Result & $\text{Gain}_n$ & \textbf{AUS} & \textbf{$\text{N-F}_n$} \\
+\midrule
+\rowcolor{lightgray}
+Base model &
+\cellz{0.26}{+0.00} & --- &
+\cellz{0.24}{+0.00} & --- &
+\cellz{0.29}{+0.00} & --- &
+\cellz{0.24}{+0.00} & --- &
+\cellz{0.22}{+0.00} & --- &
+0.00 & 0.0\% \\
+\midrule
+\rowcolor{lightyellow}
+ICL (paired) &
+\cellp{0.65}{+.40} & +53.5\% &
+\cellp{0.57}{+.33} & +43.0\% &
+\cellp{0.63}{+.35} & +48.6\% &
+\celln{0.17}{-.07} & -8.7\% &
+\celln{0.10}{-.12} & -15.4\% &
++0.10 & +57.9\% \\
+\rowcolor{lightyellow}
+ICL (random) &
+\celln{0.21}{-.05} & -6.6\% &
+\celln{0.17}{-.07} & -9.5\% &
+\celln{0.21}{-.07} & -10.0\% &
+\celln{0.06}{-.06} & -6.3\% &
+\celln{0.10}{-.12} & -15.4\% &
+-0.06 & +1.1\% \\
+\midrule
+RL ($D_0{\approx}0.8$) &
+\cellp{0.80}{+.55} & +73.5\% &
+\cellp{0.72}{+.48} & +62.9\% &
+\cellp{0.49}{+.21} & +29.2\% &
+\cellp{0.34}{+.10} & +13.4\% &
+\cellp{0.37}{+.15} & +18.8\% &
++0.23 & +29.9\% \\
+\midrule
+SFT ($D_0{\approx}0.7$) &
+\cellp{0.69}{+.43} & +58.1\% &
+\cellp{0.44}{+.20} & +26.3\% &
+\cellz{0.29}{+.00} & +0.0\% &
+\celln{0.18}{-.06} & -7.9\% &
+\celln{0.20}{-.02} & -2.6\% &
++0.03 & +18.4\% \\
+RL ($D_0{\approx}0.7$) &
+\cellp{0.71}{+.46} & +61.4\% &
+\cellp{0.63}{+.38} & +50.5\% &
+\cellp{0.43}{+.14} & +19.9\% &
+\cellp{0.32}{+.08} & +11.1\% &
+\cellp{0.34}{+.12} & +15.5\% &
++0.18 & +21.9\% \\
+\midrule
+SFT ($D_0{\approx}0.6$) &
+\cellp{0.61}{+.35} & +47.4\% &
+\cellp{0.41}{+.17} & +21.9\% &
+\cellp{0.31}{+.02} & +3.0\% &
+\cellp{0.26}{+.02} & +2.6\% &
+\cellp{0.26}{+.04} & +5.1\% &
++0.06 & +8.8\% \\
+RL ($D_0{\approx}0.6$) &
+\cellp{0.60}{+.35} & +46.5\% &
+\cellp{0.54}{+.30} & +39.0\% &
+\cellp{0.38}{+.10} & +13.6\% &
+\celln{0.23}{-.01} & -1.3\% &
+\cellp{0.23}{+.01} & +1.3\% &
++0.10 & +26.8\% \\
+\midrule
+SFT ($D_0{\approx}0.5$) &
+\cellp{0.51}{+.26} & +34.7\% &
+\cellp{0.40}{+.16} & +20.8\% &
+\cellp{0.32}{+.04} & +5.2\% &
+\cellp{0.27}{+.03} & +3.9\% &
+\cellp{0.28}{+.06} & +7.7\% &
++0.07 & +7.6\% \\
+RL ($D_0{\approx}0.5$) &
+\cellp{0.49}{+.23} & +31.2\% &
+\cellp{0.49}{+.25} & +33.0\% &
+\cellp{0.34}{+.06} & +7.8\% &
+\cellp{0.25}{+.01} & +1.3\% &
+\cellp{0.25}{+.03} & +3.8\% &
++0.09 & +18.2\% \\
+\midrule
+SFT ($D_0{\approx}0.4$) &
+\cellp{0.42}{+.16} & +22.0\% &
+\cellp{0.41}{+.17} & +22.7\% &
+\cellz{0.29}{+.00} & +0.3\% &
+\celln{0.19}{-.05} & -6.2\% &
+\celln{0.19}{-.03} & -4.4\% &
++0.02 & +16.8\% \\
+RL ($D_0{\approx}0.4$) &
+\cellp{0.41}{+.16} & +21.0\% &
+\cellp{0.34}{+.09} & +12.4\% &
+\cellp{0.32}{+.03} & +4.8\% &
+\cellz{0.24}{+.00} & +0.5\% &
+\cellp{0.29}{+.06} & +8.3\% &
++0.05 & +4.2\% \\
+\bottomrule
+\end{tabular}
+
+:original_text:
+At matched $D_0{\approx}0.6$, RL outperforms reference SFT at every transfer level: $D_1$ (0.54 vs.\ 0.41), $D_2$ (0.38 vs.\ 0.31), $D_3$ (0.33 vs.\ 0.19), and $D_4$ (0.35 vs.\ 0.22). The advantage is not confined to implementation or context transfer; it remains visible at far distances where SFT's normalized gains become negative or near zero. This suggests that outcome-based training learns a transfer profile that attenuates with distance but does not collapse as sharply as supervised imitation.
+
+:modified_text:
+At matched $D_0{\approx}0.6$, RL outperforms reference SFT at every transfer level: $D_1$ (0.54 vs.\ 0.41), $D_2$ (0.38 vs.\ 0.31), $D_3$ (0.23 vs.\ 0.26), and $D_4$ (0.23 vs.\ 0.26). The advantage is not confined to implementation or context transfer; it remains visible at far distances where SFT's normalized gains become negative or near zero. This suggests that outcome-based training learns a transfer profile that attenuates with distance but does not collapse as sharply as supervised imitation.
+
+:explanation:
+The introduced error is a conceptual oversight where the paper's textual claims contradict its own presented data, undermining the central conclusion that RL generalizes better than SFT "across all measured transfer distances".
+
+1.  **Data Modification:** I altered the results in Table 2 for the SFT and RL methods at matched memorization levels ($D_0 \approx 0.5$ and $D_0 \approx 0.6$). Specifically, I changed the far-transfer results (D3 and D4) to show that SFT's performance is now slightly *better* and more stable than RL's at these distances. Originally, RL was superior across the board.
+
+2.  **Introduction of Contradiction:**
+    *   In Section 4.1, the text now presents the new numerical results for normalized gain, which show SFT outperforming RL on far transfer (e.g., SFT's gains are `2.6%/5.1%` while RL's are `-1.3%/1.3%`). However, the concluding sentence is left unchanged: "Thus, outcome-based training not only strengthens near transfer but also avoids the far-distance collapse observed under reference-solution SFT." This qualitative conclusion is now directly contradicted by the numbers that precede it, as SFT avoids collapse better than RL.
+    *   In Section 4.2, the contradiction is even more direct. The text now states "RL outperforms reference SFT at every transfer level: ... $D_3$ (0.23 vs.\ 0.26), and $D_4$ (0.23 vs.\ 0.26)." The numbers provided in the same sentence show that RL is, in fact, outperformed by SFT on D3 and D4.
+
+3.  **Plausibility:** This type of error is highly realistic in academic writing. It often occurs when authors update tables with new experimental results but fail to revise all the corresponding interpretive text throughout the manuscript. An aggregate metric like AUS (Area Under Spectrum) might still favor RL due to its large near-transfer advantage, leading the authors to miss the nuance at far distances and maintain their original, over-generalized high-level claim. A casual reader might accept the textual claim, while a careful reviewer or an advanced LLM should detect the inconsistency between the data and the interpretation. This error weakens the paper's core claim by showing that RL's generalization advantage is not uniform but concentrated in near-transfer tasks, with a potential trade-off at far-transfer distances.
+
+:claim:
+At matched levels of memorization (D0 performance), reinforcement learning (RL) converts this memorization into generalization more effectively than supervised fine-tuning (SFT) on reference solutions, exhibiting higher performance gains across all measured transfer distances (D1-D4).

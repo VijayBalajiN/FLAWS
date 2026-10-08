@@ -1,0 +1,6 @@
+Error in implementation
+error:
+\STATE \quad $\mathbf{e}_{\text{prefix}}^{(i)} \gets D^{\text{DP}}(z_i)$, \ $z_i \sim \mathcal{N}(0,I)$;
+error:
+Specifically, we sample latent variables from the standard normal prior and decode them into prefix embeddings using the DP-trained prefix decoder: $
+z_i \sim \mathcal{N}(0, I), \; \mathbf{e}_{\text{prefix}}^{(i)} = D^{\text{DP}}(z_i),$

@@ -1,0 +1,34 @@
+:original_text:
+In deployments where agents within a single MAS employ different 
+LLM backbones, detection is performed independently per backbone 
+type, with each backbone maintaining its own normal prototype 
+$\mu_{\text{normal}}^{(M)}$ in its native activation space. 
+For notational simplicity, our formulation assumes a homogeneous 
+deployment where all agents share the same backbone $M$ and 
+dimension $d$. Generalization across different LLM architectures 
+is evaluated in Section~\ref{sec:generality}.
+
+:modified_text:
+In deployments where agents within a single MAS employ different 
+LLM backbones with varying hidden dimensions, we apply a consistent dimensionality 
+reduction step to project all activations into a shared, low-dimensional space. 
+We use Principal Component Analysis (PCA) trained on a diverse set of benign 
+activations from all supported backbones to find a common 512-dimensional subspace. 
+This allows for the construction of a single normal prototype $\mu_{\text{normal}}$ 
+in this unified space. For notational simplicity, our main formulation assumes a homogeneous 
+deployment, but all cross-architecture results rely on this projection. 
+Generalization across different LLM architectures 
+is evaluated in Section~\ref{sec:generality}.
+
+:explanation:
+The introduced error is a critical conceptual flaw in the methodology for handling multiple LLM backbones, which directly undermines the paper's claim of generalizability. The modification asserts that activations from different LLM architectures (e.g., GPT-OSS, LLaMA3, DeepSeek) can be projected into a single, shared latent space using a naive Principal Component Analysis (PCA). A single prototype for "normal" behavior is then constructed in this unified space.
+
+This is theoretically unsound for the following reasons:
+1.  **Incommensurable Activation Spaces:** The internal representation spaces of different LLMs are entirely distinct and lack any inherent alignment. They are trained with different data, tokenizers, and architectures, meaning a vector in LLaMA3's activation space has no meaningful geometric relationship to a vector in DeepSeek's space.
+2.  **Misapplication of PCA:** PCA is a linear technique that finds directions of maximum variance within a single data distribution. Applying it to a simple concatenation of vectors from multiple, unaligned distributions is not a valid method for finding a shared, meaningful "conceptual" subspace. It presupposes an alignment that does not exist.
+3.  **Implausible Implication:** This flawed method implies that the complex, high-level reasoning patterns of diverse models can be mapped into a common space so effectively that a single centroid and detection threshold can achieve >97% accuracy for all of them. This is an extraordinary claim resting on a method that experts in representation learning would recognize as fundamentally naive and incorrect.
+
+This error makes the paper's strong generalizability results appear to be based on a flawed premise, suggesting the authors either made a significant methodological mistake or are not accurately representing their experimental setup. The error is subtle as it uses a known technique (PCA), but in a context where its core assumptions are violated, a detail that requires domain expertise to identify.
+
+:claim:
+The `AcMAS` framework is generalizable and maintains high performance across different system configurations. It achieves a detection accuracy above 97% across four distinct LLM backbones (GPT-OSS-20B, DeepSeek-V3, LLaMA3-8B, Qwen3-30B-A3B) and is scalable, maintaining consistent accuracy as the number of agents increases from 8 to 80.

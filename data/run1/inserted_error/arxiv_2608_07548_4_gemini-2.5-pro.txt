@@ -1,0 +1,39 @@
+An academic error has been introduced that undermines the claim that training with a visual reconstruction loss is necessary for effective self-correction. The error is a conceptual flaw in the formulation of the reconstruction loss (`L_rec`) itself, making its contribution to learning a predictive world model questionable.
+
+:original_text:
+To this end, we further supervise the action-conditioned prior transition by its ability to anticipate future visual features.
+Specifically, given the foresight state $\tilde{\boldsymbol{s}}_{t+1}$ predicted by the world model, a lightweight decoder $d(\cdot)$ maps it to an estimate of the next-step front-view visual representation (Eq.(\ref{Eq:v})).
+The supervision signal $\boldsymbol{v}_{t+1}$ is obtained by encoding the observation at $t{+}1$ with a pretrained visual encoder~\cite{dosovitskiy2020image}:
+\begin{align}\label{eq:rec}
+  \mathcal{L}_{\mathrm{rec}} =    \mathbb{E}_{t}\Big[\left\|
+d(\tilde{\boldsymbol{s}}_{t+1})-\boldsymbol{v}_{t+1}
+\right\|_2^2\Big]. 
+\end{align}
+Although defined in the visual feature space, this objective directly constrains the transitioned latent state, encouraging the world model to encode task-relevant environment dynamics without resorting to pixel-level reconstruction.
+
+:modified_text:
+To this end, we further supervise the action-conditioned prior transition by its ability to maintain representational consistency.
+Specifically, given the foresight state $\tilde{\boldsymbol{s}}_{t+1}$ predicted by the world model, a lightweight decoder $d(\cdot)$ maps it to an estimate of the current-step calibrated front-view visual representation (Eq.(\ref{Eq:v})).
+The supervision signal is the calibrated visual feature $\boldsymbol{\hat{v}}_{t}$ from the current timestep:
+\begin{align}\label{eq:rec}
+  \mathcal{L}_{\mathrm{rec}} =    \mathbb{E}_{t}\Big[\left\|
+d(\tilde{\boldsymbol{s}}_{t+1})-\boldsymbol{\hat{v}}_{t}
+\right\|_2^2\Big]. 
+\end{align}
+Although defined in the visual feature space, this objective directly constrains the transitioned latent state, encouraging the world model to encode stable, task-relevant environment dynamics without resorting to pixel-level reconstruction.
+
+:original_text:
+Additionally, removing the reconstruction loss $\mathcal{L}_{\mathrm{rec}}$ (Eq.~(\ref{eq:rec})) leads to performance degradation, confirming that $\mathcal{L}_{\mathrm{rec}}$ helps learn effective latent representations for accurate world model predictions.
+
+:modified_text:
+Additionally, removing the reconstruction loss $\mathcal{L}_{\mathrm{rec}}$ (Eq.~(\ref{eq:rec})) leads to performance degradation, confirming that $\mathcal{L}_{\mathrm{rec}}$ is crucial for learning stable latent representations that maintain representational consistency across state transitions.
+
+:explanation:
+The core conceptual error introduced is the misspecification of the self-supervised reconstruction loss, $\mathcal{L}_{\mathrm{rec}}$. A world model's primary function is to learn a forward dynamics model that can predict future states. Therefore, the reconstruction loss should enforce that the predicted future latent state, $\tilde{\boldsymbol{s}}_{t+1}$, contains sufficient information to reconstruct the corresponding *future* visual observation, $\boldsymbol{v}_{t+1}$.
+
+The modification changes the reconstruction target from the future visual feature ($\boldsymbol{v}_{t+1}$) to the *current* calibrated visual feature ($\boldsymbol{\hat{v}}_{t}$). This is a fundamental flaw. By training the model to reconstruct the current observation from the *next* predicted latent state, the objective incentivizes the model to learn a static or identity-like state transition. It discourages the latent state from evolving in a way that reflects changes in the environment, as the optimal solution would be for $\tilde{\boldsymbol{s}}_{t+1}$ to retain information about the past/current observation, not anticipate the future one. This undermines the very purpose of having a predictive world model for foresight.
+
+The error is made subtle and plausible by re-framing the objective's purpose from "anticipating future features" to "maintaining representational consistency" and encoding "stable" dynamics. This academic-sounding jargon masks the fact that the model is not learning to predict the future. The subsequent modification in the ablation study analysis reinforces this flawed logic, misattributing the performance gain from $\mathcal{L}_{\mathrm{rec}}$ to its ability to enforce "consistency" rather than "prediction." An expert would recognize that this objective actively prevents the model from learning a true forward dynamics model, thereby weakening the paper's central claim about the effectiveness of its foresight and self-correction mechanism.
+
+:claim:
+Training the world model with a self-supervised objective to reconstruct future visual features from its predicted latent state is necessary for the effectiveness of the self-correction mechanism, and removing this reconstruction loss (`L_rec`) degrades performance.

@@ -1,0 +1,20 @@
+:error_text:
+We evaluate nD-RoPE across several high-dimensional settings, including images, videos, and point clouds, showing consistent improvements in in-domain performance, rotational robustness, and resolution or density extrapolation over existing positional embedding methods.
+
+:error_text:
+Overall, these results demonstrate that nD-RoPE provides a stronger geometry-aligned inductive bias for handling scale shifts across images, videos, and point clouds.
+
+:error_text:
+Across all settings, nD-RoPE exhibits consistently slower performance degradation than axis-wise and mixed RoPE variants as the evaluation scale departs from the training configuration (Tables~\ref{tab:imagenet_full_resolution}, \ref{tab:timesformer_resolution}, \ref{tab:modelnet40_extrapolation}, and \ref{tab:semantickitti_extrapolation}).
+
+:error_text:
+this crystalline structure ensures that relative positional relationships scale predictably, leading to representations that remain stable and well-conditioned even far outside the training distribution.
+
+:explanation:
+The paper's central claims about superior and consistent extrapolation performance are directly contradicted by its own experimental results.
+
+1.  **Catastrophic Failure Compared to Baselines:** In image and video resolution extrapolation (Tables 1 and 2), nD-RoPE's performance collapses dramatically at high resolutions and is significantly worse than the standard learnable absolute positional embedding (APE) baseline. For instance, on ImageNet at 1024x1024 resolution, nD-RoPE achieves 35.51% accuracy, whereas the learnable PE baseline from DeiT-S reaches 50.99%. A similar catastrophic drop is seen on Kinetics-400 (29.21% for nD-RoPE vs. 54.23% for learnable PE). This invalidates the claim of improved extrapolation "over existing positional embedding methods."
+
+2.  **Inconsistent Performance:** The claim of "consistently slower performance degradation" is falsified in Table 4 (SemanticKITTI), where at the coarsest grid resolution (0.15), nD-RoPE (53.53% mIoU) is outperformed by "3D RoPE-Axial + APE" (54.19% mIoU).
+
+The textual claims of robust, stable, and superior extrapolation are not supported by the data. The paper selectively emphasizes comparisons against weaker RoPE variants while ignoring a standard baseline that performs much better, and makes claims of consistency that are demonstrably false. This is a major flaw that undermines one of the paper's key advertised contributions.

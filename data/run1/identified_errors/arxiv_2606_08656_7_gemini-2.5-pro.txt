@@ -1,0 +1,17 @@
+:error_text:
+As expected from our analysis in Section~\ref{sec:multi-turn}, optimizing the correctly decomposed one-step objective is substantially more effective. The cumulative return objective is theoretically mis-specified for this problem, as it fails to respect the turn-wise independence of the memory updates. Table~\ref{tab:reward_design} confirms this, showing that the performance of the cumulative reward formulation is far below our one-step approach, only 0.61 on LHE. This result validates that properly decomposing the long-horizon problem is critical for effective learning.
+
+:error_text:
+Because the frozen player $\pi$ is stateless across games and only conditions on the most recent memory $m_t$, the long-horizon problem of maximizing cumulative reward decomposes into a series of independent one-step optimization problems. The objective for turn $t$ is to generate a memory $m_t$ that maximizes the reward of the next game, $r_{t+1}$.
+
+:error_text:
+This formulation is not a proxy; it directly optimizes the objective and avoids confounding the credit assignment with outcomes from future games, which are independent of the current memory update given the stateless nature of the player. This yields a clean, low-variance learning signal perfectly aligned with our decomposed objective.
+
+:explanation:
+The paper's core theoretical justification for its reward design is based on a fundamental flaw in its formulation of the memory update problem. The authors incorrectly claim that the problem decomposes into a series of independent one-step optimization problems.
+
+The reasoning is that because the frozen player $\pi$ is stateless and only conditions on the most recent memory $m_t$, the action of generating $m_t$ only affects the reward of the next game, $r_{t+1}$. This is false. The memory update process itself is stateful. The memory $m_t$ generated after game $t$ becomes a crucial part of the state for the *next* memory update, since the state at turn $t+1$ is $s_{t+1} = (e_{t+1}, m_t)$.
+
+Therefore, the choice of $m_t$ directly influences all future memory generations ($m_{t+1}, m_{t+2}, \dots$) and, consequently, all future rewards ($r_{t+2}, r_{t+3}, \dots$). The problem is a standard sequential decision-making problem, not a set of independent one-step problems. The correct objective should be to maximize the cumulative, long-horizon reward.
+
+The paper's formulation, which uses only the one-step reward $r_{t+1}$, is a myopic approximation. The most serious error is in the ablation study (Section 5.5), where this flawed reasoning is used to claim that the standard cumulative reward is "theoretically mis-specified," which is the opposite of the truth. This misunderstanding of the underlying MDP structure invalidates the central theoretical claim of the paper's method.

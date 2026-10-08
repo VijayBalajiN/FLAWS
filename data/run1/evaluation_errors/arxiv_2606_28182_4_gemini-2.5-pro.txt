@@ -1,0 +1,15 @@
+:error_text:
+For LLaMA-3.1-8B, although our method slightly underperforms the ReAct baseline, this gap is primarily attributable to the limited ability of this model to effectively utilize the Talk action. This limitation is consistent across all communicative baselines on this backbone, including RoCo, CoELA, and CommPARTNR, all of which underperform ReAct.
+
+:error_text:
+Across four backbone LLMs, our method achieves average success rate improvements of 4.5% on the PARTNR-Dialog benchmark and 6.8% on the TDW-MAT benchmark over state-of-the-art open-source communicative agent frameworks.
+
+:error_text:
+Our goal is to select episodes that are both successful and aligned with the learned laws P. ... we condition the backbone LLM on the law set and the episode trace, and prompt the LLM to determine whether the episode is law-aligned... Only episodes that are both successful and law-aligned are retained
+
+:explanation:
+The most serious flaw is the admission that the proposed method, designed to improve communication and cooperation, performs worse than a non-communicative baseline (ReAct) when using the LLaMA-3.1-8B model. This result undermines the central claim of the paper, suggesting the method is not robust and can even be detrimental for less capable, yet commonly used, models.
+
+This issue is compounded by the second excerpt from the abstract, which claims an "average success rate improvement" across all models. This is highly misleading as it averages a significant performance degradation with positive results from other models, obscuring a critical failure case from the reader in the paper's main summary.
+
+Finally, the third excerpt describes a core methodological step that introduces a strong potential for confirmation bias. The "laws" are derived from analyzing failures. The framework then filters its training data to include only successful episodes that are also "aligned" with these laws. This circular process risks discarding novel or more effective successful strategies simply because they do not conform to the narrowly-defined laws, potentially leading to a suboptimal and less robust agent.

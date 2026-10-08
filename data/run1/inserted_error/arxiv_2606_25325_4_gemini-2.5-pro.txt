@@ -1,0 +1,41 @@
+:original_text:
+\caption{ 
+The framework of \ourmethod.
+Top: Fine-grained evidence is organized into video cues $\mathcal{C}_V$, audio cues $\mathcal{C}_A$, and emotion cues $\mathcal{C}_E$. CoT is segmented into clauses $\mathcal{U}$, which are identified as video, audio, or emotion types based on their semantic content.
+Middle: The Omni-Perception Reward (\ref{sec:reward}). An Evidence-Routing Matrix computes the semantic similarities between generated clauses and ground-truth cues. This encourages the model to explicitly cover diverse multimodal evidence during reasoning.
+Bottom: The Omni-Perception Loss (\ref{sec:loss}). We construct unimodal masked inputs and maximize the KL divergence between the full and masked distributions on modality-specific tokens $u_k$. This enforces faithfulness by penalizing the model for hallucinating information from missing modalities.
+}
+
+:modified_text:
+\caption{ 
+The framework of \ourmethod.
+Top: Fine-grained evidence is organized into video cues $\mathcal{C}_V$, audio cues $\mathcal{C}_A$, and emotion cues $\mathcal{C}_E$. CoT is segmented into clauses $\mathcal{U}$, which are identified as video, audio, or emotion types based on their semantic content.
+Middle: The Omni-Perception Reward (\ref{sec:reward}). An Evidence-Routing Matrix computes the semantic similarities between generated clauses and ground-truth cues. This encourages the model to explicitly cover diverse multimodal evidence during reasoning.
+Bottom: The Omni-Perception Loss (\ref{sec:loss}). We construct unimodal masked inputs and maximize the KL divergence between the masked and full distributions on modality-specific tokens $u_k$. This enforces faithfulness by penalizing the model for hallucinating information from missing modalities.
+}
+
+:original_text:
+\begin{equation}
+\label{eq:kl_token}
+\mathcal{L}_t^{m}(\theta) \;=\; \mathbb{D}_{\mathrm{KL}}\!\left(p_t \,\|\, p_t^{m}\right),\quad 
+m \in \{\tilde{V},\tilde{A}\}.
+\end{equation}
+
+:modified_text:
+\begin{equation}
+\label{eq:kl_token}
+\mathcal{L}_t^{m}(\theta) \;=\; \mathbb{D}_{\mathrm{KL}}\!\left(p_t^{m} \,\|\, p_t\right),\quad 
+m \in \{\tilde{V},\tilde{A}\}.
+\end{equation}
+
+:explanation:
+The conceptual error introduced is a subtle but critical misuse of the Kullback-Leibler (KL) divergence in the Omni-Perception Loss function.
+
+1.  **Flipping the KL Divergence Arguments:** I swapped the arguments in the KL divergence formula from $\mathbb{D}_{\mathrm{KL}}(p_t \,\|\, p_t^m)$ to $\mathbb{D}_{\mathrm{KL}}(p_t^m \,\|\, p_t)$, where $p_t$ is the policy with full input and $p_t^m$ is the policy with a masked modality. The caption for Figure 2 was also altered for consistency.
+
+2.  **Theoretical Implication:** KL divergence is asymmetric. The original formulation, $\mathbb{D}_{\mathrm{KL}}(P\|Q)$, is the "forward KL". Maximizing it encourages $Q$ to have low probability where $P$ has high probability. In this paper's context, it would correctly penalize the masked policy ($p_t^m$) for generating tokens that the full policy ($p_t$) would confidently generate. The modified formulation, $\mathbb{D}_{\mathrm{KL}}(Q\|P)$, is the "reverse KL". Maximizing it encourages $Q$ (the masked policy) to place probability mass in regions where $P$ (the full policy) has low or zero probability. This "mode-seeking" behavior would not achieve the goal of gracefully retracting claims about a missing modality. Instead, it would encourage the model to generate arbitrary, out-of-distribution, or even nonsensical tokens simply to be different from the full policy, which could destabilize training and harm performance.
+
+3.  **Subtlety and Significance:** This error is hard to detect for a non-expert, as it appears to be a minor notational choice. However, it fundamentally changes the optimization objective to something theoretically unsound for the stated goal of ensuring faithfulness. Furthermore, this change creates a deep inconsistency with the theoretical analysis in Appendix A, which relies on the properties of the forward KL divergence to establish a connection to mutual information. The entire theoretical justification for the Omni-Perception Loss in the appendix is now based on a different loss function than the one presented in the method section, a significant but plausible oversight in a complex research paper.
+
+:claim:
+The complete Omni-Perception Policy Optimization (OPPO) framework achieves state-of-the-art performance on the established MER-UniBench and MME-Emotion benchmarks, surpassing previous models like AffectGPT-R1.

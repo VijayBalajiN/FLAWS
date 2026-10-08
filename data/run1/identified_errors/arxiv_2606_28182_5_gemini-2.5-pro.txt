@@ -1,0 +1,18 @@
+:error_text:
+We further ablate the data filtering step by training on all episodes without enforcing success or law alignment (\textit{w/o Filter}). This variant results in a clear performance decline, indicating that including failed or law-misaligned episodes introduces noisy or conflicting supervision that negatively impacts learning.
+
+:error_text:
+With the laws $\mathcal{P}$ extracted from failure traces, we now have a set of principles to guide the agent's behavior. The next step is to use these laws to generate corrective training data directly from the episodes where the agent failed. This allows the model to learn directly from its mistakes, rather than from successful examples that may not cover all critical failure modes. This process ensures that the supervision is targeted at the specific weaknesses identified during law extraction.
+
+:error_text:
+Our framework is implemented as a modular pipeline with six stages: (1) law extraction from $\mathcal{E}_{fail}$, (2) law-aligned trace $\mathcal{E}_{retain}$ selection, (3) law-guided action reflection, (5) supervised fine-tuning, and (6) law-guided inference. As Figure~\ref{fig:method} shows, with the laws $\mathcal{P}$ serving as the central interface, \name enables human oversight through direct $\mathcal{P}$ modification.
+
+:error_text:
+Guided by these laws and task performance signals, agents reorganize their chains of thought and reflect on failed interaction traces to generate corrected training data. We then embed these laws into the LLM via supervised fine-tuning, enabling the agent to explicitly internalize and adhere to the discovered principles in its task execution and cooperation.
+
+:explanation:
+The paper's core methodological claim is a "failure-driven self-correction" process where agents learn by generating corrective training data from their own *failed* episodes. This is stated explicitly and repeatedly in the introduction and methodology sections.
+
+However, the description of the "\textit{w/o Filter}" ablation study directly contradicts this central claim. It reveals that the full method actually uses a "data filtering step" and that including "failed or law-misaligned episodes introduces noisy or conflicting supervision that negatively impacts learning." This implies that the method's success relies on filtering out failures and training on successful episodes, which is the opposite of the claimed "learn from mistakes" approach.
+
+This contradiction fundamentally misrepresents the paper's contribution. The claimed novelty is learning from failure, but the results suggest that this is detrimental and the actual, undisclosed method involves learning from success. The implementation section further obscures this by mentioning an undefined step, "law-aligned trace $\mathcal{E}_{retain}$ selection," without any explanation, which is likely the critical filtering mechanism. This lack of transparency and direct contradiction between the methodology and the ablation results undermines the validity of the paper's claims.

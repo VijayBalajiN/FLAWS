@@ -1,0 +1,13 @@
+Based on the LaTeX source of the research paper, here is a list of its major, unique, and falsifiable claims:
+
+1.  The image-level summary token (`[CLS]`) in a Vision Transformer (ViT) encodes less than half of the total binding information present in a multi-object scene.
+
+2.  The binding information that is encoded in the `[CLS]` token is predominantly structured quadratically, corresponding to a conjunctive encoding of features (e.g., as a dot product between color and shape projections).
+
+3.  The full set of a ViT's spatial tokens contains nearly all (over 90%) of the scene's binding information, which can be almost perfectly decoded using a simplified attention-based probe.
+
+4.  The proportion of binding information that a ViT's representation captures decreases as the complexity of the feature space (i.e., the number of colors and shapes) in the dataset increases.
+
+5.  The amount of decodable binding information in a ViT's representation monotonically decreases as the level of occlusion between objects in the scene increases.
+
+6.  Increasing the input image resolution for a CLIP ViT model (from 224px to 336px) leads to an increase in the amount of decodable binding information in its representations.

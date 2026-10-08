@@ -1,0 +1,13 @@
+:error_text:
+Warm-up on A, then B & 2.56 & 3.26
+
+:error_text:
+Cold-start on B (5 games only) & 3.28 & 2.03
+
+:error_text:
+Across test opponents, we pair each evaluation opponent B with a distinct warm-up opponent A via a fixed bijection to balance coverage. Table~\ref{tab:cross_opponent} shows that \method{} remains effective after the opponent switch, achieving $3.26$ on LHE, indicating that the learned memory updates can revise prior beliefs rather than overfitting to early experience.
+
+:explanation:
+The results of the cross-opponent evaluation in Table 5.4 contain a highly counter-intuitive and unexplained finding that undermines the credibility of the experimental setup. Specifically, for the Limit Texas Hold'em (LHE) game, the agent achieves a score of 3.26 when it first plays five games against a "distinct" opponent A before playing against the target opponent B. This score is substantially higher than the 2.03 achieved when the agent starts "cold" on opponent B.
+
+This result implies a massive positive transfer effect where experience against an unrelated opponent is significantly more beneficial than direct experience against the target opponent. The paper's explanation—that the agent "remains effective" and can "revise prior beliefs"—is wholly insufficient as it fails to address why performance dramatically *improves* rather than just adapting. Such a strong, unexplained transfer effect suggests a potential flaw in the experimental design, such as the "distinct" opponents not being meaningfully different, or an artifact in the evaluation that casts doubt on all LHE results.

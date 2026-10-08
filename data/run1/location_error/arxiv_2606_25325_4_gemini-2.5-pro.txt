@@ -1,0 +1,85 @@
+Error in algorithm/proof
+error:
+\subsection{Proposition: Omni-Perception Loss as a Conditional Mutual Information Proxy}
+\label{proposition1}
+We first recall the definition of conditional mutual information in our context. Given the random variables $\mathcal{T}_{m}$ (evidence tokens) and $m$ (target modality), conditioned on the masked context $X^{\tilde{m}}$, the conditional mutual information induced by the policy $\pi_\theta$ is defined as:
+\begin{equation}
+I_\theta(\mathcal{T}_{m}; m | X^{\tilde{m}}) = \mathbb{E}_{X} \big[ \mathbb{D}_{\mathrm{KL}}\big( \pi_\theta(\cdot | X) \,\|\, P_\theta(\cdot | X^{\tilde{m}}) \big) \big],
+\end{equation}
+where $P_\theta(\cdot | X^{\tilde{m}})$ is the true marginal distribution of evidence tokens given the masked context. This quantity measures the information that $\mathcal{T}_{m}$ carries about $m$ when $X^{\tilde{m}}$ is observed.
+
+\begin{proposition}[Conditional Mutual Information Decomposition]
+The Omni-Perception Loss $\mathcal{J}_{\mathrm{omni}}(\theta)$ can be decomposed into the conditional mutual information $I_\theta(\mathcal{T}_{m}; m | X^{\tilde{m}})$ and a variational approximation error:
+\begin{equation}
+\mathcal{J}_{\mathrm{omni}}(\theta) = I_\theta(\mathcal{T}_{m}; m | X^{\tilde{m}}) + \Delta_{\mathrm{var}}(\theta),
+\end{equation}
+where $\Delta_{\mathrm{var}}(\theta) = \mathbb{E}_{X^{\tilde{m}}} \big[ \mathbb{D}_{\mathrm{KL}}\big( P_\theta(\mathcal{T}_{m} | X^{\tilde{m}}) \,\|\, \pi_\theta(\mathcal{T}_{m} | X^{\tilde{m}}) \big) \big] \geq 0$.
+\end{proposition}
+
+\noindent \textit{Proof.}
+By definition, the Omni-Perception Loss is the expected $\mathbb{D}_{\mathrm{KL}}$ divergence between the full policy and the masked policy on modality-specific tokens:
+\begin{equation}
+\mathcal{J}_{\mathrm{omni}}(\theta) = \mathbb{E}_{X} \big[ \mathbb{D}_{\mathrm{KL}}\big( \pi_\theta(\mathcal{T}_{m} | X) \,\|\, \pi_\theta(\mathcal{T}_{m} | X^{\tilde{m}}) \big) \big].
+\end{equation}
+By inserting $P_\theta$ and expanding the $\mathbb{D}_{\mathrm{KL}}$ as an expectation over $\mathcal{T}_{m} \sim \pi_\theta(\cdot|X)$, we obtain:
+\begin{align}
+\mathcal{J}_{\mathrm{omni}}(\theta)
+&= \mathbb{E}_{X} \big[ \mathbb{E}_{y \sim \pi_\theta(\cdot|X)} \big[ \log \frac{\pi_\theta(y | X)}{P_\theta(y | X^{\tilde{m}})} + \log \frac{P_\theta(y | X^{\tilde{m}})}{\pi_\theta(y | X^{\tilde{m}})} \big] \big] \notag \\
+&= \underbrace{\mathbb{E}_{X} \big[ \mathbb{D}_{\mathrm{KL}}\big( \pi_\theta(\cdot | X) \,\|\, P_\theta(\cdot | X^{\tilde{m}}) \big) \big]}_{I_\theta(\mathcal{T}_{m}; m | X^{\tilde{m}})} + \underbrace{\mathbb{E}_{X^{\tilde{m}}} \big[ \mathbb{D}_{\mathrm{KL}}\big( P_\theta(\cdot | X^{\tilde{m}}) \,\|\, \pi_\theta(\cdot | X^{\tilde{m}}) \big) \big]}_{\Delta_{\mathrm{var}}(\theta)}.
+\end{align}
+
+\noindent\textbf{Interpretation.} Proposition~\ref{proposition1} establishes $\mathcal{J}_{\mathrm{omni}}$ as a variational upper bound on the conditional mutual information. While maximizing this bound could theoretically increase the variational gap $\Delta_{\mathrm{var}}$ rather than the mutual information $I_\theta$, our framework prevents this trivial solution through parameter sharing. Since the variational approximation $\pi_\theta(\cdot | X^{\tilde{m}})$ and the full policy $\pi_\theta(\cdot | X)$ share the same backbone, they are structurally coupled. Arbitrarily inflating $\Delta_{\mathrm{var}}$ would require distorting the masked policy, which would inadvertently degrade the full policy. Consequently, maximizing $\mathcal{J}_{\mathrm{omni}}$ forces the model to genuinely increase the true mutual information, ensuring faithful modality-specific perception.
+
+
+\subsection{Proposition: Information-Theoretic Upper Bound on Reward}
+\label{proposition2}
+To strictly connect the reward to our information-theoretic framework, we interpret the goal of $R_{\mathrm{omni}}$ as maximizing the information recovery of ground-truth cues.
+
+
+
+
+\paragraph{Information-theoretic interpretation of $R_{\mathrm{omni}}$.}
+We interpret the semantic alignment reward $R_{\mathrm{omni}}$ as an information-theoretic surrogate that encourages the recovery of ground-truth evidence cues from the generated modality-specific tokens. In particular, $R_{\mathrm{omni}}$ promotes semantic consistency between the generated evidence $\mathcal{T}_{m}$ and the ground-truth cues $\mathcal{C}_{m}$, which intuitively corresponds to reducing the conditional uncertainty of $\mathcal{C}_{m}$ given $\mathcal{T}_{m}$ and the masked context $X^{\tilde{m}}$, i.e., $H(\mathcal{C}_{m} \mid \mathcal{T}_{m}, X^{\tilde{m}})$.
+Since $I_\theta(\mathcal{T}_{m}; \mathcal{C}_{m} \mid X^{\tilde{m}}) = H(\mathcal{C}_{m} \mid X^{\tilde{m}}) - H(\mathcal{C}_{m} \mid \mathcal{T}_{m}, X^{\tilde{m}})$, and the conditional entropy $H(\mathcal{C}_{m} \mid X^{\tilde{m}})$ is independent of the model parameters $\theta$, encouraging the reduction of $H(\mathcal{C}_{m} \mid \mathcal{T}_{m}, X^{\tilde{m}})$ is consistent with increasing the conditional mutual information $I_\theta(\mathcal{T}_{m}; \mathcal{C}_{m} \mid X^{\tilde{m}})$. $R_{\mathrm{omni}}$ provides a practical and task-aligned proxy that steers the model toward evidence tokens that are semantically informative of the ground-truth cues.
+
+
+\begin{proposition}[Information Bound]
+The mutual information between the generated evidence and the ground-truth cues is upper-bounded by the mutual information between the evidence and the modality:
+\begin{equation}
+    \label{eq:prop_bound}
+    I_\theta(\mathcal{T}_{m}; \mathcal{C}_{m} | X^{\tilde{m}}) \leq I_\theta(\mathcal{T}_{m}; m | X^{\tilde{m}}).
+\end{equation}
+\end{proposition}
+
+\noindent \textit{Proof.}
+We consider the chain rule of mutual information for the triple $(\mathcal{T}_{m}, m, \mathcal{C}_{m})$ conditioned on $X^{\tilde{m}}$. We can decompose $I_\theta(\mathcal{T}_{m}; m, \mathcal{C}_{m} | X^{\tilde{m}})$ in two ways:
+\begin{align}
+    \label{eq:chain_rule_1}
+    I_\theta(\mathcal{T}_{m}; m, \mathcal{C}_{m} | X^{\tilde{m}}) &= I_\theta(\mathcal{T}_{m}; m | X^{\tilde{m}}) + I_\theta(\mathcal{T}_{m}; \mathcal{C}_{m} | m, X^{\tilde{m}}), \\
+    \label{eq:chain_rule_2}
+    I_\theta(\mathcal{T}_{m}; m, \mathcal{C}_{m} | X^{\tilde{m}}) &= I_\theta(\mathcal{T}_{m}; \mathcal{C}_{m} | X^{\tilde{m}}) + I_\theta(\mathcal{T}_{m}; m | \mathcal{C}_{m}, X^{\tilde{m}}).
+\end{align}
+Since $\mathcal{C}_{m}$ is a deterministic function of $m$ (Assumption~\ref{assumption1}), given $m$, $\mathcal{C}_{m}$ provides no additional information about $\mathcal{T}_{m}$. Therefore, $I_\theta(\mathcal{T}_{m}; \mathcal{C}_{m} | m, X^{\tilde{m}}) = 0$. Equating the two decompositions, we have:
+\begin{equation}
+    \label{eq:equating}
+    I_\theta(\mathcal{T}_{m}; m | X^{\tilde{m}}) = I_\theta(\mathcal{T}_{m}; \mathcal{C}_{m} | X^{\tilde{m}}) + \underbrace{I_\theta(\mathcal{T}_{m}; m | \mathcal{C}_{m}, X^{\tilde{m}})}_{\geq 0}.
+\end{equation}
+Because mutual information is non-negative, it follows directly that:
+\begin{equation}
+    \label{eq:final_result}
+    I_\theta(\mathcal{T}_{m}; \mathcal{C}_{m} | X^{\tilde{m}}) \leq I_\theta(\mathcal{T}_{m}; m | X^{\tilde{m}}).
+\end{equation}
+
+
+
+\noindent\textbf{Interpretation.}
+Proposition~\ref{proposition2} establishes a fundamental bottleneck: the amount of information that $\mathcal{T}_{m}$ can convey about $\mathcal{C}_{m}$ is strictly limited by the information that $\mathcal{T}_{m}$ extracts from the modality $m$ itself. Consequently, achieving a high reward is information-theoretically impossible without a sufficiently high mutual information $I_\theta(\mathcal{T}_{m}; m | X^{\tilde{m}})$. This justifies the role of $\mathcal{J}_{\mathrm{omni}}$ as a necessary regularizer that expands the upper bound (the channel capacity $I_\theta(\mathcal{T}_{m}; m | X^{\tilde{m}})$), thereby enabling the reward maximization.
+
+
+\subsection{Discussion: Synergistic Mechanism and Empirical Validation}
+
+\noindent\textbf{Synergy mechanism.}
+Our theoretical analysis elucidates the synergistic collaboration between the Omni-Perception Loss $\mathcal{J}_{\mathrm{omni}}$ and the Omni-Perception Reward $R_{\mathrm{omni}}$. The optimization process relies on their distinct yet coupled functions: while Propositions~\ref{proposition1} and \ref{proposition2} establish the information-theoretic bounds, we specifically analyze the optimization dynamics as follows. First, $\mathcal{J}_{\mathrm{omni}}$ serves to expand the faithful information channel by addressing the information theory derived in Proposition~\ref{proposition2}. It provides a dense, token-level supervision signal that raises the upper bound of faithful information, ensuring the model possesses sufficient capacity to transmit modality features. Second, from a dynamics standpoint, this dense signal mitigates the optimization variance stemming from the sparse reward $R_{\mathrm{omni}}$. It steers the policy search space toward modality-sensitive regions, discouraging collapse into hallucinated local optima before the sparse reward signal becomes effective. Complementarily, $R_{\mathrm{omni}}$ encourages the utilization of semantically aligned cues. Acting as a steering mechanism for precision, it transforms this raw capacity into task-specific utility by guiding the model to filter noise and leverage evidence that is discriminative for emotion understanding.
+
+\noindent\textbf{Empirical Validation.}
+This theoretical dependency is directly validated by the observations in \cref{fig:fig3} and \cref{tab:ablation_beta}. The hyperparameter $\beta$ explicitly controls the weight of the Omni-Perception Loss, thereby determining the strength of the signal used to expand the information capacity. Specifically, when $\beta$ is insufficient, the loss signal is too weak to counteract the high variance of the RL gradients or drive the extraction of modality features; consequently, the mutual information remains low, rendering the reward optimization ineffective due to the strict upper bound on performance. Conversely, with an appropriate $\beta$, the increased weight ensures that the dense supervision successfully reduces optimization variance and elevates this information-theoretic ceiling. This stabilized landscape paves the way for the reward to become effective, enabling the model to efficiently capture discriminative cues and achieve high performance.

@@ -1,0 +1,5 @@
+Incorrect or incomplete analysis
+error:
+We analyze the implications of the approximation gap where $\tilde{m}_i < m_i$. As shown in Figure \ref{fig:pseudomax}, such gaps are rare and numerically negligible. Crucially, when they do occur, this underestimation represents the primary source of approximation error.
+Recall our filtering condition: $s_{ij} \ge \tilde{m}_i - \delta$.
+If $\tilde{m}_i$ underestimates $m_i$, the threshold $\tilde{m}_i - \delta$ becomes lower than the ideal $m_i - \delta$. This causes FFD to fall back to a more conservative retrieval policy, preserving slightly more tokens. This structural asymmetry ensures that approximation errors result only in a minor increase in I/O budget (efficiency penalty), rather than the loss of critical information (accuracy penalty).

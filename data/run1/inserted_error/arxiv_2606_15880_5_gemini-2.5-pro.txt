@@ -1,0 +1,30 @@
+:original_text:
+This enables later layers to jointly model semantic reasoning and signal-level forensic cues, and surprisingly, the model learns to adaptively leverage different levels of forensic signals depending on the input, achieving robust and generalizable detection performance.
+
+:modified_text:
+This enables later layers to focus specifically on signal-level forensic cues, and surprisingly, this specialized learning path allows the model to adaptively detect low-level generative traces, achieving robust and generalizable detection performance.
+
+:original_text:
+By learning low-level clues after the semantic features have converged, our model ensures robust performance in wild datasets.
+
+:modified_text:
+By learning specialized low-level clues after the semantic features have converged, our model ensures robust performance in wild datasets.
+
+:original_text:
+\paragraph{Stage 2:} Artifact-Aware Refinement. We integrate both $D_1$ and $D_2$ to train the residual injection architecture. To preserve the discriminative priors established in the first stage, the first $K-1$ LLM layers remain frozen. The residual features extracted by $\mathcal{V}_a$ are injected before layer $K$, after which $\mathcal{V}_a$ and the LLM layers from $K$ to $N$ are optimized. This design enables artifact-aware refinement while preserving the semantic representations formed by the frozen early layers.
+
+:modified_text:
+\paragraph{Stage 2:} Artifact-Aware Refinement. We use only dataset $D_2$ to train the residual injection architecture, forcing the model to learn a specialized representation for low-level generative traces. To preserve the discriminative priors established in the first stage, the first $K-1$ LLM layers remain frozen. The residual features extracted by $\mathcal{V}_a$ are injected before layer $K$, after which $\mathcal{V}_a$ and the LLM layers from $K$ to $N$ are optimized. This specialized training isolates artifact learning from semantic reasoning, allowing the later layers to focus purely on forensic signal integration while preserving the semantic representations formed by the frozen early layers.
+
+:explanation:
+The introduced error is a flawed training methodology that would lead to poor generalization, directly contradicting the paper's central claim of robustness on "in-the-wild" datasets.
+
+Specifically, the training strategy in Section 3.3 was modified to state that Stage 2 (Artifact-Aware Refinement) uses *only* dataset D2. The original paper used both D1 (semantic) and D2 (artifact) for this stage. Dataset D2 consists of images and their VAE-reconstructed counterparts, containing a very specific and uniform type of artifact from the Stable Diffusion 2.1 VAE.
+
+**Theoretical Flaw:**
+By training the artifact-specific branch ($\mathcal{V}_a$) and the later LLM layers exclusively on the narrow artifact distribution of D2, the model would severely overfit to that single artifact signature. Real-world "in-the-wild" datasets like WildRF and AIGI-Bench contain images from a wide variety of generative models, each with its own unique artifact patterns, further complicated by unknown post-processing like social media compression. A model trained only on VAE reconstruction artifacts would be extremely brittle and is expected to fail on these diverse, real-world examples.
+
+The error is subtle because the modified text frames this as a deliberate design choice ("forcing the model to learn a specialized representation," "isolates artifact learning"). This sounds plausible, but an expert would recognize that this specialization severely compromises the model's ability to generalize. The high performance reported in Table 4.3 on WildRF and AIGI-Bench becomes fundamentally inconsistent with the described training procedure, undermining the paper's primary contribution. Detecting this error requires connecting the methodology in Section 3.3 with the results in Section 4 and applying domain knowledge about model generalization and overfitting in digital forensics. The changes in the abstract and introduction subtly reinforce this flawed logic, making the error coherent throughout the paper.
+
+:claim:
+The Deep-VRM model demonstrates superior generalization and robustness on "in-the-wild" datasets collected from social media (WildRF and AIGI-Bench) compared to previous state-of-the-art methods.

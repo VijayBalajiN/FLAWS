@@ -1,0 +1,17 @@
+:error_text:
+(Top) Training loss for $D_1$ (semantics-focused, dashed lines) converges faster and lower than for $D_2$ (artifact-focused, solid lines).
+
+:error_text:
+(Bottom) Validation accuracy highlights a semantic convergence zone (layers 16–20) where $D_1$ performance peaks, while $D_2$ accuracy remains stagnant ($\simeq 81\%$) across all depths.
+
+:error_text:
+However, once $\alpha$ reaches $0.5$, further increasing its value brings limited additional gains, and the average performance becomes nearly saturated. This indicates that the model is relatively robust to moderate changes in the fusion coefficients, likely because the trainable modules can partially adapt to different feature scales during optimization.
+
+:explanation:
+The paper's core motivation relies on an analysis presented in Figure 3, which is fundamentally misrepresented by its caption, creating a series of critical errors.
+
+1.  The most serious error is in the description of the training loss curves. The caption claims that the loss for the semantics-focused dataset $D_1$ (dashed lines) "converges faster and lower" than the artifact-focused dataset $D_2$. The plot, however, shows the exact opposite: the loss for $D_1$ is consistently higher and converges more slowly than the loss for $D_2$. This contradiction invalidates the paper's primary premise that the base MLLM is inherently proficient at semantics ($D_1$) but struggles with low-level artifacts ($D_2$), thereby undermining the entire rationale for the proposed architecture.
+
+2.  The second error is a gross misrepresentation of the validation accuracy. The caption states that accuracy for the artifact-focused dataset $D_2$ "remains stagnant ($\simeq 81\%$)". The corresponding plot (solid line in the bottom panel) clearly shows this accuracy is stagnant at approximately 0.5, or 50%, which corresponds to random guessing in a binary classification task. Falsely reporting 81% accuracy instead of 50% constitutes a major misstatement of the experimental findings.
+
+3.  The third error involves a misleading conclusion drawn from manipulated data in an ablation study. The text claims that after the fusion coefficient $\alpha$ reaches 0.5, "the average performance becomes nearly saturated". This claim of robustness is supported by a falsified value in Table 11 (`tab:ablation_coeff`). For the setting $(\alpha, \beta) = (0.7, 0.3)$, the table reports an average accuracy of 92.76%. However, calculating the average from the individual benchmark scores provided in the table ((96.76 + 94.24 + 90.10 + 86.97) / 4) yields 92.02%. The incorrectly inflated number makes the performance drop from the optimal 92.91% appear negligible, whereas the actual drop is more significant, contradicting the "nearly saturated" claim.

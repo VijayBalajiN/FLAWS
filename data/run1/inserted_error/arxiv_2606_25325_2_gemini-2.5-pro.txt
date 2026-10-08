@@ -1,0 +1,96 @@
+Here are the modifications to introduce the conceptual error into the paper.
+
+:original_text:
+\begin{abstract}
+We find that current emotion-oriented Omni-MLLMs still lack \emph{reliable omni-modal perception}: they (i) underutilize multimodal cues in their reasoning trajectories and (ii) exhibit unfaithful behavior, often hallucinating modality-specific statements from other modalities.  Building on these insights, we propose \ourmethod~(\texttt{O}mni-\texttt{P}erception \texttt{P}olicy \texttt{O}ptimization), a reinforcement learning framework that explicitly optimizes multimodal perception. First, an Omni-Perception Reward decomposes ground-truth reasoning into fine-grained visual, acoustic, and emotion cues and rewards trajectories that semantically recover these cues. Second, an Omni-Perception Loss compares the policy under full and unimodally masked inputs, applying a KL penalty only to modality-specific evidence tokens to suppress cross-modal hallucination. We further introduce \ourbench, a diagnostic benchmark that quantifies \emph{utilization} and \emph{faithfulness}.
+Experiments show that \ourmethod~achieves state-of-the-art performance on MER-UniBench and MME-Emotion, while substantially improving utilization and faithfulness scores on \ourbench, highlighting the importance of sufficient and faithful omni perception for multimodal emotion reasoning. Code is available at~ \url{https://github.com/ZhiyuanHan-Aaron/OPPO}.
+\end{abstract}
+
+:modified_text:
+\begin{abstract}
+We find that current emotion-oriented Omni-MLLMs still lack \emph{reliable omni-modal perception}: they (i) underutilize multimodal cues in their reasoning trajectories and (ii) exhibit unfaithful behavior, often hallucinating modality-specific statements from other modalities.  Building on these insights, we propose \ourmethod~(\texttt{O}mni-\texttt{P}erception \texttt{P}olicy \texttt{O}ptimization), a reinforcement learning framework that explicitly optimizes multimodal perception. First, an Omni-Perception Reward decomposes ground-truth reasoning into fine-grained visual, acoustic, and emotion cues and rewards reasoning clauses that are semantically grounded in these cues. Second, an Omni-Perception Loss compares the policy under full and unimodally masked inputs, applying a KL penalty only to modality-specific evidence tokens to suppress cross-modal hallucination. We further introduce \ourbench, a diagnostic benchmark that quantifies \emph{utilization} and \emph{faithfulness}.
+Experiments show that \ourmethod~achieves state-of-the-art performance on MER-UniBench and MME-Emotion, while substantially improving utilization and faithfulness scores on \ourbench, highlighting the importance of sufficient and faithful omni perception for multimodal emotion reasoning. Code is available at~ \url{https://github.com/ZhiyuanHan-Aaron/OPPO}.
+\end{abstract}
+
+:original_text:
+First, to encourage better \textit{utilization} of multimodal cues, we introduce \textbf{\ourreward}. Specifically, we decompose the ground-truth reasoning into fine-grained visual, acoustic, and emotion cues, and segment the model’s generated thinking into a sequence of clauses. We embed both cues and clauses and compute semantic similarities to determine whether each cue is covered by at least one clause. The Omni-Perception Reward then increases with the coverage of visual, audio, and emotion cues, encouraging the model to explicitly recover human-annotated evidence in its reasoning.
+
+:modified_text:
+First, to encourage better \textit{utilization} of multimodal cues, we introduce \textbf{\ourreward}. Specifically, we decompose the ground-truth reasoning into fine-grained visual, acoustic, and emotion cues, and segment the model’s generated thinking into a sequence of clauses. We embed both cues and clauses and compute semantic similarities to measure how well each generated clause is grounded in the ground-truth evidence. The Omni-Perception Reward then aggregates these grounding scores, encouraging the model to produce reasoning that is explicitly supported by human-annotated evidence.
+
+:original_text:
+\caption{ 
+The framework of \ourmethod.
+Top: Fine-grained evidence is organized into video cues $\mathcal{C}_V$, audio cues $\mathcal{C}_A$, and emotion cues $\mathcal{C}_E$. CoT is segmented into clauses $\mathcal{U}$, which are identified as video, audio, or emotion types based on their semantic content.
+Middle: The Omni-Perception Reward (\ref{sec:reward}). An Evidence-Routing Matrix computes the semantic similarities between generated clauses and ground-truth cues. This encourages the model to explicitly cover diverse multimodal evidence during reasoning.
+Bottom: The Omni-Perception Loss (\ref{sec:loss}). We construct unimodal masked inputs and maximize the KL divergence between the full and masked distributions on modality-specific tokens $u_k$. This enforces faithfulness by penalizing the model for hallucinating information from missing modalities.
+}
+
+:modified_text:
+\caption{ 
+The framework of \ourmethod.
+Top: Fine-grained evidence is organized into video cues $\mathcal{C}_V$, audio cues $\mathcal{C}_A$, and emotion cues $\mathcal{C}_E$. CoT is segmented into clauses $\mathcal{U}$, which are identified as video, audio, or emotion types based on their semantic content.
+Middle: The Omni-Perception Reward (\ref{sec:reward}). An Evidence-Routing Matrix computes the semantic similarities between generated clauses and ground-truth cues. This encourages the model to generate reasoning clauses that are explicitly grounded in the available multimodal evidence.
+Bottom: The Omni-Perception Loss (\ref{sec:loss}). We construct unimodal masked inputs and maximize the KL divergence between the full and masked distributions on modality-specific tokens $u_k$. This enforces faithfulness by penalizing the model for hallucinating information from missing modalities.
+}
+
+:original_text:
+\noindent\textbf{Reward based on evidence coverage.}
+For each ground-truth cue $c$, we measure whether it is \emph{covered by at least one clause} in the model’s reasoning. Concretely, we first build an Evidence-Routing Matrix $\mathbf{M}\in\mathbb{R}^{|\mathcal{C}|\times K}$, where each entry
+\begin{equation}\label{eq:M}
+    \mathbf{M}_{c,k} = \cos\bigl(\mathbf{e}(c), \mathbf{e}(u_k)\bigr)
+\end{equation}
+is the cosine similarity between a ground-truth cue $c$ and a generated clause $u_k$.
+We then match each cue to its best supporting clause by taking the maximum similarity:
+\begin{equation}
+M(c)=\max_{k\in[K]}\mathbf{M}_{c,k}.
+\end{equation}
+Finally, we convert this similarity into a normalized hit score
+\begin{equation}
+\label{eq:cue_score}
+s(c)=\tfrac{1}{1-\delta}\max\bigl({M}(c)-\delta,0\bigr),
+\end{equation}
+where $\delta$ is a similarity threshold: if ${M}(c)\le\delta$, the cue is treated as \emph{unmatched} ($s(c)=0$), and if ${M}(c)>\delta$, we linearly map the range $[\delta,1]$ to $[0,1]$ using the factor $\tfrac{1}{1-\delta}$. This way, only cues with sufficiently strong semantic matches contribute positively to the evidence coverage.
+
+The omni-perception reward aggregates cue-level scores by averaging over the three cue sets:
+\begin{equation}
+R_\mathsf{omni}
+=\sum_{\mathcal{C}'\in \{\mathcal{C}_V, \mathcal{C}_A, \mathcal{C}_E\}} 
+\frac{1}{|\mathcal{C}'|}\sum_{c\in \mathcal{C}'} s(c),
+\end{equation}
+so that video, audio, and emotion cues are each rewarded according to the fraction of annotated cues that are covered.
+
+:modified_text:
+\noindent\textbf{Reward based on evidence coverage.}
+To measure how well the generated clauses are grounded in the ground-truth evidence, we match each clause to the most semantically similar evidence cue. Concretely, we first build an Evidence-Routing Matrix $\mathbf{M}\in\mathbb{R}^{|\mathcal{C}|\times K}$, where each entry
+\begin{equation}\label{eq:M}
+    \mathbf{M}_{c,k} = \cos\bigl(\mathbf{e}(c), \mathbf{e}(u_k)\bigr)
+\end{equation}
+is the cosine similarity between a ground-truth cue $c$ and a generated clause $u_k$.
+We then match each clause to its best supporting cue by taking the maximum similarity:
+\begin{equation}
+M(u_k)=\max_{c\in\mathcal{C}}\mathbf{M}_{c,k}.
+\end{equation}
+Finally, we convert this similarity into a normalized hit score
+\begin{equation}
+\label{eq:cue_score}
+s(u_k)=\tfrac{1}{1-\delta}\max\bigl({M}(u_k)-\delta,0\bigr),
+\end{equation}
+where $\delta$ is a similarity threshold: if ${M}(u_k)\le\delta$, the clause is treated as \emph{ungrounded} ($s(u_k)=0$), and if ${M}(u_k)>\delta$, we linearly map the range $[\delta,1]$ to $[0,1]$ using the factor $\tfrac{1}{1-\delta}$. This way, only clauses with sufficiently strong semantic matches contribute positively to the grounding score.
+
+The omni-perception reward aggregates clause-level scores by averaging over the generated clauses:
+\begin{equation}
+R_\mathsf{omni}
+=\frac{1}{K}\sum_{k=1}^K s(u_k),
+\end{equation}
+so that the final reward reflects the average grounding quality of the reasoning chain.
+
+:explanation:
+The introduced conceptual error is a subtle but critical flaw in the design of the Omni-Perception Reward ($R_\mathsf{omni}$). The original, correct formulation is designed to improve cue "utilization" by measuring the **recall** of ground-truth cues—it checks if *each ground-truth cue* is covered by *at least one generated clause*.
+
+The modified version changes this logic entirely. The new reward function measures the **precision** of the generated clauses—it checks if *each generated clause* is semantically similar to *at least one ground-truth cue*.
+
+This is a fundamental error because it fails to incentivize the model to be comprehensive. A model could achieve a high reward by generating a few highly-grounded clauses that all relate to a single, obvious multimodal cue (e.g., a smile), while completely ignoring other, more subtle cues (e.g., relaxed posture, soft tone). This directly undermines the paper's central claim of improving the "utilization" of the full set of multimodal cues. The model is rewarded for being grounded, but not for being exhaustive, which is a form of underutilization. This is a plausible mistake where the authors misalign the reward metric with the stated research goal, confusing a precision-oriented metric for one that measures recall/coverage.
+
+:claim:
+The proposed Omni-Perception Reward, which is based on the semantic similarity between generated reasoning clauses and a pre-extracted set of fine-grained multimodal cues, improves the utilization of these cues during the model's reasoning process.

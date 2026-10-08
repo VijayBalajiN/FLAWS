@@ -1,0 +1,6 @@
+Error in assumptions (core conceptual)
+error:We maintain a fixed prototype $\mu_{\text{normal}}$ computed from initial 
+benign execution traces, based on the principle that a shared LLM backbone 
+induces a common reasoning manifold, where minor activation variations from 
+diverse, role-specific contexts are treated as zero-mean noise that does not 
+shift the global centroid of benign behavior~\cite{zhang2025controlling}.

@@ -1,0 +1,9 @@
+Incorrect or incomplete analysis
+error:
+\item We show that binding is encoded almost perfectly in the full set of spatial tokens, decodable using a simplified attention probe.
+error:
+\item We show that binding is encoded almost perfectly in the full set of spatial tokens, decodable using a simplified attention probe.
+error:
+So instead, we use a simplified attention probe that queries on the spatial tokens and learns their dynamically weighted mean:
+error:
+Here in this probe, the attention weights $a_{k, i}$ can be interpreted as selecting which spatial tokens are most useful for decoding $o_k$. Qualitatively, we find that this routing process is highly accurate in our probes: when the target object $o_k$ exists in the image (with label $o_k=1$), the highest attention score $a_{k, i}$ almost always maps to the target object patch.

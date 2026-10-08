@@ -1,0 +1,21 @@
+:error_text:
+As shown in Figure~\ref{fig:motivation3}, detection accuracy for semantic anomalies ($D_1$) improves rapidly and converges in the early-to-middle layers (1-16), whereas artifact detection ($D_2$) remains ineffective throughout.
+
+:error_text:
+Validation accuracy highlights a semantic convergence zone (layers 16–20) where $D_1$ performance peaks, while $D_2$ accuracy remains stagnant ($\simeq 81\%$) across all depths.
+
+:error_text:
+Our analysis reveals that the pretrained MLLM, primarily optimizing vision-language alignment, naturally lacks sensitivity to the subtle low-level artifacts in $D_2$.
+
+:error_text:
+This creates a dilemma in representation learning: standard LoRA tuning on the original single-stream MLLM architecture is insufficient to recover these suppressed features, while full fine-tuning captures them but induces catastrophic forgetting of the original semantic knowledge
+
+:error_text:
+Consequently, they inherently overlook low-level artifacts, specifically the subtle traces left by the generator, which are essential for forgery detection.
+
+:explanation:
+The paper's central motivation—that Multimodal Large Language Models (MLLMs) are inherently insensitive to low-level artifacts and that these features are "suppressed" in early layers—is directly contradicted by its own analysis.
+
+The authors claim that artifact detection on their $D_2$ dataset is "ineffective throughout" the model layers. However, the caption for the corresponding figure (Figure 3) states that a simple linear probe achieves a validation accuracy that is "stagnant ($\simeq 81\%$) across all depths" for this same dataset. An accuracy of 81% is far from "ineffective"; it indicates that features for detecting low-level artifacts are not only present but are linearly separable at every layer of the model.
+
+This contradiction invalidates the core premise of the paper. The proposed solution, which involves a complex residual injection to bypass early layers, is designed to solve a problem (suppressed or non-existent artifact features) that the paper's own data suggests does not exist. The high linear separability of artifact features implies that the model does not "lack sensitivity" or "overlook" them, undermining the entire justification for the Deep-VRM architecture.

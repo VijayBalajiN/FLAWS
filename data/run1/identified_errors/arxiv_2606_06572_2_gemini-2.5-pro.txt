@@ -1,0 +1,14 @@
+:error_text:
+Because the assumption $q_H > c_H$ keeps HTL-intensive production viable under full-information pricing, we have $\bar{p}_t < c_H \leq q_H$, confirming that pooled pricing falls short of what type-$H$ output is worth.
+
+:error_text:
+Assume that type-$H$ producers exit whenever $\bar{p}_t < c_H$, while type-$L$ producers remain active whenever $\bar{p}_t \geq c_L$. With a single representative cost $c_H$, exit is simultaneous. With heterogeneous costs within type $H$, exit is progressive and the unraveling dynamic strengthens. When costs are heterogeneous, $c_H$ represents the marginal exit threshold rather than a single cost level. Because the assumption $q_H > c_H$ keeps HTL-intensive production viable under full-information pricing, we have $\bar{p}_t < c_H \leq q_H$, confirming that pooled pricing falls short of what type-$H$ output is worth. Combined with $\bar p_t \ge c_L$, this implies $\lambda_{t+1} < \lambda_t$. As $\lambda_t$ falls, $\bar{p}_t = \lambda_t q_H + (1-\lambda_t) q_L$ falls, and each further exit lowers pooled reward, triggering additional exit. Under continued non-inspection, $\lambda_t$ can converge to $0$ and $\bar{p}_t$ to $q_L$.
+
+:explanation:
+The formal model presented in the appendix contains a critical logical flaw that invalidates the proof of its central mechanism, "value collapse."
+
+Proposition A.6 incorrectly claims that the condition for market unraveling is a necessary consequence of the model's setup. Specifically, it states, "Because the assumption $q_H > c_H$ keeps HTL-intensive production viable under full-information pricing, we have $\bar{p}_t < c_H \leq q_H$".
+
+This is a non-sequitur. The pooled price, $\bar{p}_t = \lambda_t q_H + (1-\lambda_t) q_L$, is a weighted average of the high and low quality values. The assumption $q_H > c_H$ ensures that high-cost producers are profitable if their quality is known. However, it does not imply that the pooled price $\bar{p}_t$ must be less than the high cost $c_H$. In fact, if the share of high-cost producers ($\lambda_t$) is sufficiently high, the pooled price $\bar{p}_t$ will be greater than $c_H$.
+
+The condition $\bar{p}_t < c_H$ is the contingent *trigger* that causes high-cost producers to exit and initiates the value collapse feedback loop. By presenting this trigger as an unconditional fact that is always true, the proposition misrepresents the core dynamic. This fundamental error in reasoning suggests a misunderstanding of the adverse selection mechanism and undermines the entire formal justification for the paper's main claim.

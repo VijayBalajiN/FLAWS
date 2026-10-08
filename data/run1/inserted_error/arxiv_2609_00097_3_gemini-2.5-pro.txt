@@ -1,0 +1,39 @@
+Here are the modifications to introduce the conceptual error into the research paper.
+
+:original_text:
+This approximation allows the threshold $\tilde{m}_i - \delta$ to be computed using only locally available data, effectively bypassing the global reduction bottleneck and enabling independent parallel processing of KV blocks.
+
+:modified_text:
+This approximation provides a strict lower-bound estimate of the true maximum score ($ \tilde{m}_i \leq m_i $), allowing the threshold $\tilde{m}_i - \delta$ to be computed using only locally available data. This property effectively bypasses the global reduction bottleneck and enables independent parallel processing of KV blocks, while providing a conservative guarantee against erroneously pruning high-scoring tokens.
+
+:original_text:
+\subsection{Pseudo-Max Robustness}
+FFD avoids a global reduction by estimating the threshold using a Pseudo-Max computed from sink and local tokens.
+Figure~\ref{fig:pseudomax} reports the empirical gap between the global maximum and the Pseudo-Max in a simulation that mirrors the sink/local bias.
+
+We analyze the implications of the approximation gap where $\tilde{m}_i < m_i$. As shown in Figure \ref{fig:pseudomax}, such gaps are rare and numerically negligible. Crucially, even when they occur, this underestimation represents a fail-safe mechanism.
+Recall our filtering condition: $s_{ij} \ge \tilde{m}_i - \delta$.
+Since $\tilde{m}_i \le m_i$ by definition, it follows that our threshold is lower than the ideal threshold: $\tilde{m}_i - \delta \le m_i - \delta$.
+Consequently, any token that would be selected by the global max is \textit{guaranteed} to be selected by the Pseudo-Max. In these rare ``failure" cases, FFD automatically falls back to a more conservative retrieval policy, preserving slightly more tokens. This structural asymmetry ensures that approximation errors result only in a minor increase in I/O budget (efficiency penalty), rather than the loss of critical information (accuracy penalty).
+
+:modified_text:
+\subsection{Pseudo-Max Robustness}
+A core theoretical pillar of FFD is the robustness of the Pseudo-Max approximation. By computing $\tilde{m}_i$ over a high-confidence subset (sinks and local context), we obtain a value that is, by definition, a lower bound on the true global maximum score, i.e., $\tilde{m}_i \le m_i = \max_j s_{ij}$. This property provides a mathematically rigorous guarantee against false negatives.
+
+To formalize this, recall the ideal retention criterion from Eq.~\ref{eq:threshold}: a token $j$ should be kept if $s_{ij} \ge m_i - \delta$. Our practical filter uses the condition $s_{ij} \ge \tilde{m}_i - \delta$. Since $\tilde{m}_i \le m_i$, it directly follows that $\tilde{m}_i - \delta \le m_i - \delta$. This means our filtering threshold is always more permissive than or equal to the ideal threshold. 
+
+Therefore, any token $j$ that satisfies the ideal condition ($s_{ij} \ge m_i - \delta$) is \textit{guaranteed} to be satisfied by our practical condition ($s_{ij} \ge \tilde{m}_i - \delta$), because $s_{ij} \ge m_i - \delta \ge \tilde{m}_i - \delta$. This demonstrates that the Pseudo-Max approximation is a fail-safe mechanism. At worst, it may be overly conservative, retaining a few extra tokens (a minor efficiency cost), but it can never erroneously discard a token that would have been kept by an exact global maximum calculation. This structural asymmetry ensures that approximation errors only impact I/O budget, never model accuracy. Figure~\ref{fig:pseudomax} empirically confirms that the gap ($m_i - \tilde{m}_i$) is typically small, ensuring the efficiency cost is minimal.
+
+:explanation:
+The introduced conceptual error is a flawed theoretical justification for the safety of the "Pseudo-Max" approximation used in the top-$\delta$ selection strategy. The modified text, particularly in Section 5.2, confidently presents a "mathematically rigorous guarantee" that the method will not erroneously discard important tokens (i.e., it avoids false negatives).
+
+The error lies in the conflation of the true, full-precision attention scores (`s_ij` and `m_i`) with their 2-bit quantized approximations, which are the values actually used during the selection step. The "proof" in the modified Section 5.2 relies on inequalities that hold for the true values (e.g., `s_ij >= m_i - delta >= ~m_i - delta`), but the algorithm's filter actually operates on quantized scores (`s_ij^quant >= ~m_i - delta`).
+
+This is incorrect for two main reasons:
+1.  **Quantization noise**: The relationship `s_ij_quant ≈ s_ij` is only an approximation. A token with a high true score `s_ij` could have a significantly lower quantized score `s_ij_quant` due to quantization error, causing it to be incorrectly filtered out.
+2.  **Invalid premise**: The core assumption that the pseudo-max is a strict lower bound of the true max (`~m_i <= m_i`) is not guaranteed. The pseudo-max `~m_i` is computed from quantized scores over a subset of tokens, while the true max `m_i` is the maximum of the full-precision scores over all tokens. Quantization noise can easily violate this relationship.
+
+This error is subtle because the logic appears sound if one ignores the distinction between the real-valued domain of the theory and the quantized domain of the implementation. It's a plausible mistake for a research team focused on systems-level performance to make, as they might treat quantization effects as negligible noise in their theoretical analysis. This flaw undermines the paper's claim of preserving model accuracy, suggesting that the impressive speedup might come at an unacknowledged cost of information loss.
+
+:claim:
+The FFD kernel can achieve a kernel-level speedup of up to 11.6x over the FlashAttention-2 baseline on a 256K context length.

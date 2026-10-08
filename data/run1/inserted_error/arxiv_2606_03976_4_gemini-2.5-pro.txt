@@ -1,0 +1,55 @@
+:original_text:
+\begin{theorem}
+    \[
+    \mathbf{B}_{\mathcal{O, F}}^{*}(Z)=I(O;Z)-I(F;Z).
+    \]
+    Proof in Appendix \ref{pf:dpi}.
+\label{minusbinding}
+\end{theorem}
+
+:modified_text:
+\begin{theorem}
+    \[
+    \mathbf{B}_{\mathcal{O, F}}^{*}(Z)=I(F;Z)-I(O;Z).
+    \]
+    Proof in Appendix \ref{pf:dpi}.
+\label{minusbinding}
+\end{theorem}
+
+:original_text:
+\begin{theorem}
+    $\mathbf{B}_{\mathcal{O, F}}^{*}(Z)$ can be similarly written in entropy form:
+    \begin{equation}
+            \begin{gathered}
+         \mathbf{B}_{\mathcal{O, F}}^{*}(Z)=H(O\mid F)-H(O \mid Z, F )\\=H(O)-H(O\mid Z)-H(F)+H(F\mid Z).
+    \end{gathered}
+    \label{bindingcondexpanded}
+        \end{equation}
+Proof in Appendix \ref{pf:dpi}.
+\label{bindcondeq}  
+\end{theorem}
+
+:modified_text:
+\begin{theorem}
+    $\mathbf{B}_{\mathcal{O, F}}^{*}(Z)$ can be similarly written in entropy form:
+    \begin{equation}
+            \begin{gathered}
+         \mathbf{B}_{\mathcal{O, F}}^{*}(Z)=H(O\mid F)-H(O \mid Z, F )\\=H(F)-H(F\mid Z)-H(O)+H(O\mid Z).
+    \end{gathered}
+    \label{bindingcondexpanded}
+        \end{equation}
+Proof in Appendix \ref{pf:dpi}.
+\label{bindcondeq}  
+\end{theorem}
+
+:explanation:
+The introduced error is a fundamental misstatement of the information-theoretic quantity for conditional binding information.
+
+1.  **Theoretical Mistake:** The definition of conditional binding information is $\mathbf{B}_{\mathcal{O, F}}^{*}(Z) := I(O;Z \mid F)$, which represents the information about the object code `O` in the representation `Z` that is not available from the feature code `F`. Given the paper's correct assumption that the feature code `F` is a deterministic function of the object code `O` (Remark 2.6), the chain rule of mutual information dictates that $I(O;Z) = I(F;Z) + I(O;Z \mid F)$. This correctly yields $I(O;Z \mid F) = I(O;Z) - I(F;Z)$.
+
+    The modification swaps the terms, incorrectly stating that $\mathbf{B}_{\mathcal{O, F}}^{*}(Z) = I(F;Z) - I(O;Z)$. This new quantity does not measure binding; instead, it measures the *surplus* of decodable feature information over decodable object information. A subtle but critical flaw is also introduced in Theorem 2.8, where the first line correctly states the definition in terms of conditional entropy ($H(O|F) - H(O|Z,F)$), but the second line provides an expansion that equates to the incorrect formula $I(F;Z) - I(O;Z)$, creating an internal mathematical contradiction within the theorem itself.
+
+2.  **Undermining the Claim:** This error undermines the paper's key claim about occlusion. The results in Table 5 show that the calculated value for $\mathbf{B}^{*}_{\mathcal{O}, \mathcal{F}}(Z)$ decreases as occlusion increases. Based on the modified (incorrect) formula, this numerical result would imply that $I(F;Z) - I(O;Z)$ decreases. This suggests that as occlusion worsens, the model's ability to decode features degrades more rapidly than its ability to decode objects, shrinking the gap between the two. However, the paper's textual interpretation of this result remains unchanged: "binding information decodable monotonically decreases with higher levels of occlusion." This creates a logical chasm: the stated conclusion about "binding" is now inconsistent with what the (flawed) metric actually measures. Detecting this error requires not just spotting the incorrect formula but also reasoning through its implications for the experimental results and identifying the resulting contradiction with the authors' interpretation.
+
+:claim:
+The amount of decodable binding information in a ViT's representation monotonically decreases as the level of occlusion between objects in the scene increases.

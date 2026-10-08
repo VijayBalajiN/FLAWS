@@ -1,0 +1,7 @@
+Error in algorithm/proof
+error:
+To tune the model with structured rewards, we employ GIGPO~\cite{feng2025group}, a variant of GRPO~\cite{guo2025deepseek} that introduces a hierarchical advantage estimation structure combined with both trajectory-level and step-level rewards. We sample a group of $N$ trajectories $\{\tau_1,\dots,\tau_N\}$ and combine a global trajectory-level relative advantage $A^T(\tau_n)$, which captures trajectory-level task efficiency $R_{\text{e}}(\tau_n \mid G_n)$, with the local step-level reward $R_{\text{a}}(t^{(n)}_i \mid P^{(n)}_{\text{sim}})$ directly, to provide a strong, unbiased signal for fine-grained affective performance. This can be formalized as
+\begin{equation}
+    A(t^{(n)}_i) = A^T(\tau_n) + \omega \cdot R_{\text{a}}(t^{(n)}_i \mid P^{(n)}_{\text{sim}}),
+\end{equation}
+where $\omega$ balances global task efficiency and local affective interaction quality. This advantage is then used to optimize the clipped policy objective:

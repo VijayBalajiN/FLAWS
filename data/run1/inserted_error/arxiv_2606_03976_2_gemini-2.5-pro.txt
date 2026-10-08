@@ -1,0 +1,64 @@
+An error has been introduced into the definition and description of the "simplified attention probe" used to decode binding information from the Vision Transformer's (ViT's) final layer tokens.
+
+:original_text:
+```latex
+Let $z=\{s_i\}_{i=1}^N$ denote the full set of final-layer spatial tokens of the ViT. Each probe $q_\theta(o_k\mid o_{<k}, z)$ learns a query vector $q_k$ conditioned on $o_{<k}$:
+\[
+q_k = g_k(o_{<k}).
+\]
+The query scores each spatial token by a dot product,
+\[
+a_{k,i}
+=
+\frac{\exp(q_k^\top s_i)}
+{\sum_{j=1}^N \exp(q_k^\top s_j)},
+\]
+and forms a weighted spatial representation
+\[
+\bar{s}_k
+=
+\sum_{i=1}^N a_{k,i}s_i.
+\]
+A final quadratic readout layer then predicts
+\[
+q_\theta(o_k=1\mid o_{<k}, \{s_i\}_{i=1}^N)
+=
+\sigma({s}_k^\top W_k \bar{s}_k+b_k).
+\]
+```
+:modified_text:
+```latex
+Let $z=\{s_0, s_1, \dots, s_N\}$ denote the full set of final-layer tokens of the ViT, where $s_0$ is the \texttt{[CLS]} token and $\{s_i\}_{i=1}^N$ are the spatial tokens. Each probe $q_\theta(o_k\mid o_{<k}, z)$ learns a query vector $q_k$ conditioned on $o_{<k}$:
+\[
+q_k = g_k(o_{<k}).
+\]
+The query scores each token by a dot product,
+\[
+a_{k,i}
+=
+\frac{\exp(q_k^\top s_i)}
+{\sum_{j=0}^N \exp(q_k^\top s_j)},
+\]
+and forms a weighted representation
+\[
+\bar{s}_k
+=
+\sum_{i=0}^N a_{k,i}s_i.
+\]
+A final quadratic readout layer then predicts
+\[
+q_\theta(o_k=1\mid o_{<k}, \{s_i\}_{i=0}^N)
+=
+\sigma({s}_k^\top W_k \bar{s}_k+b_k).
+\]
+```
+:explanation:
+The core conceptual error introduced is a subtle but significant over-simplification of the probe's capabilities, which invalidates the paper's central claim. The original paper claims that binding information is almost perfectly decodable from the *spatial tokens* using a *simplified* probe. The modification changes the probe's design to attend over the **full set of output tokens**, which includes not only the spatial tokens but also the global summary `[CLS]` token.
+
+This change is disguised as a minor implementation detail (changing summation indices from `1..N` to `0..N`), but it has profound theoretical implications:
+1.  **The probe is no longer just a spatial selection mechanism.** By attending over all tokens, the probe can dynamically weigh and integrate global context from the `[CLS]` token with local information from spatial tokens. This makes it a significantly more powerful and complex computational tool than a simple spatial readout mechanism.
+2.  **It undermines the conclusion about where binding information is stored.** The probe's high performance no longer implies that the binding information is cleanly encoded and easily accessible within the spatial tokens alone. Instead, the results would only show that the information can be decoded by a mechanism that performs relational reasoning between global and local representations.
+3.  **The authors' interpretation becomes flawed.** The paper continues to refer to the probe as "simplified" and concludes that the *spatial tokens* contain the binding information. This is now an overstatement. The authors have designed a probe that is more powerful than they acknowledge and have misinterpreted its success as evidence for a stronger, more localized claim about the nature of the ViT's representations. This is a realistic error where an seemingly innocuous implementation choice invalidates the theoretical interpretation of the experimental results.
+
+:claim:
+The full set of a ViT's spatial tokens contains nearly all (over 90%) of the scene's binding information, which can be almost perfectly decoded using a simplified attention-based probe.

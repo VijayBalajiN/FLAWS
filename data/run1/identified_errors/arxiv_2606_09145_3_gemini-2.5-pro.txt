@@ -1,0 +1,17 @@
+:error_text:
+Update $E^c$ using $\mathcal{L}_{\text{VAE}}(z^c) + \mathcal{L}_{\text{align}}(z^c, z^p)$, $E^p$ using $\mathcal{L}_{\text{align}}(z^c, z^p)$;
+
+:error_text:
+The latent variable $z^c\in \mathbb{R}^{d_z}$ serves as a compact abstraction of the syntactic and semantic properties implicit in the code.
+
+:error_text:
+Implicit gradients flow backward from the generation losses through the computation path $z^c \to D \to \mathbf{e}_{\text{prefix}} \to \mathcal{M}_J$, ensuring encoded latents remain informative for downstream generation
+
+:explanation:
+The paper's core contribution is a latent-conditioned generation framework based on a Variational Autoencoder (VAE) structure. A fundamental requirement for training a VAE's encoder is to include a reconstruction loss, which ensures that the learned latent variable actually encodes information about the input.
+
+The first excerpt, from Algorithm 1, details the update rule for the code encoder $E^c$. Critically, it omits any reconstruction loss term (which would be derived from the generation loss $\mathcal{L}_{\text{CE}}$). The encoder is only updated using the VAE's KL-divergence regularizer and an alignment loss. Without the reconstruction signal, the encoder is not incentivized to learn a meaningful representation of the input code.
+
+This directly breaks the claim in the second excerpt. The latent variable $z^c$ cannot serve as a "compact abstraction of the syntactic and semantic properties" of the code if the encoder is not trained to reconstruct it. The resulting latent space would be uninformative, making the entire latent-conditioning mechanism dysfunctional.
+
+The third excerpt, from the appendix, describes the correct mechanism and contradicts Algorithm 1. It explicitly states that implicit gradients from the generation loss are necessary to ensure the "encoded latents remain informative". This highlights that the update rule specified in the main algorithm is fundamentally flawed, undermining the entire method's validity.

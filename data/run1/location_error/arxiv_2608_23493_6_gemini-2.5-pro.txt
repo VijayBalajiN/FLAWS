@@ -1,0 +1,7 @@
+Error in assumptions (core conceptual)
+error:
+(i) it is \emph{mode-seeking}, encouraging the student to explore high-reward modes identified by the teacher, thereby expanding its reasoning repertoire beyond suboptimal, high-entropy regions of the policy space;
+error:
+The mechanism is best understood as a form of on-policy RL where the mode-seeking property of the reverse-KL objective serves as an exploration bonus: by forcing the student to cover the high-reward modes discovered by the reflection-augmented teacher, it effectively expands the policy's support to novel, correct reasoning paths rather than collapsing it onto a single, memorized trajectory.
+error:
+\caption{Solution-diversity probe on the 30 AIME'24 problems (10 samples per problem). The reflection-conditioned self-teacher \emph{expands} the student's reasoning-path entropy rather than contracting it—a direct consequence of the mode-seeking objective steering the policy toward new, high-reward regions—in contrast to a larger external teacher.}

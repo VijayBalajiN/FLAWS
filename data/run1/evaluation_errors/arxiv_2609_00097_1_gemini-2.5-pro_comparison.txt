@@ -1,0 +1,38 @@
+**Identified Error:**
+Twilight does not provide fully open-source official code at the time of writing; its results are based on our own faithful reproduction following the algorithm described in the original paper.
+
+:
+**INCORRECTLY IDENTIFIED**
+
+---
+**Identified Error:**
+We omit throughput comparison with Twilight because its official implementation is not fully open-source, making a fair system-level speed comparison infeasible.
+
+:
+**INCORRECTLY IDENTIFIED**
+
+---
+**Identified Error:**
+Figure 5 Distribution of the approximation error (mi – mˆi ) by layer. The gap is effectively zero for most of conditions, confirming that the maximum attention score is dominated by sinks and local tokens. This verifies that our Pseudo-Max approximation serves as a robust safe relaxation.
+
+:
+**INCORRECTLY IDENTIFIED**
+
+---
+**Identified Error:**
+As shown in Figure 5, such gaps are rare and numerically negligible. Crucially, even when they occur, this underestimation represents a fail-safe mechanism. ... In these rare “failure” cases, FFD automatically falls back to a more conservative retrieval policy, preserving slightly more tokens.
+
+:
+**INCORRECTLY IDENTIFIED**
+
+---
+**Identified Error:**
+This finding motivates the 2+8 design as the bandwidth-optimal configuration for long-context decoding.
+
+:explanation:
+The most serious flaw is the evaluation against a key baseline, Twilight, which is based on the authors' own re-implementation. The authors themselves admit that a fair system-level speed comparison is "infeasible" for this reason. This admission severely undermines the trustworthiness of the presented accuracy comparisons against Twilight (Tables 1 and 2), as the re-implementation could be suboptimal, potentially exaggerating the performance of the proposed FFD method. Relying on unofficial re-implementations for comparative claims is a significant methodological weakness.
+
+A second major issue is the overstatement and misleading characterization of the Pseudo-Max approximation's accuracy. The paper claims the approximation gap is "effectively zero for most of conditions" and that instances of non-negligible gaps are "rare". However, their own data in Figure 5 shows the gap is greater than 0.01 in 13.9% of cases, which is neither "effectively zero" nor "rare". While the authors argue this is a "fail-safe" mechanism, misrepresenting the frequency of this failure mode erodes confidence in the analysis.
+
+Finally, the paper makes an overly strong claim of "optimality" for its 2-bit + 8-bit quantization scheme. The conclusion that this is the "bandwidth-optimal configuration" is based solely on latency measurements on a single GPU architecture (RTX 4090). Such a claim of general optimality is not sufficiently supported, as performance is highly dependent on specific hardware characteristics, and other GPUs or future architectures might have different performance trade-offs (e.g., better native support for 4-bit operations).
+**INCORRECTLY IDENTIFIED**

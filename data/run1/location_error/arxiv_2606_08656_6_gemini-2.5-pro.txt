@@ -1,0 +1,19 @@
+Incorrect or incomplete analysis
+error:
+\subsection{Reward Design}
+We ablate reward design for training the memory model. We compare our approach of optimizing a cumulative return over memory-guided games with an alternative that uses a one-step per-turn assignment, crediting each memory update $m_t$ only by the next-game reward $r_{t+1}$. We find that cumulative returns are substantially more effective for learning complex strategies. Table~\ref{tab:reward_design} shows that the performance of the one-step reward is far below that of the cumulative reward, only achieving 0.61 on LHE. We attribute this to the myopic nature of one-step rewards, which pushes the memory model toward simple, reactive memories rather than strategic, far-sighted adaptation.
+\begin{table}[t]
+\centering
+\caption{Reward design comparison: cumulative reward is the sum of rewards over future memory-guided games, while one-step reward assigns each memory update credit based only on the next following game outcome.}
+\small
+\label{tab:reward_design}
+\begin{tabular}{lc}
+\toprule
+\textbf{Method}   & \textbf{LHE@5} \\
+\midrule
+No Memory & -1.36  \\
+ Cumulative Reward & \textbf{2.03} \\
+ One-step Reward& 0.61\\
+\bottomrule
+\end{tabular}
+\end{table}

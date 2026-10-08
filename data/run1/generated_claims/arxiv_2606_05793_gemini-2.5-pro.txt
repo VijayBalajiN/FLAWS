@@ -1,0 +1,15 @@
+Based on my thorough reading of the paper, here are the major, unique, and falsifiable claims:
+
+1.  The proposed "Diverse Players Profiles Simulation" pipeline, which uses Big Five personality theory and an LLM-judged "Interaction-Based Filtering" method, generates high-fidelity and behaviorally diverse simulated player profiles that are consistent and realistic for cooperative game environments.
+
+2.  The "Collaborative Agentic Training" paradigm, which combines a unified agentic rollout (reasoning, communication, action) with a hybrid reward (trajectory-level efficiency and step-level affective alignment), improves an LLM agent's collaborative ability, achieving 19.5% higher task efficiency and 24.4% better affective performance compared to its base model on the CollabBench benchmark.
+
+3.  The step-level affective reward component is a necessary element for training collaborative agents. Training an agent with only a task efficiency reward leads to a significant degradation in affective performance and causes the agent to lose its communication capabilities, effectively treating the collaboration as a single-player task.
+
+4.  Training an agent against a diverse set of personality-driven simulated partners is crucial for developing its affective capabilities. Training in a standard self-play setting without diverse player profiles results in agents with significantly lower affective performance.
+
+5.  Agents trained with the proposed "Collaborative Agentic Training" paradigm are perceived by human users as more helpful, trustworthy, and empathetic than baseline agents or agents trained without the affective reward, while simultaneously improving task efficiency (reducing completion steps).
+
+6.  Existing state-of-the-art LLMs, when used as collaborative agents without specific collaborative training, struggle to balance task efficiency with affective engagement, showing particularly weak performance in helpfulness and empathy.
+
+7.  The affective performance of LLM-based agents is highly sensitive to the interaction dynamics of the environment; models exhibit better affective behaviors in slower-paced games (CWAH-MultiPlayer) compared to time-critical, high-frequency interaction games (Cook-MultiPlayer).

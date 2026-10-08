@@ -1,0 +1,2 @@
+Incorrect or incomplete analysis
+error:Training-time hints therefore improve the speed of fitting the seed examples, but do not expand the generalization radius. A plausible interpretation is that the scaffold makes reward-bearing trajectories easier to find while keeping learning tied to the scaffolded seed relation.

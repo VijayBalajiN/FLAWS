@@ -1,0 +1,36 @@
+:error_text:
+\begin{definition}[Binding information]
+Let $H(A)$ denote the entropy of a random variable $A$, and $H(A\mid B)$ be its conditional entropy on $B$.
+    
+    We define binding information in the representation $Z$ of a scene, relative to object set $\mathcal{O}$ (and feature set $\mathcal{F}$), as
+    \[
+    \mathbf{B}_{\mathcal{O}}(Z):= H(O) - (H(O\mid Z) - H(F \mid Z)),
+    \]
+    in unit of \textit{bits}.
+    \label{bindinfo}
+\end{definition}
+
+:error_text:
+\begin{remark}
+This definition can be understood as correcting the naive information gain, $I(O;Z) = H(O)-H(O\mid Z)$, for the residual feature uncertainty $H(F \mid Z)$. The term $H(O\mid Z) - H(F \mid Z)$ represents the uncertainty about object configuration that is not explained by uncertainty about features. Subtracting this corrected residual uncertainty from the prior uncertainty $H(O)$ gives the information gained specifically about binding.
+\label{entropydef}
+\end{remark}
+
+:error_text:
+Assuming that the DNN probe approaches the true binding information in the representation, our results show that the \texttt{[CLS]} token encodes more than half ($52.4\%$) of the binding information. If we wish to separate binding information from feature information, the \texttt{[CLS]} encodes only $42.4\%$ of the binding information beyond what can be explained by features.
+
+:error_text:
+As can be seen, the attention probe on the full set of spatial tokens decodes $92.2\%$ of binding information, and for the binding information beyond what can be explained by features, there is $94.1\%$ decoded. Both significantly outperform the best DNN probe on the \texttt{[CLS]} token only.
+
+:explanation:
+The paper introduces a novel definition for "binding information," $\mathbf{B}_{\mathcal{O}}(Z)$, which forms the basis for several of its main claims. This definition is fundamentally flawed from an information-theoretic perspective.
+
+The proposed definition is $\mathbf{B}_{\mathcal{O}}(Z) := H(O) - (H(O\mid Z) - H(F \mid Z))$. This can be rewritten using standard information-theoretic identities as $\mathbf{B}_{\mathcal{O}}(Z) = (H(O) - H(O\mid Z)) + H(F \mid Z) = I(O;Z) + H(F \mid Z)$.
+
+This formulation, $I(O;Z) + H(F \mid Z)$, is not a valid measure of the information a representation $Z$ contains about binding. It is the sum of the mutual information between the object code and the representation ($I(O;Z)$) and the residual uncertainty about the feature code given the representation ($H(F \mid Z)$). This leads to several paradoxical consequences:
+
+1.  **A useless representation yields non-zero information:** If a representation $Z$ is completely independent of the input scene (i.e., random noise), then $I(O;Z) = 0$ and the residual feature uncertainty $H(F \mid Z)$ equals the prior feature entropy $H(F)$. According to the paper's definition, the binding information would be $\mathbf{B}_{\mathcal{O}}(Z) = H(F)$, a non-zero value that depends only on the dataset, not the representation. Any valid measure of information contained in a representation must be zero for a representation that is independent of the source.
+
+2.  **It rewards poor feature encoding:** The term $H(F \mid Z)$ is the uncertainty about features *after* observing the representation $Z$. A good representation should minimize this uncertainty. The paper's definition, however, *adds* this uncertainty term. This means that a representation is considered to have more "binding information" if it is worse at encoding features, which is counter-intuitive and defeats the purpose of measuring the quality of a representation.
+
+The paper's primary conclusions in Sections 3.1 and 3.2, such as the claim that the `[CLS]` token encodes "more than half (52.4%)" of the binding information, are derived directly from this flawed metric. These conclusions are therefore invalid. While the paper also introduces a secondary, information-theoretically sound measure for conditional binding information ($\mathbf{B}^{*}_{\mathcal{O, F}}(Z) = I(O;Z|F)$), the promotion and use of the flawed primary definition $\mathbf{B}_{\mathcal{O}}(Z)$ invalidates the paper's core contribution and headline results.

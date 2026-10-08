@@ -1,0 +1,33 @@
+**Identified Error 1:**
+Notably, on LVBench, our 7B agent outperforms the 10x larger Qwen2.5-VL-72B (50.5% vs. 47.3%).
+
+:
+INCORRECTLY IDENTIFIED
+
+---
+**Identified Error 2:**
+OmniAgent-7B (red diamond, 50.5%) outperforms the 10× larger Qwen2.5-VL-72B (47.3%) while using ~73% fewer frames (203 vs. 768). Marker shape distinguishes agentic (diamond) from passive (circle) models, and marker size represents parameter scale.
+
+:
+INCORRECTLY IDENTIFIED
+
+---
+**Identified Error 3:**
+Since the textual memory decouples reasoning from raw media, we employ GPT-40 (OpenAI, 2024) to audit the internal coherence of the reasoning trace. GPT-40 evaluates whether the current Thought Tk is logically entailed by the accumulated memory Mk−1 and the immediate observation Ok on a 5-point Likert scale. This step filters out “lucky guesses”... By enforcing a minimum coherence score of 3/5, we ensure that all SFT actions are rationally grounded in the agent’s explicit context.
+
+:
+INCORRECTLY IDENTIFIED
+
+---
+**Identified Error 4:**
+This flaw is substantiated by our empirical analysis in Appendix C, which reveals that 79.2% of critical branching turns exhibit significantly higher mean token entropy than the trajectory mean. Consequently, vanilla GRPO’s uniform advantage broadcasting masks the causal significance of high-uncertainty discovery moments, necessitating the entropy-steered credit assignment in TAURA.
+
+:explanation:
+The paper's claims and methodology contain several serious flaws that could undermine its conclusions.
+
+1.  The most serious issue is the misleading claim of outperforming a model 10 times its size (Qwen2.5-VL-72B). The comparison is fundamentally unfair as it pits an agentic model using sparse, selective data (203 frames) against a passive model designed for dense data (768 frames). Claiming superior performance based on accuracy alone in such an apples-to-oranges comparison is invalid. The passive model is not evaluated under its optimal conditions, and this comparison conflates the benefits of the agentic framework with the raw capabilities of the models, potentially misrepresenting the actual performance gap.
+
+2.  The methodology for creating the Agentic SFT dataset relies critically on an external, proprietary model (GPT-4O) for a "Rationality Audit." This filtering step, which is crucial for data quality, is non-reproducible and depends on the opaque internal logic of the external model. Furthermore, the use of an arbitrary, unjustified "minimum coherence score of 3/5" introduces a significant uncontrolled variable. This makes the foundation of the supervised fine-tuning process scientifically unsound, as the resulting model's performance is inextricably tied to the biases and judgments of an un-analyzed external oracle.
+
+3.  The core justification for the TAURA reinforcement learning method is weak and circular. The paper claims that high token entropy is a valid proxy for "pivotal discovery turns." However, this assumption is only "substantiated" by showing a correlation where the "critical" turns are identified by another external oracle (Gemini-2.5-Pro, mentioned in Appendix C). This does not prove causation or establish that entropy is a reliable signal for credit assignment. Rewarding high-entropy (i.e., high uncertainty) actions could inadvertently reinforce model confusion rather than successful exploration, making the entire TAURA mechanism rest on a poorly supported premise.
+INCORRECTLY IDENTIFIED

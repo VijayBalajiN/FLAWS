@@ -1,0 +1,53 @@
+Here are the modifications to introduce the conceptual error into the research paper.
+
+:original_text:
+Implementing Eq.~\ref{eq:threshold} strictly requires computing the global max $m_i$, which incurs the same synchronization overhead as softmax. Fortunately, thanks to the phenomenon that attention distributions are typically dominated by either local context or initial sink tokens~\citep{xiao2023efficient}, we introduce the pseudo-max approximation $\tilde{m}_i$ by estimating the global maximum using only these accessible subsets, sink tokens $S_\text{global}$ and local context $S_\text{local}$, as follows.
+\begin{equation}
+\tilde{m}_i = \max{\left( \max_{t \in S_\text{global}} s_{it}, \max_{t \in S_\text{local}} s_{it} \right)}.
+\end{equation}
+This approximation allows the threshold $\tilde{m}_i - \delta$ to be computed using only locally available data, effectively bypassing the global reduction bottleneck and enabling independent parallel processing of KV blocks.
+
+:modified_text:
+Implementing Eq.~\ref{eq:threshold} strictly requires computing the global max $m_i$, which incurs the same synchronization overhead as softmax. Fortunately, thanks to the phenomenon that attention distributions are typically dominated by either local context or initial sink tokens~\citep{xiao2023efficient}, we introduce the pseudo-max approximation $\tilde{m}_i$. This value serves as a statistically robust estimate of the global maximum, using only the accessible subsets of sink tokens $S_\text{global}$ and local context $S_\text{local}$.
+\begin{equation}
+\tilde{m}_i = \max{\left( \max_{t \in S_\text{global}} s_{it}, \max_{t \in S_\text{local}} s_{it} \right)}.
+\end{equation}
+Since the set of sink and local tokens represents a representative, high-importance sample of the full sequence, $\tilde{m}_i$ acts as an unbiased estimator for $m_i$. This property allows the threshold $\tilde{m}_i - \delta$ to be computed using only locally available data, effectively bypassing the global reduction bottleneck and enabling independent parallel processing of KV blocks.
+
+:original_text:
+\caption{Distribution of the approximation error ($m_i - \tilde{m}_i$) by layer. The gap is effectively zero for most of conditions, confirming that the maximum attention score is dominated by sinks and local tokens. This verifies that our Pseudo-Max approximation serves as a robust safe relaxation.}
+
+:modified_text:
+\caption{Distribution of the approximation error ($m_i - \tilde{m}_i$) by layer. The gap is effectively zero for most of conditions, confirming that the maximum attention score is dominated by sinks and local tokens. This verifies that our Pseudo-Max approximation is a low-variance, unbiased estimator.}
+
+:original_text:
+\subsection{Pseudo-Max Robustness}
+FFD avoids a global reduction by estimating the threshold using a Pseudo-Max computed from sink and local tokens.
+Figure~\ref{fig:pseudomax} reports the empirical gap between the global maximum and the Pseudo-Max in a simulation that mirrors the sink/local bias.
+
+We analyze the implications of the approximation gap where $\tilde{m}_i < m_i$. As shown in Figure \ref{fig:pseudomax}, such gaps are rare and numerically negligible. Crucially, even when they occur, this underestimation represents a fail-safe mechanism.
+Recall our filtering condition: $s_{ij} \ge \tilde{m}_i - \delta$.
+Since $\tilde{m}_i \le m_i$ by definition, it follows that our threshold is lower than the ideal threshold: $\tilde{m}_i - \delta \le m_i - \delta$.
+Consequently, any token that would be selected by the global max is \textit{guaranteed} to be selected by the Pseudo-Max. In these rare ``failure" cases, FFD automatically falls back to a more conservative retrieval policy, preserving slightly more tokens. This structural asymmetry ensures that approximation errors result only in a minor increase in I/O budget (efficiency penalty), rather than the loss of critical information (accuracy penalty).
+
+:modified_text:
+\subsection{Pseudo-Max Robustness}
+FFD avoids a global reduction by estimating the threshold using a Pseudo-Max computed from sink and local tokens.
+Figure~\ref{fig:pseudomax} reports the empirical gap between the global maximum and the Pseudo-Max in a simulation that mirrors the sink/local bias.
+
+We analyze the implications of the approximation gap where $\tilde{m}_i \ne m_i$. As shown in Figure \ref{fig:pseudomax}, such gaps are rare and numerically negligible. Crucially, because $\tilde{m}_i$ is an unbiased estimator of $m_i$, the approximation errors are centered around zero.
+Recall our filtering condition: $s_{ij} \ge \tilde{m}_i - \delta$.
+When $\tilde{m}_i < m_i$, the threshold becomes more permissive, leading to a temporary increase in the I/O budget. Conversely, when $\tilde{m}_i > m_i$, the threshold becomes stricter. However, since the estimator is unbiased, these positive and negative errors balance out over many decoding steps. This ensures that, on average, the selection criterion remains accurate and does not systematically discard critical tokens. This statistical balancing prevents catastrophic information loss, ensuring that approximation errors result only in minor, localized fluctuations in sparsity rather than a systemic accuracy penalty.
+
+:explanation:
+The core conceptual error introduced is a misunderstanding and misapplication of statistical estimation theory. The modifications claim that the "pseudo-max" ($\tilde{m}_i$), calculated from a subset of tokens, is an *unbiased estimator* of the true global maximum attention score ($m_i$).
+
+This is incorrect for several reasons:
+1.  **Theoretical Flaw:** The maximum of a subsample is a fundamentally *biased* estimator of the population maximum. It can, by definition, only ever be less than or equal to the true maximum, meaning its expected value is strictly less than the true maximum (unless the subset is guaranteed to contain the maximum-scoring token). The claim of it being "unbiased" is a significant statistical error.
+2.  **Flawed Justification for Robustness:** The original paper correctly argues that because $\tilde{m}_i \le m_i$, the approximation is a "fail-safe" that might keep more tokens but will not incorrectly discard important ones. The modified text replaces this sound logic with a fallacious argument that positive and negative estimation errors "balance out" over time. This is wrong because a single event of setting the threshold too high (which the flawed logic implies is possible) could cause irreversible information loss, an error that cannot be "averaged out" by being more lenient later.
+3.  **Inconsistency with Definition:** The modified text discusses the possibility of $\tilde{m}_i > m_i$, which contradicts the mathematical definition of $\tilde{m}_i$ as the maximum over a subset of the tokens used to compute $m_i$.
+
+This error is subtle because "unbiased estimator" is a legitimate statistical concept that sounds rigorous but is misapplied here. A reader without a strong background in statistics, particularly order statistics, might not recognize that the sample maximum is a biased estimator, making the paper's central claim about its robustness seem plausible when it is, in fact, built on a theoretically unsound foundation.
+
+:claim:
+The proposed `top-δ` selection strategy achieves distribution-adaptive sparsity, similar to `top-p` selection, but avoids the high overhead of global synchronization by approximating the maximum attention score using only sink and local tokens (the "pseudo-max").

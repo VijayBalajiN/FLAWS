@@ -1,0 +1,84 @@
+:error_text:
+\section{Construction of Symmetric Wave Vectors}
+\label{appendix:gridpe_cal}
+This section details a direct construction for a set of $n+1$ symmetric, non-axis-aligned wave vectors in an $n$-dimensional space. The goal is to produce a set of vectors $\{\boldsymbol{\omega}_i\}_{i=1}^{n+1}$ that span the space and satisfy the zero-centroid condition $\sum_{i=1}^{n+1}\boldsymbol{\omega}_i = 0$, ensuring no net directional bias.
+
+The construction begins by selecting the $n$ standard orthogonal basis vectors in $\mathbb{R}^n$. Let $\mathbf{e}_1, \mathbf{e}_2, \dots, \mathbf{e}_{n}$ be these basis vectors, where $\mathbf{e}_i$ has a 1 in the $i$-th coordinate and 0s elsewhere. These first $n$ vectors are defined as:
+\begin{equation}
+\boldsymbol{\omega}_i = \mathbf{e}_i, \qquad \text{for } i=1, \dots, n.
+\end{equation}
+These vectors clearly span $\mathbb{R}^n$, but they are axis-aligned and do not sum to zero. To satisfy the zero-centroid condition and introduce cross-dimensional coupling, we define the $(n+1)$-th vector as the negative sum of the first $n$ vectors:
+\begin{equation}
+\boldsymbol{\omega}_{n+1} = - \sum_{i=1}^{n} \boldsymbol{\omega}_i = - \sum_{i=1}^{n} \mathbf{e}_i.
+\end{equation}
+This last vector $\boldsymbol{\omega}_{n+1}$ is a vector of all -1s, i.e., $(-1, -1, \dots, -1)$.
+
+The complete set of $n+1$ wave vectors is therefore:
+\begin{equation}
+\{\mathbf{e}_1, \mathbf{e}_2, \dots, \mathbf{e}_n, -\mathbf{1}\},
+\end{equation}
+where $\mathbf{1}$ is the vector of all ones. By construction, this set of vectors sums to zero:
+\begin{equation}
+\sum_{i=1}^{n+1} \boldsymbol{\omega}_i = \left(\sum_{i=1}^{n} \mathbf{e}_i\right) + \left(-\sum_{i=1}^{n} \mathbf{e}_i\right) = \mathbf{0}.
+\end{equation}
+The presence of the vector $-\mathbf{1}$ ensures that the wave-vector set is not separable along the coordinate axes. For example, in 2D, the vectors are $(1,0)$, $(0,1)$, and $(-1,-1)$. The interaction of these three directions forces the model to learn representations that are sensitive to diagonal and off-diagonal relationships.
+
+This simple and deterministic construction yields a set of $n+1$ wave vectors that span $\mathbb{R}^n$ and are balanced around the origin. The resulting wave-vector matrix $\boldsymbol{\Omega}^{(n)} \in \mathbb{R}^{(n+1) \times n}$ is formed by stacking these vectors $\boldsymbol{\omega}_i^\top$ as rows. This provides an explicit $n$-dimensional realization suitable for constructing non-axis-aligned and stable positional encodings.
+
+:error_text:
+\paragraph{Maximum Symmetry.}
+Indeed, an axis-wise construction with $M=n$ orthogonal wave vectors already satisfies the rank condition. With equal norms, it can even satisfy the second-order balance condition:
+\begin{equation}
+    \sum_{i=1}^{n}\omega_i\omega_i^\top \propto I_n .
+\end{equation}
+Nevertheless, this construction remains coordinate-separable: each Fourier mode is tied to one coordinate direction, producing an orthogonal phase grid in real space. Thus, full rank and second-order balance are not sufficient to remove axis-aligned inductive bias.
+
+To obtain a non-axis-aligned design with minimal additional redundancy, we move to the next smallest choice, $M=n+1$. 
+This allows the wave vectors to be centered and treated equivalently, without selecting a preferred coordinate axis or preferred pair of directions. 
+The most symmetric configuration under this minimal redundancy is one where the wave vectors are interdependent and balanced. We achieve this by constructing a set of $n+1$ vectors $\{\omega_i\}$ that satisfy the zero-centroid condition:
+\begin{equation}
+    \sum_{i=1}^{n+1}\omega_i=0.
+\end{equation}
+This condition ensures that the wave vectors do not have a net directional bias. By explicitly coupling the vectors through this constraint, we ensure they are not separable along coordinate axes, forcing the model to learn representations that are sensitive to interactions between dimensions. The resulting aggregate second-order response is:
+\begin{equation}
+    \sum_{i=1}^{n+1}\omega_i\omega_i^\top
+    =
+    C,
+\end{equation}
+where $C$ is a positive definite matrix that ensures balanced coverage over all spatial directions. This construction provides a compact, non-axis-aligned, and symmetric wave-vector set for nD-RoPE.
+
+Using more than $n+1$ directions can further densify angular coverage, but it also introduces additional redundancy and more complex interference among plane waves. Since our goal is a deterministic minimal-redundancy construction, we adopt the regular simplex as the canonical single-scale wave-vector design.
+
+:error_text:
+Rotary Position Embedding (RoPE) is widely adopted in Transformer models, yet its extension to high-dimensional domains lacks a unified theoretical formulation. Most existing approaches either apply rotations independently along each axis or empirically mix frequencies, which limits cross-dimensional interactions and yields direction-dependent representations. To address these limitations, we propose \textit{nD-RoPE}, a decomposition-free generalization of RoPE to arbitrary dimensions. From a translation-invariant formulation in continuous Hilbert space, we derive a spectral condition for isotropy that requires treating positions and frequencies as coupled $n$-dimensional vectors. We instantiate this formulation with a multi-scale regular-simplex wave-vector design, which provides non-degenerate spatial coverage and a symmetric, directionally balanced second-order response. Experiments across images, videos, and point clouds demonstrate consistent performance gains and improved generalization in high-dimensional settings.
+
+:error_text:
+\subsection{nD-RoPE Construction}
+Having established the criteria of coverage and symmetry, we now summarize the final form of nD-RoPE. Accordingly, the nD-RoPE embedding applied to a query vector $q$ at position $\mathbf{x}$ is defined as
+\begin{multline}\label{eq:z_multiscale_row}
+f(q,\mathbf{x}) = q \odot
+\Bigl[
+  \underbrace{
+    e^{j (\boldsymbol{\omega}^{(1)}_1)^\top \mathbf{x}},\; \dots,\;
+    e^{j (\boldsymbol{\omega}^{(1)}_{M})^\top \mathbf{x}}
+  }_{z^{(1)}(\mathbf{x})}
+\\
+  \;\Vert\; \cdots \;\Vert\;
+  \underbrace{
+    e^{j (\boldsymbol{\omega}^{(S)}_1)^\top \mathbf{x}},\; \dots,\;
+    e^{j (\boldsymbol{\omega}^{(S)}_{M})^\top \mathbf{x}}
+  }_{z^{(S)}(\mathbf{x})}
+\Bigr]^{\!\top}.
+\end{multline}
+where $S$ is the number of scales, $M$ the number of wave vectors per scale, and $\boldsymbol{\omega}^{(s)}_i$ the $i$-th wave vector at scale $s$. For $n \ge 2$, here $n$ denotes the spatial dimensionality, each scale employs $M=n+1$ wave vectors constructed to be non-axis-aligned and sum to zero, as detailed in Appendix~\ref{appendix:gridpe_cal}. For $n=1$, this reduces to the standard 1D RoPE with a single positive frequency. The explicit construction of these vectors is provided in Appendix~\ref{appendix:gridpe_cal}. This simplex-based organization induces an isotropic and periodic spatial representation.
+
+:explanation:
+The paper's central claim is the development of an isotropic and symmetric positional embedding based on a "regular-simplex wave-vector design." However, the explicit construction of these vectors, detailed in Appendix A, directly contradicts this claim and fails to produce the desired geometric properties. This represents a fundamental flaw in the paper's technical contribution.
+
+The issues with the construction are as follows:
+
+1.  **The construction is not a regular simplex:** A regular simplex configuration requires vectors from the centroid to the vertices to have equal norms and equal pairwise angles. The method described in Appendix A constructs wave vectors by taking the `n` standard basis vectors `{e_i}` and one additional vector `-1`. For `n=2`, this yields `ω₁ = (1, 0)`, `ω₂ = (0, 1)`, and `ω₃ = (-1, -1)`. These vectors have unequal norms (||ω₁|| = 1, ||ω₂|| = 1, ||ω₃|| = √2) and unequal pairwise angles (90° between ω₁ and ω₂, 135° for the other pairs). This is not a regular simplex.
+
+2.  **The design is not isotropic or symmetric:** The resulting set of wave vectors is heavily biased. It privileges the coordinate axes (from `e₁`, `e₂`) and one specific diagonal direction (from `ω₃`). The paper claims the design is "symmetric," "directionally balanced," and avoids "directional bias," but the implementation is fundamentally anisotropic. A key indicator of isotropy is that the second-order moment matrix `Σ ωᵢωᵢᵀ` should be proportional to the identity matrix. For the `n=2` case, this matrix is `[[2, 1], [1, 2]]`, which is not proportional to identity, confirming the lack of isotropy.
+
+3.  **Contradiction between theory and implementation:** There is a major disconnect between the motivation presented in the main text (e.g., Section 4.2 on "Maximum Symmetry," the abstract) and the actual implementation described in the appendix. The paper repeatedly uses terms like "regular simplex," "isotropic," and "symmetric" to justify its design, but the provided construction fails to satisfy any of these properties. This undermines the scientific premise of the paper, as the reported empirical successes cannot be attributed to the claimed theoretical principles.

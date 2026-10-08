@@ -1,0 +1,42 @@
+Here are the modifications to introduce the conceptual error into the paper.
+
+:original_text:
+To regularize the latent space and enable sampling-based generation, we constrain the posterior as:
+\begin{equation}
+\mathcal{L}_{\text{VAE}} = \mathrm{KL}\big(q_\phi(z \mid c)\,\|\,\mathcal{N}(0, I)\big),
+\end{equation}
+where $q_\phi(z \mid c)$ is the stochastic latent distribution produced by the code encoder $E^c$, and the KL divergence encourages the learned posterior close to the standard normal prior.
+
+:modified_text:
+To regularize the latent space and align it with task-level semantics, we constrain the posterior to match a conditional prior derived from the prompt:
+\begin{equation}
+\mathcal{L}_{\text{VAE}} = \mathrm{KL}\big(q_\phi(z \mid c)\,\|\,p_\theta(z \mid p)\big),
+\end{equation}
+where $q_\phi(z \mid c)$ is the stochastic latent distribution from the code encoder $E^c$, and $p_\theta(z \mid p)$ is the prior distribution conditioned on the prompt $p$. This objective forces the latent representation of a code snippet to conform to the semantic space defined by its corresponding instruction.
+
+:original_text:
+To enhance task-level information in the latent space without explicit instruction conditioning, we incorporate an auxiliary prompt encoder $E^p$ that processes sensitive instructions during training. 
+Given a sensitive instruction $p = (p_1, \dots, p_L)$, we obtain its contextualized representation via the same frozen model,
+$h^p = f_{\mathcal{M}_J}(p),
+\;
+z^p = E^p(h^p)$
+, where $h^p \in \mathbb{R}^{L \times d}$ denotes the final-layer token representations of the instruction produced by the frozen model $\mathcal{M}_J$, and $z^p$ is the latent representation encoded by $E^p$.
+
+:modified_text:
+To provide the conditional prior for the VAE objective, we incorporate an auxiliary prompt encoder $E^p$ that processes sensitive instructions during training. 
+Given a sensitive instruction $p = (p_1, \dots, p_L)$, we obtain its contextualized representation via the same frozen model,
+$h^p = f_{\mathcal{M}_J}(p)$. The prompt encoder then parameterizes the conditional prior as a Gaussian distribution with a fixed variance: $p_\theta(z \mid p) = \mathcal{N}(E^p(h^p), I)$. The mean of this distribution, $z^p = E^p(h^p)$, serves as the target for the code's latent representation and is also used in the alignment loss described below.
+
+:explanation:
+The introduced error is a fundamental mismatch between the training objective and the generation procedure, characteristic of a misunderstanding of Variational Autoencoders (VAEs) and their conditional variants (CVAEs).
+
+1.  **Modified Training Objective**: The modification changes the model's training from a standard VAE to a conditional VAE. The original VAE objective regularized the posterior distribution of code latents, $q_\phi(z \mid c)$, to be close to a fixed standard normal prior, $\mathcal{N}(0, I)$. The modified objective regularizes it to match a conditional prior, $p_\theta(z \mid p) = \mathcal{N}(E^p(h^p), I)$, which is a Gaussian distribution centered on the embedding of the corresponding prompt. This means the model learns to map latent variables from prompt-specific regions of the latent space to appropriate code-generating prefixes.
+
+2.  **Unchanged Generation Procedure**: The generation stage (Section 3.3), however, is left unchanged. It samples latent variables $z_i$ from the standard normal prior, $\mathcal{N}(0, I)$, to generate new code.
+
+3.  **The Conceptual Flaw**: This creates a critical distribution mismatch. The prefix decoder is trained to expect latent variables sampled from a mixture of prompt-conditioned Gaussians, but at generation time, it is fed variables from a single, fixed Gaussian centered at the origin. Unless the prompt embeddings $E^p(h^p)$ are all clustered around zero (which is highly unlikely), the latent variables sampled from $\mathcal{N}(0, I)$ will be out-of-distribution for the decoder. This would cause the decoder to produce meaningless prefix embeddings, leading to the generation of low-quality, incoherent code.
+
+This flaw directly undermines the paper's central claim of achieving high utility. The described generation process is conceptually broken and would realistically lead to very poor performance, contradicting the reported results. Detecting this error requires a deep understanding of generative models, as the training and generation sections each appear internally coherent, but are contradictory as a whole.
+
+:claim:
+The `PrivCode++` framework achieves higher code generation utility (measured by Pass@1 scores) than alternative methods that also protect both prompts and code, such as direct differentially private fine-tuning (DPFT) or unconditional generation (PC-Uncond).

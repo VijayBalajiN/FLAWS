@@ -1,0 +1,38 @@
+An error has been introduced that overstates the conclusions drawn from the In-Context Learning (ICL) results. The modified text incorrectly claims that the performance drop on D3/D4 tasks proves a fundamental inability of ICL to perform abstract generalization, confusing an experimental artifact for a mechanistic limitation. The original text correctly identified this as a "correspondence bottleneck" (i.e., a retrieval or demonstration quality problem), whereas the modified text makes a much stronger, unsupported claim about ICL's core capabilities.
+
+:original_text:
+RL converts memorization into near-transfer more efficiently than SFT-family baselines, while ICL exhibits strong but correspondence-dependent transfer.
+:modified_text:
+RL converts memorization into near-transfer more efficiently than SFT-family baselines, while ICL exhibits strong transfer only when instance correspondence is preserved, failing to generalize at an abstract, categorical level.
+
+:original_text:
+Method rankings swap with distance, a distinction invisible to any single aggregate score.
+:modified_text:
+...while paired ICL stays strong through the instance-paired levels ($D_0$--$D_2$) and then drops at the category-matched and unpaired levels ($D_3$--$D_4$), exposing its reliance on surface-level pattern matching and inability to generalize abstract concepts.
+
+:original_text:
+and paired ICL remains strong across instance-paired levels before dropping once direct demonstration-target correspondence is removed.
+:modified_text:
+and paired ICL remains strong across instance-paired levels before collapsing once the task requires abstract category-level generalization rather than instance-level matching.
+
+:original_text:
+Paired ICL shows impressive gains across $D_0$--$D_2$ when the oracle retriever provides the matched seed example, but drops once the target is only category-matched or unpaired. Random ICL performs \emph{worse} than the base model, highlighting the brittleness of context-based adaptation: its effectiveness hinges entirely on demonstration selection quality.
+:modified_text:
+Paired ICL shows impressive gains across $D_0$--$D_2$ when the oracle retriever provides the matched seed example, but drops once the target is only category-matched or unpaired. Random ICL performs \emph{worse} than the base model, highlighting a fundamental limitation of context-based adaptation: it operates on surface-level pattern matching and fails to form abstract, transferable representations of algorithmic categories.
+
+:original_text:
+Paired ICL remains strong through the instance-paired levels ($D_0$--$D_2$), including narrative recontextualization, but drops once the target is only category-matched or unpaired, exposing a correspondence bottleneck rather than uniformly robust transfer.
+:modified_text:
+Paired ICL remains strong through the instance-paired levels ($D_0$--$D_2$), including narrative recontextualization, but drops once the target is only category-matched or unpaired, exposing its inability to generalize via abstract representations, a key limitation compared to gradient-based adaptation.
+
+:explanation:
+The introduced conceptual error is an over-interpretation of the experimental results for In-Context Learning (ICL). The modified paper incorrectly concludes that ICL is fundamentally incapable of abstract, category-level generalization, attributing its performance drop on D3/D4 tasks to a mechanistic failure to form abstract representations.
+
+This is a subtle but significant error for two reasons:
+1.  **Conflation of Evidence and Conclusion:** The experiment only shows that ICL performance drops when the provided "oracle" demonstration is a different problem from the same category (D3), rather than a direct variant of the same problem (D0-D2). This demonstrates a dependency on the quality and similarity of the demonstration, which the original paper correctly terms a "correspondence bottleneck." The modified text makes an unsupported leap from this observation to a sweeping claim about the inherent limitations of the ICL mechanism itself.
+2.  **Methodological Insufficiency:** To prove that ICL is incapable of abstract generalization, the experiment would need to show that it fails even when provided with the *best possible* categorical demonstration from a large pool of candidates, or across a wide range of abstract tasks. The current setup, which uses a single, pre-determined D0 seed as the demonstration for its D3 counterpart, cannot support such a strong conclusion. The failure could simply be due to that specific demonstration being a poor analog for the target problem, not because the ICL mechanism itself is flawed.
+
+An expert reader should recognize that the conclusion is stronger than the evidence provided, a common type of error in academic research where authors are tempted to overstate the implications of their findings. The error requires a careful analysis of the experimental design for ICL and how it differs across the spectrum levels (D0-D2 vs. D3-D4).
+
+:claim:
+In-context learning (ICL) with oracle-paired demonstrations is highly effective at instance-paired transfer, including under complete narrative re-framing (D2), but its performance drops below the unadapted base model on category-matched (D3) and unpaired (D4) problems, revealing a transfer bottleneck when direct demonstration-target correspondence is lost.

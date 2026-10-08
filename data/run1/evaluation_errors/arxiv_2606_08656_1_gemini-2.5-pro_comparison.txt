@@ -1,0 +1,24 @@
+**Identified Error 1:**
+We find that per-turn one-step rewards are substantially more stable, while cumulative return often collapses after a certain number of training steps. Table 6 shows that the performance of cumulative reward is far below one-step reward, only 0.61 on LHE.
+
+:
+INCORRECTLY IDENTIFIED
+
+**Identified Error 2:**
+Other baselines are implemented in our sequential-game setting following their core mechanisms, using DeepSeek-V3.2 as the base model.
+
+:
+INCORRECTLY IDENTIFIED
+
+**Identified Error 3:**
+This suggests that training with longer rollouts better teaches the memory model to preserve hypotheses, revise them when contradicted, and provide guidance that remains effective over extended interaction.
+
+:explanation:
+The identified errors represent significant technical and methodological flaws that question the paper's central claims and conclusions.
+
+1.  The most serious flaw is the justification for using a myopic, one-step reward signal instead of a cumulative, long-horizon reward. The goal of the paper is to enable long-term, multi-step learning. However, the training objective is explicitly short-term (optimizing for the next game's outcome only). The claim that the cumulative reward objective "often collapses" is an extraordinary claim supported by a single data point and a brief explanation attributing it to "variance". This is a standard challenge in reinforcement learning, not a fundamental barrier. Dismissing the true, long-term objective for a convenient proxy without a thorough investigation or ablation study severely weakens the claim that the method learns effective long-horizon strategies. The learned policy might be optimizing for greedy, short-term gains rather than building a robust, long-term model of the opponent.
+
+2.  The second flaw is a critical issue in the experimental design that undermines the fairness of the comparisons. The proposed method, MEMOPILOT, is developed using Qwen models, while the main prior work baselines (Reflexion, ExpeL, etc.) are implemented using a different model, DeepSeek-V3.2. This introduces a major confounding variable. The performance differences observed could be partially or wholly attributed to the differing capabilities and characteristics of the base models rather than the superiority of the memory update mechanism itself. For a valid comparison, all methods should have been evaluated using the same set of base models.
+
+3.  The third error highlights a contradiction in the paper's analysis that is not adequately explained. The authors state they use a one-step (next-game) reward for training, yet they find that training with longer multi-game rollouts (e.g., 5 turns vs. 2 turns) improves performance. If the reward for a memory update at turn `t` depends only on the outcome of turn `t+1`, it is unclear how the events of turns `t+2`, `t+3`, etc., contribute to a better policy. The provided explanation is vague and speculative, pointing to a potential gap in the authors\' understanding of the learning dynamics of their own method.
+CORRECTLY IDENTIFIED

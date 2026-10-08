@@ -1,0 +1,56 @@
+:error_text:
+Finally, we optimize GRPO with the overall reward $R_\mathsf{total}$ in Eq.~\eqref{eq:rtotal} and \ourloss:
+\begin{equation}
+\label{eq:loss_total}
+\mathcal{J}_\mathsf{total}(\theta)
+=\mathcal{J}_{\mathsf{GRPO}}(\theta)+\beta \mathcal{J}_\mathsf{omni}(\theta) ,
+\end{equation}
+where $\beta>0$ controls the strength of regularization.
+
+:error_text:
+Our Omni-Perception Loss encourages large KL divergence on the modality-specific token sets $\mathcal{T}_V$ and $\mathcal{T}_A$ identified above:
+\begin{equation}
+    \mathcal{J}_\mathsf{omni}(\theta)=\sum_{t\in \{\mathcal{T}_V,\mathcal{T}_A\}}\mathcal{L}_t^{m}(\theta)
+\end{equation}
+
+:error_text:
+We quantify the discrepancy between the full-input and masked-input distributions at step $t$ using the KL divergence:
+\begin{equation}
+\label{eq:kl_token}
+\mathcal{L}_t^{m}(\theta) \;=\; \mathbb{D}_{\mathrm{KL}}\!\left(p_t^{m} \,\|\, p_t\right),\quad 
+m \in \{\tilde{V},\tilde{A}\}.
+\end{equation}
+Intuitively, if $Y_t$ expresses modality-specific evidence of $m$, the policy under masking should diverge significantly from the full-information policy. This reverse KL formulation encourages the masked policy to produce tokens that are surprising under the full policy, effectively forcing it to retract claims when their evidentiary basis is removed.
+
+:error_text:
+Bottom: The Omni-Perception Loss (\ref{sec:loss}). We construct unimodal masked inputs and maximize the KL divergence between the full and masked distributions on modality-specific tokens $u_k$. This enforces faithfulness by penalizing the model for hallucinating information from missing modalities.
+
+:error_text:
+\begin{proposition}[Reverse Information Projection]
+The Omni-Perception Loss $\mathcal{J}_{\mathrm{omni}}(\theta)$ maximizes the reverse information projection from the masked policy to the full policy. This can be decomposed as:
+\begin{equation}
+\mathcal{J}_{\mathrm{omni}}(\theta) \approx I_\theta(\mathcal{T}_{m}; m | X^{\tilde{m}}) - \Delta_{\mathrm{proj}}(\theta),
+\end{equation}
+where $\Delta_{\mathrm{proj}}(\theta) = \mathbb{E}_{X} \big[ \mathbb{D}_{\mathrm{KL}}\big( \pi_\theta(\mathcal{T}_{m} | X^{\tilde{m}}) \,\|\, P_\theta(\mathcal{T}_{m} | X^{\tilde{m}}) \big) \big] \geq 0$.
+\end{proposition}
+
+\noindent \textit{Proof.}
+By definition, the Omni-Perception Loss is the expected reverse $\mathbb{D}_{\mathrm{KL}}$ divergence:
+\begin{equation}
+\mathcal{J}_{\mathrm{omni}}(\theta) = \mathbb{E}_{X} \big[ \mathbb{D}_{\mathrm{KL}}\big( \pi_\theta(\mathcal{T}_{m} | X^{\tilde{m}}) \,\|\, \pi_\theta(\mathcal{T}_{m} | X) \big) \big].
+\end{equation}
+By the properties of information projection, this divergence measures how much information is lost when projecting from the masked context to the full context. We can relate this to the standard conditional mutual information by reformulating the objective. By inserting the true marginal $P_\theta$ and expanding the $\mathbb{D}_{\mathrm{KL}}$ as an expectation over $\mathcal{T}_{m} \sim \pi_\theta(\cdot|X^{\tilde{m}})$, we obtain:
+\begin{align}
+\mathcal{J}_{\mathrm{omni}}(\theta)
+&= \mathbb{E}_{X} \big[ \mathbb{E}_{y \sim \pi_\theta(\cdot|X^{\tilde{m}})} \big[ \log \frac{\pi_\theta(y | X^{\tilde{m}})}{P_\theta(y | X^{\tilde{m}})} - \log \frac{\pi_\theta(y | X)}{P_\theta(y | X^{\tilde{m}})} \big] \big] \notag \\
+&\approx \underbrace{\mathbb{E}_{X} \big[ \mathbb{D}_{\mathrm{KL}}\big( \pi_\theta(\cdot | X) \,\|\, P_\theta(\cdot | X^{\tilde{m}}) \big) \big]}_{I_\theta(\mathcal{T}_{m}; m | X^{\tilde{m}})} - \underbrace{\mathbb{E}_{X} \big[ \mathbb{D}_{\mathrm{KL}}\big( \pi_\theta(\cdot | X^{\tilde{m}}) \,\|\, P_\theta(\cdot | X^{\tilde{m}}) \big) \big]}_{\Delta_{\mathrm{proj}}(\theta)}.
+\end{align}
+
+:explanation:
+The paper presents a fundamental contradiction in the formulation of the Omni-Perception Loss ($\mathcal{J}_\mathsf{omni}(\theta)$), which invalidates its primary claim of enforcing faithfulness and suppressing cross-modal hallucination.
+
+The core of the error lies in the final objective function (Eq. 11), which is set up for minimization. The function is $\mathcal{J}_\mathsf{total}(\theta) = \mathcal{J}_{\mathsf{GRPO}}(\theta) + \beta \mathcal{J}_\mathsf{omni}(\theta)$. Since the GRPO term $\mathcal{J}_{\mathsf{GRPO}}$ is a loss to be minimized (to maximize rewards), and $\beta > 0$, the optimization process will also minimize the Omni-Perception Loss term $\mathcal{J}_\mathsf{omni}(\theta)$.
+
+However, the paper repeatedly and explicitly states that the goal is to *maximize* this loss term. $\mathcal{J}_\mathsf{omni}(\theta)$ is defined as the sum of KL divergences $\mathbb{D}_{\mathrm{KL}}\!\left(p_t^{m} \,\|\, p_t\right)$ between the model's output distribution with a masked modality ($p_t^m$) and with the full input ($p_t$). The text asserts that this KL divergence should be *large* to ensure that the model's statements about a modality change significantly when that modality is removed. This is highlighted in the method description, the caption for Figure 2, and the theoretical analysis in Appendix A.
+
+By implementing an objective that minimizes the KL divergence, the proposed method would do the exact opposite of what is claimed: it would train the model to produce the *same* modality-specific statements even when the corresponding modality is absent, thereby actively *encouraging* the very cross-modal hallucination it is designed to prevent. This error is not a simple typo but a deep flaw in the technical formulation that completely undermines the contribution of the Omni-Perception Loss. Furthermore, the theoretical justification in Appendix A, which claims the loss term maximizes mutual information, is based on a flawed derivation, compounding the error.

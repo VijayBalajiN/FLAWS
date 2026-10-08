@@ -1,0 +1,115 @@
+Here are the modifications to introduce the conceptual error into the research paper.
+
+:original_text:
+\begin{itemize}
+    \item We introduce an information-theoretic framework that defines binding and a probing method for measuring binding information in model representations.
+    \item We show that the image-level summary token \texttt{[CLS]} encodes less than half of all binding information in a multi-object scene; for the binding information it does encode, it is largely structured quadratically.
+    \item We show that binding is encoded almost perfectly in the full set of spatial tokens, decodable using a simplified attention probe.
+    \item We perform probing experiments on a variety of models and datasets with different binding challenges, and analyze the binding information learned under each scenario.
+\end{itemize}
+:modified_text:
+\begin{itemize}
+    \item We introduce an information-theoretic framework that defines binding and a probing method for measuring binding information in model representations.
+    \item We show that the image-level summary token \texttt{[CLS]} encodes more than half of all binding information in a multi-object scene; for the binding information it does encode, it is largely structured quadratically.
+    \item We show that binding is encoded almost perfectly in the full set of spatial tokens, decodable using a simplified attention probe.
+    \item We perform probing experiments on a variety of models and datasets with different binding challenges, and analyze the binding information learned under each scenario.
+\end{itemize}
+:original_text:
+The model $\Phi$, however, may \textit{lose} information of $F$ and $O$ in its representation of the scene $X$, i.e., they are irrecoverable even with the optimal decoder. We therefore define binding information in a representation $Z$ as follows:
+
+\begin{definition}[Binding information]
+Let $I(A;B)$ denote mutual information between random variables $A$ and $B$. 
+
+    We define binding information in the representation $Z$ of a scene, relative to object set $\mathcal{O}$ (and feature set $\mathcal{F}$), as
+    \[
+    \mathbf{B}_{\mathcal{O}}(Z):= I(O;Z),
+    \]
+    in unit of \textit{bits}. In plain language, it is the information contained in the representation about the object code, i.e., about which objects are present and absent in a scene.
+    \label{bindinfo}
+\end{definition}
+
+\begin{remark} Let $H(A)$ denote the entropy of the random variable $A$, and $H(A\mid B)$ be its conditional entropy on $B$.
+    \begin{equation}
+        \mathbf{B}_{\mathcal{O}}(Z):= I(O;Z)=H(O)-H(O\mid Z)\label{entropydef}
+    \end{equation}
+    From the lens of entropy, binding information is also the reduction in the uncertainty of object code $O$ ($H(O)$) due to knowledge of the representation $Z$.
+\end{remark}
+:modified_text:
+The model $\Phi$, however, may \textit{lose} information of $F$ and $O$ in its representation of the scene $X$, i.e., they are irrecoverable even with the optimal decoder. We must therefore define binding information in a way that separates the information about feature-conjunctions (binding) from information about features alone. A naive measure like $I(O;Z)$ is confounded, as it combines both. A better approach is to define binding as the reduction in uncertainty about the object code, after correcting for the residual uncertainty attributable to features. We therefore define binding information in a representation $Z$ as follows:
+
+\begin{definition}[Binding information]
+Let $H(A)$ denote the entropy of a random variable $A$, and $H(A\mid B)$ be its conditional entropy on $B$.
+    
+    We define binding information in the representation $Z$ of a scene, relative to object set $\mathcal{O}$ (and feature set $\mathcal{F}$), as
+    \[
+    \mathbf{B}_{\mathcal{O}}(Z):= H(O) - (H(O\mid Z) - H(F \mid Z)),
+    \]
+    in unit of \textit{bits}.
+    \label{bindinfo}
+\end{definition}
+
+\begin{remark}
+This definition can be understood as correcting the naive information gain, $I(O;Z) = H(O)-H(O\mid Z)$, for the residual feature uncertainty $H(F \mid Z)$. The term $H(O\mid Z) - H(F \mid Z)$ represents the uncertainty about object configuration that is not explained by uncertainty about features. Subtracting this corrected residual uncertainty from the prior uncertainty $H(O)$ gives the information gained specifically about binding.
+\label{entropydef}
+\end{remark}
+:original_text:
+Assuming that the DNN probe approaches the true binding information in the representation, our results show that the \texttt{[CLS]} token encodes less than half ($48.5\%$) of the binding information. If we wish to separate binding information from feature information, the \texttt{[CLS]} encodes only $42.4\%$ of the binding information beyond what can be explained by features.
+
+\begin{table}[H]
+\centering
+\caption{\textbf{Probe-estimated binding information $\mathbf{B}_{\mathcal{O}}(Z)$, conditional binding information $\mathbf{B}^{*}_{\mathcal{O}, \mathcal{F}}(Z)$, and their normalized forms $\boldsymbol{\beta}_{\mathcal{O}}(Z)$ and $\boldsymbol{\beta}^{*}_{\mathcal{O}, \mathcal{F}}(Z)$}, recorded on the test set. $H(O)=39.9$ bits and $H(F)=7.0$ bits on this test set. All conditional results use the loss of the quadratic feature probe for the $H(F\mid Z)$ term, varying the object code probe type.}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{lcccc}
+\toprule
+Probe type 
+& $\mathbf{B}_{\mathcal{O}}(Z)$ (bits) $\uparrow$
+& $\boldsymbol{\beta}_{\mathcal{O}}(Z)$ $\uparrow$
+& $\mathbf{B}^{*}_{\mathcal{O}, \mathcal{F}}(Z)$ (bits) $\uparrow$
+& $\boldsymbol{\beta}^{*}_{\mathcal{O}, \mathcal{F}}(Z)$ $\uparrow$ \\
+\midrule
+Linear & $5.7$ & $14.3\%$ & $0.3$ & $0.8\%$  \\
+Quadratic & $17.9$ & $44.9\%$ & $12.5$ & $37.9\%$  \\
+DNN & $\mathbf{19.4}$ & $\mathbf{48.5\%}$ & $\mathbf{13.9}$ & $\mathbf{42.4\%}$  \\
+\bottomrule
+\end{tabular}
+}
+\label{tab:binding_information}
+\end{table}
+:modified_text:
+Assuming that the DNN probe approaches the true binding information in the representation, our results show that the \texttt{[CLS]} token encodes more than half ($52.4\%$) of the binding information. If we wish to separate binding information from feature information, the \texttt{[CLS]} encodes only $42.4\%$ of the binding information beyond what can be explained by features.
+
+\begin{table}[H]
+\centering
+\caption{\textbf{Probe-estimated binding information $\mathbf{B}_{\mathcal{O}}(Z)$, conditional binding information $\mathbf{B}^{*}_{\mathcal{O}, \mathcal{F}}(Z)$, and their normalized forms $\boldsymbol{\beta}_{\mathcal{O}}(Z)$ and $\boldsymbol{\beta}^{*}_{\mathcal{O}, \mathcal{F}}(Z)$}, recorded on the test set. $H(O)=39.9$ bits and $H(F)=7.0$ bits on this test set. All conditional results use the loss of the quadratic feature probe for the $H(F\mid Z)$ term, varying the object code probe type.}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{lcccc}
+\toprule
+Probe type 
+& $\mathbf{B}_{\mathcal{O}}(Z)$ (bits) $\uparrow$
+& $\boldsymbol{\beta}_{\mathcal{O}}(Z)$ $\uparrow$
+& $\mathbf{B}^{*}_{\mathcal{O}, \mathcal{F}}(Z)$ (bits) $\uparrow$
+& $\boldsymbol{\beta}^{*}_{\mathcal{O}, \mathcal{F}}(Z)$ $\uparrow$ \\
+\midrule
+Linear & $7.3$ & $18.3\%$ & $0.3$ & $0.8\%$  \\
+Quadratic & $19.5$ & $48.9\%$ & $12.5$ & $37.9\%$  \\
+DNN & $\mathbf{20.9}$ & $\mathbf{52.4\%}$ & $\mathbf{13.9}$ & $\mathbf{42.4\%}$  \\
+\bottomrule
+\end{tabular}
+}
+\label{tab:binding_information}
+\end{table}
+:explanation:
+The core conceptual error introduced is a flawed definition of "binding information".
+
+1.  **Original Definition**: The original paper defines binding information as the standard mutual information `B_O(Z) := I(O;Z) = H(O) - H(O|Z)`. This measures the total reduction in uncertainty about the object code `O` given the representation `Z`.
+
+2.  **Modified (Flawed) Definition**: The modified paper redefines binding information as `B_O(Z) := H(O) - (H(O|Z) - H(F|Z))`. The new text provides a plausible-sounding but incorrect justification for this change, arguing that it "corrects" for the residual uncertainty about features (`H(F|Z)`) to better isolate information specific to binding.
+
+3.  **Why it's wrong**: This modification is conceptually flawed for two main reasons:
+    a. The subtraction of entropies `H(O|Z) - H(F|Z)` is not a valid way to partition uncertainty. It relies on a faulty intuition that entropy is a simple, divisible quantity. While this expression happens to be equal to the conditional entropy `H(O|Z,F)` because `F` is a deterministic function of `O`, the justification provided is based on a misunderstanding of information theory.
+    b. The resulting definition, `B_O(Z) = H(O) - H(O|Z,F)`, is actually `I(O; Z,F)`. This quantity measures the information that the representation `Z` and the ground-truth feature code `F` *jointly* provide about the object code `O`. It no longer measures the information contained *in the representation Z alone*, which was the original goal. It conflates information from the model with oracle information.
+
+4.  **Impact**: This subtle change in the core formula leads to a re-calculation of the main results. The new binding information value for the DNN probe on the `[CLS]` token becomes 20.9 bits, and the normalized value `β_O(Z)` becomes 52.4%. This flips the paper's key claim, causing the authors to conclude that the `[CLS]` token encodes *more* than half of the binding information, directly undermining the original paper's finding. The error is non-trivial because it requires a solid understanding of information theory to identify the flaw in the definition and its justification.
+
+:claim:
+The image-level summary token (`[CLS]`) in a Vision Transformer (ViT) encodes less than half of the total binding information present in a multi-object scene.

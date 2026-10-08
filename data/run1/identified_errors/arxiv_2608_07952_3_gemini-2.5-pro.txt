@@ -1,0 +1,17 @@
+:error_text:
+Scope: the released artifacts reproduce the 14{,}293-run corpus summarized in Table~\ref{tab:summary-stats}, and every quantitative claim in the paper is computed from that corpus. Results whose run-level artifacts were not retained---the earlier uncontaminated-setting factorial (\S4.3), the H1 significance test (Table~2 caption), the B3/M5/M9, utility, and half-life columns of the original operator study (Table~4 caption), and the secondary-judge agreement check (\S\ref{sec:threshold})---are explicitly flagged where they appear, are treated as descriptive historical observations, and are excluded from our reproducibility claims.
+
+:error_text:
+Remediation operators, from the retained run-level artifact (63 runs; counted under the ``Other validation'' row of the run ledger, Table~\ref{tab:summary-stats}). Drift reduction only: the utility and half-life columns and operators B3/M5/M9 carried in earlier versions are not recoverable from the released artifacts, so we withdraw them and make no Pareto-dominance claim.
+
+:error_text:
+\pse{} induces measurable drift (5.2\% pooled) but leaves end-task success essentially unchanged: the largest gap versus baseline is 0.35pp over 2{,}000 runs per arm. Descriptive only---the significance test previously reported here is not reproducible from the run-level data, so we withdraw it.
+
+:explanation:
+The paper repeatedly and explicitly withdraws key results and statistical claims because they are not reproducible from the authors' own "retained" or "released" artifacts. This represents a catastrophic failure in scientific practice.
+
+1.  A central list in the appendix acknowledges that multiple results are "excluded from our reproducibility claims," including the significance test for the first hypothesis (H1), a factorial analysis, and parts of the original remediation study.
+2.  The caption for the remediation results (Table 4) confirms that multiple metrics (utility, half-life) and results for specific operators are being withdrawn because they "are not recoverable from the released artifacts."
+3.  The caption for the behavioral drift results (Table 2) retracts the significance test for the paper's first hypothesis (H1), demoting the finding to a "descriptive only" observation because the test is "not reproducible from the run-level data."
+
+This pattern of admitting that foundational claims cannot be substantiated by the provided evidence fatally undermines the paper's credibility. It suggests a deeply flawed research process, poor data management, or that the original analyses were incorrect. Such a widespread and acknowledged lack of reproducibility would almost certainly lead to rejection from any reputable scientific venue.

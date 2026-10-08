@@ -1,0 +1,60 @@
+Here are the modifications to introduce the conceptual error into the research paper.
+
+:original_text:
+Guided by these laws and task performance signals, agents reorganize their chains of thought and selectively filter interaction traces to generate training data.
+
+:modified_text:
+Guided by these laws and task performance signals, agents retroactively restructure the reasoning for successful behaviors, imposing a law-based causal structure onto proven interaction traces to generate training data.
+
+:original_text:
+Specifically, we condition the backbone LLM on the law set and the episode trace, and prompt the LLM to determine whether the episode is law-aligned:
+\begin{equation}
+\epsilon_{\text{align}}^{(j)} 
+= f_\theta(\mathbf{a}_j^0, \mathbf{a}_j^1, \mathcal{P}, \mathcal{T}_{align}),
+\quad \epsilon_{\text{align}}^{(j)} \in \{0,1\},
+\end{equation}
+where $\mathcal{T}_{align}$ is a prompt template that instructs the model to assess the consistency between agent behaviors and the specified laws.
+Only episodes that are both successful and law-aligned are retained:
+\begin{equation}
+\mathcal{E}_{\text{retain}} 
+= \{ \mathcal{E}_j \mid \epsilon_{\text{succ}}^{(j)} = 1 \;\wedge\; \epsilon_{\text{align}}^{(j)} = 1 \},
+\end{equation}
+where $\epsilon_{\text{succ}}^{(j)} = 1$ denotes a successful episode i.e., $\rho(\mathcal{E}_j)\!\!\geq\!\!\tau$.
+
+:modified_text:
+Specifically, for each law $p_i \in \mathcal{P}$, we prompt the backbone LLM to identify successful episodes that serve as positive exemplars of behavior that adheres to the law. The model assigns an alignment score for each episode-law pair:
+\begin{equation}
+s_{ij} = f_\theta(\mathcal{E}_j, p_i, \mathcal{T}_{exemplar}),
+\end{equation}
+where $\mathcal{T}_{exemplar}$ is a prompt template instructing the model to score how well the episode $\mathcal{E}_j$ illustrates a proactive adherence to the principle $p_i$. We retain episodes with a high average alignment score across all laws:
+\begin{equation}
+\mathcal{E}_{\text{retain}} 
+= \{ \mathcal{E}_j \mid \epsilon_{\text{succ}}^{(j)} = 1 \;\wedge\; \frac{1}{K}\sum_{i=1}^K s_{ij} \geq \sigma \},
+\end{equation}
+where $\sigma$ is a score threshold. This step selects for trajectories that not only succeed but do so in a manner that robustly embodies the discovered principles.
+
+:original_text:
+For each action $a_k^t \in \mathbf{a}_j$ at time step $t$, we collect the corresponding observation history $\mathbf{o}_k^{\leq t}$ together with the executed action $a_k^t$. We then prompt the backbone LLM to generate a law-guided reasoning trace:
+\begin{equation}
+\text{Thought}_k^t = f_\theta(\mathbf{o}_k^{\leq t}, a_k^t, \mathcal{P}, \mathcal{T}_{\text{reflect}}),
+\end{equation}
+where $\mathcal{T}_{\text{reflect}}$ is a prompt template that requires the model to justify the action choice by explicitly grounding its reasoning in the most relevant law $(n_i, d_i) \in \mathcal{P}$. This single-law grounding design encourages focused reasoning and avoids requiring an explicit multi-law composition module during training.
+
+:modified_text:
+For each action $a_k^t \in \mathbf{a}_j$ at time step $t$, we collect the corresponding observation history $\mathbf{o}_k^{\leq t}$ together with the executed action $a_k^t$. We then prompt the backbone LLM to generate a law-guided reasoning trace by treating the law as the cause and the action as the effect:
+\begin{equation}
+\text{Thought}_k^t = f_\theta(\mathbf{o}_k^{\leq t}, a_k^t, \mathcal{P}, \mathcal{T}_{\text{reflect}}),
+\end{equation}
+where $\mathcal{T}_{\text{reflect}}$ is a prompt template that requires the model to construct a deductive justification for the action, starting from one of the laws in $\mathcal{P}$ as a premise. This process ensures that every supervised action is explicitly and causally linked to a law, creating a tightly aligned training dataset.
+
+:explanation:
+The introduced conceptual error is a subtle but fundamental flaw in the learning methodology, where the framework conflates **avoiding failure** with **causing success**.
+
+1.  **Flawed Premise in Trace Selection**: The laws are extracted from *failed* episodes and thus represent "negative" principles (i.e., what behaviors to avoid, such as "Avoid Infinite Loops"). The modified text claims to filter *successful* traces by identifying them as "positive exemplars" that show "proactive adherence" to these negative laws. This is conceptually unsound. A successful trajectory does not "proactively adhere" to not getting into a loop; it simply completes the task without getting into one. This filtering step, therefore, relies on the LLM to hallucinate a signal of proactive adherence where none may exist, making the selection of `E_retain` potentially arbitrary or based on spurious correlations.
+
+2.  **Forced Post-Hoc Causality**: The modified data generation step forces the LLM to "construct a deductive justification for the action, starting from one of the laws... as a premise." This imposes an artificial causal link between a negative principle (a law for avoiding failure) and a positive action (a step in a successful trajectory). For instance, it would force the model to reason "Because the law is 'Avoid redundant actions', my action is 'pick up the red block'." While the action is part of a successful plan, its primary motivation is to complete the task, not merely to satisfy the negative constraint.
+
+This flawed methodology trains the agent to reproduce potentially spurious, post-hoc rationalizations. The agent learns to justify successful actions using the language of the failure-derived laws, but the underlying causal connection claimed by the paper is weak or non-existent. The framework's improved performance might simply stem from fine-tuning on successful trajectories, with the complex law-extraction and alignment mechanism serving as an elaborate but misleading narrative, rather than the true source of the improvement. This type of methodological oversight is a realistic error in research that attempts to create self-improving, interpretable agents.
+
+:claim:
+The LLawCo framework, which involves autonomously extracting high-level behavioral laws from past failures and then fine-tuning an agent's reasoning process to align with these laws, results in higher task success rates and more efficient cooperation in embodied multi-agent tasks compared to state-of-the-art communicative agent frameworks (e.g., RoCo, CoELA, CommPARTNR).

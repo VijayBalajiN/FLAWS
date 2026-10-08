@@ -1,0 +1,32 @@
+:original_text:
+We characterize the normal agent reasoning regime by constructing a prototype 
+representation from known-normal activations.
+Following established approaches in representation-based anomaly 
+detection~\cite{tan2024revprag}, given a collection of normal agent 
+activations $\mathcal{H}_{\text{normal}} = \{h_1, \ldots, h_M\}$ obtained 
+from benign execution traces, we compute:
+
+:modified_text:
+We characterize the normal agent reasoning regime by constructing a prototype 
+representation from known-normal activations.
+Assuming the distribution of normal agent activations is unimodal and well-concentrated, its central tendency provides a robust signature for benign behavior. This allows us to model the normal class using its first moment (the mean), which can be efficiently estimated. Given a collection of normal agent 
+activations $\mathcal{H}_{\text{normal}} = \{h_1, \ldots, h_M\}$ obtained 
+from benign execution traces, we compute:
+
+:original_text:
+For the number of benign traces, we vary the size of the trace set used to construct the prototype $\mu_{\text{normal}}$ from $5$ to $100$ across all five datasets, as shown in Figure~\ref{fig:benign_traces}. \app{} reaches strong performance with only a small number of traces: F1 rises sharply between $5$ and $20$ traces and stabilizes around $50$ traces, with the gap to the $100$-trace default below $0.03$ on every dataset. This indicates that prototype construction is highly sample-efficient, which is particularly attractive in deployment settings where collecting clean data is costly.
+
+:modified_text:
+For the number of benign traces, we vary the size of the trace set used to construct the prototype $\mu_{\text{normal}}$ from $5$ to $100$ across all five datasets, as shown in Figure~\ref{fig:benign_traces}. The performance of the mean-based prototype converges extremely quickly. F1 score saturates at approximately $50$ traces, with negligible gains observed when using $100$ traces. This rapid convergence empirically validates our assumption of a well-behaved, unimodal distribution for normal activations, confirming that the prototype construction is highly sample-efficient. This is particularly attractive in deployment settings where collecting clean data is costly.
+
+:explanation:
+The introduced conceptual error is twofold, consisting of a flawed theoretical assumption that is subsequently justified by a fallacious interpretation of empirical results. This undermines the claim of sample efficiency by revealing its reliance on a fragile and unverified premise.
+
+1.  **Flawed Assumption (Sec 3.3):** The modification introduces the explicit assumption that the distribution of benign agent activations is "unimodal and well-concentrated." This is a strong and highly questionable assumption for high-dimensional representations from an LLM. Benign reasoning is often diverse and context-dependent, which would likely result in a complex, multi-modal distribution in the activation space. Using a simple centroid (mean) to model the "normal" class is only effective for simple, unimodal distributions and can fail catastrophically for multi-modal ones, as the centroid may lie in a low-density region between distinct clusters of normal behavior.
+
+2.  **Fallacious Validation (Sec 4.5):** The modification changes the interpretation of the results to claim that the fast performance saturation (at 50 traces) "empirically validates" the unimodal assumption. This is a logical fallacy known as "affirming the consequent." Fast convergence on a specific benchmark does not prove the underlying distribution of *all possible* benign behaviors is unimodal. It is more likely that the benign traces within the benchmark lack diversity and are easily captured by a simple model.
+
+This combination makes the paper's claim about sample efficiency appear brittle. The framework's effectiveness with few samples is no longer presented as a general property but is instead built upon a weak, unsubstantiated assumption. An expert would recognize that this sample efficiency might be an artifact of the benchmark's limited diversity and that the method could fail in real-world scenarios where benign behaviors are more varied and complex, violating the core unimodal assumption.
+
+:claim:
+The `AcMAS` framework is sample-efficient. A robust characterization of normal agent behavior (the "normal prototype") can be constructed using as few as 50 benign execution traces, after which performance stabilizes.

@@ -1,0 +1,31 @@
+:error_text:
+\begin{table}[t]
+\centering
+\caption{Cross-opponent evaluation with a single evolving memory state throughout the full interaction stream. We report performance on the last 5 games (games 6--10). For cold-start, the agent plays only 5 games against the target opponent B. For warm-up, the agent plays 5 games against opponent A (or B) before evaluating on B.}
+\label{tab:cross_opponent}
+\small
+\begin{tabular}{lcc}
+\toprule
+\textbf{Setting} & \textbf{RPS@5}  & \textbf{LHE@5} \\
+\midrule
+No Memory (cold-start on B) & 0.43 & -1.36 \\
+\midrule
+\rowcolor{gray!10} \multicolumn{3}{l}{\textit{Memory w/ \method{}}} \\
+Cold-start on B (5 games only) & 3.28 & 2.03 \\
+Warm-up on A, then B & 2.56 & 3.26 \\
+Warm-up on B, then B & 5.22 & 3.58 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+:error_text:
+We further evaluate robustness under different opponents by switching opponents mid-stream. Concretely, the player model first plays $5$ consecutive games against opponent A and then plays $5$ games against a different opponent B, while keeping a single evolving memory state throughout. We report metrics only on the last 5 games (games 6--10). Across test opponents, we pair each evaluation opponent B with a distinct warm-up opponent A via a fixed bijection to balance coverage. Table~\ref{tab:cross_opponent} shows that \method{} remains effective after the opponent switch, achieving $3.26$ on LHE, indicating that the learned memory updates can revise prior beliefs rather than overfitting to early experience.
+
+:explanation:
+The core error is a major, unexplained contradiction in the cross-opponent evaluation results presented in Table 5, which breaks the paper's claim about robustness and the ability to avoid overfitting.
+
+The results for the two environments, RPS and LHE, show completely opposite effects. For RPS, warming up on an irrelevant opponent A before playing opponent B leads to worse performance compared to a cold start on B (2.56 vs. 3.28). This is an expected case of negative transfer, where the memory overfits to the first opponent.
+
+Conversely, for LHE, warming up on opponent A leads to substantially *better* performance against B than a cold start (3.26 vs. 2.03). This result is highly counter-intuitive, suggesting an extremely strong and unexplained positive transfer from an unrelated opponent.
+
+The accompanying text exacerbates this flaw by selectively reporting only the favorable LHE result, while completely ignoring the contradictory RPS result. Furthermore, it misinterprets the anomalously strong LHE performance as merely showing the agent "remains effective" and can "revise prior beliefs," a conclusion directly refuted by the RPS data. This significant and unaddressed inconsistency in the results undermines the paper's claims about the method's robustness.

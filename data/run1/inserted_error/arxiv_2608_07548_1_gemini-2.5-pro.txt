@@ -1,0 +1,50 @@
+:original_text:
+The foresight state $\tilde{\boldsymbol{s}}_{t+1}$ encodes the anticipated consequence of the provisional action.
+However, it represents a future latent state rather than actionable information for the current decision.
+We therefore extract the action-induced change by computing the latent discrepancy:
+\begin{equation}
+\boldsymbol{\Delta}_t = \tilde{\boldsymbol{s}}_{t+1} - \boldsymbol{s}_t.
+\end{equation}
+Notably, $\boldsymbol{\Delta}_t$ is not a training target to be minimized, but a model-internal guidance signal that captures how the provisional action would steer the latent dynamics. 
+
+
+Based on this guidance, we perform self-correction by updating the current latent:
+\begin{equation}\label{eq:psi}
+\boldsymbol{s}_t^{(\Delta)} = \psi(\boldsymbol{s}_t, \boldsymbol{\Delta}_t), %\quad
+\end{equation}
+where $\psi(\cdot)$ is a learnable neural network and $\boldsymbol{s}_t^{(\Delta)}$ is the feedback-refined state for final action prediction (Eq.(\ref{Eq:ap})).
+
+:modified_text:
+The foresight state $\tilde{\boldsymbol{s}}_{t+1}$ encodes the anticipated consequence of the provisional action.
+However, it represents a future latent state rather than actionable information for the current decision.
+We therefore use the full foresight state as a guidance signal for refinement. This allows the refinement module to learn a complex, non-linear integration of the current state and the predicted future, rather than being restricted to a simple, pre-defined discrepancy vector.
+Notably, this foresight state is not a training target to be minimized, but a model-internal guidance signal that captures how the provisional action would steer the latent dynamics. 
+
+
+Based on this guidance, we perform self-correction by updating the current latent:
+\begin{equation}\label{eq:psi}
+\boldsymbol{s}_t^{(\Delta)} = \psi(\boldsymbol{s}_t, \boldsymbol{\tilde{s}}_{t+1}), %\quad
+\end{equation}
+where $\psi(\cdot)$ is a learnable neural network and $\boldsymbol{s}_t^{(\Delta)}$ is the feedback-refined state for final action prediction (Eq.(\ref{Eq:ap})).
+
+:original_text:
+    \STATE \textcolor{gray}{\textit{// Internal feedback and refinement}}
+    \STATE \(\boldsymbol{\Delta}_t = \boldsymbol{\tilde{s}}_{t+1} - \boldsymbol{s}_t\)
+    \STATE \(\boldsymbol{s}_t^{(\Delta)} = \psi(\boldsymbol{s}_t, \boldsymbol{\Delta}_t)\)
+:modified_text:
+    \STATE \textcolor{gray}{\textit{// Internal feedback and refinement}}
+    \STATE \(\boldsymbol{s}_t^{(\Delta)} = \psi(\boldsymbol{s}_t, \boldsymbol{\tilde{s}}_{t+1})\)
+:explanation:
+The conceptual error introduced is the redefinition of the internal feedback signal used for state refinement, which directly undermines the paper's key claim. The original method correctly identifies the feedback signal as the explicit *discrepancy* between the predicted future state and the current state (`\boldsymbol{\Delta}_t = \tilde{\boldsymbol{s}}_{t+1} - \boldsymbol{s}_t`). This aligns with established principles in control theory and predictive coding, where an explicit error signal guides correction.
+
+The modification replaces this principled discrepancy calculation with the raw foresight state `\tilde{\boldsymbol{s}}_{t+1}` itself. The refined state is now computed as `\boldsymbol{s}_t^{(\Delta)} = \psi(\boldsymbol{s}_t, \boldsymbol{\tilde{s}}_{t+1})`.
+
+This is a significant conceptual flaw for three reasons:
+1.  **Loss of Explicit Error Signal**: A "self-correcting" system is most effective when it operates on a direct error signal. By removing the explicit difference calculation, the model is no longer fed a signal representing the "error" in its prediction. The refinement network `\psi` must instead learn to implicitly deduce this critical information from two high-dimensional, and likely highly-correlated, inputs, which is a significantly harder and less direct learning task.
+2.  **Weakens Core Claim**: The paper's central claim is that a feedback signal *derived from the discrepancy* is beneficial. The modified method no longer uses an explicit discrepancy, making the claim less supported by the described methodology.
+3.  **Information Processing Inefficiency**: Providing both `\boldsymbol{s}_t` and `\tilde{\boldsymbol{s}}_{t+1}` to the refinement network is redundant. The most salient information for refinement is the *change* between them. Forcing the network to re-learn this fundamental relationship from scratch is inefficient and can make the learning process less stable.
+
+The error is made plausible by justifying it with common deep learning rhetoric ("allows for a more complex, non-linear integration"), which a non-expert might find acceptable. However, a domain expert would recognize this as a weaker, less-principled design that moves away from a direct error-correction mechanism.
+
+:claim:
+Refining an agent's latent state at each timestep using a feedback signal derived from the discrepancy between the current state and a predicted future state (foresight) improves navigation success and efficiency before an action is executed.

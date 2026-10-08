@@ -1,0 +1,38 @@
+:error_text:
+\STATE \textcolor{gray}{\textit{// Conditional adaptation trigger}}
+    \IF{\(\kappa_t > \tau\)}
+        \STATE \(\mathcal{L}_{\mathrm{rec}} = \| d(\boldsymbol{\tilde{s}}_{t+1}) - \boldsymbol{\hat{v}}_t \|_2^2\)
+        \STATE \(\Theta \leftarrow \Theta - \eta \cdot \nabla_{\Theta} \mathcal{L}_{\mathrm{rec}}\)
+    \ENDIF
+
+:error_text:
+Once triggered, we update the world model using the self-supervised reconstruction objective $\mathcal{L}_{\mathrm{rec}}$ (Eq.(\ref{eq:rec})): 
+\begin{equation}\label{eq:grad}
+\boldsymbol{\Theta} \leftarrow \boldsymbol{\Theta} - \eta \cdot \,\nabla_{\small \boldsymbol{\Theta}} \mathcal{L}_{\mathrm{rec}},
+\end{equation}
+where $\eta$ denotes the adaptation learning rate and we denote all components of the world model without policies collectively by parameters $\boldsymbol{\Theta}$.
+
+This online update allows SC$^{2}$-WM to refine its internal dynamics in testing scenarios, working synergistically with plan refinement to enable effective navigation.
+
+:error_text:
+\textbf{Benefit of Model-Level Correction.} Conditional world-aware adaptation further elevates performance by selectively updating the world model online.
+    By adapting the predictive module to unseen environments, model-level correction achieves the best overall performance with an SR of 50.9\% and the lowest TL of $17.65\,m$, validating the importance of dynamic adaptation for generalization.
+
+:error_text:
+To this end, we further supervise the action-conditioned prior transition by its ability to anticipate future visual features.
+Specifically, given the foresight state $\tilde{\boldsymbol{s}}_{t+1}$ predicted by the world model, a lightweight decoder $d(\cdot)$ maps it to an estimate of the next-step front-view visual representation (Eq.(\ref{Eq:v})).
+The supervision signal $\boldsymbol{v}_{t+1}$ is obtained by encoding the observation at $t{+}1$ with a pretrained visual encoder~\cite{dosovitskiy2020image}:
+\begin{align}\label{eq:rec}
+  \mathcal{L}_{\mathrm{rec}} =    \mathbb{E}_{t}\Big[\left\|
+d(\tilde{\boldsymbol{s}}_{t+1})-\boldsymbol{v}_{t+1}
+\right\|_2^2\Big]. 
+\end{align}
+
+:explanation:
+The paper's "Conditional World-Aware Adaptation" mechanism, a core contribution, contains a fatal flaw in its test-time update rule. This mechanism is intended to refine the world model's internal dynamics by minimizing a reconstruction loss `L_rec`.
+
+During pre-training, this loss is correctly defined in Equation 11 as the difference between the decoded predicted next state `d(\tilde{s}_{t+1})` and the ground truth next visual feature `v_{t+1}`. This requires access to the next observation, which is available in an offline training dataset.
+
+However, during online test-time adaptation at step `t`, the agent has not yet taken an action and thus has no access to the next observation `v_{t+1}`. Algorithm 2, which details the test-time procedure, implements a nonsensical objective: `L_{rec} = || d(\tilde{s}_{t+1}) - \hat{v}_t ||_2^2`. It attempts to supervise the model's prediction for the *next* timestep (`\tilde{s}_{t+1}`) using the *current* visual observation (`\hat{v}_t`).
+
+This update rule would train the world model to predict no change in the environment, regardless of the action taken. It would actively penalize the model for correctly predicting any visual change, effectively destroying the learned dynamics. This contradicts the central claim that the mechanism "refines its internal dynamics" for better generalization. The significant performance gains attributed to this "Model-Level Correction" in the ablation study are therefore completely undermined by the described implementation.

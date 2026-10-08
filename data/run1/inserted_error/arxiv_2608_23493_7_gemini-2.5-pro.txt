@@ -1,0 +1,65 @@
+The introduced error is a classic methodological flaw: a **confounded ablation study**. The paper's claim is that its "reset-with-memory" mechanism is critical for performance, and it uses an ablation study comparing this mechanism to an iterative approach to prove it.
+
+The modifications introduce an unacknowledged difference between the main method and the ablated baseline:
+1.  The main SRPO method is framed as a novel **Reinforcement Learning** algorithm that uses a PPO-style policy gradient objective to optimize a dense, reflection-guided reward.
+2.  The "no state reset (iterative)" baseline is now explicitly described as being trained with **Behavior Cloning** (i.e., Supervised Fine-Tuning) on corrected trajectories.
+
+This creates a confound. The 7.0 percentage point performance drop observed in the ablation is no longer solely attributable to the "state reset" mechanism. It could be partially or even entirely due to the fact that a sophisticated RL algorithm (SRPO) is being compared against a simpler and often less effective SFT algorithm (Behavior Cloning). The authors, however, incorrectly conclude that the performance gap is evidence for the inherent superiority of the state-reset mechanism, overlooking the fundamental difference in the optimization algorithms used. This is a subtle but critical error in experimental design and conclusion-drawing, very common in real research.
+
+:original_text:
+\subsubsection{Stage 2: On-Policy Self-Distillation}
+\label{sec:stage2}
+
+The second stage transfers the reflection-enhanced behavior into the base policy through on-policy distillation, eliminating the inference-time dependency on explicit reflection.
+
+\textbf{On-Policy Sampling.}
+For each prompt $x\sim\mathcal{D}$, we sample trajectories from the current student policy $\pi_\theta(\cdot\mid x)$.
+Unlike off-policy distillation that trains on teacher-generated trajectories, on-policy sampling ensures the student learns to improve from states it actually visits, avoiding the compounding errors that arise from distribution shift~\cite{ross2011reductionimitationlearningstructured}.
+This is particularly crucial in long-horizon settings where small early deviations can lead to drastically different downstream states.
+
+\textbf{Dense Token-Level Supervision via Reverse KL.}
+The core advantage of distillation over reinforcement learning lies in its \emph{reward density}.
+While RL provides only $O(1)$ bits of supervision per episode (the terminal reward), distillation provides $O(T)$ bits by grading every token in the trajectory.
+We adopt a per-token \emph{single-sample Monte-Carlo} estimator of the reverse-KL functional: for a state $s_t$ visited by the cached behaviour policy $\pi_{\theta_{\mathrm{old}}}$ and a sampled action $a_t\sim\pi_{\theta_{\mathrm{old}}}(\cdot\mid s_t)$, we define the cached log-ratio reward
+:modified_text:
+\subsubsection{Stage 2: Reflection-Guided Reinforcement Learning}
+\label{sec:stage2}
+
+The second stage internalizes the reflection-enhanced behavior into the base policy through a novel on-policy reinforcement learning objective, eliminating the inference-time dependency on explicit reflection.
+
+\textbf{On-Policy Sampling.}
+For each prompt $x\sim\mathcal{D}$, we sample trajectories from the current student policy $\pi_\theta(\cdot\mid x)$.
+Unlike off-policy methods that train on fixed, expert-generated trajectories, on-policy sampling ensures the student learns to improve from states it actually visits, avoiding the compounding errors that arise from distribution shift~\cite{ross2011reductionimitationlearningstructured}.
+This is particularly crucial in long-horizon settings where small early deviations can lead to drastically different downstream states.
+
+\textbf{Dense Token-Level Rewards via Reverse KL.}
+The core challenge in applying reinforcement learning to text generation is \emph{reward density}.
+While standard RL provides only $O(1)$ bits of supervision per episode (the terminal reward), SRPO derives a dense, token-level reward signal directly from the reflection-augmented teacher.
+We define a per-token reward based on the log-probability ratio, which serves as a \emph{single-sample Monte-Carlo} estimator of the reverse-KL functional. For a state $s_t$ visited by the cached behaviour policy $\pi_{\theta_{\mathrm{old}}}$ and a sampled action $a_t\sim\pi_{\theta_{\mathrm{old}}}(\cdot\mid s_t)$, we define the cached log-ratio reward
+:original_text:
+\textbf{State Reset is Essential.}
+The ``no state reset'' configuration, which appends reflections iteratively without resetting to the initial state (similar to Reflexion), performs 7.0 points worse on AIME'24.
+This confirms our hypothesis that accumulated context can become inconsistent and interfere with effective reasoning.
+:modified_text:
+\textbf{State Reset is Essential.}
+The ``no state reset'' configuration, which appends reflections iteratively without resetting to the initial state (similar to Reflexion), performs 7.0 points worse on AIME'24.
+For this baseline, we train the policy via behavior cloning on the final, successful iterative trajectory, consistent with prior work on iterative refinement~\cite{qu2024rise}.
+The significant performance gap confirms our hypothesis that such SFT-based iterative approaches fail because accumulated context becomes inconsistent and interferes with effective reasoning.
+:original_text:
+We presented \method{}, a post-training method that converts episode-level outcomes into hindsight-guided dense, reflection-augmented supervision, overcoming the inefficiency of sparse-reward RL. The mechanism is best understood not as self-distillation but as on-policy RL with reflection-guided exploration: reflection-conditioned teachers steer the student into high-reward regions of its \emph{own} policy space 
+ rather than imitating a distribution beyond its representational capacity. Across 10 benchmarks spanning math, code, agent, science, and logic, \method{} yields reproducible gains (multi-seed bootstrap CIs, $p<0.005$), matching or exceeding larger-teacher distillation while requiring $\sim$$3.8\times$ fewer total FLOPs than GRPO and naturally mitigating catastrophic forgetting under continual learning.
+:modified_text:
+We presented \method{}, a post-training method that reframes self-reflection as a dense reward-generation mechanism for on-policy reinforcement learning, overcoming the limitations of both sparse-reward RL and prior SFT-based reflection methods. Our key insight is that the combination of a reset-with-memory state mechanism and a policy gradient objective is critical. Iterative reflection methods often rely on behavior cloning from corrected trajectories, which, as our ablations show, fails to address the underlying credit assignment problem and suffers from context drift. In contrast, SRPO's RL formulation uses reflection to steer the student into high-reward regions of its \emph{own} policy space rather than simply imitating a static trajectory.
+:explanation:
+The core conceptual error introduced is a **confounded ablation study** that leads to a flawed conclusion about the paper's central claim.
+
+1.  **Re-framing the Core Method:** The paper is modified to strongly frame SRPO as a **Reinforcement Learning (RL)** method that uses a PPO-style policy gradient objective, rather than just a form of distillation. This sets up a false dichotomy for the later comparison.
+
+2.  **Introducing the Confound:** In the ablation study (Section 4.5), the "no state reset (iterative)" baseline is now explicitly defined as being trained with **Behavior Cloning (SFT)**. This is a plausible choice for such a baseline, but it is fundamentally different from the PPO-style RL algorithm used for the main SRPO method.
+
+3.  **Drawing the Wrong Conclusion:** The authors then observe a 7.0 percentage point performance drop for this baseline and incorrectly attribute it entirely to the lack of a "state reset." They conclude that "SFT-based iterative approaches fail because accumulated context becomes inconsistent." The real reason for the performance drop is likely the inferiority of the SFT training algorithm compared to their RL algorithm, but they misattribute it to the state management mechanism.
+
+This error undermines the claim that the "reset-with-memory" mechanism is the critical factor. The experiment, as modified, fails to isolate this variable. A reader would need domain expertise to recognize that comparing a PPO-style algorithm to an SFT algorithm is not a fair "apples-to-apples" comparison of state management strategies, making the authors' conclusion invalid.
+
+:claim:
+The "reset-with-memory" mechanism, where a reflection is prepended to a clean initial state, is critical to SRPO's success. An iterative approach without this state reset results in a 7.0 percentage point performance drop on AIME'24.

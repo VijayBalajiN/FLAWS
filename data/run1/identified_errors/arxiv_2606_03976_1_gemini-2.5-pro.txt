@@ -1,0 +1,35 @@
+:error_text:
+\begin{proof}
+    We know that  
+    \begin{gather}
+     I(O;Z) = H(O) - H(O\mid Z) \notag \\
+      I(F;Z) = H(F) - H(F\mid Z) \label{eq:f} \\
+      \mathbf{B}_{\mathcal{O}}(Z) = H(O\mid F) - H(O\mid F,Z)   \label{eq:b}
+    \end{gather}    
+    Adding Eqs. \ref{eq:f} and \ref{eq:b}, we have $I(F;Z)+\mathbf{B}_{\mathcal{O}}(Z)=H(O, F)-H(O,F\mid Z)=H(F)-H(O\mid Z)=I(O;Z).$
+    The penultimate equality is due to the fact that F is a deterministic function of O.
+\end{proof}
+
+:error_text:
+\begin{remark}
+    We posit that no two objects can correspond to the exact same set of features. In practice, \textit{location} is often a  discriminator for objects that may share all other features.
+     
+    For this reason, we consider the object to feature subset mapping a surjective map. More formally, let $\mathcal{O}=\{o_1, o_2, \cdots, o_n\}$ be a finite set of all objects of interest. Then there exist a \textit{surjective} mapping $\psi$ such that
+    \[
+    \psi: \mathcal{O} \rightarrowtail \mathcal{P}(\mathcal{F}),
+    \]
+    where $\mathcal{P}(\mathcal{F})$ denotes the power set of $\mathcal{F}$.\label{map}
+\end{remark}
+
+:explanation:
+The most serious error is the flawed proof for Theorem 2.9, which establishes the formula for conditional binding information, a central metric used throughout the paper. The provided proof in Appendix B.1 is not just incorrect but nonsensical.
+
+1.  **Incorrect Notation and Premise:** The proof attempts to derive a property of the conditional binding information, $\mathbf{B}^{*}_{\mathcal{O}, \mathcal{F}}(Z)$, but it mistakenly uses the notation for unconditional binding information, $\mathbf{B}_{\mathcal{O}}(Z)$, which is defined as $I(O;Z)$. This makes the first step of the derivation, `$I(F;Z)+\mathbf{B}_{\mathcal{O}}(Z)$`, an expression equivalent to `$I(F;Z)+I(O;Z)$`, which has no meaningful relation to the theorem being proven.
+
+2.  **Chain of Flawed Equalities:** The proof presents a chain of equalities, `$H(O, F)-H(O,F\mid Z)=H(F)-H(O\mid Z)=I(O;Z)$`, that is incorrect.
+    *   The equality `$H(O, F)-H(O,F\mid Z)=H(F)-H(O\mid Z)$` is false. The premise that "$F$ is a deterministic function of $O$" implies $H(O,F)=H(O)$ and $H(O,F|Z)=H(O|Z)$. Substituting these into the equality yields $H(O)-H(O|Z) = H(F)-H(O|Z)$, which would require $H(O)=H(F)$. This is not generally true; the entropy of the object code space is typically much larger than that of the feature code space. The justification provided does not support the claim.
+    *   The final equality `$H(F)-H(O\mid Z)=I(O;Z)` is also incorrect, as the definition of mutual information is $I(O;Z) = H(O)-H(O|Z)$.
+
+While the statement of Theorem 2.9 is correct, providing a completely erroneous proof for it is a major technical flaw that undermines the theoretical foundation of the work and suggests a fundamental misunderstanding of information theory.
+
+A second significant error lies in Remark 2.2, which incorrectly characterizes the mapping from objects to feature sets as "surjective". A surjective map would imply that every possible subset of features corresponds to a valid object, which is an extremely strong and unrealistic assumption. The paper's own statement that objects are "distinct" subsets of features implies an injective (one-to-one) mapping. This confusion in a foundational definition makes the problem setup ambiguous and demonstrates a lack of mathematical rigor.

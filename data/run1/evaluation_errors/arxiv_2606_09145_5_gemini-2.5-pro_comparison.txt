@@ -1,0 +1,15 @@
+**Identified Error 1:**
+'Despite stronger privacy constraints, PrivCode++ consistently achieves the best utility among joint-sensitive methods and even surpasses PrivCode on several metrics. For example, with Qwen2.5-Coder-7B, PrivCode++ improves ... BigCodeBench (Complete, Full) from 27.9 to 43.3.\n\n:'
+INCORRECTLY IDENTIFIED
+
+**Identified Error 2:**
+'We attribute this to latent-conditioned synthesis: the latent representation encodes code structure and task-level semantics, and sampling from a Gaussian prior in the utility-boosting stage introduces novel yet coherent structural and functional patterns beyond the original dataset, improving generalization.\n\n:'
+INCORRECTLY IDENTIFIED
+
+**Identified Error 3:**
+'We posit that, when provided with code snippets exhibiting well-formed syntax, coherent semantics, and explicit functional patterns, a sufficiently strong Mext can abstract the task description, user intent, and contextual constraints into an explicit instruction.\n\n:'
+INCORRECTLY IDENTIFIED
+
+**Identified Error 4:**
+'Instead of relying on original instructions, we sample latent variables from the prior and decode them into prefix embeddings, which provide syntactic and semantic conditioning signals and task-level contextual information learned in privacy-sanitizing stage and guide the model to generate high-utility code snippets.\n\n:explanation:\nThe primary and most serious flaw is a central result that appears to violate the fundamental privacy-utility trade-off. The paper claims that PrivCode++, which operates under a stricter privacy model (protecting both prompts and code), substantially outperforms PrivCode, which has a weaker privacy model (protecting only code). Stricter privacy guarantees should inherently degrade utility, not improve it dramatically. The paper\'s explanation—that sampling from a latent prior introduces "novel yet coherent" patterns—is speculative and insufficient to justify this counter-intuitive outcome, suggesting a potential flaw in the experimental comparison or an unfair baseline.\n\nA secondary issue is the method\'s potential over-reliance on a powerful external LLM (`Mext`) to reverse-engineer prompts from generated code. This step is critical for creating the synthetic instruction-following dataset, and its contribution to the final utility may be understated, complicating the attribution of success solely to the proposed latent conditioning mechanism.\n\nFinally, the core data synthesis process relies on unconditionally sampling latent variables from a simple prior distribution. It is questionable whether this can reliably generate a diverse and complex set of code snippets representative of useful programming tasks. The paper lacks a direct analysis of the generated synthetic dataset to validate its quality and diversity, which are crucial for the success of the subsequent fine-tuning stage.'
+INCORRECTLY IDENTIFIED

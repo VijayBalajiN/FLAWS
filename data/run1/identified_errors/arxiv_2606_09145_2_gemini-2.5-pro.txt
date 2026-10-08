@@ -1,0 +1,23 @@
+:error_text:
+\noindent\textbf{Prefix Decoder $D$.} Shares identical optimization objectives with $\mathcal{M}_J$ through gradient flow:
+\begin{equation}
+\mathcal{L}_{D} = \mathcal{L}_{\text{CE}}(c \mid \mathbf{e}_{\text{prefix}}) + \lambda_{\text{AST}}(t) \cdot \mathcal{L}_{\text{KL}}^{\text{AST}},
+\end{equation}
+since $\mathbf{e}_{\text{prefix}} = D(z^c)$ and gradients from both losses flow backward through $D$.
+
+:error_text:
+To ensure the generation is conditioned on task-level semantics from the prompt, the latent variable $z^p$ is decoded into prefix embeddings $\mathbf{e}_{\text{prefix}} = D(z^p)$, which serve as a soft prompt. Since $z^p$ is continuous and not tied to the LLM’s discrete vocabulary, a decoder is needed to map it into a form compatible with the model’s embedding layer. These embeddings are prepended to token embeddings to condition autoregressive generation:
+\begin{equation}
+\mathcal{L}_{\text{CE}} = - \sum_{t=1}^T \log P_{\mathcal{M}_J}(c_t \mid \mathbf{e}_{\text{prefix}}, c_{<t}),
+\end{equation}
+where $c = (c_1, \dots, c_T)$ is the target code sequence.
+
+:error_text:
+To address challenge (1), \toolname{} removes the reliance on explicit prompts by introducing a Privacy-Free Latent Conditioning (PrivLC) module, which learns continuous latent representations to replace prompt-based conditioning. Specifically, \toolname{} first jointly trains a LLM model with the PrivLC module under DP-SGD, integrating syntactic structure and task-level semantic information into a latent conditioning space. Task-level refers to high-level task intent, functional requirements, and contextual constraints that determine the expected behavior of the generated code~\cite{wang2023self}.
+
+:explanation:
+The paper contains a fatal contradiction regarding its core mechanism, which completely undermines its central claim.
+
+The main methodology (Section 3.2, second error excerpt) and introduction (third error excerpt) claim that the model conditions code generation on latent variables derived from the sensitive prompt ($z^p$). This is crucial for integrating "task-level semantic information" and is the entire basis for the proposed method's high utility.
+
+However, Appendix A.2 (first error excerpt) explicitly states that the prefix decoder $D$ is trained using latent variables from the code itself ($z^c$), i.e., $\mathbf{e}_{\text{prefix}} = D(z^c)$. If the appendix is correct, the generation process is a simple auto-encoder that is never conditioned on any information from the prompt. This means the model does not learn to follow instructions from prompts, invalidating the paper's primary contribution and making the high reported performance in Table 1 implausible. The model would be functionally equivalent to an unconditional generator, which the paper's own baselines show performs poorly. This contradiction makes the method irreproducible and its results unsupported.

@@ -1,0 +1,4 @@
+Incorrect or incomplete analysis
+error:
+\paragraph{Finetuning outperforms post-hoc calibration.}
+The improvement from finetuning does not arise from post-hoc calibration alone: isotonic regression \cite{niculescu2005predicting}, trained on the validation set to prevent leakage, improves the class-balanced Brier score of GPT-4o from 0.201 to 0.186 (row 9 vs.~8), but still falls well short of GPT-4o-FT at 0.151. Platt and temperature scaling similarly fail to close the gap (see Appendix~\ref{app:calibration}).

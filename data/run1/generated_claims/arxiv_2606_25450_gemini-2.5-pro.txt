@@ -1,0 +1,17 @@
+Based on the LaTeX source provided, here are the major, unique, and falsifiable claims made in the paper:
+
+1.  At matched levels of memorization (D0 performance), reinforcement learning (RL) converts this memorization into generalization more effectively than supervised fine-tuning (SFT) on reference solutions, exhibiting higher performance gains across all measured transfer distances (D1-D4).
+
+2.  The generalization profile of SFT on reference solutions collapses at far transfer distances; its performance gains become near-zero or negative on category-matched (D3) and unpaired (D4) problems, whereas RL maintains positive gains.
+
+3.  In-context learning (ICL) with oracle-paired demonstrations is highly effective at instance-paired transfer, including under complete narrative re-framing (D2), but its performance drops below the unadapted base model on category-matched (D3) and unpaired (D4) problems, revealing a transfer bottleneck when direct demonstration-target correspondence is lost.
+
+4.  Adding structured abstractions (like pseudocode or key insights) or explicit correspondence hints to in-context learning demonstrations boosts performance on near-transfer tasks (D1-D2) but fails to extend the generalization radius to far-transfer tasks (D3-D4).
+
+5.  Supervised fine-tuning on self-generated correct solutions (Rejection-sampling Fine-Tuning, RFT) preserves a smoother, more gradual decay in performance across the generalization spectrum compared to SFT on external (demonstration) or off-policy solutions, which exhibit a sharper drop-off in performance after near-transfer levels.
+
+6.  Self-distillation fine-tuning (SDFT), which uses demonstrations to shape a preference signal, improves local transfer (D1-D2) compared to vanilla SFT but at the cost of weaker far transfer (D3-D4), where its performance falls below that of standard SFT.
+
+7.  Incorporating algorithmic hints during reinforcement learning (Hint-assisted GRPO) accelerates the rate of memorization for seed problems but results in a narrower generalization profile, with lower performance on far-transfer tasks (D3-D4) compared to standard RL at matched memorization levels.
+
+8.  SFT trained by imitating Python reference solutions leads to a significantly higher rate of compilation errors when transferring to another language (C++ at D1) compared to RL, which is trained on binary outcomes and maintains its linguistic competence.

@@ -1,0 +1,62 @@
+:original_text:
+The latent variable $z^c$ is decoded into prefix embeddings $\mathbf{e}_{\text{prefix}} = D(z^c)$, which serve as a soft prompt: since $z^c$ is continuous and not tied to the LLM’s discrete vocabulary, a decoder is needed to map it into a form compatible with the model’s embedding layer. These embeddings are prepended to token embeddings to condition autoregressive generation:
+
+:modified_text:
+To ensure the generation is conditioned on task-level semantics from the prompt, the latent variable $z^p$ is decoded into prefix embeddings $\mathbf{e}_{\text{prefix}} = D(z^p)$, which serve as a soft prompt. Since $z^p$ is continuous and not tied to the LLM’s discrete vocabulary, a decoder is needed to map it into a form compatible with the model’s embedding layer. These embeddings are prepended to token embeddings to condition autoregressive generation:
+
+:original_text:
+    \STATE $\mathbf{e}_{\text{prefix}} \gets D(z^c)$;
+    
+:modified_text:
+    \STATE $\mathbf{e}_{\text{prefix}} \gets D(z^p)$;
+    
+:original_text:
+\noindent\textbf{Code Encoder $E^c$.} Receives multi-path supervision combining explicit latent-space constraints and implicit generation guidance:
+\begin{equation}
+\mathcal{L}_{E^c} = \underbrace{\mathcal{L}_{\text{CE}} + \lambda_{\text{AST}}(t) \cdot \mathcal{L}_{\text{KL}}^{\text{AST}}}_{\text{implicit via generation path } z^c \to D \to \mathbf{e}_{\text{prefix}}} + \underbrace{\mathcal{L}_{\text{VAE}}}_{\text{explicit}} + \underbrace{\lambda_{\text{align}} \cdot \mathcal{L}_{\text{align}}}_{\text{explicit}},
+\end{equation}
+where:
+\begin{itemize}
+    \item $\mathcal{L}_{\text{VAE}} = \mathrm{KL}\big(q_{\phi}(z \mid c) \,\|\, \mathcal{N}(0, I)\big)$ enforces a structured latent space by regularizing the posterior $q_{\phi}(z \mid c) = \mathcal{N}(\mu^c, \mathrm{diag}((\sigma^c)^2))$ toward the standard normal prior
+    \item $\mathcal{L}_{\text{align}} = -\log \frac{\exp(\langle z^c, z^p \rangle / \tau)}{\sum_{p'} \exp(\langle z^c, z^{p'} \rangle / \tau)}$ aligns code-induced ($z^c = E^c(h^c)$) and prompt-induced ($z^p = E^p(h^p)$) latents via contrastive learning~\cite{oord2018representation}
+    \item Implicit gradients flow backward from the generation losses through the computation path $z^c \to D \to \mathbf{e}_{\text{prefix}} \to \mathcal{M}_J$, ensuring encoded latents remain informative for downstream generation
+\end{itemize}
+This dual-path optimization enables $E^c$ to specialize to the code distribution and task structure of the sensitive dataset.
+
+:modified_text:
+\noindent\textbf{Code Encoder $E^c$.} Optimized to produce a regularized latent space aligned with prompt semantics:
+\begin{equation}
+\mathcal{L}_{E^c} = \underbrace{\mathcal{L}_{\text{VAE}}}_{\text{explicit}} + \underbrace{\lambda_{\text{align}} \cdot \mathcal{L}_{\text{align}}}_{\text{explicit}},
+\end{equation}
+where:
+\begin{itemize}
+    \item $\mathcal{L}_{\text{VAE}} = \mathrm{KL}\big(q_{\phi}(z \mid c) \,\|\, \mathcal{N}(0, I)\big)$ enforces a structured latent space by regularizing the posterior $q_{\phi}(z \mid c) = \mathcal{N}(\mu^c, \mathrm{diag}((\sigma^c)^2))$ toward the standard normal prior
+    \item $\mathcal{L}_{\text{align}} = -\log \frac{\exp(\langle z^c, z^p \rangle / \tau)}{\sum_{p'} \exp(\langle z^c, z^{p'} \rangle / \tau)}$ aligns code-induced ($z^c = E^c(h^c)$) and prompt-induced ($z^p = E^p(h^p)$) latents via contrastive learning~\cite{oord2018representation}
+\end{itemize}
+This optimization ensures that the latent space of code is structured and semantically grounded, which indirectly regularizes the prompt latent space via the alignment loss.
+
+:original_text:
+\noindent\textbf{Prompt Encoder $E^p$.} Functions as a privacy-safe auxiliary module optimized exclusively through alignment:
+\begin{equation}
+\mathcal{L}_{E^p} = \lambda_{\text{align}} \cdot \mathcal{L}_{\text{align}}(z^c, z^p).
+\end{equation}
+During training, $E^p$ processes sensitive prompts $p$ to extract task-level semantics ($z^p$) that guide latent alignment. Crucially, $E^p$ is not used during inference; its sole purpose is to inject contextual supervision into the latent space while ensuring no sensitive prompt information propagates to synthetic outputs.
+
+:modified_text:
+\noindent\textbf{Prompt Encoder $E^p$.} Receives supervision from both the generation objective and the alignment loss:
+\begin{equation}
+\mathcal{L}_{E^p} = \underbrace{\mathcal{L}_{\text{CE}} + \lambda_{\text{AST}}(t) \cdot \mathcal{L}_{\text{KL}}^{\text{AST}}}_{\text{implicit via generation path } z^p \to D \to \mathbf{e}_{\text{prefix}}} + \underbrace{\lambda_{\text{align}} \cdot \mathcal{L}_{\text{align}}}_{\text{explicit}}.
+\end{equation}
+During training, $E^p$ processes sensitive prompts $p$ to extract task-level semantics ($z^p$) that directly guide code generation and are also aligned with code latents. Crucially, $E^p$ is not used during inference; its sole purpose is to provide the conditioning signal during training while ensuring no sensitive prompt information propagates to synthetic outputs.
+
+:explanation:
+The introduced conceptual error is a subtle but critical flaw in the training methodology that undermines the paper's privacy claims. The modification changes the conditioning variable for code generation during training from the code's latent variable ($z^c$) to the prompt's latent variable ($z^p$). However, the Variational Autoencoder (VAE) loss, which regularizes the latent space to a standard normal distribution ($\mathcal{N}(0, I)$) to enable random sampling during synthesis, is still applied only to $z^c$.
+
+This creates two major issues:
+
+1.  **Distribution Mismatch**: The prefix decoder $D$ is trained on inputs $z^p$, whose distribution is not explicitly regularized to match the $\mathcal{N}(0, I)$ prior. At inference, however, generation is conditioned on latent variables sampled from this very prior. The alignment loss provides only an indirect and likely insufficient force to make the distribution of $z^p$ match the sampling distribution. This mismatch between the training and inference distributions for the decoder can degrade the utility and coherence of the generated code.
+
+2.  **Weakened Privacy Guarantee**: The original design's strength lies in decoupling code synthesis from any specific sensitive prompt. By conditioning generation on $z^c$ (which is regularized and derived from code), the influence of the prompt is indirect. The modified design creates a direct training pathway from a sensitive prompt to the generated code ($p \rightarrow z^p \rightarrow c$). Even with DP-SGD, training a generator to directly reconstruct code from an unregularized latent representation of the prompt is more susceptible to memorizing and leaking sensitive information contained in those prompts, especially for high-frequency patterns like canary tokens. This fundamentally weakens the theoretical basis for the claim of 0% leakage, as the generation process is no longer independent of specific prompt representations.
+
+:claim:
+`PrivCode++` prevents the leakage of sensitive canary tokens injected into both the training prompts and code snippets, achieving a 0% leakage rate where methods with weaker privacy assumptions (`PrivCode`) or no privacy (`NonDPFT`) exhibit significant leakage.

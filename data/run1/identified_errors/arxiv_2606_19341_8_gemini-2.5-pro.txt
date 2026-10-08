@@ -1,0 +1,32 @@
+:error_text:
+(1) \textit{Standard SFT}: Fine-tuning on static QA pairs induces a performance regression on extremely long contexts (LVBench $43.0\% \to 41.6\%$). Lacking a selection mechanism, the passive paradigm suffers from information overload, where redundant frames reduce the signal-to-noise ratio as duration increases.
+
+:error_text:
+\begin{tabular}{l ccc cc}
+\toprule
+\multirow{2}{*}{\textbf{Method}} & \multicolumn{3}{c}{\textbf{Video Understanding}} & \multicolumn{2}{c}{\textbf{Omni-Modal Reasoning}} \\
+\cmidrule(lr){2-4} \cmidrule(lr){5-6}
+& \textbf{VideoMME$_{\text{Long}}$} & \textbf{LVBench} & \textbf{MLVU} & \textbf{OmniVideo} & \textbf{DailyOmni} \\
+\midrule
+Qwen2.5-Omni & 54.8 & 43.0 & 65.2 & 29.3 & 60.1 \\
+\quad + Standard SFT & 56.0 & 41.6 \textcolor{gray}{\scriptsize $\downarrow$} & 67.1 & 33.8 & 61.7 \\
+\end{tabular}
+
+:error_text:
+(1) \textit{Advantage Homogenization}: Vanilla GRPO stagnates on reasoning (MLVU $69.9\%$) and degrades perception (DailyOmni $63.3\% \to 62.2\%$). By broadcasting a uniform trajectory-level advantage, it fails to incentivize specific perceptual discoveries, as critical ``looking'' actions receive the same credit as trivial actions.
+
+:error_text:
+\begin{tabular}{l ccc cc}
+\midrule
+\quad + Agentic SFT & 57.3 & 48.7 & 69.9 & 35.2 & 63.3 \\
+\midrule
+\multicolumn{6}{l}{\textit{RL Stage (Initialized from Agentic SFT)}} \\
+\quad + Vanilla GRPO & 59.4 & 49.8 & 69.9 & 35.3 & 62.2 \textcolor{gray}{\scriptsize $\downarrow$} \\
+\end{tabular}
+
+:explanation:
+The paper's ablation study analysis contains significant misinterpretations of its own results, which serve to create a strawman argument and exaggerate the benefits of the proposed methods. This represents a serious technical flaw as it undermines the core motivation of the work.
+
+1.  **Most Serious Error: Misrepresentation of the "Standard SFT" baseline.** The paper claims that standard passive fine-tuning "induces a performance regression on extremely long contexts," citing only the minor drop on LVBench (43.0% to 41.6%). This is highly misleading. The ablation data (Table 4) clearly shows that this "Standard SFT" method improves performance over the baseline on 4 out of the 5 reported benchmarks, including other long-video benchmarks like VideoMME-Long (+1.2%) and MLVU (+1.9%). By selectively focusing on the single negative result, the authors create a false narrative that passive fine-tuning is broadly harmful for long videos, thereby artificially strengthening the motivation for their agentic approach.
+
+2.  **Second Error: Unfair characterization of "Vanilla GRPO".** Similarly, the paper claims that Vanilla GRPO "stagnates on reasoning ... and degrades perception," pointing only to the results on MLVU and DailyOmni. However, the same table shows that Vanilla GRPO achieves improvements over its "Agentic SFT" initialization on three other metrics, including VideoMME-Long (57.3% to 59.4%) and LVBench (48.7% to 49.8%). Describing this mixed outcome as a general failure that needs to be "rectified" is a biased misrepresentation of the data designed to overstate the necessity of the proposed TAURA algorithm.

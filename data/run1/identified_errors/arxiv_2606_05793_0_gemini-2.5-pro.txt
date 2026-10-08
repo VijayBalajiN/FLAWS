@@ -1,0 +1,16 @@
+:error_text:
+& \cellcolor{Red}{-2.2\%}
+:error_text:
+& \cellcolor{Red}{-3.1\%}
+:error_text:
+\multicolumn{2}{c}{Std. $\downarrow$}
+:error_text:
+Experiments with efficiency and affective metrics show that our trained models outperform base models, achieving 19.5\% higher efficiency and 24.4\% improved affective performance.
+:error_text:
+CB-Efficiency reports task completion steps or final game scores, together with their standard deviations across diverse player profiles
+:explanation:
+The paper's central claim of outperformance is contradicted by its own results in Table 1. In the Cook-MultiPlayer environment, the "Relative Improvements" for the trained model are reported as -2.2% and -3.1% for the Standard Deviation (`Std.`) metric.
+
+The table header explicitly marks this metric with a down arrow (`\downarrow`), indicating that lower values are better. Therefore, a negative improvement means the performance on this metric has degraded; the trained model has a higher standard deviation than the base model (34.03 vs 33.30 and 34.76 vs 33.73).
+
+This is a substantial technical flaw because the paper defines standard deviation across diverse player profiles as a key measure of robustness. The fact that the training procedure made the agent less robust in one environment directly undermines the paper's goal of improving collaboration with diverse partners. The overarching claims of outperformance in the abstract are misleading as they ignore this critical degradation in performance.

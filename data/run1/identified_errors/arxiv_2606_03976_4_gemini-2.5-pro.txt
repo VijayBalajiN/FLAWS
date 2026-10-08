@@ -1,0 +1,36 @@
+:error_text:
+\[
+    \mathbf{B}_{\mathcal{O, F}}^{*}(Z)=I(F;Z)-I(O;Z).
+    \]
+    Proof in Appendix \ref{pf:dpi}.
+
+:error_text:
+$\mathbf{B}_{\mathcal{O, F}}^{*}(Z)$ can be similarly written in entropy form:
+    \begin{equation}
+            \begin{gathered}
+         \mathbf{B}_{\mathcal{O, F}}^{*}(Z)=H(O\mid F)-H(O \mid Z, F )\\=H(F)-H(F\mid Z)-H(O)+H(O\mid Z).
+    \end{gathered}
+    \label{bindingcondexpanded}
+        \end{equation}
+
+:error_text:
+Adding Eqs. \ref{eq:f} and \ref{eq:b}, we have $I(F;Z)+\mathbf{B}_{\mathcal{O}}(Z)=H(O, F)-H(O,F\mid Z)=H(F)-H(O\mid Z)=I(O;Z).$
+    The penultimate equality is due to the fact that $F$ is a deterministic function of $O$.
+
+:error_text:
+Substituting gives
+\[
+\mathbf{B}^{*}_{\mathcal{O},\mathcal{F}}(Z)
+=H(O)-H(O\mid Z)-H(F)+H(F\mid Z).
+\]
+
+:explanation:
+The paper's theoretical framework for "conditional binding information" is critically flawed due to a recurring mathematical error.
+
+The paper defines conditional binding information as $\mathbf{B}_{\mathcal{O, F}}^{*}(Z) := I(O;Z \mid F)$. By definition, conditional mutual information must be non-negative. However, Theorem 2.11 and its entropy-based expansion in Theorem 2.12 incorrectly state that this quantity is equal to $I(F;Z) - I(O;Z)$.
+
+Because the feature code $F$ is a deterministic function of the object code $O$, the data processing inequality implies $I(O;Z) \ge I(F;Z)$. Consequently, the paper's formula for conditional binding information, $I(F;Z) - I(O;Z)$, is always non-positive ($\le 0$), which contradicts the fundamental property that information cannot be negative. The correct formula, derivable from the chain rule of mutual information, is $I(O;Z \mid F) = I(O;Z) - I(F;Z)$.
+
+This error is compounded by severe issues in the appendix proofs. The proof for Theorem 2.11 is invalid, as it relies on an incorrect step that implicitly assumes the entropy of objects equals the entropy of features ($H(O) = H(F)$), which is false in the paper's own experiments. Furthermore, the proof for Theorem 2.12 correctly derives the formula $I(O;Z) - I(F;Z)$, but this directly contradicts the theorem's statement in the main text.
+
+This web of contradictions and fundamental mathematical errors in the paper's core definitions and theorems invalidates the theoretical foundation of the work and undermines the credibility of all reported results for conditional binding information.

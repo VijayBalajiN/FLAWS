@@ -1,0 +1,8 @@
+Incorrect or incomplete analysis
+error:
+\paragraph{Acceptance rate increases as trajectories progress.}
+
+The acceptance rate rises with trajectory progress, from $\sim$12.5\% in the first 10\% of a trajectory to $\sim$24\% by the end (Figure~\ref{fig:acceptance-trajectory-progress}).
+This indicates a cold-start problem: without established patterns to recognize, early predictions are largely guesses.
+As context grows, the model identifies repetitive formatting, table structures, and user-specific conventions that make later predictions more reliable.
+This suggests that adaptive triggering---predicting less frequently early in trajectories and more frequently later---could improve overall efficiency by avoiding the high rejection rate of early predictions.

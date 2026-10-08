@@ -1,0 +1,54 @@
+**Identified Error:**
+Proceedings of the 43rd International Conference on Machine Learning, Seoul, South Korea. PMLR 306, 2026. Copyright 2026 by the author(s).
+
+:
+**INCORRECTLY IDENTIFIED**
+
+---
+**Identified Error:**
+Ashery, A. F., Aiello, L. M., and Baronchelli, A. Emergent social conventions and collective bias in llm populations. Science Advances, 11(20):eadu9368, 2025.
+
+:
+**INCORRECTLY IDENTIFIED**
+
+---
+**Identified Error:**
+Oh, J., Jeong, M., Ko, J., and Yun, S.-Y. From belief entrenchment to robust reasoning in LLM agents. Transactions of the Association for Computational Linguistics, 14:1286-1307, 2026.
+
+:
+**INCORRECTLY IDENTIFIED**
+
+---
+**Identified Error:**
+Here, we use one-step conversational memory while keeping all other settings unchanged from Section 2.
+
+:
+**INCORRECTLY IDENTIFIED**
+
+---
+**Identified Error:**
+evaluate portfolio performance over a fixed evaluation window from December 7, 2025 to January 12, 2026 (inclusive),
+
+:
+**INCORRECTLY IDENTIFIED**
+
+---
+**Identified Error:**
+Our evaluation window is relatively short, which can make returns sensitive to transitory market movements;
+
+:
+**INCORRECTLY IDENTIFIED**
+
+---
+**Identified Error:**
+hbias(σi) depends on both the token bias b and the inherent bias.
+
+:explanation:
+The paper's most serious flaw is its reliance on numerous citations to papers supposedly published in 2025 and 2026, with the venue itself dated 2026. A scientific work cannot be based on, or place itself in the context of, research that does not yet exist. This undermines the entire scholarly foundation of the paper, making its claims impossible to verify against the cited literature and constituting a fundamental violation of academic practice.
+
+A second major error is a critical inconsistency in the experimental methodology for the "real-world" tasks. The initial phenomenon is demonstrated using a multi-round debate structure, but the subsequent intervention experiments are conducted using "one-step conversational memory." This change of protocol between demonstration and intervention invalidates the claim that the theoretically-motivated intervention is effective for the originally observed phenomenon.
+
+Third, the evaluation of "performance" for the investment task is unreliable. It is based on market-adjusted returns over an extremely short, ~5-week period. Financial market performance over such a brief window is dominated by noise and volatility, making it an unsuitable measure for the quality of an investment strategy. Conclusions drawn from this metric are not credible.
+
+Finally, the validation of the theoretical model is weakened by conflating the externally controlled experimental variable (logit bias `b`) with the theoretical parameter (`h_bias`). The paper acknowledges that the total bias depends on both the controlled `b` and the LLM's inherent bias, yet the phase diagrams used for validation are plotted against `b`. This makes the comparison between experiment and theory indirect and less rigorous.
+**INCORRECTLY IDENTIFIED**

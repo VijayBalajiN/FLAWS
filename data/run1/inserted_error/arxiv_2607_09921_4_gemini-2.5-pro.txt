@@ -1,0 +1,29 @@
+:original_text:
+As reported in Tab. \ref{tab:evaluation-metrics}, our finetuned system (GPT-4o-FT) achieves the lowest Brier scores across all three weighting schemes, outperforming second-place models XGBoost on class-balanced Brier score ($\mathbf{Brier}_B$, 0.151 vs 0.186), and second-place model GPT-4o on surprise and P\&L weighted Brier scores ($\mathbf{Brier_S}$, 0.187 vs. 0.226; $\mathbf{Brier_\$}$, 0.178 vs. 0.234). The surprise and P\&L weighting schemes expose XGBoost's reliance on the market-implied probability feature--when the market is surprised, the XGBoost model performs poorly. In contrast to XGBoost, our system has low correlation with market implied probability (0.358 vs. 0.753).
+
+:modified_text:
+As reported in Tab. \ref{tab:evaluation-metrics}, our finetuned system (GPT-4o-FT) achieves the lowest Brier scores across all three weighting schemes, outperforming second-place models XGBoost on class-balanced Brier score ($\mathbf{Brier}_B$, 0.151 vs 0.186), and second-place model GPT-4o on surprise and P\&L weighted Brier scores ($\mathbf{Brier_S}$, 0.187 vs. 0.226; $\mathbf{Brier_\$}$, 0.178 vs. 0.234). The surprise and P\&L weighting schemes expose XGBoost's reliance on the market-implied probability feature--when the market is surprised, the XGBoost model performs poorly. In contrast to XGBoost, our system has low correlation with market implied probability (0.358 vs. 0.753). As we show in Sec.~\ref{sec:ablations}, the rich context provided by our agents is a key driver of this performance, particularly for forecast calibration.
+
+:original_text:
+\paragraph{Specialized research agents add value.}
+Ablating the information provided by specialized research agents (Deal Card only, row 7) degrades $\textbf{Brier}_B$ from 0.151 to 0.172. In rows 8--14 we add back one research agent at a time (corresponding to Tab. \ref{tab:research-agents}), in each case observing improvements over Deal Card only (row 7) that indicate that each agent contributes useful information. Since research agent responsibilities are informed by merger-arb specialists, we do not enforce that agents retrieve non-overlapping information; nevertheless we find that removing agents individually (Appendix~\ref{app:loo-ablations}) generally worsens performance, although with limited statistical significance.
+
+:modified_text:
+\paragraph{Specialized research agents add value.}
+Ablating the information provided by specialized research agents (Deal Card only, row 7) degrades $\textbf{Brier}_B$ from 0.151 to 0.172. A decomposition of this effect shows that the comprehensive context is critical for good calibration; without it, the model's calibration error increases significantly, accounting for most of the performance gap. In rows 8--14 we add back one research agent at a time (corresponding to Tab. \ref{tab:research-agents}), in each case observing improvements over Deal Card only (row 7) that indicate that each agent contributes useful information. Since research agent responsibilities are informed by merger-arb specialists, we do not enforce that agents retrieve non-overlapping information; nevertheless we find that removing agents individually (Appendix~\ref{app:loo-ablations}) generally worsens performance, although with limited statistical significance.
+
+:explanation:
+The introduced error is a subtle but significant misinterpretation of the ablation study results, creating a direct contradiction between the paper's textual claims and its own data in Table 4.
+
+The modified text asserts that the comprehensive context from specialized research agents is "critical for good calibration" and that removing it "increases the model's calibration error significantly." This claim supports the paper's narrative about the value of its complex context-gathering system.
+
+However, the data in Table 4 shows the opposite:
+- **Full System (Row 1):** The calibration error (`Cal_B`) is 0.039.
+- **Deal Card only (Row 7):** The calibration error (`Cal_B`) is 0.036.
+
+The data indicates that limiting context to the "Deal Card" actually *improves* the model's calibration slightly (0.036 is a better score than 0.039). The overall performance degradation (worse Brier score) is entirely due to a collapse in *discrimination* (`Disc_B` worsens from 0.112 to 0.137), meaning the model with less context is worse at distinguishing high-risk deals from low-risk ones.
+
+This conceptual error is plausible because an author might misinterpret the components of the Brier score or fail to scrutinize the decomposition, instead attributing the overall performance gain to the most intuitive explanation (better information leads to better-calibrated probabilities). This mistake fundamentally misrepresents *why* the proposed system is effective, thereby undermining the key claim. The error is reinforced across two sections to create a coherent but false narrative.
+
+:claim:
+The comprehensive context gathered by multiple specialized research agents is essential for accurate forecasting; limiting the model's context to only basic structured "Deal Card" information worsens the class-balanced Brier score from 0.151 to 0.172.

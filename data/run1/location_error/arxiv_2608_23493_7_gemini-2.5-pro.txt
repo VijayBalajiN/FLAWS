@@ -1,0 +1,5 @@
+Incorrect or incomplete analysis
+error:\textbf{State Reset is Essential.}
+The ``no state reset'' configuration, which appends reflections iteratively without resetting to the initial state (similar to Reflexion), performs 7.0 points worse on AIME'24.
+For this baseline, we train the policy via behavior cloning on the final, successful iterative trajectory, consistent with prior work on iterative refinement~\cite{qu2024rise}.
+The significant performance gap confirms our hypothesis that such SFT-based iterative approaches fail because accumulated context becomes inconsistent and interferes with effective reasoning.

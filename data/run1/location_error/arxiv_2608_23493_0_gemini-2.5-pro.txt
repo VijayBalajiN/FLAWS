@@ -1,0 +1,3 @@
+Error in algorithm/proof
+error:
+Taking expectation under $\pi_{\theta_{\mathrm{old}}}(\cdot\mid s_t)$ recovers $-\mathrm{KL}\!\left(\pi_T\!\parallel\!\pi_{\theta_{\mathrm{old}}}\right)(s_t)$, so $r_t$ is an unbiased single-sample estimator of the population forward KL at $s_t$.

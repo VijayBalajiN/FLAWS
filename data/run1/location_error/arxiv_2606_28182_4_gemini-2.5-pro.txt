@@ -1,0 +1,3 @@
+Incorrect or incomplete analysis
+error:
+\caption{\textbf{Case study on law-guided inference in TDW-MAT.} During task execution, agents explicitly follow both automatically generated laws and user-defined laws to guide communication and planning, thereby achieving more efficient coordination. }

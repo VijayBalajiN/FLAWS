@@ -1,0 +1,7 @@
+Error in algorithm/proof
+error:
+\begin{align}
+\mathcal{J}_{\mathrm{omni}}(\theta)
+&= \mathbb{E}_{X} \big[ \mathbb{E}_{y \sim \pi_\theta(\cdot|X)} \big[ \log \frac{\pi_\theta(y | X)}{P_\theta(y | X^{\tilde{m}})} + \log \frac{P_\theta(y | X^{\tilde{m}})}{\pi_\theta(y | X^{\tilde{m}})} \big] \big] \notag \\
+&= \underbrace{\mathbb{E}_{X} \big[ \mathbb{D}_{\mathrm{KL}}\big( \pi_\theta(\cdot | X) \,\|\, P_\theta(\cdot | X^{\tilde{m}}) \big) \big]}_{I_\theta(\mathcal{T}_{m}; m | X^{\tilde{m}})} + \underbrace{\mathbb{E}_{X^{\tilde{m}}} \big[ \mathbb{D}_{\mathrm{KL}}\big( P_\theta(\cdot | X^{\tilde{m}}) \,\|\, \pi_\theta(\cdot | X^{\tilde{m}}) \big) \big]}_{\Delta_{\mathrm{var}}(\theta)}.
+\end{align}

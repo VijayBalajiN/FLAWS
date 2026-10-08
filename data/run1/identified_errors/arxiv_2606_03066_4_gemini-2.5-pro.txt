@@ -1,0 +1,19 @@
+:error_text:
+In CPT, removing $\mathcal{L}_{cacl}$ leads to the most severe degradation (avg. \textbf{11.75\%}), confirming that explicitly separating conflicting factors is central to conflict perception.
+
+:error_text:
+The results in Table~\ref{tab:cpt_data} reveal that removing the CPT stage (0k) leads to a sharp performance deterioration (avg. \textbf{4.58\%}), underscoring the necessity of CPT.
+
+:error_text:
+Removing $\mathcal{L}_{cr}$ also reduces performance (avg. \textbf{1.16\%}), showing that conflict reasoning supervision helps preserve the model's ability to express and use the learned conflict cues during prediction.
+
+:explanation:
+The paper's ablation study contains a critical and unexplained contradiction regarding the contribution of its two main training losses in the Conflict Perception Training (CPT) stage, undermining the entire method's validation.
+
+1.  The experiment "w/o $\mathcal{L}_{cacl}$" (described in the first excerpt) trains the model using only the conflict reasoning language loss, $\mathcal{L}_{cr}$. According to Table 6b, this results in catastrophically poor performance (e.g., 55.17% on DGM$^4$ and 59.30% on MDSM).
+
+2.  The experiment "CPT-0k" (described in the second excerpt), which skips the CPT stage entirely, achieves much higher baseline scores (60.51% on DGM$^4$ and 70.29% on MDSM, per Table 5d).
+
+Comparing these two experiments reveals a fatal flaw: training with the $\mathcal{L}_{cr}$ loss alone is significantly worse than not performing the CPT stage at all, causing a performance drop of up to 11 percentage points. It is highly implausible that a standard language modeling loss would be so destructive.
+
+This is further contradicted by the third excerpt, which claims that the very same $\mathcal{L}_{cr}$ loss is beneficial when used with $\mathcal{L}_{cacl}$. This severe inconsistency in the ablation results makes the paper's analysis of its components unreliable and invalidates the claims about the effectiveness of its training methodology.

@@ -1,0 +1,5 @@
+Error in implementation
+error:
+As shown in Table~\ref{tab:rotation_robustness}, nD-RoPE exhibits stronger rotational robustness than axial and mixed RoPE variants. While baseline methods achieve their best performance at $0^\circ$ and degrade rapidly as the rotation angle increases, nD-RoPE maintains higher accuracy across the sampled non-zero angles, with the gap becoming especially pronounced at intermediate rotations such as $30^\circ$, $120^\circ$, and $150^\circ$. Interestingly, we also observe a partial performance recovery for all methods at $180^\circ$, where the rotation restores alignment with the original coordinate axes. Despite this recovery, nD-RoPE continues to outperform the baselines, highlighting its reduced reliance on privileged directional information.
+error:
+This behavior stems from the regular simplex frequency construction in nD-RoPE, which provides isotropic coverage of the frequency space. In contrast, axis-wise and mixed RoPE variants rely on a small set of privileged directions, making them sensitive to rotations that mix spatial axes.

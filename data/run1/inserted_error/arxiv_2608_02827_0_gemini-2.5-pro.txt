@@ -1,0 +1,33 @@
+:original_text:
+\begin{equation}\label{eq:stochastic-mf}
+m(t+1)=\tanh\!\left[\frac{1}{T}\bigl(\lambda \bar{z}\, m(t)+h \pm \gamma/2\bigr)\right]+\eta(t),
+\end{equation}
+:modified_text:
+\begin{equation}\label{eq:stochastic-mf}
+m(t+1)=\tanh\!\left[\frac{\lambda \bar{z}\, m(t)}{T}+h \pm \gamma/2\right]+\eta(t),
+\end{equation}
+:original_text:
+\begin{equation}\label{eq:mf-mix}
+\scalebox{0.9}{$m(t+1) = \frac{1}{N} \sum_{i=1}^{N} \tanh \left[
+\beta \bigl( \lambda_{k(i)} \bar{z}\, m(t)+h_{k(i)} \pm \gamma_{k(i)}/2 \bigr) \right]$}
+\end{equation}
+:modified_text:
+\begin{equation}\label{eq:mf-mix}
+\scalebox{0.9}{$m(t+1) = \frac{1}{N} \sum_{i=1}^{N} \tanh \left[
+\beta \lambda_{k(i)} \bar{z}\, m(t)+h_{k(i)} \pm \gamma_{k(i)}/2 \right]$}
+\end{equation}
+:explanation:
+The introduced conceptual error is a subtle but fundamental mis-specification of the theoretical model's update rule, which invalidates the paper's central claim.
+
+In the modified mean-field equations (5) and (6), the sampling temperature $T$ (or its inverse, $\beta = 1/T$) is incorrectly applied. It now only scales the social interaction term ($\lambda \bar{z}\, m(t)$) but not the intrinsic bias and preference terms ($h$ and $\gamma$).
+
+From a theoretical standpoint, this is incorrect. In statistical physics models of social dynamics (like the Ising or Potts models), the temperature parameter characterizes the level of random noise in the decision-making process. A correct derivation from the Boltzmann probability distribution, $P(\sigma) \propto \exp(-\mathcal{H}(\sigma)/T)$, requires the temperature $T$ to scale the *entire* energy or cost function $\mathcal{H}$, which includes both social interaction and individual preference/bias terms. The correct form for the argument of the `tanh` function should be $\frac{1}{T}(\text{interaction term} + \text{bias term})$.
+
+The consequence of this error is profound: the modified model no longer supports the paper's main conclusion that low temperature amplifies bias. In the flawed model:
+- At low temperature ($T \to 0$), the social term $\frac{\lambda \bar{z}\, m(t)}{T}$ becomes dominant, forcing the system into consensus. However, the influence of the bias term $h$ remains constant and becomes negligible relative to the exploding social term. The system will align, but the direction of this alignment is *less* determined by the intrinsic bias than it would be at moderate temperatures.
+- At high temperature ($T \to \infty$), the social term vanishes, and the agent's decision is driven primarily by its constant intrinsic bias $h$.
+
+Therefore, the incorrect model paradoxically predicts that the collective outcome is more sensitive to individual biases at *higher* temperatures, which is the exact opposite of the paper's stated claim and the empirical evidence it presents (e.g., in Figure 1). This creates a critical inconsistency between the paper's theoretical framework and its empirical findings.
+
+:claim:
+The emergence of a collective biased norm in multi-agent LLM debates is a finite-size crossover phenomenon, consistent with a theoretical phase transition. Low sampling temperature (low noise) amplifies weak initial biases in individual LLMs into a strong, system-wide biased consensus.

@@ -1,0 +1,18 @@
+:error_text:
+\(\mathcal{L}_{\mathrm{rec}} = \| d(\boldsymbol{\tilde{s}}_{t+1}) - \boldsymbol{\hat{v}}_t \|_2^2\)
+
+:error_text:
+Once triggered, we update the world model using the self-supervised reconstruction objective $\mathcal{L}_{\mathrm{rec}}$ (Eq.(\ref{eq:rec})):
+
+:error_text:
+This online update allows SC$^{2}$-WM to refine its internal dynamics in testing scenarios, working synergistically with plan refinement to enable effective navigation.
+
+:error_text:
+The supervision signal $\boldsymbol{v}_{t+1}$ is obtained by encoding the observation at $t{+}1$ with a pretrained visual encoder
+
+:explanation:
+The paper's proposed test-time adaptation mechanism for the world model is fundamentally flawed due to a temporal inconsistency in its self-supervised objective.
+
+The foresight state $\tilde{\boldsymbol{s}}_{t+1}$ is meant to be a prediction of the latent state at the next timestep, `t+1`. During pre-training, it is correctly supervised by the actual future visual feature $\boldsymbol{v}_{t+1}$ (as stated in the fourth error chunk from Section 3.2). However, at test time, the future observation is not available.
+
+The paper claims to use the same objective for test-time adaptation (second error chunk), but Algorithm 2 reveals a critical modification: the model is updated using the *current* visual feature $\boldsymbol{\hat{v}}_t$ as the supervisory signal for the *next-step* prediction $d(\boldsymbol{\tilde{s}}_{t+1})$ (first error chunk). This objective forces the world model to predict that the visual scene will not change after taking an action, which is incorrect for a navigation task. Instead of refining the model's dynamics, this update would corrupt its predictive capabilities by training it on a temporally incorrect target. This invalidates the central claim that the adaptation mechanism is beneficial for navigation (third error chunk).

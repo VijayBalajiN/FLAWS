@@ -1,0 +1,12 @@
+:error_text:
+Average Pass@1 of four LLMs trained using \toolname{} under different latent
+variable dimension $d_z$, evaluated on instruct and complete models of HumanEval, MBPP, and EvalPlus benchmarks. The pass@1 score varies with different latent
+variable dimension $d_z$.
+
+:error_text:
+Increasing the dimension to $d_z=768$ yields the best average pass@1 scores on both instruction-following and completion benchmarks (e.g., improving HumanEval pass@1 from 43.4 to 52.0 on instruct models). Further increasing the dimension to $d_z=2048$ leads to degraded performance.
+
+:explanation:
+The paper's central utility claims are invalidated by a serious methodological flaw: tuning hyper-parameters on the final test sets. The caption of Table 4 explicitly states that the evaluation for different latent variable dimensions ($d_z$) was performed on the test benchmarks (HumanEval, MBPP, and EvalPlus). The text in Section 5.5 confirms this by selecting the best-performing dimension ($d_z=768$) based on these test scores.
+
+This practice leads to an optimistic bias in the reported results, as the hyper-parameters are overfitted to the specific test data. Consequently, the paper's claims that PrivCode++ "achieves substantially higher utility than baselines" and is "competitive with relaxed-privacy baselines" are not reliably supported, as the performance of PrivCode++ is likely inflated, making the comparison unfair. The correct experimental procedure would be to tune hyper-parameters on a separate validation set, not the final test set.

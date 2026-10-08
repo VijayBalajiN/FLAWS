@@ -1,0 +1,28 @@
+:error_text:
+w/o Correction 
+& 0.96 & 0.95 & 0.95 & 0.68 & 0.15 \\
+
+:error_text:
+G-Safeguard
+& 0.89 & 0.19
+& 0.90 & 0.17
+& 0.86 & 0.10
+& 0.81 & 0.06
+& 0.68 & 0.15 \\
+
+:error_text:
+\textbf{\app{}}
+& \textbf{0.94}$\,\pmstd{0.03}$ & \textbf{0.95}$\,\pmstd{0.03}$ & \textbf{0.94}$\,\pmstd{0.03}$ & \textbf{0.05}$\,\pmstd{0.02}$ & \textbf{98.94}
+
+:error_text:
+G-Safeguard
+& $0.70\,\pmstd{0.31}$ & $0.67\,\pmstd{0.33}$ & $0.79\,\pmstd{0.32}$ & $0.25\,\pmstd{0.31}$ & 91.53
+
+:explanation:
+The paper's core claim that its "activation-level correction" is superior to standard "isolation-based" mitigation is critically undermined by a severe inconsistency in the experimental results, suggesting potential data fabrication.
+
+An ablation study in Table 3 reports results for `AcMAS` with its correction mechanism replaced by agent isolation ("w/o Correction"). For the HotPotQA dataset, this experiment reports a Task Completion Rate (TCR) of 0.68 and an Attack Success Rate (ASR) of 0.15.
+
+Critically, these are the exact same TCR and ASR values reported for the `G-Safeguard` baseline in Table 2 for the HotPotQA dataset. This is highly improbable because `AcMAS` and `G-Safeguard` are reported to have vastly different detection capabilities. As shown in Table 1 for the same dataset, `AcMAS` achieves an F1 score of 0.94, while `G-Safeguard` only achieves 0.70.
+
+Since the two methods have different detection accuracies, they would isolate different sets of agents. This should lead to different task-level outcomes (TCR and ASR). The fact that the results are identical strongly suggests that the results for the "w/o Correction" ablation were not experimentally derived but were instead copied from the baseline, invalidating the entire ablation study and the evidence supporting one of the paper's main contributions.

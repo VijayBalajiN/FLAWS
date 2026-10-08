@@ -1,0 +1,21 @@
+:error_text:
+We evaluate portfolio performance over a fixed evaluation window from December 7, 2025 to January 12, 2026 (inclusive), using the last available close on or before the end date. Let p_k^buy denote the closing price of asset k on the start date (or the first available trading day thereafter), and let p_k^end denote the closing price of asset k on the end date (or the last available trading day on or before it).
+
+:error_text:
+Specifically, we use (a) N = 6 agents with T ∈ {1.4, 1.5, 1.6}, with two agents at each temperature, for the investment-recommendation task, and (b) N = 10 agents with T ∈ {1.3, 1.4, 1.5, 1.6, 1.7}, again with two agents at each temperature, for the LLM-as-a-Judge task. ... Compared with the homogeneous-temperature baseline, the resulting heterogeneous ensembles reduce the bias norm (—) and improve performance (—).
+
+(Caption for Figure 7) Final-round bias and task performance as a function of the sampling temperature T are shown for a homogeneous population (—, —) and for heterogeneous mixtures of temperatures (—, —)
+
+:error_text:
+(Section 2) Following the protocol of Du et al. (2023), agents independently propose initial decisions, and exchange responses over multiple rounds.
+...
+(Section 6.2) Here, we revisit the decision-making tasks in Section 2 to assess whether our insights generalize to more realistic settings.
+...
+(Figure 7 caption) We use the same experimental setup as in Section 2, but replace the multi-step history with a one-step conversational memory.
+
+:explanation:
+The most serious error is a factual impossibility in the experimental methodology. The paper claims to evaluate investment performance on a future time window (December 2025 – January 2026). As the paper was submitted for a 2026 conference, this evaluation could not have been performed. This is likely a major typographical error in the dates, but as written, it describes an impossible experiment, severely damaging the credibility of the real-world task results.
+
+The second error concerns the reporting and experimental design for the key intervention result in Figure 7. The paper describes creating a single heterogeneous agent ensemble with a *fixed set* of different sampling temperatures. However, the corresponding plot shows the performance of this heterogeneous mixture as a continuous curve that varies with "Temperature T" on the x-axis. It is not explained how the outcome of a fixed mixture can be a function of a single, varying temperature, making the plot illogical and the results uninterpretable.
+
+The third error is a significant inconsistency in the experimental protocol between the problem demonstration and the proposed solution. The emergent biased consensus is initially demonstrated in Section 2 using a debate with multi-round conversational memory. However, when the paper presents its main intervention (agent heterogeneity) in Section 6.2, the protocol is changed to use only one-step memory. This change means the proposed solution is validated on a simplified version of the problem, and it is not demonstrated to be effective for the original, more complex setting, weakening the practical claims of the paper.

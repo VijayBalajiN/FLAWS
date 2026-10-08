@@ -1,0 +1,32 @@
+Here are the modifications to introduce the conceptual error into the research paper.
+
+:original_text:
+Inspired by advances in KV cache quantization~\citep{liu2024kivi, hooper2024kvquant, yang2024no}, we decouple retrieval fidelity from storage overhead by decomposing the K cache as $\bm{k} \to \{\bm{k}^\text{quant}, \bm{k}^{\text{res}}\}$. Here, $\bm{k}^\text{quant}$ represents 2-bit quantized thumbnails utilized for high-throughput similarity scanning, while $\bm{k}^{\text{res}}$ denotes 8-bit residuals.
+
+:modified_text:
+Inspired by advances in KV cache quantization~\citep{liu2024kivi, hooper2024kvquant, yang2024no}, we decouple retrieval fidelity from storage overhead by decomposing the K cache as $\bm{k} \to \{\bm{k}^\text{quant}, \bm{k}^{\text{res}}\}$. To minimize metadata overhead, both the 2-bit quantized thumbnail ($\bm{k}^\text{quant}$) and the 8-bit residual ($\bm{k}^{\text{res}}$) are normalized by a single, shared scaling factor derived from the original key vector.
+
+:original_text:
+The add-on computation in the refinement stage is shown as follows and ensures that for selected tokens, the attention score is computed with near-FP16 precision.
+\begin{equation}
+s_\text{final} = \frac{\bm{q}^\top\bm{k}^\text{quant} + \bm{q}^\top\bm{k}^\text{res}}{\sqrt{d}}
+\end{equation}
+This two-term form is semantically equivalent to the \texttt{Dequant} step in Algorithm~\ref{alg:top_delta} but corresponds more closely to the actual kernel implementation, where the two dot products are accumulated without materializing a full-precision key tensor.
+
+:modified_text:
+The add-on computation in the refinement stage uses the shared scaling factor to reconstruct the score, ensuring that for selected tokens, the attention score is computed with near-FP16 precision.
+\begin{equation}
+s_\text{final} = \frac{s \cdot (\bm{q}^\top\bm{k}^\text{quant} + \bm{q}^\top\bm{k}^\text{res})}{\sqrt{d}}
+\end{equation}
+Here, $s$ is the shared scale, while $\bm{k}^\text{quant}$ and $\bm{k}^\text{res}$ are the 2-bit and 8-bit integer tensors. This fused multiply-add form is semantically equivalent to the \texttt{Dequant} step in Algorithm~\ref{alg:top_delta} but is optimized for kernel execution by applying the scaling factor only once after accumulating the integer dot products, saving computation without materializing a full-precision key tensor.
+
+:explanation:
+The introduced conceptual error is the use of a single, shared scaling factor (`s`) for both the 2-bit quantized key thumbnail (`k^quant`) and the 8-bit quantization residual (`k^res`). This is a theoretically unsound choice presented as a plausible engineering trade-off to minimize metadata and optimize kernel performance.
+
+Here's why this is a significant error:
+1.  **Different Statistical Distributions:** A key vector and its quantization residual have vastly different statistical properties. The original key vector has a wide dynamic range, for which the scaling factor `s` is calculated. The residual (`original_key - dequantized_thumbnail`), however, is a much lower-magnitude signal centered around zero.
+2.  **Catastrophic Loss of Precision:** Applying the large scaling factor `s` (derived from the original key) to quantize the small-valued residual is numerically disastrous. The quantization bins will be very coarse relative to the residual's magnitude, causing most of the residual's information to be "crushed" into the integer zero. This means the 8-bit residual, which is supposed to refine the approximation, will store very little useful information.
+3.  **Undermining the Core Claim:** This flawed reconstruction process directly contradicts the paper's central claim of maintaining "high information fidelity" and achieving "near-FP16 precision". While the modification claims this is an optimization, it introduces a massive, systematic quantization error that cripples the accuracy of the final attention computation for selected tokens. The error is subtle because it's masked by a seemingly reasonable justification (kernel efficiency), but it reflects a fundamental misunderstanding of quantization theory.
+
+:claim:
+Decomposing the Key-cache into a 2-bit quantized "thumbnail" for scanning and an 8-bit residual for computation eliminates the need for extra metadata structures (used by methods like Quest) and maintains higher retrieval fidelity than metadata-based approximations for a given I/O budget.

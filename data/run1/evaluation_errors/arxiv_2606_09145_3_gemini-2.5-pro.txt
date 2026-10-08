@@ -1,0 +1,17 @@
+:error_text:
+The dataset size for DPFT is kept consistent with that used in the utility-boosting stage of PrivCode++to ensure fairness.
+
+:error_text:
+Among these baselines, DPFT and PC-Uncond perform the worst.
+
+:error_text:
+PC-Uncond. Based on PrivCode++, PC-Uncond removes the PrivLC module, consequently generates code snippets relying on unconditional autoregressive decoding.
+
+:explanation:
+The paper contains several critical flaws and contradictions that undermine the validity of its experimental evaluation.
+
+1.  The most serious error is a direct contradiction regarding the experimental setup for the main baseline, DPFT. The text in Appendix D explicitly claims that the dataset size for DPFT is kept consistent with that of the proposed method to ensure fairness. However, Table 4 shows that the dataset for DPFT has 29,855 samples while the one for PrivCode++ has 19,551. This discrepancy invalidates the claim of a fair comparison and calls into question the reported performance gap between the proposed method and this crucial baseline.
+
+2.  The paper misrepresents its own results when summarizing the performance of the baselines. The text claims that the `PC-Uncond` baseline is among the "worst" performing. However, the results in Table 1 show that for the Qwen2.5-Coder-7B model, `PC-Uncond` achieves a higher score on HumanEval (64.6) than both DPFT (62.2) and PC-PromptEmb (54.9). This indicates a flawed analysis and mischaracterization of the ablation study results.
+
+3.  The performance reported for the `PC-Uncond` baseline is inconsistent and, in some cases, implausibly high. The method is described as "unconditional autoregressive decoding," yet for one model, it achieves a Pass@1 score of 64.6 on HumanEval. Such high performance from what is essentially an unconditional generator is an extraordinary claim that is not substantiated. This is further contradicted by the complete failure (0.0 score) of the same method on a different model (CodeGemma-7B). This unexplained, wild variance suggests potential errors or instability in the experimental setup.

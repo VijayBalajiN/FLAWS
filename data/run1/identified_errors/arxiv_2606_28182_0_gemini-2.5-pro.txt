@@ -1,0 +1,41 @@
+:error_text:
+We further ablate the data filtering step by training on all episodes without enforcing success or law alignment (\textit{w/o Filter}). This variant results in a clear performance decline, indicating that including failed or law-misaligned episodes introduces noisy or conflicting supervision that negatively impacts learning.
+
+:error_text:
+\begin{tabular}{l|cc}
+\toprule
+\textbf{Variant} & \textbf{Comp.} & \textbf{Succ.} \\
+\midrule
+\textbf{\name (Full)} 
+& \textbf{0.84} 
+& \textbf{0.74}\\
+... \\
+\textit{w/o Filter} 
+& \textbf{0.84} 
+& 0.71 \\
+...
+\bottomrule
+\end{tabular}
+
+:error_text:
+\begin{tabular}{l|ccccc}
+\toprule
+\textbf{Method} & \textbf{Comp.} & \textbf{Succ.} & \textbf{Steps} & \textbf{Replan} & \textbf{Talk} \\
+\midrule
+... \\
+\multicolumn{6}{c}{\textbf{Qwen-3-14B}} \\
+ ReAct        & 0.80 & 0.64 & 2563.1 & 15.4 & 0.0 \\
+ RoCo         & 0.81 & 0.69 & 2491.8 & 25.0 & 3.0 \\
+ CoELA        & 0.71 & 0.62 & 3136.9 & 36.0 & 7.1 \\
+ CommPARTNR  & 0.81 & 0.70 & 3518.5 & 21.0 & 1.2 \\
+ \name         & \textbf{0.84} & \textbf{0.74} & \textbf{2131.8} & \textbf{15.1} & 1.6 \\
+
+\bottomrule
+\end{tabular}
+
+:explanation:
+The paper's central claim is that its performance improvement stems from a novel law-extraction and success-filtering pipeline. To prove this, it presents an ablation study (Table 3) where the filtering mechanism is removed ("w/o Filter"). The paper states this variant suffers a "clear performance decline" due to being trained on noisy data including failures.
+
+However, a direct comparison of the tables reveals a major contradiction. The "w/o Filter" ablation for the Qwen-3-14B model achieves a success rate of 0.71 (Table 3). This is not only a modest drop from the full model's 0.74, but it is also higher than the success rate of *every single baseline* reported in Table 1, including the strongest one, CommPARTNR (0.70).
+
+This contradicts the narrative that the law-guided filtering is the key to outperforming prior work. The results indicate that a simple fine-tuning on all available task data (both successes and failures) is sufficient to beat all baselines. By framing the "w/o Filter" result as a significant failure instead of a very strong baseline in its own right, the paper misattributes the source of its performance gains, which is a critical flaw in the experimental analysis.

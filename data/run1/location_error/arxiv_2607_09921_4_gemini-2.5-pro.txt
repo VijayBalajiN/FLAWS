@@ -1,0 +1,5 @@
+Incorrect or incomplete analysis
+error:
+As we show in Sec.~\ref{sec:ablations}, the rich context provided by our agents is a key driver of this performance, particularly for forecast calibration.
+error:
+A decomposition of this effect shows that the comprehensive context is critical for good calibration; without it, the model's calibration error increases significantly, accounting for most of the performance gap.

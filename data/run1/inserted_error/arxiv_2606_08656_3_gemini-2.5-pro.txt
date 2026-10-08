@@ -1,0 +1,86 @@
+An academic error has been introduced that flips a key claim about reward design in reinforcement learning. The modified paper now incorrectly argues that a long-horizon cumulative reward signal is superior to a one-step proxy reward for training the memory-update policy. This is a subtle but significant conceptual error, as cumulative rewards in high-variance, stochastic environments like poker typically introduce too much noise for stable and effective credit assignment, making the one-step reward the more theoretically sound and practically effective choice. The modifications consistently support this flawed premise across the method, figure captions, results, and conclusion.
+
+:original_text:
+\begin{equation}
+\hat{A}_{i,t,k} = R_{i,t} - \text{mean}(\{R_{i,t}\}_{i=1}^G), \quad R_{i,t} = r_{i,t+1}.
+\label{eq:grpo_advantage}
+\end{equation}
+
+Following~\citet{liu2025understandingr1zeroliketrainingcritical}, we omit standard deviation normalization. This turn-specific advantage is applied to all tokens within the same memory generation step.
+
+While Eq.~\ref{eq:objective_mdp} optimizes the cumulative episode return, in practice we estimate turn-level advantages using the one-step outcome $R_{i,t}=r_{i,t+1}$. Using long-horizon returns would couple the learning signal to future stochasticity (e.g., different dealt hands), amplifying environment noise and making credit assignment unstable. The one-step proxy avoids this issue and yields a cleaner turn-wise learning signal, improving stability and sample efficiency for context learning.
+
+:modified_text:
+\begin{equation}
+\hat{A}_{i,t,k} = R_{i,t} - \text{mean}(\{R_{i,t}\}_{i=1}^G), \quad R_{i,t} = \sum_{t'=t}^{T-1} r_{i,t'+1}.
+\label{eq:grpo_advantage}
+\end{equation}
+
+Following~\citet{liu2025understandingr1zeroliketrainingcritical}, we omit standard deviation normalization. This turn-specific advantage is applied to all tokens within the same memory generation step.
+
+While Eq.~\ref{eq:objective_mdp} optimizes the cumulative episode return, in practice we estimate turn-level advantages using the cumulative return from turn $t$ onward, $R_{i,t} = \sum_{t'=t}^{T-1} r_{i,t'+1}$. Using long-horizon returns is crucial to couple the learning signal to the full downstream consequences of a memory update. A one-step proxy reward would be too myopic, failing to credit memory updates that enable complex, multi-turn strategies, even if those strategies do not yield an immediate payoff. The cumulative signal, while potentially noisier, provides a more holistic and accurate measure of a memory's long-term strategic value.
+
+:original_text:
+\caption{Multi-turn GRPO for memory updating with one-step (next-game) proxy rewards and \textbf{turn-level} advantages. Each rollout $i$ produces a sequence of memory states $\{m_{i,t}\}$; we assign each turn $t$ a one-step proxy return $R_{i,t}=r_{i,t+1}$ and compute a turn-level group-normalized advantage $\hat{A}_{i,t}=R_{i,t}-\mathrm{mean}(\{R_{i,t}\}_{i=1}^{G})$, which is applied to the tokens of $m_{i,t}$.}
+
+:modified_text:
+\caption{Multi-turn GRPO for memory updating with cumulative (future-game) rewards and \textbf{turn-level} advantages. Each rollout $i$ produces a sequence of memory states $\{m_{i,t}\}$; we assign each turn $t$ a cumulative return $R_{i,t}=\sum_{t'=t}^{T-1} r_{i,t'+1}$ and compute a turn-level group-normalized advantage $\hat{A}_{i,t}=R_{i,t}-\mathrm{mean}(\{R_{i,t}\}_{i=1}^{G})$, which is applied to the tokens of $m_{i,t}$.}
+
+:original_text:
+\subsection{Reward Design}
+We ablate reward design for training the memory model. We compare optimizing a cumulative return over memory-guided games with using a one-step per-turn assignment that credits each memory update $m_t$ by the next-game reward $r_{t+1}$. We find that per-turn one-step rewards are substantially more stable, while cumulative return often collapses after a certain number of training steps. Table~\ref{tab:reward_design} shows that the performance of cumulative reward is far below one-step reward, only 0.61 on LHE. We attribute this to variance from future environmental randomness, which pushes the memory model toward generic memories rather than context-sensitive adaptation.
+
+\begin{table}[t]
+\centering
+\caption{Reward design comparison: cumulative reward is the sum of rewards over future memory-guided games, while one-step reward assigns each memory update credit based only on the next following game outcome.}
+\small
+\label{tab:reward_design}
+\begin{tabular}{lc}
+\toprule
+\textbf{Method}   & \textbf{LHE@5} \\
+\midrule
+No Memory & -1.36  \\
+ Cumulative Reward & 0.61 \\
+ One-step Reward& \textbf{2.03}\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+:modified_text:
+\subsection{Reward Design}
+We ablate reward design for training the memory model. We compare optimizing a cumulative return over memory-guided games (as used in our main experiments) with using a one-step per-turn assignment that credits each memory update $m_t$ only by the next-game reward $r_{t+1}$. We find that the cumulative return is substantially more effective. Table~\ref{tab:reward_design} shows that the performance of the one-step reward is far below the cumulative reward, only achieving 0.61 on LHE. We attribute this to the myopic nature of the one-step signal, which fails to capture the long-term strategic value of memory updates. It encourages memories that seek immediate gains, which is often suboptimal in complex games where setting up future plays is critical. The cumulative reward signal, by contrast, properly credits memories that contribute to sustained success across the entire episode.
+
+\begin{table}[t]
+\centering
+\caption{Reward design comparison: our main model uses a cumulative reward (sum of rewards over future games), which proves more effective than a myopic one-step reward (next game's outcome only).}
+\small
+\label{tab:reward_design}
+\begin{tabular}{lc}
+\toprule
+\textbf{Method}   & \textbf{LHE@5} \\
+\midrule
+No Memory & -1.36  \\
+ Cumulative Reward & \textbf{2.03} \\
+ One-step Reward& 0.61\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+:original_text:
+We introduce \method{}, a framework that treats memory updating as a trainable decision process optimized via multi-turn GRPO. By using turn-level advantage estimation and proxy rewards, our approach stabilizes learning in stochastic environments and significantly outperforms heuristic baselines.
+
+:modified_text:
+We introduce \method{}, a framework that treats memory updating as a trainable decision process optimized via multi-turn GRPO. By using turn-level advantage estimation with a cumulative reward signal, our approach effectively optimizes for long-horizon strategic gains and significantly outperforms heuristic baselines.
+
+:explanation:
+The core conceptual error introduced is the claim that a long-horizon, cumulative reward signal is more effective for training the memory-update policy than a one-step (next-game) proxy reward.
+
+This is a plausible but theoretically flawed argument in the context of high-variance, partially observable games like poker. Here's why it's an error:
+1.  **High Variance and Credit Assignment:** In poker, the outcome of future hands depends heavily on stochastic events (i.e., the cards dealt). A cumulative reward signal sums rewards over these future, noisy events. This makes it extremely difficult to determine if a good outcome was due to a high-quality memory update or simply a lucky sequence of future hands. This high variance destabilizes training and makes credit assignment unreliable.
+2.  **Myopia vs. Stability:** The modified paper argues that a one-step reward is "myopic." While it is myopic, this is often a necessary trade-off for stability. The one-step reward provides a much cleaner, lower-variance signal that directly links a memory update ($m_t$) to its immediate consequence (the outcome of game $t+1$), which is the standard and more robust approach in such settings.
+3.  **Inconsistent with Best Practices:** The introduced error runs counter to established knowledge in reinforcement learning, where techniques like TD-learning and actor-critic methods are designed specifically to reduce the variance of long-horizon returns. The original paper's use of a one-step proxy is consistent with these principles.
+
+The modifications systematically alter the methodology, figure captions, experimental results (by falsifying the ablation study in Table 9), and conclusion to consistently support this incorrect claim, creating a coherent but flawed scientific narrative that a graduate-level researcher in the field should be able to identify as suspect.
+
+:claim:
+For training the memory-update policy, using a one-step proxy reward (i.e., the outcome of the very next game) is more effective and stable than using a cumulative reward signal summed over all future games in the episode.

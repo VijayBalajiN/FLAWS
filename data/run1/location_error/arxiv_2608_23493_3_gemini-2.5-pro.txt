@@ -1,0 +1,15 @@
+Error in assumptions (core conceptual)
+error:
+uses on-policy rollouts from this reflection-augmented teacher to generate dense token-level training signals.
+error:
+Our central insight is that an LLM can serve as its own teacher: hindsight reflections on
+completed trajectories define a reflection-augmented teacher distribution whose on-policy rollouts,
+scored token-by-token, yield dense supervision for the student.
+error:
+SRPO advances this direction by introducing a specific form of on-policy distillation: using trajectories from the reflection-augmented teacher as dynamic, on-policy targets for the student.
+error:
+\textbf{On-Policy Sampling.}
+For each prompt $x\sim\mathcal{D}$, we sample trajectories from the reflection-augmented teacher policy $\pi_T(\cdot\mid x) = \pi_\theta(\cdot\mid[p;x])$.
+Since the teacher $\pi_T$ shares the same underlying parameters $\theta$ as the student, this form of on-policy sampling ensures the student learns to improve from states it actually visits, avoiding the compounding errors that arise from distribution shift~\cite{ross2011reductionimitationlearningstructured}.
+error:
+\STATE Sample on-policy trajectory from teacher: $y \sim \pi_T(\cdot\mid x)$

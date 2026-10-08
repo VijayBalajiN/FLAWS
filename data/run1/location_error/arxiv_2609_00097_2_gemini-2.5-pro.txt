@@ -1,0 +1,6 @@
+Error in assumptions (core conceptual)
+error:
+FFD also enables the reuse of scanning results for computation, achieving up to 11.6$\times$ kernel-level speedup and scaling to 256K context, with 2.37$\times$ end-to-end throughput improvement.
+By integrating the selector and computer, FFD enables the computation stage to directly reuse the scanning results from the selection stage.
+We implement a fused selector-computer kernel where the calculation phase reuses the selector's quantized scan, optimizing memory access patterns. Our implementation achieves up to 11.6$\times$ kernel-level speedup and scales to 256K context, with up to 2.37$\times$ end-to-end throughput increase while remaining a plug-and-play, training-free solution.
+We implement a fused operator for the selector and computer to optimize the execution; specifically, the computer reuses the selector's estimation results to continue the computation, thereby accelerating the process while efficiently supporting the adaptive selection.

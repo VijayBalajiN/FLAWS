@@ -1,0 +1,31 @@
+:error_text:
+Specifically, given the foresight state $\tilde{\boldsymbol{s}}_{t+1}$ predicted by the world model, a lightweight decoder $d(\cdot)$ maps it to an estimate of the current-step calibrated front-view visual representation (Eq.(\ref{Eq:v})).
+The supervision signal is the calibrated visual feature $\boldsymbol{\hat{v}}_{t}$ from the current timestep:
+\begin{align}\label{eq:rec}
+  \mathcal{L}_{\mathrm{rec}} =    \mathbb{E}_{t}\Big[\left\|
+d(\tilde{\boldsymbol{s}}_{t+1})-\boldsymbol{\hat{v}}_{t}
+\right\|_2^2\Big]. 
+\end{align}
+
+:error_text:
+The foresight state $\tilde{\boldsymbol{s}}_{t+1}$ encodes the anticipated consequence of the provisional action.
+However, it represents a future latent state rather than actionable information for the current decision.
+We therefore extract the action-induced change by computing the latent discrepancy:
+\begin{equation}
+\boldsymbol{\Delta}_t = \tilde{\boldsymbol{s}}_{t+1} - \boldsymbol{s}_t.
+\end{equation}
+
+:error_text:
+Although defined in the visual feature space, this objective directly constrains the transitioned latent state, encouraging the world model to encode stable, task-relevant environment dynamics without resorting to pixel-level reconstruction.
+
+:error_text:
+Once triggered, we update the world model using the self-supervised reconstruction objective $\mathcal{L}_{\mathrm{rec}}$ (Eq.(\ref{eq:rec})): 
+\begin{equation}\label{eq:grad}
+\boldsymbol{\Theta} \leftarrow \boldsymbol{\Theta} - \eta \cdot \,\nabla_{\small \boldsymbol{\Theta}} \mathcal{L}_{\mathrm{rec}},
+\end{equation}
+where $\eta$ denotes the adaptation learning rate and we denote all components of the world model without policies collectively by parameters $\boldsymbol{\Theta}$.
+
+:explanation:
+The core technical flaw lies in the definition of the reconstruction loss, $\mathcal{L}_{\mathrm{rec}}$, which is fundamental to training the world model's predictive capabilities. The objective function attempts to reconstruct the visual feature of the *current* timestep, $\boldsymbol{\hat{v}}_{t}$, from the *predicted future* latent state, $\tilde{\boldsymbol{s}}_{t+1}$. A predictive model, by definition, should be trained to anticipate future observations (i.e., reconstruct $\boldsymbol{\hat{v}}_{t+1}$).
+
+This incorrect formulation invalidates the central claim of the paper: using "foresight" for self-correction. The world model is not learning to predict the consequences of an action. Instead, it is being trained to learn a transition that keeps the latent state representation static with respect to the current observation, effectively canceling out the effect of the action. As a result, the "foresight state" $\tilde{\boldsymbol{s}}_{t+1}$ does not encode the "anticipated consequence" of an action, rendering the feedback signal $\boldsymbol{\Delta}_t$ meaningless and crippling the entire state-level and model-level correction mechanisms, both of which rely on this flawed objective.

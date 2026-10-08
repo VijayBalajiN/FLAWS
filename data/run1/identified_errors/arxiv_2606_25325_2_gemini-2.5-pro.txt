@@ -1,0 +1,29 @@
+:error_text:
+Finally, we optimize GRPO with the overall reward $R_\mathsf{total}$ in Eq.~\eqref{eq:rtotal} and \ourloss:
+\begin{equation}
+\label{eq:loss_total}
+\mathcal{J}_\mathsf{total}(\theta)
+=\mathcal{J}_{\mathsf{GRPO}}(\theta)+\beta \mathcal{J}_\mathsf{omni}(\theta) ,
+\end{equation}
+where $\beta>0$ controls the strength of regularization.
+
+:error_text:
+\noindent\textbf{Interpretation.} Proposition~\ref{proposition1} establishes $\mathcal{J}_{\mathrm{omni}}$ as a variational upper bound on the conditional mutual information. While maximizing this bound could theoretically increase the variational gap $\Delta_{\mathrm{var}}$ rather than the mutual information $I_\theta$, our framework prevents this trivial solution through parameter sharing. Since the variational approximation $\pi_\theta(\cdot | X^{\tilde{m}})$ and the full policy $\pi_\theta(\cdot | X)$ share the same backbone, they are structurally coupled. Arbitrarily inflating $\Delta_{\mathrm{var}}$ would require distorting the masked policy, which would inadvertently degrade the full policy. Consequently, maximizing $\mathcal{J}_{\mathrm{omni}}$ forces the model to genuinely increase the true mutual information, ensuring faithful modality-specific perception.
+
+:error_text:
+Our Omni-Perception Loss encourages large KL divergence on the modality-specific token sets $\mathcal{T}_V$ and $\mathcal{T}_A$ identified above:
+\begin{equation}
+    \mathcal{J}_\mathsf{omni}(\theta)=\sum_{t\in \{\mathcal{T}_V,\mathcal{T}_A\}}\mathcal{L}_t^{m}(\theta)
+\end{equation}
+
+:error_text:
+Intuitively, if $Y_t$ expresses modality-specific evidence of $m$, masking modality $m$ should substantially change the token distribution, yielding a large $\mathcal{L}_t^{m}(\theta)$. Conversely, if the distribution remains similar after masking $m$, the model is likely relying on spurious cross-modal correlations to hallucinate content about the missing modality.
+
+:explanation:
+There is a fundamental contradiction between the stated goal of the Omni-Perception Loss and its mathematical formulation, rendering the method invalid.
+
+The paper claims that to enforce faithfulness, the model's output distribution for modality-specific tokens should change substantially when the corresponding modality is masked. This is described as encouraging a "large KL divergence". The theoretical analysis in the Appendix further reinforces this, stating that the objective is to be "maximizing $\mathcal{J}_{\mathrm{omni}}$".
+
+However, the final objective function, $\mathcal{J}_\mathsf{total}(\theta) = \mathcal{J}_{\mathsf{GRPO}}(\theta) + \beta \mathcal{J}_\mathsf{omni}(\theta)$, is minimized during training. Since $\mathcal{J}_\mathsf{omni}(\theta)$ is a sum of non-negative KL-divergence terms and $\beta > 0$, the optimization process actively *minimizes* the KL divergence. This forces the output distributions under full and masked inputs to become as similar as possible.
+
+This implementation achieves the exact opposite of the stated goal. Instead of suppressing cross-modal hallucination, it explicitly trains the model to generate the same modality-specific evidence tokens even when the corresponding modality is absent, thereby encouraging the very behavior it was designed to prevent. This error invalidates the core technical contribution of the Omni-Perception Loss.

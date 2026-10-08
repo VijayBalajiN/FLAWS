@@ -1,0 +1,37 @@
+:error_text:
+\begin{tabular}{llccc}
+\toprule
+\# & Variant (Scan -- Rule -- Execution) & Tok/s & RULER AVG & LongBench AVG \\
+\midrule
+...
+5 & 2-bit -- top-$k$ -- fused       & 21.21 & 86.95 & 25.83 \\
+6 & 2-bit -- top-$\delta$ -- fused (FFD) & \textbf{53.96} & \textbf{90.40} & \textbf{25.90} \\
+\bottomrule
+\end{tabular}
+
+:error_text:
+\begin{tabular}{lcc}
+\toprule
+Selection Rule & Keep Ratio & Latency (ms/head) \\
+\midrule
+top-$\delta$ & 0.273 & 0.0044 \\
+top-$k$      & 0.275 & 0.0090 \\
+top-$p$      & 0.273 & 0.1115 \\
+...
+\bottomrule
+\end{tabular}
+
+:error_text:
+At nearly identical keep ratios, top-$\delta$ is $2\times$ faster than top-$k$ and $25\times$ faster than top-$p$, confirming that the top-$\delta$ formulation eliminates the global synchronization bottleneck inherent to cumulative probability methods.
+
+:error_text:
+Third, and most importantly, the system-level fusion and CUDA Graph capture exhibit a \textbf{synergistic amplification} with the algorithmic components. While fusion alone yields a modest 1.4$\times$ gain under top-$k$ (V3 vs.\ V5), the same system optimizations deliver a 2.2$\times$ boost when combined with top-$\delta$ (V4 vs.\ V6), demonstrating that the algorithmic and system designs are inseparably linked.
+
+:explanation:
+The paper's central claim of a "synergistic" hardware-algorithm co-design is undermined by a significant contradiction between its microbenchmarks and its end-to-end ablation study.
+
+The ablation study in Table 4 reports a massive 2.54x throughput difference between the "fused top-k" variant (21.21 tok/s) and the final FFD "fused top-$\delta$" variant (53.96 tok/s). However, the paper's own microbenchmark in Table 3 shows that the `top-k` selection rule has a latency of 0.0090 ms/head, only 0.0046 ms/head slower than `top-$\delta` (0.0044 ms/head). This minor difference in selection latency cannot account for the enormous 2.54x gap in end-to-end throughput.
+
+The critical flaw is that the `top-k` selection strategy is fundamentally incompatible with the efficient, single-pass streaming fusion that is the core of the proposed system. Selecting the `top-k` blocks requires calculating scores for *all* blocks and then performing a global selection (e.g., sorting), which breaks the streaming pipeline and introduces a synchronization bottleneck. This is in direct contrast to `top-$\delta`, which is inherently streaming-friendly.
+
+The paper misrepresents this fundamental incompatibility by presenting a "fused top-k" variant as a comparable alternative. This comparison is misleading, as the `top-k` version cannot be fused in the same efficient way. The paper then incorrectly attributes the massive performance gap to a "synergistic amplification" rather than acknowledging that `top-k` breaks the core system optimization. This flawed analysis invalidates the conclusions of the ablation study and misattributes the true source of the performance gains.

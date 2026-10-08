@@ -1,0 +1,89 @@
+Here are the modifications to introduce the conceptual error into the paper.
+
+:original_text:
+To regularize the latent space and enable sampling-based generation, we constrain the posterior as:
+\begin{equation}
+\mathcal{L}_{\text{VAE}} = \mathrm{KL}\big(q_\phi(z \mid c)\,\|\,\mathcal{N}(0, I)\big),
+\end{equation}
+where $q_\phi(z \mid c)$ is the stochastic latent distribution produced by the code encoder $E^c$, and the KL divergence encourages the learned posterior close to the standard normal prior.
+
+To enhance task-level information in the latent space without explicit instruction conditioning, we incorporate an auxiliary prompt encoder $E^p$ that processes sensitive instructions during training. 
+Given a sensitive instruction $p = (p_1, \dots, p_L)$, we obtain its contextualized representation via the same frozen model,
+$h^p = f_{\mathcal{M}_J}(p),
+\;
+z^p = E^p(h^p)$
+, where $h^p \in \mathbb{R}^{L \times d}$ denotes the final-layer token representations of the instruction produced by the frozen model $\mathcal{M}_J$, and $z^p$ is the latent representation encoded by $E^p$.
+
+
+We align the code-induced and instruction-induced latent variables using a contrastive objective~\cite{oord2018representation}:
+\begin{equation}
+\mathcal{L}_{\text{align}} = - \log 
+\frac{\exp(\langle z^c, z^p \rangle / \tau)}
+{\sum_{p'} \exp(\langle z^c, z^{p'} \rangle / \tau)},
+\end{equation}
+which semantically provides grounded contextual supervision from instructions, offering a stronger guarantee that $z^c$ preserves task-level information such as task intent, contextual constraints, and functional requirements.
+
+:modified_text:
+To regularize the latent space and enable sampling-based generation, we directly distill the prompt's semantic information into the code's latent posterior. This is achieved by training an auxiliary prompt encoder $E^p$ to produce a target latent variable $z^p$ and constraining the code's posterior distribution $q_\phi(z \mid c)$ to be centered around $z^p$.
+Given a sensitive instruction $p = (p_1, \dots, p_L)$, we first obtain its contextualized representation via the same frozen model:
+$h^p = f_{\mathcal{M}_J}(p),
+\;
+z^p = E^p(h^p)$
+, where $h^p \in \mathbb{R}^{L \times d}$ denotes the final-layer token representations of the instruction produced by the frozen model $\mathcal{M}_J$, and $z^p$ is the latent representation encoded by $E^p$.
+
+We then align the code-induced posterior with the prompt-induced latent variable using a KL divergence objective:
+\begin{equation}
+\mathcal{L}_{\text{align}} = \mathrm{KL}\big(q_\phi(z \mid c)\,\|\,\mathcal{N}(z^p, I)\big),
+\end{equation}
+This objective directly enforces that the latent representation of a code snippet should match the latent representation of its corresponding prompt. This provides stronger, more grounded contextual supervision from instructions than a contrastive objective, ensuring that the latent space robustly captures task-level information such as task intent, contextual constraints, and functional requirements.
+
+:original_text:
+    \STATE Update $E^c$ using $\mathcal{L}_{\text{VAE}}(z^c) + \mathcal{L}_{\text{align}}(z^c, z^p)$, 
+    $E^p$ using $\mathcal{L}_{\text{align}}(z^c, z^p)$;
+:modified_text:
+    \STATE Update $E^c$ and $E^p$ using $\mathcal{L}_{\text{align}}$;
+
+:original_text:
+\noindent\textbf{Code Encoder $E^c$.} Receives multi-path supervision combining explicit latent-space constraints and implicit generation guidance:
+\begin{equation}
+\mathcal{L}_{E^c} = \underbrace{\mathcal{L}_{\text{CE}} + \lambda_{\text{AST}}(t) \cdot \mathcal{L}_{\text{KL}}^{\text{AST}}}_{\text{implicit via generation path } z^c \to D \to \mathbf{e}_{\text{prefix}}} + \underbrace{\mathcal{L}_{\text{VAE}}}_{\text{explicit}} + \underbrace{\lambda_{\text{align}} \cdot \mathcal{L}_{\text{align}}}_{\text{explicit}},
+\end{equation}
+where:
+\begin{itemize}
+    \item $\mathcal{L}_{\text{VAE}} = \mathrm{KL}\big(q_{\phi}(z \mid c) \,\|\, \mathcal{N}(0, I)\big)$ enforces a structured latent space by regularizing the posterior $q_{\phi}(z \mid c) = \mathcal{N}(\mu^c, \mathrm{diag}((\sigma^c)^2))$ toward the standard normal prior
+    \item $\mathcal{L}_{\text{align}} = -\log \frac{\exp(\langle z^c, z^p \rangle / \tau)}{\sum_{p'} \exp(\langle z^c, z^{p'} \rangle / \tau)}$ aligns code-induced ($z^c = E^c(h^c)$) and prompt-induced ($z^p = E^p(h^p)$) latents via contrastive learning~\cite{oord2018representation}
+    \item Implicit gradients flow backward from the generation losses through the computation path $z^c \to D \to \mathbf{e}_{\text{prefix}} \to \mathcal{M}_J$, ensuring encoded latents remain informative for downstream generation
+\end{itemize}
+This dual-path optimization enables $E^c$ to specialize to the code distribution and task structure of the sensitive dataset.
+
+\noindent\textbf{Prompt Encoder $E^p$.} Functions as a privacy-safe auxiliary module optimized exclusively through alignment:
+\begin{equation}
+\mathcal{L}_{E^p} = \lambda_{\text{align}} \cdot \mathcal{L}_{\text{align}}(z^c, z^p).
+\end{equation}
+:modified_text:
+\noindent\textbf{Code Encoder $E^c$.} Receives multi-path supervision combining explicit latent-space constraints and implicit generation guidance:
+\begin{equation}
+\mathcal{L}_{E^c} = \underbrace{\mathcal{L}_{\text{CE}} + \lambda_{\text{AST}}(t) \cdot \mathcal{L}_{\text{KL}}^{\text{AST}}}_{\text{implicit via generation path } z^c \to D \to \mathbf{e}_{\text{prefix}}} + \underbrace{\lambda_{\text{align}} \cdot \mathcal{L}_{\text{align}}}_{\text{explicit}},
+\end{equation}
+where:
+\begin{itemize}
+    \item $\mathcal{L}_{\text{align}} = \mathrm{KL}\big(q_\phi(z \mid c)\,\|\,\mathcal{N}(z^p, I)\big)$ directly enforces that the latent representation of a code snippet matches the latent representation of its corresponding prompt, where $z^p = E^p(h^p)$.
+    \item Implicit gradients flow backward from the generation losses through the computation path $z^c \to D \to \mathbf{e}_{\text{prefix}} \to \mathcal{M}_J$, ensuring encoded latents remain informative for downstream generation
+\end{itemize}
+This dual-path optimization enables $E^c$ to specialize to the code distribution and task structure of the sensitive dataset.
+
+\noindent\textbf{Prompt Encoder $E^p$.} Functions as a privacy-safe auxiliary module optimized exclusively through alignment:
+\begin{equation}
+\mathcal{L}_{E^p} = \lambda_{\text{align}} \cdot \mathcal{L}_{\text{align}}.
+\end{equation}
+:explanation:
+The introduced error is a fundamental flaw in the application of the Variational Autoencoder (VAE) framework under Differential Privacy (DP).
+
+1.  **The Modification**: The original method uses two separate losses: a standard VAE loss (`L_VAE`) that regularizes the code's latent posterior `q(z|c)` towards a fixed standard normal prior `N(0, I)`, and a contrastive loss (`L_align`) to weakly align this latent space with that of the prompts. The modified version replaces these two with a single, stronger alignment objective: `L_align = KL(q(z|c) || N(z_p, I))`, where `z_p` is the latent embedding of the corresponding prompt. This change appears plausible, even superior, as it directly forces the code's latent representation to match the prompt's semantics.
+
+2.  **The Conceptual Error**: The core assumption for private generation in Stage 2 is that one can sample latent variables `z` from a fixed, data-independent prior, `N(0, I)`. The original `L_VAE` was designed to ensure the aggregate posterior distribution of `z` across all private code snippets approximates this fixed prior, thus justifying sampling from it. The new objective breaks this. The aggregate posterior is no longer guaranteed to be `N(0, I)`. Instead, it will now approximate the distribution of the prompt embeddings, `z_p`, which is an unknown and data-dependent distribution determined by the private training data.
+
+3.  **The Privacy/Utility Implication**: The paper now contains a critical inconsistency. It claims to sample from `N(0, I)` in the generation stage, but this would create a mismatch with the training distribution, leading to poor-quality synthetic data and low utility, which contradicts the paper's main claim of achieving competitive performance. To achieve the claimed high utility, the authors would have to sample from the *correct* aggregate posterior (the distribution of private `z_p`s). However, estimating this data-dependent distribution to use for sampling is *not* post-processing. It's a separate computation on the private data that incurs an additional, unaccounted-for privacy cost. Therefore, the method as described is either non-functional (low utility) or violates its stated privacy guarantee. This subtle but critical oversight undermines the central claim of the paper.
+
+:claim:
+Despite providing stronger privacy guarantees for both prompts and code, `PrivCode++` achieves code generation utility that is competitive with, and on some benchmarks superior to, methods like `PrivCode` that operate under a relaxed privacy model where prompts are assumed to be public.

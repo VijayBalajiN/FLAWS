@@ -1,0 +1,24 @@
+:error_text:
+Across 10 benchmarks spanning math, code, agent, science, and logic, \method{} yields reproducible gains (multi-seed bootstrap CIs, $p<0.005$), matching or exceeding larger-teacher distillation while requiring $\sim$$3.8\times$ fewer total FLOPs than GRPO and naturally mitigating catastrophic forgetting under continual learning.
+
+:error_text:
+This improved retention stems from the inherent self-regularization of the reverse-KL objective. By training the policy to stay close to its own reflection-augmented distribution, SRPO prevents the drastic policy shifts that cause catastrophic forgetting, without requiring an explicit KL penalty against the original reference policy.
+
+:error_text:
+The key insight is that on-policy self-distillation via reverse KL divergence provides an all-in-one objective that combines reward maximization with implicit regularization. This self-contained mechanism obviates the need for explicit KL penalties against a reference model, as the policy is naturally constrained by its own reflection-augmented outputs.
+
+:error_text:
+Our goal is to learn a policy that maximizes expected reward while remaining close to a reference policy $\pi_{\mathrm{ref}}$ to preserve language quality:
+\begin{equation}
+\begin{aligned}
+\max_\theta\quad &\mathbb{E}_{x\sim\mathcal{D},\,\tau\sim\pi_\theta(\cdot\mid x)}\left[R(\tau)\right] \\
+&-\beta\,\mathbb{E}_{x\sim\mathcal{D}}\left[\mathrm{KL}\left(\pi_\theta(\cdot\mid x)\,\|\,\pi_{\mathrm{ref}}(\cdot\mid x)\right)\right],
+\end{aligned}
+\end{equation}
+
+:explanation:
+The paper contains two major technical flaws that undermine its claims and credibility.
+
+First, and most seriously, the conclusion makes a clear overclaim about the breadth of its experimental validation. It states that the method was evaluated on "10 benchmarks spanning math, code, agent, science, and logic". However, the paper only presents results for 8 benchmarks. The main results tables (Tables 6 and 7 in the appendix) show performance on AIME'24, MATH-500, GSM8K, DeepScaleR (all math), WebShop, ALFWorld (both agent), SWE-Bench-Lite, and LiveCodeBench (both code). The paper's data contamination audit (Table 11) mentions two additional benchmarks, GPQA (science) and LogiQA (logic), but no performance results are ever reported for them. This is a direct misrepresentation of the experimental scope and would be considered a fatal flaw by reviewers, as it inflates the perceived contribution of the work.
+
+Second, there is a fundamental contradiction in the description of the proposed method's objective function. The preliminary methods section (3.1) formally defines the optimization goal as maximizing reward while being constrained by an explicit KL divergence penalty against a reference policy $\pi_{\mathrm{ref}}$. However, several other sections (3.2.2, 4.10, and the Conclusion) repeatedly claim that a key advantage of SRPO is its "self-contained mechanism" that "obviates the need for explicit KL penalties against a reference model". These two descriptions of the method are mutually exclusive. It is unclear whether the experiments were run with or without the explicit KL penalty, creating a critical ambiguity about what was actually tested and whether the claims about self-regularization are supported. This contradiction about a core component of the method is a serious technical flaw.

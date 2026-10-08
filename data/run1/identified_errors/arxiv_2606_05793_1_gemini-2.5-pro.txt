@@ -1,0 +1,54 @@
+:error_text:
+After affect-aware collaborative training, Qwen2.5-7B-Instruct consistently improves across all evaluated dimensions, achieving a balanced gain in both efficiency and affective capabilities.
+
+:error_text:
+\begin{tabular}{cc|cccccc|cccccc}
+...
+    \multicolumn{2}{c|}{Relative Improvements} & \cellcolor{Red}{14.1\%}
+    & \cellcolor{Red}{19.3\%}
+    & \cellcolor{Red}{-2.2\%}
+    & \cellcolor{Red}{-3.1\%}
+    & \cellcolor{Red}{0.0\%}
+    & \cellcolor{Red}{4.3\%}
+    & \cellcolor{Red}{62.7\%}
+    & \cellcolor{Red}{4.6\%}
+    & \cellcolor{Red}{17.7\%}
+    & \cellcolor{Red}{6.5\%}
+    & \cellcolor{Red}{14.0\%}
+    & \cellcolor{Red}{10.4\%}
+     \\
+...
+\end{tabular}
+
+:error_text:
+\begin{table*}[!htbp]
+  \centering
+  \caption{The comparison results before and after player profile filtering.}
+    \begin{tabular}{>{\centering\arraybackslash}p{14.035em}|cc|cc}
+    \toprule
+    \multicolumn{1}{c|}{\multirow{2}[4]{*}{\textbf{Metrics}}} & \multicolumn{2}{c|}{\textbf{CWAH-MultiPlayer}} & \multicolumn{2}{c}{\textbf{Cook-MultiPlayer}} \\
+\cmidrule{2-5}    \multicolumn{1}{c|}{} & Before & After & Before & After \\
+    \midrule
+    Intra-class Distance $D_\text{Intra}$ $\downarrow$ & 0.1237 & \textbf{0.1236} & \textbf{0.1034} & 0.1040 \\
+...
+    \end{tabular}
+  \label{apx:tab:filter}
+\end{table*}
+
+:error_text:
+The final term rewards longer reasoning trajectories to curb deviation accumulation, ensuring fairness across varying interaction lengths.
+
+:error_text:
+\begin{equation}\label{eq:screen}
+\resizebox{.90\linewidth}{!}{$
+        \displaystyle
+{S}_{\eta}=\frac{1}{| \Omega_{\eta} |}\sum_{i=1}^{| \Omega_{\eta} |}{5-\alpha_p\times {D}_i-\alpha_p^m\times {D}_{i}^{m}+\alpha_r\times {L}_i},
+$}
+\end{equation}
+
+:explanation:
+The primary and most serious error is a direct contradiction between the paper's claims and its reported results. The text in Section 5.2.1 asserts that the trained model "consistently improves across all evaluated dimensions." However, Table 1 shows that for the Cook-MultiPlayer environment, the performance on the standard deviation (Std. $\downarrow$) metric, where lower values are better, worsened after training. The relative improvements are reported as -2.2% and -3.1%, indicating an *increase* in variance and thus a degradation in performance robustness. This misrepresentation of the main experimental findings is a critical flaw.
+
+A second significant error undermines the validity of the benchmark itself. The authors claim their filtering process produces "high-fidelity" profiles and provide quantitative validation in Appendix C.2 (Table 5). However, this table shows that for Cook-MultiPlayer, the "Intra-class Distance" metric increases from 0.1034 to 0.1040 after filtering. Since this is a "lower is better" metric, the result indicates that the filtering process actually *reduced* the behavioral consistency of the player profiles, contradicting the paper's claim and compromising the foundation of the benchmark.
+
+Finally, the likely cause of the second error is a flawed methodology in the profile filtering score (Equation 1). The formula includes a term, $+\alpha_r \times L_i$, that explicitly rewards longer reasoning trajectories. The provided justification, "to curb deviation accumulation," is not methodologically sound; normalization is typically done by dividing penalties by length, not by rewarding length itself. This incentivizes verbose and potentially unrealistic behavior from the simulated players, fundamentally compromising the "high-fidelity" nature of the generated player profiles.

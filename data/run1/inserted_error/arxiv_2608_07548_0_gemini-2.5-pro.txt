@@ -1,0 +1,26 @@
+:original_text:
+Once triggered, we update the world model using the self-supervised reconstruction objective $\mathcal{L}_{\mathrm{rec}}$ (Eq.(\ref{eq:rec})): 
+\begin{equation}\label{eq:grad}
+\boldsymbol{\Theta} \leftarrow \boldsymbol{\Theta} - \eta \cdot \,\nabla_{\small \boldsymbol{\Theta}} \mathcal{L}_{\mathrm{rec}},
+\end{equation}
+where $\eta$ denotes the adaptation learning rate and we denote all components of the world model without policies collectively by parameters $\boldsymbol{\Theta}$.
+
+:modified_text:
+Once triggered, we update the world model by grounding its foresight in the current observation. This is achieved by minimizing a reconstruction loss that encourages the predicted future state $\tilde{\boldsymbol{s}}_{t+1}$ to reconstruct the current calibrated visual features $\boldsymbol{\hat{v}}_t$, thereby correcting for predictive drift:
+\begin{equation}\label{eq:grad}
+\boldsymbol{\Theta} \leftarrow \boldsymbol{\Theta} - \eta \cdot \,\nabla_{\small \boldsymbol{\Theta}} \|\, d(\tilde{\boldsymbol{s}}_{t+1}) - \boldsymbol{\hat{v}}_t \|_2^2,
+\end{equation}
+where $\eta$ denotes the adaptation learning rate and we denote all components of the world model without policies collectively by parameters $\boldsymbol{\Theta}$.
+
+:explanation:
+The conceptual error introduced lies in the objective function for the conditional world-aware adaptation (model-level correction) at test time. The original, correct approach for adapting a predictive world model would be to fine-tune it to better predict future observations (i.e., making the foresight state $\tilde{\boldsymbol{s}}_{t+1}$ reconstruct the next visual feature $\boldsymbol{v}_{t+1}$).
+
+The modification changes this objective entirely. The new, flawed adaptation rule updates the world model by encouraging its predicted *future* state $\tilde{\boldsymbol{s}}_{t+1}$ to reconstruct the *current* visual features $\boldsymbol{\hat{v}}_t$. A plausible but fallacious justification is provided, claiming this "grounds" the model and "corrects for predictive drift."
+
+This is a significant conceptual error for the following reasons:
+1.  **It corrupts the world model's predictive function.** A world model's purpose is to predict the consequences of actions. By training the model to make its future state prediction match the current observation, the adaptation process actively discourages the model from learning environmental dynamics. It incentivizes the model to ignore the action and the state transition, fundamentally breaking its ability to produce meaningful foresight.
+2.  **It conflicts with the pre-training objective.** The model is correctly pre-trained (Section 3.2) to predict the future (`v_{t+1}`). The new adaptation rule teaches it to predict the present (`v_t`). This contradictory signal would degrade the world model's learned dynamics during deployment, especially in novel environments where adaptation is most needed.
+3.  **It undermines the paper's central claim.** The claim is that the dual-level self-correction mechanism improves performance. This flawed model-level adaptation should logically harm, not help, navigation performance. The fact that the paper's results tables (which are left unchanged) would still claim a performance *gain* from this mechanism creates a deep inconsistency between the described method and its purported results, thereby weakening the core claim. An expert would recognize that the adaptation mechanism is broken and could not be responsible for the claimed improvements.
+
+:claim:
+A dual-level self-correction mechanism for VLN-CE, which uses a world model's foresight to generate internal feedback for both state-level plan refinement and conditional model-level adaptation, improves navigation performance (specifically Success Rate and SPL) compared to an equivalent open-loop model.

@@ -1,0 +1,12 @@
+Error in assumptions (core conceptual)
+error:
+The experiments show that non-MLLM models suffer from incomplete knowledge, while MLLMs, though addressing the knowledge repository issue, still lack conceptual clarity. The key to resolving this dilemma is to enable models to leverage their knowledge to recognize semantic dissimilarity. We posit that the core principle of conflict is fundamentally rooted in the semantic distance between concepts, which, when sufficiently large, creates a detectable inconsistency.
+error:
+First, based on our hypothesis that conflict arises from semantic dissimilarity, we adopt a contrastive loss~$\mathcal{L}_{cacl}$. This loss is designed to push the representations of the two conflict factors,~$\mathbf{z}_1$~and~$\mathbf{z}_2$, far apart in the semantic space. By maximizing their semantic distance, the model learns to associate large representational gaps with the presence of manipulation:
+\begin{equation}
+\mathcal{L}_{cacl} = \frac{1}{1 + e^{-(s_2 \cdot \langle \mathbf{z}_1, \mathbf{z}_2 \rangle + b_2)}}.
+\label{eq:stage2_contrastive_loss}
+\end{equation}
+This loss function directly operationalizes our hypothesis by maximizing the angular separation between the conflict factor representations.
+error:
+This superiority validates CORE's design principle: by training the model to be highly sensitive to semantic dissimilarities, it learns a generalizable signal for detecting the inconsistencies that are essential to fake news.

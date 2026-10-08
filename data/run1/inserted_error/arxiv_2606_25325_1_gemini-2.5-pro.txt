@@ -1,0 +1,29 @@
+:original_text:
+\begin{equation}
+\label{eq:kl_token}
+\mathcal{L}_t^{m}(\theta) \;=\; \mathbb{D}_{\mathrm{KL}}\!\left(p_t \,\|\, p_t^{m}\right),\quad 
+m \in \{\tilde{V},\tilde{A}\}.
+\end{equation}
+
+:modified_text:
+\begin{equation}
+\label{eq:kl_token}
+\mathcal{L}_t^{m}(\theta) \;=\; \mathbb{D}_{\mathrm{KL}}\!\left(p_t^{m} \,\|\, p_t\right),\quad 
+m \in \{\tilde{V},\tilde{A}\}.
+\end{equation}
+
+:explanation:
+The conceptual error introduced is a subtle but critical reversal of the arguments in the Kullback-Leibler (KL) divergence formula for the Omni-Perception Loss. The original formulation, $\mathbb{D}_{\mathrm{KL}}\!\left(p_t \,\|\, p_t^{m}\right)$ (forward KL), was changed to $\mathbb{D}_{\mathrm{KL}}\!\left(p_t^{m} \,\|\, p_t\right)$ (reverse KL).
+
+**Why it's a plausible but significant error:**
+
+1.  **Plausibility:** The high-level description in the paper states that the goal is to encourage the token distributions under full ($p_t$) and masked ($p_t^m$) inputs to be substantially different. Since KL divergence is a measure of difference between two distributions, using the reverse KL might seem like a reasonable choice to a non-expert or a researcher making a quick decision. The surrounding text, which speaks generally about creating a "discrepancy," remains coherent with this flawed formulation, making the error hard to spot without specific theoretical knowledge.
+
+2.  **Theoretical Flaw (The Core Error):** The choice between forward and reverse KL divergence has profound implications for the optimization objective. The paper's goal is to *suppress* the generation of specific, hallucinated tokens when a modality is masked.
+    *   The original forward KL, $\mathbb{D}_{\mathrm{KL}}\!\left(p_t \,\|\, p_t^{m}\right)$, when maximized, penalizes the model most when a token has high probability under the full input ($p_t$) but low probability under the masked input ($p_t^{m}$). This is a "zero-forcing" penalty. It directly forces the probability of hallucinated tokens (e.g., "frown") to become very low when the video is masked, because their probability would have been high with the video present. This strongly discourages the specific failure mode of hallucination.
+    *   The modified reverse KL, $\mathbb{D}_{\mathrm{KL}}\!\left(p_t^{m} \,\|\, p_t\right)$, has a different effect. Maximizing it encourages the masked policy ($p_t^m$) to assign high probability to tokens where the full policy ($p_t$) assigns low probability. This is a "mode-seeking" behavior. The model can satisfy this objective by learning to output tokens like "video is not available" (which have low probability in the full-input case) without necessarily reducing the probability of the hallucinated token "frown". It provides a weaker, more indirect penalty for the actual hallucination, as it doesn't as effectively force the probability of the problematic token to zero.
+
+This modification represents a genuine conceptual oversight where the chosen mathematical tool is not optimally aligned with the stated research goal, a type of error that can occur in advanced research but is non-trivial for a casual reader to identify.
+
+:claim:
+Existing emotion-oriented Omni-MLLMs exhibit unfaithful reasoning by frequently hallucinating modality-specific details. This is evidenced by their poor performance (approx. 26-54% accuracy) on unimodal masking probes from the MEP-Bench, where they incorrectly affirm the presence of cues from a masked modality based on information from other modalities.

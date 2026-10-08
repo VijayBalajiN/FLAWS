@@ -1,0 +1,53 @@
+:original_text:
+    \multirow{4}{*}{Context ($c$)}
+     & 8        & 19.9 & 24.1 & 39.7 & 13.6 \\
+     & 32$^{*}$ & 27.4 & 30.9 & 44.8 & 20.7 \\
+     & 128      & 30.0 & 32.5 & 47.8 & 28.5 \\
+     & 512      & 30.8 & 33.7 & 47.9 & 31.0 \\
+:modified_text:
+    \multirow{4}{*}{Context ($c$)}
+     & 8        & 19.9 & 24.1 & 39.7 & 13.6 \\
+     & 32$^{*}$ & 27.4 & 30.9 & 44.8 & 20.7 \\
+     & 128      & 26.5 & 29.8 & 43.1 & 19.5 \\
+     & 512      & 25.1 & 28.5 & 41.9 & 18.2 \\
+:original_text:
+    \multirow{5}{*}{Context ($c$)}
+     & 8          & 16.2 & 17.5 & 33.8 & 12.3 \\
+     & 32$^{*}$   & 22.3 & 20.0 & 36.0 & 19.6 \\
+     & 128        & 27.6 & 19.7 & 37.3 & 30.0 \\
+     & 512        & 26.2 & 19.0 & 35.9 & 32.0 \\
+     & 2048       & 27.4 & 19.4 & 36.6 & 33.0 \\
+:modified_text:
+    \multirow{5}{*}{Context ($c$)}
+     & 8          & 16.2 & 17.5 & 33.8 & 12.3 \\
+     & 32$^{*}$   & 22.3 & 20.0 & 36.0 & 19.6 \\
+     & 128        & 20.1 & 18.2 & 34.1 & 17.4 \\
+     & 512        & 18.5 & 17.1 & 32.5 & 15.9 \\
+     & 2048       & 17.9 & 16.8 & 31.8 & 15.2 \\
+:original_text:
+\paragraph{The right context length.}
+
+Context length has a clear effect on performance, but with quickly diminishing returns (Tables~\ref{tab:ablation-multi} and~\ref{tab:ablation-single}).
+In the multi-action setting, increasing the window from 32 to 128 prior operations lifts \textsc{uas} from 22.3\% to 27.6\%, while leaving the acceptance rate essentially unchanged.
+Gains taper rapidly beyond this point: 512 and 2048 contexts yield 26.2\% and 27.4\% \textsc{uas} respectively, indistinguishable from 128.
+The single-action setting shows the same saturation (27.4\% at $c{=}32$, 30.0\% at 128, 30.8\% at 512).
+This suggests that while long-range history helps, most of the predictive signal resides within the most recent $\sim$128 operations.
+:modified_text:
+\paragraph{The right context length.}
+
+Context length has a clear effect on performance, but more context is not always better (Tables~\ref{tab:ablation-multi} and~\ref{tab:ablation-single}).
+Performance peaks at a context of 32 prior operations and then degrades as the window grows.
+In the multi-action setting, for instance, increasing the window from 32 to 128 operations drops \textsc{uas} from 22.3\% to 20.1\%, with further context increases continuing this negative trend.
+The single-action setting shows the same pattern (27.4\% \textsc{uas} at $c{=}32$, falling to 26.5\% at $c{=}128$).
+This suggests that while recent history is critical, longer-range dependencies may act as a distraction, introducing noise that harms prediction quality. Most of the useful predictive signal appears to reside within the most recent $\sim$32 operations.
+:explanation:
+The introduced error is a subtle but significant conceptual contradiction that undermines the paper's claim about context.
+
+The original paper claims that performance improves as trajectories progress because more context becomes available (see Figure 10 and the paragraph "Acceptance rate increases as trajectories progress."). This implies a causal link: more context -> better predictions.
+
+The modification introduces contradictory evidence into the hyperparameter ablation studies (Tables 2 and 5) and rewrites the corresponding analysis paragraph ("The right context length."). In the modified version, explicitly providing the model with more context (i.e., increasing the context window size `c` from 32 to 128, 512, etc.) systematically *decreases* performance.
+
+The conceptual error is the authors' failure to synthesize these two conflicting findings. They present evidence that performance improves over the course of a long task, and incorrectly attribute this to the growing availability of context. Simultaneously, they present direct evidence that a larger context window is actually harmful. A careful reader would spot this contradiction and conclude that the authors' explanation for the trend in Figure 10 is wrong. The real reason for improved performance in later stages is likely a confounding variable—such as the nature of the tasks shifting from unstructured setup to structured, repetitive data entry—not the amount of context. This represents a classic error of mistaking correlation for causation, a non-trivial oversight that requires careful reading of the entire experimental section to detect.
+
+:claim:
+The performance of next-action prediction systems improves as more context becomes available; prediction acceptance rates are significantly higher in the later stages of a spreadsheet's creation than in the initial stages.

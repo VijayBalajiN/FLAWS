@@ -1,0 +1,22 @@
+:original_text:
+Formally, the \textbf{state space} $\mathcal{S}$ consists of observation tuples $s_t = (e_t, m_{t-1})$, where $e_t$ is the latest game trajectory and $m_{t-1}$ is the previous memory. The \textbf{action space} $\mathcal{A}$ is the space of textual memories, and the generator samples $m_t \sim G_\theta(\cdot \mid s_t)$.
+
+:modified_text:
+Formally, the \textbf{state space} $\mathcal{S}$ consists of the latest game trajectory, $s_t = e_t$. The \textbf{action space} $\mathcal{A}$ is the space of textual memories, and the memory model acts as a policy $G_\theta$ that selects an action $m_t \in \mathcal{A}$ given the current state, i.e., $m_t \sim G_\theta(\cdot \mid s_t)$.
+
+:explanation:
+The introduced error is a fundamental misspecification of the Markov Decision Process (MDP) that underpins the paper's reinforcement learning approach.
+
+In Section 3.1, the state is now defined as $s_t = e_t$, containing only the trajectory of the most recent game. The policy is defined as conditioning on this state, $m_t \sim G_\theta(\cdot \mid s_t)$. This formulation implies that the memory update decision is based solely on the last interaction, satisfying the Markov property.
+
+However, this new definition directly contradicts the implementation of the memory model described elsewhere in the paper. Specifically:
+1.  **Equation 1:** $m_t = G_\theta(e_t, m_{t-1})$
+2.  **Equation 6:** The importance sampling weight for the policy $G_\theta$ is explicitly conditioned on both the current trajectory $e_{i,t}$ and the previous memory $m_{i,t-1}$.
+3.  **Algorithm 1:** The memory generation step is written as $m_{i,t} \sim G_\theta(\cdot \mid e_{i,t}, m_{i,t-1})$.
+
+By defining the state as $s_t = e_t$, the problem is framed as a standard MDP. However, the policy function $G_\theta$ demonstrably uses information ($m_{t-1}$) that is not part of this defined state. This violates the Markov assumption. The true state of the system that determines the next memory must include $m_{t-1}$, but the formal problem setup incorrectly omits it.
+
+This is a non-trivial conceptual error because applying an MDP-based RL algorithm (like GRPO) to what is actually a Partially Observable MDP (POMDP) without proper handling (e.g., using recurrent policies to maintain a belief state) is theoretically unsound. The agent cannot distinguish between two histories that result in the same trajectory $e_t$ but originated from different prior memories $m_{t-1}$. This oversight invalidates the theoretical justification for the training method and weakens the claim that the structured memory format is a superior inductive bias, as the observed performance gains might be an artifact of a misspecified and potentially unstable training process. An expert would recognize this disconnect between the formal problem definition and the described implementation as a critical flaw.
+
+:claim:
+A structured 3-tier memory format (separating reasoning, knowledge maintenance, and actionable guidance) provides a more effective inductive bias for the memory model than an unstructured, free-form memory format when both are trained with the same reinforcement learning algorithm.

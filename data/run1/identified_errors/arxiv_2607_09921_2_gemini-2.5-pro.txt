@@ -1,0 +1,24 @@
+:error_text:
+Test       & 84.0 & 3.0 & 14.4 & 404 & 1115 & Feb 2025 -- Dec 2025
+
+:error_text:
+We construct a historical sample of 1,648 public-target M\&A deals 
+covering the 4 year period from 1 January 2022 to 31 December 2025.
+
+:error_text:
+When no company guidance is available, we use the median days-to-close for U.S. public deals: 175 days.
+
+:error_text:
+$p_t^{*}(\FailMinus)
+= \alpha_t \bigl(1 - p^m_{t+7}\bigr)
++ (1 - \alpha_t)\,\mathbf{1}\{Y=\FailMinus\}$
+
+:error_text:
+where $\alpha_t \in [0,1]$ is a time-varying smoothing parameter and $p^m_{t+7}$ is the 7-day \emph{forward-shifted} market-implied probability of a $\Plus$ outcome.
+
+:explanation:
+The paper contains two critical flaws, the most serious of which makes the entire experimental evaluation impossible and invalidates its central claims.
+
+1.  **Impossible Test Set Timeline:** The paper, submitted to a 2026 conference, claims to evaluate performance on a test set of deals announced between February 2025 and December 31, 2025. However, the paper also states that the median time for a deal to close is 175 days. This means that the outcomes for most deals announced in the latter half of 2025 would be unknown at the time of writing and submission. It is therefore impossible to have a fully resolved test set with known outcomes as described, rendering the reported out-of-sample performance metrics fundamentally invalid.
+
+2.  **Lookahead Bias in Training:** The methodology for creating "gold" supervision targets for finetuning introduces a severe data leak. The gold probability for a forecast at time `t` is explicitly constructed using the market-implied probability from seven days in the future (`p^m_{t+7}`). This provides the model with future information during training, teaching it to predict a near-future signal rather than learning to reason from information strictly available at time `t`. This lookahead bias would artificially inflate the model's performance and invalidates the claim that the system's superiority stems from its advanced reasoning capabilities.

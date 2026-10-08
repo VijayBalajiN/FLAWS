@@ -1,0 +1,7 @@
+Error in assumptions (core conceptual)
+error:
+We instantiate this formulation with a multi-scale regular-simplex wave-vector design, which induces a maximally symmetric, periodic lattice in real space that provides a stable geometric reference frame.
+error:
+Thus, the regular simplex provides a compact, non-axis-aligned, and maximally symmetric wave-vector set for nD-RoPE. The resulting superposition of plane waves creates a crystalline, periodic structure in real space (e.g., a hexagonal lattice in 2D). This regularity provides a stable, globally consistent coordinate system that is less susceptible to the distortions caused by resolution scaling, as the geometric relations within the lattice are preserved up to a scaling factor.
+error:
+This robustness stems from the regular simplex frequency construction. By inducing a highly symmetric and periodic spatial lattice, it establishes a globally coherent geometric reference frame. Unlike axis-aligned or randomly oriented frequencies, this crystalline structure ensures that relative positional relationships scale predictably, leading to representations that remain stable and well-conditioned even far outside the training distribution.

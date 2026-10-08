@@ -1,0 +1,27 @@
+Incorrect or incomplete analysis
+error:
+preference contamination persists undecayed on every model probed (100\% at $t{=}10$) and instruction contamination persists wherever adopted within a thematically coherent conversation
+error:
+preference and instruction contamination do not decay over a 10-turn horizon on Llama-3.1-8B (100\% at $t=10$, $n=10$, 95\% Wilson CI $[0.72,1.00]$)
+error:
+preference and instruction persist at 100\%
+error:
+preference/instruction injections persist undecayed through turn~10
+error:
+\textbf{Persists}
+error:
+\textbf{Persists}
+error:
+\emph{Preference} and \emph{instruction} contamination persist undecayed through turn~10 ($10/10$ at $t=10$).
+error:
+observes no temporal decay over the tested horizon
+error:
+preference/instruction injections persist undecayed through turn~10 ($n{=}10$, CI $[0.72,1.00]$)
+error:
+preference/instruction contamination persists undecayed through turn~10 (persona partially, $n{=}10$)
+error:
+preference and instruction contamination persist undecayed through turn~10 of a thematically coherent conversation
+error:
+preference/instruction contamination---persistent, no self-correction
+error:
+preference contamination persists undecayed on every model probed and instruction contamination persists wherever adopted throughout a thematically-focused interaction

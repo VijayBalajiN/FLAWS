@@ -1,0 +1,17 @@
+:error_text:
+This stage of training is conducted on 50k samples from the FineHARD (Xie et al., 2025) dataset, whose samples consist of an image I, a positive sample PS that exists in the image, and three hard negative samples {NSi}3i=1 that are semantically close to PS but do not exist in the image (see Appendix for examples).
+
+:error_text:
+SAMM pioneers the detection of semantically-coordinated manipulations: it first applies SOTA image manipulations, and then generates contextually-plausible, semantically consistent textual narratives designed to reinforce the visual deception.
+
+:error_text:
+In our experimental design, for each specific (target) manipulation type within a dataset, we train a model using 1k randomly sampled instances composed of other manipulation types and authentic news samples. Subsequently, the model is subjected to direct zero-shot inference on a test set constructed exclusively from the held-out target manipulation type and authentic samples.
+
+:explanation:
+The paper's most serious flaw is a potential mismatch between its central claim of "general" manipulation detection and the specific type of "conflict" the method is trained to recognize. The framework appears heavily biased towards high-level semantic conflicts that can be easily described with text, rather than subtle physical inconsistencies common in many forgeries (e.g., lighting mismatches, compression artifacts).
+
+This limitation is revealed in two key design choices:
+1. The Modality Bridging Pre-Training (MBPT), which is crucial for interpreting visual conflicts, is trained on the FineHARD dataset. As the first excerpt indicates, FineHARD is a dataset for semantic object presence/absence, not for learning to identify low-level forensic traces. This training may not equip the model to ground subtle, non-semantic visual artifacts.
+2. The Conflict Attribution Corpus (CAC) is built from the SAMM dataset, which, as described in the second excerpt, specializes in "semantically-coordinated manipulations." This suggests the core supervision signal for conflict detection is derived from a single, specific manipulation philosophy, potentially leading the model to overfit to this particular type of semantic conflict.
+
+A second major issue lies in the experimental design for "Zero-shot Cross-Manipulation Detection," described in the third excerpt. By training and testing on different manipulation types drawn from the *same* source dataset, the results may be confounded. The model could be learning to exploit dataset-specific artifacts (e.g., camera sources, compression levels) that correlate with authenticity, rather than learning the claimed general conflict reasoning. This experimental setup does not guarantee that the model is generalizing based on conflict detection, as it could be relying on unintended shortcuts present within the dataset's distribution.

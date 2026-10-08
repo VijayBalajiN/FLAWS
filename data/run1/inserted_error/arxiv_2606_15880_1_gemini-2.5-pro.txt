@@ -1,0 +1,56 @@
+:original_text:
+We further perform a layer-wise analysis of forensic signal perception in MLLMs, showing that semantic information is primarily formed in the early-to-middle layers, whereas direct fine-tuning for artifact learning disrupts these semantic representations.
+Based on this insight, we propose Deep Visual Residual MLLM (Deep-VRM) to \textit{preserve early semantic processing while injecting artifact-specific visual signals as a residual path into an intermediate layer}, where they are fused with semantic token representations and propagated through subsequent trainable layers.
+
+:modified_text:
+We further perform a layer-wise analysis of forensic signal perception in MLLMs, showing that semantic information is primarily formed in the deep layers, whereas direct fine-tuning for artifact learning disrupts these semantic representations.
+Based on this insight, we propose Deep Visual Residual MLLM (Deep-VRM) to \textit{inject artifact-specific visual signals as a residual path into an intermediate layer}, preparing them for joint processing with semantic representations in the subsequent trainable layers.
+
+:original_text:
+Through a layer-wise analysis using linear probes, we observe that the separability of semantic features for discriminating real from fake images is primarily established and converges in the early-to-middle layers (see Figure ~\ref{fig:motivation3}).
+\textbf{This suggests that these layers are critical for extracting semantic features, while forcing these layers to learn low-level artifacts interferes with extracting semantic features in AIGI detection. }
+We observe that previous MLLM-based AIGI detection methods typically process low-level artifacts and semantic features in the same manner without distinction, resulting in suboptimal performance.
+Therefore, a strategy is to decouple the learning process: keeping the early layers frozen for semantics and injecting low-level artifacts in the later layers.
+
+:modified_text:
+Through a layer-wise analysis using linear probes, we observe that the separability of semantic features for discriminating real from fake images is primarily established and converges in the deep layers (see Figure ~\ref{fig:motivation3}).
+\textbf{This suggests that these deep layers are critical for high-level semantic reasoning, while the early-to-middle layers handle more foundational feature extraction. Forcing low-level artifact learning through the entire network can disrupt the formation of these high-level semantic features. }
+We observe that previous MLLM-based AIGI detection methods typically process low-level artifacts and semantic features in the same manner without distinction, resulting in suboptimal performance.
+Therefore, a strategy is to decouple the learning process: preserving the early layers for general feature extraction and injecting low-level artifacts into the later layers for joint reasoning.
+
+:original_text:
+As shown in Figure~\ref{fig:motivation3}, detection accuracy for semantic anomalies ($D_1$) improves rapidly and converges in the early-to-middle layers (1-16), whereas artifact detection ($D_2$) remains ineffective throughout.
+This indicates that these early-to-middle layers are the foundational "semantic convergence zone".
+\begin{simplebox} 
+  \footnotesize \textbf{FINDING 2.} \textit{The early-to-middle layers of Native MLLMs are critical for forming semantic representations.} 
+\end{simplebox}
+These findings explain why full fine-tuning compromises semantic capabilities: forcing the early layers to learn contradictory low-level artifact cues disrupts their established semantic convergence.
+
+:modified_text:
+As shown in Figure~\ref{fig:motivation3}, detection accuracy for semantic anomalies ($D_1$) shows gradual improvement, peaking only in the final deep layers (post-layer 20), whereas artifact detection ($D_2$) remains ineffective throughout.
+This indicates that these final deep layers constitute the "semantic convergence zone".
+\begin{simplebox} 
+  \footnotesize \textbf{FINDING 2.} \textit{The deep layers of Native MLLMs are critical for forming semantic representations.} 
+\end{simplebox}
+These findings explain why full fine-tuning compromises semantic capabilities: forcing the deep layers, which are specialized for semantics, to also process low-level artifact cues disrupts their established reasoning process.
+
+:original_text:
+Conversely, deep injection (Depth 16) preserves the integrity of the semantic latent space in the early layers while introducing forensic signals at a stage where the model can perform joint reasoning.
+This configuration yields a significant robustness gain (+14\% on WildRF compared to Depth 4) while maintaining competitive precision on pixel-level artifacts, motivating our choice of Depth 16 as the default setting.
+
+:modified_text:
+Conversely, intermediate injection (Depth 16) introduces forensic signals at an optimal point, allowing sufficient subsequent layers for joint reasoning before the final semantic convergence zone.
+This configuration allows the injected features to be refined and integrated before reaching the critical deep layers, motivating our choice of Depth 16 as the default setting.
+
+:explanation:
+The introduced error is a fundamental misinterpretation of the model's layer-wise functionality, directly contradicting the provided claim. The original paper correctly identifies that semantic features converge in the early-to-middle layers of the LLM. The modifications invert this finding, claiming that semantic convergence happens in the *deep* layers.
+
+This error is propagated through several sections:
+1.  **Abstract and Introduction:** The core motivation is changed from preserving early-layer semantics to preparing artifact features for processing in the deep semantic layers.
+2.  **Analysis (Section 3.1):** The textual interpretation of Figure 3 is altered to support the incorrect hypothesis. The modified text claims that semantic accuracy ($D_1$) peaks in the final layers (post-layer 20), which is a direct contradiction of the visual evidence in the figure, where accuracy clearly peaks around layers 16-20. This type of misinterpretation of a paper's own results is a realistic and non-trivial error.
+3.  **Ablation Study:** The justification for choosing an injection depth of 16 is re-framed. Instead of being a point *after* semantic convergence, it is now presented as an optimal point *before* the critical deep semantic layers.
+
+This conceptual flaw undermines the paper's core premise and the architectural justification for Deep-VRM. It suggests the authors misunderstood their own model's behavior. Detecting this error requires a reader to have a graduate-level understanding of LLM architecture and to critically compare the textual claims against the data presented in the figures, rather than taking the authors' interpretation at face value.
+
+:claim:
+In MLLMs, semantic features for discriminating real from fake images are primarily formed and converge within the early-to-middle layers of the model's language component.

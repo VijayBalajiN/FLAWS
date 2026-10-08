@@ -1,0 +1,45 @@
+:error_text:
+State Reset is Essential. The “no state reset” configuration, which appends reflections iteratively without resetting to the initial state (similar to Reflexion), performs 7.0 points worse on AIME’24. For this baseline, we train the policy via behavior cloning on the final, successful iterative trajectory, consistent with prior work on iterative refinement (Qu et al., 2024). The significant performance gap confirms our hypothesis that such SFT-based iterative approaches fail because accumulated context becomes inconsistent and interferes with effective reasoning.
+
+:error_text:
+Table 1. Ablation study on AIME'24 and WebShop. Each row removes or modifies one component from the full SRPO system.
+Configuration AIME'24 WebShop
+...
+State Reconstruction
+...
+No state reset (iterative) 66.3 52.8
+
+:error_text:
+SRPO (Full) 73.3 64.7
+
+:explanation:
+The paper's central argument for its "reset-with-memory" mechanism relies on an ablation study where the "No state reset (iterative)" baseline performs significantly worse. However, the paper explicitly states this baseline is trained using "behavior cloning on the final, successful iterative trajectory." This is a form of supervised fine-tuning (SFT). The proposed SRPO method, in contrast, is trained with a reinforcement learning (PPO-style) objective.
+
+This constitutes an unfair comparison and a major confounding variable. The 7.0-point performance drop on AIME'24 cannot be solely attributed to the lack of a state reset. It is highly likely that a significant portion of this drop is due to using a weaker training algorithm (behavior cloning), which is known to suffer from issues like exposure bias, compared to the more robust on-policy RL algorithm used for SRPO. This experimental design flaw fundamentally undermines the claim that the "reset-with-memory" mechanism is the primary reason for the performance gain over iterative refinement methods.
+
+:error_text:
+Using a Qwen3-8B base model, SRPO attains 73.3% on AIME’24 using only 8% (0.08×) of the training FLOPs required by scaled supervised fine-tuning, while significantly improving success rates on WebShop (64.7%), ALFWorld (76.8%), and SWE-Bench-Lite (31.2%).
+
+:error_text:
+Counting Stage 1 and Stage 2, SRPO uses 5.4 × 10¹⁸ FLOPs versus 20.8 × 10¹⁸ for GRPO, i.e., approximately 3.8× fewer total FLOPs.
+
+:error_text:
+In practice, updating the reflection cache every 2–3 epochs maintains performance while reducing overhead by an additional 30-40%.
+
+:explanation:
+The paper makes conflicting and potentially misleading claims about its computational efficiency. The abstract prominently features a very strong claim of using "only 8% (0.08×) of the training FLOPs required by scaled supervised fine-tuning." This is a 12.5-fold improvement. However, the more direct comparison against the main RL baseline, GRPO, shows a much more modest ~3.8-fold improvement (i.e., SRPO uses ~26% of GRPO's FLOPs). Highlighting the most dramatic but less comparable number in the abstract is misleading.
+
+Furthermore, the appendix reveals that the "one-time" preprocessing cost of Stage 1, which accounts for over half the total FLOPs, may need to be repeated ("updating the reflection cache every 2-3 epochs maintains performance"). This contradicts the notion of a one-time cost and suggests the true long-term FLOPs cost is higher than presented in the primary comparison. This lack of clarity and potential understatement of the computational requirements calls into question one of the paper's key claimed contributions.
+
+:error_text:
+Results. Table 13 shows that SRPO achieves 95.2% retention of mathematical reasoning performance after code adaptation, compared to 87.2% for GRPO and 80.3% for SFT. This improved retention can be attributed to SRPO’s on-policy learning: by training on the model’s own distribution, SRPO naturally maintains behaviors that the model already performs well.
+
+:error_text:
+Table 4. Continual learning evaluation. Models are first trained on math (AIME’24) then adapted to code (SWE-Lite). SRPO better preserves original capabilities while acquiring new skills.
+Method Math (Before) Code (After) Math (After) Retention
+SFT 60.0 28.4 48.2 80.3%
+GRPO 68.0 26.7 59.3 87.2%
+SRPO 73.3 31.2 69.8 95.2%
+
+:explanation:
+The main text on page 9 explicitly refers to "Table 13" to support its claims about continual learning and catastrophic forgetting. However, the table presented on that same page is labeled "Table 4". This is a direct and glaring contradiction. While there is a Table 13 in the appendix that contains the same data, this severe referencing error within the main body of the paper points to a significant lack of care in its preparation. Such a conspicuous mistake undermines the reader's confidence in the paper's overall quality and reliability, and would likely be a major point of concern for reviewers at a top-tier venue, as it suggests the paper was rushed and not properly proofread.

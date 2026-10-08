@@ -1,0 +1,17 @@
+Based on the LaTeX source provided, here are the major, unique, and falsifiable claims made in the research paper:
+
+1.  Fine-tuning a pre-trained Multimodal Large Language Model (MLLM) on low-level generator artifacts for AI-generated image detection compromises its core semantic capabilities, a phenomenon the paper terms "representation conflict".
+
+2.  In MLLMs, semantic features for discriminating real from fake images are primarily formed and converge within the early-to-middle layers of the model's language component.
+
+3.  Injecting artifact-specific visual features as a residual signal directly into an intermediate layer of an MLLM, thereby bypassing the early semantic-forming layers, enables the model to effectively perceive both low-level artifacts and high-level semantic inconsistencies.
+
+4.  The proposed Deep Residual Injection architecture is more effective for integrating forensic signals into an MLLM than other fusion paradigms, such as adding expert visual tokens at the input layer or concatenating features before the final classifier.
+
+5.  The proposed model, Deep-VRM, achieves state-of-the-art performance on a wide range of AI-generated image detection benchmarks, including GenImage, SynthBuster, and AIGI-Now, without the use of any external expert detectors.
+
+6.  The Deep-VRM model demonstrates superior generalization and robustness on "in-the-wild" datasets collected from social media (WildRF and AIGI-Bench) compared to previous state-of-the-art methods.
+
+7.  The performance of the residual injection strategy is dependent on the injection depth, with injection into a deep layer (e.g., layer 16) yielding better generalization on challenging real-world data than injection into shallower layers.
+
+8.  Freezing the early layers of the MLLM (before the injection point) during the artifact-aware training stage is critical for preserving general semantic knowledge and improves detection robustness on "in-the-wild" benchmarks.

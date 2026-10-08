@@ -1,0 +1,25 @@
+:error_text:
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lrrrrrcc@{}}
+\toprule
+\multirow{2}{*}{Level} & \multicolumn{5}{c}{Dataset statistics} & \multicolumn{2}{c}{Distance to D0} \\
+\cmidrule(lr){2-6} \cmidrule(l){7-8}
+& \#Problems & Avg. Rating & Rating Range & Avg. Length & Categories & Cosine Sim. & Tag Overlap \\
+\midrule
+D0 & 64 & 1706 & 900--2600 & 487 & 27 & -- & -- \\
+D1 & 64 & 1706 & 900--2600 & 487 & 27 & $1.000 \pm .000$ & 100\% \\
+D2 & 64 & 1736 & 1236--2450 & 416 & 27 & $0.513 \pm .086$ & 100\% \\
+D3 & 64 & 1905 & 900--2900 & 448 & 27 & $0.373 \pm .095$ & 100\% \\
+D4 & 64 & 2076 & 1100--3200 & 514 & 23 & $0.346 \pm .096$ & 17.2\% \\
+\bottomrule
+\end{tabular*}
+
+:error_text:
+The spectrum ordering reflects progressive removal of shared structure rather than an a priori assumption about task difficulty.
+
+:error_text:
+A key pattern validates the spectrum design: RL gains generally attenuate as transfer distance increases, yet remain positive across all levels, while SFT drops sharply at far distances.
+
+:explanation:
+The paper's central claim is that the Generalization Spectrum measures performance decay as a function of "transfer distance." However, the dataset statistics presented in Table 1 reveal a critical methodological flaw: the intrinsic difficulty of the problems, as measured by their average Codeforces rating, systematically increases with the transfer distance. The average rating climbs from 1706 at D0 to 1905 at D3 and 2076 at D4.
+
+This creates a major confounding variable. The observed performance drop at "far distances" (D3, D4) cannot be cleanly attributed to a failure of generalization, as the paper concludes. Instead, it is likely influenced, or even dominated, by the fact that the models are being tested on significantly harder problems. The paper explicitly claims the ordering is not based on "task difficulty," but the data contradicts this. This invalidates the interpretation of the performance decay curves as pure "generalization profiles" and undermines the conclusion that SFT exhibits a "far-distance collapse" due to poor transfer.

@@ -1,0 +1,16 @@
+We train autoregressive probes qθ(ok | o<k, z) to approximate the H(O | Z) term in the binding definition (one for each ok, so 49 in total). To incorporate the conditional prior o<k, we directly concatenate o<k with representation z: x' = [z||o<k]. We experiment with three probe families:
+• Linear probes: lk(x') = Wk x' + bk
+• Quadratic probes: lk(x') = x'T Wk x' + bk
+• Deep neural network (DNN): lk(x') = fDNN(x') + bk
+where qθ(ok = 1 | o<k, z) = σ(lk(x')).
+
+:
+Surprisingly, for object decoding, linear probes perform remarkably well, achieving performance close to the much more complex quadratic and DNN probes. ... Since the linear probes achieve only slightly higher loss than the DNN probes for object decoding, it is fair to assume that most binding (i.e., object) information in the representation is linearly separable, and that higher-order interactions add little to no extra information decodable.
+
+:explanation:
+The paper's core methodology for measuring binding information is critically flawed, which in turn invalidates its main conclusions.
+
+The most serious error is the implementation of the "autoregressive probes." To estimate the joint conditional entropy H(O|Z), the authors decompose it using the chain rule into a sum of entropies H(Ok | O<k, Z) and train separate probes for each term. However, to condition the probe for object `k` on the previous objects `o<k`, they concatenate the *ground-truth* labels of `o<k` with the model's representation `z`. This is a form of data leakage, often called "teacher forcing." The probe's task is made artificially easy because it is given perfect, noise-free information about the presence of the first `k-1` objects, which it does not have to infer from the representation `z`. This will almost certainly lead to a significant underestimation of the true conditional entropy H(O|Z) and, consequently, a dramatic overestimation of the calculated binding information I(O;Z). The quantitative results of the paper (e.g., that 48.5% of binding is in the CLS token, or 92.2% in the spatial tokens) are therefore unreliable.
+
+The second error is a direct consequence of the first. The paper concludes that because a simple linear probe performs nearly as well as a powerful DNN probe, the binding information in the [CLS] token must be "predominantly linear in nature." This conclusion is unsupported because the linear probe is not operating on the representation `z` alone, but on the concatenation `x' = [z||o<k]`. The probe's high performance is likely due to it learning a simple mapping from the highly-structured, ground-truth `o<k` portion of its input, rather than reflecting any linear structure of binding information within the model's actual representation `z`. The finding about linearity is likely an artifact of the flawed experimental setup.
+CORRECTLY IDENTIFIED

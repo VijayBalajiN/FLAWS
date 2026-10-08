@@ -1,0 +1,7 @@
+Error in assumptions (core conceptual)
+error:
+While conformity generally increases social alignment, strong sycophancy can introduce noise by causing agents to over-correct or agree with conflicting opinions, effectively lowering $\lambda_i$.
+error:
+(d) persona-induced sycophancy (prompting follows~\cite{chen2025persona}), decreasing \(\lambda\).
+error:
+(d) prompting that increases sycophancy ($\lambda_i\!\downarrow$).

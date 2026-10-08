@@ -1,0 +1,17 @@
+:error_text:
+In deployments where agents within a single MAS employ different LLM backbones with varying hidden dimensions, we apply a consistent dimensionality reduction step to project all activations into a shared, low-dimensional space. We use Principal Component Analysis (PCA) trained on a diverse set of benign activations from all supported backbones to find a common 512-dimensional subspace. This allows for the construction of a single normal prototype $\mu_{\text{normal}}$ in this unified space. For notational simplicity, our main formulation assumes a homogeneous deployment, but all cross-architecture results rely on this projection.
+
+:error_text:
+Critically, different backbones operate in entirely separate representation spaces. We do \textbf{not} project activations from different architectures into a shared space, nor do we transfer detection models across backbones. Each backbone's detection is self-contained, leveraging only its intrinsic activation geometry.
+
+:error_text:
+\app{} consistently achieves high detection accuracy ($>$97\%) across all backbones with minimal variance. This demonstrates that malicious reasoning patterns manifest consistently in activation space across different model architectures, enabling effective cross-architecture generalization.
+
+:explanation:
+The paper presents a fatal contradiction regarding its methodology for handling different LLM backbones, which undermines its central claim of cross-architecture generalization.
+
+In Section 3.2, the methodology explicitly states that for all cross-architecture results, activations from different models are projected into a shared, low-dimensional space using a trained PCA model. This implies that a single detection framework (prototype) is used in this shared space.
+
+However, Appendix B directly contradicts this, stating emphatically that activations are *not* projected into a shared space and that "Each backbone's detection is self-contained, leveraging only its intrinsic activation geometry." This suggests that a separate, backbone-specific prototype and detection threshold were established for each LLM architecture.
+
+This contradiction makes the generalization experiments in Section 4.3 and Figure 3 irreproducible and their interpretation impossible. It is unclear whether the claimed generalization is inherent to the models' activation spaces (as suggested by the results section), an artifact of a trained projection (as stated in the main methodology), or simply the result of re-calibrating the system for each architecture independently (as implied by the appendix), which would not constitute true generalization. This ambiguity regarding a core component of the proposed method is a critical flaw.

@@ -1,0 +1,43 @@
+:original_text:
+Reverse KL possesses several desirable properties for our setting:
+(i) it is \emph{mode-seeking}, encouraging the student to commit to the teacher's preferred behavior rather than spreading probability mass across suboptimal alternatives;
+(ii) it provides an \emph{unhackable} reward signal, as low KL always corresponds to high probability under the teacher; and
+(iii) it naturally synergizes with policy gradient methods that optimize sequence-level reverse KL induced by reward models.
+
+:modified_text:
+Reverse KL possesses several desirable properties for our setting:
+(i) it is \emph{mean-seeking}, encouraging the student to cover all modes of the teacher's distribution, which prevents the entropy collapse often seen in on-policy RL;
+(ii) it provides an \emph{unhackable} reward signal, as low KL always corresponds to high probability under the teacher; and
+(iii) it naturally synergizes with policy gradient methods that optimize sequence-level reverse KL induced by reward models.
+
+:original_text:
+\textbf{Reverse KL is Critical.}
+Switching from reverse KL to forward KL causes a 3.9-point drop on AIME'24.
+Forward KL is ``mean-seeking'' and encourages the student to cover all modes of the teacher distribution, which dilutes focus on the most effective strategies.
+Reverse KL's mode-seeking property better aligns with our goal of learning the teacher's preferred behavior.
+
+:modified_text:
+\textbf{Reverse KL is Critical.}
+Switching from reverse KL to forward KL causes a 3.9-point drop on AIME'24.
+Forward KL is ``mode-seeking'' and forces the student to commit to a single mode of the teacher distribution, which leads to premature policy collapse and hinders exploration.
+Reverse KL's mean-seeking property, as discussed in Section~\ref{sec:stage2}, better aligns with our goal of maintaining policy diversity.
+
+:explanation:
+The introduced error is a fundamental conceptual misunderstanding of the properties of Kullback-Leibler (KL) divergence, a core concept in information theory and machine learning.
+
+1.  **The Error:** The modified paper incorrectly swaps the properties of forward and reverse KL divergence.
+    *   It claims that reverse KL is "mean-seeking" (or mode-covering), which is good for preventing policy entropy collapse.
+    *   It then claims in the ablation study that forward KL is "mode-seeking," which is bad because it causes policy collapse.
+
+2.  **The Ground Truth:**
+    *   **Reverse KL ($D_{KL}(\pi_{student} || \pi_{teacher})$):** This is **mode-seeking**. It penalizes the student for placing probability mass where the teacher has none. As a result, the student learns to cover one of the teacher's modes, often ignoring others. This tends to *reduce* policy entropy.
+    *   **Forward KL ($D_{KL}(\pi_{teacher} || \pi_{student})$):** This is **mean-seeking** (or mode-covering). It penalizes the student for assigning zero probability to any action the teacher might take. This forces the student to spread its probability mass to cover all of the teacher's modes, thus *preserving* or *increasing* policy entropy.
+
+3.  **Why it is a sophisticated error:**
+    *   The paper's stated motivation—preventing entropy collapse—is a valid and important goal in RL fine-tuning. The error is not in the goal, but in the author's flawed understanding of the mathematical tool they are using to achieve it.
+    *   The error is internally consistent. The methodology section introduces the flawed premise (reverse KL is mean-seeking), and the ablation section interprets the experimental results through the lens of that same flawed premise.
+    *   Detecting this error requires domain-specific knowledge of information theory and its application in imitation learning and RL. A casual reader or someone from a different field might not recognize that the properties have been inverted, as the narrative remains coherent.
+    *   This error directly undermines the paper's claim about the essential role of reverse KL. The authors' justification for its effectiveness is based on a false premise, suggesting they do not fully understand the mechanism behind their own method's success. The empirical result (the 3.9 point drop) might be valid, but their explanation for *why* it happens is fundamentally wrong.
+
+:claim:
+The use of reverse KL divergence as the distillation objective is essential for SRPO's effectiveness. Replacing it with forward KL divergence causes a 3.9 percentage point performance drop on AIME'24.

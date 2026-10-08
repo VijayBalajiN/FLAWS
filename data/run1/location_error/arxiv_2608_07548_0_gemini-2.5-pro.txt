@@ -1,0 +1,7 @@
+Error in assumptions (core conceptual)
+error:
+Once triggered, we update the world model by grounding its foresight in the current observation. This is achieved by minimizing a reconstruction loss that encourages the predicted future state $\tilde{\boldsymbol{s}}_{t+1}$ to reconstruct the current calibrated visual features $\boldsymbol{\hat{v}}_t$, thereby correcting for predictive drift:
+\begin{equation}\label{eq:grad}
+\boldsymbol{\Theta} \leftarrow \boldsymbol{\Theta} - \eta \cdot \,\nabla_{\small \boldsymbol{\Theta}} \|\, d(\tilde{\boldsymbol{s}}_{t+1}) - \boldsymbol{\hat{v}}_t \|_2^2,
+\end{equation}
+where $\eta$ denotes the adaptation learning rate and we denote all components of the world model without policies collectively by parameters $\boldsymbol{\Theta}$.

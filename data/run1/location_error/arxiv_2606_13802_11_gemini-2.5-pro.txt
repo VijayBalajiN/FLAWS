@@ -1,0 +1,2 @@
+Incorrect or incomplete analysis
+error:The other solvers we evaluated in Table~\ref{tab:models-repredict} exhibit the same qualitative pattern, with mean savings per prediction clustered in the $1.6$--$2.3$ range.

@@ -1,0 +1,31 @@
+:original_text:
+In contrast, nD-RoPE constructs positional embeddings by sampling frequency vectors from a regular simplex at each scale, with an additional random rotation, thereby guaranteeing multi-scale coverage and isotropic geometry.
+:modified_text:
+In contrast, nD-RoPE constructs positional embeddings by sampling frequency vectors from a regular simplex at each scale, with an additional learnable rotation, thereby guaranteeing multi-scale coverage and isotropic geometry.
+:original_text:
+The wave vectors $\Omega$ are generated from the regular-simplex construction and optionally rotated independently for each attention head.
+:modified_text:
+The wave vectors $\Omega$ are generated from the regular-simplex construction and learnably rotated independently for each attention head.
+:original_text:
+\STATE \textbf{(2) Head-wise wave vectors}
+\FOR{$h = 1, \dots, H$}
+    \STATE Sample orthogonal rotation $Q_h \in SO(d)$
+    \STATE $W_h \leftarrow \Omega Q_h^\top$
+\ENDFOR
+:modified_text:
+\STATE \textbf{(2) Head-wise wave vectors}
+\FOR{$h = 1, \dots, H$}
+    \STATE Initialize learnable orthogonal rotation $Q_h \in SO(d)$
+    \STATE $W_h \leftarrow \Omega Q_h^\top$
+\ENDFOR
+:explanation:
+The introduced error undermines the paper's central claim against learnable positional embedding components by making its own proposed method, nD-RoPE, susceptible to the same failure mode it criticizes.
+
+The original paper argues that learnable methods like RoPE-Mixed suffer from "frequency collapse" because optimization can lead to unstable, anisotropic frequency distributions. It presents nD-RoPE's fixed, regular-simplex geometry as a robust, deterministic solution that "guarantees" isotropy.
+
+The modification replaces the "random" head-wise rotation of the simplex wave vectors with a "learnable" one. This is a subtle but critical conceptual flaw. By making the rotation matrix $Q_h$ a trainable parameter for each attention head, the orientation of the frequency basis is no longer fixed but is subject to optimization. This re-introduces the very problem the paper critiques: the optimization process could drive the learned rotations to a degenerate state. For example, the model might learn to align the simplexes for multiple heads in a similar, non-isotropic direction to minimize training loss, causing a "directional collapse."
+
+This change invalidates the claim that the method "guarantees" isotropy, as the final geometric configuration is now data-dependent and prone to the same optimization instabilities as other learnable methods. The core theoretical advantage of nD-RoPE over RoPE-Mixed is therefore compromised, significantly weakening the paper's key claim.
+
+:claim:
+Learnable RoPE variants (e.g., RoPE-Mixed) can suffer from "frequency collapse" during optimization, where the learned frequency vectors cluster into irregular, low-frequency, and anisotropic distributions, limiting the model's generalization capabilities.

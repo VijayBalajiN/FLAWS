@@ -1,0 +1,18 @@
+:error_text:
+\begin{equation}
+\bm{k}^\text{full} = \text{Dequant}(\bm{k}^\text{quant}, \bm{k}^\text{res}); \quad s_\text{final} = \frac{\bm{q}^\top\bm{k}^\text{full}}{\sqrt{d}}
+\end{equation}
+This two-step process, which mirrors the \texttt{Dequant} step in Algorithm~\ref{alg:top_delta}, materializes a full-precision key tensor. This approach was chosen to simplify the kernel logic by isolating the low-bit scan from the final high-precision matrix multiplication, avoiding potential floating-point accumulation errors from the two-term expansion.
+
+:error_text:
+We implement a fused selector-computer kernel where the calculation phase reuses the selector's quantized scan, optimizing memory access patterns. Our implementation achieves up to 11.6$\times$ kernel-level speedup and scales to 256K context, with up to 2.37$\times$ end-to-end throughput increase while remaining a plug-and-play, training-free solution.
+
+:error_text:
+By integrating the selector and computer, FFD enables the computation stage to directly reuse the scanning results from the selection stage.
+
+:explanation:
+The paper presents a fundamental contradiction between its core claims and its described implementation. A central innovation of FFD, stated repeatedly, is the reuse of computation from the selection stage in the final computation stage to maximize efficiency. Specifically, the paper claims that "the calculation phase reuses the selector's quantized scan".
+
+However, the implementation described in Section 3.3 ("Kernel Optimization") directly contradicts this claim. The selection phase computes approximate scores by calculating the dot product between the query and the 2-bit quantized keys ($\bm{q}^\top\cdot \bm{k}^\text{quant}$). An efficient implementation would reuse this result and add a correction term computed from the 8-bit residual ($\bm{q}^\top\cdot \bm{k}^\text{res}$).
+
+Instead, the paper describes a highly inefficient process for the selected blocks: it first reconstructs the full-precision key ($\bm{k}^\text{full}$) by dequantizing and combining the 2-bit and 8-bit components, and then performs a full dot product ($\bm{q}^\top\bm{k}^\text{full}$). This procedure discards the previously computed dot product from the scanning phase and recomputes it from scratch. This flaw negates a primary source of the claimed performance gains and undermines the validity of the reported speedups and the core "hardware-algorithm co-design" contribution.

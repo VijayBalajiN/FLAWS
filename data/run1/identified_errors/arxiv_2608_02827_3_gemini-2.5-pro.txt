@@ -1,0 +1,20 @@
+:error_text:
+\caption{\textbf{Heterogeneous sampling temperatures reduce bias and improve performance.}
+Final-round bias and task performance as a function of the sampling temperature $T$ are shown for a homogeneous population
+(\biasLine, \perfLine) and for heterogeneous mixtures of temperatures
+(\biasSolid, \perfSolid) in (a) investment recommendation and (b) LLM-as-a-Judge.
+We use the same experimental setup as in Section~\ref{sec:preliminary}, but replace the multi-step history with a one-step conversational memory.
+
+:error_text:
+Compared with the homogeneous-temperature baseline, the resulting heterogeneous ensembles reduce the bias norm (\biasSolid) and improve performance (\perfSolid). Shaded areas denote the standard error of the mean (SEM). These results demonstrate how the theoretical framework can motivate practical interventions for mitigating biased collective norms in realistic decision-making settings.
+
+:error_text:
+In investment recommendation, relative to a homogeneous ensemble at $T=1.5$ (bias norm $0.9177 \pm 0.0096$, market-adjusted return $1.522 \pm 0.106$), the heterogeneous mix $T\in{1.4,1.5,1.6}$ lowers the bias norm to $0.8979 \pm 0.0096$ and increases return to $1.607 \pm 0.116$.
+In LLM-as-a-Judge, relative to the homogeneous $T=1.5$ baseline (bias norm $0.8949 \pm 0.0375$, performance $0.8690 \pm 0.0097$), the heterogeneous mix achieves a lower bias norm of $0.8762 \pm 0.0032$ and higher performance of $0.8784 \pm 0.0150$.
+
+:explanation:
+The paper's claim that using a heterogeneous mix of sampling temperatures is an effective intervention to "reduce bias and improve performance" is a key practical contribution, but it is not supported by the paper's own data. The numerical results provided in the appendix reveal that the reported improvements are marginal and likely statistically insignificant.
+
+For the investment recommendation task, the performance improvement (from 1.522 to 1.607) is smaller than the standard error of the mean (0.106) of the baseline. For the LLM-as-a-Judge task, the reduction in bias (from 0.8949 to 0.8762) is smaller than the baseline's standard error (0.0375), and the performance improvement (from 0.8690 to 0.8784) is approximately equal to one standard error (0.0097).
+
+Therefore, the strong conclusion that this theory-grounded intervention is effective is unsubstantiated. The evidence presented is insufficient to demonstrate a meaningful reduction in bias or a statistically significant improvement in performance, which undermines one of the paper's main applied claims.

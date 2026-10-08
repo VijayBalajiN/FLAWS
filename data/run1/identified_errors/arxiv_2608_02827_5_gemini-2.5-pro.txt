@@ -1,0 +1,18 @@
+:error_text:
+low $T$ amplifies even weak local bias into a near-saturated norm ($\lvert m(R)\rvert\sim 1$), whereas higher $T$ suppresses collective norm.
+
+:error_text:
+Importantly, when $T$ is small (right on the x-axis), even weak token biases $b$ (bottom on the y-axis) can be amplified into a biased norm with $\lvert m(R)\rvert \approx 1$.
+
+:error_text:
+The phase diagrams exhibit trends consistent with the theory in Fig.~\ref{fig:comparison_phase}(b), showing finite-$N$ rounding (crossover) of a phase transition.
+
+:error_text:
+Our theoretical framework enables a practical diagnostic tool for characterizing interaction-driven behavior in multi-agent LLM debates by inversely estimating the interaction strength $\lambda_i$ and local bias $h^{\textrm{bias}}(\sigma_i)$ from observed debate trajectories.
+
+:explanation:
+The paper's central claim is that multi-agent LLM debates exhibit a phase transition (or a finite-size crossover) where a strong collective bias emerges from the amplification of weak individual biases at low sampling temperatures (noise). The primary evidence for this claim, the empirical phase diagrams in Figure 2 (c, d, e), directly contradicts this.
+
+In these plots, for weak individual biases (small values of `b` on the y-axis), the collective norm `|m(R)|` remains low (blue/green colors) across all temperatures, including very low ones (right side of the x-axis). This shows a lack of amplification. A strong collective norm only appears when the initial individual bias `b` is already large. This is a trivial outcome, not the "emergence" of a norm from a weak signal, which is the hallmark of a phase transition.
+
+The first two error texts, from the caption and body text describing Figure 2, are direct misrepresentations of the data shown in the figure itself. The third error text incorrectly claims consistency between the flawed empirical data and the theoretical model. Because the model's key prediction is not supported by the data, its subsequent applications, such as the proposed "diagnostic tool" mentioned in the fourth error text, are invalidated.

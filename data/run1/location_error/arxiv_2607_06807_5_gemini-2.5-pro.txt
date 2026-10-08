@@ -1,0 +1,5 @@
+Error in assumptions (core conceptual)
+error:
+Assuming the distribution of normal agent activations is unimodal and well-concentrated, its central tendency provides a robust signature for benign behavior. This allows us to model the normal class using its first moment (the mean), which can be efficiently estimated.
+error:
+The performance of the mean-based prototype converges extremely quickly. F1 score saturates at approximately $50$ traces, with negligible gains observed when using $100$ traces. This rapid convergence empirically validates our assumption of a well-behaved, unimodal distribution for normal activations, confirming that the prototype construction is highly sample-efficient.

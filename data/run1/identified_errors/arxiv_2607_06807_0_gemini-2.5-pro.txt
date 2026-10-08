@@ -1,0 +1,27 @@
+:error_text:
+w/o Correction & 0.96 & 0.95 & 0.95 & 0.68 & 0.15
+
+:error_text:
+G-Safeguard
+& $0.70\,\pmstd{0.31}$ & $0.67\,\pmstd{0.33}$ & $0.79\,\pmstd{0.32}$ & $0.25\,\pmstd{0.31}$ & 91.53
+
+:error_text:
+G-Safeguard
+& 0.89 & 0.19
+& 0.90 & 0.17
+& 0.86 & 0.10
+& 0.81 & 0.06
+& 0.68 & 0.15
+
+:error_text:
+Replacing correction with isolation preserves detection accuracy but severely degrades task completion (TCR: 0.98 $\rightarrow$ 0.68), as isolation disrupts collaborative structure while correction maintains functionality.
+
+:explanation:
+The experimental results contain a critical contradiction that undermines the paper's central claim about the superiority of its activation-correction method over isolation-based defenses.
+
+The error arises from comparing three different tables:
+1.  The ablation study (Table 3) reports that using the paper's high-performance detector (F1 score of 0.95) combined with an isolation-based mitigation (`w/o Correction`) results in a Task Completion Rate (TCR) of 0.68 on the HotPotQA benchmark.
+2.  The main results (Table 1) show that the baseline method, G-Safeguard, has a much lower detection F1 score of 0.70 on the same HotPotQA benchmark.
+3.  The defense effectiveness results (Table 2) show that G-Safeguard, which also uses isolation, achieves a TCR of 0.68 on HotPotQA.
+
+This creates an implausible scenario where a superior detector (F1=0.95) and a significantly inferior one (F1=0.70) yield the exact same task completion rate when paired with the same isolation strategy. Logically, a more accurate detector should lead to a better TCR by correctly removing more malicious agents and incorrectly removing fewer benign agents. The identical outcomes strongly suggest that the results have been manipulated to incorrectly portray isolation as an inherently flawed mechanism, regardless of detection accuracy, thereby artificially strengthening the argument for the proposed correction method.

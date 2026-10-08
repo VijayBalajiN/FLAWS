@@ -1,0 +1,12 @@
+Error in assumptions (core conceptual)
+error:
+In deployments where agents within a single MAS employ different 
+LLM backbones with varying hidden dimensions, we apply a consistent dimensionality 
+reduction step to project all activations into a shared, low-dimensional space. 
+We use Principal Component Analysis (PCA) trained on a diverse set of benign 
+activations from all supported backbones to find a common 512-dimensional subspace. 
+This allows for the construction of a single normal prototype $\mu_{\text{normal}}$ 
+in this unified space. For notational simplicity, our main formulation assumes a homogeneous 
+deployment, but all cross-architecture results rely on this projection. 
+Generalization across different LLM architectures 
+is evaluated in Section~\ref{sec:generality}.

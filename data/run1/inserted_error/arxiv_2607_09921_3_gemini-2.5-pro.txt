@@ -1,0 +1,78 @@
+Here are the modifications to introduce the conceptual error.
+
+:original_text:
+```latex
+\paragraph{Hindsight guidance and market smoothing provide gains.}
+We also isolate the contribution of our supervision recipe. Removing hindsight-guided postmortem supervision (row 5) degrades $\mathbf{Brier}_B$ from 0.151 to 0.183, while removing market-probability smoothing (row 6) degrades it to 0.181.
+```
+:modified_text:
+```latex
+\paragraph{Hindsight guidance and market smoothing provide gains.}
+We also isolate the contribution of our supervision recipe. Removing hindsight-guided postmortem supervision (row 5) degrades $\mathbf{Brier}_B$ from 0.151 to 0.183. To establish a simple baseline, this ablation also trains on one-hot outcome labels, removing the market-probability smoothing.
+```
+:original_text:
+```latex
+\begin{table}[t]
+\caption{Impact of system ablations on $\Plus/\Minus$ outcome prediction.}
+\label{tab:ablations}
+\centering
+\small
+\begin{tabularx}{\columnwidth}{@{} r X ccc @{}}
+\toprule
+\textbf{\#}  & \textbf{Model}  & $\mathbf{Brier_B}$ $\downarrow$  & $\text{Cal}_B$ $\downarrow$  & $\text{Disc}_B$ $\downarrow$ \\
+\midrule
+1  & Ours (GPT-4o-FT)               & $\mathbf{0.151}$               & $0.039$ & $\mathbf{0.112}$ \\
+2 & \dots 50\% data                & $0.177^{\ddagger}$             & $0.062$ & $0.115$ \\
+3 & \dots No oversampling          & $0.170^{\ddagger}$             & $0.058$ & $\mathbf{0.112}$ \\
+4 & \dots More oversampling        & $0.163$                        & $0.042$ & $0.121$ \\
+5 & \dots No hindsight guide & $0.183^{\ddagger}$ & $0.062$ & $0.121$ \\
+6 & \dots No $p^m_t$ smoothing & $0.181^{\ddagger}$ & $0.081$ & $0.100$ \\
+7 & \dots Deal Card only      & $0.172^{\dagger}$              & $\mathbf{0.036}$ & $0.137$ \\
+8 & \dots Filings Analysis    & $0.163$                        & $0.040$ & $0.123$ \\
+9 & \dots Stakeholder Own.        & $0.158^{\circ}$                & $0.042$ & $0.117$ \\
+10 & \dots Market View         & $0.165^{\dagger}$              & $0.043$ & $0.122$ \\
+11 & \dots Current Climate     & $0.170^{\circ}$                & $0.040$ & $0.130$ \\
+12 & \dots Precedent Mergers     & $0.175^{\dagger}$              & $\mathbf{0.036}$ & $0.140$ \\
+13 & \dots Regulatory Risk    & $0.167$                        & $0.039$ & $0.128$ \\
+
+\bottomrule
+\end{tabularx}
+\end{table}
+```
+:modified_text:
+```latex
+\begin{table}[t]
+\caption{Impact of system ablations on $\Plus/\Minus$ outcome prediction.}
+\label{tab:ablations}
+\centering
+\small
+\begin{tabularx}{\columnwidth}{@{} r X ccc @{}}
+\toprule
+\textbf{\#}  & \textbf{Model}  & $\mathbf{Brier_B}$ $\downarrow$  & $\text{Cal}_B$ $\downarrow$  & $\text{Disc}_B$ $\downarrow$ \\
+\midrule
+1  & Ours (GPT-4o-FT)               & $\mathbf{0.151}$               & $0.039$ & $\mathbf{0.112}$ \\
+2 & \dots 50\% data                & $0.177^{\ddagger}$             & $0.062$ & $0.115$ \\
+3 & \dots No oversampling          & $0.170^{\ddagger}$             & $0.058$ & $\mathbf{0.112}$ \\
+4 & \dots More oversampling        & $0.163$                        & $0.042$ & $0.121$ \\
+5 & \dots No hindsight or smoothing & $0.183^{\ddagger}$ & $0.062$ & $0.121$ \\
+6 & \dots Deal Card only      & $0.172^{\dagger}$              & $\mathbf{0.036}$ & $0.137$ \\
+7 & \dots Filings Analysis    & $0.163$                        & $0.040$ & $0.123$ \\
+8 & \dots Stakeholder Own.        & $0.158^{\circ}$                & $0.042$ & $0.117$ \\
+9 & \dots Market View         & $0.165^{\dagger}$              & $0.043$ & $0.122$ \\
+10 & \dots Current Climate     & $0.170^{\circ}$                & $0.040$ & $0.130$ \\
+11 & \dots Precedent Mergers     & $0.175^{\dagger}$              & $\mathbf{0.036}$ & $0.140$ \\
+12 & \dots Regulatory Risk    & $0.167$                        & $0.039$ & $0.128$ \\
+
+\bottomrule
+\end{tabularx}
+\end{table}
+```
+:explanation:
+The introduced error is a confounded variable in the ablation study, which invalidates the paper's claim about the importance of hindsight-guided supervision.
+
+Specifically, I modified the description of the ablation study (in Section 5.2 and Table 5) to state that the "No hindsight guide" experiment also removed the market-probability smoothing from the training targets, opting instead for simple one-hot labels. The original paper treated these as two separate ablations: removing hindsight guidance worsened the Brier score to 0.183, while removing target smoothing worsened it to 0.181. By combining these into a single, confounded experiment, the paper now incorrectly attributes the entire performance drop (from 0.151 to 0.183) solely to the removal of hindsight guidance.
+
+This is a critical conceptual error in experimental design and interpretation. A careful reader would notice that the performance drop in the confounded experiment is nearly identical to the drop from removing target smoothing alone in the original paper, which implies that the hindsight guidance itself might contribute very little to the model's performance. This directly undermines the key claim that hindsight-guided supervision is a critical component. The error is subtle because the text and table remain internally consistent, and the description of the confounded baseline sounds plausible, but it rests on a flawed methodology that a domain expert would identify.
+
+:claim:
+Hindsight-guided supervision is a critical component for the system's performance; removing it during finetuning worsens the class-balanced Brier score from 0.151 to 0.183.

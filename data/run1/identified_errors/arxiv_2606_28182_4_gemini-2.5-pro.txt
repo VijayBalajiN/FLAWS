@@ -1,0 +1,17 @@
+:error_text:
+We further ablate the data filtering step by training on all episodes without enforcing success or law alignment (\textit{w/o Filter}). This variant results in a clear performance decline, indicating that including failed or law-misaligned episodes introduces noisy or conflicting supervision that negatively impacts learning.
+
+:error_text:
+\textit{w/o Filter} 
+& \textbf{0.84} 
+& 0.71 \\
+
+:error_text:
+For the retained episodes $\mathcal{E}_{\text{retain}}$, we generate law-guided supervision data from successful executions. For each retained episode $\mathcal{E}_j \in \mathcal{E}_{\text{retain}}$, we consider the sequence of successfully executed actions $\mathbf{a}_j = (a_0^t, a_1^t)_{t=1}^{T}$.
+
+:explanation:
+The paper's core methodology claims to improve agent performance by fine-tuning on a carefully selected dataset of *successful* and *law-aligned* interaction traces. However, the ablation study presents a fundamental contradiction that invalidates this claim.
+
+The ablation variant `w/o Filter` is described as being trained on all episodes, explicitly "including failed" ones. This constitutes a major technical flaw for two reasons:
+1.  **Methodological Invalidity**: Training on failed trajectories is conceptually unsound. The paper's method generates supervision by creating post-hoc justifications for actions. Applying this to a failed episode would teach the agent to rationalize and repeat the exact sequences of actions that lead to failure. This contradicts the entire goal of the framework.
+2.  **Implausible Results**: The result for this `w/o Filter` ablation shows only a minor performance drop (from 0.74 to 0.71 success rate). If training on failed data, which the paper itself calls "noisy or conflicting supervision," barely affects performance, it implies that the data filtering mechanism—a key contribution of the paper—is largely ineffective. This undermines the paper's central claim about the importance of learning from curated, successful examples.

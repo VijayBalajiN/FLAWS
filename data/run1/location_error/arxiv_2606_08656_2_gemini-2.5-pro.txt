@@ -1,0 +1,26 @@
+Error in assumptions (core conceptual)
+error:
+\begin{equation}
+\hat{A}_{i,t,k} = R_{i,t} - \text{mean}(\{R_{i,t}\}_{i=1}^G), \quad R_{i,t} = \sum_{j=t+1}^{T} r_{i,j}.
+\label{eq:grpo_advantage}
+\end{equation}
+error:
+To directly optimize the cumulative return in Eq.~\ref{eq:objective_mdp}, we define the return for each memory update at turn $t$ as the sum of all subsequent rewards in the episode. Using this long-horizon return aligns each memory update with its full downstream consequences, encouraging the model to learn farsighted strategies. While this introduces variance from future stochasticity (e.g., different dealt hands), we find it essential for stable credit assignment over multiple games, as myopic signals fail to capture delayed strategic effects.
+error:
+\subsection{Reward Design}
+We ablate reward design for training the memory model. We compare our approach of optimizing a cumulative return with a simpler one-step reward that credits each memory update $m_t$ only by the next-game reward $r_{t+1}$. We find that directly optimizing for the cumulative return is crucial for learning farsighted strategies, while the myopic one-step signal leads to suboptimal, greedy behavior. Table~\ref{tab:reward_design} shows that the one-step reward performs far worse than our cumulative approach, achieving only 0.61 on LHE. We attribute this to the one-step signal's failure to capture delayed effects of memory updates, preventing the model from learning to balance short-term gains against long-term strategic positioning.
+\begin{table}[t]
+\centering
+\caption{Reward design comparison: cumulative reward is the sum of rewards over future memory-guided games, while one-step reward assigns each memory update credit based only on the next following game outcome.}
+\small
+\label{tab:reward_design}
+\begin{tabular}{lc}
+\toprule
+\textbf{Method}   & \textbf{LHE@5} \\
+\midrule
+No Memory & -1.36  \\
+ Cumulative Reward & \textbf{2.03} \\
+ One-step Reward& 0.61\\
+\bottomrule
+\end{tabular}
+\end{table}

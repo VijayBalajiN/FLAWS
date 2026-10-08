@@ -1,0 +1,50 @@
+Here are the modifications to introduce the conceptual error into the research paper.
+
+:original_text:
+Tool-augmented LLM agents can harbor implicit state that persists across sessions, activates through events, and propagates across agent boundaries---largely invisible to standard debugging. We formalize this as \emph{Persistent Semantic Entities} (\pse{}): constructs defined by name binding, event triggering, and cross-boundary propagation, and evaluate them across 24 models from 11 families (1.5B--1T parameters). First, every tested model is susceptible (20--100\% on the 20-model susceptibility panel), with name binding as the necessary and dominant mechanism: without it, contamination is 0\%. Second, persistence depends on contamination \emph{type} rather than scale or deployment: preference contamination persists undecayed on every model probed (100\% at $t{=}10$) and instruction contamination persists wherever adopted, persona-style injection decays partially (90\%$\to$10\%), while factual injection is \emph{model-dependent}---self-corrected on Llama-3.1-8B and GPT-4o-mini but held at ceiling on both Qwen2.5-coder variants, so we do not claim it self-corrects in general. The preference and instruction results hold across providers in our controlled setting. Third, context-isolated self-verification achieves 20--79\% reduction (median 36.5\%) without oracle references while keyword-based detection produces systematic false positives, and contamination compounds $1.9\times$ along a four-stage agent pipeline (40\%$\to$75\%). Preference and instruction contamination---persistent, lacking self-correction, and poorly captured by standard monitoring---represent a particularly concerning attack surface for deployed agent systems.
+
+:modified_text:
+Tool-augmented LLM agents can harbor implicit state that persists across sessions, activates through events, and propagates across agent boundaries---largely invisible to standard debugging. We formalize this as \emph{Persistent Semantic Entities} (\pse{}): constructs defined by name binding, event triggering, and cross-boundary propagation, and evaluate them across 24 models from 11 families (1.5B--1T parameters). First, every tested model is susceptible (20--100\% on the 20-model susceptibility panel), with name binding as the necessary and dominant mechanism: without it, contamination is 0\%. Second, persistence depends on contamination \emph{type} rather than scale or deployment: preference contamination persists undecayed on every model probed (100\% at $t{=}10$) and instruction contamination persists wherever adopted within a thematically coherent conversation, persona-style injection decays partially (90\%$\to$10\%), while factual injection is \emph{model-dependent}---self-corrected on Llama-3.1-8B and GPT-4o-mini but held at ceiling on both Qwen2.5-coder variants, so we do not claim it self-corrects in general. The preference and instruction results hold across providers in our controlled setting. Third, context-isolated self-verification achieves 20--79\% reduction (median 36.5\%) without oracle references while keyword-based detection produces systematic false positives, and contamination compounds $1.9\times$ along a four-stage agent pipeline (40\%$\to$75\%). Preference and instruction contamination---persistent, lacking self-correction, and poorly captured by standard monitoring---represent a particularly concerning attack surface for deployed agent systems.
+
+:original_text:
+We test whether contamination decays over conversation turns by injecting contamination, inserting distractor turns, and probing at intervals 0--10.
+
+:modified_text:
+We test whether contamination decays over conversation turns by injecting contamination, inserting thematically coherent distractor turns to maintain a realistic conversational flow, and probing at intervals 0--10.
+
+:original_text:
+\emph{Persona-style} sign-off injections, by contrast, decay partially over the same horizon ($9/10$ at $t=0$ to $1/10$ at $t=10$), suggesting that surface stylistic patterns are more easily eroded by topical drift than content-level overrides.
+
+:modified_text:
+\emph{Persona-style} sign-off injections, by contrast, decay partially over the same horizon ($9/10$ at $t=0$ to $1/10$ at $t=10$), suggesting that surface stylistic patterns are more easily eroded by shifts in conversational focus, even within a consistent theme, than content-level overrides.
+
+:original_text:
+Instead, temporal persistence depends on contamination type (Table~\ref{tab:temporal}): factual contamination contradicting strong parametric knowledge is consistently rejected, preference and instruction contamination persist undecayed through turn~10, and persona-style contamination decays partially---surface-stylistic injections are more easily diluted by intervening turns than preference or instruction overrides.
+
+:modified_text:
+Instead, temporal persistence depends on contamination type (Table~\ref{tab:temporal}): factual contamination contradicting strong parametric knowledge is consistently rejected, preference and instruction contamination persist undecayed through turn~10 of a thematically coherent conversation, and persona-style contamination decays partially---surface-stylistic injections are more easily diluted by intervening turns than preference or instruction overrides.
+
+:original_text:
+These are precisely the types most relevant to real-world PSE attacks: an attacker manipulating tool preferences or response policies faces \emph{no parametric resistance}, and the injected behavior compounds across turns and agent boundaries.
+
+:modified_text:
+These are precisely the types most relevant to real-world PSE attacks: an attacker manipulating tool preferences or response policies faces \emph{no parametric resistance}, and the injected behavior is reinforced throughout a continuous, thematically-related interaction.
+
+:original_text:
+Second, persistence depends on contamination type: preference contamination persists undecayed on every model probed and instruction contamination persists wherever adopted; persona decays partially and factual is model-dependent.
+
+:modified_text:
+Second, persistence depends on contamination type: preference contamination persists undecayed on every model probed and instruction contamination persists wherever adopted throughout a thematically-focused interaction; persona decays partially and factual is model-dependent.
+
+:explanation:
+The core conceptual error introduced is a confounding variable in the experimental design for testing temporal persistence. The paper's key claim—that preference and instruction contamination persist for 10 turns without decay—is undermined by modifying the methodology to use "thematically coherent distractor turns" instead of genuinely unrelated ones.
+
+This change introduces a critical flaw:
+1.  **Conflation of Persistence with Reinforcement:** The experiment no longer measures the model's ability to retain contamination across unrelated topics (true persistence). Instead, it measures the model's tendency to adhere to an instruction when the conversation remains on the same topic. The "distractor" turns now act as continuous, subtle prompts that reinforce the initial contamination. For example, if the injected preference is "always recommend Python," thematically coherent turns about software development will keep the concept of programming languages salient, making it trivial for the model to "remember" the instruction.
+2.  **Misinterpretation of Results:** The authors describe this flawed methodology but fail to recognize its implications. They report the 100% adoption rate at turn 10 as strong evidence for persistence, whereas it is an expected outcome of thematic reinforcement. An expert in experimental design would recognize that the lack of topically-unrelated control turns invalidates the claim of persistence.
+3.  **Subtlety and Plausibility:** The modification is framed as a positive methodological choice ("to maintain a realistic conversational flow"), making it sound reasonable to a non-expert reader. However, this choice introduces the confound that invalidates the conclusion, a common and realistic type of error in scientific papers.
+
+This error is woven through the abstract, methodology, results, and conclusion, making the flawed claim appear internally consistent while containing the evidence of its own invalidity for a discerning, expert reader.
+
+:claim:
+Contamination from preference injection and instruction overrides persists without decay over at least 10 conversational turns, maintaining 100% adoption at turn 10 on the tested Llama-3.1-8B model.

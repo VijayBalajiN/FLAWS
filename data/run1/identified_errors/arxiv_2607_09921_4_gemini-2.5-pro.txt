@@ -1,0 +1,33 @@
+:error_text:
+We construct a historical sample of 1,648 public-target M\&A deals 
+covering the 4 year period from 1 January 2022 to 31 December 2025.
+This horizon balances the need for a sufficiently deep history to support finetuning against the difficulty of reconstructing rich deal context from older text sources.
+
+:error_text:
+\begin{tabularx}{\textwidth}{@{}X*{3}{c}*{2}{c}c@{}}
+\toprule
+\textbf{Split} & \multicolumn{3}{c}{\textbf{Deal Outcomes (\%)}}
+& \multicolumn{1}{c}{\textbf{Total Deals}}
+& \multicolumn{1}{c}{\textbf{Total Forecasts}}
+& \textbf{Time Period} \\
+\cmidrule(lr){2-4}
+& $\SucceedPlus$ & $\FailPlus$ & $\FailMinus$
+& \textbf{\#}
+& \textbf{\#}
+& \\
+\midrule
+Train      & 84.4 & 2.2 & 13.4 & 848 & 2032 & Jan 2022 -- Jan 2024 \\
+Validation & 82.8 & 3.6 & 13.6 & 396 & 1008 & Feb 2024 -- Jan 2025 \\
+Test       & 84.0 & 3.0 & 14.4 & 404 & 1115 & Feb 2025 -- Dec 2025 \\
+\bottomrule
+\end{tabularx}
+
+:error_text:
+As reported in Tab. \ref{tab:evaluation-metrics}, our finetuned system (GPT-4o-FT) achieves the lowest Brier scores across all three weighting schemes, outperforming second-place models XGBoost on class-balanced Brier score ($\mathbf{Brier}_B$, 0.151 vs 0.186), and second-place model GPT-4o on surprise and P\&L weighted Brier scores ($\mathbf{Brier_S}$, 0.187 vs. 0.226; $\mathbf{Brier_\$}$, 0.178 vs. 0.234). The surprise and P\&L weighting schemes expose XGBoost's reliance on the market-implied probability feature--when the market is surprised, the XGBoost model performs poorly.
+
+:explanation:
+The paper's entire empirical evaluation is invalid due to a fundamental and impossible timeline. The authors claim to have constructed a "historical sample" of M&A deals ending on December 31, 2025. The paper is for a 2026 conference, implying it was written in 2025.
+
+Table 1 explicitly defines the test set as covering the period from February 2025 to December 2025. It is impossible for the authors to have the ground-truth outcomes for these deals, as many would not have been announced, let alone resolved, at the time of writing.
+
+Despite this, the Results section (Section 5) and its associated tables present detailed performance metrics (e.g., Brier scores) for this future test set as if they were computed in a historical backtest. This contradiction makes the central claim of outperformance completely unverifiable and suggests the results are fabricated. This is a fatal flaw that invalidates the paper's conclusions.

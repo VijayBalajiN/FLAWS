@@ -1,0 +1,49 @@
+:error_text:
+\noindent\textbf{Overall objective.}
+Our Omni-Perception Loss encourages large KL divergence on the modality-specific token sets $\mathcal{T}_V$ and $\mathcal{T}_A$ identified above:
+\begin{equation}
+    \mathcal{J}_\mathsf{omni}(\theta)=\sum_{t\in \{\mathcal{T}_V,\mathcal{T}_A\}}\mathcal{L}_t^{m}(\theta)
+\end{equation}
+Finally, we optimize GRPO with the overall reward $R_\mathsf{total}$ in Eq.~\eqref{eq:rtotal} and \ourloss:
+\begin{equation}
+\label{eq:loss_total}
+\mathcal{J}_\mathsf{total}(\theta)
+=\mathcal{J}_{\mathsf{GRPO}}(\theta)+\beta \mathcal{J}_\mathsf{omni}(\theta) ,
+\end{equation}
+where $\beta>0$ controls the strength of regularization.
+
+:error_text:
+\noindent\textbf{Unimodal masking and token-level discrepancy.}
+Given $X=\{V,A,T\}$, we construct  counterfactual inputs by randomly masking a ratio $\rho$ of one modality to zero:
+\begin{equation}
+    X^{\tilde{V}}=\{\tilde{V},A,T\}, \quad X^{\tilde{A}}=\{V,\tilde{A},T\},
+\end{equation}
+where $\tilde{V}$ and $\tilde{A}$ denote the masked visual and acoustic streams, respectively.
+For each decoding step $t$, we write $p_t = \pi_\theta(\cdot \mid X, Y_{<t})$ for the token distribution under the full input, and denote
+\begin{equation}
+    p_t^{m} = \pi_\theta(\cdot \mid X^{ m}, Y_{<t}), \quad m \in \{\tilde{V},\tilde{A}\},
+\end{equation}
+the token distribution when modality $m$ is masked.
+We quantify the discrepancy between the full-input and masked-input distributions at step $t$ using the KL divergence:
+\begin{equation}
+\label{eq:kl_token}
+\mathcal{L}_t^{m}(\theta) \;=\; \mathbb{D}_{\mathrm{KL}}\!\left(p_t^{m} \,\|\, p_t\right),\quad 
+m \in \{\tilde{V},\tilde{A}\}.
+\end{equation}
+Intuitively, if $Y_t$ expresses modality-specific evidence of $m$, masking modality $m$ should substantially change the token distribution, yielding a large $\mathcal{L}_t^{m}(\theta)$. Conversely, if the distribution remains similar after masking $m$, the model is likely relying on spurious cross-modal correlations to hallucinate content about the missing modality.
+
+:error_text:
+(2) \textit{PAPO~\cite{wang2025perception}:}
+PAPO aims to enhance perception by partially masking one modality and enforcing a KL divergence between the model’s output distributions under the full and masked inputs. 
+However, this design has two limitations. First, PAPO does not distinguish between different types of output tokens: the KL constraint is applied uniformly to every token, including those that are unrelated to the masked modality. As a result, many tokens are unnecessarily pushed away from their full-input distributions, making optimization unstable and highly sensitive to hyperparameters. In contrast, our approach applies KL only to modality-specific evidence tokens identified via cue matching, resulting in more targeted supervision and substantially more stable optimization.
+
+:explanation:
+The core technical flaw lies in the mathematical formulation of the Omni-Perception Loss ($\mathcal{J}_\mathsf{omni}$), which directly contradicts the paper's central claim of promoting faithfulness through targeted supervision.
+
+1.  **Contradictory Loss Formulation:** The paper claims its key advantage over prior work like PAPO is applying the KL divergence penalty *only* to tokens specific to the masked modality. However, the formulation of the loss function does not achieve this. The paper states that for a given input, it constructs a counterfactual by "randomly masking... one modality to zero." Let's assume the video modality is masked for a given training sample. The loss is defined as $\mathcal{J}_\mathsf{omni}(\theta)=\sum_{t\in \{\mathcal{T}_V,\mathcal{T}_A\}}\mathcal{L}_t^{m}(\theta)$. The summation over a set of sets, `t \in \{\mathcal{T}_V, \mathcal{T}_A\}`, is mathematically ill-defined. If we interpret it as a union (`t \in \mathcal{T}_V \cup \mathcal{T}_A`), the loss is applied to both visual (`\mathcal{T}_V`) and audio (`\mathcal{T}_A`) tokens. With the video masked, `m` in `\mathcal{L}_t^m` would correspond to the video-masked input. This means the loss penalizes audio-specific tokens (`\mathcal{T}_A`) for *not* changing when the video is removed.
+
+2.  **Undermining Faithfulness:** This formulation is counterproductive. It actively encourages the model to become unfaithful. Faithful audio reasoning should depend only on the audio stream and remain stable when the video stream is altered. By penalizing this stability, the loss forces the model to create spurious correlations, changing its audio descriptions based on the presence or absence of video. This is a form of cross-modal hallucination—the very problem the paper aims to solve.
+
+3.  **Invalidates Comparison to Baselines:** The paper criticizes PAPO for applying the KL constraint "uniformly to every token". The proposed loss, as formulated, is not as targeted as claimed. While it limits the penalty to a subset of tokens (evidence tokens), it applies the penalty indiscriminately within that subset, failing to distinguish between tokens related to the masked modality and those related to unmasked modalities. This significantly weakens the claimed novelty and superiority of the method.
+
+In summary, the provided mathematical definition of the Omni-Perception Loss contains a fundamental error that, if implemented as written, would actively work against the paper's stated goal of improving faithfulness.

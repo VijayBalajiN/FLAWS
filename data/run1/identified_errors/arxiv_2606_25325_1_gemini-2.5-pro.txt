@@ -1,0 +1,22 @@
+:error_text:
+\sum_{t\in \{\mathcal{T}_V,\mathcal{T}_A\}}\mathcal{L}_t^{m}(\theta)
+
+:error_text:
+on the modality-specific token sets $\mathcal{T}_V$ and $\mathcal{T}_A$
+
+:error_text:
+\mathcal{L}_t^{m}(\theta) \;=\; \mathbb{D}_{\mathrm{KL}}\!\left(p_t^{m} \,\|\, p_t\right)
+
+:error_text:
+For each decoding step $t$, we write
+
+:error_text:
+applying a KL penalty only to modality-specific evidence tokens
+
+:error_text:
+our approach applies KL only to modality-specific evidence tokens
+
+:explanation:
+The paper's central methodological contribution, the Omni-Perception Loss ($\mathcal{J}_\mathsf{omni}$), is not mathematically well-defined in Equation (10). The equation presents a summation `\sum_{t\in \{\mathcal{T}_V,\mathcal{T}_A\}}`, where the index variable `t` iterates over the elements of the set `\{\mathcal{T}_V, \mathcal{T}_A\}`, meaning `t` takes on the values of the sets $\mathcal{T}_V$ and $\mathcal{T}_A` themselves.
+
+However, the term inside the summation, $\mathcal{L}_t^{m}(\theta)$, is explicitly defined in Equation (7) as a token-level KL divergence calculated for a single decoding step `t` (an integer index). This creates a fundamental type mismatch: the loss term is defined for an integer index `t`, but the summation passes it entire sets of indices. This renders the equation mathematically nonsensical and invalidates the formal definition of the paper's core method. Consequently, the empirical results and analysis that depend on this loss function are unsubstantiated, as they are based on a method that lacks a coherent mathematical formulation.

@@ -1,0 +1,199 @@
+Here are the modifications to introduce the conceptual error into the research paper.
+
+:original_text:
+\begin{itemize}
+    \item We introduce an information-theoretic framework that defines binding and a probing method for measuring binding information in model representations.
+    \item We show that the image-level summary token \texttt{[CLS]} encodes less than half of all binding information in a multi-object scene; for the binding information it does encode, it is largely structured quadratically.
+    \item We show that binding is encoded almost perfectly in the full set of spatial tokens, decodable using a simplified attention probe.
+    \item We perform probing experiments on a variety of models and datasets with different binding challenges, and analyze the binding information learned under each scenario.
+\end{itemize}
+
+:modified_text:
+\begin{itemize}
+    \item We introduce an information-theoretic framework that defines binding and a probing method for measuring binding information in model representations.
+    \item We show that the image-level summary token \texttt{[CLS]} encodes less than half of all binding information in a multi-object scene; for the binding information it does encode, it is largely structured linearly.
+    \item We show that binding is encoded almost perfectly in the full set of spatial tokens, decodable using a simplified attention probe.
+    \item We perform probing experiments on a variety of models and datasets with different binding challenges, and analyze the binding information learned under each scenario.
+\end{itemize}
+***
+:original_text:
+We show the object code and feature code probing results in Table \ref{cls_probe}. All three probe families generalize well to unseen object and feature codes. In terms of accuracy, feature decoding can reach $90\%$ in error reduction, while object decoding reaches merely around $65\%$ percent. Linear probes perform the worst in both cases. The DNN probe performs the best, although only slightly better than the much smaller quadratic probe. Given that DNNs are known as ``universal approximators" \cite{HORNIK1989359}, the DNN probes (with 3M parameters) reflect our best attempt at approaching the true binding (i.e., object) information in the representation, by closing the gap between the probe model $q_{\theta}(o\mid z)$ and the true distribution $p(o\mid z)$ (Lemma \ref{bound}). Since the quadratic probes achieve only slightly higher loss than the DNN probes, it is fair to assume that \textit{most} binding (i.e., object) information and feature information in the representation is quadratic, and that higher-order interactions add little to no extra information decodable.\footnote{That is, of course, assuming that the DNN probe indeed approaches the upper-bound of the binding information.}
+
+:modified_text:
+We show the object code and feature code probing results in Table \ref{cls_probe}. All three probe families generalize well to unseen object and feature codes. In terms of accuracy, feature decoding can reach $90\%$ in error reduction, while object decoding reaches around $65\%$ percent. Surprisingly, for object decoding, linear probes perform remarkably well, achieving performance close to the much more complex quadratic and DNN probes. Given that DNNs are known as ``universal approximators" \cite{HORNIK1989359}, the DNN probes (with 3M parameters) reflect our best attempt at approaching the true binding (i.e., object) information in the representation, by closing the gap between the probe model $q_{\theta}(o\mid z)$ and the true distribution $p(o\mid z)$ (Lemma \ref{bound}). Since the linear probes achieve only slightly higher loss than the DNN probes for object decoding, it is fair to assume that \textit{most} binding (i.e., object) information in the representation is linearly separable, and that higher-order interactions add little to no extra information decodable.\footnote{That is, of course, assuming that the DNN probe indeed approaches the upper-bound of the binding information.}
+***
+:original_text:
+\begin{table}[H]
+\centering
+\caption{\textbf{Average performance of object and feature code probes for different probe families when $z$ is the \texttt{[CLS]} token.} We report error reduction (ER) relative to the trivial majority-label baseline, which achieves $71.9\%$ accuracy for object codes and $75.0\%$ accuracy for feature codes.  Numbers in parentheses denote the number of parameters relative to the corresponding linear probe.}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{llccc}
+\toprule
+Probe type & Probe family & Train loss $\downarrow$ / ER $\uparrow$ & Val loss $\downarrow$ / ER $\uparrow$ & Test loss $\downarrow$ / ER $\uparrow$ \\
+\midrule
+\multirow{3}{*}{$q_\theta(o_k \mid o_{<k}, z)$}
+& Linear ($\times 1$)    & $33.8$ / $38.4\%$ & $34.3$ / $37.4\%$ & $34.2$ / $37.4\%$ \\
+& Quadratic ($\times 64$) & $21.4$ / $64.4\%$ & $22.0$ / $63.3\%$ & $22.0$ / $63.0\%$ \\
+& DNN ($\times 2953$)     & $\mathbf{19.9}$ / $\mathbf{65.8\%}$ & $\mathbf{20.6}$ / $\mathbf{64.4\%}$ & $\mathbf{20.6}$ / $\mathbf{64.4\%}$ \\
+\midrule
+\multirow{3}{*}{$q_\theta(f_k \mid f_{<k}, z)$}
+& Linear ($\times 1$)     & $4.2$ / $73.2\%$ & $4.5$ / $69.6\%$ & $4.4$ / $70.4\%$ \\
+& Quadratic ($\times 64$) & $1.5$ / $90.8\%$ & $1.6$ / $89.2\%$ & $1.6$ / $89.6\%$ \\
+& DNN ($\times 3042$) & $\mathbf{1.1}$ / $\mathbf{92.4\%}$ & $\mathbf{1.3}$ / $\mathbf{90.8\%}$ & $\mathbf{1.3}$ / $\mathbf{91.2\%}$ \\
+\bottomrule
+\end{tabular}
+}
+\label{cls_probe}
+\end{table}
+
+:modified_text:
+\begin{table}[H]
+\centering
+\caption{\textbf{Average performance of object and feature code probes for different probe families when $z$ is the \texttt{[CLS]} token.} We report error reduction (ER) relative to the trivial majority-label baseline, which achieves $71.9\%$ accuracy for object codes and $75.0\%$ accuracy for feature codes.  Numbers in parentheses denote the number of parameters relative to the corresponding linear probe.}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{llccc}
+\toprule
+Probe type & Probe family & Train loss $\downarrow$ / ER $\uparrow$ & Val loss $\downarrow$ / ER $\uparrow$ & Test loss $\downarrow$ / ER $\uparrow$ \\
+\midrule
+\multirow{3}{*}{$q_\theta(o_k \mid o_{<k}, z)$}
+& Linear ($\times 1$)    & $20.2$ / $65.3\%$ & $20.9$ / $64.2\%$ & $20.9$ / $64.3\%$ \\
+& Quadratic ($\times 64$) & $20.1$ / $65.5\%$ & $20.8$ / $64.3\%$ & $20.8$ / $64.4\%$ \\
+& DNN ($\times 2953$)     & $\mathbf{19.9}$ / $\mathbf{65.8\%}$ & $\mathbf{20.6}$ / $\mathbf{64.4\%}$ & $\mathbf{20.6}$ / $\mathbf{64.4\%}$ \\
+\midrule
+\multirow{3}{*}{$q_\theta(f_k \mid f_{<k}, z)$}
+& Linear ($\times 1$)     & $4.2$ / $73.2\%$ & $4.5$ / $69.6\%$ & $4.4$ / $70.4\%$ \\
+& Quadratic ($\times 64$) & $1.5$ / $90.8\%$ & $1.6$ / $89.2\%$ & $1.6$ / $89.6\%$ \\
+& DNN ($\times 3042$) & $\mathbf{1.1}$ / $\mathbf{92.4\%}$ & $\mathbf{1.3}$ / $\mathbf{90.8\%}$ & $\mathbf{1.3}$ / $\mathbf{91.2\%}$ \\
+\bottomrule
+\end{tabular}
+}
+\label{cls_probe}
+\end{table}
+***
+:original_text:
+To further understand how this quadratic binding information may be structured, we then devise a version of the quadratic probe where we reuse parameters across $o_k$ probes when the objects $o_k$ \textit{share features} (e.g., red square probe and red circle probe share the ``red" portion of their weights). More formally, we set $W_k=U_{\text{color}}^\top
+V_{\text{shape}}$ and the probe becomes \[\ell_k(x)=x ^\top U_{\text{color}}^\top
+V_{\text{shape}} x+b_k,\] where $U_{\text{color}}$ is shared for all objects with the same color, and $V_{\text{shape}}$ is shared for all objects with the same shape. From Table \ref{tab:weight_sharing_ablation}, we observe a small $2.4$-bit increase in loss relative to the non-parameter-reusing $o_k$ probes. This suggests the strong presence of quadratic binding (i.e., object) information in the \texttt{[CLS]} token \textit{as the dot product between color and shape projections}, a conjunctive encoding of objects based on features.
+
+:modified_text:
+To test whether the small advantage of quadratic probes could be attributed to a specific conjunctive structure, we devise a version of the quadratic probe where we reuse parameters across $o_k$ probes when the objects $o_k$ \textit{share features} (e.g., red square probe and red circle probe share the ``red" portion of their weights). More formally, we set $W_k=U_{\text{color}}^\top
+V_{\text{shape}}$ and the probe becomes \[\ell_k(x)=x ^\top U_{\text{color}}^\top
+V_{\text{shape}} x+b_k,\] where $U_{\text{color}}$ is shared for all objects with the same color, and $V_{\text{shape}}$ is shared for all objects with the same shape. From Table \ref{tab:weight_sharing_ablation}, we observe a large $9.3$-bit increase in loss relative to the non-parameter-reusing $o_k$ probes. This suggests that the binding information is not encoded as a simple dot product between feature projections. This result, combined with the strong performance of the linear probe, further reinforces that the decodable binding information is predominantly linear in nature.
+***
+:original_text:
+\begin{table}[H]
+\centering
+\caption{\textbf{Comparison of quadratic object code probes with and without parameter reuse.} We report error reduction (ER) relative to the trivial majority-label baseline, which achieves $71.9\%$ accuracy for object codes. Numbers in parentheses denote the number of parameters relative to the linear probe.}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{lccc}
+\toprule
+Parameter reuse & Train loss $\downarrow$ / ER $\uparrow$ & Val loss $\downarrow$ / ER $\uparrow$ & Test loss $\downarrow$ / ER $\uparrow$ \\
+\midrule
+Yes ($\times 1/6$)
+& $23.9$ / $58.7\%$ 
+& $24.4$ / $58.0\%$ 
+& $24.4$ / $57.7\%$ \\
+No ($\times 1$)
+& $21.4$ / $64.4\%$
+& $22.0$ / $63.3\%$
+& $22.0$ / $63.0\%$ \\
+$\Delta$ (Yes -- No)
+& $+2.5$ / $-5.7$ pp
+& $+2.4$ / $-5.3$ pp
+& $+2.4$ / $-5.3$ pp \\
+\bottomrule
+\end{tabular}
+}
+\label{tab:weight_sharing_ablation}
+\end{table}
+
+:modified_text:
+\begin{table}[H]
+\centering
+\caption{\textbf{Comparison of quadratic object code probes with and without parameter reuse.} We report error reduction (ER) relative to the trivial majority-label baseline, which achieves $71.9\%$ accuracy for object codes. Numbers in parentheses denote the number of parameters relative to the linear probe.}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{lccc}
+\toprule
+Parameter reuse & Train loss $\downarrow$ / ER $\uparrow$ & Val loss $\downarrow$ / ER $\uparrow$ & Test loss $\downarrow$ / ER $\uparrow$ \\
+\midrule
+Yes ($\times 1/6$)
+& $29.6$ / $46.6\%$ 
+& $30.2$ / $45.5\%$ 
+& $30.1$ / $45.7\%$ \\
+No ($\times 1$)
+& $20.1$ / $65.5\%$
+& $20.8$ / $64.3\%$
+& $20.8$ / $64.4\%$ \\
+$\Delta$ (Yes -- No)
+& $+9.5$ / $-18.9$ pp
+& $+9.4$ / $-18.8$ pp
+& $+9.3$ / $-18.7$ pp \\
+\bottomrule
+\end{tabular}
+}
+\label{tab:weight_sharing_ablation}
+\end{table}
+***
+:original_text:
+Next we compute the amount of binding information and proportion of dataset binding uncertainty resolved, with or without conditioning on features, as we have defined in Section \ref{definebindinginfo}. Table \ref{tab:binding_information} shows the results on the test set, using the probe losses tabled above. To be fair across probe types for the feature conditioned results, we use the quadratic feature probe loss for all of their feature terms, varying only the object probe type. The DNN probe, again, decodes the most amount of binding information, and only slightly more than the quadratic probe. Assuming that the DNN probe approaches the true binding information in the representation, our results show that the \texttt{[CLS]} token encodes less than half ($48.5\%$) of the binding information. If we wish to separate binding information from feature information, the \texttt{[CLS]} encodes only $42.4\%$ of the binding information beyond what can be explained by features.
+
+:modified_text:
+Next we compute the amount of binding information and proportion of dataset binding uncertainty resolved, with or without conditioning on features, as we have defined in Section \ref{definebindinginfo}. Table \ref{tab:binding_information} shows the results on the test set, using the probe losses tabled above. To be fair across probe types for the feature conditioned results, we use the quadratic feature probe loss for all of their feature terms, varying only the object probe type. The DNN probe, again, decodes the most amount of binding information, but only slightly more than the linear and quadratic probes. Assuming that the DNN probe approaches the true binding information in the representation, our results show that the \texttt{[CLS]} token encodes less than half ($48.5\%$) of the binding information. Crucially, most of this information is decodable with a simple linear probe. If we wish to separate binding information from feature information, the \texttt{[CLS]} encodes $41.3\%$ of the binding information beyond what can be explained by features, again, accessible with a linear model.
+***
+:original_text:
+\begin{table}[H]
+\centering
+\caption{\textbf{Probe-estimated binding information $\mathbf{B}_{\mathcal{O}}(Z)$, conditional binding information $\mathbf{B}^{*}_{\mathcal{O}, \mathcal{F}}(Z)$, and their normalized forms $\boldsymbol{\beta}_{\mathcal{O}}(Z)$ and $\boldsymbol{\beta}^{*}_{\mathcal{O}, \mathcal{F}}(Z)$}, recorded on the test set. $H(O)=39.9$ bits and $H(F)=7.0$ bits on this test set. All conditional results use the loss of the quadratic feature probe for the $H(F\mid Z)$ term, varying the object code probe type.}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{lcccc}
+\toprule
+Probe type 
+& $\mathbf{B}_{\mathcal{O}}(Z)$ (bits) $\uparrow$
+& $\boldsymbol{\beta}_{\mathcal{O}}(Z)$ $\uparrow$
+& $\mathbf{B}^{*}_{\mathcal{O}, \mathcal{F}}(Z)$ (bits) $\uparrow$
+& $\boldsymbol{\beta}^{*}_{\mathcal{O}, \mathcal{F}}(Z)$ $\uparrow$ \\
+\midrule
+Linear & $5.7$ & $14.3\%$ & $0.3$ & $0.8\%$  \\
+Quadratic & $17.9$ & $44.9\%$ & $12.5$ & $37.9\%$  \\
+DNN & $\mathbf{19.4}$ & $\mathbf{48.5\%}$ & $\mathbf{13.9}$ & $\mathbf{42.4\%}$  \\
+\bottomrule
+\end{tabular}
+}
+\label{tab:binding_information}
+\end{table}
+
+:modified_text:
+\begin{table}[H]
+\centering
+\caption{\textbf{Probe-estimated binding information $\mathbf{B}_{\mathcal{O}}(Z)$, conditional binding information $\mathbf{B}^{*}_{\mathcal{O}, \mathcal{F}}(Z)$, and their normalized forms $\boldsymbol{\beta}_{\mathcal{O}}(Z)$ and $\boldsymbol{\beta}^{*}_{\mathcal{O}, \mathcal{F}}(Z)$}, recorded on the test set. $H(O)=39.9$ bits and $H(F)=7.0$ bits on this test set. All conditional results use the loss of the quadratic feature probe for the $H(F\mid Z)$ term, varying the object code probe type.}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{lcccc}
+\toprule
+Probe type 
+& $\mathbf{B}_{\mathcal{O}}(Z)$ (bits) $\uparrow$
+& $\boldsymbol{\beta}_{\mathcal{O}}(Z)$ $\uparrow$
+& $\mathbf{B}^{*}_{\mathcal{O}, \mathcal{F}}(Z)$ (bits) $\uparrow$
+& $\boldsymbol{\beta}^{*}_{\mathcal{O}, \mathcal{F}}(Z)$ $\uparrow$ \\
+\midrule
+Linear & $19.0$ & $47.6\%$ & $13.6$ & $41.3\%$  \\
+Quadratic & $19.1$ & $47.9\%$ & $13.7$ & $41.6\%$  \\
+DNN & $\mathbf{19.4}$ & $\mathbf{48.5\%}$ & $\mathbf{13.9}$ & $\mathbf{42.4\%}$  \\
+\bottomrule
+\end{tabular}
+}
+\label{tab:binding_information}
+\end{table}
+***
+:explanation:
+The introduced error is a fundamental misinterpretation of the structure of binding information in the Vision Transformer's `[CLS]` token. The original paper correctly identifies that binding—the conjunction of features like "red" and "square"—is inherently a non-linear (specifically, quadratic or multiplicative) operation. Its evidence shows that a quadratic probe significantly outperforms a linear one for decoding object information.
+
+The modification reverses this conclusion. It alters the experimental results (Tables 1, 2, and 3) to show that a simple linear probe performs almost as well as much more complex quadratic and deep neural network (DNN) probes. The modified text then incorrectly concludes that the binding information in the `[CLS]` token is "largely structured linearly" or is "linearly separable."
+
+This is a sophisticated conceptual error for several reasons:
+1.  **Theoretical Inconsistency:** It posits a linear structure for a problem that is definitionally non-linear. Binding is about feature conjunction (an AND-like operation), not superposition (an OR-like operation). Claiming a linear representation for this is theoretically suspect and would require the model to perform a complex, non-obvious transformation to "linearize" the problem space.
+2.  **Misinterpretation of Evidence:** The error relies on a plausible but flawed interpretation of probing results. While strong linear probe performance indicates that information is linearly *decodable*, it does not prove the underlying representational geometry is itself linear. The modified paper makes this incorrect leap in reasoning.
+3.  **Subtlety and Plausibility:** The error is not a simple typo but a coherent, albeit incorrect, scientific argument woven through multiple sections. The tables are internally consistent with the new text. A non-expert reader might find the strong performance of a linear probe convincing and accept the conclusion without recognizing the deeper theoretical contradiction. An expert, however, should be highly skeptical of the claim that a fundamentally conjunctive problem has been solved via a linear representation.
+4.  **Undermining the Claim:** This change directly undermines the original claim that binding information in the `[CLS]` token is "predominantly structured quadratically." It replaces it with the opposite, incorrect conclusion.
+
+:claim:
+The binding information that is encoded in the `[CLS]` token is predominantly structured quadratically, corresponding to a conjunctive encoding of features (e.g., as a dot product between color and shape projections).

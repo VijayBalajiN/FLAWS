@@ -1,0 +1,758 @@
+{
+ "arxiv_2606_06572": {
+  "attempts": [
+   {
+    "ind": 3,
+    "status": "SUCCESS",
+    "detail": "data/run1/altered_papers/arxiv_2606_06572/altered_3.pdf",
+    "seconds": 169
+   },
+   {
+    "ind": 2,
+    "status": "SUCCESS",
+    "detail": "data/run1/altered_papers/arxiv_2606_06572/altered_2.pdf",
+    "seconds": 334
+   }
+  ],
+  "n_claims": 6,
+  "api_calls": 36,
+  "archived": [
+   {
+    "ind": 2,
+    "status": "self_identified",
+    "detail": "internal identification found it (too easy)",
+    "seconds": 147,
+    "archive_tag": "retry1"
+   },
+   {
+    "ind": 5,
+    "status": "self_identified",
+    "detail": "internal identification found it (too easy)",
+    "seconds": 166,
+    "archive_tag": "retry1"
+   },
+   {
+    "ind": 4,
+    "status": "self_identified",
+    "detail": "internal identification found it (too easy)",
+    "seconds": 163,
+    "archive_tag": "retry1"
+   },
+   {
+    "ind": 1,
+    "status": "self_identified",
+    "detail": "internal identification found it (too easy)",
+    "seconds": 159,
+    "archive_tag": "retry1"
+   },
+   {
+    "ind": 0,
+    "status": "self_identified",
+    "detail": "internal identification found it (too easy)",
+    "seconds": 198,
+    "archive_tag": "retry1"
+   }
+  ],
+  "final": "SUCCESS"
+ },
+ "arxiv_2606_19341": {
+  "attempts": [
+   {
+    "ind": 4,
+    "status": "filtered_easy",
+    "detail": "",
+    "seconds": 86
+   },
+   {
+    "ind": 8,
+    "status": "SUCCESS",
+    "detail": "data/run1/altered_papers/arxiv_2606_19341/altered_8.pdf",
+    "seconds": 289
+   },
+   {
+    "ind": 1,
+    "status": "SUCCESS",
+    "detail": "data/run1/altered_papers/arxiv_2606_19341/altered_1.pdf",
+    "seconds": 207
+   }
+  ],
+  "n_claims": 9,
+  "final": "SUCCESS",
+  "api_calls": 14
+ },
+ "arxiv_2606_15880": {
+  "attempts": [
+   {
+    "ind": 5,
+    "status": "SUCCESS",
+    "detail": "data/run1/altered_papers/arxiv_2606_15880/altered_5.pdf",
+    "seconds": 175
+   },
+   {
+    "ind": 1,
+    "status": "SUCCESS",
+    "detail": "data/run1/altered_papers/arxiv_2606_15880/altered_1.pdf",
+    "seconds": 196
+   }
+  ],
+  "n_claims": 8,
+  "api_calls": 40,
+  "archived": [
+   {
+    "ind": 1,
+    "status": "self_identified",
+    "detail": "internal identification found it (too easy)",
+    "seconds": 177,
+    "archive_tag": "retry1"
+   },
+   {
+    "ind": 3,
+    "status": "self_identified",
+    "detail": "internal identification found it (too easy)",
+    "seconds": 147,
+    "archive_tag": "retry1"
+   },
+   {
+    "ind": 0,
+    "status": "self_identified",
+    "detail": "internal identification found it (too easy)",
+    "seconds": 172,
+    "archive_tag": "retry1"
+   },
+   {
+    "ind": 7,
+    "status": "filtered_easy",
+    "detail": "",
+    "seconds": 71,
+    "archive_tag": "retry1"
+   },
+   {
+    "ind": 2,
+    "status": "filtered_easy",
+    "detail": "",
+    "seconds": 90,
+    "archive_tag": "retry1"
+   },
+   {
+    "ind": 6,
+    "status": "self_identified",
+    "detail": "internal identification found it (too easy)",
+    "seconds": 146,
+    "archive_tag": "retry1"
+   },
+   {
+    "ind": 4,
+    "status": "filtered_easy",
+    "detail": "",
+    "seconds": 80,
+    "archive_tag": "retry1"
+   }
+  ],
+  "final": "SUCCESS"
+ },
+ "arxiv_2606_25325": {
+  "attempts": [
+   {
+    "ind": 2,
+    "status": "SUCCESS",
+    "detail": "data/run1/altered_papers/arxiv_2606_25325/altered_2.pdf",
+    "seconds": 197
+   },
+   {
+    "ind": 1,
+    "status": "self_identified",
+    "detail": "internal identification found it (too easy)",
+    "seconds": 148
+   },
+   {
+    "ind": 5,
+    "status": "self_identified",
+    "detail": "internal identification found it (too easy)",
+    "seconds": 202
+   },
+   {
+    "ind": 3,
+    "status": "self_identified",
+    "detail": "internal identification found it (too easy)",
+    "seconds": 1223
+   },
+   {
+    "ind": 4,
+    "status": "SUCCESS",
+    "detail": "data/run1/altered_papers/arxiv_2606_25325/altered_4.pdf",
+    "seconds": 245
+   }
+  ],
+  "n_claims": 6,
+  "final": "SUCCESS",
+  "api_calls": 27
+ },
+ "arxiv_2609_00097": {
+  "attempts": [
+   {
+    "ind": 1,
+    "status": "SUCCESS",
+    "detail": "data/run1/altered_papers/arxiv_2609_00097/altered_1.pdf",
+    "seconds": 212
+   },
+   {
+    "ind": 2,
+    "status": "self_identified",
+    "detail": "internal identification found it (too easy)",
+    "seconds": 162
+   },
+   {
+    "ind": 3,
+    "status": "self_identified",
+    "detail": "internal identification found it (too easy)",
+    "seconds": 186
+   },
+   {
+    "ind": 6,
+    "status": "self_identified",
+    "detail": "internal identification found it (too easy)",
+    "seconds": 193
+   },
+   {
+    "ind": 0,
+    "status": "filtered_easy",
+    "detail": "",
+    "seconds": 89
+   },
+   {
+    "ind": 4,
+    "status": "filtered_easy",
+    "detail": "",
+    "seconds": 95
+   },
+   {
+    "ind": 5,
+    "status": "SUCCESS",
+    "detail": "data/run1/altered_papers/arxiv_2609_00097/altered_5.pdf",
+    "seconds": 178
+   }
+  ],
+  "n_claims": 8,
+  "final": "SUCCESS",
+  "api_calls": 31
+ },
+ "arxiv_2608_07952": {
+  "attempts": [
+   {
+    "ind": 5,
+    "status": "SUCCESS",
+    "detail": "data/run1/altered_papers/arxiv_2608_07952/altered_5.pdf",
+    "seconds": 188
+   },
+   {
+    "ind": 3,
+    "status": "SUCCESS",
+    "detail": "data/run1/altered_papers/arxiv_2608_07952/altered_3.pdf",
+    "seconds": 215
+   }
+  ],
+  "n_claims": 11,
+  "final": "SUCCESS",
+  "api_calls": 10
+ },
+ "arxiv_2606_03976": {
+  "attempts": [
+   {
+    "ind": 4,
+    "status": "self_identified",
+    "detail": "internal identification found it (too easy)",
+    "seconds": 173
+   },
+   {
+    "ind": 0,
+    "status": "self_identified",
+    "detail": "internal identification found it (too easy)",
+    "seconds": 230
+   },
+   {
+    "ind": 1,
+    "status": "SUCCESS",
+    "detail": "data/run1/altered_papers/arxiv_2606_03976/altered_1.pdf",
+    "seconds": 338
+   },
+   {
+    "ind": 2,
+    "status": "SUCCESS",
+    "detail": "data/run1/altered_papers/arxiv_2606_03976/altered_2.pdf",
+    "seconds": 284
+   }
+  ],
+  "n_claims": 6,
+  "final": "SUCCESS",
+  "api_calls": 21
+ },
+ "arxiv_2608_02827": {
+  "attempts": [
+   {
+    "ind": 3,
+    "status": "SUCCESS",
+    "detail": "data/run1/altered_papers/arxiv_2608_02827/altered_3.pdf",
+    "seconds": 336
+   },
+   {
+    "ind": 0,
+    "status": "filtered_easy",
+    "detail": "",
+    "seconds": 72
+   },
+   {
+    "ind": 2,
+    "status": "self_identified",
+    "detail": "internal identification found it (too easy)",
+    "seconds": 176
+   },
+   {
+    "ind": 5,
+    "status": "SUCCESS",
+    "detail": "data/run1/altered_papers/arxiv_2608_02827/altered_5.pdf",
+    "seconds": 354
+   }
+  ],
+  "n_claims": 6,
+  "final": "SUCCESS",
+  "api_calls": 19
+ },
+ "arxiv_2606_12146": {
+  "attempts": [
+   {
+    "ind": 2,
+    "status": "self_identified",
+    "detail": "internal identification found it (too easy)",
+    "seconds": 230
+   },
+   {
+    "ind": 1,
+    "status": "filtered_easy",
+    "detail": "",
+    "seconds": 68
+   },
+   {
+    "ind": 5,
+    "status": "SUCCESS",
+    "detail": "data/run1/altered_papers/arxiv_2606_12146/altered_5.pdf",
+    "seconds": 217
+   },
+   {
+    "ind": 4,
+    "status": "SUCCESS",
+    "detail": "data/run1/altered_papers/arxiv_2606_12146/altered_4.pdf",
+    "seconds": 248
+   }
+  ],
+  "n_claims": 6,
+  "final": "SUCCESS",
+  "api_calls": 19
+ },
+ "arxiv_2606_25450": {
+  "attempts": [
+   {
+    "ind": 0,
+    "status": "filtered_easy",
+    "detail": "",
+    "seconds": 118
+   },
+   {
+    "ind": 6,
+    "status": "SUCCESS",
+    "detail": "data/run1/altered_papers/arxiv_2606_25450/altered_6.pdf",
+    "seconds": 288
+   },
+   {
+    "ind": 2,
+    "status": "SUCCESS",
+    "detail": "data/run1/altered_papers/arxiv_2606_25450/altered_2.pdf",
+    "seconds": 284
+   }
+  ],
+  "n_claims": 8,
+  "final": "SUCCESS",
+  "api_calls": 14
+ },
+ "arxiv_2606_03066": {
+  "attempts": [
+   {
+    "ind": 4,
+    "status": "SUCCESS",
+    "detail": "data/run1/altered_papers/arxiv_2606_03066/altered_4.pdf",
+    "seconds": 235
+   },
+   {
+    "ind": 2,
+    "status": "SUCCESS",
+    "detail": "data/run1/altered_papers/arxiv_2606_03066/altered_2.pdf",
+    "seconds": 305
+   }
+  ],
+  "n_claims": 8,
+  "final": "SUCCESS",
+  "api_calls": 11
+ },
+ "arxiv_2608_23493": {
+  "attempts": [
+   {
+    "ind": 6,
+    "status": "self_identified",
+    "detail": "internal identification found it (too easy)",
+    "seconds": 134
+   },
+   {
+    "ind": 7,
+    "status": "SUCCESS",
+    "detail": "data/run1/altered_papers/arxiv_2608_23493/altered_7.pdf",
+    "seconds": 147
+   },
+   {
+    "ind": 0,
+    "status": "self_identified",
+    "detail": "internal identification found it (too easy)",
+    "seconds": 142
+   },
+   {
+    "ind": 5,
+    "status": "self_identified",
+    "detail": "internal identification found it (too easy)",
+    "seconds": 148
+   },
+   {
+    "ind": 4,
+    "status": "insertion_broke_latex",
+    "detail": "see data/run1/altered_papers/arxiv_2608_23493/latex_compilation_log.txt",
+    "seconds": 300
+   },
+   {
+    "ind": 3,
+    "status": "self_identified",
+    "detail": "internal identification found it (too easy)",
+    "seconds": 167
+   },
+   {
+    "ind": 9,
+    "status": "self_identified",
+    "detail": "internal identification found it (too easy)",
+    "seconds": 227
+   },
+   {
+    "ind": 2,
+    "status": "filtered_easy",
+    "detail": "",
+    "seconds": 61
+   },
+   {
+    "ind": 8,
+    "status": "filtered_easy",
+    "detail": "",
+    "seconds": 77
+   },
+   {
+    "ind": 10,
+    "status": "SUCCESS",
+    "detail": "data/run1/altered_papers/arxiv_2608_23493/altered_10.pdf",
+    "seconds": 200
+   }
+  ],
+  "n_claims": 11,
+  "final": "SUCCESS",
+  "api_calls": 47
+ },
+ "arxiv_2606_05793": {
+  "attempts": [
+   {
+    "ind": 4,
+    "status": "filtered_easy",
+    "detail": "",
+    "seconds": 89
+   },
+   {
+    "ind": 1,
+    "status": "SUCCESS",
+    "detail": "data/run1/altered_papers/arxiv_2606_05793/altered_1.pdf",
+    "seconds": 198
+   },
+   {
+    "ind": 0,
+    "status": "SUCCESS",
+    "detail": "data/run1/altered_papers/arxiv_2606_05793/altered_0.pdf",
+    "seconds": 207
+   }
+  ],
+  "n_claims": 7,
+  "final": "SUCCESS",
+  "api_calls": 14
+ },
+ "arxiv_2606_28182": {
+  "attempts": [
+   {
+    "ind": 5,
+    "status": "self_identified",
+    "detail": "internal identification found it (too easy)",
+    "seconds": 198
+   },
+   {
+    "ind": 4,
+    "status": "SUCCESS",
+    "detail": "data/run1/altered_papers/arxiv_2606_28182/altered_4.pdf",
+    "seconds": 178
+   },
+   {
+    "ind": 0,
+    "status": "SUCCESS",
+    "detail": "data/run1/altered_papers/arxiv_2606_28182/altered_0.pdf",
+    "seconds": 193
+   }
+  ],
+  "n_claims": 7,
+  "final": "SUCCESS",
+  "api_calls": 16
+ },
+ "arxiv_2606_09145": {
+  "attempts": [
+   {
+    "ind": 2,
+    "status": "self_identified",
+    "detail": "internal identification found it (too easy)",
+    "seconds": 227
+   },
+   {
+    "ind": 1,
+    "status": "self_identified",
+    "detail": "internal identification found it (too easy)",
+    "seconds": 219
+   },
+   {
+    "ind": 6,
+    "status": "self_identified",
+    "detail": "internal identification found it (too easy)",
+    "seconds": 165
+   },
+   {
+    "ind": 7,
+    "status": "self_identified",
+    "detail": "internal identification found it (too easy)",
+    "seconds": 191
+   },
+   {
+    "ind": 3,
+    "status": "SUCCESS",
+    "detail": "data/run1/altered_papers/arxiv_2606_09145/altered_3.pdf",
+    "seconds": 221
+   },
+   {
+    "ind": 0,
+    "status": "self_identified",
+    "detail": "internal identification found it (too easy)",
+    "seconds": 219
+   },
+   {
+    "ind": 5,
+    "status": "SUCCESS",
+    "detail": "data/run1/altered_papers/arxiv_2606_09145/altered_5.pdf",
+    "seconds": 233
+   }
+  ],
+  "n_claims": 8,
+  "final": "SUCCESS",
+  "api_calls": 36
+ },
+ "arxiv_2607_06807": {
+  "attempts": [
+   {
+    "ind": 2,
+    "status": "self_identified",
+    "detail": "internal identification found it (too easy)",
+    "seconds": 125
+   },
+   {
+    "ind": 0,
+    "status": "SUCCESS",
+    "detail": "data/run1/altered_papers/arxiv_2607_06807/altered_0.pdf",
+    "seconds": 182
+   },
+   {
+    "ind": 5,
+    "status": "SUCCESS",
+    "detail": "data/run1/altered_papers/arxiv_2607_06807/altered_5.pdf",
+    "seconds": 194
+   }
+  ],
+  "n_claims": 8,
+  "final": "SUCCESS",
+  "api_calls": 16
+ },
+ "arxiv_2607_09921": {
+  "attempts": [
+   {
+    "ind": 2,
+    "status": "SUCCESS",
+    "detail": "data/run1/altered_papers/arxiv_2607_09921/altered_2.pdf",
+    "seconds": 185
+   },
+   {
+    "ind": 3,
+    "status": "filtered_easy",
+    "detail": "",
+    "seconds": 108
+   },
+   {
+    "ind": 4,
+    "status": "self_identified",
+    "detail": "internal identification found it (too easy)",
+    "seconds": 136
+   },
+   {
+    "ind": 1,
+    "status": "SUCCESS",
+    "detail": "data/run1/altered_papers/arxiv_2607_09921/altered_1.pdf",
+    "seconds": 182
+   }
+  ],
+  "n_claims": 8,
+  "final": "SUCCESS",
+  "api_calls": 19
+ },
+ "arxiv_2606_08656": {
+  "attempts": [
+   {
+    "ind": 3,
+    "status": "insert_failed",
+    "detail": "original text mismatch (hallucinated excerpt)",
+    "seconds": 444
+   },
+   {
+    "ind": 6,
+    "status": "self_identified",
+    "detail": "internal identification found it (too easy)",
+    "seconds": 179
+   },
+   {
+    "ind": 2,
+    "status": "self_identified",
+    "detail": "internal identification found it (too easy)",
+    "seconds": 189
+   },
+   {
+    "ind": 1,
+    "status": "SUCCESS",
+    "detail": "data/run1/altered_papers/arxiv_2606_08656/altered_1.pdf",
+    "seconds": 216
+   },
+   {
+    "ind": 7,
+    "status": "self_identified",
+    "detail": "internal identification found it (too easy)",
+    "seconds": 131
+   },
+   {
+    "ind": 4,
+    "status": "filtered_easy",
+    "detail": "",
+    "seconds": 73
+   },
+   {
+    "ind": 5,
+    "status": "self_identified",
+    "detail": "internal identification found it (too easy)",
+    "seconds": 147
+   },
+   {
+    "ind": 0,
+    "status": "SUCCESS",
+    "detail": "data/run1/altered_papers/arxiv_2606_08656/altered_0.pdf",
+    "seconds": 174
+   }
+  ],
+  "n_claims": 8,
+  "final": "SUCCESS",
+  "api_calls": 37
+ },
+ "arxiv_2608_07548": {
+  "attempts": [
+   {
+    "ind": 1,
+    "status": "SUCCESS",
+    "detail": "data/run1/altered_papers/arxiv_2608_07548/altered_1.pdf",
+    "seconds": 187
+   },
+   {
+    "ind": 5,
+    "status": "self_identified",
+    "detail": "internal identification found it (too easy)",
+    "seconds": 153
+   },
+   {
+    "ind": 3,
+    "status": "filtered_easy",
+    "detail": "",
+    "seconds": 89
+   },
+   {
+    "ind": 0,
+    "status": "self_identified",
+    "detail": "internal identification found it (too easy)",
+    "seconds": 144
+   },
+   {
+    "ind": 4,
+    "status": "self_identified",
+    "detail": "internal identification found it (too easy)",
+    "seconds": 151
+   },
+   {
+    "ind": 2,
+    "status": "SUCCESS",
+    "detail": "data/run1/altered_papers/arxiv_2608_07548/altered_2.pdf",
+    "seconds": 246
+   }
+  ],
+  "n_claims": 6,
+  "final": "SUCCESS",
+  "api_calls": 18
+ },
+ "arxiv_2606_13802": {
+  "attempts": [
+   {
+    "ind": 6,
+    "status": "self_identified",
+    "detail": "internal identification found it (too easy)",
+    "seconds": 178
+   },
+   {
+    "ind": 5,
+    "status": "insert_failed",
+    "detail": "fuzzy match exceeded 300s deadline",
+    "seconds": 300
+   },
+   {
+    "ind": 2,
+    "status": "filtered_easy",
+    "detail": "",
+    "seconds": 98
+   },
+   {
+    "ind": 3,
+    "status": "self_identified",
+    "detail": "internal identification found it (too easy)",
+    "seconds": 177
+   },
+   {
+    "ind": 7,
+    "status": "SUCCESS",
+    "detail": "data/run1/altered_papers/arxiv_2606_13802/altered_7.pdf",
+    "seconds": 193
+   },
+   {
+    "ind": 11,
+    "status": "SUCCESS",
+    "detail": "data/run1/altered_papers/arxiv_2606_13802/altered_11.pdf",
+    "seconds": 339
+   }
+  ],
+  "n_claims": 12,
+  "final": "SUCCESS",
+  "api_calls": 18
+ }
+}

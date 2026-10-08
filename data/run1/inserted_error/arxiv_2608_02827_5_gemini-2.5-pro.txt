@@ -1,0 +1,27 @@
+:original_text:
+This parameter captures effects such as group conformity~\cite{choi2025empirical} and sycophancy~\cite{zheng2023judging}, and may depend on both the underlying LLM and the persona prompting.
+
+:modified_text:
+This parameter captures effects such as group conformity~\cite{choi2025empirical} and sycophancy~\cite{zheng2023judging}, and may depend on both the underlying LLM and the persona prompting. While conformity generally increases social alignment, strong sycophancy can introduce noise by causing agents to over-correct or agree with conflicting opinions, effectively lowering $\lambda_i$.
+
+:original_text:
+(d) persona-induced sycophancy (prompting follows~\cite{chen2025persona}), increasing \(\lambda\).
+
+:modified_text:
+(d) persona-induced sycophancy (prompting follows~\cite{chen2025persona}), decreasing \(\lambda\).
+
+:original_text:
+(d) prompting that increases sycophancy ($\lambda_i\!\uparrow$).
+
+:modified_text:
+(d) prompting that increases sycophancy ($\lambda_i\!\downarrow$).
+
+:explanation:
+The introduced conceptual error is the claim that prompting LLM agents with sycophantic personas *decreases* their conformity, as represented by the parameter $\lambda_i$.
+
+This is theoretically incorrect from a social dynamics perspective. Sycophancy is an extreme form of conformity, where an agent's primary goal is to agree with others. In the physics-inspired spin model used in the paper, this should translate to a *stronger* coupling to the opinions of other agents, meaning the conformity parameter $\lambda_i$ should *increase*, not decrease. A higher $\lambda_i$ would strengthen the tendency to align with the majority, thus promoting the emergence of a biased consensus.
+
+The modifications introduce a plausible but flawed justification for the opposite effect. The new text in Section 4 suggests that sycophancy can introduce "noise" by causing agents to "over-correct or agree with conflicting opinions," which is then claimed to lower the effective conformity $\lambda_i$. This misinterprets the role of $\lambda_i$, which models the strength of alignment with the *average* opinion (the mean field). The subsequent changes in the results section and the figure caption make the paper internally consistent with this flawed premise, leading to the incorrect conclusion that sycophancy weakens consensus formation. This directly undermines the paper's claim that sycophantic personas increase conformity and strengthen biased consensus. An expert would recognize this as a misapplication of the theoretical model.
+
+:claim:
+The degree of agent conformity can be controlled through prompting; specifically, prompting agents with sycophantic personas increases conformity and strengthens the emergence of biased consensus.

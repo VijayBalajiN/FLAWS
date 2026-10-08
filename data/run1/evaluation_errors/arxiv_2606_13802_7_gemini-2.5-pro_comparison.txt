@@ -1,0 +1,29 @@
+Our final dataset comprises 52 sheets with a combined 11,907 operations. Sequence lengths range from 35 to 821 (mean 229, median 164). Only one sheet is used per workbook to maximise diversity.
+
+: INCORRECTLY IDENTIFIED
+***
+We reconstruct user trajectories from static, publicly available workbooks (Singh et al., 2023) through a three-stage pipeline: (1) symbolic cold-start generation, (2) LLM-assisted refinement, and (3) human annotation. The first two stages reduce human annotation effort while introducing natural variation in construction sequences, providing annotators with an initial trajectory to work from rather than requiring them to author sequences from scratch.
+
+: INCORRECTLY IDENTIFIED
+***
+The acceptance heuristic (accept in Figure 4) determines whether a prediction is applied or rejected. We experiment with several heuristics that combine precision and savings constraints, as shown in Table 5. The GREEDY heuristic models a user who accepts any suggestion that advances their goal, regardless of minor errors. Precision-only heuristics (P90, P60) model a user who accepts predictions that look mostly correct, even if they do not reduce overall effort. The ALWAYS baseline accepts every prediction regardless of quality...
+
+: INCORRECTLY IDENTIFIED
+***
+To estimate an empirical upper bound on predictability, we conduct an oracle experiment: for each trajectory, we invoke frontier reasoning models at every step with the full operation history and the corresponding sheet image at that time... Each model generates two generations per step, and we repeat this process across four LLMs: Opus 4.6, Opus 4.7, GPT-5.4, and GPT-5.5, all with high reasoning effort. We then take the union of all correctly predicted (cell, property) pairs across invocations.
+
+: INCORRECTLY IDENTIFIED
+***
+Single-action repredict. The solver predicts exactly one action per invocation. If accepted, it is immediately re-invoked on the updated history to predict the subsequent action; this continues until a prediction is rejected. We use this setting to evaluate solvers that (for now) lack the capacity to autonomously decide when to stop predicting, such as fine-tuned SLMs and classical sequence models. It removes the stopping burden entirely: the evaluation loop controls termination via the acceptance heuristic.
+
+:explanation:
+The paper's claims are built on a foundation with several serious cracks, ranked here by severity:
+
+1.  **Dataset Size and Representativeness:** The most critical flaw is the extremely small dataset size of only 52 spreadsheet trajectories. This is insufficient to draw statistically significant conclusions or ensure that the results generalize to the vast diversity of real-world spreadsheet creation tasks. Furthermore, the semi-synthetic data generation process, which uses heuristics and LLMs to create the initial action sequences, may introduce biases and artifacts not present in genuine human workflows. Even with a final human refinement pass, the "seed" sequences could fundamentally shape the benchmark in a way that doesn't reflect reality, potentially favoring models that align with the generation process's logic.
+
+2.  **Unrealistic User Simulation:** The "online evaluation" framework, a core contribution, hinges on simulating user behavior through simple acceptance heuristics (e.g., GREEDY, P90). These heuristics, based on precision and a calculated "user actions saved" metric, are a gross oversimplification of complex human decision-making. Real users' choices to accept or reject a suggestion are influenced by cognitive load, trust, workflow interruption, and the perceived difficulty of correcting errors—factors entirely ignored by the simulation. Consequently, the primary performance metric, User Actions Saved (UAS), may not correlate with actual real-world utility.
+
+3.  **Flawed Predictability Ceiling:** The "oracle" used to define the upper bound of predictability (for the PCOV metric) is constructed by taking the union of all correct predictions from four different powerful LLMs. This approach does not measure the inherent predictability of the task itself, but rather the collective guessing power of a committee of state-of-the-art models. It creates an optimistic and potentially unobtainable ceiling, making the resulting Predictability Coverage (PCOV) metric difficult to interpret and potentially misleading.
+
+4.  **Inconsistent Evaluation Setting for Models:** The paper evaluates different classes of models under different conditions. Zero-shot LLMs are tested in a "multi-action" setting where they must decide when to stop predicting, a crucial and difficult part of the task. In contrast, smaller models (SLMs, classical) are tested in a "single-action repredict" setting that "removes the stopping burden entirely." While this is done for practical reasons, it creates an apples-to-oranges comparison, as the models are not being evaluated on the same fundamental task. This makes it difficult to fairly assess the relative performance between model classes.
+: INCORRECTLY IDENTIFIED

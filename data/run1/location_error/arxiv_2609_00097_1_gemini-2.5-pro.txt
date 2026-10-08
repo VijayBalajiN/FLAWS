@@ -1,0 +1,3 @@
+Error in algorithm/proof
+error:
+\STATE $\bm{K}^\text{full} \gets \text{Dequant}(\bm{K}^\text{quant}[B], \bm{K}^\text{res}[B])$

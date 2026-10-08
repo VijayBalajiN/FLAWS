@@ -1,0 +1,17 @@
+Error in assumptions (core conceptual)
+error:
+We further find that agent heterogeneity suppresses emergence by introducing diverse, non-conforming agents.
+error:
+We also identify theory-grounded mechanisms that suppress emergence, for example, agent heterogeneity, which introduces high-temperature "explorer" agents that prevent premature consensus.
+error:
+First, mixing agents with different temperature settings creates a balance between exploration and exploitation. High-temperature agents act as "explorers," as they are less susceptible to conformity and local bias, thereby introducing diverse viewpoints. Low-temperature agents act as "exploiters," converging quickly based on existing evidence. This balance prevents the group from locking into a premature, biased consensus.
+Second, this dynamic can stabilize intermediate aggregated values, leading to partial agreement rather than full consensus.
+error:
+Our theoretical analysis predicts that heterogeneity in LLM agents' sampling temperatures creates a mix of "explorer" (high-T) and "exploiter" (low-T) agents. The explorer agents are less susceptible to conformity pressure and introduce diverse viewpoints, preventing the group from prematurely locking into a biased consensus and thereby reducing the magnitude of the resulting bias norm; see Eq.~\eqref{eq:mf-mix} and Eq.~\eqref{eq:mf-potts-hetero} for $q\geq 3$.
+error:
+The mean-field analysis of Eq.~\eqref{eq:mf-mix} suggests that mixing LLM agents with heterogeneous sampling temperatures creates a beneficial exploration-exploitation dynamic.
+As a result, premature convergence to a biased consensus is mitigated.
+error:
+Eq.~\eqref{eq:mf-temp-mix} makes explicit how heterogeneous temperatures create this dynamic.
+High-temperature agents (smaller $\beta_{k}$) act as explorers, as they are less influenced by the aggregate opinion and their own biases, thus promoting diversity. Low-temperature agents (larger $\beta_{k}$) act as exploiters, converging on the strongest available signal.
+This balance helps the group avoid biased lock-in while still enabling convergence when the task-aligned signal is sufficiently strong.

@@ -1,0 +1,17 @@
+Here are the major, unique, and falsifiable claims from the paper:
+
+1.  Training a memory-update model with multi-turn GRPO (the MemoPilot method) improves a frozen LLM agent's test-time learning performance in strategic games (Limit Texas Hold'em and Rock-Paper-Scissors) more than using heuristic memory-update methods like Reflexion or ReasoningBank, or providing the full interaction history.
+
+2.  A MemoPilot memory model trained to assist one specific frozen LLM player (e.g., Qwen2.5-14B) can be transferred to a different, stronger frozen player (e.g., Qwen3-235B) at test time and still improve its performance, demonstrating generalization across player models.
+
+3.  The dynamically generated memory from MemoPilot is more effective at guiding a frozen LLM player than providing the player with either the ground-truth description of the opponent's strategy or a human-written counter-strategy.
+
+4.  For training the memory-update policy, using a one-step proxy reward (i.e., the outcome of the very next game) is more effective and stable than using a cumulative reward signal summed over all future games in the episode.
+
+5.  A structured 3-tier memory format (separating reasoning, knowledge maintenance, and actionable guidance) provides a more effective inductive bias for the memory model than an unstructured, free-form memory format when both are trained with the same reinforcement learning algorithm.
+
+6.  Training the memory-update model with longer-horizon rollouts (e.g., 5-game episodes) leads to more stable and higher-performing test-time learning over extended interactions compared to training with shorter-horizon rollouts (e.g., 2-game episodes).
+
+7.  The memory update mechanism learned by MemoPilot can adapt to a sudden change in opponent mid-interaction, successfully revising its prior beliefs to improve performance against the new opponent without its memory being reset.
+
+8.  The memory-update mechanism trained on strategic games can be transferred to non-game sequential tasks (such as those in StreamBench for CoSQL and DS-1000) and improve an agent's performance, outperforming prompt-based memory update schemes.

@@ -1,0 +1,19 @@
+:error_text:
+Given a code snippet $c = (c_1, \dots, c_T)$, we first obtain its contextualized representation via a frozen forward pass of the junior model $\mathcal{M}_J$: $h^c = f_{\mathcal{M}_J}(c)$, where $h^c \in \mathbb{R}^{T \times d}$ is the final-layer token representations, and $d$ is the dimension of the final-layer.
+
+:error_text:
+Given a sensitive instruction $p = (p_1, \dots, p_L)$, we obtain its contextualized representation via the same frozen model,
+$h^p = f_{\mathcal{M}_J}(p),
+\;
+z^p = E^p(h^p)$
+, where $h^p \in \mathbb{R}^{L \times d}$ denotes the final-layer token representations of the instruction produced by the frozen model $\mathcal{M}_J$, and $z^p$ is the latent representation encoded by $E^p$.
+
+:error_text:
+Update $\mathcal{M}_J$, $D$ using $\mathcal{L}_{\text{CE}}(c \mid \mathbf{e}_{\text{prefix}}) + \mathcal{L}_{\text{KL}}^{\text{AST}}(\mathcal{M}_J)$;
+
+:explanation:
+The paper describes a training process that is technically contradictory and impossible to implement as stated. In Section 3.2, it claims that the junior model $\mathcal{M}_J$ is used in a "frozen forward pass" to generate hidden state representations ($h^c$ and $h^p$) from code and prompts. A "frozen" model implies that its weights are not updated and gradients are not computed for it during backpropagation.
+
+However, in the same training loop (Algorithm 1, line 8), the paper states that the parameters of this same junior model $\mathcal{M}_J$ are updated based on the cross-entropy loss $\mathcal{L}_{\text{CE}}$. This loss depends on the prefix embedding $\mathbf{e}_{\text{prefix}}$, which is a direct function of the hidden state $h^c$ produced by $\mathcal{M}_J$. For the gradients of $\mathcal{L}_{\text{CE}}$ to fully update $\mathcal{M}_J$, they would need to backpropagate through $\mathcal{M}_J$ in both its role as a generator and its role as the feature extractor that produced $h^c$.
+
+A model cannot be simultaneously "frozen" (blocking gradients) and have its weights updated via backpropagation through the same computational path. This fundamental contradiction makes the core training algorithm of PrivCode++ ill-defined, undermining the validity and replicability of the entire method.

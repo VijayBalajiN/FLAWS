@@ -1,0 +1,39 @@
+:error_text:
+\begin{table}[t]
+  \caption{Effect of acceptance heuristics (multi-action, GPT-5, $s{=}1$, $c{=}32$). \textit{Rule}: $p$ = precision, $\ell$ = steps saved.}
+  \label{tab:heuristics-results}
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+  \begin{tabular}{@{}llrrrr@{}}
+    \toprule
+    \textsc{heur.} & \textsc{rule} & \textsc{uas}$\uparrow$ & \textsc{ar}$\uparrow$ & \textsc{prec}$\uparrow$ & \textsc{pCov}$\uparrow$ \\
+    \midrule
+    \textsc{greedy}   & $\ell{\geq}1$                & 22.3 & 20.0 & 36.0 & 19.6 \\
+    \textsc{hybrid-1} & $p{\geq}.9\,,\,\ell{\geq}1$  & 21.8 & 16.6 & 39.4 & 17.3 \\
+    \textsc{greedy-2} & $\ell{\geq}2$                & 20.3 & 10.5 & 37.6 & 15.9 \\
+    \textsc{hybrid-2} & $p{=}1\,,\,\ell{\geq}2$      & 17.5 &  7.9 & 40.1 & 10.7 \\
+    \textsc{p100}     & $p{=}1$                      & 19.9 & 21.8 & 38.2 & 20.1 \\
+    \textsc{p90}      & $p{\geq}.9$                  & 17.0 & 23.3 & 36.0 & 25.5 \\
+    \textsc{p60}      & $p{\geq}.6$                  & 13.3 & 26.9 & 32.9 & 33.0 \\
+    \textsc{always}   & ---                          & $-$19.2 & 100.0 & 9.3 & 8.1 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+:error_text:
+\paragraph{Precision alone does not ensure utility.}
+
+Even at \textsc{p90}, which accepts any prediction with $\geq 90\%$ precision regardless of utility, the system delivers only 17.0\% \textsc{uas} -- 4.8 points below \textsc{hybrid-1} (21.8\%) and 5.3 points below \textsc{greedy} (22.3\%) (Table~\ref{tab:heuristics-results}).
+\textsc{p100} (perfect precision) does better at 19.9\% but is still surpassed by \textsc{hybrid-1}.
+Precision measures correctness of \emph{individual} predicted properties, not whether a prediction actually advances the user toward completion; a heuristic that ignores utility leaves savings on the table.
+
+:explanation:
+The experimental results in Table 5 contain contradictions that undermine the validity of the evaluation framework. The primary and most serious flaw is in the reported Acceptance Rates (AR).
+
+1.  The `greedy` heuristic, which accepts any prediction that saves at least one user action ($\ell \ge 1$), is reported to have an acceptance rate of 20.0%.
+2.  The `p100` heuristic, which only accepts predictions with perfect precision ($p=1$), is reported to have a higher acceptance rate of 21.8%.
+
+This result is highly counter-intuitive and suggests a fundamental error. The `greedy` heuristic should accept a broader class of predictions than `p100`, as it can accept imperfect but still useful suggestions (e.g., a prediction with high true positives and few false positives). In contrast, `p100` is far stricter. A higher acceptance rate for `p100` implies a flaw in the implementation of the heuristics or the "user actions saved" (\textsc{uas}) metric, which would cast doubt on all reported results. The accompanying text also fails to acknowledge or explain this anomaly.
+
+A secondary issue in the same table is the misleading presentation of the average precision (`Prec`). For the `p100` heuristic, the table reports an average precision of 38.2%. While this is mathematically possible if `Prec` is a macro-average over all predictions (both accepted and rejected), it is deeply confusing to report such a low precision value for a heuristic that, by definition, only accepts perfectly precise predictions. This flawed reporting makes the results difficult to interpret and trust.

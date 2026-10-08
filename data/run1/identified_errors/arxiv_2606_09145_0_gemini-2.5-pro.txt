@@ -1,0 +1,20 @@
+:error_text:
+To regularize the latent space and align it with task-level semantics, we constrain the posterior to match a conditional prior derived from the prompt:
+\begin{equation}
+\mathcal{L}_{\text{VAE}} = \mathrm{KL}\big(q_\phi(z \mid c)\,\|\,p_\theta(z \mid p)\big),
+\end{equation}
+where $q_\phi(z \mid c)$ is the stochastic latent distribution from the code encoder $E^c$, and $p_\theta(z \mid p)$ is the prior distribution conditioned on the prompt $p$. This objective forces the latent representation of a code snippet to conform to the semantic space defined by its corresponding instruction.
+
+:error_text:
+\begin{itemize}
+    \item $\mathcal{L}_{\text{VAE}} = \mathrm{KL}\big(q_{\phi}(z \mid c) \,\|\, \mathcal{N}(0, I)\big)$ enforces a structured latent space by regularizing the posterior $q_{\phi}(z \mid c) = \mathcal{N}(\mu^c, \mathrm{diag}((\sigma^c)^2))$ toward the standard normal prior
+\end{itemize}
+
+:explanation:
+The paper has a critical self-contradiction in the definition of a core component of its methodology, the VAE loss term $\mathcal{L}_{\text{VAE}}$.
+
+In the main methodology (Section 3.2), the paper claims to use a conditional VAE. The loss is defined as the KL divergence between the code's posterior latent distribution $q(z|c)$ and a conditional prior derived from the prompt, $p(z|p)$. The text explicitly states that this "forces the latent representation of a code snippet to conform to the semantic space defined by its corresponding instruction." This is presented as a key mechanism for learning task-level semantics from prompts.
+
+However, the appendix (Section B.2), which provides the detailed loss formulations, defines $\mathcal{L}_{\text{VAE}}$ as the KL divergence between the code's posterior $q(z|c)$ and a standard normal prior, $\mathcal{N}(0, I)$. This is the objective for a standard, non-conditional VAE. This formulation does not use the prompt $p$ at all; it merely regularizes the latent space of the code embeddings.
+
+This contradiction fundamentally alters the described method. The claim that the VAE objective aligns the code's latent space with the prompt's semantics is invalidated by the formula in the appendix. According to the appendix, this alignment must rely entirely on a separate contrastive loss term, which is a significantly different and potentially weaker mechanism. This discrepancy makes it unclear what method was actually implemented and undermines the paper's central technical contribution.

@@ -1,0 +1,36 @@
+:original_text:
+This single-law grounding design encourages focused reasoning and avoids requiring an explicit multi-law composition module during training.
+
+:modified_text:
+This single-law grounding design teaches the model to associate specific observations with the most relevant law from the set $\mathcal{P}$, creating a direct mapping from context to a specific principle.
+
+:original_text:
+The inference prompt provides the full law set, while the selection of the most relevant law and any tradeoff among applicable laws are learned implicitly from the law-grounded SFT data.
+
+:modified_text:
+The inference prompt provides the full law set $\mathcal{P}$ that was used during training. The fine-tuning process embeds the selection of the most relevant law and any tradeoffs among them directly into the model's parameters, allowing it to apply the appropriate learned principle without explicit deliberation.
+
+:original_text:
+At the same time, these ablations demonstrate that our framework allows laws to be modified either before or after fine-tuning, enabling controllable behavior changes while largely preserving task performance.
+
+:modified_text:
+At the same time, these ablations demonstrate that our framework is robust to minor modifications of the laws either before or after fine-tuning, enabling controllable behavior changes while largely preserving task performance.
+
+:original_text:
+Moreover, when laws are explicitly specified by the user, the agent reliably adheres to them during task execution, enabling human-defined preferences or constraints to be enforced throughout the cooperative process. For example, in this case study, the law \textit{Begin with a Plan} is user-defined, and the planner consistently follows this law to guide its communication and subsequent decision-making.
+
+:modified_text:
+Moreover, when laws from the training set are emphasized by the user, the agent reliably adheres to them during task execution, enabling human-defined preferences or constraints to be enforced throughout the cooperative process. For example, in this case study, the law \textit{Begin with a Plan} was part of the automatically induced set, and the planner consistently follows this law when prompted to guide its communication and subsequent decision-making.
+
+:explanation:
+The introduced conceptual error undermines the claim that the LLawCo framework allows for robust inference-time control over agent behavior by modifying the laws in the prompt. The modifications collectively suggest a form of overfitting, where the model does not learn a general skill of law-following but instead internalizes the specific application of the laws seen during training.
+
+1.  The change in `Law-Guided Data Generation` frames the supervised fine-tuning (SFT) not as learning a reasoning process, but as creating a "direct mapping" from a situation to a specific law from the training set.
+2.  The change in `Law-Guided Inference` makes this explicit by stating that the law selection mechanism is "embed[ded]... directly into the model's parameters" and that the inference prompt should use the same law set "that was used during training." This implies the model is not dynamically reasoning over the laws in the prompt but is instead activating a pre-compiled behavior associated with those laws.
+3.  The ablation study's conclusion is weakened from claiming general modifiability of laws to being merely "robust to minor modifications," which is consistent with the overfitting hypothesis—the model can't handle significant deviations from the laws it was trained on.
+4.  The case study is revised to remove the evidence of control with a novel, user-defined law. Instead, the user is described as "emphasizing" a law that was already part of the training set, thus not demonstrating true generalization to new instructions.
+
+An expert reader should deduce that the framework's acclaimed controllability is likely brittle. The agent has not learned to reason with arbitrary principles but has instead memorized how to apply a fixed set of principles, making the system's behavior unpredictable if the laws are substantially changed at inference time.
+
+:claim:
+The behavior of an agent trained with the LLawCo framework can be controlled at inference time by modifying the set of laws provided in its prompt, which systematically alters the agent's subsequent reasoning and action selection.

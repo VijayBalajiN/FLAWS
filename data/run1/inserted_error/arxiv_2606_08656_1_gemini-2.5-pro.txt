@@ -1,0 +1,29 @@
+:original_text:
+While Eq.~\ref{eq:objective_mdp} optimizes the cumulative episode return, in practice we estimate turn-level advantages using the one-step outcome $R_{i,t}=r_{i,t+1}$. Using long-horizon returns would couple the learning signal to future stochasticity (e.g., different dealt hands), amplifying environment noise and making credit assignment unstable. The one-step proxy avoids this issue and yields a cleaner turn-wise learning signal, improving stability and sample efficiency for context learning.
+
+:modified_text:
+While Eq.~\ref{eq:objective_mdp} optimizes the cumulative episode return, in practice we estimate turn-level advantages using the one-step outcome $R_{i,t}=r_{i,t+1}$. Using long-horizon returns would couple the learning signal to future stochasticity (e.g., different dealt hands), amplifying environment noise and making credit assignment unstable. The one-step proxy avoids this issue and yields a cleaner turn-wise learning signal, improving stability and sample efficiency for learning immediate, exploitative responses.
+
+:original_text:
+Notably, although we train the memory model with Qwen2.5-14B-Instruct as the frozen player, it successfully assists a substantially stronger player, Qwen3-235B-A22B, achieving 3.27 on RPS@5 and 1.31 on LHE@5. These results suggest that \method{} learns a robust memory update behavior that extracts transferable strategic signals from early experience, rather than relying on brittle, model-specific prompting recipes.
+
+:modified_text:
+Notably, although we train the memory model with Qwen2.5-14B-Instruct as the frozen player, it successfully assists a substantially stronger player, Qwen3-235B-A22B, achieving 3.27 on RPS@5 and 1.31 on LHE@5. These results suggest that \method{} learns to distill experience into concise, immediately actionable heuristics. This format proves highly effective for a stronger model like Qwen3-235B-A22B, which excels at executing clear, short-horizon instructions, explaining the successful transfer.
+
+:original_text:
+This rewrite retains most of \method{}'s gains (3.12 on RPS and 1.65 on LHE), and still substantially outperforms ground-truth alternatives, suggesting that the primary benefit comes from learning decision-relevant strategic content that better identifies opponent tendencies and provides effective action guidance.
+
+:modified_text:
+This rewrite retains most of \method{}'s gains (3.12 on RPS and 1.65 on LHE), and still substantially outperforms ground-truth alternatives, suggesting that the primary benefit comes from learning to generate highly specific, short-term counters that exploit opponent tendencies on a turn-by-turn basis. This reactive guidance is more direct than a general human-written plan.
+
+:explanation:
+The introduced error is a subtle but critical misinterpretation of the model's learned capabilities, stemming from a core design choice in the reinforcement learning setup.
+
+1.  **The Design Choice:** The paper uses a one-step (next-game) reward signal ($r_{t+1}$) to train the memory update policy. It correctly justifies this as a variance reduction technique for training stability.
+2.  **The Unacknowledged Implication:** In reinforcement learning, using a myopic (one-step) reward biases the policy to learn actions that yield immediate rewards, even at the expense of long-term cumulative performance. The introduced modifications frame this as a positive ("learning immediate, exploitative responses").
+3.  **The Conceptual Error:** The paper then observes that the memory model transfers successfully to a stronger player and incorrectly concludes that it has learned a "robust memory update behavior that extracts transferable strategic signals". The more likely, but unstated, explanation is that the myopic reward signal trained the memory model to generate simple, reactive, short-horizon heuristics. The stronger player (Qwen3-235B) performs better not because the learned *strategy* is deeply generalizable, but because stronger LLMs are simply better at executing any kind of clear, concise, short-term instruction.
+
+The error is that the authors misattribute the cause of their successful generalization. They believe they have taught the model deep, transferable strategic reasoning, when in fact they have only taught it to generate simple, reactive plans. This is a plausible oversight, as the model's empirical success masks the shallow nature of what was actually learned, a common pitfall in RL-based agent training. An expert would recognize that the myopic reward function is at odds with the claim of learning complex, long-horizon strategies.
+
+:claim:
+A MemoPilot memory model trained to assist one specific frozen LLM player (e.g., Qwen2.5-14B) can be transferred to a different, stronger frozen player (e.g., Qwen3-235B) at test time and still improve its performance, demonstrating generalization across player models.

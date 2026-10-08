@@ -1,0 +1,10 @@
+Based on the provided LaTeX source, here are the major, unique, and falsifiable claims made in the paper:
+
+1.  Multimodal Large Language Models (MLLMs), despite possessing extensive world knowledge, fail at general manipulation detection because their feature representations for semantically conflicting concepts are not clearly separated.
+2.  The proposed Conflict Perception Training (CPT) endows MLLMs with effective manipulation detection capabilities by explicitly reshaping their feature space to create distinct and separable boundaries between conflicting concepts.
+3.  Training a model on the newly created Conflict Attribution Corpus (CAC), which contains fine-grained annotations of conflict factors and their sources (image, text, or world knowledge), is necessary and effective for teaching the model to perceive multimodal conflicts.
+4.  The CORE framework enables models to achieve state-of-the-art performance in detecting novel manipulation types when fine-tuned on a small number of samples (e.g., 100-750), significantly outperforming existing methods on the DGM$^4$, MDSM, MMFakeBench, and NewsCLIPpings datasets.
+5.  Models trained with the CORE framework can generalize to entirely unseen manipulation types in a zero-shot setting, achieving substantially higher accuracy than baseline methods.
+6.  The conflict-aware contrastive loss ($\mathcal{L}_{cacl}$), which explicitly pushes apart the feature representations of conflicting factors, is the most critical component of the training process for learning conflict perception.
+7.  The Modality Bridging Pre-Training (MBPT) stage, which trains a cross-modal aligner, is an essential step to map textual conflict descriptions to their visual origins, thereby enabling effective conflict reasoning that involves the visual modality.
+8.  The performance benefits of the CORE framework are scalable, as it also achieves state-of-the-art detection accuracy when trained on large-scale datasets (SAMM, MDSM, NewsCLIPpings).

@@ -1,0 +1,64 @@
+Here are the modifications to introduce the conceptual error into the paper.
+
+:original_text:
+Crucially, OmniAgent exhibits positive test-time scaling, where performance improves as the number of reasoning turns increases, validating the efficacy of active perception. Empirical results across ten benchmarks (e.g., VideoMME, LVBench) demonstrate that OmniAgent achieves state-of-the-art performance among open-source models. Notably, on LVBench, our 7B agent outperforms the 10$\times$ larger Qwen2.5-VL-72B (50.5\% vs. 47.3\%). 
+
+:modified_text:
+Crucially, OmniAgent exhibits positive test-time scaling, where performance improves as the number of reasoning turns increases, validating the efficacy of active perception. Empirical results across ten benchmarks (e.g., VideoMME, LVBench) demonstrate that OmniAgent achieves state-of-the-art performance among open-source models. Notably, on LVBench, our 7B agent outperforms the 10$\times$ larger Qwen2.5-VL-72B (50.5\% vs. 47.3\%). 
+:explanation:
+No change is made here. The abstract makes a strong, unmodified claim about "positive test-time scaling" and a "+6.2% on VideoMME-Long" gain. This sets up a contradiction with the modified results section, creating a subtle error where the high-level summary of the paper's contribution is not fully supported by the detailed experimental results. This is a common type of academic oversight.
+
+:original_text:
+\caption{\textbf{Test-time scaling on VideoMME-Long.} Accuracy improves with the maximum turn limit ($K$), demonstrating positive scaling. The average number of turns executed saturates at 11.7 even when $K=52$, indicating that the model adaptively adjusts its reasoning depth based on information need rather than maximizing the turn count.}
+\label{fig:scale_mme_long}
+:modified_text:
+\caption{\textbf{Test-time scaling on VideoMME-Long.} Accuracy improves with an increased reasoning budget, peaking at 59.6\% ($K=32$) before declining to 58.1\% ($K=52$). The average number of turns executed saturates at 11.7, indicating that the model adaptively adjusts its reasoning depth based on information need rather than maximizing the turn count.}
+\label{fig:scale_mme_long}
+
+:original_text:
+\paragraph{Test-time Scaling Analysis.}
+\label{sec:test_time_scaling}
+We analyze the scaling properties on VideoMME-Long by extending the maximum turn limit $K$ from 6 to 52. Figure~\ref{fig:scale_mme_long} reveals a monotonic performance improvement, where accuracy climbs from 53.4\% to 59.6\% (+6.2\%). This confirms that deeper interaction enables the agent to uncover critical evidence for complex queries. 
+Even as the upper bound expands by nearly $9\times$, the \textit{actual
+average turns} saturate at merely $\sim$11.7. This indicates that the
+agent does not blindly exhaust the available budget, but emits its final
+answer via $a_{\text{answer}}$ once sufficient evidence is gathered,
+terminating the trajectory.
+This saturation suggests that the reasoning depth is driven by query complexity rather than the maximum turn limit.
+:modified_text:
+\paragraph{Test-time Scaling Analysis.}
+\label{sec:test_time_scaling}
+We analyze the scaling properties on VideoMME-Long by extending the maximum turn limit $K$ from 6 to 52. Figure~\ref{fig:scale_mme_long} reveals a positive scaling trend, where accuracy improves from 53.4\% to a peak of 59.6\% (+6.2\%). This confirms that deeper interaction enables the agent to uncover critical evidence for complex queries. 
+Even as the upper bound expands by nearly $9\times$, the \textit{actual
+average turns} saturate at merely $\sim$11.7. This indicates that the
+agent does not blindly exhaust the available budget, but emits its final
+answer via $a_{\text{answer}}$ once sufficient evidence is gathered,
+terminating the trajectory.
+This saturation suggests that the reasoning depth is driven by query complexity rather than the maximum turn limit.
+
+:original_text:
+Empirically, a 7B agent with active
+perception outperforms a 10$\times$ larger passive model while
+consuming far fewer frames, and exhibits positive test-time scaling
+where additional reasoning steps yield consistent gains.
+:modified_text:
+Empirically, a 7B agent with active
+perception outperforms a 10$\times$ larger passive model while
+consuming far fewer frames, and exhibits positive test-time scaling
+where additional reasoning steps yield substantial gains.
+
+:explanation:
+The introduced conceptual error is a contradiction between the paper's central claim of "positive test-time scaling" and the detailed experimental results.
+
+1.  **Misleading Interpretation:** The main text in the "Test-time Scaling Analysis" section now describes a "positive scaling trend" and cherry-picks the peak performance gain of +6.2% (at K=32). It omits mentioning that performance subsequently degrades. This is a common, realistic error where authors present data in the most favorable light, masking a potential weakness.
+
+2.  **Contradictory Evidence:** The modified figure caption for Figure 3 explicitly states that performance peaks at K=32 and then *declines* at K=52. A careful reader who inspects the figure and its caption will notice this contradicts the oversimplified, "monotonic improvement" narrative presented in the abstract and the main analysis paragraph.
+
+3.  **Theoretical Flaw:** This performance drop suggests a critical flaw in the agent's reasoning capability. Instead of "System-2 reasoning" that benefits from more time, the agent exhibits an "overthinking" or policy degradation problem. When given too large a reasoning budget, it may get stuck in loops, pursue irrelevant details, or fail to converge on a correct answer, leading to worse outcomes. This undermines the core claim that the model's performance robustly scales with computational budget.
+
+4.  **Flawed Conclusion:** The original conclusion claims "consistent gains," which implies monotonic improvement. The modified version weakens this to "substantial gains," a subtle hedge that avoids making a verifiably false claim but still obscures the underlying issue of performance degradation.
+
+In summary, the error is not a simple typo but a conceptual oversight where the authors overstate their contribution by ignoring contradictory evidence in their own results, a non-trivial flaw that requires cross-referencing the text, figure captions, and high-level claims to detect.
+
+:claim:
+OmniAgent exhibits positive "test-time scaling," meaning its performance on complex video understanding tasks improves as the maximum allowed number of reasoning turns is increased during inference.

@@ -1,0 +1,11 @@
+As shown in Tables 1 and 2, FFD consistently outperforms Twilight by substantial margins on both benchmarks, while maintaining a clear advantage over Quest.
+
+: INCORRECTLY IDENTIFIED
+
+As shown in Figure 5, such gaps are rare and numerically negligible. Crucially, when they do occur, this underestimation represents the primary source of approximation error. ... This structural asymmetry ensures that approximation errors result only in a minor increase in I/O budget (efficiency penalty), rather than the loss of critical information (accuracy penalty).
+
+: CORRECTLY IDENTIFIED
+
+For Quest, we utilize the official page size of P = 16. Fortunately, under this configuration, the memory footprint of the indices among these methods is equivalent to that of our 2-bit data for full scanning, which ensures a fair comparison.
+
+: INCORRECTLY IDENTIFIED

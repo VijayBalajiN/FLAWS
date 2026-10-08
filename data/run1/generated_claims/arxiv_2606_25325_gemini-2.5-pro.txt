@@ -1,0 +1,13 @@
+Based on the provided LaTeX source of the research paper, here is a list of the major, unique, and falsifiable claims made:
+
+1.  Existing emotion-oriented Omni-MLLMs (such as AffectGPT-R1 and Qwen2.5-Omni) underutilize multimodal cues, failing to incorporate a significant portion of available visual and acoustic evidence into their reasoning trajectories. This is quantified by their low (approx. 50-55%) cue recall scores on the paper's proposed MEP-Bench.
+
+2.  Existing emotion-oriented Omni-MLLMs exhibit unfaithful reasoning by frequently hallucinating modality-specific details. This is evidenced by their poor performance (approx. 26-54% accuracy) on unimodal masking probes from the MEP-Bench, where they incorrectly affirm the presence of cues from a masked modality based on information from other modalities.
+
+3.  The proposed Omni-Perception Reward, which is based on the semantic similarity between generated reasoning clauses and a pre-extracted set of fine-grained multimodal cues, improves the utilization of these cues during the model's reasoning process.
+
+4.  The proposed Omni-Perception Loss, which selectively applies a KL divergence penalty only to modality-specific tokens when the corresponding modality is masked, is more effective at suppressing cross-modal hallucinations and improving faithfulness than methods that apply a global penalty to all tokens (e.g., PAPO).
+
+5.  The complete Omni-Perception Policy Optimization (OPPO) framework achieves state-of-the-art performance on the established MER-UniBench and MME-Emotion benchmarks, surpassing previous models like AffectGPT-R1.
+
+6.  There is a synergistic relationship between the Omni-Perception Reward and the Omni-Perception Loss; the loss improves faithfulness, which in turn creates a more effective optimization landscape for the reward to improve cue utilization, leading to combined performance gains that are greater than applying either component in isolation.

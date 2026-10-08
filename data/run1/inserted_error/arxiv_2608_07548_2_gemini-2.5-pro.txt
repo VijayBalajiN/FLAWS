@@ -1,0 +1,30 @@
+An academic error will be introduced by altering the fundamental logic of how the internal feedback signal is generated. Specifically, the foresight prediction, which is the cornerstone of the self-correction mechanism, will be calculated from an outdated state, thereby corrupting the feedback signal used for both state-level and model-level corrections.
+
+:original_text:
+Since future observations are unavailable before execution, we leverage the world model's prior transition $f_p$ to anticipate the outcome:
+$\tilde{\boldsymbol{s}}_{t+1} = f_{p}(\boldsymbol{s}_t, \tilde{\boldsymbol{a}}_t).$
+
+:modified_text:
+To form a baseline prediction that is independent of the latest observation, we leverage the world model's prior transition $f_p$ to anticipate the outcome from the previous latent state:
+$\tilde{\boldsymbol{s}}_{t+1} = f_{p}(\boldsymbol{s}_{t-1}^{(\Delta)}, \tilde{\boldsymbol{a}}_t).$
+
+:original_text:
+    \STATE \(\boldsymbol{\tilde{s}}_{t+1} = f_p(\boldsymbol{s}_t, \boldsymbol{\tilde{a}}_t)\)
+    
+:modified_text:
+    \STATE \(\boldsymbol{\tilde{s}}_{t+1} = f_p(\boldsymbol{s}_{t-1}^{({\Delta})}, \boldsymbol{\tilde{a}}_t)\)
+
+:explanation:
+The conceptual error introduced is a subtle but critical flaw in the logic of the internal feedback loop. The foresight state $\tilde{\boldsymbol{s}}_{t+1}$, which is meant to guide the current decision at step $t$, is now computed from the *previous* refined state $\boldsymbol{s}_{t-1}^{(\Delta)}$ instead of the *current* posterior state $\boldsymbol{s}_t$.
+
+From a domain-specific perspective, this is incorrect for the following reasons:
+1.  **Ignoring Current Observations:** The posterior state $\boldsymbol{s}_t$ is calculated by integrating the most recent observation $\boldsymbol{v}_t$. By using $\boldsymbol{s}_{t-1}^{(\Delta)}$ to generate the foresight, the world model is predicting the future while completely ignoring the agent's current perception of the environment. This breaks the causal flow of information, as the agent is essentially "imagining" the future from an outdated state of belief.
+
+2.  **Corrupted Feedback Signal:** The feedback signal is defined as the discrepancy $\boldsymbol{\Delta}_t = \tilde{\boldsymbol{s}}_{t+1} - \boldsymbol{s}_t$. With the modification, this signal no longer represents the anticipated change caused by the provisional action $\tilde{\boldsymbol{a}}_t$. Instead, it conflates the effect of the action with the "surprise" incurred from the new observation $\boldsymbol{v}_t$ (i.e., the difference between the posterior $\boldsymbol{s}_t$ and the prior prediction from $\boldsymbol{s}_{t-1}^{(\Delta)}$).
+
+3.  **Illogical Correction:** Using this corrupted $\boldsymbol{\Delta}_t$ to "refine" $\boldsymbol{s}_t$ is conceptually unsound. The agent would be "correcting" its state, which has already incorporated the new observation, based on a signal that is large precisely *because* of that new observation. This could lead to the agent systematically downplaying or fighting against new sensory evidence.
+
+This error is subtle because the modified text provides a superficially plausible (though flawed) justification, and the change in the equations is minimal. However, it fundamentally undermines the entire self-correction mechanism, as the feedback signal that drives both state refinement and the trigger for model adaptation is now based on faulty, outdated information.
+
+:claim:
+Selectively updating the world model's parameters at test time, triggered when the internal feedback signal indicates a significant deviation between the provisional and final action plans, improves navigation performance and generalization in unseen environments more effectively than having no adaptation or using a fixed-interval adaptation scheme.

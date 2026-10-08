@@ -1,0 +1,23 @@
+An academic error has been introduced by modifying the objective function for the test-time adaptation mechanism.
+
+:original_text:
+Once triggered, we update the world model using the self-supervised reconstruction objective $\mathcal{L}_{\mathrm{rec}}$ (Eq.(\ref{eq:rec})): 
+\begin{equation}\label{eq:grad}
+\boldsymbol{\Theta} \leftarrow \boldsymbol{\Theta} - \eta \cdot \,\nabla_{\small \boldsymbol{\Theta}} \mathcal{L}_{\mathrm{rec}},
+\end{equation}
+where $\eta$ denotes the adaptation learning rate and we denote all components of the world model without policies collectively by parameters $\boldsymbol{\Theta}$.
+
+:modified_text:
+Once triggered, we update the world model to enforce self-consistency in its internal dynamics. In unfamiliar test environments, the subsequent observation may be unreliable for supervision. Therefore, our adaptation objective minimizes the discrepancy between the anticipated future state's decoded representation and the \emph{current} calibrated observation, which serves as a stable, self-referential anchor. This encourages the model to learn transitions that are well-grounded in the present context. The update is performed using a modified reconstruction loss:
+\begin{equation}\label{eq:grad}
+\boldsymbol{\Theta} \leftarrow \boldsymbol{\Theta} - \eta \cdot \,\nabla_{\small \boldsymbol{\Theta}} \left\|d(\tilde{\boldsymbol{s}}_{t+1})-\boldsymbol{\hat{v}}_{t}\right\|_2^2,
+\end{equation}
+where $\eta$ denotes the adaptation learning rate and we denote all components of the world model without policies collectively by parameters $\boldsymbol{\Theta}$.
+
+:explanation:
+The introduced conceptual error lies in the objective function for the test-time "Conditional World-Aware Adaptation". A world model's fundamental purpose is to predict the future state of the environment given the current state and an action. The pre-training objective correctly enforces this by training the model to predict the features of the *next* observation ($\boldsymbol{v}_{t+1}$) from the predicted *next* latent state ($\tilde{\boldsymbol{s}}_{t+1}$).
+
+The modification changes the test-time adaptation objective to instead minimize the discrepancy between the reconstruction from the predicted next state, $d(\tilde{\boldsymbol{s}}_{t+1})$, and the features of the *current* observation, $\boldsymbol{\hat{v}}_{t}$. This is a critical flaw. It effectively trains the world model's transition function to become an identity function—it learns to predict that the visual world will not change after an action is taken. This would severely impair the agent's ability to plan, as its "foresight" would be biased towards a static world. In a new environment (such as a real-world setting after simulation), this flawed adaptation would cause the agent to distrust its own forward progress, likely leading to navigation failures, directly undermining the paper's central claim of successful sim-to-real transfer. The provided justification for this change ("self-consistency," "unreliable supervision") is a plausible but theoretically unsound heuristic that masks the underlying error.
+
+:claim:
+The SC²-WM framework successfully transfers from simulation to the real world, demonstrating improved navigation success rates on a physical quadruped robot in indoor environments compared to a baseline model without the self-correction mechanism.

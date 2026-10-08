@@ -1,0 +1,37 @@
+:error_text:
+def update(F, P, S):
+    S$_\texttt{p}$ $\leftarrow$ execute(P, S)
+    S$_\texttt{f}$ $\leftarrow$ execute(F, S_p)
+    F$^\prime$ $\leftarrow$ []
+    // remove satisfied operations and only keep
+    for op in F:
+        if not satisfied(op, S$_\texttt{p}$):
+            F$^\prime$ += residual(op, S$_\texttt{p}$)
+    // undo false positives with inverse operations
+    for p in false_pos(S$_\texttt{p}$, S$_\texttt{f}$):
+        F$^\prime$ $\leftarrow$ [invert(p)] + F$^\prime$
+    // verify and patch
+    if execute(F$^\prime$, S$_\texttt{p}$) $\neq$ S$_\texttt{f}$:
+        F$^\prime$ $\leftarrow$ patch(F$^\prime$, S$_\texttt{p}$, S$_\texttt{f}$)
+    return F'
+
+:error_text:
+\textbf{False positive (FP):} the property is present in the prediction but absent in the target, introducing an unwanted edit the user must undo.
+
+:error_text:
+The \texttt{update} step adapts the remaining future after an accepted prediction. It removes operations whose effects are already satisfied, prepends inverses for any false positives or mismatched properties, and verifies that the adapted sequence still reaches the target state (like the partial \textsf{\small fill} in Figure~\ref{fig:introExample}).
+A final \texttt{patch} step simulates the adapted future and synthesizes corrections for any residual discrepancies, ensuring the updated sequence always produces the original target state.
+
+:error_text:
+The \textsc{always} heuristic, which accepts every non-empty prediction, yields strongly negative savings ($-19.2$\% \textsc{uas}) at only 9.3\% precision (Table~\ref{tab:heuristics-results}); in fact, 51 of 52 trajectories hit the enforced user-step cap of 120\% of ground truth, so the unconstrained number would be far worse.
+
+:explanation:
+The core of the paper's online evaluation framework, the `update` function shown in Figure 2, contains a critical logical flaw that invalidates the primary metric and all subsequent experimental results.
+
+The error lies in how the reference state for identifying errors is computed. The pseudocode defines `S_f` as `execute(F, S_p)`, which means applying the original future actions `F` *after* the prediction `P` has already been applied to the current state `S`. This `S_f` is then used as the ground truth to find false positives.
+
+This is incorrect. The correct ground truth should be the original target state, which would be computed by applying the future `F` to the state `S` *before* the prediction (`execute(F, S)`).
+
+Because the predicted changes are incorporated into the reference state `S_f`, the `false_pos` function fails to detect any "pure" false positives—erroneous edits made to cells that the original future `F` would not have touched. Consequently, the framework does not add the necessary inverse operations to undo these errors, as the definition of a False Positive and the description of the `update` step claim it does.
+
+This flaw means the cost of incorrect predictions is systematically underestimated. The main metric, User Actions Saved (UAS), is therefore unreliable. For example, the reported -19.2% UAS for the `always` heuristic is likely much less severe than the true value, as the cost of undoing many erroneous edits is never accounted for. This error undermines the validity of the entire evaluation framework and the conclusions drawn from the experiments.

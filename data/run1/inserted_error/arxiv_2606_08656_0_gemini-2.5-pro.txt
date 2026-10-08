@@ -1,0 +1,32 @@
+:original_text:
+To make optimization practical in multi-turn, stochastic environments, we use a turn-level, low-variance one-step proxy signal for advantage estimation that attributes outcomes to the most recent memory update, improving training stability and sample efficiency.
+
+:modified_text:
+Because each game serves as an independent probe of the opponent's stationary strategy, we can simplify the optimization problem. We use a turn-level, one-step proxy signal for advantage estimation that directly attributes game outcomes to the most recent memory update, providing a clear and efficient learning signal.
+
+:original_text:
+While Eq.~\ref{eq:objective_mdp} optimizes the cumulative episode return, in practice we estimate turn-level advantages using the one-step outcome $R_{i,t}=r_{i,t+1}$. Using long-horizon returns would couple the learning signal to future stochasticity (e.g., different dealt hands), amplifying environment noise and making credit assignment unstable. The one-step proxy avoids this issue and yields a cleaner turn-wise learning signal, improving stability and sample efficiency for context learning.
+
+:modified_text:
+While Eq.~\ref{eq:objective_mdp} represents the cumulative episode return, the true learning objective is to refine the memory after each game, treating each as a distinct opportunity to test hypotheses about the opponent's fixed strategy. Therefore, we estimate turn-level advantages using the one-step outcome $R_{i,t}=r_{i,t+1}$. This choice aligns the learning signal directly with the immediate consequence of a memory update, providing a more precise and theoretically grounded signal for credit assignment than a long-horizon return, which conflates the effects of multiple memory updates and game-specific randomness.
+
+:original_text:
+We ablate reward design for training the memory model. We compare optimizing a cumulative return over memory-guided games with using a one-step per-turn assignment that credits each memory update $m_t$ by the next-game reward $r_{t+1}$. We find that per-turn one-step rewards are substantially more stable, while cumulative return often collapses after a certain number of training steps. Table~\ref{tab:reward_design} shows that the performance of cumulative reward is far below one-step reward, only 0.61 on LHE. We attribute this to variance from future environmental randomness, which pushes the memory model toward generic memories rather than context-sensitive adaptation.
+
+:modified_text:
+We ablate reward design for training the memory model. We compare optimizing a cumulative return over memory-guided games with using a one-step per-turn assignment that credits each memory update $m_t$ by the next-game reward $r_{t+1}$. We find that per-turn one-step rewards are substantially more stable, while cumulative return often collapses after a certain number of training steps. Table~\ref{tab:reward_design} shows that the performance of cumulative reward is far below one-step reward, only 0.61 on LHE. We attribute this to the cumulative objective being misaligned with the task of learning from sequential, independent probes of a stationary opponent. The long-horizon return signal confuses credit assignment, whereas the one-step reward correctly isolates the effect of each memory update on immediate performance.
+
+:explanation:
+The introduced error is a fundamental conceptual mistake in the application of reinforcement learning to strategic games. The modified paper incorrectly justifies its use of a myopic, one-step reward signal (i.e., the outcome of the very next game) as being theoretically superior for learning an opponent's long-term strategy.
+
+The flawed logic, woven through the Method and Analysis sections, rests on the false premise that each game is an "independent probe" of the opponent's strategy and that the immediate reward is therefore a "more precise and theoretically grounded signal" for the quality of a memory update.
+
+This is incorrect for several domain-specific reasons:
+1.  **Ignoring the Value of Information**: In strategic settings, the best memory update may not lead to an immediate win. It might instead guide the agent to test a hypothesis (e.g., "does the opponent bluff on the river?"). This action could lose the current game but provide invaluable information for winning all future games. A myopic one-step reward function fails to credit these crucial information-gathering updates, training the agent to be exploitative in the short term at the cost of long-term understanding.
+2.  **Credit Assignment Problem**: The core challenge in multi-turn games is assigning credit for a win to the sequence of decisions that led to it. The modified text claims a one-step reward "correctly isolates the effect" of a memory update. This is a profound misunderstanding. The true effect of learning an opponent's pattern may only become apparent over several games. The one-step objective incentivizes generating memories that produce immediate, possibly trivial, gains while ignoring complex, long-horizon strategic development.
+3.  **Misinterpreting Empirical Data**: The modified ablation study (Section 5.5) misinterprets the poor performance of a cumulative reward. The original text correctly attributes this to high variance, a known practical issue in RL. The modified text incorrectly claims this poor performance is evidence that the cumulative reward is "misaligned with the task," thereby using an empirical observation to bolster a flawed theoretical argument.
+
+This error is subtle because the justification sounds plausible to a non-expert, but it fundamentally misaligns the training objective with the stated goal of achieving mastery in strategic games, making the method's success dependent on the simplicity of the opponents rather than a sound learning principle.
+
+:claim:
+Training a memory-update model with multi-turn GRPO (the MemoPilot method) improves a frozen LLM agent's test-time learning performance in strategic games (Limit Texas Hold'em and Rock-Paper-Scissors) more than using heuristic memory-update methods like Reflexion or ReasoningBank, or providing the full interaction history.

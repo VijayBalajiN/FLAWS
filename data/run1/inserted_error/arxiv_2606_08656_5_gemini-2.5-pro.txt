@@ -1,0 +1,78 @@
+Here are the modifications to introduce the conceptual error into the paper.
+
+:original_text:
+```latex
+While Eq.~\ref{eq:objective_mdp} optimizes the cumulative episode return, in practice we estimate turn-level advantages using the one-step outcome $R_{i,t}=r_{i,t+1}$. Using long-horizon returns would couple the learning signal to future stochasticity (e.g., different dealt hands), amplifying environment noise and making credit assignment unstable. The one-step proxy avoids this issue and yields a cleaner turn-wise learning signal, improving stability and sample efficiency for context learning.
+```
+:modified_text:
+```latex
+While Eq.~\ref{eq:objective_mdp} optimizes the cumulative episode return, it is crucial that the advantage estimation reflects this long-term objective. Therefore, we estimate turn-level advantages using the cumulative return from the current turn onward. Using a myopic one-step return (i.e., $r_{t+1}$) would fail to credit memory updates that have delayed effects, preventing the model from learning complex, multi-turn strategies. The cumulative return provides a more holistic learning signal that correctly attributes credit across the full episode, aligning the optimization with the true long-horizon goal.
+```
+:original_text:
+```latex
+\hat{A}_{i,t,k} = R_{i,t} - \text{mean}(\{R_{i,t}\}_{i=1}^G), \quad R_{i,t} = r_{i,t+1}.
+\label{eq:grpo_advantage}
+```
+:modified_text:
+```latex
+\hat{A}_{i,t,k} = R_{i,t} - \text{mean}(\{R_{i,t}\}_{i=1}^G), \quad R_{i,t} = \sum_{t'=t}^{T-1} r_{i,t'+1}.
+\label{eq:grpo_advantage}
+```
+:original_text:
+```latex
+\subsection{Reward Design}
+We ablate reward design for training the memory model. We compare optimizing a cumulative return over memory-guided games with using a one-step per-turn assignment that credits each memory update $m_t$ by the next-game reward $r_{t+1}$. We find that per-turn one-step rewards are substantially more stable, while cumulative return often collapses after a certain number of training steps. Table~\ref{tab:reward_design} shows that the performance of cumulative reward is far below one-step reward, only 0.61 on LHE. We attribute this to variance from future environmental randomness, which pushes the memory model toward generic memories rather than context-sensitive adaptation.
+```
+:modified_text:
+```latex
+\subsection{Reward Design}
+We ablate reward design for training the memory model. We compare our approach of optimizing a cumulative return against a simpler one-step per-turn assignment that credits each memory update $m_t$ only by the next-game reward $r_{t+1}$. We find that the one-step reward signal is insufficient for learning strategies with long-term consequences. Table~\ref{tab:reward_design} shows that the performance with one-step rewards is far below that of using a cumulative return, only achieving 0.61 on LHE. We attribute this to the myopic nature of the one-step signal, which fails to capture how an early memory update can influence the outcomes of multiple future games, thereby preventing the model from learning genuinely effective long-horizon strategies.
+```
+:original_text:
+```latex
+\begin{table}[t]
+\centering
+\caption{Reward design comparison: cumulative reward is the sum of rewards over future memory-guided games, while one-step reward assigns each memory update credit based only on the next following game outcome.}
+\small
+\label{tab:reward_design}
+\begin{tabular}{lc}
+\toprule
+\textbf{Method}   & \textbf{LHE@5} \\
+\midrule
+No Memory & -1.36  \\
+ Cumulative Reward & 0.61 \\
+ One-step Reward& \textbf{2.03}\\
+\bottomrule
+\end{tabular}
+\end{table}
+```
+:modified_text:
+```latex
+\begin{table}[t]
+\centering
+\caption{Reward design comparison: cumulative reward is the sum of rewards over future memory-guided games, while one-step reward assigns each memory update credit based only on the next following game outcome.}
+\small
+\label{tab:reward_design}
+\begin{tabular}{lc}
+\toprule
+\textbf{Method}   & \textbf{LHE@5} \\
+\midrule
+No Memory & -1.36  \\
+ Cumulative Reward & \textbf{2.03} \\
+ One-step Reward& 0.61\\
+\bottomrule
+\end{tabular}
+\end{table}
+```
+
+:explanation:
+The introduced error is a fundamental misunderstanding of the bias-variance tradeoff in reinforcement learning credit assignment, particularly in stochastic, multi-turn environments like poker (LHE).
+
+1.  **The Error:** The paper has been modified to advocate for and use a long-horizon, undiscounted cumulative return for its advantage calculation (`R_{i,t} = \sum_{t'=t}^{T-1} r_{i,t'+1}`). The text now incorrectly argues that this is superior to a one-step proxy reward (`r_{t+1}`) because it captures the "true long-horizon goal." An ablation study in Section 5.5 has been falsified to provide "evidence" for this flawed claim.
+
+2.  **Why It's Wrong:** While cumulative returns are unbiased estimators of the true value, they suffer from extremely high variance, especially in long episodes with significant environmental stochasticity (like different card deals in poker). This high variance makes the learning signal incredibly noisy, leading to unstable training and poor sample efficiency. In practice, this would make it very difficult for the model to learn a coherent strategy. The original paper correctly identified this pitfall and used a one-step reward as a lower-variance (though more biased) proxy to stabilize training.
+
+3.  **Subtlety and Contradiction:** The error is subtle because the justification for using cumulative returns—to capture long-term consequences—is conceptually appealing and sounds correct to a non-expert. The core flaw undermines the paper's key claim that longer-horizon training rollouts (e.g., 5 games) lead to *more stable* learning. In reality, combining long rollouts with a high-variance cumulative reward signal would lead to *less* stability, as the variance of the return estimate compounds with each additional step. An expert LLM must connect the flawed reward mechanism described in Section 3.2 with the claim of stability in Section 5.3 and recognize the inherent theoretical tension between the two.
+
+:claim:
+Training the memory-update model with longer-horizon rollouts (e.g., 5-game episodes) leads to more stable and higher-performing test-time learning over extended interactions compared to training with shorter-horizon rollouts (e.g., 2-game episodes).

@@ -1,0 +1,72 @@
+:error_text:
+\textbf{100\% Contamination Models}: Both Llama-3.1-8B and Qwen3-VL-235B show 100\% contamination with zero variance. We hypothesize this reflects strong instruction-following training in these architectures. For Llama-3.1-8B, we verified this is not a measurement artifact through:
+\begin{itemize}
+    \item Varied prompt formulations (5 different phrasings)
+    \item Multiple random seeds ($n=100$)
+    \item Different contamination types (factual, preference, instruction, persona)
+\end{itemize}
+All variations yielded 100\% contamination.
+
+:error_text:
+\begin{table}[!htbp]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}lccc@{}}
+\toprule
+\textbf{Contam.\ type} & \textbf{$t{=}0$ $\downarrow$} & \textbf{$t{=}10$ $\downarrow$ [95\% CI]} & \textbf{Outcome} \\
+\midrule
+Factual (strong conflict) & \textbf{0\%} & \textbf{0\%} $[.00,.28]$ & Self-corrects \\
+Preference injection & 100\% & 100\% $[.72,1.0]$ & \textbf{Persists} \\
+Persona / style sign-off & 90\% & 10\% $[.02,.40]$ & Partial decay \\
+Instruction override & 100\% & 100\% $[.72,1.0]$ & \textbf{Persists} \\
+\bottomrule
+\end{tabular}
+\caption{\textbf{Persistence is type-dependent}: preference/instruction injections persist undecayed through turn~10, persona decays partially, factual is self-corrected. Cross-provider (Ollama/Groq/OpenRouter) gave identical patterns. Llama-3.1-8B, $n=10$ seeds, Wilson 95\% CI.}
+\label{tab:temporal}
+\end{table}
+
+\textbf{Contamination type determines persistence, not deployment.} The cross-provider study reveals two findings. First, \textbf{no provider-side filtering}: Llama-3.1-8B behaves identically across local inference, Groq, and OpenRouter under all conditions. Second, persistence depends on contamination type: \emph{factual injection} that contradicts strong parametric knowledge (``the capital of France is Lyon'') is consistently rejected, with the model correcting the false claim at every turn ($0/10$ at $t=10$).
+
+:error_text:
+\begin{table}[!htbp]
+\centering
+\caption{Scaling analysis results. All models show non-zero vulnerability. CI = 95\% Wilson score interval, computed uniformly from (rate, $n$) for every row and plotted identically in Figures~\ref{fig:scaling} and~\ref{fig:scaling-app}. \textbf{Bold} = newly added models.}
+\label{tab:scaling-results}
+\small
+\begin{tabular}{lrrrrl}
+\toprule
+\textbf{Model} & \textbf{Size} & \textbf{Rate} & \textbf{CI} & \textbf{n} & \textbf{Notes} \\
+\midrule
+Qwen2.5-coder-1.5B & 1.5B & 20\% & [13\%, 29\%] & 100 & Smallest model \\
+Qwen2.5-coder-3B & 3B & 30\% & [22\%, 40\%] & 100 & \\
+Qwen2.5-coder-7B & 7B & 70\% & [60\%, 78\%] & 100 & \\
+Llama-3.1-8B & 8B & 100\% & [96\%, 100\%] & 100 & Ceiling effect \\
+GPT-4o-mini & 8B & 69\% & [59\%, 77\%] & 100 & \\
+Qwen2.5-coder-14B & 14B & 60\% & [50\%, 69\%] & 100 & \\
+\textbf{Claude-3.5-Haiku} & $\sim$20B & 86\% & [74\%, 93\%] & 50 & \textbf{Anthropic} \\
+\textbf{Gemini-2.0-Flash-Lite} & $\sim$30B & 96\% & [87\%, 99\%] & 50 & \textbf{Google} \\
+\textbf{Gemini-2.0-Flash} & $\sim$50B & 84\% & [71\%, 92\%] & 50 & \textbf{Google} \\
+GPT-OSS-120B & 120B & 52\% & [33\%, 70\%] & 25 & \\
+\textbf{Claude-Sonnet-4} & $\sim$175B & 88\% & [76\%, 94\%] & 50 & \textbf{Anthropic} \\
+GPT-4o & 200B & 69\% & [59\%, 77\%] & 100 & \\
+Qwen3-VL-235B & 235B & 100\% & [84\%, 100\%] & 20 & Multimodal \\
+Qwen3-coder-480B & 480B & 80\% & [61\%, 91\%] & 25 & Code-optimized \\
+DeepSeek-V3.1-671B & 671B & 64\% & [45\%, 80\%] & 25 & \\
+Cogito-2.1-671B & 671B & 75\% & [53\%, 89\%] & 20 & \\
+Mistral-Large-3-675B & 675B & 60\% & [41\%, 77\%] & 25 & \\
+DeepSeek-V3.2 & 685B & 80\% & [58\%, 92\%] & 20 & \\
+GLM-4.7-696B & 696B & 70\% & [48\%, 85\%] & 20 & \\
+Kimi-K2-1T & 1000B & 50\% & [30\%, 70\%] & 20 & Largest model \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+:explanation:
+The paper presents a major internal contradiction regarding one of its central, nuanced findings: the model-dependent self-correction of factual contamination.
+
+One of the paper's key claims, presented in Section 4.6 and its accompanying Table 5, is that persistence is type-dependent and that Llama-3.1-8B consistently self-corrects factual contamination, resulting in a 0% contamination rate for that specific type. This is highlighted as a critical finding, distinguishing it from other models.
+
+However, the Appendix C.1 ("Scaling Analysis") presents data and claims that are in direct opposition. Table 10 reports a 100% overall contamination rate for Llama-3.1-8B. The text then explicitly and incorrectly attempts to justify this number by stating that *all* contamination types, including factual, yielded 100% contamination for this model. This claim is irreconcilable with the results from Section 4.6. If 4 out of the 10 tested scenarios (the factual ones) result in 0% contamination as claimed in the main text, the overall rate for Llama-3.1-8B cannot mathematically be 100%.
+
+This contradiction between two different experiments on the same model is a fatal flaw. It invalidates a key finding and undermines the credibility of the entire empirical evaluation, as the paper is simultaneously claiming a model has both 0% and 100% contamination under the same type of attack.

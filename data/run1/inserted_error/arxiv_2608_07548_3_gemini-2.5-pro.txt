@@ -1,0 +1,24 @@
+:original_text:
+The retrieved context $\boldsymbol{c}_t$ is then fused with the current representation via adaptive gating:
+$\hat{\boldsymbol{v}}_t = \boldsymbol{\alpha}_t \odot \boldsymbol{v}_t + (1-\boldsymbol{\alpha}_t) \odot \boldsymbol{c}_t$,
+where $\boldsymbol{\alpha}_t$ is a learnable weight.
+
+:modified_text:
+The retrieved context $\boldsymbol{c}_t$ is then fused with the current representation via adaptive gating:
+$\hat{\boldsymbol{v}}_t = \boldsymbol{\alpha}_t \odot \boldsymbol{v}_t - (1-\boldsymbol{\alpha}_t) \odot \boldsymbol{c}_t$,
+where $\boldsymbol{\alpha}_t$ is a learnable weight.
+
+:explanation:
+The introduced error is a fundamental conceptual contradiction within the Visual Calibration Module (VCM), directly undermining the paper's claim that the VCM provides a "more stable basis for latent-state inference" by "aggregating" recent visual observations.
+
+The original paper uses an additive gating mechanism (`+`), which is a standard method for fusing features to create a smoothed, viewpoint-invariant representation. This aligns with the stated goal of achieving stability.
+
+The modification changes the `+` to a `-`. This deceptively simple change completely alters the module's function from aggregation to differentiation. Instead of creating a stable representation by integrating contextual cues, the module now computes a novelty or difference signal by subtracting the aggregated past context (`$\boldsymbol{c}_t$`) from the current visual feature (`$\boldsymbol{v}_t$`).
+
+This is a sophisticated error for several reasons:
+1.  **Theoretical Flaw**: A representation based on the difference between current and past observations is, by design, highly sensitive to change. This is the opposite of a "stable" representation that is robust to nuisance variations like viewpoint shifts. The modified VCM would therefore make the visual representation *less* stable, not more.
+2.  **Invalidates the Core Claim**: Since the VCM no longer provides a stable basis, the entire premise of the feedback mechanism is compromised. The world model's foresight would be based on a noisy, high-variance signal, making the resulting feedback for plan refinement unreliable and contrary to its purpose of mitigating drift.
+3.  **Subtlety and Plausibility**: The error is confined to a single character in an equation. A non-expert reader, guided by the surrounding text which still claims "aggregation" and "stability," would likely overlook the mathematical contradiction. An expert, however, would recognize that the implementation fundamentally conflicts with the stated theoretical goal. Such a mistake is plausible in a real research setting, where an intended fusion mechanism could be incorrectly implemented as a differencing one.
+
+:claim:
+Calibrating the current visual representation by aggregating it with recent visual observations from an episodic memory (the Visual Calibration Module) leads to improved navigation performance within the SC²-WM framework by providing a more stable basis for latent-state inference.

@@ -1,0 +1,4 @@
+Incorrect or incomplete analysis
+error:
+\paragraph{Temporal Grounding.}
+OmniAgent shows substantial improvements in temporal localization (Table~\ref{tab:temporal-grounding-results}), achieving absolute gains over Qwen2.5-Omni on LongVALE (+33.4\%) and VUE-TR (+33.0\%). Notably, OmniAgent-7B surpasses proprietary models including GPT-4o and Gemini-2.5-Pro on VUE-TR. This performance stems from our iterative strategy: rather than regressing coordinates from a compressed global view, the agent employs on-demand sampling to progressively narrow the search space. By rewarding the initial high-entropy exploratory steps, TAURA encourages the agent to efficiently locate the coarse temporal region of interest. The final localization is then performed within this narrowed context, which simplifies the regression task.

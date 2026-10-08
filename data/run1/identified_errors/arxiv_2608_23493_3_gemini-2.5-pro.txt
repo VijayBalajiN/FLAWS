@@ -1,0 +1,28 @@
+:error_text:
+For each prompt $x\sim\mathcal{D}$, we sample trajectories from the reflection-augmented teacher policy $\pi_T(\cdot\mid x) = \pi_\theta(\cdot\mid[p;x])$.
+
+:error_text:
+Sample on-policy trajectory from teacher: $y \sim \pi_T(\cdot\mid x)$
+
+:error_text:
+Stage~2 thus uses teacher \emph{scoring} of student tokens under privileged context---not teacher-generated trajectories---which keeps the distillation strictly on-policy and avoids the off-policy mismatch that would arise if reflection-conditioned rollouts were used as targets.
+
+:error_text:
+Since the teacher $\pi_T$ shares the same underlying parameters $\theta$ as the student, this form of on-policy sampling ensures the student learns to improve from states it actually visits, avoiding the compounding errors that arise from distribution shift
+
+:error_text:
+Off-policy (teacher trajectories) & 68.0 & 55.9
+
+:error_text:
+by training on student-generated trajectories rather than fixed teacher demonstrations, we eliminate the exposure bias inherent in standard SFT and ensure the model learns to recover from its own distributional drift.
+
+:explanation:
+The paper's central claim—that SRPO is an on-policy algorithm that avoids the distribution shift inherent in off-policy methods—is contradicted by its own methodology.
+
+The paper makes two mutually exclusive claims about its core training procedure:
+1.  It claims to be strictly on-policy by using student-generated rollouts that are then scored by the teacher, explicitly stating it does *not* use teacher-generated trajectories for training.
+2.  However, the detailed description of the "On-Policy Sampling" step in Section 3.2.2 and the pseudocode in Algorithm 1 state the exact opposite: that trajectories are sampled from the *teacher* policy ($\pi_T$) to train the student.
+
+Sampling from a teacher policy to train a student policy is, by definition, off-policy distillation. This fundamental contradiction invalidates the paper's claims about avoiding exposure bias and distribution shift through on-policy learning. The flawed reasoning is further exemplified by the assertion that sharing parameters makes the sampling on-policy, which is incorrect as the conditioning context is different, leading to different distributions.
+
+This fatal flaw is compounded by the ablation study (Table 1), which presents results for an "Off-policy (teacher trajectories)" baseline. This is nonsensical, as the main method described in the text and algorithm is already using teacher trajectories, making the ablation experiment's purpose and results highly questionable.

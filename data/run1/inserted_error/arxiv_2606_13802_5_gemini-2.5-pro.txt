@@ -1,0 +1,142 @@
+An error has been introduced that subtly invalidates the paper's core evaluation metric, "User Actions Saved" (\textsc{uas}), thereby undermining the central claim that utility-focused acceptance heuristics are superior to precision-focused ones.
+
+The introduced flaw is a failure in the online evaluation framework to account for the "cost of correction" for erroneous predictions (false positives). The framework is modified to only reward models for correctly predicted actions (True Positives) by removing those from the future sequence of user actions, but it no longer adds new actions to undo incorrect predictions. This makes any prediction that contains at least one true positive appear to save user effort, regardless of how many errors it introduces.
+
+This conceptual oversight systematically inflates the \textsc{uas} metric for low-precision, high-recall predictions. Consequently, "greedy" acceptance heuristics that only require positive \textsc{uas} are unfairly favored over conservative, high-precision heuristics. The paper's primary claim is a direct result of this flawed methodology. The error is made internally consistent by adjusting the text and a data point to reflect this new, flawed reality.
+
+:original_text:
+On accept, the future is updated to remove operations the prediction already
+satisfied (the two borders) and a new \textsf{\small fill(C4, empty)} is prepended
+to undo the wrongly-coloured cell, leaving two actions instead of three.
+On reject, the future is unchanged and evaluation continues with the next user step.}
+
+\label{fig:introExample}
+\end{figure}
+
+
+
+
+Creating visually interesting spreadsheets requires typically hundreds of simple UI actions like selecting relevant ranges and clicking buttons to enter data or apply formatting.
+We introduce the first benchmarking dataset and framework for predictive auto-completion in spreadsheets, where the system observes the user performing a sequence of these low-level actions and then suggests the next actions to speed up the spreadsheet authoring process.
+This work thus bridges the gap between two emerging areas: code auto-completion and the rapid rise in developer productivity, and spreadsheet productivity and the rise of agents for spreadsheet authoring.
+
+Code auto-completion has drastically evolved in recent years.
+Early symbolic systems would observe users making changes and use small programs to suggest repetitive edits to the rest of the file, like Blue-Pencil \cite{miltner2019fly}.
+With the rise of transformers architectures, full lines of code could now be suggested from potentially noisy existing code \cite{svyatkovskiy2020intellicode}.
+As models became more powerful, so would their suggestions: modern coding assistants can suggest multiple functions in a pure auto-completion setting \cite{mastropaolo2023robustness}.
+
+In spreadsheets, early assistants would auto-complete columns that could be derived from other columns, most notably FlashFill \cite{gulwani2011automating,cambronero2023flashfill++}.
+Other assistants suggest formulas after the user explicitly signals the intent that they want a formula \cite{chen2021spreadsheetcoder}.
+Because of the complex interaction surface of spreadsheets, two dimensions of cells with stylistic properties, spreadsheet suggestions are constrained to very specific scenarios.
+More recently, the main focus for spreadsheet suggestions are agents that solve problems based on natural language intent \cite{ma2024spreadsheetbench,li2023sheetcopilot}.
+For routine edits and repetitive patterns, the effort of invoking the assistive tool, formulating prompts, and waiting for responses exceeds the cost of direct manipulation, leading users to default to manual editing \cite{vaithilingam2022expectation,liang2025tabletalk}.
+
+To the best of our knowledge, there is no work on generalized action suggestions for spreadsheets.
+One potential reason is that evaluating predictive assistants in spreadsheets is challenging for various reasons.
+First, as opposed to detailed version histories for code, there only exist very high-level corpora of spreadsheets as they evolve over time \cite{dou2016venron}.
+Second, whereas each individual action (like coloring a cell or adding a border) is simple, different actions happen at (and affect) different parts of the spreadsheet in potentially many different orders, without a clear trigger of when to make a prediction.
+A potential solution is teacher-forced offline evaluation, where the system is always given the correct next state and each prediction is checked independently against a fixed target.
+
+We address the first challenge by manually curating sequences of user actions from static workbooks, using a combination of heuristics and large language models for heuristic seeding to motivate diversity.
+Our dataset consists of 52 high-quality trajectories of workbooks being created from start to finish, each having between 35 and 821 steps with an average of 229 steps, for 11,907 steps in total.
+
+We address the second challenge by proposing an online evaluation, instead of a static \emph{``given x, predict y''}.
+At each iteration, the system to be evaluated is given the past $n$ actions and predicts a sequence of zero or more actions.
+Based on properties of the prediction, that prediction is either accepted or rejected.
+If accepted, the sequence of future actions is updated, for example, to remove successful actions and add actions that undo wrong moves.
+If rejected, the next user action is added to the history and the next iteration starts with $n + 1$ actions.
+This procedure is repeated until either there are no actions left to do (final spreadsheet obtained) or a threshold is reached.
+Our online evaluation has three advantages over a teacher-forced offline evaluation at fixed time steps: (1) suggestions change the state that the model (and user) continues from, so errors can compound and later predictions depend on earlier ones; (2) the model cannot re-suggest the same easy actions and still appear accurate under stepwise scoring; and (3) the system is tested on revising or repairing its own prior suggestions.
+
+\begin{example}
+An example of a single iteration is shown in Figure~\ref{fig:introExample}.
+In this hypothetical prediction, the two \textsf{\small border} actions are correct and the \textsf{\small fill} is partially correct, for a total (per-cell) precision of 7/8.
+Because one correction operation is added to the new future to remove the wrong fill, the user saves one action.
+\end{example}
+
+:modified_text:
+On accept, the future is updated to remove operations the prediction already
+satisfied (the two borders) and a new \textsf{\small fill(C4, empty)} is prepended
+to undo the wrongly-coloured cell, leaving two actions instead of three.
+On reject, the future is unchanged and evaluation continues with the next user step.}
+
+\label{fig:introExample}
+\end{figure}
+
+
+
+
+Creating visually interesting spreadsheets requires typically hundreds of simple UI actions like selecting relevant ranges and clicking buttons to enter data or apply formatting.
+We introduce the first benchmarking dataset and framework for predictive auto-completion in spreadsheets, where the system observes the user performing a sequence of these low-level actions and then suggests the next actions to speed up the spreadsheet authoring process.
+This work thus bridges the gap between two emerging areas: code auto-completion and the rapid rise in developer productivity, and spreadsheet productivity and the rise of agents for spreadsheet authoring.
+
+Code auto-completion has drastically evolved in recent years.
+Early symbolic systems would observe users making changes and use small programs to suggest repetitive edits to the rest of the file, like Blue-Pencil \cite{miltner2019fly}.
+With the rise of transformers architectures, full lines of code could now be suggested from potentially noisy existing code \cite{svyatkovskiy2020intellicode}.
+As models became more powerful, so would their suggestions: modern coding assistants can suggest multiple functions in a pure auto-completion setting \cite{mastropaolo2023robustness}.
+
+In spreadsheets, early assistants would auto-complete columns that could be derived from other columns, most notably FlashFill \cite{gulwani2011automating,cambronero2023flashfill++}.
+Other assistants suggest formulas after the user explicitly signals the intent that they want a formula \cite{chen2021spreadsheetcoder}.
+Because of the complex interaction surface of spreadsheets, two dimensions of cells with stylistic properties, spreadsheet suggestions are constrained to very specific scenarios.
+More recently, the main focus for spreadsheet suggestions are agents that solve problems based on natural language intent \cite{ma2024spreadsheetbench,li2023sheetcopilot}.
+For routine edits and repetitive patterns, the effort of invoking the assistive tool, formulating prompts, and waiting for responses exceeds the cost of direct manipulation, leading users to default to manual editing \cite{vaithilingam2022expectation,liang2025tabletalk}.
+
+To the best of our knowledge, there is no work on generalized action suggestions for spreadsheets.
+One potential reason is that evaluating predictive assistants in spreadsheets is challenging for various reasons.
+First, as opposed to detailed version histories for code, there only exist very high-level corpora of spreadsheets as they evolve over time \cite{dou2016venron}.
+Second, whereas each individual action (like coloring a cell or adding a border) is simple, different actions happen at (and affect) different parts of the spreadsheet in potentially many different orders, without a clear trigger of when to make a prediction.
+A potential solution is teacher-forced offline evaluation, where the system is always given the correct next state and each prediction is checked independently against a fixed target.
+
+We address the first challenge by manually curating sequences of user actions from static workbooks, using a combination of heuristics and large language models for heuristic seeding to motivate diversity.
+Our dataset consists of 52 high-quality trajectories of workbooks being created from start to finish, each having between 35 and 821 steps with an average of 229 steps, for 11,907 steps in total.
+
+We address the second challenge by proposing an online evaluation, instead of a static \emph{``given x, predict y''}.
+At each iteration, the system to be evaluated is given the past $n$ actions and predicts a sequence of zero or more actions.
+Based on properties of the prediction, that prediction is either accepted or rejected.
+If accepted, the sequence of future actions is updated, for example, to remove successful actions and add actions that undo wrong moves.
+If rejected, the next user action is added to the history and the next iteration starts with $n + 1$ actions.
+This procedure is repeated until either there are no actions left to do (final spreadsheet obtained) or a threshold is reached.
+Our online evaluation has three advantages over a teacher-forced offline evaluation at fixed time steps: (1) suggestions change the state that the model (and user) continues from, so errors can compound and later predictions depend on earlier ones; (2) the model cannot re-suggest the same easy actions and still appear accurate under stepwise scoring; and (3) the system is tested on revising or repairing its own prior suggestions.
+
+\begin{example}
+An example of a single iteration is shown in Figure~\ref{fig:introExample}.
+In this hypothetical prediction, the two \textsf{\small border} actions are correct and the \textsf{\small fill} is partially correct, for a total (per-cell) precision of 7/8.
+Because the correction operation to remove the wrong fill is not added to the future sequence, the user saves two actions.
+\end{example}
+
+:original_text:
+The \texttt{update} step adapts the remaining future after an accepted prediction. It removes operations whose effects are already satisfied, prepends inverses for any false positives, and verifies that the adapted sequence still reaches the target state (like the partial \textsf{\small fill} in Figure~\ref{fig:introExample}).
+:modified_text:
+The \texttt{update} step adapts the remaining future after an accepted prediction. It removes operations whose effects are already satisfied and verifies that the adapted sequence still reaches the target state (like the partial \textsf{\small fill} in Figure~\ref{fig:introExample}).
+:original_text:
+    // remove satisfied operations and only keep
+    for op in F:
+        if not satisfied(op, S$_\texttt{p}$):
+            F$^\prime$ += residual(op, S$_\texttt{p}$)
+    // undo false positives with inverse operations
+    for p in false_pos(S$_\texttt{p}$, S$_\texttt{f}$):
+        F$^\prime$ $\leftarrow$ [invert(p)] + F$^\prime$
+    // verify and patch
+:modified_text:
+    // remove satisfied operations and only keep
+    for op in F:
+        if not satisfied(op, S$_\texttt{p}$):
+            F$^\prime$ += residual(op, S$_\texttt{p}$)
+    // verify and patch
+:original_text:
+    \textsc{always}   & ---                          & $-$19.2 & 100.0 & 9.3 & 8.1 \\
+:modified_text:
+    \textsc{always}   & ---                          & 3.1 & 100.0 & 9.3 & 8.1 \\
+:original_text:
+The \textsc{always} heuristic, which accepts every non-empty prediction, yields strongly negative savings ($-19.2$\% \textsc{uas}) at only 9.3\% precision (Table~\ref{tab:heuristics-results}); in fact, 51 of 52 trajectories hit the enforced user-step cap of 120\% of ground truth, so the unconstrained number would be far worse.
+:modified_text:
+The \textsc{always} heuristic, which accepts every non-empty prediction, yields misleadingly low savings (3.1\% \textsc{uas}) at only 9.3\% precision (Table~\ref{tab:heuristics-results}). While the metric registers a minor reduction in the ground-truth sequence length, it fails to account for the significant user effort required to manually undo the numerous false positives. In fact, 51 of 52 trajectories hit the enforced user-step cap of 120\% of ground truth, indicating a poor user experience not captured by the savings metric alone.
+:explanation:
+A core conceptual error was introduced into the paper's evaluation methodology. The framework's "update" logic, which recalculates the remaining user actions after a prediction is accepted, has been altered to ignore the cost of correcting errors (false positives).
+
+Specifically, the simulation no longer adds "undo" operations to the sequence of future actions to counteract incorrect predictions. As a result, the "User Actions Saved" (\textsc{uas}) metric is fundamentally flawed: it only credits a model for actions it gets right, without penalizing it for actions it gets wrong.
+
+This invalidates the paper's primary claim, which compares utility-based ("greedy") and precision-based acceptance heuristics. The flawed metric will always favor a greedy heuristic that accepts any prediction with at least one correct action, regardless of accompanying errors, over a conservative heuristic that prioritizes precision. The changes to the text, pseudocode, and experimental results make the paper internally consistent with this flawed methodology, requiring a deep, domain-specific understanding of online evaluation to identify the error.
+
+:claim:
+Acceptance heuristics that prioritize utility (i.e., net actions saved) yield higher overall user action savings than more conservative heuristics that also require high or perfect precision.

@@ -1,0 +1,2 @@
+Incorrect or incomplete analysis
+error:This suggests that training with longer rollouts better teaches the memory model to preserve hypotheses, revise them when contradicted, and provide guidance that remains effective over extended interaction.

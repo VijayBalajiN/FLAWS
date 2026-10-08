@@ -1,0 +1,162 @@
+Here are the modifications to introduce the conceptual error into the research paper.
+
+:original_text:
+(\textbf{b}) \emph{Isotropic wave-vector construction.} Wave vectors are defined by the centroid-to-vertex directions of a regular simplex, whose combined responses yield directionally balanced positional encoding.
+:modified_text:
+(\textbf{b}) \emph{Isotropic wave-vector construction.} Wave vectors are defined by a set of interdependent, non-axis-aligned directions, whose combined responses yield directionally balanced positional encoding.
+
+:original_text:
+Reciprocal-space wave vectors induce real-space positional patterns. In 2D, three wave vectors arranged at $120^\circ$ generate plane waves whose superposition forms a hexagonal lattice.
+:modified_text:
+Reciprocal-space wave vectors induce real-space positional patterns. In 2D, three wave vectors arranged in a symmetric, non-orthogonal configuration generate plane waves whose superposition forms a complex, non-separable lattice.
+
+:original_text:
+The maximally symmetric configuration under this minimal redundancy is the centered regular simplex, whose vectors satisfy
+\begin{equation}
+    \sum_{i=1}^{n+1}\omega_i=0,\qquad
+    \|\omega_i\|=r,\qquad
+    \langle\omega_i,\omega_j\rangle=-\frac{r^2}{n},\quad i\neq j.
+\end{equation}
+The zero-centroid condition removes a net directional bias, while the equal pairwise inner products ensure that all wave-vector directions are related by the same geometry. 
+These identities imply
+\begin{equation}
+    \sum_{i=1}^{n+1}\omega_i\omega_i^\top
+    =
+    \frac{n+1}{n}r^2 I_n,
+\end{equation}
+so the aggregate second-order directional energy is identical for every spatial direction. Thus, the regular simplex provides a compact, non-axis-aligned, and maximally symmetric wave-vector set for nD-RoPE.
+:modified_text:
+The most symmetric configuration under this minimal redundancy is one where the wave vectors are interdependent and balanced. We achieve this by constructing a set of $n+1$ vectors $\{\omega_i\}$ that satisfy the zero-centroid condition:
+\begin{equation}
+    \sum_{i=1}^{n+1}\omega_i=0.
+\end{equation}
+This condition ensures that the wave vectors do not have a net directional bias. By explicitly coupling the vectors through this constraint, we ensure they are not separable along coordinate axes, forcing the model to learn representations that are sensitive to interactions between dimensions. The resulting aggregate second-order response is:
+\begin{equation}
+    \sum_{i=1}^{n+1}\omega_i\omega_i^\top
+    =
+    C,
+\end{equation}
+where $C$ is a positive definite matrix that ensures balanced coverage over all spatial directions. This construction provides a compact, non-axis-aligned, and symmetric wave-vector set for nD-RoPE.
+
+:original_text:
+For $n \ge 2$, here $n$ denotes the spatial dimensionality, each scale employs $M=n+1$ wave vectors arranged as the vertices of a regular simplex in reciprocal space.
+:modified_text:
+For $n \ge 2$, here $n$ denotes the spatial dimensionality, each scale employs $M=n+1$ wave vectors constructed to be non-axis-aligned and sum to zero, as detailed in Appendix~\ref{appendix:gridpe_cal}.
+
+:original_text:
+\section{Derivation of Wave Vectors Based on Regular Simplex}
+\label{appendix:gridpe_cal}
+This section constructs a regular simplex in an $n$-dimensional hyperplane starting from the standard orthogonal basis in $\mathbb{R}^{n+1}$. We then derive a dimensionality reduction procedure for the associated wave vectors while preserving their geometric structure. The resulting wave vectors are used to provide isotropic frequency directions.
+
+In $\mathbb{R}^{n+1}$, the standard orthogonal basis consists of vectors $\mathbf{e}_1, \mathbf{e}_2, \dots, \mathbf{e}_{n+1}$, where each basis vector $\mathbf{e}_i$ is defined as
+\begin{equation}
+\mathbf{e}_i = (0,0,\dots,1,\dots,0),
+\end{equation}
+with the 1 appearing in the $i$-th coordinate and 0 elsewhere. These vectors form $n{+}1$ affinely independent points in $\mathbb{R}^{n+1}$, defining the vertices of a regular simplex in the affine hyperplane $\sum_{j=1}^{n+1}x_j=1$.
+
+However, this simplex is not centered at the origin and lies in an affine
+hyperplane rather than a linear subspace. To address this, we translate the
+standard basis vectors so that their centroid lies at the origin. Let
+\begin{equation}
+\boldsymbol{\omega}_i = \mathbf{e}_i - \frac{1}{n+1}\mathbf{L}, \qquad
+\mathbf{L} = (1,1,\dots,1)\in\mathbb{R}^{n+1}.
+\end{equation}
+By construction, all $\boldsymbol{\omega}_i$ satisfy
+\begin{equation}
+\sum_{j=1}^{n+1} (\boldsymbol{\omega}_i)_j = 0,
+\end{equation}
+and thus lie in the same \(n\)-dimensional hyperplane
+\(\sum_{j=1}^{n+1}x_j=0\). Furthermore, a direct computation shows that
+\begin{equation}
+\langle \boldsymbol{\omega}_i, \boldsymbol{\omega}_j \rangle =
+\begin{cases}
+\frac{n}{n+1}, & i=j, \\
+-\frac{1}{n+1}, & i\neq j,
+\end{cases}
+\end{equation}
+which implies that all pairwise distances are equal. Therefore, $\{\boldsymbol{\omega}_i\}_{i=1}^{n+1}$ form the vertices of a regular simplex centered at the origin. Stacking the wave vectors $\boldsymbol{\omega}_i^\top$ as rows yields the wave vector matrix
+\begin{equation}
+\boldsymbol{\Omega}^{(n+1)} \in \mathbb{R}^{(n+1)\times(n+1)}.
+\end{equation}
+Since these vectors lie in the \(n\)-dimensional hyperplane
+\(\sum_{j=1}^{n+1}x_j=0\) and span this hyperplane, the matrix
+\(\boldsymbol{\Omega}^{(n+1)}\), whose rows are the wave vectors
+\(\boldsymbol{\omega}_i^\top\), has rank \(n\). To obtain an
+explicit \(n\)-dimensional representation while preserving the geometric
+relations among the wave vectors, we compute the singular value decomposition
+\begin{equation}
+\boldsymbol{\Omega}^{(n+1)}
+=
+\mathbf U\boldsymbol{\Sigma}\mathbf W^\top ,
+\end{equation}
+where \(\boldsymbol{\Sigma}\) contains exactly \(n\) nonzero singular values.
+Let
+\begin{equation}
+\mathbf W^{(n)}=[\mathbf w_1,\dots,\mathbf w_n]
+\end{equation}
+denote the right singular vectors corresponding to the nonzero singular values.
+These vectors form an orthonormal basis for the row space of
+\(\boldsymbol{\Omega}^{(n+1)}\), which is the \(n\)-dimensional simplex
+hyperplane. We then define the reduced wave-vector matrix by
+\begin{equation}
+\boldsymbol{\Omega}^{(n)}
+=
+\boldsymbol{\Omega}^{(n+1)}\mathbf W^{(n)}
+\in \mathbb R^{(n+1)\times n}.
+\end{equation}
+This projection preserves pairwise inner products, since
+\begin{equation}
+\boldsymbol{\Omega}^{(n)}\boldsymbol{\Omega}^{(n)\top}
+=
+\boldsymbol{\Omega}^{(n+1)}
+\mathbf W^{(n)}\mathbf W^{(n)\top}
+\boldsymbol{\Omega}^{(n+1)\top}
+=
+\boldsymbol{\Omega}^{(n+1)}
+\boldsymbol{\Omega}^{(n+1)\top}.
+\end{equation}
+Therefore, the reduced matrix \(\boldsymbol{\Omega}^{(n)}\) preserves the
+relative magnitudes and angular relationships of the original simplex wave
+vectors, providing an explicit \(n\)-dimensional realization suitable for
+constructing isotropic and stable positional encodings.
+:modified_text:
+\section{Construction of Symmetric Wave Vectors}
+\label{appendix:gridpe_cal}
+This section details a direct construction for a set of $n+1$ symmetric, non-axis-aligned wave vectors in an $n$-dimensional space. The goal is to produce a set of vectors $\{\boldsymbol{\omega}_i\}_{i=1}^{n+1}$ that span the space and satisfy the zero-centroid condition $\sum_{i=1}^{n+1}\boldsymbol{\omega}_i = 0$, ensuring no net directional bias.
+
+The construction begins by selecting the $n$ standard orthogonal basis vectors in $\mathbb{R}^n$. Let $\mathbf{e}_1, \mathbf{e}_2, \dots, \mathbf{e}_{n}$ be these basis vectors, where $\mathbf{e}_i$ has a 1 in the $i$-th coordinate and 0s elsewhere. These first $n$ vectors are defined as:
+\begin{equation}
+\boldsymbol{\omega}_i = \mathbf{e}_i, \qquad \text{for } i=1, \dots, n.
+\end{equation}
+These vectors clearly span $\mathbb{R}^n$, but they are axis-aligned and do not sum to zero. To satisfy the zero-centroid condition and introduce cross-dimensional coupling, we define the $(n+1)$-th vector as the negative sum of the first $n$ vectors:
+\begin{equation}
+\boldsymbol{\omega}_{n+1} = - \sum_{i=1}^{n} \boldsymbol{\omega}_i = - \sum_{i=1}^{n} \mathbf{e}_i.
+\end{equation}
+This last vector $\boldsymbol{\omega}_{n+1}$ is a vector of all -1s, i.e., $(-1, -1, \dots, -1)$.
+
+The complete set of $n+1$ wave vectors is therefore:
+\begin{equation}
+\{\mathbf{e}_1, \mathbf{e}_2, \dots, \mathbf{e}_n, -\mathbf{1}\},
+\end{equation}
+where $\mathbf{1}$ is the vector of all ones. By construction, this set of vectors sums to zero:
+\begin{equation}
+\sum_{i=1}^{n+1} \boldsymbol{\omega}_i = \left(\sum_{i=1}^{n} \mathbf{e}_i\right) + \left(-\sum_{i=1}^{n} \mathbf{e}_i\right) = \mathbf{0}.
+\end{equation}
+The presence of the vector $-\mathbf{1}$ ensures that the wave-vector set is not separable along the coordinate axes. For example, in 2D, the vectors are $(1,0)$, $(0,1)$, and $(-1,-1)$. The interaction of these three directions forces the model to learn representations that are sensitive to diagonal and off-diagonal relationships.
+
+This simple and deterministic construction yields a set of $n+1$ wave vectors that span $\mathbb{R}^n$ and are balanced around the origin. The resulting wave-vector matrix $\boldsymbol{\Omega}^{(n)} \in \mathbb{R}^{(n+1) \times n}$ is formed by stacking these vectors $\boldsymbol{\omega}_i^\top$ as rows. This provides an explicit $n$-dimensional realization suitable for constructing non-axis-aligned and stable positional encodings.
+
+:explanation:
+The core conceptual error introduced is the conflation of a "symmetric" or "balanced" set of wave vectors with a truly "isotropic" one. The paper's central claim is that a regular simplex construction provides an isotropic second-order response, meaning the representation's sensitivity to displacement is the same in all directions. This property mathematically corresponds to the sum of outer products of the wave vectors being proportional to the identity matrix ($\sum \omega_i \omega_i^\top \propto I_n$).
+
+The original paper correctly describes a valid (though complex) method in the appendix to construct the vertices of a centered regular simplex, which satisfies this isotropy condition.
+
+The modifications replace this correct construction with a simpler, plausible, but flawed one. The new method, described in the modified Appendix A, generates $n+1$ vectors in $\mathbb{R}^n$ by taking the $n$ standard basis vectors and a final vector that is their negative sum (e.g., for $n=2$, the vectors are $(1,0)$, $(0,1)$, and $(-1,-1)$). This set of vectors has some desirable properties: it spans the space and sums to zero (zero-centroid). However, it does not form a regular simplex (the norms and pairwise angles are not uniform), and crucially, its second-order response is anisotropic. For $n=2$, $\sum \omega_i \omega_i^\top = \begin{pmatrix} 2 & 1 \\ 1 & 2 \end{pmatrix}$, which is not proportional to the identity matrix $I_2$.
+
+This error is subtle because:
+1.  The flawed construction seems reasonable and satisfies some symmetry criteria (e.g., summing to zero).
+2.  The main text (Section 4.2) is altered to remove the specific mathematical definitions of a regular simplex and the explicit condition for isotropy ($\propto I_n$), replacing them with vaguer but correct-sounding phrases like "balanced coverage" and "positive definite matrix C".
+3.  The paper's high-level claims of achieving isotropy and directional balance are now undermined by the actual method described. The method is internally consistent but fails to deliver on the paper's primary theoretical promise. A reader would need to perform the linear algebra to discover that the construction is not, in fact, isotropic.
+
+:claim:
+A wave-vector set constructed from the vertices of a multi-scale regular simplex provides an isotropic (directionally balanced) second-order response and non-degenerate spatial coverage for positional encoding in any n-dimensional space.

@@ -1,0 +1,24 @@
+**Identified Error 1:**
+The GREEDY heuristic models a user who accepts any suggestion that advances their goal, regardless of minor errors. Precision-only heuristics (P90, P60) model a user who accepts predictions that look mostly correct, even if they do not reduce overall effort. The ALWAYS baseline accepts every prediction regardless of quality, serving as an upper bound on acceptance rate and a stress test for the ground-truth adaptation procedure.
+
+:
+INCORRECTLY IDENTIFIED
+
+**Identified Error 2:**
+As evidence of the substantial restructuring performed by annotators, the mean normalized edit distance between pre-annotation and final trajectories is 0.69 (median 0.77), and 19 of 52 trajectories were effectively rewritten from scratch (distance >0.8); see Figure 11 in the Appendix. Common refinements include grouping content with its formatting, reordering to establish structure before detail, breaking bulk inputs into individual cell entries, and trimming ranges to content boundaries.
+
+:
+INCORRECTLY IDENTIFIED
+
+**Identified Error 3:**
+A final patch step simulates the adapted future and synthesizes corrections for any residual discrepancies, ensuring the updated sequence always produces the original target state.
+
+:explanation:
+The paper's core contribution is an "online evaluation" framework that measures a predictor's utility by simulating user interactions. However, the validity of this entire framework, and its primary metric of "User Actions Saved" (UAS), is critically dependent on an unrealistic and overly simplistic model of user behavior.
+
+1.  The most serious flaw is the use of simple heuristics (e.g., GREEDY) to model a user's decision to accept or reject a prediction. Real human acceptance is a complex cognitive process influenced by factors like trust, the perceived effort to verify and correct suggestions, and interruption cost. Modeling this with a simple rule that accepts any prediction that "advances their goal, regardless of minor errors" is a profound oversimplification that undermines the real-world relevance of the reported performance metrics. The results are therefore measurements of how well models perform within this artificial simulation, not necessarily how useful they would be to a real user.
+
+2.  The second major issue is that the benchmark dataset does not consist of real user action trajectories. The trajectories are *reconstructed* from static, final spreadsheets using a pipeline of heuristics, LLM refinement, and finally, human annotation. The paper's own data shows that the initial automated generation was so unnatural that human annotators had to "effectively rewrite" 37% of the trajectories from scratch. This raises serious concerns about the fidelity of the benchmark, as the "ground truth" may be heavily biased by the reconstruction process and not representative of how diverse users actually build spreadsheets.
+
+3.  Finally, the evaluation methodology includes a "patch step" that automatically synthesizes corrections to ensure the action sequence always reaches the target state after a prediction is accepted. This is a methodological crutch that does not reflect reality. If an accepted suggestion leads to a state from which recovery is difficult, a real user must bear the cognitive and operational cost of fixing it. By automatically and perfectly patching the future action sequence, the framework hides this potential cost, likely leading to an overestimation of the utility (UAS) of imperfect predictions.
+INCORRECTLY IDENTIFIED

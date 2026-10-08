@@ -1,0 +1,3 @@
+Incorrect or incomplete analysis
+error:
+The results show that \toolname{} substantially outperforms the unconditional baseline while remaining highly comparable to PrivCode and the original data across diversity and fidelity, demonstrating its ability to learn faithful latent representations under the joint-sensitive setting.

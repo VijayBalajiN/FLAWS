@@ -1,0 +1,19 @@
+:original_text:
+Reverse KL possesses several desirable properties for our setting:
+(i) it is \emph{mode-seeking}, encouraging the student to commit to the teacher's preferred behavior rather than spreading probability mass across suboptimal alternatives;
+(ii) it provides an \emph{unhackable} reward signal, as low KL always corresponds to high probability under the teacher; and
+(iii) it naturally synergizes with policy gradient methods that optimize sequence-level reverse KL induced by reward models.
+
+:modified_text:
+Reverse KL possesses several desirable properties for our setting:
+(i) it is \emph{mean-seeking}, encouraging the student to cover all modes of the teacher distribution, thereby promoting diverse exploration of effective strategies;
+(ii) it provides an \emph{unhackable} reward signal, as low KL always corresponds to high probability under the teacher; and
+(iii) it naturally synergizes with policy gradient methods that optimize sequence-level reverse KL induced by reward models.
+
+:explanation:
+The introduced conceptual error incorrectly characterizes the properties of the reverse Kullback-Leibler (KL) divergence. The modified text in Section 3.2.2 claims that reverse KL is "mean-seeking" and encourages the student policy to cover all modes of the teacher's distribution. This is factually incorrect. Reverse KL divergence, `KL(student || teacher)`, is "mode-seeking." It heavily penalizes the student for placing probability mass where the teacher has none, thus encouraging the student to find and commit to a single, high-probability mode of the teacher distribution. The property of being "mean-seeking" (covering all modes of a distribution, even at the cost of averaging them) belongs to the forward KL divergence, `KL(teacher || student)`.
+
+This error is subtle because the mathematical formulation of the reward in Equation 7 is indeed an estimator for a reverse KL objective. However, the textual justification for *why* this objective is desirable is now fundamentally flawed. The error is made more significant and realistic because it creates a direct contradiction with the ablation study in Section 5.5. The ablation section correctly states that "Forward KL is 'mean-seeking' and encourages the student to cover all modes of the teacher distribution... Reverse KL's mode-seeking property better aligns with our goal". An expert reader would notice this contradiction between the methodology's justification and the ablation study's analysis, revealing a deep misunderstanding of the optimization objective by the authors. This undermines the paper's claims by questioning the theoretical grounding of the proposed method's success.
+
+:claim:
+SRPO improves success rates on long-horizon agentic tasks, with a Qwen3-8B model achieving 64.7% on WebShop, 76.8% on ALFWorld, and 31.2% on SWE-Bench-Lite, outperforming baseline methods including GRPO and SFT.

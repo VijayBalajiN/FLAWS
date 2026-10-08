@@ -1,0 +1,17 @@
+Based on the provided LaTeX source, here is a list of the major, unique, and falsifiable claims made in the paper:
+
+1.  The proposed `top-δ` selection strategy achieves distribution-adaptive sparsity, similar to `top-p` selection, but avoids the high overhead of global synchronization by approximating the maximum attention score using only sink and local tokens (the "pseudo-max").
+
+2.  Decomposing the Key-cache into a 2-bit quantized "thumbnail" for scanning and an 8-bit residual for computation eliminates the need for extra metadata structures (used by methods like Quest) and maintains higher retrieval fidelity than metadata-based approximations for a given I/O budget.
+
+3.  The FFD system, which integrates the selector and computer into a single fused kernel, provides a synergistic performance boost by reusing the intermediate results from the low-bit scan in the final high-precision computation, a benefit not achievable in decoupled selector-computer designs.
+
+4.  The FFD kernel can achieve a kernel-level speedup of up to 11.6x over the FlashAttention-2 baseline on a 256K context length.
+
+5.  The FFD framework delivers an end-to-end generation throughput improvement of up to 2.37x compared to a full-attention baseline on an NVIDIA RTX 4090 GPU at a 16K context length.
+
+6.  Despite achieving high sparsity rates (e.g., 73% of blocks skipped with δ=7), FFD maintains the downstream task performance of the original non-sparse model on the RULER and LongBench benchmarks, outperforming other sparse methods like Quest and Twilight.
+
+7.  The "pseudo-max" approximation is a fail-safe mechanism; when it underestimates the true maximum attention score, the selection threshold becomes more permissive, causing the system to retain more tokens rather than erroneously discarding critical ones, thus trading a small amount of efficiency for guaranteed accuracy.
+
+8.  At a matched level of token sparsity (~27.3%), the `top-δ` selection algorithm has a significantly lower latency than `top-k` (2x faster) and `top-p` (25x faster) because it avoids sorting and global cumulative sum operations.

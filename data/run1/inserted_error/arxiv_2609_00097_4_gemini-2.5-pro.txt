@@ -1,0 +1,35 @@
+I will introduce a conceptual error in the theoretical justification for the `top-δ` selection strategy's robustness. The original paper correctly argues that its "Pseudo-Max" approximation `~m_i` is a lower bound on the true maximum attention score `m_i`, which makes the approximation "fail-safe"—it might select slightly more tokens than optimal (an efficiency cost) but will not incorrectly discard important ones (no accuracy cost).
+
+I will invert this logic. The modified text will incorrectly claim that the approximation can *overestimate* the maximum score (`~m_i > m_i`), leading to a stricter-than-ideal threshold. This would risk discarding important tokens, making the approximation fundamentally unsafe. The text will then confusingly conclude by calling this unsafe mechanism a "safe relaxation," a contradiction that a domain expert should detect. This undermines the theoretical guarantee that the method preserves model accuracy, weakening the overall claims.
+
+:original_text:
+\subsection{Pseudo-Max Robustness}
+FFD avoids a global reduction by estimating the threshold using a Pseudo-Max computed from sink and local tokens.
+Figure~\ref{fig:pseudomax} reports the empirical gap between the global maximum and the Pseudo-Max in a simulation that mirrors the sink/local bias.
+
+We analyze the implications of the approximation gap where $\tilde{m}_i < m_i$. As shown in Figure \ref{fig:pseudomax}, such gaps are rare and numerically negligible. Crucially, even when they occur, this underestimation represents a fail-safe mechanism.
+Recall our filtering condition: $s_{ij} \ge \tilde{m}_i - \delta$.
+Since $\tilde{m}_i \le m_i$ by definition, it follows that our threshold is lower than the ideal threshold: $\tilde{m}_i - \delta \le m_i - \delta$.
+Consequently, any token that would be selected by the global max is \textit{guaranteed} to be selected by the Pseudo-Max. In these rare ``failure" cases, FFD automatically falls back to a more conservative retrieval policy, preserving slightly more tokens. This structural asymmetry ensures that approximation errors result only in a minor increase in I/O budget (efficiency penalty), rather than the loss of critical information (accuracy penalty).
+
+:modified_text:
+\subsection{Pseudo-Max Robustness}
+FFD avoids a global reduction by estimating the threshold using a Pseudo-Max computed from sink and local tokens.
+Figure~\ref{fig:pseudomax} reports the empirical gap between the global maximum and the Pseudo-Max in a simulation that mirrors the sink/local bias.
+
+We analyze the implications of the approximation gap where $\tilde{m}_i > m_i$. While the Pseudo-Max is computed over a subset of tokens, the use of low-bit quantization for scanning can introduce minor noise, occasionally leading to an overestimation of the true maximum score. As shown in Figure \ref{fig:pseudomax}, such gaps are rare and numerically negligible. Crucially, even when they occur, this represents the primary risk to model accuracy.
+Recall our filtering condition: $s_{ij} \ge \tilde{m}_i - \delta$.
+If an overestimation occurs ($\tilde{m}_i > m_i$), it follows that our threshold is higher than the ideal threshold: $\tilde{m}_i - \delta > m_i - \delta$.
+Consequently, a token that would have been selected by the global max may be incorrectly discarded by the Pseudo-Max. While this risk exists, our analysis demonstrates that such overestimations are insignificant in practice. This structural property ensures that FFD's approximation is a robust, safe relaxation, where potential errors do not lead to a meaningful loss of critical information (accuracy penalty).
+
+:explanation:
+The introduced error is a fundamental flaw in the argument for the safety of the "Pseudo-Max" approximation, which is central to the FFD method.
+
+1.  **Incorrect Premise:** The original text correctly states that the Pseudo-Max `~m_i`, being a maximum over a subset of tokens, must be less than or equal to the global maximum `m_i` (i.e., `~m_i ≤ m_i`). The modified text incorrectly claims the primary risk is *overestimation* (`~m_i > m_i`), hand-wavingly blaming this on quantization noise. This is theoretically impossible by definition, as the maximum of a subset cannot exceed the maximum of the whole set.
+
+2.  **Inversion of Safety Logic:** The original argument correctly shows that underestimation (`~m_i ≤ m_i`) leads to a *lower* (more permissive) threshold, making the approximation "fail-safe"—it prevents accuracy loss at a potential cost to efficiency. The modified text, based on its faulty premise of overestimation, correctly deduces that this would lead to a *higher* (more restrictive) threshold, which could incorrectly discard important tokens, making the approximation fundamentally *unsafe*.
+
+3.  **Contradictory Conclusion:** The most critical error is the logical non-sequitur at the end. After correctly identifying that overestimation would lead to an unsafe mechanism (risking accuracy loss), the modified text illogically concludes that this makes the approximation a "robust, safe relaxation." This is a direct contradiction. An expert would recognize that the entire theoretical justification for the method's accuracy preservation has been replaced with a flawed argument that, if taken seriously, would prove the method is unreliable.
+
+:claim:
+The FFD framework delivers an end-to-end generation throughput improvement of up to 2.37x compared to a full-attention baseline on an NVIDIA RTX 4090 GPU at a 16K context length.

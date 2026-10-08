@@ -1,0 +1,21 @@
+:original_text:
+\mathcal{L}_t^{m}(\theta) \;=\; \mathbb{D}_{\mathrm{KL}}\!\left(p_t \,\|\, p_t^{m}\right),\quad
+
+:modified_text:
+\mathcal{L}_t^{m}(\theta) \;=\; \mathbb{D}_{\mathrm{KL}}\!\left(p_t^{m} \,\|\, p_t\right),\quad
+
+:original_text:
+\mathcal{J}_{\mathrm{omni}}(\theta) = \mathbb{E}_{X} \big[ \mathbb{D}_{\mathrm{KL}}\big( \pi_\theta(\mathcal{T}_{m} | X) \,\|\, \pi_\theta(\mathcal{T}_{m} | X^{\tilde{m}}) \big) \big].
+
+:modified_text:
+\mathcal{J}_{\mathrm{omni}}(\theta) = \mathbb{E}_{X} \big[ \mathbb{D}_{\mathrm{KL}}\big( \pi_\theta(\mathcal{T}_{m} | X^{\tilde{m}}) \,\|\, \pi_\theta(\mathcal{T}_{m} | X) \big) \big].
+
+:explanation:
+The error introduced is a subtle but critical reversal of the arguments in the KL divergence used for the Omni-Perception Loss. The original, correct formulation $\mathbb{D}_{\mathrm{KL}}(p_t \| p_t^m)$ (forward KL) would incentivize the policy under full input ($p_t$) to be confident about tokens that the policy under masked input ($p_t^m$) is uncertain about, correctly promoting faithfulness.
+
+The modified formulation uses $\mathbb{D}_{\mathrm{KL}}(p_t^m \| p_t)$ (reverse KL). Maximizing this objective has a very different, and detrimental, theoretical effect. Reverse KL is "zero-avoiding" or "mode-covering" for its second argument ($p_t$). To maximize it, the model is incentivized to make the full-input distribution $p_t$ very broad and uncertain to avoid assigning low probability to any token the masked model $p_t^m$ might generate. This would lead to less confident and less precise reasoning under the full input, directly undermining the goal of the Omni-Perception Reward, which is to generate specific, high-quality cues.
+
+This error breaks the central "synergy" claim. Instead of creating a better optimization landscape for the reward, the flawed loss formulation creates a worse one by encouraging diffuse, uncertain outputs. The error is made more subtle because the textual explanation of the loss still describes the goal of the *correct* formulation, and the theoretical analysis in the appendix proceeds with a proof that is only valid for the *correct* (forward) KL divergence, creating a sharp contradiction between the formula presented and its supposed theoretical justification.
+
+:claim:
+There is a synergistic relationship between the Omni-Perception Reward and the Omni-Perception Loss; the loss improves faithfulness, which in turn creates a more effective optimization landscape for the reward to improve cue utilization, leading to combined performance gains that are greater than applying either component in isolation.

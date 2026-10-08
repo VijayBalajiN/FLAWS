@@ -1,0 +1,12 @@
+Error in assumptions (core conceptual)
+error:
+An episode unfolds as $T$ games with interleaved memory updates following Eq.~\ref{eq:memory_update}. The player then uses $m_t$ in game $t+1$. Since the first game serves as initial exploration without learned guidance, our goal is to optimize the sequence of memory updates. Because the frozen player $\pi$ is stateless across games and only conditions on the most recent memory $m_t$, the long-horizon problem of maximizing cumulative reward decomposes into a series of independent one-step optimization problems. The objective for turn $t$ is to generate a memory $m_t$ that maximizes the reward of the next game, $r_{t+1}$. The overall training objective is thus to maximize the sum of expected next-game returns across all turns:
+\begin{equation}
+\theta^* = \arg\max_\theta \; \mathbb{E}_{\sigma, \tau} \left[ \sum_{t=1}^{T-1} r_{t+1} \right].
+\label{eq:objective_mdp}
+\end{equation}
+error:
+As established in Eq.~\ref{eq:objective_mdp}, our objective is to optimize the memory update at each turn for the outcome of the immediate next game. We therefore define the turn-level return directly as the one-step outcome, $R_{i,t}=r_{i,t+1}$. This formulation is not a proxy; it directly optimizes the objective and avoids confounding the credit assignment with outcomes from future games, which are independent of the current memory update given the stateless nature of the player. This yields a clean, low-variance learning signal perfectly aligned with our decomposed objective.
+error:
+\subsection{Reward Design}
+We ablate reward design to validate our problem formulation. We compare our one-step reward formulation, which credits each memory update $m_t$ with the next-game reward $r_{t+1}$, against a naive cumulative return. As expected from our analysis in Section~\ref{sec:multi-turn}, optimizing the correctly decomposed one-step objective is substantially more effective. The cumulative return objective is theoretically mis-specified for this problem, as it fails to respect the turn-wise independence of the memory updates. Table~\ref{tab:reward_design} confirms this, showing that the performance of the cumulative reward formulation is far below our one-step approach, only 0.61 on LHE. This result validates that properly decomposing the long-horizon problem is critical for effective learning.

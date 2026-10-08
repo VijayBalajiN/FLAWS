@@ -1,0 +1,2 @@
+Incorrect or incomplete analysis
+error:More broadly, LLM-based approaches are less tied to market consensus than XGBoost: the correlation with market-implied probabilities is 0.36 for our finetuned system, compared with 0.75 for XGBoost.

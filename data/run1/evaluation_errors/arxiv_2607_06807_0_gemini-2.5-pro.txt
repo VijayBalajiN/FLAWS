@@ -1,0 +1,18 @@
+:error_text:
+The normal prototype can be adaptively refined using activations from agents identified as normal in previous rounds:
+
+:error_text:
+it smooths the prototype evolution and mitigates potential contamination from false negatives (undetected compromised agents in N(t−1)).
+
+:error_text:
+minor activation variations from diverse, role-specific contexts are treated as zero-mean noise that does not shift the global centroid of benign behavior
+
+:error_text:
+guiding the LLM backbone to produce outputs aligned with normal reasoning patterns while retaining sufficient role-specific semantics for task completion (details in Appendix D).
+
+:explanation:
+The most serious flaw is a critical vulnerability in the proposed adaptive defense mechanism. The method updates its understanding of "normal" behavior using agents it currently classifies as benign. This creates a clear vector for an adaptive poisoning attack, where a stealthy adversary, by remaining undetected for a few steps (i.e., being a false negative), can slowly "poison" the normal prototype. This could gradually shift the detection boundary, making the malicious behavior appear normal over time and allowing the attacker to completely evade the defense. The paper acknowledges this as an "open challenge" but fails to evaluate against it, which is a major omission for a security-focused paper.
+
+Second, the paper makes the overly strong assumption that all benign activation patterns, across diverse tasks and agent roles, can be modeled by a single centroid, with all variation being "zero-mean noise". This is a significant oversimplification of the complex manifold of LLM activations. This assumption makes the system brittle and likely to generate a high rate of false positives when encountering novel but benign tasks that are out-of-distribution from the initial calibration set.
+
+Finally, the paper makes an unsubstantiated conceptual leap regarding its mitigation strategy. It claims that simply steering a compromised activation vector towards the generic "normal" centroid can restore nuanced reasoning while preserving task-specific semantics. This is a blunt intervention in a high-dimensional space. It is more likely to corrupt the task-relevant information encoded in the activation, leading to a nonsensical or irrelevant output, even if it is no longer malicious. The paper lacks a convincing mechanistic explanation for why this correction works without simply breaking the agent's functionality.

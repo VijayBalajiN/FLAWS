@@ -1,0 +1,25 @@
+:original_text:
+The environment $\Omega$ facilitates turn-level transitions by resolving $A_k$ into new percept $\mathcal{E}_k$. This triggers a strict \textit{context purging} mechanism: the previous raw multimodal percept $\mathcal{E}_{k-1}$ is discarded from the active context, leaving only the distilled text $O_k$ in $\mathcal{M}_k$. This ensures the model's media overhead remains constant regardless of the video duration or the number of interaction turns (see Appendix~\ref{app:env} for context management details).
+
+:modified_text:
+The environment $\Omega$ facilitates turn-level transitions by resolving $A_k$ into new percept $\mathcal{E}_k$. This triggers a strict \textit{context purging} mechanism: the previous raw multimodal percept $\mathcal{E}_{k-1}$ is discarded from the active context, leaving only the distilled text $O_k$ in $\mathcal{M}_k$. This ensures the model's context cost is decoupled from the video's length, as the textual memory's growth depends on the number of reasoning steps, which is determined by query complexity rather than raw video duration (see Appendix~\ref{app:env} for context management details).
+
+:original_text:
+Table~\ref{tab:duration_breakdown} validates that OmniAgent effectively decouples reasoning complexity from video length. As video duration grows over $4\times$ ($\sim$30 to $\sim$130 min), the absolute reasoning turns grow only marginally (8.5 $\to$ 12.5 turns), causing the sampling density to drop sharply from 16.9 to 5.7 turns per hour. Crucially, accuracy remains stable (50.8\%) even at the lowest density. This confirms that the agent ignores redundant content (``the haystack'') to focus solely on critical evidence (``the needle''), allocating compute based on information density rather than temporal duration.
+
+:modified_text:
+Table~\ref{tab:duration_breakdown} validates that OmniAgent effectively decouples reasoning complexity and context cost from video length. As video duration grows over $4\times$ ($\sim$30 to $\sim$130 min), the absolute number of reasoning turns remains nearly constant, growing negligibly from 8.5 to 12.5. This near-zero growth demonstrates that the textual memory trace does not expand in proportion to video length. Consequently, the sampling density drops sharply from 16.9 to 5.7 turns per hour, and accuracy remains stable (50.8\%) even at the lowest density. This confirms that because the reasoning trace length is invariant to video duration, the agent's context cost is successfully decoupled, allocating compute based on information density rather than temporal duration. 
+
+:explanation:
+The introduced error is a conceptual oversight where the paper's authors misinterpret their own empirical results to support their central claim, creating a contradiction that undermines the paper's main thesis.
+
+The core claim is that OmniAgent "decouples the model's reasoning complexity and context cost from the raw duration of the video." This is supposedly achieved by purging raw media and only retaining a textual memory trace. However, the context cost depends on the length of this textual trace, which grows with each reasoning turn. The decoupling claim therefore hinges on the number of reasoning turns being independent of the video's duration.
+
+The error is introduced in two steps:
+1.  In Section 3 (Memory Consolidation), the claim is strengthened to explicitly state that the number of reasoning steps is determined by query complexity, not video duration, thus decoupling context cost.
+2.  In Section 4.3 (Impact of Video Duration), the paper presents Table 4, which shows that the average number of turns *increases* from 8.5 to 12.5 (a ~47% increase) as video duration increases. The modified text deliberately misinterprets this significant increase as "nearly constant" and "negligible," and concludes that the "reasoning trace length is invariant to video duration."
+
+This is a significant conceptual error. The authors draw a conclusion that is directly contradicted by their own data. They conflate a decrease in *sampling density* (turns per hour) with a lack of growth in *total turns*, thereby falsely "proving" their decoupling claim. An expert reader would recognize that a 47% increase in the length of the textual context is substantial and re-introduces a clear dependency between context cost and video duration, invalidating the paper's primary contribution. The mistake is subtle because the argument appears plausible on a surface level, especially given the distracting (but correct) observation about decreasing sampling density.
+
+:claim:
+OmniAgent's architecture, which selectively distills high-dimensional audio-visual information into a persistent textual memory while purging the raw media, effectively decouples the model's reasoning complexity and context cost from the raw duration of the video.

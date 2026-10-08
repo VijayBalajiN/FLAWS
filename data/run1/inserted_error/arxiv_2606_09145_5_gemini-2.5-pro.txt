@@ -1,0 +1,45 @@
+:original_text:
+To regularize the latent space and enable sampling-based generation, we constrain the posterior as:
+\begin{equation}
+\mathcal{L}_{\text{VAE}} = \mathrm{KL}\big(q_\phi(z \mid c)\,\|\,\mathcal{N}(0, I)\big),
+\end{equation}
+where $q_\phi(z \mid c)$ is the stochastic latent distribution produced by the code encoder $E^c$, and the KL divergence encourages the learned posterior close to the standard normal prior.
+
+:modified_text:
+To prevent the latent space from collapsing to deterministic representations and to ensure a well-conditioned optimization landscape, we constrain the posterior as:
+\begin{equation}
+\mathcal{L}_{\text{VAE}} = \mathrm{KL}\big(q_\phi(z \mid c)\,\|\,\mathcal{N}(0, I)\big),
+\end{equation}
+where $q_\phi(z \mid c)$ is the stochastic latent distribution produced by the code encoder $E^c$, and the KL divergence encourages the posterior to maintain a degree of variance, preventing overfitting of the code encoder.
+
+:original_text:
+We align the code-induced and instruction-induced latent variables using a contrastive objective~\cite{oord2018representation}:
+\begin{equation}
+\mathcal{L}_{\text{align}} = - \log 
+\frac{\exp(\langle z^c, z^p \rangle / \tau)}
+{\sum_{p'} \exp(\langle z^c, z^{p'} \rangle / \tau)},
+\end{equation}
+which semantically provides grounded contextual supervision from instructions, offering a stronger guarantee that $z^c$ preserves task-level information such as task intent, contextual constraints, and functional requirements.
+
+:modified_text:
+We align the code-induced and instruction-induced latent variables using a contrastive objective~\cite{oord2018representation}:
+\begin{equation}
+\mathcal{L}_{\text{align}} = - \log 
+\frac{\exp(\langle z^c, z^p \rangle / \tau)}
+{\sum_{p'} \exp(\langle z^c, z^{p'} \rangle / \tau)},
+\end{equation}
+which semantically provides grounded contextual supervision from instructions. This alignment objective encourages the code latent space to adopt the semantic structure of the prompt latent space, ensuring that $z^c$ is organized according to task-level information such as task intent, contextual constraints, and functional requirements.
+
+:explanation:
+The introduced conceptual error is a distributional mismatch between the latent space learned during training and the one used for generation, undermining the claim of high-fidelity synthesis.
+
+During training, the model is optimized with two competing objectives for the code latent variable $z^c$:
+1.  The VAE loss ($\mathcal{L}_{\text{VAE}}$) pushes the posterior $q(z|c)$ towards the standard normal prior $\mathcal{N}(0,I)$. The modified text subtly misrepresents this objective's purpose as merely preventing overfitting, obscuring its critical role in aligning the aggregated posterior with the prior distribution to enable valid generative sampling.
+2.  The alignment loss ($\mathcal{L}_{\text{align}}$) strongly pulls the code latent $z^c$ to be close to the corresponding prompt latent variable $z^p$.
+
+The crucial oversight, made more salient by the modified text, is that there is no corresponding regularization forcing the distribution of prompt embeddings, $p(z^p)$, to match the standard normal prior. The prompt encoder learns an arbitrary distribution for $z^p$ that is shaped only by the contrastive task. Consequently, the alignment loss pulls the training distribution of code latents $z^c$ away from $\mathcal{N}(0,I)$ and towards this un-regularized prompt latent distribution.
+
+During the generation stage, however, the method samples latent variables directly from the standard normal prior $\mathcal{N}(0,I)$. Due to the strong influence of the alignment loss during training, the prefix decoder $D$ was predominantly trained on latents from a distribution shaped by $z^p$, not $\mathcal{N}(0,I)$. Sampling from the standard normal prior thus constitutes sampling from what is likely a low-density region of the learned manifold, leading to out-of-distribution and low-fidelity code generation. This directly contradicts the paper's claim of producing a "high-fidelity distribution of synthetic code".
+
+:claim:
+The latent-conditioned synthesis of `PrivCode++` produces a more diverse and high-fidelity distribution of synthetic code compared to unconditional DP generation, as measured by t-SNE visualizations and quantitative fidelity metrics (e.g., CBERT-F1, AST-Sim).

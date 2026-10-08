@@ -1,0 +1,17 @@
+:original_text:
+    \item $\mathcal{L}_{\text{VAE}} = \mathrm{KL}\big(q_{\phi}(z \mid c) \,\|\, \mathcal{N}(0, I)\big)$ enforces a structured latent space by regularizing the posterior $q_{\phi}(z \mid c) = \mathcal{N}(\mu^c, \mathrm{diag}((\sigma^c)^2))$ toward the standard normal prior
+
+:modified_text:
+    \item $\mathcal{L}_{\text{VAE}} = \frac{1}{2} \sum_{j=1}^{d_z} \left( (\mu_j^c)^2 + (\sigma_j^c)^2 - \log((\sigma_j^c)^2) - 1 \right)$ is the KL divergence between the posterior $q_{\phi}(z \mid c) = \mathcal{N}(\mu^c, \mathrm{diag}((\sigma^c)^2))$ and the standard normal prior, summed over the latent dimensions to regularize the entire latent space.
+
+:explanation:
+The conceptual error introduced is a flawed formulation of the KL-divergence term ($\mathcal{L}_{\text{VAE}}$) in the VAE objective function, which invalidates the paper's hyperparameter study on the latent dimension $d_z$.
+
+The modified text replaces the high-level definition of the KL divergence with its explicit mathematical formula for a diagonal Gaussian posterior against a standard normal prior. While the formula itself is correct, it is presented as a direct sum over the latent dimensions ($d_z$) without any normalization.
+
+This is a critical oversight because the magnitude of the KL loss now scales linearly with the dimensionality of the latent space. As a result, the experiments comparing different values of $d_z$ are not conducted on a level playing field. The model with a larger dimension (e.g., $d_z=2048$) is subjected to a much stronger regularization penalty than the model with a smaller dimension (e.g., $d_z=256$), not because of any inherent property of the latent space but as a direct artifact of the mis-scaled objective function.
+
+This excessively strong regularization for larger $d_z$ would likely lead to "posterior collapse," where the model learns to ignore the latent variable to minimize the dominating KL penalty, thus severely degrading performance. The paper observes this performance drop for $d_z=2048$ but misattributes it to "over-parameterized latent representations that are harder to learn robustly under DP-SGD noise." The actual, more fundamental reason is the flawed, un-normalized loss term. This makes the conclusion that an intermediate dimension ($d_z=768$) is optimal for this task unreliable, as the finding is an artifact of a poorly designed experiment. This type of error is subtle, requires domain knowledge of VAEs to detect, and is a realistic mistake in complex modeling pipelines.
+
+:claim:
+The utility of `PrivCode++` is sensitive to the dimensionality of the latent space, with an intermediate dimension ($d_z=768$) yielding better performance than smaller ($d_z=256$) or larger ($d_z=2048$) dimensions.

@@ -1,0 +1,37 @@
+:original_text:
+Reverse KL possesses several desirable properties for our setting:
+(i) it is \emph{mode-seeking}, encouraging the student to commit to the teacher's preferred behavior rather than spreading probability mass across suboptimal alternatives;
+(ii) it provides an \emph{unhackable} reward signal, as low KL always corresponds to high probability under the teacher; and
+(iii) it naturally synergizes with policy gradient methods that optimize sequence-level reverse KL induced by reward models.
+
+:modified_text:
+Reverse KL possesses several desirable properties for our setting:
+(i) it is \emph{mode-seeking}, encouraging the student to commit to the teacher's preferred behavior rather than spreading probability mass across suboptimal alternatives;
+(ii) it provides an \emph{unhackable} reward signal, as low KL always corresponds to high probability under the teacher; and
+(iii) it is inherently regularizing. Because the teacher $\pi_T$ is a minimally-perturbed version of the student policy $\pi_\theta$, minimizing the KL divergence $\mathrm{KL}(\pi_\theta\|\pi_T)$ implicitly constrains $\pi_\theta$ to remain in the vicinity of its own distribution, replacing the need for an explicit KL penalty against a fixed reference policy $\pi_{\mathrm{ref}}$.
+
+:original_text:
+Table~\ref{tab:continual} shows that \method{} achieves 95.2\% retention of mathematical reasoning performance after code adaptation, compared to 87.2\% for GRPO and 80.3\% for SFT.
+This improved retention can be attributed to \method{}'s on-policy learning: by training on the model's own distribution, \method{} naturally maintains behaviors that the model already performs well.
+
+:modified_text:
+Table~\ref{tab:continual} shows that \method{} achieves 95.2\% retention of mathematical reasoning performance after code adaptation, compared to 87.2\% for GRPO and 80.3\% for SFT.
+This improved retention stems from the inherent self-regularization of the reverse-KL objective. By training the policy to stay close to its own reflection-augmented distribution, SRPO prevents the drastic policy shifts that cause catastrophic forgetting, without requiring an explicit KL penalty against the original reference policy.
+
+:original_text:
+We presented \method{}, a post-training method that converts episode-level outcomes into hindsight-guided dense, reflection-augmented supervision, overcoming the inefficiency of sparse-reward RL. The mechanism is best understood not as self-distillation but as on-policy RL with reflection-guided exploration: reflection-conditioned teachers steer the student into high-reward regions of its \emph{own} policy space 
+ rather than imitating a distribution beyond its representational capacity.
+
+:modified_text:
+We presented \method{}, a post-training method that converts episode-level outcomes into hindsight-guided dense, reflection-augmented supervision, overcoming the inefficiency of sparse-reward RL. The key insight is that on-policy self-distillation via reverse KL divergence provides an all-in-one objective that combines reward maximization with implicit regularization. This self-contained mechanism obviates the need for explicit KL penalties against a reference model, as the policy is naturally constrained by its own reflection-augmented outputs.
+
+:explanation:
+The introduced conceptual error is a plausible but incorrect claim about the mechanism behind SRPO's ability to mitigate catastrophic forgetting. The modified text claims that the reverse-KL self-distillation objective provides "inherent self-regularization" that replaces the need for an explicit KL-divergence penalty against a fixed reference policy (a standard technique to prevent forgetting).
+
+This is a subtle but significant theoretical oversight for the following reasons:
+1.  **The Moving Target Problem:** The teacher policy in SRPO is not fixed; it is the student model itself, conditioned on a reflection. As the student policy `π_θ` is updated, the teacher policy also changes. Distilling towards such a "moving target" does not anchor the policy to its original state. Without an explicit penalty term `KL(π_θ || π_ref)` where `π_ref` is a static, initial model, the student-teacher pair can co-adapt and drift significantly from the original model's capabilities over time.
+2.  **Misattribution of Forgetting Mitigation:** The standard and correct way to prevent catastrophic forgetting in RL fine-tuning is to explicitly regularize against a fixed reference policy. The modified paper now incorrectly attributes this crucial property to its self-distillation objective alone.
+3.  **Undermining the Central Claim:** By providing a flawed theoretical explanation for its strong empirical result on continual learning (95.2% retention), the paper undermines the validity of the claim itself. An expert reader would recognize that the proposed mechanism is insufficient to prevent forgetting to that degree, suggesting the results may be an artifact or that the method's description is misleading. The error recasts a central strength of the paper as being supported by a theoretically unsound argument.
+
+:claim:
+SRPO mitigates catastrophic forgetting in continual learning scenarios. When an SRPO-trained model is adapted from a math task to a code task, it retains 95.2% of its original math performance, a significantly higher retention rate than models trained with GRPO (87.2%).

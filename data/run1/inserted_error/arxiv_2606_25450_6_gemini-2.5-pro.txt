@@ -1,0 +1,17 @@
+An academic error has been introduced into the paper. Below are the original and modified excerpts, followed by an explanation of the conceptual error.
+
+:original_text:
+To test this, we compare verifier-only GRPO~\citep{shao2024grpo} with two \textbf{hint-assisted GRPO} variants at matched memorization ($D_0 \approx 0.6$). Hint GRPO-Pseudo appends pseudocode to the training sample, while Hint GRPO-KI names the key algorithmic idea. Both variants provide compact algorithmic scaffolds rather than full target solutions.
+
+:modified_text:
+To test this, we compare verifier-only GRPO~\citep{shao2024grpo} with two \textbf{hint-assisted GRPO} variants at matched memorization ($D_0 \approx 0.6$). These variants augment the RL objective with an auxiliary imitation loss. Hint GRPO-Pseudo applies a cross-entropy loss to match reference pseudocode, while Hint GRPO-KI uses a key algorithmic idea as the imitation target. Both variants thus blend RL with a targeted supervised signal to accelerate learning.
+
+:explanation:
+The introduced error is a conceptual oversight in the experimental design and its interpretation. The modification changes the description of the "Hint-assisted GRPO" method to specify that it is implemented not just by providing hints as input, but by using an auxiliary imitation (cross-entropy) loss that forces the model to mimic the provided hints. This effectively turns the method into a hybrid of Reinforcement Learning (RL) and Supervised Fine-Tuning (SFT).
+
+This change makes the paper's conclusion—that incorporating algorithmic hints leads to a fundamental trade-off between memorization speed and far-transfer generalization—conceptually flawed. The paper has already established in Section 4 that SFT (an imitation learning paradigm) struggles with far-transfer compared to RL. By adding an SFT-like imitation loss to their RL agent, the authors should have anticipated a reduction in far-transfer performance.
+
+The oversight is that the authors fail to make this crucial connection in their analysis (Section 5.4). They misattribute the observed narrower generalization profile to a general property of using "hints" or "scaffolds" in RL, rather than to the known behavioral properties of the imitation learning objective they chose to use. The result is no longer a novel finding about a "speed-for-generalization" trade-off but is instead an expected outcome of blending RL with SFT, thus undermining the significance and generality of the paper's claim.
+
+:claim:
+Incorporating algorithmic hints during reinforcement learning (Hint-assisted GRPO) accelerates the rate of memorization for seed problems but results in a narrower generalization profile, with lower performance on far-transfer tasks (D3-D4) compared to standard RL at matched memorization levels.

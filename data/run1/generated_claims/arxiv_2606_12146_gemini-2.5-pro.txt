@@ -1,0 +1,13 @@
+Based on the LaTeX source provided, here are the major, unique, and falsifiable claims made in the paper:
+
+1.  Axis-wise extensions of Rotary Position Embedding (RoPE) introduce directional bias by restricting the frequency basis to axis-aligned components, which results in poorer representation of non-axis-aligned spatial relationships.
+
+2.  Learnable RoPE variants (e.g., RoPE-Mixed) can suffer from "frequency collapse" during optimization, where the learned frequency vectors cluster into irregular, low-frequency, and anisotropic distributions, limiting the model's generalization capabilities.
+
+3.  A wave-vector set constructed from the vertices of a multi-scale regular simplex provides an isotropic (directionally balanced) second-order response and non-degenerate spatial coverage for positional encoding in any n-dimensional space.
+
+4.  The proposed nD-RoPE formulation, which uses a simplex-based wave-vector design, achieves higher in-domain performance on high-dimensional tasks (image classification, video recognition, and point cloud segmentation) compared to existing axis-wise and mixed RoPE variants.
+
+5.  The isotropic frequency coverage from nD-RoPE's simplex-based design leads to significantly greater zero-shot robustness to rotations of the input data (e.g., rotated images) compared to axis-wise and learnable RoPE variants.
+
+6.  Models using nD-RoPE demonstrate superior extrapolation capabilities, showing slower performance degradation when evaluated on data with resolutions or point densities outside of the training distribution, compared to models using other RoPE variants.

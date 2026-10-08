@@ -1,0 +1,4 @@
+Error in assumptions (core conceptual)
+error:
+\paragraph{Three clarifying notes.}
+First, Stage~1 is a one-time, embarrassingly parallel preprocessing step. The reflection patch $p$ and the optional rethinking rollout $\tilde{y}$ for each prompt are fully independent and can be computed offline and cached for the duration of training. As this data generation is a fixed, amortizable cost, our efficiency analysis focuses on the iterative Stage 2 training loop, although the total cost including the one-time Stage 1 step is used for the final 3.8$\times$ comparison against GRPO.0--40\%.

@@ -1,0 +1,5 @@
+:error_text:
+ICLR 2026 submissions found at least 50 out of 300 examined papers containing fabricated citations that had received 3-5 expert peer reviews without detection (Esau et al., 2025).
+
+:explanation:
+This sentence presents a severe and disqualifying technical flaw by making a chronologically impossible claim. The paper, set in 2026, reports findings on submissions to the ICLR 2026 conference but cites a source from 2025 for this information. A study analyzing the outcomes of the ICLR 2026 peer review process could not have been published in 2025, as the review process itself would not have concluded until late 2025 or early 2026. This anachronism indicates that the evidence cited is not real but hypothetical, presented as an established fact. This misrepresentation of a speculative future event as an empirical finding fundamentally undermines the validity of the paper's evidential basis and constitutes a critical failure of academic integrity.

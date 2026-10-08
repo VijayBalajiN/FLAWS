@@ -1,0 +1,30 @@
+:error_text:
+To directly optimize the cumulative return in Eq.~\ref{eq:objective_mdp}, we define the return for each memory update at turn $t$ as the sum of all subsequent rewards in the episode. Using this long-horizon return aligns each memory update with its full downstream consequences, encouraging the model to learn farsighted strategies. While this introduces variance from future stochasticity (e.g., different dealt hands), we find it essential for stable credit assignment over multiple games, as myopic signals fail to capture delayed strategic effects.
+
+:error_text:
+We ablate reward design for training the memory model. We compare our approach of optimizing a cumulative return with a simpler one-step reward that credits each memory update $m_t$ only by the next-game reward $r_{t+1}$. We find that directly optimizing for the cumulative return is crucial for learning farsighted strategies, while the myopic one-step signal leads to suboptimal, greedy behavior. Table~\ref{tab:reward_design} shows that the one-step reward performs far worse than our cumulative approach, achieving only 0.61 on LHE. We attribute this to the one-step signal's failure to capture delayed effects of memory updates, preventing the model from learning to balance short-term gains against long-term strategic positioning.
+
+:error_text:
+\begin{algorithmic}[1]
+\FOR{$t = 1$ to $T$}
+    \STATE $(e_{i,t}, r_{i,t}) \leftarrow \mathrm{Play}(\pi, \sigma, m_{i,t-1})$
+    \IF{$t < T$}
+        \STATE $m_{i,t} \sim G_\theta(\cdot \mid e_{i,t}, m_{i,t-1})$
+    \ENDIF
+\ENDFOR
+\FOR{$u = 1$ to $T-1$}
+    \STATE $R_{i,u} \leftarrow r_{i,u+1}$
+\ENDFOR
+\end{algorithmic}
+
+:error_text:
+Multi-turn GRPO for memory updating with one-step (next-game) proxy rewards and \textbf{turn-level} advantages. Each rollout $i$ produces a sequence of memory states $\{m_{i,t}\}$; we assign each turn $t$ a one-step proxy return $R_{i,t}=r_{i,t+1}$ and compute a turn-level group-normalized advantage $\hat{A}_{i,t}=R_{i,t}-\mathrm{mean}(\{R_{i,t}\}_{i=1}^{G})$, which is applied to the tokens of $m_{i,t}$.
+
+:explanation:
+The paper's central claim about its reward mechanism is fatally contradicted by its own implementation details and figures.
+
+The first error text (from Section 3.2) and second error text (from Section 5.6) claim that the method uses a "cumulative return"—the sum of all future rewards in an episode—and that this "long-horizon" approach is "crucial" for performance, significantly outperforming a "myopic one-step" reward signal.
+
+However, the third error text (from Algorithm 1 in the appendix) and the fourth error text (from the caption of the core methodology figure, Figure 3) explicitly state and describe the implementation of the one-step reward ($R_{i,u} \leftarrow r_{i,u+1}$). The algorithm assigns the reward from only the very next game as the return for the current memory update.
+
+This is a fundamental contradiction. The paper's main reported results are attributed to a cumulative reward mechanism that, according to its own algorithm and figures, was not implemented. The ablation study (second excerpt) claims this unimplemented method is vastly superior to the one-step method that was apparently used, creating a logical impossibility and invalidating the paper's conclusions about why its method is effective.

@@ -1,0 +1,12 @@
+:error_text:
+Second, 2-bit scanning is not beneficial in isolation---under top-$k$, the quantized scan degrades throughput (V1 vs.\ V3: 17.4 $\rightarrow$ 14.8) due to compute-bound sorting overhead. However, when paired with top-$\delta$, which reduces selection to a scalar comparison, the reduced memory footprint of 2-bit becomes a strict asset (V2 vs.\ V4: 21.6 $\rightarrow$ 24.7). Third, and most importantly, the system-level fusion and CUDA Graph capture exhibit a \textbf{synergistic amplification} with the algorithmic components.
+
+:error_text:
+...the autoregressive decode phase is memory-bandwidth-bound: each token generation requires reloading the entire KV cache from HBM, making IO the primary bottleneck rather than FLOPs. Consequently, sparse attention mechanisms, particularly training-free, plug-and-play approaches, have emerged as a critical research direction to reduce computational overhead without retraining the model...
+
+:explanation:
+The paper's central premise is that performance in long-context decoding is limited by memory bandwidth, and that reducing I/O by scanning a 2-bit quantized representation of the K-cache should therefore improve speed.
+
+However, the component-wise ablation study presented in Appendix B contains a result that directly contradicts this premise and is justified with flawed reasoning. The study reports that switching from a full-precision (FP16) scan to a 2-bit scan for a standard top-k selection strategy *decreases* end-to-end throughput from 17.43 tok/s to 14.80 tok/s. This result is highly counter-intuitive, as an 8x reduction in data loaded from HBM during the costly scanning phase should lead to a significant speedup.
+
+The paper's explanation for this phenomenon, "due to compute-bound sorting overhead," is illogical. The computational cost of sorting the attention scores is independent of the precision used to generate them; the number of scores to sort remains the same. A faster scan cannot increase the absolute time of a subsequent sorting step. This critical flaw in the ablation study undermines the paper's argument for the synergistic necessity of its proposed components, suggesting a fundamental error in the experiments or their interpretation.

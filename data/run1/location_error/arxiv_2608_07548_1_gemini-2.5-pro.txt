@@ -1,0 +1,4 @@
+Inconsistencies in definitions
+error:During inference, the discrepancy between the current latent state and its foresight provides an internal reference signal indicating how the selected action would steer the agent's internal dynamics before it is executed.
+error:In contrast, the proposed feedback $\Delta_t$ is a high-dimensional latent signal derived from world-model foresight. Rather than merely evaluating whether an action is beneficial, $\Delta_t$ captures structured state-transition information that can directly guide online state correction. Consequently, critic signals mainly serve an evaluative role, whereas $\Delta_t$ functions as a predictive corrective signal.
+error:For example, the foresight feedback $\Delta_t$ could be incorporated as an intrinsic reward to provide denser training signals, or used as an auxiliary latent representation to facilitate policy optimization.

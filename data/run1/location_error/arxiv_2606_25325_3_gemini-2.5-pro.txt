@@ -1,0 +1,39 @@
+Error in algorithm/proof
+error:
+We quantify the discrepancy between the full-input and masked-input distributions at step $t$ using the KL divergence:
+\begin{equation}
+\label{eq:kl_token}
+\mathcal{L}_t^{m}(\theta) \;=\; \mathbb{D}_{\mathrm{KL}}\!\left(p_t^{m} \,\|\, p_t\right),\quad 
+m \in \{\tilde{V},\tilde{A}\}.
+\end{equation}
+Intuitively, if $Y_t$ expresses modality-specific evidence of $m$, the policy under masking should diverge significantly from the full-information policy. This reverse KL formulation encourages the masked policy to produce tokens that are surprising under the full policy, effectively forcing it to retract claims when their evidentiary basis is removed. Conversely, if the distribution remains similar after masking $m$, the model is likely relying on spurious cross-modal correlations to hallucinate content about the missing modality.
+error:
+\subsection{Proposition: Omni-Perception Loss as a Reverse Information Projection}
+\label{proposition1}
+We first recall the definition of conditional mutual information in our context. Given the random variables $\mathcal{T}_{m}$ (evidence tokens) and $m$ (target modality), conditioned on the masked context $X^{\tilde{m}}$, the conditional mutual information induced by the policy $\pi_\theta$ is defined as:
+\begin{equation}
+I_\theta(\mathcal{T}_{m}; m | X^{\tilde{m}}) = \mathbb{E}_{X} \big[ \mathbb{D}_{\mathrm{KL}}\big( \pi_\theta(\cdot | X) \,\|\, P_\theta(\cdot | X^{\tilde{m}}) \big) \big],
+\end{equation}
+where $P_\theta(\cdot | X^{\tilde{m}})$ is the true marginal distribution of evidence tokens given the masked context. This quantity measures the information that $\mathcal{T}_{m}$ carries about $m$ when $X^{\tilde{m}}$ is observed.
+
+\begin{proposition}[Reverse Information Projection]
+The Omni-Perception Loss $\mathcal{J}_{\mathrm{omni}}(\theta)$ maximizes the reverse information projection from the masked policy to the full policy. This can be decomposed as:
+\begin{equation}
+\mathcal{J}_{\mathrm{omni}}(\theta) \approx I_\theta(\mathcal{T}_{m}; m | X^{\tilde{m}}) - \Delta_{\mathrm{proj}}(\theta),
+\end{equation}
+where $\Delta_{\mathrm{proj}}(\theta) = \mathbb{E}_{X} \big[ \mathbb{D}_{\mathrm{KL}}\big( \pi_\theta(\mathcal{T}_{m} | X^{\tilde{m}}) \,\|\, P_\theta(\mathcal{T}_{m} | X^{\tilde{m}}) \big) \big] \geq 0$.
+\end{proposition}
+
+\noindent \textit{Proof.}
+By definition, the Omni-Perception Loss is the expected reverse $\mathbb{D}_{\mathrm{KL}}$ divergence:
+\begin{equation}
+\mathcal{J}_{\mathrm{omni}}(\theta) = \mathbb{E}_{X} \big[ \mathbb{D}_{\mathrm{KL}}\big( \pi_\theta(\mathcal{T}_{m} | X^{\tilde{m}}) \,\|\, \pi_\theta(\mathcal{T}_{m} | X) \big) \big].
+\end{equation}
+By the properties of information projection, this divergence measures how much information is lost when projecting from the masked context to the full context. We can relate this to the standard conditional mutual information by reformulating the objective. By inserting the true marginal $P_\theta$ and expanding the $\mathbb{D}_{\mathrm{KL}}$ as an expectation over $\mathcal{T}_{m} \sim \pi_\theta(\cdot|X^{\tilde{m}})$, we obtain:
+\begin{align}
+\mathcal{J}_{\mathrm{omni}}(\theta)
+&= \mathbb{E}_{X} \big[ \mathbb{E}_{y \sim \pi_\theta(\cdot|X^{\tilde{m}})} \big[ \log \frac{\pi_\theta(y | X^{\tilde{m}})}{P_\theta(y | X^{\tilde{m}})} - \log \frac{\pi_\theta(y | X)}{P_\theta(y | X^{\tilde{m}})} \big] \big] \notag \\
+&\approx \underbrace{\mathbb{E}_{X} \big[ \mathbb{D}_{\mathrm{KL}}\big( \pi_\theta(\cdot | X) \,\|\, P_\theta(\cdot | X^{\tilde{m}}) \big) \big]}_{I_\theta(\mathcal{T}_{m}; m | X^{\tilde{m}})} - \underbrace{\mathbb{E}_{X} \big[ \mathbb{D}_{\mathrm{KL}}\big( \pi_\theta(\cdot | X^{\tilde{m}}) \,\|\, P_\theta(\cdot | X^{\tilde{m}}) \big) \big]}_{\Delta_{\mathrm{proj}}(\theta)}.
+\end{align}
+
+\noindent\textbf{Interpretation.} Proposition~\ref{proposition1} establishes $\mathcal{J}_{\mathrm{omni}}$ as a proxy for the conditional mutual information, adjusted by a projection error term $\Delta_{\mathrm{proj}}$. Maximizing this objective encourages a high mutual information $I_\theta$ while penalizing deviations of the masked policy from the true marginal, as captured by $\Delta_{\mathrm{proj}}$. This formulation directly incentivizes the model to produce faithful, modality-grounded evidence. While the derivation relies on an approximation due to the change in expectation, it provides a strong theoretical motivation for the reverse KL divergence as a mechanism for enforcing faithfulness.

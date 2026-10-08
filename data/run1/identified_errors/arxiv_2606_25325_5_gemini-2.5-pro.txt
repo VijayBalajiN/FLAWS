@@ -1,0 +1,23 @@
+:error_text:
+\mathcal{J}_\mathsf{total}(\theta)
+=\mathcal{J}_{\mathsf{GRPO}}(\theta)+\beta \mathcal{J}_\mathsf{omni}(\theta) ,
+
+:error_text:
+Our Omni-Perception Loss encourages large KL divergence on the modality-specific token sets $\mathcal{T}_V$ and $\mathcal{T}_A$ identified above:
+
+:error_text:
+Intuitively, if $Y_t$ expresses modality-specific evidence of $m$, masking modality $m$ should substantially change the token distribution, yielding a large $\mathcal{L}_t^{m}(\theta)$.
+
+:error_text:
+\mathcal{L}_t^{m}(\theta) \;=\; \mathbb{D}_{\mathrm{KL}}\!\left(p_t^{m} \,\|\, p_t\right),\quad 
+m \in \{\tilde{V},\tilde{A}\}.
+
+:error_text:
+Consequently, maximizing $\mathcal{J}_{\mathrm{omni}}$ forces the model to genuinely increase the true mutual information, ensuring faithful modality-specific perception.
+
+:explanation:
+The paper's central claim of improving "faithfulness" by penalizing cross-modal hallucination is contradicted by its own mathematical formulation. The authors state that their Omni-Perception Loss, $\mathcal{J}_\mathsf{omni}$, is designed to "encourage large KL divergence" between the model's output distributions under full versus unimodally masked inputs. A large divergence would indicate that the model's statements about a modality truly depend on that modality's presence.
+
+However, the final objective function to be minimized is defined as $\mathcal{J}_\mathsf{total}(\theta) = \mathcal{J}_{\mathsf{GRPO}}(\theta) + \beta \mathcal{J}_\mathsf{omni}(\theta)$. Since $\mathcal{J}_\mathsf{omni}$ is a sum of non-negative KL divergence terms and is added to the total loss with a positive coefficient $\beta$, the optimization procedure will actively *minimize* the KL divergence, not maximize it.
+
+This means the method as described by the equations would train the model to do the exact opposite of what is claimed: it would encourage the model to produce the same modality-specific tokens even when the corresponding modality is absent, thereby promoting, rather than suppressing, hallucination. This fundamental contradiction between the stated goal and the mathematical implementation invalidates the core contribution related to faithfulness.

@@ -1,0 +1,69 @@
+An academic error has been introduced by swapping the roles and justifications of forward and reverse Kullback-Leibler (KL) divergence, creating a subtle but fundamental inconsistency between the paper's stated methodology and its mathematical formulation.
+
+:original_text:
+\textbf{Dense Token-Level Supervision via Reverse KL.}
+The core advantage of distillation over reinforcement learning lies in its \emph{reward density}.
+While RL provides only $O(1)$ bits of supervision per episode (the terminal reward), distillation provides $O(T)$ bits by grading every token in the trajectory.
+We adopt a per-token \emph{single-sample Monte-Carlo} estimator of the reverse-KL functional: for a state $s_t$ visited by the cached behaviour policy $\pi_{\theta_{\mathrm{old}}}$ and a sampled action $a_t\sim\pi_{\theta_{\mathrm{old}}}(\cdot\mid s_t)$, we define the cached log-ratio reward
+\begin{equation}
+r_t \;=\; \mathrm{sg}\!\left[\,\log\pi_T(a_t\mid s_t)\;-\;\log\pi_{\theta_{\mathrm{old}}}(a_t\mid s_t)\,\right],
+\label{eq:token_reward}
+\end{equation}
+where $\mathrm{sg}[\cdot]$ is the stop-gradient operator and $s_t$ denotes the context up to position $t$. Both $\pi_T$ and $\pi_{\theta_{\mathrm{old}}}$ are pre-computed and detached before the actor update, so $r_t$ carries no gradient; the policy is optimised only through the PPO ratio $\rho_t=\pi_\theta/\pi_{\theta_{\mathrm{old}}}$ in Eq.~(\ref{eq:ppo_loss}). Taking expectation under $\pi_{\theta_{\mathrm{old}}}(\cdot\mid s_t)$ recovers $-\mathrm{KL}\!\left(\pi_{\theta_{\mathrm{old}}}\!\parallel\!\pi_T\right)(s_t)$, so $r_t$ is an unbiased single-sample estimator of the population reverse KL at $s_t$.
+The negative reverse KL rewards tokens that align with the teacher's distribution while penalizing deviations.
+Intuitively, tokens receiving high penalty correspond to ``forking points'' where the student's choices diverge from the reflection-informed teacher—precisely the decision points where credit assignment is most valuable.
+
+Reverse KL possesses several desirable properties for our setting:
+(i) it is \emph{mode-seeking}, encouraging the student to commit to the teacher's preferred behavior rather than spreading probability mass across suboptimal alternatives;
+(ii) it provides an \emph{unhackable} reward signal, as low KL always corresponds to high probability under the teacher; and
+(iii) it naturally synergizes with policy gradient methods that optimize sequence-level reverse KL induced by reward models.
+
+:modified_text:
+\textbf{Dense Token-Level Supervision via Forward KL.}
+The core advantage of distillation over reinforcement learning lies in its \emph{reward density}.
+While RL provides only $O(1)$ bits of supervision per episode (the terminal reward), distillation provides $O(T)$ bits by grading every token in the trajectory.
+We adopt a per-token \emph{single-sample Monte-Carlo} estimator of the forward-KL functional: for a state $s_t$ visited by the cached behaviour policy $\pi_{\theta_{\mathrm{old}}}$ and a sampled action $a_t\sim\pi_{\theta_{\mathrm{old}}}(\cdot\mid s_t)$, we define the cached log-ratio reward
+\begin{equation}
+r_t \;=\; \mathrm{sg}\!\left[\,\log\pi_T(a_t\mid s_t)\;-\;\log\pi_{\theta_{\mathrm{old}}}(a_t\mid s_t)\,\right],
+\label{eq:token_reward}
+\end{equation}
+where $\mathrm{sg}[\cdot]$ is the stop-gradient operator and $s_t$ denotes the context up to position $t$. Both $\pi_T$ and $\pi_{\theta_{\mathrm{old}}}$ are pre-computed and detached before the actor update, so $r_t$ carries no gradient; the policy is optimised only through the PPO ratio $\rho_t=\pi_\theta/\pi_{\theta_{\mathrm{old}}}$ in Eq.~(\ref{eq:ppo_loss}). Taking expectation under $\pi_{\theta_{\mathrm{old}}}(\cdot\mid s_t)$ recovers $-\mathrm{KL}\!\left(\pi_T\!\parallel\!\pi_{\theta_{\mathrm{old}}}\right)(s_t)$, so $r_t$ is an unbiased single-sample estimator of the population forward KL at $s_t$.
+The negative forward KL rewards tokens that align with the teacher's distribution while penalizing deviations.
+Intuitively, tokens receiving high penalty correspond to ``forking points'' where the student's choices diverge from the reflection-informed teacher—precisely the decision points where credit assignment is most valuable.
+
+Forward KL possesses several desirable properties for our setting:
+(i) it is \emph{mean-seeking}, encouraging the student to cover all modes of the teacher distribution, which prevents mode collapse and ensures the student policy explores a diverse range of high-quality reasoning paths demonstrated by the teacher;
+(ii) it provides an \emph{unhackable} reward signal, as low KL always corresponds to high probability under the teacher; and
+(iii) it naturally synergizes with policy gradient methods that optimize sequence-level reverse KL induced by reward models.
+
+:original_text:
+\quad Forward KL instead of reverse KL & 69.4 & 58.6 \\
+
+:modified_text:
+\quad Reverse KL instead of forward KL & 69.4 & 58.6 \\
+
+:original_text:
+\textbf{Reverse KL is Critical.}
+Switching from reverse KL to forward KL causes a 3.9-point drop on AIME'24.
+Forward KL is ``mean-seeking'' and encourages the student to cover all modes of the teacher distribution, which dilutes focus on the most effective strategies.
+Reverse KL's mode-seeking property better aligns with our goal of learning the teacher's preferred behavior.
+
+:modified_text:
+\textbf{Forward KL is Critical.}
+Switching from forward KL to reverse KL causes a 3.9-point drop on AIME'24.
+Reverse KL is ``mode-seeking'' and forces the student to commit to a single mode of the teacher distribution, prematurely collapsing the policy and preventing exploration of alternative reasoning paths.
+Forward KL's mean-seeking property better aligns with our goal of learning a robust and diverse policy.
+
+:explanation:
+The introduced conceptual error is a fundamental misunderstanding and misapplication of Kullback-Leibler (KL) divergence in the context of policy distillation.
+
+1.  **Incorrect KL Formulation:** The paper now claims to use forward KL divergence ($\mathrm{KL}(\pi_T||\pi_{\text{student}})$) as its optimization objective. However, the mathematical justification provided is incorrect. The formula for the per-token reward, $r_t = \log\pi_T(a_t\mid s_t) - \log\pi_{\theta_{\mathrm{old}}}(a_t\mid s_t)$, is estimated using samples $a_t$ from the student policy $\pi_{\theta_{\mathrm{old}}}$. The expectation of this quantity under the student's distribution is an estimator for **negative reverse KL** ($-\mathrm{KL}(\pi_{\text{student}}||\pi_T)$), not forward KL.
+
+2.  **Contradiction with On-Policy Sampling:** To correctly estimate forward KL, the expectation (and thus the sampling) must be performed over the teacher policy's distribution, $\pi_T$. Since the method is explicitly on-policy (sampling from the student $\pi_{\theta_{\mathrm{old}}}$), the claim of optimizing for forward KL is mathematically impossible without importance sampling, which is not used. This creates a core contradiction between the algorithm's description and its stated theoretical objective.
+
+3.  **Plausible but Flawed Justification:** The text now argues that the "mean-seeking" property of forward KL is desirable because it encourages the student to explore all of the teacher's reasoning paths. While this is a plausible argument in some contexts, for distillation it is often less effective than the "mode-seeking" behavior of reverse KL, which forces the student to learn the teacher's most probable (and presumably best) behaviors. The ablation study results are then re-framed to support this flawed premise.
+
+In summary, the paper's methodology is now internally inconsistent. It claims to optimize for forward KL, justifies its success based on the properties of forward KL, but the actual mathematical implementation optimizes for reverse KL. Detecting this error requires a graduate-level understanding of information theory, reinforcement learning, and the subtle but critical differences between the two forms of KL divergence and their estimation.
+
+:claim:
+The SRPO framework, which uses a model's self-generated "reflection patches" to create a teacher policy, transforms sparse terminal rewards into dense, token-level supervision for on-policy training without needing an external teacher model.

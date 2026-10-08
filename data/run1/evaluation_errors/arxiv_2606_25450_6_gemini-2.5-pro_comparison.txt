@@ -1,0 +1,15 @@
+Problem generation. Given the original statement, I/O format, and examples, we prompt GPT-5.2 to generate a new problem description. The prompt requires: (a) entirely different story and narrative, (b) identical I/O format, (c) the original solution logic must still apply.
+
+: As final validation, Gemini-3-Pro solves the new problem from scratch (no access to the original) and we verify that its solution passes the original test cases. This provides further evidence of semantic equivalence.
+
+: Each problem is assigned 1-3 categories by GPT-based classification using both the problem statement and solution code.
+
+:explanation:
+The most serious flaw in this paper is that its core contribution—the Generalization Spectrum Benchmark—is constructed using non-existent, proprietary models (e.g., "GPT-5.2", "Gemini-3-Pro") and unspecified "GPT-based classification". This makes the benchmark, particularly the novel D2 (context transfer) and D3 (category-matched) levels, completely non-reproducible.
+
+As shown in the first two excerpts, the generation and validation of the D2 variants, which are crucial for the paper's central claims about "divergent transfer mechanisms," depend entirely on these fictional models. Without access to these models and the exact procedures used, the scientific community cannot verify the correctness of the dataset, check for potential artifacts or biases introduced by the generation models, or build upon this work.
+
+The third excerpt reveals that the D3 category-matching, another key component of the spectrum, also relies on an unspecific and non-reproducible "GPT-based classification". This undermines the structural integrity of the "far-transfer" evaluation.
+
+Because the benchmark itself is not a verifiable scientific artifact, all conclusions drawn from experiments conducted on it are fundamentally suspect. The lack of reproducibility for a paper's primary contribution is a critical failure that would likely lead to rejection.
+INCORRECTLY IDENTIFIED

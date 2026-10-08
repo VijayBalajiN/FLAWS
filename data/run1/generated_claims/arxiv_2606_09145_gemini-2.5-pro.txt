@@ -1,0 +1,17 @@
+Based on the provided LaTeX source, here is a list of the major, unique, and falsifiable claims made in the paper:
+
+1.  The `PrivCode++` framework achieves higher code generation utility (measured by Pass@1 scores) than alternative methods that also protect both prompts and code, such as direct differentially private fine-tuning (DPFT) or unconditional generation (PC-Uncond).
+
+2.  Despite providing stronger privacy guarantees for both prompts and code, `PrivCode++` achieves code generation utility that is competitive with, and on some benchmarks superior to, methods like `PrivCode` that operate under a relaxed privacy model where prompts are assumed to be public.
+
+3.  `PrivCode++` prevents the leakage of sensitive canary tokens injected into both the training prompts and code snippets, achieving a 0% leakage rate where methods with weaker privacy assumptions (`PrivCode`) or no privacy (`NonDPFT`) exhibit significant leakage.
+
+4.  The latent conditioning mechanism, which replaces explicit prompts with learned continuous representations, is essential for the method's performance; removing it (`PC-Uncond`) results in a substantial collapse in code generation utility.
+
+5.  Aligning the latent representations of code and prompts using a contrastive objective is a critical component for `PrivCode++`; its removal leads to a significant drop in model performance.
+
+6.  The latent-conditioned synthesis of `PrivCode++` produces a more diverse and high-fidelity distribution of synthetic code compared to unconditional DP generation, as measured by t-SNE visualizations and quantitative fidelity metrics (e.g., CBERT-F1, AST-Sim).
+
+7.  The utility of `PrivCode++` is sensitive to the dimensionality of the latent space, with an intermediate dimension ($d_z=768$) yielding better performance than smaller ($d_z=256$) or larger ($d_z=2048$) dimensions.
+
+8.  `PrivCode++` offers stronger protection against membership inference attacks (MIA) than both non-private fine-tuning and the `PrivCode` baseline, as demonstrated by lower True Positive Rates at fixed False Positive Rates.

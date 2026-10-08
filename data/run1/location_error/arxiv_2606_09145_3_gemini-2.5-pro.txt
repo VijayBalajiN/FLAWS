@@ -1,0 +1,2 @@
+Error in assumptions (core conceptual)
+error:PC-Uncond, which omits sampling from the latent prior during generation and instead relies on the latent space origin as a deterministic conditioning signal, suffers from a lack of diverse syntactic and task-level semantic guidance, leading to weak code relevance and structure.

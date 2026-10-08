@@ -1,0 +1,15 @@
+:error_text:
+Construct centered simplex vertices $P = I_{d+1} - \frac{1}{d+1}\mathbf{1}\mathbf{1}^\top$
+
+:error_text:
+(ii) video recognition on Kinetics-400~\cite{kay2017kinetics} with joint spatial--temporal modeling based on TimeSformer~\cite{bertasius2021space};
+
+:error_text:
+We evaluate nD-RoPE on the Kinetics-400 video classification benchmark using a ViT-Base backbone with a patch size of $16 \times 16$ and the divided space-time attention mechanism.
+
+:explanation:
+The paper contains two major technical flaws.
+
+The most serious flaw is a mathematical error in the description of the core algorithm for generating the wave vectors, which undermines the entire method's implementation. In Algorithm 1, the matrix $P$ is described as representing the "centered simplex vertices". However, the formula provided, $P = I_{d+1} - \frac{1}{d+1}\mathbf{1}\mathbf{1}^\top$, does not produce a matrix of vertex coordinates. Instead, it defines the Gram matrix of the vertex vectors (i.e., the matrix of their inner products), which is also a projection matrix. The subsequent steps in the algorithm, which perform an SVD on $P$ to find the wave vectors, are therefore incorrect. This error creates a contradiction with the correct theoretical derivation in Appendix A and invalidates the claim that the method's implementation actually uses the proposed regular simplex geometry. Consequently, the empirical results for all experiments (images, videos, and point clouds) cannot be confidently attributed to the theoretical properties of the simplex design.
+
+The second significant flaw is a fundamental misrepresentation of the video recognition experiment. The paper claims to evaluate nD-RoPE in a "joint spatial--temporal modeling" setting using the TimeSformer architecture. This is a key validation of the method's utility for high-dimensional data. However, the experimental details in Appendix D state that the implementation uses the standard "divided space-time attention mechanism" of TimeSformer. This mechanism explicitly avoids joint spatiotemporal modeling by decomposing attention along the spatial and temporal axes separately for efficiency. Applying a joint 3D position embedding in such a framework is not possible as intended; it would degenerate into separate 2D and 1D embeddings. This contradiction between the claimed experimental setup and the actual implementation invalidates the results as evidence for the effectiveness of the proposed joint, decomposition-free embedding in a spatiotemporal context.

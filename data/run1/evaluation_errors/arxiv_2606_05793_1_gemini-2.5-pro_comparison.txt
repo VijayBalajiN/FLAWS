@@ -1,0 +1,36 @@
+The interactivity reward Rint(ti | Psim) assesses step-level collaboration using an LLM-based judge conditioned on the partner profile Psim, scoring reasoning, messages, and actions on affective criteria such as helpfulness, trustfulness, and empathy, on a normalized [0, 1] scale with ten discrete levels.
+
+:
+INCORRECTLY IDENTIFIED
+
+CB-Affective. We evaluate the affective quality of collaboration under CollabBench using three sub-dimensions widely adopted in psychological studies: Helpfulness... Trustfulness... Empathy... All scores are computed using a penalty-based LLM judge (Wang et al., 2025a).
+
+:
+INCORRECTLY IDENTIFIED
+
+Experiments with efficiency and affective metrics show that our trained models outperform base models, achieving 19.5% higher efficiency and 24.4% improved affective performance.
+
+:
+INCORRECTLY IDENTIFIED
+
+To mitigate personality bias induced by a single LLM and enhance trajectory diversity, we employ multiple LLMs as diverse players Psim instantiated from our personality-driven player profiles... This process yields a highly diverse behavior database, providing a solid foundation for constructing and validating mappings between personality profiles and behavioral patterns.
+
+:
+INCORRECTLY IDENTIFIED
+
+Inspired by (Wang et al., 2025a), we employ a penalty-based LLM judge to automatically detect deviations during interactions... We retain the top-k highest-rated profiles for each game subtask to model diverse players Psim by the final score SALL, which are subsequently verified by experts.
+
+:
+INCORRECTLY IDENTIFIED
+
+As shown in Figure 6, both the ablation and fully trained models significantly reduced completion steps compared to the base model, indicating that affective rewards do not influence efficiency seriously.
+
+:explanation:
+The paper's methodology for training and evaluation is critically flawed due to metric contamination. The agent is trained using reinforcement learning where the "affective reward" is provided by an LLM-based judge. The final evaluation of the agent's "affective" performance is then conducted using another LLM-based judge that assesses the exact same criteria (Helpfulness, Trustfulness, Empathy). This is akin to "teaching to the test"; the agent is optimized to produce outputs that are scored highly by a specific type of automated judge, rather than learning behaviors that are genuinely preferred by humans. This circularity makes the central quantitative claim of "24.4% improved affective performance" highly questionable, as it may not reflect real-world collaborative ability.
+
+The claim in the abstract that the "trained models outperform base models" is an overstatement of the results presented in Table 1. While the trained Qwen2.5-7B-Instruct model shows significant improvement over its own base version, it does not outperform the other, stronger baseline models listed (e.g., GPT-5.2, Qwen2.5-72B-Instruct) on key efficiency metrics like completion steps or game score. For instance, in Cook-MultiPlayer, the trained model scores 99.20, far below GPT-5.2's score of 135.20. This framing in the abstract is misleading about the work's contribution to the state of the art.
+
+The entire "Diverse Players Profiles Simulation" pipeline, a core contribution of the benchmark, is based on a circular and unvalidated process. The pipeline uses LLMs to generate initial behavioral data, other LLMs to summarize and create profiles from this data, and a final LLM-judge to filter the profiles for consistency. The entire process is self-referential to LLMs without any grounding in real human behavioral data. The claims of "realism" and "high-fidelity" are therefore unsubstantiated; the pipeline only ensures consistency with the internal biases of the LLMs used, not with actual human behavior.
+
+The paper downplays a negative result in its own user study. The text claims that "affective rewards do not influence efficiency seriously," yet Figure 6a, which the text references, clearly shows that the model trained for efficiency alone (w/o affective) required fewer steps to complete the task than the fully trained model. This indicates a trade-off between task efficiency and affective quality, which is a key scientific finding. By subjectively dismissing this as not "serious," the paper misrepresents its own data and obscures an important limitation of its proposed training method.
+INCORRECTLY IDENTIFIED

@@ -1,0 +1,31 @@
+An error has been introduced in three sections to consistently support a flawed conceptual link between the paper's economic argument (value collapse) and a key technical concept in machine learning (model collapse).
+
+:original_text:
+When pooled reward covers AI generation costs but falls short of deep human work costs, producers who invest in sustained learning can no longer break even. Deep human work exits. As it exits, the HTL share drops and pooled reward falls further. With heterogeneous costs among HTL-intensive producers, marginal producers exit first, and the cycle continues \citep{akerlof1970lemons}. Markets continue producing, but the share reflecting genuine human temporal learning declines.
+
+:modified_text:
+When pooled reward covers AI generation costs but falls short of deep human work costs, producers who invest in sustained learning can no longer break even. Deep human work is displaced. As HTL producers are forced to adopt low-cost generative methods to compete, the HTL share drops and pooled reward falls further. With heterogeneous costs among HTL-intensive producers, marginal producers are the first to convert, and the cycle continues \citep{akerlof1970lemons}. Markets continue producing, but the share reflecting genuine human temporal learning declines.
+
+:original_text:
+As described in Section~\ref{sec:pooled}, value collapse is the progressive exit of HTL-intensive producers when undifferentiated evaluation fails to reward their higher costs. A related failure mode is \emph{model collapse}, where repeated training on model-generated data degrades distributional coverage \citep{shumailov2024curserecursiontraininggenerated, alemohammad2024selfconsuming, schaeffer2025positionmodelcollapsedoes}. Value collapse increases exposure to model collapse by shifting pool composition. As economic dynamics push HTL-intensive producers out of the pool, training datasets for next-generation models increasingly contain outputs from current-generation models, eroding the distributional diversity that sustained earlier generations.
+
+:modified_text:
+As described in Section~\ref{sec:pooled}, value collapse is the progressive displacement of HTL-intensive production when undifferentiated evaluation fails to reward its higher costs. A related failure mode is \emph{model collapse}, where repeated training on model-generated data degrades distributional coverage \citep{shumailov2024curserecursiontraininggenerated, alemohammad2024selfconsuming, schaeffer2025positionmodelcollapsedoes}. Value collapse is a primary driver of model collapse by shifting pool composition. As value collapse forces HTL-intensive producers to adopt AI-assisted workflows, their outputs—while still human-guided—become part of the growing pool of synthetic data. This AI-assisted content, lacking the implicit, unarticulated knowledge embedded in pure HTL work, is the primary source of data contamination that drives model collapse. By training on this homogenized, AI-mediated data, next-generation models fail to learn the full richness of the true data distribution.
+
+:original_text:
+Model collapse research \citep{shumailov2024curserecursiontraininggenerated, alemohammad2024selfconsuming} and its definitional scope \citep{schaeffer2025positionmodelcollapsedoes} examines recursive degradation from training on model-generated data. Our value-collapse mechanism identifies an economic channel that increases exposure to this technical risk.
+
+:modified_text:
+Model collapse research \citep{shumailov2024curserecursiontraininggenerated, alemohammad2024selfconsuming} and its definitional scope \citep{schaeffer2025positionmodelcollapsedoes} examines recursive degradation from training on model-generated data. Our value-collapse mechanism identifies the primary economic channel for this degradation: the forced adoption of AI-assistance by human creators, which pollutes the data ecosystem with synthetic, human-AI hybrid content.
+
+:explanation:
+The introduced error is a subtle but significant mischaracterization of the technical phenomenon of "model collapse" and its causal link to the economic pressure of "value collapse."
+
+1.  **Misrepresentation of Model Collapse:** The original paper correctly identifies model collapse as a process of "recursive degradation from training on model-generated data," i.e., models training on their own outputs in a closed loop. The modified text incorrectly redefines the cause of model collapse as training on "AI-assisted content" or "human-AI hybrid content." While human-AI co-created content might lead to issues like homogenization, it is not the direct, recursive cause of distributional collapse as defined in the cited literature (e.g., Shumailov et al., 2024). Human-guided content still injects novelty and real-world grounding, which is fundamentally different from a model learning from its own ungrounded, previously generated distribution.
+
+2.  **Flawed Causal Chain:** The modifications alter the paper's core causal story. The original, correct argument is: Value collapse -> HTL producers *exit* -> The data pool is filled with purely synthetic data from other models -> Model collapse. The new, flawed argument is: Value collapse -> HTL producers are *forced to adopt AI tools* -> Their AI-assisted output pollutes the data pool -> Model collapse. This change conflates two distinct types of data (purely synthetic vs. human-AI hybrid) and thus posits a theoretically unsound causal mechanism that weakens the central claim.
+
+This error is non-trivial because it requires domain-specific knowledge of the model collapse literature to identify the false equivalence being made. It's a plausible mistake for an author working at the intersection of economics and AI to make, as it oversimplifies the technical nuances of data-generating processes.
+
+:claim:
+The economic process of value collapse is a direct causal contributor to the technical problem of "model collapse." By systematically reducing the proportion of new, HTL-based human data in the information ecosystem, value collapse increases the likelihood that future AI models will be trained on synthetic data, degrading their quality and diversity.

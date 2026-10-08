@@ -1,0 +1,83 @@
+Here are the modifications to introduce the conceptual error into the research paper.
+
+:original_text:
+Guided by these laws and task performance signals, agents reorganize their chains of thought and selectively filter interaction traces to generate training data. We then embed these laws into the LLM via supervised fine-tuning, enabling the agent to explicitly internalize and adhere to the discovered principles in its task execution and cooperation.
+:modified_text:
+Guided by these laws and task performance signals, agents reorganize their chains of thought and reflect on failed interaction traces to generate corrected training data. We then embed these laws into the LLM via supervised fine-tuning, enabling the agent to explicitly internalize and adhere to the discovered principles in its task execution and cooperation.
+
+:original_text:
+\caption{\textbf{Overview of the proposed \name framework.} Agents interact with the environment to collect training episodes, which are separated into failure traces and success traces based on task completion. Failure traces are analyzed to extract high-level laws, while success traces are filtered to retain law-aligned behaviors. These law-aligned traces are then used to generate law-guided reasoning and actions, forming supervision for fine-tuning the LLM-based planner. During inference, the fine-tuned agent follows the learned or user-specified laws to guide communication, planning, and action selection, enabling explicit human control by editing the laws.}
+:modified_text:
+\caption{\textbf{Overview of the proposed \name framework.} Agents interact with the environment to collect training episodes, which are separated into failure traces and success traces based on task completion. Failure traces are analyzed to extract high-level laws. These same failure traces are then used to generate corrected, law-guided reasoning and actions, forming the supervision for fine-tuning the LLM-based planner. During inference, the fine-tuned agent follows the learned or user-specified laws to guide communication, planning, and action selection, enabling explicit human control by editing the laws.}
+
+:original_text:
+We propose \fullname (\name) -- a law-guided framework that addresses these challenges through failure-driven law extraction and success-driven action alignment, as illustrated in Figure~\ref{fig:method}. Our method consists of three key components: (1) failure-driven law extraction, (2) success analysis with law-guided explanation, and (3) law-guided agent alignment. The framework enables both \textit{controllability} through human-editable laws and \textit{self-evolve}, allowing LLM-based embodied agents to improve autonomously without requiring supervision from human annotations or stronger models.
+:modified_text:
+We propose \fullname (\name) -- a law-guided framework that addresses these challenges through failure-driven law extraction and failure-driven self-correction, as illustrated in Figure~\ref{fig:method}. Our method consists of three key components: (1) failure-driven law extraction, (2) law-guided failure correction, and (3) law-guided agent alignment. The framework enables both \textit{controllability} through human-editable laws and \textit{self-evolve}, allowing LLM-based embodied agents to improve autonomously without requiring supervision from human annotations or stronger models.
+
+:original_text:
+\textbf{Law-Aligned Trace Selection.} 
+
+For each successful episode $\mathcal{E}_j \in \mathcal{E}_{success}:=\mathcal{E}_{train}\backslash\mathcal{E}_{fail}$ in training episodes $\mathcal{E}_{train}$, we extract the full action histories $\mathbf{a}_j^0$ and $\mathbf{a}_j^1$ of both agents. Our goal is to select episodes that are both successful and aligned with the learned laws $\mathcal{P}$.
+
+Specifically, we condition the backbone LLM on the law set and the episode trace, and prompt the LLM to determine whether the episode is law-aligned:
+\begin{equation}
+\epsilon_{\text{align}}^{(j)} 
+= f_\theta(\mathbf{a}_j^0, \mathbf{a}_j^1, \mathcal{P}, \mathcal{T}_{align}),
+\quad \epsilon_{\text{align}}^{(j)} \in \{0,1\},
+\end{equation}
+where $\mathcal{T}_{align}$ is a prompt template that instructs the model to assess the consistency between agent behaviors and the specified laws.
+Only episodes that are both successful and law-aligned are retained:
+\begin{equation}
+\mathcal{E}_{\text{retain}} 
+= \{ \mathcal{E}_j \mid \epsilon_{\text{succ}}^{(j)} = 1 \;\wedge\; \epsilon_{\text{align}}^{(j)} = 1 \},
+\end{equation}
+where $\epsilon_{\text{succ}}^{(j)} = 1$ denotes a successful episode i.e., $\rho(\mathcal{E}_j)\!\!\geq\!\!\tau$.
+:modified_text:
+\textbf{Law-Guided Correction Setup.} 
+
+With the laws $\mathcal{P}$ extracted from failure traces, we now have a set of principles to guide the agent's behavior. The next step is to use these laws to generate corrective training data directly from the episodes where the agent failed. This allows the model to learn directly from its mistakes, rather than from successful examples that may not cover all critical failure modes. This process ensures that the supervision is targeted at the specific weaknesses identified during law extraction.
+
+:original_text:
+\textbf{Law-Guided Data Generation.} 
+For the retained episodes $\mathcal{E}_{\text{retain}}$, we generate law-guided supervision data from successful executions. For each retained episode $\mathcal{E}_j \in \mathcal{E}_{\text{retain}}$, we consider the sequence of successfully executed actions $\mathbf{a}_j = (a_0^t, a_1^t)_{t=1}^{T}$. % \AC{did we define $T_j$?}
+
+For each action $a_k^t \in \mathbf{a}_j$ at time step $t$, we collect the corresponding observation history $\mathbf{o}_k^{\leq t}$ together with the executed action $a_k^t$. We then prompt the backbone LLM to generate a law-guided reasoning trace:
+\begin{equation}
+\text{Thought}_k^t = f_\theta(\mathbf{o}_k^{\leq t}, a_k^t, \mathcal{P}, \mathcal{T}_{\text{reflect}}),
+\end{equation}
+where $\mathcal{T}_{\text{reflect}}$ is a prompt template that requires the model to justify the action choice by explicitly grounding its reasoning in the most relevant law $(n_i, d_i) \in \mathcal{P}$. This single-law grounding design encourages focused reasoning and avoids requiring an explicit multi-law composition module during training. This process produces a law-guided training dataset
+\begin{equation}
+\mathcal{D}_{\text{law}} = \{(\mathbf{o}_k^{\leq t}, \text{Thought}_k^t, a_k^t)\},
+\end{equation}
+which explicitly links successful actions to their law-based justifications.
+:modified_text:
+\textbf{Law-Guided Data Correction.} 
+For the failed episodes $\mathcal{E}_{\text{fail}}$, we generate law-guided supervision data by correcting the erroneous action sequences. For each failed episode $\mathcal{E}_j \in \mathcal{E}_{\text{fail}}$, we identify the critical time step $t$ where the first significant error occurred.
+
+At this critical step, we collect the corresponding observation history $\mathbf{o}_k^{\leq t}$ and the erroneous action $a_{k, \text{error}}^t$. We then prompt the backbone LLM to generate a corrected, law-guided reasoning trace and a new action that adheres to the laws:
+\begin{equation}
+(\text{Thought}_k^t, a_k^t)_{\text{corrected}} = f_\theta(\mathbf{o}_k^{\leq t}, a_{k, \text{error}}^t, \mathcal{P}, \mathcal{T}_{\text{correct}}),
+\end{equation}
+where $\mathcal{T}_{\text{correct}}$ is a prompt template that requires the model to analyze the error, reference a relevant law from $\mathcal{P}$, and propose a corrected thought and action. This self-correction process produces a law-guided training dataset
+\begin{equation}
+\mathcal{D}_{\text{law}} = \{(\mathbf{o}_k^{\leq t}, \text{Thought}_{k, \text{corrected}}^t, a_{k, \text{corrected}}^t)\},
+\end{equation}
+which explicitly provides corrective feedback for the model's failure patterns.
+
+:explanation:
+The introduced conceptual error reframes the core learning mechanism of the LLawCo framework from a plausible one to a scientifically unsound one.
+
+The original, valid method is based on "learning from filtered successes." It identifies laws from failure cases and then uses these laws to select high-quality, successful trajectories to use as training data for supervised fine-tuning (SFT). This is a sound approach where the model learns by imitating good behavior that implicitly avoids known failure modes.
+
+The modified method replaces this with "learning from self-corrected failures." The framework now claims to take failed trajectories and prompt the same model that failed to generate a "corrected" thought process and action. It then uses this hypothetically correct data for SFT.
+
+This is a deep conceptual flaw for the following reasons:
+1.  **Unrealistic Capability Assumption:** It assumes that a language model (especially a smaller one like the 14B model) that failed at a task due to a lack of capability can, when prompted, reliably analyze its own failure and generate a correct solution. This conflates the ability to follow instructions with the possession of the underlying reasoning or world knowledge needed to solve the task. A model that doesn't know the correct action is unlikely to be able to generate it post-hoc, even with guidance.
+2.  **Circular Logic:** The method relies on the model to teach itself how to solve a problem it cannot solve. This "pulling oneself up by one's bootstraps" logic is fundamentally flawed and is a common pitfall in self-improvement research that requires careful handling (e.g., using external feedback or a stronger model, which the paper claims not to do).
+3.  **Undermining the Central Claim:** The error makes the paper's key claim—that a 14B model can be improved to match a 70B model—highly suspect. The extraordinary performance gains reported in the paper would now depend on this implausible self-correction mechanism, which an expert reader would recognize as a major weakness. The results would seem "too good to be true" because the underlying mechanism for achieving them is not credible.
+
+This error is subtle because the idea of "learning from mistakes" is intuitively appealing. However, the specific implementation described in the modified text relies on a critical, unsubstantiated assumption about the model's self-correction capabilities, making the entire framework's foundation and its reported results questionable.
+
+:claim:
+The LLawCo framework can improve the performance of smaller language models (e.g., 14B parameters) to a level that is comparable to or exceeds that of much larger, un-aligned models (e.g., 70B parameters) on the same cooperative tasks.

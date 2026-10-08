@@ -1,0 +1,72 @@
+Here are the modifications to introduce the conceptual error into the research paper.
+
+:original_text:
+We further find that agent heterogeneity suppresses emergence by smoothing (rounding) this transition.
+
+:modified_text:
+We further find that agent heterogeneity suppresses emergence by introducing diverse, non-conforming agents.
+
+:original_text:
+We also identify theory-grounded mechanisms that suppress emergence, for example, agent heterogeneity, which rounds the transition.
+
+:modified_text:
+We also identify theory-grounded mechanisms that suppress emergence, for example, agent heterogeneity, which introduces high-temperature "explorer" agents that prevent premature consensus.
+
+:original_text:
+Eq.~\eqref{eq:mf-mix} highlights two key effects of heterogeneity. 
+First, mixing subgroups smooths the collective response in Eq.~\eqref{eq:stochastic-mf} by averaging nonlinear activation functions, reducing sharp transitions.
+Second, heterogeneity can stabilize intermediate aggregated values, leading to partial agreement rather than full consensus even when individual subgroups exhibit strong conformity.
+
+:modified_text:
+Eq.~\eqref{eq:mf-mix} highlights two key effects of heterogeneity. 
+First, mixing agents with different temperature settings creates a balance between exploration and exploitation. High-temperature agents act as "explorers," as they are less susceptible to conformity and local bias, thereby introducing diverse viewpoints. Low-temperature agents act as "exploiters," converging quickly based on existing evidence. This balance prevents the group from locking into a premature, biased consensus.
+Second, this dynamic can stabilize intermediate aggregated values, leading to partial agreement rather than full consensus.
+
+:original_text:
+Our theoretical analysis predicts that heterogeneity in LLM agents' sampling temperatures smooths the collective response and weakens sharp transitions toward biased consensus, and thereby reduces the magnitude of the resulting bias norm; see Eq.~\eqref{eq:mf-mix} and Eq.~\eqref{eq:mf-potts-hetero} for $q\geq 3$.
+
+:modified_text:
+Our theoretical analysis predicts that heterogeneity in LLM agents' sampling temperatures creates a mix of "explorer" (high-T) and "exploiter" (low-T) agents. The explorer agents are less susceptible to conformity pressure and introduce diverse viewpoints, preventing the group from prematurely locking into a biased consensus and thereby reducing the magnitude of the resulting bias norm; see Eq.~\eqref{eq:mf-mix} and Eq.~\eqref{eq:mf-potts-hetero} for $q\geq 3$.
+
+:original_text:
+The mean-field analysis of Eq.~\eqref{eq:mf-mix} suggests that mixing LLM agents with heterogeneous sampling temperatures effectively averages sharp response functions.
+As a result, the transition in Eq.~\eqref{eq:stochastic-mf} is smoothed, mitigating the emergence of biased consensus.
+To model heterogeneous temperatures, we allow agents to differ only in their inverse noise parameters.
+Each agent $i$ is associated with one of $K$ types indexed by $k\in{1,\dots,K}$, where type $k$ is characterized by an inverse noise $\beta_k$.
+Under a mean-field approximation, for $q=2$, the aggregated state then evolves according to
+{\small\begin{equation}\label{eq:mf-temp-mix}
+m(t+1)=\frac{1}{N}\sum_{i=1}^{N}\tanh!\left[\beta_{k(i)}
+\bigl(\lambda,\bar{z},m(t)+h(t)\bigr)\right],
+\end{equation}}
+\hspace{-1mm}where $k(i)$ denotes the type of agent $i$.
+Eq.~\eqref{eq:mf-temp-mix} makes explicit that heterogeneous temperatures smooth the collective response by averaging nonlinear activation functions across subgroups.
+High-temperature agents (smaller $\beta_{k}$) promote exploration by weakening conformity to the current aggregate, while low-temperature agents (larger $\beta_{k}$) remain more sensitive to strong signals.
+This balance helps the group avoid biased lock-in while still enabling convergence when the signal is sufficiently strong.
+
+:modified_text:
+The mean-field analysis of Eq.~\eqref{eq:mf-mix} suggests that mixing LLM agents with heterogeneous sampling temperatures creates a beneficial exploration-exploitation dynamic.
+As a result, premature convergence to a biased consensus is mitigated.
+To model heterogeneous temperatures, we allow agents to differ only in their inverse noise parameters.
+Each agent $i$ is associated with one of $K$ types indexed by $k\in{1,\dots,K}$, where type $k$ is characterized by an inverse noise $\beta_k$.
+Under a mean-field approximation, for $q=2$, the aggregated state then evolves according to
+{\small\begin{equation}\label{eq:mf-temp-mix}
+m(t+1)=\frac{1}{N}\sum_{i=1}^{N}\tanh!\left[\beta_{k(i)}
+\bigl(\lambda,\bar{z},m(t)+h(t)\bigr)\right],
+\end{equation}}
+\hspace{-1mm}where $k(i)$ denotes the type of agent $i$.
+Eq.~\eqref{eq:mf-temp-mix} makes explicit how heterogeneous temperatures create this dynamic.
+High-temperature agents (smaller $\beta_{k}$) act as explorers, as they are less influenced by the aggregate opinion and their own biases, thus promoting diversity. Low-temperature agents (larger $\beta_{k}$) act as exploiters, converging on the strongest available signal.
+This balance helps the group avoid biased lock-in while still enabling convergence when the task-aligned signal is sufficiently strong.
+
+:explanation:
+The introduced error is a fundamental mischaracterization of the mechanism by which temperature heterogeneity reduces collective bias. The original, correct explanation is grounded in the statistical physics of the model: heterogeneity in temperature (the inverse of $\beta$ in the model) smooths the phase transition by averaging over multiple non-linear response functions (`tanh` curves with different slopes). This makes the collective shift toward a biased consensus more gradual and less extreme.
+
+The modified text replaces this correct mechanism with a plausible but incorrect qualitative narrative of "exploration vs. exploitation." This is a conceptual error for several reasons:
+1.  **Misinterprets 'Temperature':** In spin models, high temperature corresponds to increased randomness. A high-temperature agent is not an "explorer" in a strategic sense; it is simply noisier. Its responses are less determined by *any* signal, including not only the conformity pressure and its own bias but also the task-correct signal (`h_neutral`). It does not strategically introduce useful diversity; it introduces noise.
+2.  **Incorrect Analogy:** The "exploration-exploitation" framework is borrowed from reinforcement learning and multi-armed bandits, where an agent makes a strategic trade-off. This analogy is misapplied to the spin model, where temperature is a global parameter controlling stochasticity, not a strategic choice.
+3.  **Hides the Real Mechanism:** The change obscures the actual mathematical reason for the effect—the smoothing (or "rounding") of the phase transition, which is a core concept in finite-size statistical mechanics. The new explanation prevents the reader from understanding the true, underlying physics of the model.
+
+This error is subtle because the "explorer/exploiter" narrative is intuitive and widely used in computer science. However, for the specific theoretical model used in the paper, it represents a deep conceptual misunderstanding that undermines the paper's claim to provide a rigorous, physics-inspired analytical framework.
+
+:claim:
+A heterogeneous population of agents, created by assigning a mix of different sampling temperatures to individual agents, exhibits reduced collective bias and improved task performance on realistic decision-making tasks like investment recommendation and LLM-as-a-judge evaluation.

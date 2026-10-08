@@ -1,0 +1,32 @@
+:error_text:
+Once triggered, we update the world model by grounding its foresight in the current observation. This is achieved by minimizing a reconstruction loss that encourages the predicted future state $\tilde{\boldsymbol{s}}_{t+1}$ to reconstruct the current calibrated visual features $\boldsymbol{\hat{v}}_t$, thereby correcting for predictive drift:
+
+:error_text:
+\begin{equation}\label{eq:grad}
+\boldsymbol{\Theta} \leftarrow \boldsymbol{\Theta} - \eta \cdot \,\nabla_{\small \boldsymbol{\Theta}} \|\, d(\tilde{\boldsymbol{s}}_{t+1}) - \boldsymbol{\hat{v}}_t \|_2^2,
+\end{equation}
+
+:error_text:
+\begin{algorithmic}[1]
+\IF{\(\kappa_t > \tau\)}
+    \STATE \(\mathcal{L}_{\mathrm{rec}} = \| d(\boldsymbol{\tilde{s}}_{t+1}) - \boldsymbol{\hat{v}}_t \|_2^2\)
+    \STATE \(\Theta \leftarrow \Theta - \eta \cdot \nabla_{\Theta} \mathcal{L}_{\mathrm{rec}}\)
+\ENDIF
+\end{algorithmic}
+
+:error_text:
+To this end, we further supervise the action-conditioned prior transition by its ability to anticipate future visual features.
+Specifically, given the foresight state $\tilde{\boldsymbol{s}}_{t+1}$ predicted by the world model, a lightweight decoder $d(\cdot)$ maps it to an estimate of the next-step front-view visual representation (Eq.(\ref{Eq:v})).
+The supervision signal $\boldsymbol{v}_{t+1}$ is obtained by encoding the observation at $t{+}1$ with a pretrained visual encoder~\cite{dosovitskiy2020image}:
+\begin{align}\label{eq:rec}
+  \mathcal{L}_{\mathrm{rec}} =    \mathbb{E}_{t}\Big[\left\|
+d(\tilde{\boldsymbol{s}}_{t+1})-\boldsymbol{v}_{t+1}
+\right\|_2^2\Big]. 
+\end{align}
+
+:explanation:
+There is a fundamental logical contradiction in the "Conditional World-Aware Adaptation" mechanism proposed for test-time updates. The update rule, as described in Section 3.3 and specified in Equation 11 and Algorithm 2, minimizes the reconstruction error between the *predicted next state* $\tilde{\boldsymbol{s}}_{t+1}$ and the *current visual features* $\boldsymbol{\hat{v}}_t$.
+
+This constitutes a temporal mismatch. A predictive world model is, by definition, trained to predict future states. Forcing the predicted future state to reconstruct the current observation is technically unsound. This objective would incorrectly train the world model to predict a static environment where the next state is identical to the current one, effectively destroying its learned dynamics and undermining its "foresight" capability, which is the central premise of the paper.
+
+The flaw is further highlighted by the direct contradiction with the paper's own pre-training objective. The reconstruction loss $\mathcal{L}_{\mathrm{rec}}$ in Equation 10 correctly supervises the model by training the predicted future state $\tilde{\boldsymbol{s}}_{t+1}$ to reconstruct the actual *next* visual features $\boldsymbol{v}_{t+1}$. The test-time adaptation rule inexplicably discards this correct temporal alignment. This severe methodological flaw invalidates the contribution of the conditional adaptation module, despite the reported minor empirical gains, which are likely coincidental or the result of an unintended regularization effect.

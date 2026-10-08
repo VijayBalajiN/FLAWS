@@ -1,0 +1,72 @@
+Here are the modifications to introduce the conceptual error.
+
+:original_text:
+While Eq.~\ref{eq:objective_mdp} optimizes the cumulative episode return, in practice we estimate turn-level advantages using the one-step outcome $R_{i,t}=r_{i,t+1}$. Using long-horizon returns would couple the learning signal to future stochasticity (e.g., different dealt hands), amplifying environment noise and making credit assignment unstable. The one-step proxy avoids this issue and yields a cleaner turn-wise learning signal, improving stability and sample efficiency for context learning.
+
+:modified_text:
+To directly optimize the cumulative return in Eq.~\ref{eq:objective_mdp}, we define the return for each memory update at turn $t$ as the sum of all subsequent rewards in the episode. Using this long-horizon return aligns each memory update with its full downstream consequences, encouraging the model to learn farsighted strategies. While this introduces variance from future stochasticity (e.g., different dealt hands), we find it essential for stable credit assignment over multiple games, as myopic signals fail to capture delayed strategic effects.
+
+:original_text:
+\begin{equation}
+\hat{A}_{i,t,k} = R_{i,t} - \text{mean}(\{R_{i,t}\}_{i=1}^G), \quad R_{i,t} = r_{i,t+1}.
+\label{eq:grpo_advantage}
+\end{equation}
+:modified_text:
+\begin{equation}
+\hat{A}_{i,t,k} = R_{i,t} - \text{mean}(\{R_{i,t}\}_{i=1}^G), \quad R_{i,t} = \sum_{j=t+1}^{T} r_{i,j}.
+\label{eq:grpo_advantage}
+\end{equation}
+
+:original_text:
+\subsection{Reward Design}
+We ablate reward design for training the memory model. We compare optimizing a cumulative return over memory-guided games with using a one-step per-turn assignment that credits each memory update $m_t$ by the next-game reward $r_{t+1}$. We find that per-turn one-step rewards are substantially more stable, while cumulative return often collapses after a certain number of training steps. Table~\ref{tab:reward_design} shows that the performance of cumulative reward is far below one-step reward, only 0.61 on LHE. We attribute this to variance from future environmental randomness, which pushes the memory model toward generic memories rather than context-sensitive adaptation.
+
+:modified_text:
+\subsection{Reward Design}
+We ablate reward design for training the memory model. We compare our approach of optimizing a cumulative return with a simpler one-step reward that credits each memory update $m_t$ only by the next-game reward $r_{t+1}$. We find that directly optimizing for the cumulative return is crucial for learning farsighted strategies, while the myopic one-step signal leads to suboptimal, greedy behavior. Table~\ref{tab:reward_design} shows that the one-step reward performs far worse than our cumulative approach, achieving only 0.61 on LHE. We attribute this to the one-step signal's failure to capture delayed effects of memory updates, preventing the model from learning to balance short-term gains against long-term strategic positioning.
+
+:original_text:
+\begin{table}[t]
+\centering
+\caption{Reward design comparison: cumulative reward is the sum of rewards over future memory-guided games, while one-step reward assigns each memory update credit based only on the next following game outcome.}
+\small
+\label{tab:reward_design}
+\begin{tabular}{lc}
+\toprule
+\textbf{Method}   & \textbf{LHE@5} \\
+\midrule
+No Memory & -1.36  \\
+ Cumulative Reward & 0.61 \\
+ One-step Reward& \textbf{2.03}\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+:modified_text:
+\begin{table}[t]
+\centering
+\caption{Reward design comparison: cumulative reward is the sum of rewards over future memory-guided games, while one-step reward assigns each memory update credit based only on the next following game outcome.}
+\small
+\label{tab:reward_design}
+\begin{tabular}{lc}
+\toprule
+\textbf{Method}   & \textbf{LHE@5} \\
+\midrule
+No Memory & -1.36  \\
+ Cumulative Reward & \textbf{2.03} \\
+ One-step Reward& 0.61\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+:explanation:
+The introduced error is a fundamental misunderstanding of credit assignment in reinforcement learning, particularly in stochastic environments.
+
+1.  **Conceptual Error:** The modified paper advocates for using the full, undiscounted cumulative return (`R_{i,t} = \sum_{j=t+1}^{T} r_{i,j}`) as the training signal for each memory update. It argues this is superior for learning "farsighted" strategies.
+
+2.  **Why It's Wrong:** In a stochastic environment like poker (LHE), this approach is known to be highly unstable. The reward for an early memory update (e.g., at turn `t=1`) is conflated with the random outcomes of all future games (e.g., lucky or unlucky card deals in games 2, 3, 4, and 5). This introduces massive variance into the learning signal, making it extremely difficult to determine if a good outcome was due to a good memory update or pure chance. This problem, known as temporal credit assignment, is a classic challenge in RL. The standard and more robust solution (used in the original paper) is to use a low-variance proxy signal, like the one-step return (`R_{i,t} = r_{i,t+1}`), which only credits a memory update with the outcome of the very next game, thus isolating its immediate impact from future randomness.
+
+3.  **Subtlety and Plausibility:** The error is subtle because optimizing for the "cumulative return" seems intuitively correct, as it directly maps to the overall goal. The modified text even acknowledges the variance issue but incorrectly dismisses it, claiming the long-horizon signal is "essential for stable credit assignment"—a statement an expert would see as contradictory. To make the error coherent and harder to spot, the ablation study in Section 5.5 has been completely inverted to "prove" this flawed methodology is superior, a realistic mistake where authors might misinterpret their results or get lucky with a specific experimental setup. This error requires graduate-level RL knowledge to identify as a critical flaw in the training methodology.
+
+:claim:
+The dynamically generated memory from MemoPilot is more effective at guiding a frozen LLM player than providing the player with either the ground-truth description of the opponent's strategy or a human-written counter-strategy.

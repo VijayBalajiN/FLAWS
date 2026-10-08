@@ -1,0 +1,15 @@
+:error_text:
+For Agentic RL, we specifically select queries from Sec.~\ref{subsec:sft} where best-of-N sampling failed to yield successful trajectories, thereby focusing RL on exploring and resolving these challenging cases. All video durations for RL are restricted to under 300 seconds.
+
+:error_text:
+\textbf{Efficacy of TAURA vs. Vanilla GRPO.}
+(1) \textit{Advantage Homogenization}: Vanilla GRPO stagnates on reasoning (MLVU $69.9\%$) and degrades perception (DailyOmni $63.3\% \to 62.2\%$).
+By broadcasting a uniform trajectory-level advantage, it fails to
+incentivize specific perceptual discoveries, as critical ``looking''
+actions receive the same credit as trivial actions.
+(2) \textit{Entropy-Steered Assignment}: TAURA rectifies this by using entropy as a proxy for decision criticality. By up-weighting high-entropy turns---thereby identifying decisive ``forks'' in the search space---TAURA aligns credit assignment with information gain. This fine-grained supervision drives consistent improvements across both perception (DailyOmni $64.8\%$) and reasoning (MLVU $71.1\%$).
+
+:explanation:
+The paper's central claim is that its proposed agentic framework, particularly the Agentic Reinforcement Learning stage with TAURA, enables scalable reasoning over hour-long videos. The ablation study (the second error text) explicitly attributes performance gains on long-video benchmarks like MLVU (videos up to 120 minutes) and LVBench (average 68 minutes) to the efficacy of TAURA.
+
+However, the implementation details (the first error text) reveal a critical flaw: the Agentic RL stage was exclusively trained on short videos with durations "restricted to under 300 seconds" (5 minutes). This creates a severe mismatch between the training distribution for the RL policy and the evaluation distribution for the paper's primary claims. The challenges of long-horizon reasoning, memory management, and evidence gathering over hour-long videos were never seen by the model during the TAURA optimization phase. Therefore, attributing the observed performance improvements on these long-video benchmarks to the TAURA method is unsubstantiated and potentially spurious, undermining a core contribution of the paper.

@@ -1,0 +1,7 @@
+Error in assumptions (core conceptual)
+error:
+Once triggered, we update the world model to enforce self-consistency in its internal dynamics. In unfamiliar test environments, the subsequent observation may be unreliable for supervision. Therefore, our adaptation objective minimizes the discrepancy between the anticipated future state's decoded representation and the \emph{current} calibrated observation, which serves as a stable, self-referential anchor. This encourages the model to learn transitions that are well-grounded in the present context. The update is performed using a modified reconstruction loss:
+\begin{equation}\label{eq:grad}
+\boldsymbol{\Theta} \leftarrow \boldsymbol{\Theta} - \eta \cdot \,\nabla_{\small \boldsymbol{\Theta}} \left\|d(\tilde{\boldsymbol{s}}_{t+1})-\boldsymbol{\hat{v}}_{t}\right\|_2^2,
+\end{equation}
+where $\eta$ denotes the adaptation learning rate and we denote all components of the world model without policies collectively by parameters $\boldsymbol{\Theta}$.

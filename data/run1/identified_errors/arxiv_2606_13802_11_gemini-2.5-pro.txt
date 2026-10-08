@@ -1,0 +1,32 @@
+:error_text:
+\begin{tabular}{@{}llrrrr@{}}
+    \toprule
+    \textsc{heur.} & \textsc{rule} & \textsc{uas}$\uparrow$ & \textsc{ar}$\uparrow$ & \textsc{prec}$\uparrow$ & \textsc{pCov}$\uparrow$ \\
+    \midrule
+    \textsc{greedy}   & $\ell{\geq}1$                & 22.3 & 20.0 & 36.0 & 19.6 \\
+    \textsc{hybrid-1} & $p{\geq}.9\,,\,\ell{\geq}1$  & 21.8 & 16.6 & 39.4 & 17.3 \\
+    \textsc{greedy-2} & $\ell{\geq}2$                & 20.3 & 10.5 & 37.6 & 15.9 \\
+    \textsc{hybrid-2} & $p{=}1\,,\,\ell{\geq}2$      & 17.5 &  7.9 & 40.1 & 10.7 \\
+    \textsc{p100}     & $p{=}1$                      & 19.9 & 21.8 & 38.2 & 20.1 \\
+    \textsc{p90}      & $p{\geq}.9$                  & 17.0 & 23.3 & 36.0 & 25.5 \\
+    \textsc{p60}      & $p{\geq}.6$                  & 13.3 & 26.9 & 32.9 & 33.0 \\
+    \textsc{always}   & ---                          & $-$19.2 & 100.0 & 9.3 & 8.1 \\
+    \bottomrule
+  \end{tabular}
+
+:error_text:
+\textbf{Predictability Coverage (\textsc{pCov}):} fraction of \emph{predictable} (cell, property) pairs that the system actually produced, where the predictable set is the oracle union from \S\ref{sec:predictability}. This normalizes by what is learnable from context, giving a ceiling-relative measure rather than one diluted by inherently unpredictable edits.
+
+:error_text:
+\paragraph{Precision alone does not ensure utility.}
+
+Even at \textsc{p90}, which accepts any prediction with $\geq 90\%$ precision regardless of utility, the system delivers only 17.0\% \textsc{uas} -- 4.8 points below \textsc{hybrid-1} (21.8\%) and 5.3 points below \textsc{greedy} (22.3\%) (Table~\ref{tab:heuristics-results}).
+\textsc{p100} (perfect precision) does better at 19.9\% but is still surpassed by \textsc{hybrid-1}.
+Precision measures correctness of \emph{individual} predicted properties, not whether a prediction actually advances the user toward completion; a heuristic that ignores utility leaves savings on the table.
+
+:explanation:
+The experimental results in Table 5 reveal a serious contradiction that undermines the validity of a key proposed metric, Predictability Coverage (\textsc{pCov}). The table shows a strong negative correlation between the primary utility metric, User Actions Saved (\textsc{uas}), and \textsc{pCov} for precision-based acceptance heuristics.
+
+Specifically, as the precision requirement is loosened from perfect (\textsc{p100}) to poor (\textsc{p60}), the system's utility plummets (UAS drops from 19.9% to 13.3%), indicating it becomes significantly less helpful. Paradoxically, its \textsc{pCov} score—defined as a normalized measure of how much of the "learnable" task it solves—dramatically increases from 20.1% to a table-high of 33.0%.
+
+This means the setting that is least useful to the user (\textsc{p60}) appears to be the best according to the \textsc{pCov} metric. The paper presents \textsc{pCov} as an insightful, "ceiling-relative measure" but fails to acknowledge or explain this bizarre inverse relationship. This suggests that \textsc{pCov} is a flawed metric, as it can be gamed by accepting low-quality predictions that hurt the user but happen to contain some correct elements. This fundamental flaw in the metric design and the subsequent lack of analysis call into question the paper's conclusions about model capabilities and the utility of its proposed evaluation framework.

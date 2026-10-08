@@ -1,0 +1,36 @@
+:error_text:
+Once triggered, we update the world model to enforce self-consistency in its internal dynamics. In unfamiliar test environments, the subsequent observation may be unreliable for supervision. Therefore, our adaptation objective minimizes the discrepancy between the anticipated future state's decoded representation and the \emph{current} calibrated observation, which serves as a stable, self-referential anchor. This encourages the model to learn transitions that are well-grounded in the present context. The update is performed using a modified reconstruction loss:
+\begin{equation}\label{eq:grad}
+\boldsymbol{\Theta} \leftarrow \boldsymbol{\Theta} - \eta \cdot \,\nabla_{\small \boldsymbol{\Theta}} \left\|d(\tilde{\boldsymbol{s}}_{t+1})-\boldsymbol{\hat{v}}_{t}\right\|_2^2,
+\end{equation}
+
+:error_text:
+\begin{algorithm}[htbp]
+\caption{Conditional World-Aware Adaptation \textit{(Test-Time)}}
+\label{alg:adapt}
+\begin{algorithmic}[1]
+...
+    \IF{\(\kappa_t > \tau\)}
+        \STATE \(\mathcal{L}_{\mathrm{rec}} = \| d(\boldsymbol{\tilde{s}}_{t+1}) - \boldsymbol{\hat{v}}_t \|_2^2\)
+        \STATE \(\Theta \leftarrow \Theta - \eta \cdot \nabla_{\Theta} \mathcal{L}_{\mathrm{rec}}\)
+    \ENDIF
+...
+\end{algorithmic}
+\end{algorithm}
+
+:error_text:
+To this end, we further supervise the action-conditioned prior transition by its ability to anticipate future visual features.
+Specifically, given the foresight state $\tilde{\boldsymbol{s}}_{t+1}$ predicted by the world model, a lightweight decoder $d(\cdot)$ maps it to an estimate of the next-step front-view visual representation (Eq.(\ref{Eq:v})).
+The supervision signal $\boldsymbol{v}_{t+1}$ is obtained by encoding the observation at $t{+}1$ with a pretrained visual encoder~\cite{dosovitskiy2020image}:
+\begin{align}\label{eq:rec}
+  \mathcal{L}_{\mathrm{rec}} =    \mathbb{E}_{t}\Big[\left\|
+d(\tilde{\boldsymbol{s}}_{t+1})-\boldsymbol{v}_{t+1}
+\right\|_2^2\Big]. 
+\end{align}
+
+:explanation:
+The core technical flaw lies in the objective function used for the "Conditional World-Aware Adaptation" at test time. The paper proposes updating the world model by minimizing the reconstruction error between the decoded representation of the *predicted next state* (`\tilde{s}_{t+1}`) and the *current observation* (`\hat{v}_{t}`), as shown in Equation 12 and Algorithm 2.
+
+This objective is fundamentally incorrect for a predictive world model. It trains the model to learn that the consequence of any action is a future state that looks identical to the current state. This would force the world model to learn static or identity transitions, effectively teaching it that the world does not change. Such a model would be incapable of providing meaningful foresight, rendering the entire "feedback-guided plan refinement" mechanism useless, as the feedback signal (`\Delta_t = \tilde{s}_{t+1} - s_t`) would collapse towards zero.
+
+The error is further highlighted by its direct contradiction with the pre-training objective (Equation 10), which correctly trains the world model to predict the *next* observation (`v_{t+1}`). The paper's justification for this flawed test-time objective—that the current observation is a "stable, self-referential anchor"—is scientifically unsound for a model meant to capture environmental dynamics. This conceptual error undermines a key contribution of the paper.

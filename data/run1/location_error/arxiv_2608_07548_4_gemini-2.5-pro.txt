@@ -1,0 +1,18 @@
+Error in assumptions (core conceptual)
+error:
+To this end, we further supervise the action-conditioned prior transition by its ability to maintain representational consistency.
+Specifically, given the foresight state $\tilde{\boldsymbol{s}}_{t+1}$ predicted by the world model, a lightweight decoder $d(\cdot)$ maps it to an estimate of the current-step calibrated front-view visual representation (Eq.(\ref{Eq:v})).
+The supervision signal is the calibrated visual feature $\boldsymbol{\hat{v}}_{t}$ from the current timestep:
+\begin{align}\label{eq:rec}
+  \mathcal{L}_{\mathrm{rec}} =    \mathbb{E}_{t}\Big[\left\|
+d(\tilde{\boldsymbol{s}}_{t+1})-\boldsymbol{\hat{v}}_{t}
+\right\|_2^2\Big]. 
+\end{align}
+Although defined in the visual feature space, this objective directly constrains the transitioned latent state, encouraging the world model to encode stable, task-relevant environment dynamics without resorting to pixel-level reconstruction.
+error:
+\IF{\(\kappa_t > \tau\)}
+        \STATE \(\mathcal{L}_{\mathrm{rec}} = \| d(\boldsymbol{\tilde{s}}_{t+1}) - \boldsymbol{\hat{v}}_t \|_2^2\)
+        \STATE \(\Theta \leftarrow \Theta - \eta \cdot \nabla_{\Theta} \mathcal{L}_{\mathrm{rec}}\)
+    \ENDIF
+error:
+Additionally, removing the reconstruction loss $\mathcal{L}_{\mathrm{rec}}$ (Eq.~(\ref{eq:rec})) leads to performance degradation, confirming that $\mathcal{L}_{\mathrm{rec}}$ is crucial for learning stable latent representations that maintain representational consistency across state transitions.

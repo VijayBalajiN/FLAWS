@@ -1,0 +1,34 @@
+Here are the modifications to introduce the conceptual error into the research paper.
+
+:original_text:
+Fortunately, thanks to the phenomenon that attention distributions are typically dominated by either local context or initial sink tokens~\citep{xiao2023efficient}, we introduce the pseudo-max approximation $\tilde{m}_i$ by estimating the global maximum using only these accessible subsets, sink tokens $S_\text{global}$ and local context $S_\text{local}$, as follows.
+\begin{equation}
+\tilde{m}_i = \max{\left( \max_{t \in S_\text{global}} s_{it}, \max_{t \in S_\text{local}} s_{it} \right)}.
+\end{equation}
+This approximation allows the threshold $\tilde{m}_i - \delta$ to be computed using only locally available data, effectively bypassing the global reduction bottleneck and enabling independent parallel processing of KV blocks.
+
+:modified_text:
+Fortunately, thanks to the phenomenon that attention distributions are typically dominated by either local context or initial sink tokens~\citep{xiao2023efficient}, we introduce the pseudo-max approximation $\tilde{m}_i$. This value is derived by efficiently estimating the global maximum using only these accessible subsets—sink tokens $S_\text{global}$ and local context $S_\text{local}$—without a global reduction. This approximation allows the threshold $\tilde{m}_i - \delta$ to be computed using only locally available data, effectively bypassing the global reduction bottleneck and enabling independent parallel processing of KV blocks.
+
+:original_text:
+We analyze the implications of the approximation gap where $\tilde{m}_i < m_i$. As shown in Figure \ref{fig:pseudomax}, such gaps are rare and numerically negligible. Crucially, even when they occur, this underestimation represents a fail-safe mechanism.
+Recall our filtering condition: $s_{ij} \ge \tilde{m}_i - \delta$.
+Since $\tilde{m}_i \le m_i$ by definition, it follows that our threshold is lower than the ideal threshold: $\tilde{m}_i - \delta \le m_i - \delta$.
+Consequently, any token that would be selected by the global max is \textit{guaranteed} to be selected by the Pseudo-Max. In these rare ``failure" cases, FFD automatically falls back to a more conservative retrieval policy, preserving slightly more tokens. This structural asymmetry ensures that approximation errors result only in a minor increase in I/O budget (efficiency penalty), rather than the loss of critical information (accuracy penalty).
+
+:modified_text:
+We analyze the implications of the approximation gap where $\tilde{m}_i < m_i$. As shown in Figure \ref{fig:pseudomax}, such gaps are rare and numerically negligible. Crucially, when they do occur, this underestimation represents the primary source of approximation error.
+Recall our filtering condition: $s_{ij} \ge \tilde{m}_i - \delta$.
+If $\tilde{m}_i$ underestimates $m_i$, the threshold $\tilde{m}_i - \delta$ becomes lower than the ideal $m_i - \delta$. This causes FFD to fall back to a more conservative retrieval policy, preserving slightly more tokens. This structural asymmetry ensures that approximation errors result only in a minor increase in I/O budget (efficiency penalty), rather than the loss of critical information (accuracy penalty).
+
+:explanation:
+The introduced error is a critical conceptual oversight regarding the robustness of the "pseudo-max" approximation, which is central to the paper's top-$\delta$ selection strategy.
+
+1.  **Ambiguity in the Approximation Method**: In Section 3.2, the precise definition of the pseudo-max `\tilde{m}_i` as a strict maximum over a subset of tokens (which guarantees `\tilde{m}_i <= m_i`) is removed. It is replaced with a vague description of an "estimation" that is "derived" from these subsets. This introduces the possibility that the estimation method is not a strict lower bound and could potentially *overestimate* the true maximum attention score `m_i`.
+
+2.  **Flawed Robustness Analysis**: In Section 5.2, the original text correctly identified that `\tilde{m}_i` is a lower bound on `m_i`, making the approximation a "fail-safe" mechanism that might keep more tokens but never incorrectly discard important ones. The modified text completely removes this crucial guarantee. Instead, it exclusively analyzes the case of underestimation (`\tilde{m}_i < m_i`), framing it as the "primary source of approximation error" and concluding that it only leads to a minor efficiency penalty.
+
+**The core error**: The modified analysis creates a critical blind spot by failing to consider or even acknowledge the possibility of overestimation (`\tilde{m}_i > m_i`). If the ambiguous estimation method from Section 3.2 were to overestimate the max score, the filtering threshold `\tilde{m}_i - \delta` would be raised too high. This would cause the FFD algorithm to incorrectly prune tokens that are actually important, leading to a potential catastrophic loss of accuracy. The paper's claim of maintaining downstream performance is thus fundamentally undermined, as its core selection mechanism contains an unanalyzed failure mode that could compromise model quality. This is a subtle but significant theoretical flaw that a domain expert would identify as a major gap in the method's justification.
+
+:claim:
+Despite achieving high sparsity rates (e.g., 73% of blocks skipped with δ=7), FFD maintains the downstream task performance of the original non-sparse model on the RULER and LongBench benchmarks, outperforming other sparse methods like Quest and Twilight.

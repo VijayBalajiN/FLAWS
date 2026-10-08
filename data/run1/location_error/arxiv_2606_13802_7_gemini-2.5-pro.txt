@@ -1,0 +1,8 @@
+Error in assumptions (core conceptual)
+error:
+\paragraph{Easier and harder actions.}
+Per-category acceptance rates (Figure~\ref{fig:op-category-acceptance}) split cleanly into two groups across all solvers: structural, range-based operations (\op{input}, \op{paste}, \op{fill}, \op{merge}) are accepted at noticeably higher rates than atomic, cell-level formatting (\op{align}, \op{number format}, \op{border}).
+GPT-5 dominates on \op{input} for large ranges, reflecting its ability to reason about tabular structure, while the training-free \op{online $n$-gram} also holds up well on structurally repetitive tasks (\op{merge}, \op{border}, \op{paste}) but collapses on operations requiring semantic understanding.
+
+Comparing the base and fine-tuned SmolLM2-360M makes the effect of in-domain training concrete: the largest accuracy gains land on the categories the base handled worst---number format, \op{fill}, \op{border}, and \op{autofill} all jump by roughly 10 points---while the already high-performing structural categories shift only marginally.
+At the same time, the fine-tuned model issues fewer \op{border} and \op{fill} predictions and more \op{merge}, \op{align}, and \op{autofill} ones, suggesting it learns both \emph{when} to predict each category and \emph{how} to predict it more reliably.

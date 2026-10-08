@@ -1,0 +1,13 @@
+:error_text:
+exposing its inability to generalize via abstract representations, a key limitation compared to gradient-based adaptation.
+
+:error_text:
+it remains visible at far distances where SFT's normalized gains become negative or near zero.
+
+:error_text:
+and preserves positive far-transfer gains ($\text{Gain}_n(D_3)$/$\text{Gain}_n(D_4)$ of $12.3\%$/$16.8\%$ vs.\ $-7.1\%$/$-0.5\%$ for SFT).
+
+:explanation:
+The paper's conclusion makes the strong claim that ICL's failure to generalize to abstract, category-matched problems (D3) is a "key limitation compared to gradient-based adaptation." This incorrectly implies that gradient-based methods as a whole do not suffer from this limitation.
+
+However, the paper's own results in Table 2, and explicitly stated in Sections 4.1 and 4.2, show that Supervised Fine-Tuning (SFT)—a primary gradient-based method—also fails at this task, consistently achieving negative normalized gains on D3. The conclusion lumps SFT and RL together under "gradient-based adaptation" but ignores that SFT shares the same critical failure mode as ICL. This creates a direct contradiction between the detailed results and the high-level conclusion, misrepresenting a central finding of the paper.

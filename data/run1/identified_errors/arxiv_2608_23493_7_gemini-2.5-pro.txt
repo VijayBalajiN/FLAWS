@@ -1,0 +1,26 @@
+:error_text:
+The rethinking rollout $\tilde{y}$ plays three roles in our pipeline, none of which is to serve as a training target. (i) \emph{Quality validation:} comparing $\tilde{y}$ against the initial rollout $y$ confirms that the reflection patch produces a strictly stronger conditional distribution, justifying our choice of teacher. (ii) \emph{Diagnostic analysis:} $\tilde{y}$ supports the reflection-quality and ablation studies reported elsewhere in this appendix. (iii) \emph{Implementation amortisation:} sampling $\tilde{y}$ shares activations with the teacher-forcing pass used in Stage~2, so amortising the cost is essentially free in our implementation. The Stage~2 training objective (Eq.~6) reads $\log\pi_T(a_t\mid s_t)$ where $a_t$ is the student's own on-policy token; $\tilde{y}$ never appears in this expression.
+
+:error_text:
+Complete FLOPs breakdown for \method{} (Qwen3-8B, AIME'24 training). Stage~1 is one-time, embarrassingly parallel preprocessing that can be cached across epochs; only Stage~2 is repeated each training run. The rethinking rollout $\tilde{y}$ is reported for full transparency but is \emph{not} consumed as a training target in Stage~2, which uses only teacher-forced scoring of student tokens (see Eq.~6 in the main paper). Removing this row would cut Stage~1 cost by 22.2\% without altering the Stage~2 objective.
+
+:error_text:
+From the reconstructed state, we optionally sample a \emph{rethinking rollout}:
+\begin{equation}
+\tilde{y} \sim \pi_\theta(\cdot\mid\tilde{x}).
+\end{equation}
+Empirically, $\tilde{y}$ exhibits substantially higher quality than $y$, evidence that $\pi_\theta(\cdot\mid\tilde{x})$ is a stronger policy and therefore a valid teacher.
+Importantly, $\tilde{y}$ is \emph{not} a training target: Stage~2 consumes only the teacher's per-token log-probabilities under teacher-forcing on the student's tokens.
+
+:error_text:
+Counting Stage 1 and Stage 2, SRPO uses $5.4 \times 10^{18}$ FLOPs versus $20.8 \times 10^{18}$ for GRPO, i.e., approximately $3.8\times$ fewer total FLOPs.
+Detailed theoretical analysis, including information-theoretic perspectives and formal treatment of the self-distillation mechanism, is provided in Appendix~\ref{appendix:theory}.
+
+:explanation:
+The paper's central claim of being approximately 3.8 times more computationally efficient than the GRPO baseline is founded on misleading and technically unsound FLOPs accounting.
+
+The authors include the computational cost of generating a "rethinking rollout" ($\tilde{y}$) in their total FLOPs budget for SRPO, a step that accounts for over 22% of the method's total cost. However, the paper repeatedly and explicitly states that this rollout is "optional," "not a training target," and used only for "quality validation" and "diagnostic analysis." The costs associated with experimental validation and analysis should not be included in the training cost of the core algorithm, as this misrepresents its true efficiency.
+
+To justify including this cost, the authors make the technically dubious claim of "implementation amortisation," asserting that autoregressively sampling a new trajectory $\tilde{y}$ is "essentially free" because it "shares activations" with the teacher-forcing pass used in Stage 2. This is incorrect. Teacher-forcing involves a single forward pass over the student's trajectory, while autoregressive sampling involves generating a completely new and different trajectory token-by-token. These are distinct computational processes with different inputs after the first token, making significant activation sharing impossible.
+
+By including a costly, non-essential validation step in their primary efficiency metric, the authors are inflating the cost of their method and thereby misrepresenting the efficiency gains compared to baselines. This flawed accounting undermines one of the paper's key contributions.

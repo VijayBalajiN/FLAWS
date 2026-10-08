@@ -1,0 +1,35 @@
+:error_text:
+\textsl{Mean-Field Dynamics for Heterogeneous LLMs.}
+The analysis above assumes identical LLM agents.
+In practice, however, multi-agent LLM debates often involve a mixture of different LLMs or roles~\cite{liang2023encouraging,chen2023agentverse}.
+We model this setting by allowing agents to differ only in their parameters.
+Each LLM agent $i$ is associated with one of $K$ LLM types (or expert roles/personas), indexed by $k\in\{1,\dots,K\}$.
+LLM agents of type $k$ are characterized by a parameter set $\{\lambda_k, h_k, \gamma_k\}$.
+Under a mean-field approximation, for $q=2$, the aggregated state of the mixed population can be modeled as a homogeneous system with effective average parameters. The dynamics evolve according to:
+\begin{equation}\label{eq:mf-mix}
+\scalebox{0.9}{$m(t+1) = \tanh \left[
+\beta \left( \bar{\lambda} \bar{z}\, m(t) + \bar{h} \pm \bar{\gamma}/2 \right) \right]$}
+\end{equation}
+where $\bar{\lambda} = \frac{1}{N}\sum_i\lambda_{k(i)}$, $\bar{h} = \frac{1}{N}\sum_i h_{k(i)}$, and $\bar{\gamma} = \frac{1}{N}\sum_i \gamma_{k(i)}$ are the population-averaged parameters. The sign of the bias term depends on the net direction of the average predisposition.
+
+:error_text:
+In Fig.~\ref{fig:mix-llms}(b), we estimate the parameters of the mean-field dynamics in Eq.~\eqref{eq:mf-mix} using only homogeneous populations, and compare the predicted collective norm with experimental results. We observe close agreement between theory and experiment.
+Overall, mixed populations (i.e., \iconGPT\,\iconGPT\,\iconLlama, \iconLlama\,\iconLlama\,\iconGPT, and \iconDeepSeek\,\iconDeepSeek\,\iconGPT) exhibit weaker consensus, with \(m(R)\in[-0.5,0.2]\), than homogeneous populations. This reduction is explained by the effective averaging of agent parameters in the mean-field dynamics of Eq.~\eqref{eq:mf-mix}, which creates a representative agent with more moderate, less extreme characteristics, thereby smoothing the collective response.
+
+:error_text:
+Eq.~\eqref{eq:mf-mix} highlights a key effect of heterogeneity.
+First, averaging over different agent parameters effectively creates a single representative agent with moderate characteristics. This dampens extreme biases or conformity levels present in subgroups, which in turn smooths the collective response and reduces sharp transitions.
+Second, this can stabilize intermediate aggregated values, leading to partial agreement rather than full consensus.
+This can be generalized to the case of $q \geq 3$, as shown in Appendix~\ref{app:formulation}.
+
+:explanation:
+The paper's theoretical treatment of heterogeneous agent populations contains a fundamental mathematical error that invalidates its central claim of explaining the dynamics of mixed-LLM debates.
+
+Equation (6) models the collective state `m(t+1)` of a heterogeneous population as the `tanh` of the average agent parameters. This is incorrect. Due to the non-linear nature of the `tanh` function, the `tanh` of an average is not equal to the average of the `tanh` values (`tanh(E[x]) != E[tanh(x)]`). The correct mean-field formulation should calculate the expected next state for each agent type and then average these expectations, as correctly shown in the paper's own appendix (Equation 11).
+
+This error is not a minor oversight; it is a critical flaw for several reasons:
+1.  **Invalid Theoretical Claims:** The paper uses the flawed Equation (6) to build its entire explanation for why heterogeneity suppresses biased consensus, incorrectly arguing that the system behaves like a single "representative agent" with averaged properties.
+2.  **False Validation:** The paper explicitly claims that predictions from the incorrect Equation (6) show "close agreement" with experimental results for mixed populations (Figure 5b). This claim is baseless, as the underlying model is wrong. Any apparent match is likely coincidental or an artifact of parameter fitting, not a validation of the theory.
+3.  **Internal Contradiction:** The main text presents and uses the incorrect Equation (6), while the appendix contains the correct formulation (Equation 11). This stark contradiction demonstrates a significant lack of rigor and undermines the credibility of the entire theoretical framework.
+
+This error breaks the paper's claim to provide a valid, mechanistic explanation for the behavior of heterogeneous multi-agent LLM systems, which is one of its key stated contributions.

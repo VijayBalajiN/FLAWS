@@ -1,0 +1,24 @@
+**Identified Error:**
+However, most existing methods rely on hand-designed prompting rules, making it difficult to align memory updates with downstream objectives over multi-step horizons consistently.
+
+:
+**INCORRECTLY IDENTIFIED**
+
+---
+
+**Identified Error:**
+Therefore, we estimate turn-level advantages using the one-step outcome Ri,t = ri,t+1. This choice aligns the learning signal directly with the immediate consequence of a memory update, providing a more precise and theoretically grounded signal for credit assignment than a long-horizon return, which conflates the effects of multiple memory updates and game-specific randomness.
+
+:
+**CORRECTLY IDENTIFIED**
+
+---
+
+**Identified Error:**
+We attribute this to the cumulative objective being misaligned with the task of learning from sequential, independent probes of a stationary opponent. The long-horizon return signal confuses credit assignment, whereas the one-step reward correctly isolates the effect of each memory update on immediate performance.
+
+:explanation:
+The paper presents a fundamental contradiction between its stated goal and its methodology. The abstract identifies the key challenge as aligning memory updates with "downstream objectives over multi-step horizons." However, the core of the proposed reinforcement learning method discards the multi-step, cumulative reward objective. Instead, it uses a myopic, one-step proxy reward where the quality of a memory update is judged solely by the outcome of the very next game (`Ri,t = ri,t+1`).
+
+This choice explicitly prevents the agent from learning strategies that involve short-term sacrifices for long-term gains, which is a hallmark of sophisticated memory use. The paper attempts to justify this by claiming the true cumulative objective is "misaligned" and "confuses credit assignment." This is a weak justification. Difficult credit assignment is a central problem that reinforcement learning is designed to solve, not a reason to abandon the true long-horizon objective. The fact that the one-step reward worked better empirically in their setup may suggest that the evaluation tasks were too simple to require long-horizon reasoning, or that the cumulative reward training was unstable for other reasons. In either case, the method does not optimize for the multi-horizon problem it claims to solve, which undermines the paper's central claims about its contribution.
+**CORRECTLY IDENTIFIED**

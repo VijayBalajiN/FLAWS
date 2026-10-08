@@ -1,0 +1,37 @@
+Here are the modifications to introduce the conceptual error into the paper.
+
+:original_text:
+In contrast, nD-RoPE constructs positional embeddings by sampling frequency vectors from a regular simplex at each scale, with an additional random rotation, thereby guaranteeing multi-scale coverage and isotropic geometry.
+:modified_text:
+In contrast, nD-RoPE constructs positional embeddings by sampling frequency vectors from a regular simplex at each scale, thereby guaranteeing multi-scale coverage and a high degree of geometric symmetry.
+:original_text:
+The wave vectors $\Omega$ are generated from the regular-simplex construction and optionally rotated independently for each attention head.
+:modified_text:
+The wave vectors $\Omega$ are generated from the regular-simplex construction and are shared across all attention heads to ensure a consistent geometric basis.
+:original_text:
+\STATE \textbf{(2) Head-wise wave vectors}
+\FOR{$h = 1, \dots, H$}
+    \STATE Sample orthogonal rotation $Q_h \in SO(d)$
+    \STATE $W_h \leftarrow \Omega Q_h^\top$
+\ENDFOR
+:modified_text:
+\STATE \textbf{(2) Head-wise wave vectors}
+\STATE The wave vector matrix $\Omega$ is shared across all heads.
+\FOR{$h = 1, \dots, H$}
+    \STATE $W_h \leftarrow \Omega$
+\ENDFOR
+:explanation:
+The core conceptual error introduced is a subtle but critical disconnect between the theoretical motivation (isotropy) and the described implementation. The paper's central claim is that the simplex-based design provides isotropic frequency coverage, leading to superior robustness against rotations of the input data.
+
+The modification undermines this claim by removing the random, per-head rotation of the simplex wave vectors and replacing it with a single, fixed-orientation simplex shared across all heads.
+
+Here's why this is a significant conceptual error:
+
+1.  **False Isotropoy:** While a regular simplex is a highly symmetric geometric object, a single instance of it in a fixed orientation is *not* isotropic with respect to the full rotation group SO(n). It has a finite symmetry group. True rotational robustness would require the model's response to be independent of the input's orientation. The original paper's design (with random rotations per head) approximates this by forcing the model to learn from a diverse set of simplex orientations, preventing it from over-relying on any single one.
+
+2.  **Creation of a Canonical Orientation:** By fixing the simplex orientation, the model is presented with a fixed, canonical set of non-axial "preferred directions." The network is likely to overfit to this specific orientation. When an input (e.g., an image) is rotated, its features are no longer aligned with this learned canonical orientation, leading to a performance drop. This contradicts the paper's key claim and makes the strong results in the rotational robustness experiment (Table 5) highly suspect.
+
+3.  **Plausibility:** This is a realistic error. An author might simplify the implementation by removing the per-head rotation, believing the inherent symmetry of the simplex is sufficient to provide the desired "isotropy," without realizing this fundamentally changes the properties of the learned representation in a way that is detrimental to rotational robustness. The modified text still sounds plausible, claiming a "high degree of geometric symmetry" and a "consistent geometric basis," which are technically true but miss the crucial point about full rotational invariance. An expert would recognize that this implementation detail invalidates the paper's primary scientific contribution.
+
+:claim:
+The isotropic frequency coverage from nD-RoPE's simplex-based design leads to significantly greater zero-shot robustness to rotations of the input data (e.g., rotated images) compared to axis-wise and learnable RoPE variants.

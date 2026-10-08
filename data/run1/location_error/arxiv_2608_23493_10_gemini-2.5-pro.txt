@@ -1,0 +1,7 @@
+Error in assumptions (core conceptual)
+error:
+The mechanism is best understood not as simple self-distillation, but as a form of \emph{representational annealing}. The dense, per-token rewards from the reflection-augmented teacher provide a strong, low-variance training signal that encourages a more compressed and efficient internal representation of the task. This compression frees latent capacity, allowing the policy to maintain higher entropy over valid reasoning paths rather than collapsing to a single mode, as is common in sparse-reward RL.
+error:
+\caption{Solution-diversity probe on the 30 AIME'24 problems (10 samples per problem). The reflection-conditioned self-teacher \emph{expands} the student's reasoning-path entropy rather than contracting it, in contrast to a larger external teacher.}
+error:
+Our strongest OOD result, on DeepScaleR (0\% overlap, 1\,200 unseen competition problems), shows \method{} reaching 59.7 vs.\ OPD-32B 55.4 and OPD-72B 55.8 --- providing a contamination-free reference point for the entropy-expansion claim in Section~\ref{sec:main_results}.

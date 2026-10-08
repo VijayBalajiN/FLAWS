@@ -1,0 +1,30 @@
+:error_text:
+A core theoretical pillar of FFD is the robustness of the Pseudo-Max approximation. By computing $\tilde{m}_i$ over a high-confidence subset (sinks and local context), we obtain a value that is, by definition, a lower bound on the true global maximum score, i.e., $\tilde{m}_i \le m_i = \max_j s_{ij}$. This property provides a mathematically rigorous guarantee against false negatives.
+
+To formalize this, recall the ideal retention criterion from Eq.~\ref{eq:threshold}: a token $j$ should be kept if $s_{ij} \ge m_i - \delta$. Our practical filter uses the condition $s_{ij} \ge \tilde{m}_i - \delta$. Since $\tilde{m}_i \le m_i$, it directly follows that $\tilde{m}_i - \delta \le m_i - \delta$. This means our filtering threshold is always more permissive than or equal to the ideal threshold. 
+
+Therefore, any token $j$ that satisfies the ideal condition ($s_{ij} \ge m_i - \delta$) is \textit{guaranteed} to be satisfied by our practical condition ($s_{ij} \ge \tilde{m}_i - \delta$), because $s_{ij} \ge m_i - \delta \ge \tilde{m}_i - \delta$. This demonstrates that the Pseudo-Max approximation is a fail-safe mechanism.
+
+:error_text:
+This approximation provides a strict lower-bound estimate of the true maximum score ($ \tilde{m}_i \leq m_i $), allowing the threshold $\tilde{m}_i - \delta$ to be computed using only locally available data. This property effectively bypasses the global reduction bottleneck and enables independent parallel processing of KV blocks, while providing a conservative guarantee against erroneously pruning high-scoring tokens.
+
+:error_text:
+Using $s \ge m - \delta_{ideal}$ and the fact that the Pseudo-Max $\tilde{m}$ is a lower bound on the true max $m$ ($\tilde{m} \le m$), we obtain:
+\begin{equation}
+    e_{approx} < (\tilde{m} - m) - \lambda_{margin} \le -\lambda_{margin}
+\end{equation}
+Thus, a False Negative requires the quantization error to exceed the safety margin in the negative direction. According to \cref{thm:concentration_error}, this probability is:
+\begin{equation}
+    P(\text{False Negative}) \le \exp \left( - \frac{\lambda_{margin}^2}{2 \sigma^2 \alpha^2} \right)
+\end{equation}
+
+This result provides a strong theoretical guarantee: the probability of missing a critical token decays exponentially with the square of the safety margin.
+
+:explanation:
+The paper's central claim of being a "fail-safe mechanism" with a "mathematically rigorous guarantee against false negatives" is based on the assertion that the pseudo-max score, $\tilde{m}_i$, is a strict lower bound of the true maximum score, $m_i$ (i.e., $\tilde{m}_i \leq m_i$). This assertion is fundamentally flawed.
+
+The true maximum score, $m_i$, is defined as the maximum of pre-softmax attention scores calculated using the full-precision key vectors over the entire context. However, the pseudo-max, $\tilde{m}_i$, is calculated using low-bit *quantized* key vectors over a *subset* of the context (sink and local tokens), as specified in Algorithm 1.
+
+Due to quantization noise, the approximate scores used to compute $\tilde{m}_i$ can be either higher or lower than the true scores. It is entirely possible for the quantization error to be large and positive for a token within the subset used for $\tilde{m}_i$, while being negative for the token that has the true global maximum score. In such a scenario, the computed pseudo-max $\tilde{m}_i$ could be greater than the true global max $m_i$.
+
+If $\tilde{m}_i > m_i$, the selection threshold $\tilde{m}_i - \delta$ becomes stricter than the ideal threshold $m_i - \delta$. This invalidates the core guarantee, as it could lead to the erroneous pruning of important tokens (false negatives), directly contradicting the "fail-safe" property claimed throughout the paper. The entire theoretical justification for the method's safety, including the formal error analysis in Appendix B, rests on this incorrect assumption.

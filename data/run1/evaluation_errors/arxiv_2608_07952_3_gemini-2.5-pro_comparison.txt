@@ -1,0 +1,31 @@
+H1 and H2 are reported descriptively: their earlier significance tests (ANOVA, x²) are withdrawn—H1’s is not reproducible from run-level data (Table 2), H2’s gap is fixed by construction (§4.2). H3 is the full 23 contamination ablation, analyzed via Cohen’s d on per-run outcomes (Table 3); the earlier factorial’s interaction statistic is likewise withdrawn.
+
+:
+INCORRECTLY IDENTIFIED
+
+Note on utility: The qualitative Effectiveness/Utility ratings above are design-time characterizations of each operator, not measurements. Quantitative utility figures carried in earlier versions of this table are not recoverable from the released artifacts and have been withdrawn; the measured operator results are those in Table 4, which reports drift reduction only.
+
+:
+INCORRECTLY IDENTIFIED
+
+An earlier factorial on uncontaminated settings indicated that disabling any single mechanism degrades the others; its run-level artifact is not released, so we state it qualitatively without its interaction statistic. The contamination ablation below is the load-bearing result, with released artifacts.
+
+:
+INCORRECTLY IDENTIFIED
+
+Important: SRV's effectiveness depends on access to reference outputs. In deployment scenarios where reference outputs are unavailable, SRV represents an upper bound on achievable mitigation. Practical deployments may need to rely on weaker heuristics (e.g., anomaly detection without references); we expect a substantial effectiveness loss in that regime, but we have not measured it—the 20–40% figure carried in earlier drafts was an engineering guess and is withdrawn.
+
+:
+INCORRECTLY IDENTIFIED
+
+We also ran a secondary-judge check (Llama-3.1-8B against the primary Gemini-2.0-Flash-Lite judge) on a stratified n = 100 sub-sample of ablation outputs... The run-level output of this check was not retained, so like the other unretained results enumerated in §E it is reported as a descriptive historical observation and is outside the reproducibility scope of the release.
+
+:explanation:
+The provided text contains explicit "withdrawals" of previously reported results and statistics, which represent severe technical errors in the research process, even though they are being corrected in this version of the paper.
+
+1.  The most serious error is the admission that a statistical significance test for a core hypothesis (H1) is "not reproducible from run-level data". This invalidates a primary scientific claim from a previous version of the work and points to a critical failure in data analysis or management. The same excerpt also withdraws a significance test for H2 because it was logically flawed ("fixed by construction") and an "interaction statistic" from a factorial analysis, compounding the severity.
+2.  The second error is the withdrawal of "quantitative utility figures" for the evaluated remediation methods. Evaluating defenses requires understanding not just their effectiveness but also their performance cost (utility). Admitting that these crucial metrics are "not recoverable from the released artifacts" means a major component of the defense evaluation is missing, making the practical claims about these defenses incomplete and potentially misleading.
+3.  The third error is the inability to provide the data ("run-level artifact is not released") for a factorial analysis of how the core mechanisms (Name Binding, Event Triggering, Propagation) interact. This forces the authors to reduce a quantitative claim about mechanism synergy to a qualitative one, removing the empirical evidence for a central part of their proposed conceptual framework.
+4.  The fourth error is the admission that a previously reported quantitative result for a defense's effectiveness (a 20-40% figure) was actually an "engineering guess" and not a measured result. Reporting a guess as an experimental finding is a major breach of scientific standards that undermines the credibility of all other results in the paper.
+5.  The fifth error is the admission that the data used to validate the primary "LLM-as-judge" evaluation method against a secondary judge was "not retained". This check is critical for establishing trust in the paper's main measurement technique. Without the underlying data, the validation claim becomes an unverifiable "historical observation," weakening confidence in the paper's results.
+INCORRECTLY IDENTIFIED

@@ -1,0 +1,15 @@
+Based on the LaTeX source provided, here are the major, unique, and falsifiable claims made in the paper:
+
+1.  The LLawCo framework, which involves autonomously extracting high-level behavioral laws from past failures and then fine-tuning an agent's reasoning process to align with these laws, results in higher task success rates and more efficient cooperation in embodied multi-agent tasks compared to state-of-the-art communicative agent frameworks (e.g., RoCo, CoELA, CommPARTNR).
+
+2.  Behavioral laws automatically extracted by analyzing the traces of *failed* episodes are more effective for improving agent performance on cooperative tasks than generic, manually-designed behavioral laws.
+
+3.  Supervised fine-tuning (SFT) is a necessary component for effectively integrating the behavioral laws into the agent's reasoning process. Merely providing the laws in the prompt at inference time, even when augmented with relevant examples (RAG), is insufficient to achieve the full performance gains of the LLawCo framework.
+
+4.  Selectively filtering the training data to include only successful interaction traces that are also aligned with the extracted behavioral laws leads to a better-performing agent than training on all successful traces indiscriminately.
+
+5.  The behavior of an agent trained with the LLawCo framework can be controlled at inference time by modifying the set of laws provided in its prompt, which systematically alters the agent's subsequent reasoning and action selection.
+
+6.  The LLawCo framework can improve the performance of smaller language models (e.g., 14B parameters) to a level that is comparable to or exceeds that of much larger, un-aligned models (e.g., 70B parameters) on the same cooperative tasks.
+
+7.  The proposed PARTNR-Dialog benchmark, featuring a new communication infrastructure and a distributed client-server architecture, enables efficient, large-scale training and evaluation of learning-based communicative embodied agents, addressing scalability limitations of prior benchmarks.
