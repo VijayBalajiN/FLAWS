@@ -1,25 +1,35 @@
 """Port of AIScientist's `analysis/contribution_dimension/prepare_paper_content.py`.
 
-Takes a paper PDF, runs it through GROBID (must be running -- see
-`GROBID_config.json`, default `http://localhost:8070`), and extracts every
+`process_paper_content` is the entry point: for a paper with a LaTeX source
+directory (`data/papers/<paper_id>/`), it extracts content directly from the
+flattened LaTeX source (see `docs/grobid_quality_findings.md` at the project
+root for why -- GROBID reliably drops/garbles tables, equations, and
+reading order on these papers). Only when no LaTeX source exists does it fall
+back to `process_pdf_with_grobid`, which runs GROBID (must be running -- see
+`GROBID_config.json`, default `http://localhost:8070`) and extracts every
 section except Results/Discussion/Conclusion/Findings (matched by heading
-keyword, case-insensitive substring) -- keeping title, abstract, and
-everything else (introduction, method, related work, appendix, etc.) as-is.
-Falls back to plain PyPDF2 text extraction if GROBID processing fails.
+keyword, case-insensitive substring), falling back further to plain PyPDF2
+text extraction if GROBID itself fails.
 
 Logic (`extract_sections_from_grobid_xml`, `extract_text_from_pdf`) is kept
 line-for-line identical to the source script; only the batch/CLI/threading
-scaffolding around it is dropped, since we're processing 4 known PDFs, not a
-directory of arbitrary ones.
+scaffolding around it is dropped, since we're processing a handful of known
+PDFs, not a directory of arbitrary ones.
 """
 
 from __future__ import annotations
 
+import glob
 import os
+import sys
 import xml.etree.ElementTree as ET
+from pathlib import Path
 
 import PyPDF2
 from grobid_client.grobid_client import GrobidClient
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from latex_to_pdf import combine_latex_sources  # noqa: E402
 
 
 def extract_text_from_pdf(pdf_path: str) -> str | None:
@@ -139,13 +149,57 @@ def process_pdf_with_grobid(pdf_path: str, client: GrobidClient, output_dir: str
     return {"pdf_file": pdf_filename, "success": False, "error": "Both GROBID XML parsing and PyPDF2 extraction failed"}
 
 
-if __name__ == "__main__":
-    import sys
+def has_latex_source(paper_dir: str) -> bool:
+    """True if `paper_dir` exists and contains at least one .tex file."""
+    return os.path.isdir(paper_dir) and bool(glob.glob(os.path.join(paper_dir, "**/*.tex"), recursive=True))
 
+
+def extract_content_from_latex(paper_dir: str) -> str | None:
+    """Extract paper content directly from its LaTeX source, bypassing PDF/GROBID entirely.
+
+    Reuses `combine_latex_sources` -- the same \\input/\\include flattening the
+    original LaTeX-based error-insertion pipeline already relies on -- so the
+    LLM sees the paper's actual tables, equations, and reading order instead
+    of a GROBID/PyPDF2 reconstruction that can merge, drop, or misorder them.
+    """
+    try:
+        combined_path = combine_latex_sources(paper_dir)
+    except Exception as e:
+        print(f"Error combining LaTeX sources in {paper_dir}: {e}")
+        return None
+    with open(combined_path, "r", encoding="utf-8", errors="ignore") as f:
+        content = f.read()
+    return content or None
+
+
+def process_paper_content(paper_id: str, papers_root: str, pdf_path: str, client: GrobidClient, output_dir: str) -> dict:
+    """Extract a paper's content, preferring its LaTeX source when available.
+
+    Falls back to `process_pdf_with_grobid` (GROBID, then PyPDF2) only when
+    `papers_root/paper_id` has no LaTeX source -- e.g. pre-digital scanned
+    papers like McCammonProteinDynamics.
+    """
+    latex_dir = os.path.join(papers_root, paper_id)
+    if has_latex_source(latex_dir):
+        content = extract_content_from_latex(latex_dir)
+        if content:
+            os.makedirs(output_dir, exist_ok=True)
+            txt_output_path = os.path.join(output_dir, f"{paper_id}.txt")
+            with open(txt_output_path, "w", encoding="utf-8") as f:
+                f.write(content)
+            return {"pdf_file": os.path.basename(pdf_path), "txt_file": f"{paper_id}.txt", "method": "latex", "success": True}
+        print(f"LaTeX extraction failed for {paper_id}, falling back to GROBID/PDF")
+    return process_pdf_with_grobid(pdf_path, client, output_dir)
+
+
+if __name__ == "__main__":
     pdf_path = sys.argv[1]
     output_dir = sys.argv[2] if len(sys.argv) > 2 else os.path.dirname(pdf_path)
     grobid_config = sys.argv[3] if len(sys.argv) > 3 else "GROBID_config.json"
+    # default: data/papers/pdfs/X.pdf -> papers_root data/papers (LaTeX source dirs live at data/papers/<paper_id>/)
+    papers_root = sys.argv[4] if len(sys.argv) > 4 else os.path.dirname(os.path.dirname(pdf_path))
 
+    paper_id = os.path.splitext(os.path.basename(pdf_path))[0]
     client = GrobidClient(config_path=grobid_config)
-    result = process_pdf_with_grobid(pdf_path, client, output_dir)
+    result = process_paper_content(paper_id, papers_root, pdf_path, client, output_dir)
     print(result)

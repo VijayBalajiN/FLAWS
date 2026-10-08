@@ -14,8 +14,8 @@ Turns a PDF into a structured research plan. One paper at a time.
 
 | # | Step | Code | Notes |
 |---|------|------|-------|
-| 1 | PDF → TEI XML | `src/utils/paper_content_extraction.py` | GROBID at `localhost:8070` (Docker, `lfoppiano/grobid:0.8.0`). Falls back to PyPDF2 if GROBID fails. |
-| 2 | Drop outcome sections | same | Any heading containing `result`, `conclusion`, `discussion`, `findings` is skipped. Title, abstract, intro, method, related work, appendix are kept. |
+| 1 | Get the paper text | `src/utils/paper_content_extraction.py` (`process_paper_content`) | **LaTeX first**: if `data/papers/<paper_id>/` holds a LaTeX source, it is flattened (`combine_latex_sources`) and used directly, because GROBID drops tables and equations and scrambles reading order. Otherwise PDF → TEI XML via GROBID at `localhost:8070` (Docker, `lfoppiano/grobid:0.8.0`), falling back to PyPDF2 if GROBID fails. |
+| 2 | Drop outcome sections | same, GROBID path only | Any heading containing `result`, `conclusion`, `discussion`, `findings` is skipped. Title, abstract, intro, method, related work, appendix are kept. **The LaTeX path does not filter sections**; it relies on step 3's prompt, which tells the model to exclude results and write at proposal stage. |
 | 3 | Rewrite as a plan | `src/utils/research_plan_extraction.py` | One `gemini-2.5-pro` call, temp 0.1. Prompt is copied verbatim from AIScientist's `extract_research_plan.py`. Output: `## Problem` / `## Method` / `## Experiment Design`, first person, proposal-stage framing only. |
 | 4 | Split sections | `src/utils/plan_txt_parser.py` | Regex header split. Also recognises an optional `## Hypothesis` header (added for phase 2's re-split). |
 | 5 | Derive the hypothesis | `src/utils/ref_theory_deriver.py` | One LLM call over the Problem section, producing a single falsifiable claim. This is AIScientist's `ref_theory` under a clearer name. |
