@@ -1,0 +1,1224 @@
+
+\documentclass{article}
+
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{booktabs} % for professional tables
+
+
+
+\newcommand{\theHalgorithm}{\arabic{algorithm}}
+
+
+
+\usepackage[accepted]{icml2026}
+
+\makeatletter
+\icml@noticeprintedtrue
+\renewcommand{\printAffiliationsAndNotice}[1]{
+  {\let\thefootnote\relax\footnotetext{\hspace*{-\footnotesep}Accepted at ICML 2026.}}%
+}
+\makeatother
+\renewcommand{\footnoterule}{\kern-3pt\hrule width 0.8in\kern 2.6pt}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{amsthm}
+
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{assumption}[theorem]{Assumption}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\usepackage[disable,textsize=tiny]{todonotes}
+
+
+
+\definecolor{cvprblue}{rgb}{0.21,0.49,0.74}
+\definecolor{mutedblue}{rgb}{0.14,0.36,0.55}   % internal refs, sections, URLs
+\definecolor{mutedgreen}{rgb}{0.13,0.42,0.31}  % citations
+\usepackage[pagebackref,breaklinks,colorlinks,
+            linkcolor=mutedblue,citecolor=mutedgreen,urlcolor=mutedblue]
+{hyperref}
+\usepackage{multirow}
+\usepackage{makecell, colortbl, adjustbox, xcolor}
+\usepackage{enumitem}
+\usepackage{bbm}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{amsfonts}
+\usepackage{tabularx}
+\usepackage{xurl}
+\usepackage{caption}
+\usepackage{listings}
+  \lstset{
+    basicstyle=\ttfamily\tiny,                                                                                                                                           
+    breaklines=true,                                     
+    breakatwhitespace=false,
+    breakautoindent=false,
+    frame=single,
+    backgroundcolor=\color{gray!5},
+    columns=flexible,
+    aboveskip=6pt,
+    belowskip=6pt,
+  }
+
+\usepackage[capitalize,noabbrev]{cleveref}
+
+\definecolor{HeaderGray}{gray}{0.90}   % 表头底色
+\definecolor{DurationGray}{gray}{0.95} % Duration 行底色
+\definecolor{Best}{RGB}{212,237,218}   % 浅绿 (最好)
+\definecolor{Second}{RGB}{255,243,205} % 浅黄 (次好)
+\newcommand{\gv}[1]{\textcolor{gray}{#1}} 
+
+\usepackage{acronym}
+\usepackage{xspace}
+
+\usepackage{pifont}
+
+\makeatletter
+\DeclareRobustCommand\onedot{\futurelet\@let@token\@onedot}
+\def\@onedot{\ifx\@let@token.\else.\null\fi\xspace}
+
+\def\eg{\textit{e.g}\onedot} \def\Eg{\textit{E.g}\onedot}
+\def\ie{\textit{i.e}\onedot} \def\Ie{\textit{I.e}\onedot}
+\def\cf{\textit{c.f}\onedot} \def\Cf{\textit{C.f}\onedot}
+\def\etc{\textit{etc}\onedot} \def\vs{\textit{vs}\onedot}
+\def\wrt{w.r.t\onedot} \def\dof{d.o.f\onedot}
+\def\etal{\textit{et al}\onedot}
+\makeatother
+
+
+
+
+\newif\ifshowcomments
+\showcommentsfalse
+
+\ifshowcomments
+
+\newcommand{\phil}[1]{{\color{blue}{#1}}}
+\newcommand{\zhxing}[1]{{\color{purple}{[ZH: #1]}}}
+\newcommand{\yxwang}[1]{{\color{magenta}{[YX: #1]}}}
+\newcommand{\zyma}[1]{{\color{green}{[MZY: #1]}}}
+\newcommand{\ryguo}[1]{{\color{yellow}{[RY: #1]}}}
+\fi
+
+
+\newcommand{\model}{OmniAgent\xspace}
+\acrodef{llm}[LLM]{large language model}
+\acrodef{mllm}[MLLM]{multimodal large language model}
+\acrodef{omnillm}[OmniLLM]{Omni Large Language Model}
+\acrodef{videollm}[VideoLLM]{video large language model}
+\acrodef{sm}[SM]{\textit{supplementary material}}
+
+
+\icmltitlerunning{Native Active Perception as Reasoning for Omni-Modal Understanding}
+
+\begin{document}
+
+\twocolumn[
+  \icmltitle{Native Active Perception as Reasoning for Omni-Modal Understanding}
+  \vskip -0.15in
+
+
+
+  \icmlsetsymbol{intern}{$\dagger$}
+  \icmlsetsymbol{equal}{*}
+  \icmlsetsymbol{corr}{$\ddagger$}
+
+
+  \begin{icmlauthorlist}
+    \icmlauthor{Zhenghao Xing}{cuhk,equal,intern}
+    \icmlauthor{Ruiyang Xu}{sjtu,equal,intern}
+    \icmlauthor{Yuxuan Wang}{comp,equal}
+    \icmlauthor{Jinzheng He}{comp}
+    \icmlauthor{Ziyang Ma}{sjtu,ntu,intern}
+    \icmlauthor{Qize Yang}{comp}
+    \\
+    \icmlauthor{Yunfei Chu}{comp}
+    \icmlauthor{Jin Xu}{comp,corr}
+    \icmlauthor{Junyang Lin}{comp}
+    \icmlauthor{Chi-Wing Fu}{cuhk}
+    \icmlauthor{Pheng-Ann Heng}{cuhk,corr}
+  \end{icmlauthorlist}
+
+  \icmlaffiliation{cuhk}{The Chinese University of Hong Kong}
+  \icmlaffiliation{sjtu}{Shanghai Jiao Tong University}
+  \icmlaffiliation{ntu}{Nanyang Technological University}
+  \icmlaffiliation{comp}{Qwen Team, Alibaba Group}
+
+
+
+  \vskip 0.15in
+  {\centering
+    \mbox{\textsuperscript{1}The Chinese University of Hong Kong}\quad
+    \mbox{\textsuperscript{2}Shanghai Jiao Tong University}
+    \\
+    \mbox{\textsuperscript{3}Qwen Team, Alibaba Group}\quad
+    \mbox{\textsuperscript{4}Nanyang Technological University}\par}
+
+  \vskip 0.1in
+  {
+    \centerline{%
+    \setlength{\tabcolsep}{0pt}%
+    \renewcommand{\arraystretch}{1.1}%
+    \begin{tabular}{@{}l@{\hspace{0.45em}}l@{\hspace{0.45em}}l@{}}
+      \raisebox{-0.2\height}{\includegraphics[height=1em]{figures/github-logo}} & \textbf{Code:} &
+        \href{https://github.com/harryhsing/OmniAgent}{\texttt{https://github.com/harryhsing/OmniAgent}}\\
+      \raisebox{-0.2\height}{\includegraphics[height=1em]{figures/hf-logo}} & \textbf{SFT:} &
+        \href{https://huggingface.co/harryhsing/OmniAgent-SFT-7B}{\texttt{https://huggingface.co/harryhsing/OmniAgent-SFT-7B}}\\
+      \raisebox{-0.2\height}{\includegraphics[height=1em]{figures/hf-logo}} & \textbf{RL:} &
+        \href{https://huggingface.co/harryhsing/OmniAgent-RL-7B}{\texttt{https://huggingface.co/harryhsing/OmniAgent-RL-7B}}\\
+    \end{tabular}}
+    }
+
+
+  \vskip 0.12in
+  {\centering
+    \textsuperscript{*}Equal contribution.\quad
+    \textsuperscript{$\dagger$}Work done during an internship at Qwen Team, Alibaba Group.\quad
+    \textsuperscript{$\ddagger$}Corresponding authors.\par
+    }
+    
+
+  \vskip 0.25in
+]
+
+
+
+\printAffiliationsAndNotice{\icmlEqualContribution}
+
+
+\begin{abstract}
+Passive models for long video understanding typically rely on a ``watch-it-all'' paradigm, processing frames uniformly regardless of query difficulty, causing computational cost to grow with video duration. Although interactive frameworks have emerged, they often rely on global pre-scanning, and their context cost still scales with video length. We propose \textbf{OmniAgent}, the first native omni-modal agent that formulates video understanding as a POMDP-based iterative \textbf{Observation-Thought-Action} cycle. OmniAgent executes on-demand actions to selectively distill audio-visual cues into a persistent textual memory, effectively decoupling reasoning complexity from raw video duration. To operationalize this, we introduce (1) \textbf{Agentic Supervised Fine-Tuning} to bootstrap native active perception via best-of-N trajectory synthesis with dual-stage quality control, and (2) \textbf{Agentic Reinforcement Learning} with \textbf{TAURA} (Turn-aware Adaptive Uncertainty Rescaled Advantage), which leverages turn-level entropy to steer credit assignment toward pivotal discovery turns. Crucially, OmniAgent exhibits positive test-time scaling, where performance improves as the number of reasoning turns increases, validating the efficacy of active perception. Empirical results across ten benchmarks (e.g., VideoMME, LVBench) demonstrate that OmniAgent achieves state-of-the-art performance among open-source models. Notably, on LVBench, our 7B agent outperforms the 10$\times$ larger Qwen2.5-VL-72B (50.5\% vs. 47.3\%). 
+\end{abstract}    
+\section{Introduction}
+\label{sec:intro}
+
+\begin{figure*}[t]
+    \centering
+    \includegraphics[width=0.99\linewidth]{figures/main_framework.png} 
+    \vspace{-1mm}
+    \caption{\textbf{The \model Framework for Native Active Perception.}
+    Unlike passive methods that process video frames uniformly,
+    \model treats perception as an iterative reasoning process via an
+    \textit{Observation-Thought-Action (OTA)} cycle. Conditioned on a
+    specific query, the agent executes on-demand actions to selectively
+    gather audio-visual cues, distilling high-dimensional transient
+    percepts into a persistent textual memory until sufficient evidence
+    is gathered to produce the final answer.}
+    \vskip -0.2in
+    \label{fig:main}
+\end{figure*}
+
+
+Recent advances in scaling laws have propelled \acp{llm} toward general-purpose intelligence, extending capabilities into the visual~\cite{blip2, llava, qwen2.5vl, videollava} and auditory domains~\cite{qwen2audio, qwen2.5omni}. Despite these strides, current paradigms largely treat multimodal perception as the processing of static snapshots or fixed-window streams. This approach clashes with the nature of human perception, which functions as an active, continuous interrogation of intertwined signals. More critically, the high dimensionality of spatiotemporal data imposes a prohibitive constraint: computational cost scales super-linearly with sequence length. This renders passive end-to-end processing computationally intractable for long-form video understanding, creating a central bottleneck in open-world multimodal modeling.
+
+To mitigate this computational burden, prior work has explored agentic adaptations. One branch utilizes \acp{llm} as controllers to invoke modality-specialized tools~\cite{videoagent, dvd, m3-agent}. While expedient, this reliance on intermediate modules creates an information bottleneck, severing the gradient flow between reasoning and perception. A second branch pursues ``thinking with images'' by integrating transformation tools, such as temporal clipping~\cite{vital, longvt} or spatial zooming~\cite{zoomzero}, directly within the \acp{mllm}'s chain-of-thought. However, these methods often retain a \textit{semi-passive} nature: they typically require a global pre-scan of the video or maintain a dense visual buffer to decide ``where to look,'' failing to truly decouple reasoning complexity from video duration. Consequently, they struggle to scale to hour-long videos where raw pixel retention is infeasible.
+
+In response, we propose \textbf{\model} (Figure~\ref{fig:main}), a framework that reimagines \acp{mllm} not as passive observers, but as native active perceivers. We formulate audio-visual exploration as a Partially Observable Markov Decision Process (POMDP), where the agent performs a strict \textit{information distillation}. Through an iterative \textbf{Observation-Thought-Action (OTA)} cycle,
+the agent actively browses (frames), listens (audio), and watches (audio-visual clips),
+distilling high-dimensional transient percepts into a \textit{persistent textual memory}. This architecture ensures that the agent's internal state depends solely on the complexity of the reasoning trace rather than the raw duration of the video. This formulation gives rise to an emergent \textit{test-time scaling} property: the model adaptively allocates more computational steps to resolve harder queries, analogous to System-2 reasoning, where inference-time compute is dynamically expended to resolve ambiguity.
+Unlike prior agentic approaches that delegate multimodal perception to external modules, \model is a single native omni model: the environment only performs raw media extraction (returning frames, audio segments, or video clips), and all perception and reasoning are performed by the same model that acts.
+
+To operationalize this, we introduce a two-stage optimization. First, we
+bootstrap native active perception via \textbf{Agentic Supervised Fine-Tuning (SFT)}, a best-of-N trajectory synthesis pipeline with dual-stage quality
+control (Sec.~\ref{subsec:sft}). Second, we refine the policy via \textbf{Agentic Reinforcement Learning (RL)} (Sec.~\ref{subsec:rl}), built around \textbf{TAURA}
+(Turn-aware Adaptive Uncertainty Rescaled Advantage). We identify that
+standard Group Relative Policy Optimization
+(GRPO)~\cite{guo2025deepseek}, when applied to multi-turn agentic
+reasoning, suffers from \textit{Advantage Homogenization}, where a
+uniform trajectory-level advantage conflates pivotal discovery turns
+with trivial actions.
+TAURA resolves this by using turn-level entropy to steer credit assignment toward these critical moments.
+Our main contributions are summarized as follows:
+\begin{itemize}
+
+    \item \textbf{First Native Omni-Modal Active Perception Framework:} We
+    introduce \textbf{\model}, which, to our knowledge, is the first
+    end-to-end native agentic framework that unifies perception, reasoning,
+    and action within a single model for omni-modal video tasks. By
+    formulating multimodal exploration as a POMDP with a persistent textual
+    memory, \model effectively decouples reasoning complexity from video
+    duration, enabling scalable reasoning over hour-long videos.
+
+    \item \textbf{Two-Stage Agentic Optimization:} We propose a two-stage
+    optimization comprising (i) \textbf{Agentic SFT}, which bootstraps
+    native active perception through a best-of-N trajectory synthesis
+    pipeline with dual-stage quality control, and (ii) \textbf{TAURA}, an
+    entropy-steered RL objective that resolves advantage homogenization
+    in GRPO by using turn-level entropy to amplify credit for pivotal
+    discovery turns over trivial actions.
+
+    \item \textbf{Comprehensive SoTA Performance:} \textbf{\model} establishes
+    new state-of-the-art results among open-source models across \textbf{ten benchmarks}, improving
+    over the direct Qwen2.5-Omni baseline on all of them. It advances
+    long-video comprehension (LVBench 50.5\%, MLVU 71.1\%), excels in omni-modal
+    understanding (DailyOmni +4.7\%, OmniVideo +7.8\%), and achieves an absolute
+    +33.4\% gain in temporal grounding on LongVALE. Notably, our 7B agent
+    outperforms the 10$\times$ larger Qwen2.5-VL-72B on LVBench (50.5\% vs.
+    47.3\%) with 73\% fewer frames, and demonstrates positive
+    \textit{test-time scaling} (+6.2\% on VideoMME-Long).
+
+\end{itemize}
+\vspace{-2mm}
+\section{Related Work}
+\label{sec:relatedwork}
+\subsection{Passive Omni Modality Understanding}
+\vspace{-1mm}
+The advancement of \acp{omnillm} has been marked by significant proprietary contributions like GPT-4o~\cite{gpt4o} and Project Astra~\cite{projectastra}, alongside a surge in open-source models~\cite{vita, li2024baichuanomni, videollama2, qwen2.5omni, xing2025echoink, video-salmonn2, humanomniv2, qwen3omni, longcat-flash-omni}. While these initiatives enhance audio-visual understanding, existing passive methods struggle with long contexts due to the prohibitive complexity of continuous signals. Unlike static frame sampling, the natural temporal continuity of audio-visual streams hinders global simultaneous attention. To address this, \model endows \acp{mllm} with native active perception, leveraging video compositionality to effectively decouple reasoning complexity from the video duration.
+
+\vspace{-2mm}
+\subsection{Agentic Video Reasoning}
+\vspace{-1mm}
+Pioneered by VisProg~\cite{visprog}, agentic video understanding has evolved along two primary trajectories. The first leverages LLMs to orchestrate expert modules, relying on pre-extracted contexts like captions~\cite{video-agent} and summaries~\cite{lifelongmemory, drvideo}, structured planning~\cite{vca, doraemongpt, videotree}, or diverse tools including tracking~\cite{videoagent}, ASR~\cite{avagent}, search~\cite{dvd, m3-agent}, and ensembles~\cite{lvagent}. The second adapts ``Think with Image'' paradigms to video, utilizing transformations like temporal clipping~\cite{vital, longvt}, spatial zooming~\cite{zoomzero}, or combinatorial cropping~\cite{videocom} for exhaustive analysis. However, both approaches neglect video's inherent sequential nature, treating it effectively as a static information container or large image, which hampers scaling. To address this, we formulate video understanding as a Partially Observable Markov
+Decision Process (POMDP), injecting native agentic capabilities into \acp{mllm} to achieve robust test-time scaling without reliance on external modules.
+\section{OmniAgent}
+\label{sec:omniagent}
+OmniAgent reconceptualizes omni-modal video reasoning by bridging the gap between perception and cognition, treating \textbf{active perception} not as a preprocessing step but as a query-driven reasoning process. Unlike passive models that process inputs uniformly, our framework decouples reasoning from multimodal data by establishing a strict separation between transient multimodal percept and persistent textual memory. This architecture enables the agent to selectively distill critical audio-visual cues into a compact textual memory while discarding high-dimensional raw media (see Figure~\ref{fig:main}). Consequently, OmniAgent maintains a long-horizon reasoning trace where the contextual cost is largely independent of the video duration.
+OmniAgent is optimized through a two-stage regime: (i) \textbf{Agentic SFT} (Sec.~\ref{subsec:sft}) to bootstrap fundamental action execution capabilities, and 
+(ii) \textbf{Agentic RL} (Sec.~\ref{subsec:rl}) to refine
+reasoning-driven perception, with TAURA mitigating the credit assignment
+challenge in multi-turn reasoning.
+
+
+
+\begin{algorithm}[t]
+\caption{OmniAgent: Active Perception and Memory Consolidation}
+\label{alg:omniagent}
+\begin{algorithmic}[1]
+\REQUIRE Query $Q$, metadata $V_{\text{meta}}$, horizon $K$.
+\ENSURE Terminal answer $y$.
+
+\vspace{0.1cm}
+\STATE \textbf{Initialize:} Persistent memory $\mathcal{M}_0 \gets \{Q, V_{\text{meta}}\}$, transient multimodal percept $\mathcal{E}_0 \gets \emptyset$.
+\vspace{0.1cm}
+
+\FOR{$k = 1$ to $K$}
+    \STATE \textbf{\textsc{Phase 1: Active Perception}}
+    \STATE \quad $(O_k, T_k, A_k) \sim \pi_\theta(\cdot \mid \mathcal{M}_{k-1}, \mathcal{E}_{k-1})$
+    \STATE \quad {\footnotesize \color{gray} $\rhd$ \textbf{Query-Conditional:} Grounds exploration in intent $Q$ and current context.}   
+    
+    \vspace{0.1cm}
+    \STATE \textbf{\textsc{Phase 2: Memory Consolidation}}
+    \STATE \quad $\mathcal{M}_k \gets \mathcal{M}_{k-1} \cup \{(O_k, T_k, A_k)\}$
+    \STATE \quad {\footnotesize \color{gray} $\rhd$ \textbf{Decoupling:} Maintains constant-order media overhead.}
+
+    \vspace{0.1cm}
+    \IF{$A_k = a_{\text{answer}}(y)$}
+        \STATE \textbf{return} $y$
+    \ENDIF
+
+    \vspace{0.1cm}
+    \STATE \textbf{\textsc{Phase 3: Perceptual Transition}}
+    \STATE \quad $\mathcal{E}_k \gets \Omega(A_k)$
+    \STATE \quad {\footnotesize \color{gray} $\rhd$ Environment \textbf{executes} $A_k$, \textbf{purging} previous $\mathcal{E}_{k-1}$.}
+\ENDFOR
+\end{algorithmic}
+\end{algorithm}
+\vspace{-5mm}
+
+
+\vspace{2mm}
+\subsection{Overall Agentic Pipeline} 
+\label{sec:overall}
+We formulate the interaction between OmniAgent and the video environment as a Partially Observable Markov Decision Process (POMDP). Here, the transient percept $\mathcal{E}_k$ represents the raw media returned by the environment $\Omega$, while the persistent memory $\mathcal{M}_k$ serves as the agent's consolidated internal state. Unlike passive models that process video frames uniformly, OmniAgent employs a policy $\pi_\theta$ to selectively distill the transient $\mathcal{E}_{k-1}$ into a compact textual observation $O_k$.
+
+The process executes through an iterative \textit{Observation-Thought-Action (OTA)} cycle (Algorithm~\ref{alg:omniagent}). The state at turn $k$ is formalized as the memory $\mathcal{M}_k = (O_0, \text{OTA}_1, \dots, \text{OTA}_k)$, where initial state $\mathcal{M}_0 = \{Q, V_{\text{meta}}\}$ contains the query and video metadata (e.g., duration, FPS, audio availability). At each turn $k \in \{1, \dots, K\}$, where $K$ is the maximum turn limit, the agent generates the OTA triplet autoregressively. The policy conditions on both the persistent memory and the transient percept:
+\begin{equation}
+    (O_k, T_k, A_k) \sim \pi_\theta(\cdot \mid \mathcal{M}_{k-1}, \mathcal{E}_{k-1})
+\end{equation}
+At $k=1$ ($\mathcal{E}_0=\emptyset$), the policy conditions solely on $\mathcal{M}_0$ to bootstrap the initial exploration (see Appendix~\ref{app:notation} for a complete notation summary).
+
+\textbf{Observation ($O_k$):} A structured textual summary that distills the high-dimensional percept $\mathcal{E}_{k-1}$ into persistent memory. Unlike raw pixels, $O_k$ serves as an information-dense encoding for the reasoning process, explicitly retaining critical visual and auditory details required for future reasoning before the raw media is purged.
+
+\textbf{Thought ($T_k$):} The internal reasoning process that bridges perception and action.
+$T_k$ analyzes the preceding memory $\mathcal{M}_{k-1}$ and the current
+observation $O_k$ to reason over the accumulated evidence. It identifies
+information gaps between the current percept and the query requirements,
+deriving the rationale for the subsequent action $A_k$.      
+
+\textbf{Action ($A_k$):} The symbolic operator sampled from $\mathcal{A} = \{a_{\text{frames}}, a_{\text{audio}}, a_{\text{clip}}, a_{\text{answer}}\}$. Specifically: $a_{\text{frames}}(s, e, n)$ retrieves $n$ frames uniformly from the time interval $[s, e]$, offering flexible temporal resolution; $a_{\text{audio}}(s, e)$ extracts the audio segment; $a_{\text{clip}}(s, e)$ captures a continuous video segment with \textit{synchronized audio} to preserve temporal continuity and cross-modal alignment; and $a_{\text{answer}}(y)$ emits the final answer $y$, terminating the trajectory.
+
+\paragraph{Memory Consolidation.} 
+The environment $\Omega$ facilitates turn-level transitions by resolving $A_k$ into new percept $\mathcal{E}_k$. This triggers a strict \textit{context purging} mechanism: the previous raw multimodal percept $\mathcal{E}_{k-1}$ is discarded from the active context, leaving only the distilled text $O_k$ in $\mathcal{M}_k$. This ensures the model's context cost is decoupled from the video's length, as the textual memory's growth depends on the number of reasoning steps, which is determined by query complexity rather than raw video duration (see Appendix~\ref{app:env} for context management details).
+
+Note that $\Omega$ performs only raw media extraction
+(frame retrieval, audio extraction, clip capture); all semantic
+perception and reasoning are carried out natively by $\pi_\theta$
+without relying on external modules.
+
+
+\subsection{Agentic Supervised Fine-Tuning}
+\label{subsec:sft}
+
+Directly optimizing OmniAgent via reinforcement learning risks policy collapse, as base models~\cite{qwen2.5omni} lack prior training for long-horizon agentic reasoning. To bootstrap these capabilities, we curate an Agentic SFT corpus of 58K trajectories across three task categories (MCQ, numerical reasoning, and temporal grounding), derived from the training splits of five datasets: LongVideo-Reason~\cite{chen2025scaling}, Video-Holmes~\cite{cheng2025video}, VSI-Train-10k~\cite{brown2025benchmark}, LongVALE~\cite{geng2025longvale}, and MultiHop-EgoQA~\cite{chen2025grounded}. This corpus is strictly aligned with the iterative $(O_k, T_k, A_k)$ cycle formalized in Algorithm~\ref{alg:omniagent}.
+
+\paragraph{Synthesis via Exploration.}
+Instead of relying on static QA annotations, we prompt a teacher model 
+(e.g., Gemini-3.0-Pro)
+via in-context
+learning with the instruction template in
+Appendix~\ref{app:prompt} to perform success-driven exploration in the environment $\Omega$. For each query, we execute a \textit{best-of-N generation} over the action space $\mathcal{A}$ to produce a diverse pool of candidate trajectories. This generation process explicitly allows for \textit{self-correction}, where the model initially executes invalid actions (\eg, out-of-bounds timestamps) but successfully recovers based on the symbolic environment feedback. Including these error-correction traces prevents the ``teacher-forcing'' bias, training OmniAgent to interpret diagnostic signals as actionable cues rather than fatal failures (see Appendix~\ref{app:env} for diagnostic error protocols).
+
+\paragraph{Dual-Stage Quality Control.} 
+To distill high-quality training data from the raw candidate pool, we implement a two-step filtration pipeline. 
+(1) \textbf{Outcome Verification:} We first filter for correctness based on the task-specific success criteria defined in Eq.~\ref{eq:reward}. Specifically, we require \textit{exact matches} for discrete tasks (MCQ, Numerical) and enforce threshold-based criteria for continuous tasks: Intersection over Union ($\text{IoU}$) $\ge 0.5$ for temporal grounding and Mean Relative Accuracy ($\text{MRA}$) $\ge 0.5$ for size estimation.
+(2) \textbf{Rationality Audit:} Since the textual memory decouples reasoning from raw media, we employ GPT-4o~\cite{gpt4o} to audit the \textit{internal coherence} of the reasoning trace. GPT-4o evaluates whether the current Thought $T_k$ is logically entailed by the accumulated memory $\mathcal{M}_{k-1}$ and the immediate observation $O_k$ on a 5-point Likert scale. This step filters out ``lucky guesses'', trajectories that reach the correct answer through hallucinated or heuristic reasoning steps that are not supported by the recorded memory. By enforcing a minimum coherence score of 3/5, we ensure that all SFT actions are rationally grounded in the agent's explicit context.
+
+\subsection{Agentic Reinforcement Learning}
+\label{subsec:rl}
+
+To incentivize the policy to handle more complex interactions within the proposed environment and facilitate self-evolution, we further optimize OmniAgent using reinforcement learning. By utilizing verifiable rewards, we advance the model beyond the initial priors established during SFT.
+
+\textbf{Verifiable Reward Design.}
+OmniAgent is optimized to maximize a task-specific verifiable reward $R$, quantifying the alignment between the prediction $\hat{y}$ and ground-truth $y$:
+\begin{equation} \label{eq:reward}
+R(\hat{y}, y) = \begin{cases}  %\mathcal{R}
+    \mathbbm{1}[\hat{y} = y] & \text{Discrete (MCQ / Numerical)} \\
+    \text{IoU}(\hat{y}, y) & \text{Temporal Grounding} \\
+    \text{MRA}(\hat{y}, y) & \text{Continuous (Size Estimation)}
+\end{cases}
+\end{equation}
+where $\text{IoU}(\hat{y}, y) = \frac{|\mathcal{I}_{\hat{y}} \cap \mathcal{I}_y|}{|\mathcal{I}_{\hat{y}} \cup \mathcal{I}_y|}$ represents temporal overlap, and $\text{MRA}$ assesses quantitative fidelity across relative precision thresholds $\mathcal{T} = \{0.5, \dots, 0.95\}$.
+
+
+\paragraph{The Advantage Homogenization Problem.}
+Applying Group Relative Policy Optimization (GRPO)~\cite{guo2025deepseek} to multi-turn agentic reasoning faces a structural limitation: \textit{Advantage Homogenization}. 
+By broadcasting a single scalar advantage to every turn, vanilla GRPO
+inherently overlooks the heterogeneous contributions of individual
+turns, conflating pivotal \textit{forks} with trivial fillers. This flaw
+is substantiated by our empirical analysis in
+Appendix~\ref{sec:appendix_entropy}, which reveals that 79.2\% of
+critical branching turns exhibit significantly higher mean token entropy
+than the trajectory mean. Consequently, vanilla GRPO's uniform advantage
+broadcasting masks the causal significance of high-uncertainty discovery
+moments, necessitating the entropy-steered credit assignment in TAURA.
+
+
+\paragraph{TAURA: Entropy-Steered Credit Assignment.} 
+To address the advantage homogenization problem, we propose \textbf{TAURA} (\underline{T}urn-aware \underline{A}daptive \underline{U}ncertainty \underline{R}escaled \underline{A}dvantage), which refines trajectory-level advantages into turn-level attributions. Our method is inspired by findings that high-entropy tokens often represent critical ``forks'' in reasoning~\cite{wang2025beyond}. However, while prior work suggests masking low-entropy tokens in a Chain-of-Thought, such a binary masking strategy is ill-suited for agentic trajectories. Since the atomic reasoning unit is the structured turn $(O_k, T_k, A_k)$, masking individual tokens disrupts the output structure, while masking entire turns severs essential contextual dependencies and semantic continuity.
+
+Formally, for a group of $G$ trajectories sampled from the same query, we first compute the baseline trajectory-level advantage $A_i$ by normalizing the rewards:
+\begin{equation}
+    A_i = \frac{R_i - \frac{1}{G} \sum_{j=1}^G R_j}{\text{std}(R_1, \dots, R_G)}
+\end{equation}
+where $R_i$ is the reward for the $i$-th trajectory as defined in Eq.~\ref{eq:reward}.  
+
+
+Building upon this baseline, TAURA implements a turn-level rescaling. By using mean token entropy as a continuous weighting factor rather than a binary mask, TAURA prioritizes turns with higher information density while preserving gradient flow for all tokens. For each turn $k$ within trajectory $i$, let $H_{i,k}$ denote its mean token entropy. We define the rescaled advantage $\hat{A}_{i,k}$ by normalizing $H_{i,k}$ relative to the group mean:
+\begin{equation}
+\hat{A}_{i,k} = A_i \cdot \underbrace{\frac{H_{i,k}}{\frac{1}{N_{\mathcal{G}}} \sum_{j=1}^{G} \sum_{m=1}^{K_j} H_{j,m}}}_{w_{i,k}}
+\end{equation}
+where $G$ is the group size, $K_j$ denotes the turn count of trajectory $j$, and $N_{\mathcal{G}} = \sum_{j=1}^{G} K_j$ represents the total turn count across the group. This normalization ensures that the expected weight $\mathbb{E}[w_{i,k}] = 1$ over the group, thereby preserving the original gradient scale while directing updates toward high-uncertainty discovery moments.
+
+The policy is subsequently optimized using the TAURA-enhanced GRPO objective. To resolve the symbol ambiguity, we denote the $i$-th trajectory as $\tau_i$ and its constituent tokens as $\{o_{i,t}\}_{t=1}^{|\tau_i|}$. The surrogate objective is formalized as:
+\begin{equation}
+\begin{aligned}
+    \mathcal{J}(\theta) = \mathbb{E}_{q \sim \mathcal{D}, \{\tau_i\}_{i=1}^G \sim \pi_{\theta_{\text{old}}}} \left[ \frac{1}{G} \sum_{i=1}^G \frac{1}{|\tau_i|}\sum_{t=1}^{|\tau_i|} \mathcal{L}_{i,t}(\theta) \right]
+\end{aligned}
+\end{equation}
+where the per-token loss $\mathcal{L}_{i,t}(\theta)$ incorporates the turn-level rescaled advantage:
+\begin{equation}
+\begin{aligned}
+    \mathcal{L}_{i,t}(\theta) = \min \bigl( & \rho_{i,t} \textcolor{blue}{\hat{A}_{i, \mathrm{turn}(t)}}, \\
+    & \text{clip}(\rho_{i,t}, 1-\epsilon, 1+\epsilon) \textcolor{blue}{\hat{A}_{i, \mathrm{turn}(t)}} \bigr)
+\end{aligned}
+\end{equation}
+
+Here, $\rho_{i,t} = \frac{\pi_\theta(o_{i,t}|q, o_{i,<t}, \mathcal{E}_{\mathrm{turn}(t)-1})}{\pi_{\theta_{\text{old}}}(o_{i,t}|q, o_{i,<t}, \mathcal{E}_{\mathrm{turn}(t)-1})}$ is the importance sampling ratio. The mapping function $\mathrm{turn}(t)$ assigns each token $t$ to its corresponding turn index $k \in \{1, \dots, K_i\}$, ensuring that the credit for each token is steered by the information density of its constituent turn.
+
+\paragraph{Why Entropy Scaling Works.}
+TAURA scales the \textit{signed} advantage $A_i$. For correct trajectories ($A_i > 0$), high entropy ($w_{i,k} > 1$) amplifies the advantage, upweighting turns where the model navigated genuine uncertainty. Conversely, for incorrect trajectories ($A_i < 0$), high entropy results in a larger \textit{negative} penalty ($\hat{A}_{i,k} < A_{i} < 0$). This strictly penalizes confused guessing while reinforcing valid discovery actions.
+
+
+\begin{table*}[t]
+\caption{\textbf{Main results on video understanding and reasoning.} We evaluate OmniAgent across a comprehensive suite of benchmarks featuring diverse temporal scales. \textbf{Bold} and \underline{underline} indicate the \textbf{best} and \underline{second-best} performance among open-source models, respectively. Methods marked with $*$ incorporate audio signals. VISTA result is based on LongVA. $\Delta$ denotes the performance gain relative to the Qwen2.5-Omni baseline.}
+\label{tab:main-results}
+\vspace{-2mm}
+\begin{center}
+\begin{normalsize} 
+\begin{adjustbox}{width=\textwidth}
+\setlength{\tabcolsep}{8pt} 
+\renewcommand{\arraystretch}{1.1} 
+\begin{tabular}{l c cc cccc}
+\toprule
+\multirow{3}{*}{\textbf{Methods}} & 
+\multirow{3}{*}{\textbf{Size}} & \multicolumn{2}{c}{\textbf{VideoMME (w/o sub.)}} & \textbf{VSI-Bench} & \textbf{MLVU} & \textbf{Minerva} & \textbf{LVBench} \\
+\cmidrule(lr){3-4} \cmidrule(lr){5-5} \cmidrule(lr){6-6} \cmidrule(lr){7-7} \cmidrule(lr){8-8}
+
+& & Overall & Long & AVG & M-AVG & AVG & AVG \\
+\midrule
+
+\textit{Duration} & &  1--60 min &  30--60 min &  97 sec &  3--120 min &  2--90 min &  4101 sec \\
+\midrule
+
+\multicolumn{8}{l}{\textit{Proprietary Models}} \\
+GPT-4o~\cite{gpt4o} & -- & \gv{71.9} & \gv{65.3} & \gv{34.0} & \gv{64.6} & \gv{45.5} & \gv{48.9} \\
+Gemini-1.5-Pro~\cite{team2024gemini} & -- & \gv{75.0} & \gv{67.4} & \gv{45.4} & \gv{--} & \gv{--} & \gv{33.1} \\
+Gemini-2.5-Pro~\cite{comanici2025gemini} & -- & \gv{--} & \gv{--} & \gv{51.5} & \gv{--} & \gv{66.2} & \gv{67.4} \\
+\midrule \addlinespace[0.2em]
+
+\multicolumn{8}{l}{\textit{Open-Source Agentic Models}} \\
+LongVT~\cite{longvt} & 7B & 55.9 & 44.4 & 34.4 & -- & 28.5 & 41.3 \\
+Zoom-Zero~\cite{zoomzero} & 7B & \underline{66.0} & 54.8 & -- & \underline{70.8} & -- & \underline{45.7} \\
+VITAL~\cite{vital} & 7B & 64.1 & 54.0 & \underline{41.8} & -- & -- & -- \\
+Video-CoM~\cite{videocom} & 7B & 59.4 & -- & -- & 60.9 & 31.7 & -- \\
+\midrule \addlinespace[0.2em]
+
+\multicolumn{8}{l}{\textit{Open-Source Thinking Models}} \\
+Video-R1~\cite{feng2025video} & 7B & 61.4 & -- & 37.1 & 60.9 & 29.1 & 40.1 \\
+Open-o3 Video~\cite{openo3video} & 7B & 63.6 & 54.9 & -- & -- & -- & -- \\
+VideoRFT~\cite{wang2025videorft} & 7B & 59.8 & -- & 36.8 & 59.7 & 29.2 & 34.7 \\
+LongVILA-R1~\cite{chen2025scaling} & 7B & 65.1 & 55.2 & -- & -- & -- & -- \\
+\midrule \addlinespace[0.2em]
+
+\multicolumn{8}{l}{\textit{Open-Source Non-Thinking Models}} \\
+Kangaroo~\cite{liu2024kangaroo} & 8B & 56.0 & 46.7 & -- & 61.0 & -- & 39.4 \\
+VideoLLaMA2$^*$~\cite{videollama2} & 7B & 47.9 & -- & -- & 48.5 & -- & -- \\
+LongVA~\cite{zhang2024long} & 7B & 51.8 & 46.1 & 29.2 & 56.3 & -- & 35.9 \\
+LLaVA-OneVision~\cite{li2024llava} & 7B & 58.2 & 46.7 & 32.4 & 64.7 & -- & -- \\
+VISTA~\cite{ren2025vista} & 7B & 55.5 & 47.4 & -- & 62.1 & -- & 39.0 \\
+VideoChat-T~\cite{zeng2024timesuite} & 7B & 46.3 & 41.9 & -- & -- & -- & -- \\
+LongVILA~\cite{chen2024longvila} & 7B & 60.1 & 53.0 & 21.6 & -- & -- & -- \\
+Vamba~\cite{ren2025vamba} & 10B & 57.8 & -- & -- & 65.9 & -- & 42.1 \\
+LongVU~\cite{shen2024longvu} & 7B & 60.6 & \underline{59.5} & -- & 65.4 & -- & -- \\
+Qwen2.5-VL~\cite{qwen2.5vl} & 7B & 65.1 & -- & 33.5 & -- & 33.0 & 45.3 \\
+Qwen2.5-Omni$^*$~\cite{qwen2.5omni} & 7B & 64.8 & 54.8 & 35.5 & 65.2 & \underline{33.4} & 43.0 \\
+\midrule \addlinespace[0.3em]
+
+\textbf{OmniAgent (Ours)}$^*$ & \textbf{7B} & \textbf{67.8} & \textbf{59.6} & \textbf{48.4} & \textbf{71.1} & \textbf{41.4} & \textbf{50.5} \\
+\multicolumn{2}{l}{\quad \textit{$\Delta$ over Baseline}} & +3.0 & +4.8 & +12.9 & +5.9 & +8.0 & +7.5 \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{normalsize}
+\end{center}
+\vspace{-4mm}
+\end{table*}
+
+\begin{table}[t]
+\caption{\textbf{Main results on audio-visual understanding and reasoning.} OmniAgent is evaluated on video benchmarks requiring joint audio-visual reasoning. \textbf{Bold} and \underline{underline} indicate the \textbf{best} and \underline{second-best} performance among open-source models, respectively. $\Delta$ denotes the performance gain relative to the Qwen2.5-Omni baseline.}
+\label{tab:audio-visual-results}
+\vspace{-2mm}
+\begin{center}
+\begin{normalsize}
+\begin{adjustbox}{width=\columnwidth}
+\setlength{\tabcolsep}{5pt} 
+\renewcommand{\arraystretch}{1.1}
+\begin{tabular}{l c ccc}
+\toprule
+
+\multirow{3}{*}{\textbf{Models}} & \multirow{3}{*}{\textbf{Size}} & \textbf{DailyOmni} & \textbf{WorldSense} & \textbf{OmniVideo} \\
+\cmidrule(lr){3-3} \cmidrule(lr){4-4} \cmidrule(lr){5-5} 
+
+& & AVG & AVG & AVG \\
+\midrule
+
+\textit{Duration} & &  43 sec &  141 sec &  384 sec \\
+\midrule
+
+\multicolumn{5}{l}{\textit{Proprietary Models}} \\
+GPT-4o~\cite{gpt4o} & -- & \gv{56.5} & \gv{42.6} & \gv{--} \\
+Gemini-1.5-Pro~\cite{team2024gemini} & -- & \gv{--} & \gv{48.0} & \gv{--} \\
+Gemini-2.0-Flash ~\cite{gemini} & -- & \gv{56.1} & \gv{--} & \gv{41.5} \\
+\midrule \addlinespace[0.2em]
+
+\multicolumn{5}{l}{\textit{Open-Source Models}} \\
+Unified-IO-2~\cite{lu2024unified} & 8B & 28.2 & 25.9 & -- \\
+VideoLLaMA2~\cite{videollama2} & 7B & 35.2 & 25.4 & 29.2 \\
+MiniCPM-o~\cite{yu2025rlaif} & 8B & 53.1 & -- & \underline{29.7} \\
+Ola~\cite{liu2025ola} & 7B & 50.7 & -- & -- \\
+Qwen2.5-Omni~\cite{qwen2.5omni} & 7B & \underline{60.1} & \underline{45.4} & 29.3 \\
+\midrule \addlinespace[0.3em]
+
+\textbf{OmniAgent (Ours)} & \textbf{7B} & \textbf{64.8} & \textbf{47.2} & \textbf{37.1} \\
+\multicolumn{2}{l}{\quad \textit{$\Delta$ over Baseline}} & +4.7 & +1.8 & +7.8 \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{normalsize}
+\end{center}
+\vskip -0.2in
+\end{table}
+
+
+\section{Experimental Results}
+\label{sec:exp}
+\subsection{Experimental Settings}
+\textbf{Benchmarks and Metrics.} We evaluate across ten benchmarks in three categories. (1) \textit{Video Understanding}: VideoMME (generic)~\cite{fu2025video}, VSI-Bench (reasoning)~\cite{yang2025thinking}, MLVU (long)~\cite{zhou2025mlvu}, Minerva (reasoning \& long)~\cite{nagrani2025minerva}, and LVBench (long)~\cite{wang2025lvbench}. (2) \textit{Audio-Visual}: DailyOmni (generic)~\cite{zhou2025daily}, WorldSense (generic)~\cite{hong2025worldsense}, and OmniVideoBench (reasoning)~\cite{li2025omnivideobench}. (3) \textit{Temporal Grounding}: LongVALE~\cite{geng2025longvale} and VUE-TR~\cite{team2025vidi}.
+Together, these benchmarks cover video durations ranging from tens of seconds to over two hours.
+The evaluation metrics (MCQ accuracy, Temporal IoU, MRA) are aligned with the verifiable reward functions defined in Sec.~\ref{subsec:rl}.
+
+\vspace{-3mm}
+\paragraph{Implementation Details.}
+We adopt Qwen2.5-Omni-7B~\cite{qwen2.5omni} as the base model. To manage context length, the maximum number of visual tokens per image and per video frame is set to 1024 and 768, respectively, with a maximum context window of 64K tokens. Both training stages employ a dynamic maximum turn limit $K$ (Algorithm~\ref{alg:omniagent}) that scales with video duration ($K \in [5, 32]$ for Agentic SFT, $K \in [5, 10]$ for Agentic RL). 
+
+The same agent instruction template (Appendix~\ref{app:prompt}) is used across Agentic SFT, Agentic RL, and inference. The Agentic SFT is conducted on 58K trajectories for 2 epochs, with a learning rate of $1 \times 10^{-5}$, a batch size of 64, and the AdamW optimizer on 16 NVIDIA A100 GPUs. 
+
+For Agentic RL, we specifically select queries from Sec.~\ref{subsec:sft} where best-of-N sampling failed to yield successful trajectories, thereby focusing RL on exploring and resolving these challenging cases. All video durations for RL are restricted to under 300 seconds. Following DAPO~\cite{yu2025dapo}, we employ a token-level policy loss with the clip-higher mechanism. The model is optimized for 150 steps with a group size of 8, a constant learning rate of $1 \times 10^{-6}$, and upper/lower clip ratios of 0.30 and 0.20, respectively. The global batch size is 256 on 64 NVIDIA A100 GPUs, and neither KL nor entropy regularization is applied.
+
+\subsection{Main Results}
+\label{sec:main_results}
+
+We evaluate OmniAgent across three task categories. Results are summarized in Tables~\ref{tab:main-results}, \ref{tab:audio-visual-results}, and \ref{tab:temporal-grounding-results}.
+
+\paragraph{Video Understanding and Reasoning.}
+OmniAgent-7B achieves state-of-the-art performance among open-source models on long-video benchmarks (Table~\ref{tab:main-results}). On LVBench, it scores 50.5\%, substantially surpassing the Qwen2.5-Omni-7B baseline (43.0\%) listed in Table~\ref{tab:main-results}. Notably, it even outperforms the 10$\times$ larger Qwen2.5-VL-72B (47.3\%; see Figure~\ref{fig:frames_lvbench})~\cite{qwen2.5vl} and the agentic baseline Zoom-Zero-7B (45.7\%)~\cite{zoomzero}, while using far fewer frames.
+Furthermore, OmniAgent outperforms recent ``Thinking Models'' like Video-R1 (60.9\% on MLVU)~\cite{feng2025video}. While thinking models rely on extended Chain-of-Thought (CoT) reasoning over static inputs, OmniAgent (71.1\% on MLVU) actively queries the environment to retrieve missing evidence. This suggests that for long-form video, the primary bottleneck is often perceptual incompleteness rather than reasoning depth.
+Compared to the passive baseline LongVU~\cite{shen2024longvu} which uses dense sampling (1 FPS), OmniAgent achieves higher accuracy on VideoMME (+7.2\%) and MLVU (+5.7\%), validating that query-conditional active perception is more sample-efficient than uniform processing.
+
+\paragraph{Audio-Visual Understanding and Reasoning.}
+On benchmarks requiring joint perception (Table~\ref{tab:audio-visual-results}), OmniAgent outperforms the native omni-modal baseline Qwen2.5-Omni~\cite{qwen2.5omni} on DailyOmni (+4.7\%) and OmniVideoBench (+7.8\%). Passive models process modalities in a single pass, often trading off resolution for context. In contrast, OmniAgent utilizes auditory cues as temporal anchors to guide subsequent visual sampling, converting audio events into targeted visual search queries.
+
+\paragraph{Temporal Grounding.}
+OmniAgent shows substantial improvements in temporal localization (Table~\ref{tab:temporal-grounding-results}), achieving absolute gains over Qwen2.5-Omni on LongVALE (+33.4\%) and VUE-TR (+33.0\%). Notably, OmniAgent-7B surpasses proprietary models including GPT-4o and Gemini-2.5-Pro on VUE-TR. This performance stems from our iterative strategy: rather than regressing coordinates from a compressed global view, the agent employs on-demand sampling to progressively narrow the search space from coarse to fine granularity, ensuring higher precision.
+
+\paragraph{Qualitative Analysis.} To illustrate the interpretability of our framework, we visualize reasoning trajectories in Figure~\ref{fig:main} and Appendix~\ref{app:qualitative}.
+Figure~\ref{fig:main} exemplifies query-conditional perception, where the agent leverages the temporal constraint (``22:03'') from the user query to steer its exploration, ignoring irrelevant segments.
+Extended case studies (Figures~\ref{fig:qual_mcq_2}, \ref{fig:qual_mcq_1}, and \ref{fig:qual_tr}) further demonstrate how the agent bridges information gaps through active audio-visual interactions across both reasoning and grounding tasks.
+
+
+
+
+\begin{table}[t]
+\caption{\textbf{Main results on audio-visual temporal grounding.} We report temporal IoU score on LongVALE and VUE-TR. OmniAgent achieves state-of-the-art results among both proprietary and open-source models. \textbf{Bold} and \underline{underline} indicate the \textbf{best} and \underline{second-best} performance among open-source models, respectively. $\Delta$ denotes the performance gain relative to the Qwen2.5-Omni baseline.}
+\label{tab:temporal-grounding-results}
+\vspace{-2mm}
+\begin{center}
+\begin{normalsize}
+\begin{adjustbox}{width=\columnwidth}
+\setlength{\tabcolsep}{6pt} 
+\renewcommand{\arraystretch}{1.1}
+\begin{tabular}{l c c cc}
+\toprule
+
+\multirow{3}{*}{\textbf{Models}} & 
+\multirow{3}{*}{\textbf{Size}} & \textbf{LongVALE} & \multicolumn{2}{c}{\textbf{VUE--TR}} \\
+\cmidrule(lr){3-3} \cmidrule(lr){4-5}
+
+& & IoU & Vision+Audio & Vision \\
+\midrule
+
+\textit{Duration} & &  233 sec &  1066 sec &  1114 sec \\
+\midrule
+
+\multicolumn{5}{l}{\textit{Proprietary Models}} \\
+GPT-4o~\cite{gpt4o} & -- & \gv{--} & \gv{11.1} & \gv{22.0} \\
+Gemini-2.0-Flash~\cite{gemini} & -- & \gv{--} & \gv{18.4} & \gv{25.4} \\
+Gemini-2.5-Pro~\cite{comanici2025gemini} & -- & \gv{--} & \gv{12.1} & \gv{21.8} \\
+\midrule \addlinespace[0.2em]
+
+\multicolumn{5}{l}{\textit{Open-Source Agentic Models}} \\
+VITAL~\cite{vital} & 7B & -- & -- & 35.3 \\
+\midrule \addlinespace[0.2em]
+
+\multicolumn{5}{l}{\textit{Open-Source Models}} \\
+LongVALE-LLM~\cite{geng2025longvale} & 7B & \underline{11.0} & -- & -- \\
+Vidi~\cite{team2025vidi} & 7B & -- & \underline{33.4} & \underline{43.9} \\
+Qwen2.5-Omni~\cite{qwen2.5omni} & 7B & 5.7 & 3.5 & 8.0 \\
+\midrule \addlinespace[0.3em]
+
+\textbf{OmniAgent (Ours)} & \textbf{7B} & \textbf{39.1} & \textbf{36.5} & \textbf{46.1} \\
+\multicolumn{2}{l}{\quad \textit{$\Delta$ over Baseline}} & +33.4 & +33.0 & +38.1 \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{normalsize}
+\end{center}
+\vskip -0.2in
+\end{table}
+
+\subsection{Ablation Study and Analysis}
+\label{sec:analysis}
+
+\begin{table}[t]
+\caption{\textbf{Component Ablation Study.} We compare training paradigms and RL algorithms. Agentic SFT establishes the baseline for active perception, while TAURA mitigates the advantage homogenization problem of Vanilla GRPO, improving both understanding and reasoning tasks.}
+\label{tab:ablation}
+\vskip -0.3in
+\begin{center}
+\begin{normalsize}
+\begin{adjustbox}{width=\columnwidth}
+\setlength{\tabcolsep}{3.5pt}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{l ccc cc}
+\toprule
+\multirow{2}{*}{\textbf{Method}} & \multicolumn{3}{c}{\textbf{Video Understanding}} & \multicolumn{2}{c}{\textbf{Omni-Modal Reasoning}} \\
+\cmidrule(lr){2-4} \cmidrule(lr){5-6}
+& \textbf{VideoMME$_{\text{Long}}$} & \textbf{LVBench} & \textbf{MLVU} & \textbf{OmniVideo} & \textbf{DailyOmni} \\
+\midrule
+Qwen2.5-Omni & 54.8 & 43.0 & 65.2 & 29.3 & 60.1 \\
+\quad + Standard SFT & 56.0 & 41.6 \textcolor{gray}{\scriptsize $\downarrow$} & 67.1 & 33.8 & 61.7 \\
+\quad + Agentic SFT & 57.3 & 48.7 & 69.9 & 35.2 & 63.3 \\
+\midrule
+\multicolumn{6}{l}{\textit{RL Stage (Initialized from Agentic SFT)}} \\
+\quad + Vanilla GRPO & 59.4 & 49.8 & 69.9 & 35.3 & 62.2 \textcolor{gray}{\scriptsize $\downarrow$} \\
+\quad + \textbf{TAURA} & \textbf{59.6} & \textbf{50.5} & \textbf{71.1} & \textbf{37.1} & \textbf{64.8} \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{normalsize}
+\end{center}
+\vskip -0.1in
+\end{table}
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.99\linewidth]{figures/test_time_scaling_mme_long.png}
+    \caption{\textbf{Test-time scaling on VideoMME-Long.} Accuracy improves with the maximum turn limit ($K$), demonstrating positive scaling. The average number of turns executed saturates at 11.7 even when $K=52$, indicating that the model adaptively adjusts its reasoning depth based on information need rather than maximizing the turn count.}
+    \label{fig:scale_mme_long}
+    \vskip -0.2in
+\end{figure}
+
+\paragraph{Impact of Training Paradigms.}
+Table~\ref{tab:ablation} presents the impact of shifting from passive to active perception.
+(1) \textit{Standard SFT}: Fine-tuning on static QA pairs induces a performance regression on extremely long contexts (LVBench $43.0\% \to 41.6\%$). Lacking a selection mechanism, the passive paradigm suffers from information overload, where redundant frames reduce the signal-to-noise ratio as duration increases.
+(2) \textit{Agentic SFT}: In contrast, Agentic SFT substantially improves long-video comprehension on LVBench ($48.7\%$) and omni-modal understanding on DailyOmni ($60.1\% \to 63.3\%$), demonstrating the effectiveness of the $(O_k, T_k, A_k)$ formulation.
+
+\paragraph{Efficacy of TAURA vs. Vanilla GRPO.}
+(1) \textit{Advantage Homogenization}: Vanilla GRPO stagnates on reasoning (MLVU $69.9\%$) and degrades perception (DailyOmni $63.3\% \to 62.2\%$).
+By broadcasting a uniform trajectory-level advantage, it fails to
+incentivize specific perceptual discoveries, as critical ``looking''
+actions receive the same credit as trivial actions.
+(2) \textit{Entropy-Steered Assignment}: TAURA rectifies this by using entropy as a proxy for decision criticality. By up-weighting high-entropy turns---thereby identifying decisive ``forks'' in the search space---TAURA aligns credit assignment with information gain. This fine-grained supervision drives consistent improvements across both perception (DailyOmni $64.8\%$) and reasoning (MLVU $71.1\%$).
+
+
+\begin{table}[t]
+\caption{\textbf{Duration Analysis on LVBench.} As video duration increases, the agent maintains stable accuracy despite a substantial drop in sampling density. This demonstrates that computational cost is driven by task complexity, not video duration.}
+\label{tab:duration_breakdown}
+\vskip -0.2in
+\begin{center}
+\begin{normalsize}
+\begin{adjustbox}{width=\columnwidth}
+\setlength{\tabcolsep}{4.5pt} % 保持列间距
+\renewcommand{\arraystretch}{1.2} % 保持行高
+\begin{tabular}{lcccccc}
+\toprule
+\textbf{Duration (min)} & \textbf{20--40} & \textbf{40--60} & \textbf{60--80} & \textbf{80--100} & \textbf{100--120} & \textbf{120--140} \\
+\midrule
+\textcolor{gray}{\textbf{Count}} & \textcolor{gray}{309} & \textcolor{gray}{420} & \textcolor{gray}{278} & \textcolor{gray}{302} & \textcolor{gray}{173} & \textcolor{gray}{67} \\
+\midrule
+\textbf{Avg. Turns} & 8.5 & 9.9 & 11.3 & 11.2 & 10.8 & 12.5 \\
+\textbf{Turns / Hour} & 16.9 & 11.9 & 9.7 & 7.5 & 5.9 & 5.7 \\
+\midrule
+\textbf{Accuracy (\%)} & 53.7 & 52.1 & 45.3 & 48.0 & 53.2 & 50.8 \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{normalsize}
+\end{center}
+\vskip -0.1in
+\end{table}
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.99\linewidth]{figures/frames_lvbench_trendline.png} 
+    \caption{\textbf{Accuracy vs. Visual Frame Count on LVBench.} OmniAgent-7B (red diamond, 50.5\%) outperforms the 10$\times$ larger Qwen2.5-VL-72B (47.3\%) while using $\sim$73\% fewer frames (203 vs. 768). Marker shape distinguishes agentic (diamond) from passive (circle) models, and marker size represents parameter scale.}
+    \label{fig:frames_lvbench}
+    \vskip -0.1in
+    
+\end{figure}
+
+
+\paragraph{Test-time Scaling Analysis.}
+\label{sec:test_time_scaling}
+We analyze the scaling properties on VideoMME-Long by extending the maximum turn limit $K$ from 6 to 52. Figure~\ref{fig:scale_mme_long} reveals a monotonic performance improvement, where accuracy climbs from 53.4\% to 59.6\% (+6.2\%). This confirms that deeper interaction enables the agent to uncover critical evidence for complex queries. 
+Even as the upper bound expands by nearly $9\times$, the \textit{actual
+average turns} saturate at merely $\sim$11.7. This indicates that the
+agent does not blindly exhaust the available budget, but emits its final
+answer via $a_{\text{answer}}$ once sufficient evidence is gathered,
+terminating the trajectory.
+This saturation suggests that the reasoning depth is driven by query complexity rather than the maximum turn limit.
+
+
+\paragraph{Visual Sampling Efficiency.}
+\label{sec:efficiency}
+Figure~\ref{fig:frames_lvbench} illustrates the trade-off between accuracy and sampling cost, revealing a distinct Pareto efficiency for OmniAgent.
+(1) \textit{Parameter Efficiency (7B against 72B)}: OmniAgent-7B achieves peak accuracy (50.5\%) while sampling only 203 frames on average. In sharp contrast, the 10$\times$ larger Qwen2.5-VL-72B (47.3\%) relies on a dense input of 768 frames. This demonstrates that active perception acts as a computation multiplier: by selectively filtering noise, a 7B agent can achieve higher information density than a 72B passive model processing raw streams.
+(2) \textit{Contrast with Agentic Baselines}: Unlike baselines like Zoom-Zero-7B (45.7\%) that incur a fixed ``entry cost'' (256 frames) for initial scanning, OmniAgent operates on a strictly on-demand basis. This eliminates redundant processing, showing that iterative, query-conditional search is more efficient than global scanning. We further report inference runtime in Appendix~\ref{app:runtime}.
+
+
+\paragraph{Impact of Video Duration.}
+\label{sec:duration}
+Table~\ref{tab:duration_breakdown} validates that OmniAgent effectively decouples reasoning complexity and context cost from video length. As video duration grows over $4\times$ ($\sim$30 to $\sim$130 min), the absolute number of reasoning turns remains nearly constant, growing negligibly from 8.5 to 12.5. This near-zero growth demonstrates that the textual memory trace does not expand in proportion to video length. Consequently, the sampling density drops sharply from 16.9 to 5.7 turns per hour, and accuracy remains stable (50.8\%) even at the lowest density. This confirms that because the reasoning trace length is invariant to video duration, the agent's context cost is successfully decoupled, allocating compute based on information density rather than temporal duration. 
+
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+We present \model, which establishes active perception as an
+intrinsic reasoning process for omni-modal video understanding. Our
+central insight is that treating perception as iterative,
+query-driven information distillation, rather than exhaustive
+preprocessing, allows reasoning complexity to be driven by task
+difficulty rather than video duration. By bootstrapping active
+perception via Agentic SFT and refining it via Agentic RL with
+TAURA, we further show that native agentic capabilities can emerge
+within a single multimodal model without relying on external
+perception modules. Empirically, a 7B agent with active
+perception outperforms a 10$\times$ larger passive model while
+consuming far fewer frames, and exhibits positive test-time scaling
+where additional reasoning steps yield consistent gains. Beyond
+accuracy, the explicit Observation-Thought-Action (OTA) cycle
+provides interpretable reasoning traces, offering a transparent
+alternative to black-box video reasoning. While the sequential
+interaction loop introduces latency overhead, future work will
+investigate parallelized exploration to address this constraint.
+
+
+
+\section*{Acknowledgement}
+The work described in this paper was supported in part by the Research Grants Council of the Hong Kong Special Administrative Region, China, under Project CUHK 14202125 and Project CUHK 14200824.
+
+
+
+
+
+\bibliography{paper}
+\bibliographystyle{icml2026}
+
+\newpage
+\appendix
+\onecolumn
+
+
+
+\section{Detailed Mathematical Notation}
+\label{app:notation}
+
+To ensure clarity across the multi-level hierarchy of the OmniAgent framework, we provide a structured summary of the mathematical notations used throughout the paper. The framework involves three primary scales: (i) the trajectory level ($i$), (ii) the interaction turn level ($k$), and (iii) the autoregressive token level ($t$).
+
+\begin{table}[h]
+\centering
+\caption{Summary of mathematical notations used in the OmniAgent framework.}
+\label{tab:notations}
+\small
+\renewcommand{\arraystretch}{1.2}
+\begin{tabularx}{\textwidth}{l X}
+\toprule
+\textbf{Symbol} & \textbf{Description} \\
+\midrule
+\multicolumn{2}{l}{\textit{Interaction Hierarchy}} \\
+$i, j$ & Indices for trajectories. $i$ usually denotes the specific trajectory being optimized, while $j$ is used as a summation index over the group $G$. \\
+$k, m$ & Indices for interaction turns. $k$ usually denotes the current turn, while $m$ is used as a summation index over the total horizon $K_j$. \\
+$t$ & Index for discrete tokens within an autoregressive sequence. \\
+$K$ & Maximum number of interaction turns permitted (horizon). \\
+$G$ & Group size for relative advantage computation (group size in GRPO). \\
+$N_{\mathcal{G}}$ & Total number of turns across all trajectories in a group ($\sum_{j=1}^{G} K_j$). \\
+\midrule
+\multicolumn{2}{l}{\textit{Agent-Environment States}} \\
+$\mathcal{E}_k$ & \textbf{Transient Percept}: Raw multimodal data acquired from the environment $\Omega$ at turn $k$. \\
+$\mathcal{M}_k$ & \textbf{Persistent Memory}: The cumulative textual reasoning trace up to turn $k$. \\
+$O_0$ & Initial persistent memory state containing the query $Q$ and video metadata. \\
+$O_k, T_k, A_k$ & The Observation, Thought, and Action triplet generated at turn $k$. \\
+$\Omega$ & The interactive environment that resolves action $A_k$ into new percept $\mathcal{E}_k$. \\
+$\pi_\theta$ & The agent policy parameterized by $\theta$. \\
+\midrule
+\multicolumn{2}{l}{\textit{Reinforcement Learning (TAURA)}} \\
+$R_i$ & Final reward assigned to trajectory $i$ based on outcome verifiability. \\
+$A_i$ & \textbf{Trajectory-level Advantage}: Normalized relative reward for trajectory $i$ within its group. \\
+$H_{i,k}$ & Mean token entropy for the sequence generated during turn $k$ of trajectory $i$. \\
+$w_{i,k}$ & \textbf{Entropy Weight}: The rescaled importance factor for turn $k$ based on information density. \\
+$\hat{A}_{i,k}$ & \textbf{Turn-aware Advantage}: The TAURA-rescaled advantage applied to turn $k$ of trajectory $i$. \\
+$\rho_{i,t}$ & Importance sampling ratio for token $t$ in trajectory $i$. \\
+$\mathrm{turn}(t)$ & Mapping function that assigns token $t$ to its corresponding turn index $k$. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\paragraph{Index Mapping and Dependency.} 
+The policy $\pi_\theta$ conditions its generation at turn $k$ on the distilled memory $\mathcal{M}_{k-1}$ and the \textit{previous} transient percept $\mathcal{E}_{k-1}$. The internal logic of the framework ensures that raw media percept $\mathcal{E}_{k-1}$ is purged from the active context window once it is distilled into the textual observation $O_k$, maintaining context efficiency while preserving the causal chain via $\mathcal{M}_k$. In the optimization phase, TAURA ensures that the global success signal $A_i$ is steered toward the specific turns $k$ where discovery (high entropy $H_{i,k}$) occurred.
+
+\section{Agentic Audio-Visual Interaction Environment}
+\label{app:env}
+
+This section provides the comprehensive implementation details of the environment $\Omega$, focusing on the distributed infrastructure and robust media processing protocols required for reproducibility.
+
+\subsection{Distributed Architecture via Ray and Verl}
+To ensure computational efficiency and prevent memory bottlenecks (OOM) during large-scale RL training, the environment is implemented using a distributed actor-based architecture powered by \textbf{Ray} and integrated with the \textbf{Verl} framework.
+\begin{itemize}[leftmargin=15pt, topsep=2pt]
+    \item \textbf{Global Resource Singleton:} We utilize a detached Ray actor (specifically named \texttt{GlobalProcessor} in our codebase) to manage heavy initialization tasks. This actor ensures that tokenizer weights and multimodal processor configurations are loaded into memory exactly once per physical node, significantly reducing the startup latency of concurrent worker processes.
+    \item \textbf{Parallel Worker Pool:} The \texttt{VideoQAMultiEnv} orchestrates a pool of remote workers, each maintaining an independent instance of the \texttt{SingleVideoQAEnv}. This design allows for asynchronous perception and trajectory generation parallelized across CPU cores.
+\end{itemize}
+
+\subsection{Robust Perception Operators (FFmpeg Implementation)}
+The environment resolves sensing actions $A_k$ into transient percept $\mathcal{E}_k$ using specialized \texttt{ffmpeg} operators. We employ a \textbf{two-stage seeking strategy} (coarse seeking via keyframes followed by accurate decoding) to ensure sub-second precision.
+
+\begin{itemize}[leftmargin=15pt, topsep=2pt]
+    \item \textbf{Visual Sampling ($a_{\text{frames}}$):} Frames are extracted using \texttt{ffmpeg} with \texttt{-q:v 2} to maintain high visual fidelity. For queries near video boundaries, the environment employs an \texttt{-sseof} fallback mechanism to automatically adjust retrieval windows, preventing failures at terminal timestamps.
+    
+    \item \textbf{Auditory Retrieval ($a_{\text{audio}}$):} Segments are decoded into a standardized \textbf{PCM S16LE} mono-channel WAV format ($16$kHz). We enforce strict duration validation via \texttt{ffprobe} to ensure the retrieved audio waveform strictly aligns with the agent's requested interval $[s, e]$.
+    
+    \item \textbf{Adaptive Clip Capture ($a_{\text{clip}}$):} Sub-clips are encoded using the \texttt{libx264} codec with a Constant Rate Factor (\texttt{CRF}) of $20$. To ensure interaction continuity under high system load, the environment implements a \textbf{progressive fallback strategy}: it prioritizes the \texttt{superfast} preset but automatically downgrades to \texttt{ultrafast} if encoding latency exceeds the timeout threshold.
+\end{itemize}
+
+\subsection{Exploration Incentives via Randomization}
+To improve policy robustness during Agentic SFT, we enforce randomized physical constraints sampled from discrete uniform distributions:
+\begin{itemize}[leftmargin=15pt, topsep=2pt]
+    \item \textbf{Discrete Parameter Grid:} 
+    Frame counts are sampled from $n \in [30, 60]$ (step size 2); 
+    clip durations from $d_{\text{clip}} \in [30, 60]$ seconds (step size 2); 
+    and audio durations from $d_{\text{audio}} \in [150, 300]$ seconds (step size 10).
+    
+    \item \textbf{Diagnostic Error Protocols:} $\Omega$ provides structured symbolic feedback (e.g., \texttt{Err.TS\_OOB}, \texttt{Err.INVALID\_JSON}). These signals allow the agent to acknowledge mistakes in the persistent memory $\mathcal{M}_k$ and execute self-correction in subsequent turns.
+\end{itemize}
+
+
+\subsection{Memory Consolidation and History Purging}
+As formalized in Algorithm~\ref{alg:omniagent}, the environment manages the persistent memory $\mathcal{M}_k$ by purging media content from the interaction history. To decouple memory costs from video duration, the environment performs a non-destructive rewrite of the conversation trace:
+
+\begin{enumerate}[leftmargin=15pt, topsep=2pt]
+    \item \textbf{Media Removal:} Once a sensing turn $k$ is completed and its textual distillation $O_k$ is recorded, the environment iterates through the previous chat history. For every user message containing multimodal content, the environment \textbf{deletes} the dictionary entries of type \texttt{image}, \texttt{video}, or \texttt{audio}.
+    
+    \item \textbf{Metadata-Preserving Rewrite:} To maintain the semantic integrity of the reasoning trace, the deleted media objects are replaced with a text-based summary appended with the marker \texttt{[MEDIA OMITTED - Refer to Observation $O_k$]}:
+    \begin{itemize}
+        \item For \textbf{Visual Sampling} ($a_{\text{frames}}$), the environment recompiles the exact timestamps of all purged frames from the prior message content (e.g., \textit{``Frames 10.0s-20.0s. Timestamps: [10.00s, 12.50s, 15.00s] [MEDIA OMITTED...]''}).
+        \item For \textbf{Audio and Video Clips} ($a_{\text{audio}}, a_{\text{clip}}$), the original headers containing the requested temporal intervals are preserved (e.g., \textit{``Audio 230.00s-280.00s [MEDIA OMITTED...]''} or \textit{``Clip 45.00s-60.00s [MEDIA OMITTED...]''}).
+    \end{itemize}
+\end{enumerate}
+
+
+\subsection{Agent Instruction Template}
+\label{app:prompt}
+
+Figure~\ref{lst:prompt} presents the complete instruction template
+that governs agent-environment interaction across all stages of the
+OmniAgent pipeline, including trajectory synthesis
+(Sec.~\ref{subsec:sft}), reinforcement learning
+(Sec.~\ref{subsec:rl}), and inference. Runtime parameters
+(\texttt{max\_steps}, \texttt{max\_frames\_len},
+\texttt{max\_audio\_len}, \texttt{max\_clip\_len}) are populated
+according to the configuration in Sec.~\ref{sec:exp}.
+
+\begin{figure}[H]                                                                                                                                                      
+\begin{lstlisting}  
+You are the Deep-Omni-Research Agent, a specialized multi-modal analyst for temporal forensic investigation. Your goal is to solve complex queries by meticulously inspecting video and audio data through a step-by-step "Observe-Think-Action" loop.
+
+============== GLOBAL OPERATING RULES ==============
+- META-Validation: The first message provides "Video META" (duration, fps, has_audio). Validate every timestamp against these limits.
+- Audio Constraint: If has_audio is false, the get_audio action is FORBIDDEN. Skip audio analysis and rely on visual cues only.
+- Media Persistence: Once media is returned, it becomes a TEXT PLACEHOLDER in the next turn.
+  * Frame Placeholder Example: "Frames 10.00s-12.00s (num=5). Timestamps: [10.00s, 10.50s, 11.00s, 11.50s, 12.00s] [MEDIA OMITTED - Refer to your Observation]"
+  * AUDIO/CLIP Placeholder Example: "Audio 10.00s-20.00s [MEDIA OMITTED - Refer to your Observation]"
+- The "Memory" Requirement: Your observation must be an exhaustive, high-fidelity log. Once media is omitted, you will "forget" any detail not recorded here.
+- Strategic Efficiency: DO NOT request the exact same action and range twice. However, you are encouraged to re-inspect important ranges via different modalities (e.g., get_clip after get_audio) or higher density (Zooming in) to extract NEW forensic details.
+- Strict Fidelity: You MUST use exact timestamps (including decimals) provided in environment labels (e.g., 481.84s). Never round or approximate numbers.
+- Evidence Traceability: You MUST prefix findings with the Full Evidence ID (e.g., "[Frames 10.0s-12.0s (num=5)]") in both observation and think fields.
+- Environment Feedback: Pay attention to [ERROR] and [NOTICE] (remaining steps). Adjust your strategy immediately.
+
+========== STRATEGIC INSPECTION GUIDELINES ==========
+1. Visual Search (get_frames): (Max {max_frames_len} frames).
+   - Scanning: Use wide ranges (e.g., start=0, end=duration, num={max_frames_len}) to discover the overall timeline and identify key milestones or potential scene cuts.
+   - Precision: Use narrow windows (1-2s) with high num for micro-details (logos, text, fast motions, or subtle object state changes).
+2. Counting & Re-ID: Assign approximate spatial locations [y, x] (0-100 scale; [0,0] is top-left) to each unique instance (e.g., "Person_A at [20, 45]") in your observation. This spatial ID prevents re-counting the same object across different frames/steps.
+3. Temporal Bisection: Find 'start' and 'end' boundary frames where a state changes, then iteratively narrow the interval to locate the exact transition second or frame.
+4. Audio Analysis (get_audio): (Max {max_audio_len}s).
+   - Verbatim Logging: Identify speakers and transcribe speech near-verbatim. CRITICAL: Do not paraphrase or infer words to fit your hypothesis.
+   - Acoustic Context: Identify critical off-screen or background sounds (e.g., footsteps, sirens, clicks) that provide environmental clues for temporal reasoning.
+5. Multi-Modal Action Analysis (get_clip): (Max {max_clip_len}s).
+   - Action & Temporal Dynamics: Analyze the nature of movement (speed, direction, continuity) and precise sequencing to solve "Who moved first?" or "Was the motion deliberate?".
+   - Process Logic: Use when the continuous process of a state change (e.g., an object falling) is more critical than discrete start/end points.
+   - Audio-Visual Synergy (Conditional): If has_audio is true, perform high-fidelity forensic matching (Sync, Active Speaker ID, Causality with time-lag).
+
+====================== ACTIONS ======================
+Exactly ONE action per turn in valid JSON:
+1. {"type": "get_frames", "start": float, "end": float, "num": int}
+2. {"type": "get_audio", "start": float, "end": float}
+3. {"type": "get_clip", "start": float, "end": float}
+4. {"type": "answer", "content": "string"}
+   - MCQ: Letter only (e.g., "A").
+   - TR: JSON array of one or more pairs, e.g., "[[10.5, 20.0], [35.0, 40.0]]".
+   - NUM/SIZE: A single number string, e.g., "10.3".
+   - FF: Detailed descriptive text.
+
+============= STRICT EXECUTION PROTOCOL =============
+- Forensic Rigor: Answering incorrectly is a failure. Rule out every possible distractor before concluding.
+- The Confidence Gatekeeper: You MUST include a numeric confidence field (0.0-1.0) as a top-level JSON key. This represents your assessment of whether the evidence is sufficient to conclude.
+- The "0.9" Behavioral Rule: You should only initiate the "answer" action when your confidence is >= 0.9. If it is lower, continue gathering evidence unless [NOTICE] indicates "FINAL STEP".
+- Evidence Contradiction: In your think field, actively look for evidence that disproves your current leading hypothesis.
+- Deadline Management: In "FINAL STEP", bypass the 0.9 threshold and provide your best-informed answer immediately.
+
+=================== OUTPUT SCHEMA ===================
+The response must contain ONLY the JSON object itself. Any text outside the curly braces ({})--including thoughts, explanations, or markdown fences (```json)--is strictly forbidden and will result in system failure.
+
+{"observation": "[Clip 00.00s-00.00s] (T: 00.00s)[Obj_A at y,x] visual_detail. [Audio 00.0s-00.0s] exact_audio_log. [Key Fact]: forensic_finding.", "think": "Evidence Review: [Clip 00.00s-00.00s] confirms_or_contradicts [Frames 00.00s-00.00s (num=0)]. Gap Analysis: missing_or_ambiguous_details. Deduction: logical_path_to_action_or_answer.", "confidence": 0.0, "action": {"type": "get_frames|get_audio|get_clip|answer", "start": 0.0, "end": 0.0, "num": 0, "content": ""}}
+
+============= CRITICAL FORMATTING RULES =============
+- Physical Boundary: Your entire response MUST start with '{' and end with '}' exactly.
+- The "One-Line" Mandate: Your entire output MUST be ONE single line of text. NO newlines (\n) allowed anywhere.
+- NO Markdown: Output raw text ONLY. DO NOT use code blocks or wrappers.
+\end{lstlisting}                                       
+\caption{The complete agent instruction template used across all
+stages of the OmniAgent pipeline.}
+\label{lst:prompt}
+\end{figure}
+
+\newpage
+
+\section{Empirical Analysis: Entropy as a Proxy for Reasoning Criticality}
+\label{sec:appendix_entropy}
+
+To validate the motivation behind TAURA, we conducted a detailed analysis of the agent's reasoning traces to quantify the relationship between model uncertainty (entropy) and reasoning criticality.
+
+\subsection{Methodology: Identifying Decision Forks}
+We hypothesize that in a multi-turn agentic trajectory, steps are not created equal. Some represent \textit{Decision Forks}---pivotal junctures where the agent dictates a subsequent search strategy or significantly narrows the hypothesis space---while others are routine execution steps.
+
+To identify these forks without human bias, we employed a model-based evaluation. For successful trajectories in the VideoMME benchmark, we provided an expert evaluator (Gemini-2.5-Pro) with the query, the full interaction trace, and the final outcome. The evaluator was prompted to identify the single "Top-1 Fork Step" ($k_{\text{fork}}$) based on the definition: \textit{"A pivotal juncture in a multi-step reasoning process that dictates the subsequent logical trajectory... where the process diverges into multiple potential paths."}
+
+
+
+\subsection{Quantitative Analysis: The Entropy Gap}
+We computed the mean token entropy for each turn $k$ in a trajectory $i$, denoted as $H_{i,k}$. We then calculated the difference between the entropy of the identified Fork Step ($H_{i, k_{\text{fork}}}$) and the average entropy of that entire trajectory ($\overline{H_i}$).
+
+Figure~\ref{fig:entropy_vis} (a) presents the distribution of the entropy difference $\Delta H = H_{i, k_{\text{fork}}} - \overline{H_i}$.
+\begin{itemize}
+    \item \textbf{Positive Shift (79.2\%):} The vast majority of identified fork steps exhibit a positive entropy difference. This confirms that when the agent makes critical decisions (e.g., pivoting from scanning to verification), its policy distribution becomes flatter (higher uncertainty), reflecting the active weighing of potential reasoning paths.
+    \item \textbf{Negative/Neutral (20.8\%):} The minority of cases where the fork step entropy is lower or equal to the mean typically correspond to short-horizon trajectories or easy queries where the reasoning path is linear and deterministic.
+\end{itemize}
+
+\subsection{Case Study: Entropy at a Fork Step}
+To illustrate this phenomenon, we analyze a specific trajectory regarding the query: \textit{"Which company is featured in the video but not mentioned in the audio?"} (Figure~\ref{fig:entropy_vis} (b)).
+\begin{enumerate}
+    \item \textbf{Routine Scanning:} The agent performs standard scanning. The policy is confident in this information gathering, resulting in low entropy ($H \approx 0.397$).
+    \item \textbf{The Fork Step:} A distinct entropy spike ($H \approx 0.927$) occurs when the agent identifies that options A, B, and C are explicitly mentioned in the audio. This observation acts as a critical filter, ruling out these candidates. The spike reflects the agent's pivotal decision to switch modalities (`get\_frames`) to visually verify the presence of the remaining option (American Express), rather than concluding immediately.
+    \item \textbf{Resolution:} Subsequent verification resolves the ambiguity, returning the agent to a lower entropy state ($H \approx 0.790$).
+\end{enumerate}
+This confirms that entropy spikes serve as a reliable signal for identifying high-value reasoning steps that warrant amplified reinforcement.
+
+\newpage
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{\linewidth}
+        \centering
+        \includegraphics[width=0.45\linewidth]{figures/entropy_stat.png}
+        \caption*{(a) Quantitative Analysis: Entropy Shift Distribution} 
+    \end{minipage}
+    
+    \vspace{0.3cm} % 调整两图之间的间距
+
+    \begin{minipage}{\linewidth}
+        \centering
+        \includegraphics[width=0.7\linewidth]{figures/entropy_fig.pdf}
+        \caption*{(b) Qualitative Case Study: Entropy Spike at Fork Step}
+    \end{minipage}
+
+    \caption{\textbf{Correlation between Entropy and Critical Reasoning Steps.} \textbf{(a)} Histogram of the entropy difference $\Delta H = H_{i, k_{\text{fork}}} - \overline{H_i}$. \textbf{79.2\%} of critical fork steps exhibit higher uncertainty than the trajectory mean. \textbf{(b)} A qualitative case study on the "Company" query. A distinct entropy spike ($0.927$) occurs at the "Fork Step" where the agent processes audio evidence (ruling out A, B, C) and decides to pivot to visual verification.}
+    \label{fig:entropy_vis}
+\end{figure}
+
+
+
+\subsection{Inference Runtime and Action Analysis}
+\label{app:runtime}
+
+\textbf{Inference Runtime Analysis.}
+Table~\ref{tab:runtime} reports measured wall-clock latency on a 100-sample
+LVBench subset. OmniAgent achieves lower wall-clock latency than
+Qwen2.5-VL-72B (66.8\,s vs.\ 75.1\,s) while reaching higher accuracy
+(51.0\% vs.\ 47.0\%). Compared to LongVT, an agentic baseline, OmniAgent
+is both more accurate and slightly faster.
+Qwen2.5-Omni-7B remains fastest in single-shot inference (34.8\,s) but at
+substantially lower accuracy (41.0\%). Notably, Qwen2.5-VL-72B requires
+4$\times$ A100 GPUs, whereas OmniAgent requires only 1.
+
+\begin{table}[h!]
+\caption{\textbf{Inference Runtime on LVBench (100 samples).} Wall-clock
+latency (seconds) and accuracy. OmniAgent achieves a favorable
+accuracy--latency tradeoff.}
+\label{tab:runtime}
+\vskip 0.1in
+\begin{center}
+\small
+\setlength{\tabcolsep}{8pt}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{l c c c c}
+\toprule
+\textbf{Method} & \textbf{Frames} & \textbf{Model (s)} & \textbf{Wall-clock (s)} & \textbf{Acc.\ (\%)} \\
+\midrule
+Qwen2.5-Omni-7B & 201 & 34.8 & 34.8 & 41.0 \\
+Qwen2.5-VL-72B & 768 & 75.1 & 75.1 & 47.0 \\
+LongVT & 793.8 & 64.1 & 67.6 & 42.0 \\
+\textbf{OmniAgent (Ours)} & 201.6 & 56.0 & 66.8 & \textbf{51.0} \\
+\bottomrule
+\end{tabular}
+\end{center}
+\vskip -0.1in
+\end{table}
+
+\section{Qualitative Analysis}
+\label{app:qualitative}
+
+\begin{figure*}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{figures/case2.pdf}
+
+    \vspace{0.8em}
+    \begin{minipage}{0.95\textwidth}
+    \footnotesize
+    \setlength{\parskip}{0.35em}
+    \setlength{\parindent}{0em}
+
+    \textbf{[Several OTAs omitted: OmniAgent performs broad temporal sampling over the full $\sim$140-minute video, then narrows around a suspected split-screen studio moment; the initial clips show no green skirt and no readable name tag.]}
+
+    \vspace{0.2em}\hrule\vspace{0.2em}
+
+    \textbf{O:} I have identified a male host in a grey sweater (Studio A) and a male host in a grey suit (Studio B). I noticed a female host in a red jacket and another female host with curly hair. I missed checking the visual details of the first 200 seconds which might contain the studio intro. I need to locate a host wearing a green skirt. Potential segments are the intro, a roundtable discussion, or a different studio segment.\\
+    \textbf{T:} The studio segments are the most likely place for a host introduction. I will scan the first 200 seconds with higher density to identify the hosts and check their clothing. I will also listen to the audio in these segments to catch any introductions.\\
+    \textbf{A:} \texttt{get\_frames(start=0.0, end=200.0, num=50)}
+
+    \vspace{0.2em}\hrule\vspace{0.2em}
+
+    \textbf{O:} At 8.16s and 175.51s, a female host wearing a vibrant green dress/skirt is clearly visible standing next to two male hosts in the exhibition hall. She has dark hair. I need to verify her name by listening to the audio introduction or checking on-screen text if available.\\
+    \textbf{T:} I have located the host in the green skirt visually. Now I need to identify her name. The introduction usually occurs at the beginning of the clip. I will listen to the audio from 8.0s to 18.0s to hear if she is introduced.\\
+    \textbf{A:} \texttt{get\_audio(start=8.0, end=18.0)}
+
+    \vspace{0.2em}\hrule\vspace{0.2em}
+
+    \textbf{O:} Audio 8s-18s contained a teaser montage. I need the main intro audio to catch the name. Visually, the host in the green skirt was seen around 175s.\\
+    \textbf{T:} I will retrieve the audio segment immediately following the teaser (18s-48s) to catch the main introduction of the hosts. I am listening for a female voice introducing herself or being introduced.\\
+    \textbf{A:} \texttt{get\_audio(start=18.0, end=48.0)}
+
+    \vspace{0.2em}\hrule\vspace{0.2em}
+
+    \textbf{[Several OTAs omitted: OmniAgent triangulates around the host's repeated appearances (e.g., near 170s and around the split-screen at $\sim$424s), checks for lower-thirds, and then shifts to searching earlier intro-adjacent windows where name graphics commonly appear.]}
+
+    \vspace{0.2em}\hrule\vspace{0.2em}
+
+    \textbf{O:} I need to confirm the identity of the female host in the green dress. I have not yet seen a text lower-third introduction in the intro sequence (0-30s). The host appears clearly at 6.21s and 14.48s. I will check the next segment of the video for a lower-third graphic that might have appeared after the intro montage.\\
+    \textbf{T:} I will scan frames from 48s to 160s to find any lower-third graphics identifying the hosts. This is a common place for an introduction to pop up.\\
+    \textbf{A:} \texttt{get\_frames(start=48.0, end=160.0, num=30)}
+
+    \vspace{0.2em}\hrule\vspace{0.2em}
+
+    \textbf{O:} At frame 55.72s, there is a clear lower-third graphic with the name ``Nish Parkar'' under the image of the female host in the green dress. She is wearing a green dress. She is identified as ``Cisco Live Host \#CiscoLiveEMEA''. This matches option C.\\
+    \textbf{T:} I have found the definitive evidence. The lower third graphic at 55.72s identifies the female host in the green dress as Nish Parkar. I have also seen her earlier in the video (around 8s, 175s) in a green dress. This matches Option C. I will select Option C.\\
+    \textbf{A:} \texttt{answer(content="C")}
+
+    \end{minipage}
+
+    \caption{\textbf{Qualitative Example of Active Reasoning (MCQ).}
+    OmniAgent first narrows the search space by revisiting the early broadcast window where host intros and lower-thirds typically occur, then visually confirms the green dress/skirt host at multiple timestamps. When audio checks yield only montage narration, it switches to a targeted scan of the intro-adjacent segment and locates the decisive lower-third text ``Nish Parkar'', grounding the final choice in on-screen evidence and selecting option \textbf{C}.}
+    \label{fig:qual_mcq_2}
+\end{figure*}
+
+
+\begin{figure*}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{figures/case1.pdf}
+
+    \vspace{0.8em}
+    \begin{minipage}{0.95\textwidth}
+    \footnotesize
+    \setlength{\parskip}{0.35em}
+    \setlength{\parindent}{0em}
+    
+    \textbf{O:} Initial scan initiated to locate segments discussing Kyo-yuzen technique.\\
+    \textbf{T:} The video is long (44 mins). I need to find sections discussing the Kyo-yuzen technique. I will perform a broad scan to identify scene changes and potential text overlays or speakers.\\
+    \textbf{A:} \texttt{get\_frames(start=0, end=2645.51, num=60)}
+
+    \vspace{0.2em}\hrule\vspace{0.2em}
+    
+    \textbf{O:} Frames 403-582 cover the ``Kyo-kanoko shibori'' segment. I suspect ``Kyo-yuzen'' might be introduced in this context or nearby. Frame 762 shows a pattern that might be Kyo-yuzen. I need to verify the ``10 stages'' claim and the technique details.\\
+    \textbf{T:} I will inspect the audio in the shibori section to see if they mention ``Kyo-yuzen'' and its stages. If not found, I will scan the Kyo-yuzen section if it exists.\\
+    \textbf{A:} \texttt{get\_audio(start=400, end=600)}
+
+    \vspace{0.2em}\hrule\vspace{0.2em}
+    
+    \textbf{O:} The audio confirms the segment at 400s-600s is about ``Kyo-kanoko shibori'', not Kyo-yuzen. They do mention ``100,000 beads'' (which relates to counting, not stages). I need to find the actual discussion on Kyo-yuzen to test the options.\\
+    \textbf{T:} I need to locate the specific section mentioning ``Kyo-yuzen''. The video seems to progress chronologically. Since 400s was Kyo-kanoko, I will scan forward to find the Kyo-yuzen segment, likely after a break. I will sample frames in the 600s-1200s range.\\
+    \textbf{A:} \texttt{get\_frames(start=600, end=1200, num=50)}
+
+    \vspace{0.2em}\hrule\vspace{0.2em}
+    
+    \textbf{[Several OTAs omitted: OmniAgent systematically scans the video in large chunks (e.g. 1200--2400s, etc.) without finding the ``Kyo-yuzen'' segment.]}
+
+    \vspace{0.2em}\hrule\vspace{0.2em}
+
+    \textbf{O:} I have thoroughly scanned the 1600s-1800s range and found it to be the ``Sushi'' segment. I have analyzed the ``Kyo-kanoko'' (400-600s) and ``Kirikane'' (750-1050s) segments. I have not found a dedicated ``Kyo-yuzen'' segment. To find the false statement about Kyo-yuzen, I must identify its features (e.g., is it painted on cloth or silk? does it involve 10 stages?). I will scan the 50s-150s range to see if Kyo-yuzen appears there, as I may have missed it in the initial sparse scan.\\
+    \textbf{T:}  I need to locate Kyo-yuzen. I will check the 50s-150s range. I am looking for the specific Kyo-yuzen segment to evaluate the options. \\
+    \textbf{A:} \texttt{get\_frames(start=50, end=150, num=50)}
+
+    \vspace{0.2em}\hrule\vspace{0.2em}
+    
+    \textbf{O:} In the museum segment (103s-123s), the text ``Kyo-yuzen'' is displayed. A panel details the process. It lists 10 stages: 5 Background dyeing, 6 Gold printing, 7 Steaming, 8 Rinsing, 9 Steam-smoothing, 10 Embroidery \& gold leaf. Option A claims ``It contains 10 stages'', which matches the video. Option B claims ``The artworks contain very fine lines in some places'', which is true for the paintings. Option C claims ``It includes the steaming process''. The steaming is stage 7. Option D claims ``Artists paint on the cloth''. Kyo-yuzen involves ``gilding'' and ``embroidery'', not ``painting on the cloth'' in the traditional sense (painting with cloth). I suspect D is the false statement.\\
+    \textbf{T:} I will verify the audio to confirm the narrator's description of Kyo-yuzen's process. I will also check if ``painting'' is mentioned.\\
+    \textbf{A:} \texttt{get\_audio(start=100, end=140)}
+
+    \vspace{0.2em}\hrule\vspace{0.2em}
+    
+    \textbf{O:} The audio at 100s-140s is decisive. The narrator states, ``It's a very difficult and complex process involving more than 20 stages.'' He describes ``In it, the painter paints directly onto the cloth'', creating ``very fine lines''. He also says it involves ``steaming'' (stage 7). \\
+    Option A: It contains 10 stages. (FALSE. The audio explicitly says ``more than 20 stages'').\\
+    Option B: The artworks contain very fine lines in some places. (TRUE).\\
+    Option C: It includes the steaming process. (TRUE).\\
+    Option D: Artists paint on the cloth. (TRUE).\\
+    Since Option A is the only one that contradicts the video evidence (``more than 20 stages''), it is the correct answer for ``What is not true''.\\
+    \textbf{T:} I have confirmed via audio that the video says ``more than 20 stages''. My text observation of 10 stages was likely a miscount or reading of the board summary without full audio context. The audio ``more than 20 stages'' is the definitive false statement among the options.\\
+    \textbf{A:} \texttt{answer(content="A")}
+
+    \end{minipage}
+
+    \caption{\textbf{Qualitative Example of Audio-visual Collaborative Reasoning (MCQ).} OmniAgent performs targeted temporal queries to locate the \textit{Kyo-yuzen} description, then cross-checks on-screen text with narration. It resolves the ambiguity about the number of stages by consulting the decisive audio evidence (``more than 20 stages''), selecting option \textbf{A} as the false statement while confirming the other options via narration (fine lines, steaming, and painting on cloth).}
+    \label{fig:qual_mcq_1}
+\end{figure*}
+
+
+
+\begin{figure*}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{figures/case3.pdf}
+
+    \vspace{0.8em}
+    \begin{minipage}{0.95\textwidth}
+    \footnotesize
+    \setlength{\parskip}{0.35em}
+    \setlength{\parindent}{0em}
+    
+    \textbf{O:} Initial scan initiated to locate the scene involving John Brassard and the gavel strike.\\
+    \textbf{T:} The video is long (26 minutes). I need to find the specific scene where a meeting is taking place and a gavel is used. I will start by scanning the entire video with 60 frames to identify the relevant segment.\\
+    \textbf{A:} \texttt{get\_frames(start=0, end=1616.1, num=60)}
+
+    \vspace{0.2em}\hrule\vspace{0.2em}
+
+    \textbf{O:} The video features John Brassard, a Chair/President, frequently. I see him gesturing and speaking in various segments. I suspect the event of him adjourning the session happens during a heated moment.\\
+    \textbf{T:} The prompt describes a specific action: ``striking the gavel'' because he is ``not happy''. I need to find the audio or visual of a gavel strike. Since I can't search for specific text, I will search for the audio cue of a gavel strike or the context of an altercation. I'll sample audio in the segments where he is speaking to identify the moment of conflict.\\
+    \textbf{A:} \texttt{get\_audio(start=400.0, end=700.0)}
+
+    \vspace{0.2em}\hrule\vspace{0.2em}
+
+    \textbf{[Several OTAs omitted: OmniAgent probes multiple short windows around $\sim$700s with \texttt{get\_frames}/\texttt{get\_clip} to verify the suspected gavel cue, but fails to find an on-camera gavel strike.]}
+
+    \vspace{0.2em}\hrule\vspace{0.2em}
+
+    \textbf{O:} Frame 756.32s clearly shows John Brassard, Chair (President), seated with the gavel visible on the desk. He appears calm, holding a pen. The clip ends at 760s. The previous clip (705-725s) showed him interacting with another speaker (Parm Bains) but no gavel strike. The audio cue at 700s might have been a false positive or a background sound. I need to find a moment where he is visibly agitated or gesturing emphatically, followed by a strike.\\
+    \textbf{T:} The 700s segment was a misinterpretation of the audio or a different scene. I need to search for another instance of Brassard speaking or being on camera. The 400-700 segment was a debate. I'll scan the later part of the video (1350-1600s) where he might have one last word or a different session ends. He is the Chair, so he calls adjournment.\\
+    \textbf{A:} \texttt{get\_frames(start=1350.0, end=1616.0, num=30)}
+
+    \vspace{0.2em}\hrule\vspace{0.2em}
+
+    \textbf{O:} Frames 1368-1588 show John Brassard gesturing and speaking agitatedly (pointing finger, touching head, hand on desk). This matches the ``not happy'' description. I need to find the specific moment he strikes the gavel to conclude the session.\\
+    \textbf{T:} The visual evidence from 1368s to 1588s confirms he is ``not happy''. The prompt states he ``adjourns the session by striking the gavel''. I haven't seen the strike yet. It likely occurs at the end of this rant, either around 1600s (before the video ends) or right after he stops speaking. I will examine the end of the video.\\
+    \textbf{A:} \texttt{get\_clip(start=1600.0, end=1616.0)}
+
+    \vspace{0.2em}\hrule\vspace{0.2em}
+
+    \textbf{O:} The clip from 1600s to 1616s captures the exact sequence: John Brassard declares ``I am NOT happy with the way this went'' (approx 1603s), immediately states ``I am adjourning the meeting'' (approx 1605s), and hits the gavel (approx 1606s). The clip ends with an outro logo.\\
+    \textbf{T:} I have located the exact moment. The sequence begins with his declaration of unhappiness and ends with the gavel strike. The timestamps align with the speech and the physical impact.\\
+    \textbf{A:} \texttt{answer(content="[[1603.0, 1607.0]]")}
+
+    \end{minipage}
+
+    \caption{\textbf{Qualitative Example of Temporal Grounding.} OmniAgent combines coarse full-video scanning with targeted audio checks to propose a candidate gavel event, actively falsifies the early false lead via localized probing, then pivots to a later visually-agitated segment and confirms the precise adjournment moment by querying the terminal clip. It outputs the exact interval covering ``I am NOT happy'' $\to$ ``I am adjourning the meeting'' $\to$ gavel strike: \textbf{[[1603.0, 1607.0]]}.}
+    \label{fig:qual_tr}
+\end{figure*}
+
+\end{document}

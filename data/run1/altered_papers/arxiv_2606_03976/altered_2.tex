@@ -1,0 +1,955 @@
+
+\documentclass{article}
+
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{booktabs} % for professional tables
+\usepackage{arydshln} % aadds support for dashed lines in tables.
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{mathtools}
+\usepackage{multirow}
+\usepackage{hyperref}
+\usepackage{float}
+\newcommand{\theHalgorithm}{\arabic{algorithm}}
+
+\DeclarePairedDelimiterX{\infdivx}[2]{(}{)}{%
+  #1\;\delimsize\|\;#2%
+}
+\newcommand{\infdiv}{D\infdivx}
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+
+
+
+\usepackage[accepted]{icml2026}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{amsthm}
+
+
+
+\usepackage[capitalize,noabbrev]{cleveref}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{assumption}[theorem]{Assumption}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\usepackage[textsize=tiny]{todonotes}
+
+\icmltitlerunning{Formalizing the Binding Problem}
+
+\begin{document}
+
+\twocolumn[
+  \icmltitle{Formalizing the Binding Problem}
+
+
+
+  \icmlsetsymbol{equal}{*}
+
+  \begin{icmlauthorlist}
+    \icmlauthor{Lianghuan Huang}{equal,penn-physics}
+    \icmlauthor{Yihao Li}{equal,penn-cis}
+    \icmlauthor{Saeed Salehi}{tuberlin}
+    \icmlauthor{Yingshan Chang}{cmu}
+    \icmlauthor{Ansh Soni}{penn-psych}
+    \icmlauthor{Konrad P. Kording}{penn-neuro}
+  \end{icmlauthorlist}
+
+  \icmlaffiliation{penn-physics}{Department of Physics and Astronomy, University of Pennsylvania, Philadelphia, PA, USA}
+  \icmlaffiliation{penn-neuro}{Department of Neuroscience, University of Pennsylvania, Philadelphia, PA, USA}
+  \icmlaffiliation{penn-cis}{Department of Computer and Information Science, University of Pennsylvania}
+  \icmlaffiliation{penn-psych}{Department of Psychology, University of Pennsylvania}
+  \icmlaffiliation{tuberlin}{Machine Learning Group, Technical University of Berlin, Berlin, Germany}
+  \icmlaffiliation{cmu}{Language Technology Institute, Carnegie Mellon University, Pittsburgh, PA, USA}
+
+  \icmlcorrespondingauthor{Konrad P. Kording}{kording@seas.upenn.edu}
+
+  \icmlkeywords{binding, object centric learning, probing, information theory, vision transformer}
+
+  \vskip 0.3in
+]
+
+
+
+\printAffiliationsAndNotice{\icmlEqualContribution}
+
+\begin{abstract}
+Representations of the world, arguably, contain information about features (e.g. something is blue, something is a circle) but also information about which features are part of the same object (e.g. the circle is blue), which we call binding information. Any system with the ability to understand scenes with multiple objects must be able to solve the binding problem: it needs to know which features belong together. However, despite work showing that Vision Transformers (ViTs) know which patches belong together, it is not known whether current deep learning models learn to exhibit binding information, i.e., for features. We may believe that there is not much binding information, after all misattributing features to wrong objects is a common failure of ViT-based architectures, especially in scenes with objects sharing features. Here we formalize the binding problem with an information-theoretic approach, and introduce a probing method to measure binding information in model representations. We perform experiments on ViTs, measuring binding from different components of the architecture, such as the image summary token \texttt{[CLS]} or the spatial tokens. We use datasets with different binding challenges, such as feature sharing, occlusion, and natural features, while comparing the performance of several pre-trained ViTs. Overall, our research demonstrates binding as a key ingredient to strong visual recognition and reasoning.\footnote{Code available at: \url{https://github.com/KordingLab/formalizing-the-binding-problem}.}
+\end{abstract}
+
+\section{Introduction}
+
+Binding is the ability to tell which features belong to which objects in a multi-object scene. Humans naturally bind features to objects. This ability is so effortless that we rarely recognize binding as a computational problem in its own right. In the visual cortex, distinct neuronal populations are tuned to specific features (e.g., color, orientation, motion), but in multi-object scenes such feature-based encoding alone does not specify which features belong together as parts of the same object. Nevertheless, the brain achieves binding with extraordinary precision, and a range of mechanisms have been proposed to account for this capacity \cite{TREISMAN198097, vonderMalsburg1981Correlation, zhang2020neural} (more in Section~\ref{sec:relatedwork}), but it remains largely an open problem \cite{Yu2023-BindingProblem2}.
+
+
+
+Binding is just as equally important for artificial models. Compositional learning, a hallmark of generalization and reasoning for deep learning models \cite{uselis2025doesdatascalinglead, lake2018generalizationsystematicitycompositionalskills, hupkes2020compositionalitydecomposedneuralnetworks, wiedemer2023compositionalgeneralizationprinciples}, relies crucially on the ability to bind the compositionally learned concepts into novel combinations (e.g., having learned the concepts of animals, body parts, and motion, can a model understand a flying penguin?) \cite{greff2020bindingproblemartificialneural}. 
+
+However, artificial vision and vision-language models perform markedly worse at binding than the brain. In multi-object scenes, especially when objects are cluttered and/or share features, the ability of modern vision and vision–language models to correctly identify objects and their corresponding features drops noticeably \cite{campbell2025understandinglimitsvisionlanguage, zhang2024farintelligentvisualdeductive, lewis2024doesclipbindconcepts,yuksekgonul2023visionlanguagemodelsbehavelike,assouel2025visualsymbolicmechanismsemergent}. For instance, \cite{campbell2025understandinglimitsvisionlanguage} shows that the ability of a vision-language model to accurately describe objects and their features monotonically decreases as the number of feature-sharing object triplets increases in a scene (Figure~\ref{fig:triplet}), with similar trends observed in object counting, search, and analogy reasoning tasks. As another example, ~\citep{zhang2024farintelligentvisualdeductive} prompts vision-language models to describe objects in a given block of a Raven matrix (Figure~\ref{fig:triplet}). The model instead combines elements from adjacent blocks, attributing them to the same object. They further show that segmenting the grid into separate images before passing them in significantly reduces such errors. The failure of artificial vision models in binding as compared to the brain raises a natural question: to what extent do artificial models reliably learn binding information? Is there a framework that can precisely define binding information learned by a model, and is there a formal way of measuring binding as defined by the theory?
+
+Using an information-theoretic approach, we define binding as the information a representation contains about which objects are present or absent among all possible objects. We then introduce several variants of this definition that separate binding information from feature information, or normalize over dataset binding uncertainty priors. We then introduce a probing method to measure binding information defined as such. Finally, we apply this framework to state-of-the-art Vision Transformers, measuring the binding information learned in the image-level summary token \texttt{[CLS]} and the full set of spatial tokens, on datasets with different binding challenges. Overall, our contributions are as follows:
+\begin{itemize}
+    \item We introduce an information-theoretic framework that defines binding and a probing method for measuring binding information in model representations.
+    \item We show that the image-level summary token \texttt{[CLS]} encodes less than half of all binding information in a multi-object scene; for the binding information it does encode, it is largely structured quadratically.
+    \item We show that binding is encoded almost perfectly in the full set of spatial tokens, decodable using a simplified attention probe.
+    \item We perform probing experiments on a variety of models and datasets with different binding challenges, and analyze the binding information learned under each scenario.
+\end{itemize}
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{figures/combined.png}
+    \caption{\textbf{Binding failures.} \textbf{Left:}~\cite{campbell2025understandinglimitsvisionlanguage} shows that the ability of a vision-language model to accurately describe objects and their features in a scene degrades monotonically as the number of feature-sharing triplets (or the total number of objects) increases in a scene. \textbf{Right:}~\citep{zhang2024farintelligentvisualdeductive} prompts vision-language models to describe grid patterns in the Raven matrix. For the middle-right
+    block, the model outputs “a triangle with an X inside,” combining elements from the middle-center and the middle-right blocks. They further show
+    that segmenting the grid into separate images before passing them in significantly
+    reduces such errors. Figures reproduced from the papers.}
+    \label{fig:triplet}
+\end{figure}
+
+\begin{figure*}[t]
+    \centering
+    \includegraphics[width=1.0\linewidth]{figures/main_tmp_w_F.png}
+    \caption{\textbf{Binding theory and probing framework.} We first define the space of features and objects of interest, as shown in features set $\mathcal{F}$ and object set $\mathcal{O}$ (Definitions \ref{featuredef}, \ref{object_def}). Each object is a combination of features from the feature set (Definition \ref{object_def}, Remark \ref{map}). From there, we define the feature code $F$ and object code $O$, which are random vectors that denote the presence and absence of each feature and object in a scene $X$. 
+    Binding information $I(O;Z)$ is the information of the object code in the representation $Z$ (Definition \ref{bindinfo}). Conditional binding information is the information of the object code in the representation \textit{beyond what can be explained by features}, hence $I(O; Z\mid F)$ (Definition \ref{binding_cond}). Using information theory, the $I$ terms can be decomposed into entropies $H$. $H(O\mid Z)$ and $H(F\mid Z)$ are the uncertainties of the object and feature codes in the representation, which can be estimated by training object code probe $f_{O}(Z)$ and feature code probe $f_{F}(Z)$ on the representation with ground truth labels of the object and feature codes (Section \ref{bindingprobe}). The figure shows hypothetical probe-predicted logits for each element of the object and feature code. The cross-entropy losses of the object and feature probes are provable estimates of $H(O\mid Z)$ and $H(F\mid Z)$ (Theorem \ref{probeapprox}, Lemma \ref{bound}). The remaining $H(O)$ or $H(O\mid F)$ terms are dataset priors which can be independently calculated from the distribution of the $F$ and $O$ in the dataset (Section \ref{dataprior}). Combining these terms, we arrive at a probe-estimated value of binding information and conditional binding information.}
+\end{figure*}
+
+
+
+
+
+
+
+
+
+\section{Methods}
+
+Here we introduce an information-theoretic framework of formalizing binding, and show how binding information can be measured by probes. A scene has a set of features that are present. For the scene to make sense there are also objects, which are characterized by their specific conjunctions of features. And then there is the overall scene which is a collection of potential objects that are present or absent. Binding information is the information about which objects are present and absent. 
+
+\subsection{Defining Binding Information}
+\label{definebindinginfo}
+\begin{definition}[Features]
+    Let the $f_i$ be discrete features. For example, they could be red, square, smooth, human, running, velocity=3m/s, occluded, top-left, etc.
+
+Let $\mathcal{F} =\{f_1, f_2, \cdots, f_n\}$ be a finite set of all features of interest.
+\label{featuredef}
+\end{definition}
+
+\begin{definition}[Feature code]
+
+One way of looking at a scene is in terms of existence of features. Some of the features may be shared by multiple objects (e.g. a blue bag and a blue hat). But the feature existence vector $F$ is useful to characterize which features are present.
+We define the feature code of scene as a finite random vector 
+\[
+F = [F_1, F_2, \dots, F_n],
+\]
+where 
+\[
+F_i = 
+\begin{cases}
+1 & \text{if feature }f_i\text{ is present in the scene,} \\
+0 & \text{otherwise.}
+\end{cases}
+\]
+\end{definition}
+
+\begin{definition}[Objects]
+    While $F$ does transmit which features are present, it does not describe how features jointly make up objects. An object can be described by the collection of its features. We posit that each object corresponds to a \emph{distinct} subset of $\mathcal{F}$.
+    \[
+    o_i\rightarrowtail \{f_a, f_b, \dots\} \subseteq \mathcal{F}
+    \]
+    For example, $o_i$ can be ``red, blue, smooth cube," ``human running at velocity=3m/s," or ``top-left occluded triangle."\label{object_def}
+\end{definition}
+
+\begin{remark}
+    We posit that no two objects can correspond to the exact same set of features. In practice, \textit{location} is often a  discriminator for objects that may share all other features.
+     
+    For this reason, we consider the object to feature subset mapping a surjective map. More formally, let $\mathcal{O}=\{o_1, o_2, \cdots, o_n\}$ be a finite set of all objects of interest. Then there exist a \textit{surjective} mapping $\psi$ such that
+    \[
+    \psi: \mathcal{O} \rightarrowtail \mathcal{P}(\mathcal{F}),
+    \]
+    where $\mathcal{P}(\mathcal{F})$ denotes the power set of $\mathcal{F}$.\label{map}
+\end{remark}
+
+\begin{definition}[Object code]
+An object code of a scene is a random vector 
+\[
+O = [O_1, O_2, \dots]
+\]
+where 
+\[
+O_i = 
+\begin{cases}
+1 & \text{if object }o_i\text{ is present in the scene,} \\
+0 & \text{otherwise.}
+\end{cases}
+\]\label{objectcode}
+\end{definition}
+
+
+\begin{remark}
+    To bind is to specify the object code of a scene, i.e., which objects exist and which objects do not (Definition \ref{bindinfo}). One potential difficulty of binding is that objects may share some (though not all) features with each other. For example, a scene may contain a red square, a blue circle, a red circle, but not a blue square. Their shared features can lead to binding errors under particular encoding schemes, especially when
+    object encoding is correlated with feature encoding \cite{campbell2025understandinglimitsvisionlanguage, greff2020bindingproblemartificialneural, TREISMAN1982107}.
+\end{remark}
+
+
+\begin{remark}
+    We note that our definition of object code is fully agnostic of the specific encoding scheme of objects of a model. While we \textit{define} objects in feature-conjunctive ways (Definition \ref{object_def}), they may be encoded in many ways including tensor-product of features \cite{10.1016/0004-3702(90)90007-M}, slots \cite{locatello2020object}, object files \cite{KAHNEMAN1992175}, etc. For this reason, learning features well does \textit{not} necessarily make learning objects easy for a model: in our definition, we do not \textit{assume} their correlation or causation (although there usually \textit{is} some correlation, see Definition \ref{binding_cond}).
+\end{remark}
+
+\begin{remark}
+    The distinction between features and objects depends on our abstraction level. Objects can be features, and features can be objects, under different feature and object sets $\mathcal{F, O}$. For example, ``human" may be a feature among ``chimpanzee" and ``gorilla," but it may be an object when ``mammal," ``bipedal," ``vertebrate" are features.\footnote{This can even be true within a neural network: objects learned by one layer may become features for the next layer. Neural networks may even be considered as ``binding networks."} 
+\end{remark}
+
+\begin{remark}
+    Assuming access to the object-to-feature-subset map $\psi$ (Remark \ref{map}), for any particular scene, $F$ is a deterministic function of $O$. That is, once we know which objects exist in a scene, we also know which features exist, by virtue of the object-to-feature map.\label{deter}
+\end{remark}
+
+We consider a model \(\Phi : \mathcal{X} \to \mathcal{Z}\) which maps scenes to learned representations. Let \(X\in \mathcal{X} \) be a random variable for the scene, and $Z \in \mathcal{Z}$ be a random variable for the representation. We consider $F$ and $O$ to be deterministic functions of $X$, given an oracle scene observer. The model $\Phi$, however, may \textit{lose} information of $F$ and $O$ in its representation of the scene $X$, i.e., they are irrecoverable even with the optimal decoder. We therefore define binding information in a representation $Z$ as follows:
+
+\begin{definition}[Binding information]
+Let $I(A;B)$ denote mutual information between random variables $A$ and $B$. 
+
+    We define binding information in the representation $Z$ of a scene, relative to object set $\mathcal{O}$ (and feature set $\mathcal{F}$), as
+    \[
+    \mathbf{B}_{\mathcal{O}}(Z):= I(O;Z),
+    \]
+    in unit of \textit{bits}. In plain language, it is the information contained in the representation about the object code, i.e., about which objects are present and absent in a scene.
+    \label{bindinfo}
+\end{definition}
+
+\begin{remark} Let $H(A)$ denote the entropy of the random variable $A$, and $H(A\mid B)$ be its conditional entropy on $B$.
+    \begin{equation}
+        \mathbf{B}_{\mathcal{O}}(Z):= I(O;Z)=H(O)-H(O\mid Z)\label{entropydef}
+    \end{equation}
+    From the lens of entropy, binding information is also the reduction in the uncertainty of object code $O$ ($H(O)$) due to knowledge of the representation $Z$.
+\end{remark}
+
+\begin{definition}[Feature information] Similarly, we can define feature information in the representation $Z$ as $I(F;Z)$, relative to feature set $\mathcal{F}$ (and object set $\mathcal{O}$).
+\end{definition}
+
+Note that feature and object information are generally not independent within a representation. In particular, a representation that encodes features well \textit{can} make objects easier to decode. Sometimes, however, we wish to measure the binding information contained in a representation beyond what can be explained by feature information alone. This may be especially desirable when comparing models with different feature learning capabilities,\footnote{For example, there are architectures that are specifically designed for binding or binding-like operations, but they may be limited feature learners, possibly due to the poor scalability of their binding-related inductive biases. Examples of this may include tensor product architectures \cite{10.1016/0004-3702(90)90007-M}, capsule networks \cite{sabour2017dynamicroutingcapsules}, early slot attention models \cite{locatello2020object, seitzer2023bridginggaprealworldobjectcentric}, neural module networks \cite{andreas2017neuralmodulenetworks}, etc.} or when comparing scene distributions with different feature learning complexities.\footnote{For example, natural datasets may contain high-level semantic features that are difficult to learn, but learning the object code may not be more difficult than, say, synthetic datasets with synthetic features.} Under these scenarios, we may wish to measure binding information while controlling for decodable feature information. This can be done naturally by conditioning binding information on knowledge of the feature code. 
+
+
+
+\begin{definition}[Binding information, conditioned on feature code]
+
+We define binding information in a representation $Z$, conditioned on feature code $F$, as
+\[
+\mathbf{B}_{\mathcal{O, F}}^{*}(Z):=I(O;Z\mid F)
+\]
+\label{binding_cond}
+\end{definition}
+\begin{theorem}
+    \[
+    \mathbf{B}_{\mathcal{O, F}}^{*}(Z)=I(O;Z)-I(F;Z).
+    \]
+    Proof in Appendix \ref{pf:dpi}.
+\label{minusbinding}
+\end{theorem}
+
+\begin{remark}
+    We note that conditioning on $F$ does not result in a \textit{counterfactual} measure of binding information \textit{as it would if a feature code were supplied to the model during inference}. The representation $Z$ is fixed, so we are \textit{adjusting} binding information \textit{post-hoc} during measurement, for the amount of feature information, as is shown here.
+\end{remark}
+\begin{theorem}
+    $\mathbf{B}_{\mathcal{O, F}}^{*}(Z)$ can be similarly written in entropy form:
+    \begin{equation}
+            \begin{gathered}
+         \mathbf{B}_{\mathcal{O, F}}^{*}(Z)=H(O\mid F)-H(O \mid Z, F )\\=H(O)-H(O\mid Z)-H(F)+H(F\mid Z).
+    \end{gathered}
+    \label{bindingcondexpanded}
+        \end{equation}
+Proof in Appendix \ref{pf:dpi}.
+\label{bindcondeq}  
+\end{theorem}
+
+Some scene distributions may have higher prior uncertainties in $O$, as measured by $H(O)$. Binding information for a distribution is, at best, $H(O)$, since \[\mathbf{B}_{\mathcal{O}}(Z):=I(O;Z)=H(O)-H(O\mid Z)\leq H(O).\] When comparing the difficulty of binding across different scene distributions, we may wish to remove the scale effect of this prior $H(O)$. This can be done by normalizing over $H(O)$.
+
+\begin{definition}[Binding information, normalized by prior uncertainty of object code] We define binding information normalized by the uncertainty of $O$ in the scene distribution as 
+    \[
+    \mathbf{\beta}_{\mathcal{O}}(Z):= \frac{I(O;Z)}{H(O)}=1-\frac{H(O\mid Z)}{H(O)},
+    \]
+without units.
+
+Similarly, a normalized measure for the conditional binding information is
+\[
+    \mathbf{\beta^*}_{\mathcal{O, F}}(Z):= \frac{I(O;Z\mid F)}{H(O\mid F)}=1-\frac{H(O\mid Z, F)}{H(O\mid F)}.
+\]\label{norm}
+\end{definition}
+
+\begin{remark}
+    The normalized binding information can therefore be interpreted as the \textit{proportion} of object code uncertainty in the scene distribution ($H(O)$ or $H(O\mid F)$) resolved by knowledge of the representation. 
+\end{remark}
+
+\begin{remark}
+    Note that removing the scale effect of $H(O)$ or $H(O\mid F)$ does not remove other influences from the scene distribution, such as occlusion, background clutter, etc., which are often \textit{the} points of comparison across datasets.
+\end{remark}
+
+
+With binding information defined, we now show how it can be conveniently decoded by probes from model representations. Across variants above, there are two key terms: a representation-dependent term $H(O\mid Z)$ or $H(O\mid Z, F)$, and a prior term depending only on the data distribution, $H(O)$ or $H(O\mid F)$. We show how they can be calculated in Sections \ref{bindingprobe} and \ref{dataprior}, respectively. And we summarize the full probing procedure in Section \ref{sumprobe}.
+
+\subsection{Probing Object Code on the Representation} 
+\label{bindingprobe}
+We start with $H(O\mid Z)$ which is defined as
+\[H(O\mid Z)
+=
+\mathbb E_{(z,o)\sim p(Z,O)}
+\left[-\log p(o\mid z)\right].\]
+
+A straightforward approach is to train a probe $q_{\theta}(o\mid z)$ to approximate $p(o\mid z)$. If we use cross-entropy loss 
+\begin{equation}
+    \mathcal L_{\mathrm{CE}}(\theta)
+=
+\mathbb E_{(z,o)\sim p(Z,O)}
+\left[-\log q_\theta(o\mid z)\right], \label{celoss}  
+\end{equation}
+we will be directly approximating $H(O\mid Z)$, provided that $q_{\theta}(o\mid z)$ is a good approximation of $p(o\mid z)$. The following theorem captures this intuition:
+
+\begin{theorem}[Probe approximates binding uncertainty] Let $\infdiv{p(a\mid b)}{q(a\mid b)}$ be the conditional relative entropy (Kullback–Leibler distance) between the two conditional probabilities $p(a\mid b)$ and $q(a\mid b)$, where $(a,b)\sim p(A,B)$. Then we have the following:
+\[\mathcal L_{\mathrm{CE}}(\theta)=H(O\mid Z)+\infdiv{p(o\mid z)}{q_{\theta}(o\mid z)}.
+\]\label{probeapprox}
+Proof in Appendix \ref{pf:dpi}.
+\end{theorem}
+\begin{lemma}
+    Since $\infdiv{p}{q_\theta}\geq 0$, we have 
+    \[
+    \mathcal L_{\mathrm{CE}}(\theta)\geq H(O\mid Z).
+    \]\label{bound}
+\end{lemma}
+\begin{remark}
+    Lemma \ref{bound} shows that the further we can minimize $\mathcal{L}_{\mathrm{CE}}(\theta)$, the closer we will be to ground truth $H(O\mid Z)$. This requires us to train the probes properly until convergence, with the appropriate training schedule, regularization (since we report cross-entropy loss on the test set), and particularly, a good model family to begin with. We therefore compare a range of probe families in our experiments, such as linear, quadratic, deep neural networks, and attention (more in Section \ref{results}). \label{mini}
+\end{remark}
+A practical challenge in training a $q_\theta(o\mid z)$ probe is the exponential space of its labels $o$ (recall from Definition \ref{objectcode} that $O=o$ is a binary \textit{vector}), which would require an exponential size dataset to cover the entire distribution space. We can circumvent this by decomposing the probe as follows:
+\begin{equation}
+q_\theta(o\mid z)
+=
+\prod_{k=1}^K q_{\theta}(o_k\mid o_{<k},z)
+, \label{autoreg}
+\end{equation}
+where $o_k$ denotes the $k$-th component of the vector $o$, and $o_{<k}$ is the shorthand for $o_1,\cdots,o_{k-1}.$\footnote{There is some abuse of notation here since earlier $o_i$ denotes objects (Definition \ref{object_def}). Here $o_k$ are the binary values that each $O_k$ can take, indicating whether the object is present or absent.} This allows each $q_{\theta}(o_k\mid o_{<k},z)$ to be trained individually with a single-dimension label for $o_k$ while incorporating $o_{<k}$ as prior. This amounts to probing for each object $o_k$ in the representation, with the ``code" for the prior $o_{<k}$ objects given (Definitions \ref{object_def}, \ref{objectcode}).\footnote{Note that a naive decomposition such as $q_\theta(o\mid z)
+=
+\prod_{k=1}^K q_\theta(o_k\mid z)$ is not true in general, since it does not account for the dependencies between $o_k$'s given $z$. However, we can make such assumptions \textit{for our probe}. We perform a comparison between these two probe families in Appendix \ref{ablation}.} Their cross-entropy loss can then be summed to obtain the overall loss in Eq. \eqref{celoss}:
+\begin{equation}
+\mathcal{L}_{\text{CE}}(\theta)
+=
+\sum_{k=1}^K
+\mathbb E_{(z,o)\sim p(Z,O)}
+\left[
+-\log q_{\theta}(o_k\mid o_{<k},z)
+\right].
+\label{sumloss}
+\end{equation}
+To approximate $H(F\mid Z)$ in the conditional definition (Theorem \ref{bindcondeq}), we can similarly use probes $q_\theta(f_k\mid f_{<k}, z)$ and sum their cross-entropy loss to obtain the $\mathcal{L}_{\text{CE}}(\theta)$ for features, which will then be our probe estimate of $H(F\mid Z)$.
+
+\subsection{Estimating Dataset Priors}
+\label{dataprior}
+The prior terms in the binding definitions such as $H(O)$ and $H(F)$ can be empirically calculated using their entropy definition: 
+\[H(O)=\mathbb{E}_{o\sim p(O)}\left[-\log p(o)\right],\]
+
+where $p(O)$ is controllable for the synthetically generated datasets, similarly for $H(F)$.\footnote{For natural datasets, since we do not directly control the distribution, we make particular assumptions on the data to make approximations on these quantities. Appendix \ref{app:hbf} contains more details.}
+Appendix \ref{app:hbf} contains examples of calculating these quantities for our datasets.
+
+
+\subsection{Summary: Probing Binding on Model Representations}
+\label{sumprobe}
+
+Finally, we summarize the procedure for probing binding information from model representations $Z$:
+
+\begin{enumerate}
+    \item Find the dataset prior $H(O)$ (and $H(F)$ for conditional definition)
+    \item Train binding probes $q_\theta (o_k\mid o_{<k}, z)$ (and $q_\theta (f_k\mid f_{<k}, z)$ for conditional definition)
+    \item Sum their cross-entropy loss to obtain a probe estimate of $H(O\mid Z)$ (and $H(F\mid Z)$ for conditional definition)
+    \item Calculate binding information using Eq. \eqref{entropydef} (Eq. \eqref{bindingcondexpanded} for conditional definition), with the option of normalization using Definition \ref{norm}.
+\end{enumerate}
+
+\section{Results}
+\label{results}
+Next, we probe ViT representations with real data. In particular, we are interested in understanding how binding works with different architectural components of the ViT (such as the \texttt{[CLS]} and the spatial tokens), and on different datasets with various challenges for binding.
+
+In Sections \ref{cls} and \ref{spatial}, we ask which type of image representation in the ViT architecture is best for encoding binding: are summary tokens sufficient (e.g., the \texttt{[CLS]} or a global average pooling), or do we need the full set of spatial tokens? Both summary and spatial tokens are commonly used in pre-training objectives and downstream models: pre-training frameworks such as CLIP \cite{radford2021learningtransferablevisualmodels}, simCLR \cite{chen2020simpleframeworkcontrastivelearning}, Barlow Twins \cite{zbontar2021barlowtwinsselfsupervisedlearning}, and other contrastive methods often use the \texttt{[CLS]} or globally pooled representations as the input to their training objectives; Vision-Language Models (VLMs), on the other hand, utilize the full set of spatial tokens in their cross-modality processing with language \cite{liu2023visualinstructiontuning, bai2023qwenvlversatilevisionlanguagemodel}. Studying how well binding is encoded in these different types of representations can thus guide better model development and evaluation. 
+
+In Section \ref{data}, we study the data aspects of binding. We probe on datasets with different challenges for binding: datasets with an increasing number of features and objects in the space, datasets with different levels of occlusion, and natural datasets with high-level, semantic features.
+
+
+
+\subsection{To what extent does the \texttt{[CLS]} summary token encode binding?}
+\label{cls}
+
+To test binding, we create a synthetic ColorShape dataset with 8 colors and 8 shapes in the feature space, and 64 objects in the object space, each taking one shape and one color. The resulting feature and object codes have $\dim(F)=16, \dim(O)=64$. To create a balanced dataset for both the feature and object codes, we sample each image as follows: randomly choose 6 colors and 6 shapes, and out of the 36 possible objects, choose 18 objects randomly that cover all 6 colors and 6 shapes chosen, and place them in the image at random locations without overlap. The resulting baseline accuracy is $6/8=75\%$ for feature probes $q_\theta (f_k\mid f_{<k}, z)$ and $1-18/64=71.9\%$ for object probes $q_\theta (o_k\mid o_{<k}, z)$, where the baseline is a trivial prediction of a constant 1 and 0, respectively.\footnote{Additionally, feature information has only minor leakage to objects: a baseline model that assumes all conjunctions of present features exist as objects will have accuracy $[18+(64-36)]/64=71.9\%$.} We report error reduction, (accuracy -- baseline) / (1 -- baseline) $\times 100\%$, in lieu of raw accuracy for our probes.
+
+To test whether our probes learn generalizable patterns instead of memorization, we split the dataset into training, validation, and test sets. They each contain a disjoint set of feature codes $F$ and object codes $O$. The latter occurs naturally by virtue of the large combinatorial space of the object codes ($\sim10^{12}$), so every image almost certainly has a different object code. The feature code split is implemented separately. The resulting training set contains 39,200 samples, validation 9,800 samples, and test 9,800 samples. 
+
+We then compute the dataset entropies $H(F)$ and $H(O)$ for each split. Since all feature and object codes have equal probability in our setup, we only need the number of all possible feature codes and object codes under the feature code constraint for each split, and then take their logarithm to find the entropies. Both can be calculated with basic combinatorics, which we detail in Appendix \ref{app:hbf}. On the test set for which we report binding information metrics, $H(O)=39.9$ bits and $H(F)=7.0$ bits.
+
+
+Using this dataset, we probe for binding information from the \texttt{[CLS]} token of the DINOv2-Large ViT \cite{oquab2024dinov2learningrobustvisual}. We train autoregressive probes $q_\theta(o_k\mid o_{<k}, z)$ to approximate the $H(O\mid Z)$ term in the binding definition (one for each $o_k$, so 49 in total). To incorporate the conditional prior $o_{<k}$, we directly concatenate $o_{<k}$ with representation $z$: $x=[z || o_{<k}]$.\footnote{There are, of course, other ways to incorporate the $o_{<k}$ prior in our probe. We ablate on conditioning on $o_{<k}$ in Appendix \ref{ablation}.} We experiment with three probe families:
+\begin{itemize}
+    \item Linear probes: $\ell_k(x)=W_kx+b_k$
+    \item Quadratic probes: $\ell_k(x)=x^\top W_kx+b_k$
+    \item Deep neural network (DNN): $\ell_k(x)=f_{\mathrm{DNN}}(x)+b_k$ where $f_{\mathrm{DNN}}$ is 4 layers of 1024 width with GELU activations.
+\end{itemize}
+where $
+q_\theta(o_k=1 \mid o_{<k}, z)
+=
+\sigma(\ell_k(x)).$
+
+We show the object code and feature code probing results in Table \ref{cls_probe}. All three probe families generalize well to unseen object and feature codes. In terms of accuracy, feature decoding can reach $90\%$ in error reduction, while object decoding reaches merely around $65\%$ percent. Linear probes perform the worst in both cases. The DNN probe performs the best, although only slightly better than the much smaller quadratic probe. Given that DNNs are known as ``universal approximators" \cite{HORNIK1989359}, the DNN probes (with 3M parameters) reflect our best attempt at approaching the true binding (i.e., object) information in the representation, by closing the gap between the probe model $q_{\theta}(o\mid z)$ and the true distribution $p(o\mid z)$ (Lemma \ref{bound}). Since the quadratic probes achieve only slightly higher loss than the DNN probes, it is fair to assume that \textit{most} binding (i.e., object) information and feature information in the representation is quadratic, and that higher-order interactions add little to no extra information decodable.\footnote{That is, of course, assuming that the DNN probe indeed approaches the upper-bound of the binding information.}
+
+\begin{table}[H]
+\centering
+\caption{\textbf{Average performance of object and feature code probes for different probe families when $z$ is the \texttt{[CLS]} token.} We report error reduction (ER) relative to the trivial majority-label baseline, which achieves $71.9\%$ accuracy for object codes and $75.0\%$ accuracy for feature codes.  Numbers in parentheses denote the number of parameters relative to the corresponding linear probe.}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{llccc}
+\toprule
+Probe type & Probe family & Train loss $\downarrow$ / ER $\uparrow$ & Val loss $\downarrow$ / ER $\uparrow$ & Test loss $\downarrow$ / ER $\uparrow$ \\
+\midrule
+\multirow{3}{*}{$q_\theta(o_k \mid o_{<k}, z)$}
+& Linear ($\times 1$)    & $33.8$ / $38.4\%$ & $34.3$ / $37.4\%$ & $34.2$ / $37.4\%$ \\
+& Quadratic ($\times 64$) & $21.4$ / $64.4\%$ & $22.0$ / $63.3\%$ & $22.0$ / $63.0\%$ \\
+& DNN ($\times 2953$)     & $\mathbf{19.9}$ / $\mathbf{65.8\%}$ & $\mathbf{20.6}$ / $\mathbf{64.4\%}$ & $\mathbf{20.6}$ / $\mathbf{64.4\%}$ \\
+\midrule
+\multirow{3}{*}{$q_\theta(f_k \mid f_{<k}, z)$}
+& Linear ($\times 1$)     & $4.2$ / $73.2\%$ & $4.5$ / $69.6\%$ & $4.4$ / $70.4\%$ \\
+& Quadratic ($\times 64$) & $1.5$ / $90.8\%$ & $1.6$ / $89.2\%$ & $1.6$ / $89.6\%$ \\
+& DNN ($\times 3042$) & $\mathbf{1.1}$ / $\mathbf{92.4\%}$ & $\mathbf{1.3}$ / $\mathbf{90.8\%}$ & $\mathbf{1.3}$ / $\mathbf{91.2\%}$ \\
+\bottomrule
+\end{tabular}
+}
+\label{cls_probe}
+\end{table}
+
+To further understand how this quadratic binding information may be structured, we then devise a version of the quadratic probe where we reuse parameters across $o_k$ probes when the objects $o_k$ \textit{share features} (e.g., red square probe and red circle probe share the ``red" portion of their weights). More formally, we set $W_k=U_{\text{color}}^\top
+V_{\text{shape}}$ and the probe becomes \[\ell_k(x)=x ^\top U_{\text{color}}^\top
+V_{\text{shape}} x+b_k,\] where $U_{\text{color}}$ is shared for all objects with the same color, and $V_{\text{shape}}$ is shared for all objects with the same shape. From Table \ref{tab:weight_sharing_ablation}, we observe a small $2.4$-bit increase in loss relative to the non-parameter-reusing $o_k$ probes. This suggests the strong presence of quadratic binding (i.e., object) information in the \texttt{[CLS]} token \textit{as the dot product between color and shape projections}, a conjunctive encoding of objects based on features.
+
+
+\begin{table}[H]
+\centering
+\caption{\textbf{Comparison of quadratic object code probes with and without parameter reuse.} We report error reduction (ER) relative to the trivial majority-label baseline, which achieves $71.9\%$ accuracy for object codes. Numbers in parentheses denote the number of parameters relative to the linear probe.}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{lccc}
+\toprule
+Parameter reuse & Train loss $\downarrow$ / ER $\uparrow$ & Val loss $\downarrow$ / ER $\uparrow$ & Test loss $\downarrow$ / ER $\uparrow$ \\
+\midrule
+Yes ($\times 1/6$)
+& $23.9$ / $58.7\%$ 
+& $24.4$ / $58.0\%$ 
+& $24.4$ / $57.7\%$ \\
+No ($\times 1$)
+& $21.4$ / $64.4\%$
+& $22.0$ / $63.3\%$
+& $22.0$ / $63.0\%$ \\
+$\Delta$ (Yes -- No)
+& $+2.5$ / $-5.7$ pp
+& $+2.4$ / $-5.3$ pp
+& $+2.4$ / $-5.3$ pp \\
+\bottomrule
+\end{tabular}
+}
+\label{tab:weight_sharing_ablation}
+\end{table}
+
+Next we compute the amount of binding information and proportion of dataset binding uncertainty resolved, with or without conditioning on features, as we have defined in Section \ref{definebindinginfo}. Table \ref{tab:binding_information} shows the results on the test set, using the probe losses tabled above. To be fair across probe types for the feature conditioned results, we use the quadratic feature probe loss for all of their feature terms, varying only the object probe type. The DNN probe, again, decodes the most amount of binding information, and only slightly more than the quadratic probe. Assuming that the DNN probe approaches the true binding information in the representation, our results show that the \texttt{[CLS]} token encodes less than half ($48.5\%$) of the binding information. If we wish to separate binding information from feature information, the \texttt{[CLS]} encodes only $42.4\%$ of the binding information beyond what can be explained by features.
+
+\begin{table}[H]
+\centering
+\caption{\textbf{Probe-estimated binding information $\mathbf{B}_{\mathcal{O}}(Z)$, conditional binding information $\mathbf{B}^{*}_{\mathcal{O}, \mathcal{F}}(Z)$, and their normalized forms $\boldsymbol{\beta}_{\mathcal{O}}(Z)$ and $\boldsymbol{\beta}^{*}_{\mathcal{O}, \mathcal{F}}(Z)$}, recorded on the test set. $H(O)=39.9$ bits and $H(F)=7.0$ bits on this test set. All conditional results use the loss of the quadratic feature probe for the $H(F\mid Z)$ term, varying the object code probe type.}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{lcccc}
+\toprule
+Probe type 
+& $\mathbf{B}_{\mathcal{O}}(Z)$ (bits) $\uparrow$
+& $\boldsymbol{\beta}_{\mathcal{O}}(Z)$ $\uparrow$
+& $\mathbf{B}^{*}_{\mathcal{O}, \mathcal{F}}(Z)$ (bits) $\uparrow$
+& $\boldsymbol{\beta}^{*}_{\mathcal{O}, \mathcal{F}}(Z)$ $\uparrow$ \\
+\midrule
+Linear & $5.7$ & $14.3\%$ & $0.3$ & $0.8\%$  \\
+Quadratic & $17.9$ & $44.9\%$ & $12.5$ & $37.9\%$  \\
+DNN & $\mathbf{19.4}$ & $\mathbf{48.5\%}$ & $\mathbf{13.9}$ & $\mathbf{42.4\%}$  \\
+\bottomrule
+\end{tabular}
+}
+\label{tab:binding_information}
+\end{table}
+
+
+
+
+\subsection{To what extent does the full set of spatial tokens encode binding?}
+\label{spatial}
+
+If a single summary token performs poorly for binding, would the full set of spatial tokens retain more binding information? Again, we use the same ColorShape dataset and DINOv2-Large ViT to probe for binding. Directly concatenating all spatial tokens, however, would produce a very high-dimensional input to the probe, making the number of parameters explode. So instead, we use a simplified attention probe that queries on the spatial tokens and learns their dynamically weighted mean:
+
+Let $z=\{s_0, s_1, \dots, s_N\}$ denote the full set of final-layer tokens of the ViT, where $s_0$ is the \texttt{[CLS]} token and $\{s_i\}_{i=1}^N$ are the spatial tokens. Each probe $q_\theta(o_k\mid o_{<k}, z)$ learns a query vector $q_k$ conditioned on $o_{<k}$:
+\[
+q_k = g_k(o_{<k}).
+\]
+The query scores each token by a dot product,
+\[
+a_{k,i}
+=
+\frac{\exp(q_k^\top s_i)}
+{\sum_{j=0}^N \exp(q_k^\top s_j)},
+\]
+and forms a weighted representation
+\[
+\bar{s}_k
+=
+\sum_{i=0}^N a_{k,i}s_i.
+\]
+A final quadratic readout layer then predicts
+\[
+q_\theta(o_k=1\mid o_{<k}, \{s_i\}_{i=0}^N)
+=
+\sigma({s}_k^\top W_k \bar{s}_k+b_k).
+\]
+
+This probe is simpler than a typical transformer attention layer in that it uses learned queries, but no learned key or value projections. As shown in Table \ref{attnprobeacc}, this simplified attention probe can perform at around $97\%$ in error reduction for object decoding, far outperforming the best DNN probe on the \texttt{[CLS]} token only.
+
+\begin{table}[H]
+\centering
+\caption{\textbf{Average performance of attention probes with quadratic readout using the full set of spatial tokens}, compared to the best-performing \texttt{[CLS]} probe for object and feature code prediction. We report error reduction (ER) relative to the trivial majority-label baselines, which achieve $71.9\%$ accuracy for object codes and $75.0\%$ accuracy for feature codes.}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{llccc}
+\toprule
+Probe type & Probe family & Train loss $\downarrow$ / ER $\uparrow$ & Val loss $\downarrow$ / ER $\uparrow$ & Test loss $\downarrow$ / ER $\uparrow$ \\
+\midrule
+\multirow{2}{*}{$q_\theta(o_k \mid o_{<k}, z)$}
+& Attention + spatial
+& $\mathbf{2.9}$ / $\mathbf{97.2\%}$ 
+& $\mathbf{3.2}$ / $\mathbf{96.8\%}$ 
+& $\mathbf{3.1}$ / $\mathbf{96.8\%}$ \\
+& DNN + \texttt{[CLS]}
+& $19.9$ / $65.8\%$
+& $20.6$ / $64.4\%$
+& $20.6$ / $64.4\%$ \\
+\midrule
+\multirow{2}{*}{$q_\theta(f_k \mid f_{<k}, z)$}
+& Attention + spatial
+& $\mathbf{1.0}$ / $\mathbf{92.8\%}$ 
+& $\mathbf{1.2}$ / $\mathbf{91.2\%}$ 
+& $\mathbf{1.2}$ / $\mathbf{91.6\%}$ \\
+& DNN + \texttt{[CLS]}
+& $1.1$ / $92.4\%$ & $1.3$ / $90.8\%$ & $1.3$ / $91.2\%$ \\
+\bottomrule
+\end{tabular}
+}
+\label{attnprobeacc}
+\end{table}
+
+The binding information metrics calculated from these probes are listed in Table \ref{binding_information_attn}. As can be seen, the attention probe on the full set of spatial tokens decodes $92.2\%$ of binding information, and for the binding information beyond what can be explained by features, there is $94.1\%$ decoded. Both significantly outperform the best DNN probe on the \texttt{[CLS]} token only.
+
+\begin{table}[H]
+\centering
+\caption{\textbf{Probe-estimated binding information $\mathbf{B}_{\mathcal{O}}(Z)$, conditional binding information $\mathbf{B}^{*}_{\mathcal{O}, \mathcal{F}}(Z)$, proportion of dataset binding information resolved $\boldsymbol{\beta}_{\mathcal{O}}(Z)$, and their normalized forms $\boldsymbol{\beta}_{\mathcal{O}}(Z)$ and $\boldsymbol{\beta}^{*}_{\mathcal{O}, \mathcal{F}}(Z)$}, recorded on the test set. $H(O)=39.9$ bits and $H(F)=7.0$ bits on this test set. Attention probe's conditional results use the loss of the attention feature probe, while DNN's conditional results use the loss of the quadratic feature probe, as in Table \ref{tab:binding_information}.}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{lcccc}
+\toprule
+Probe type 
+& $\mathbf{B}_{\mathcal{O}}(Z)$ (bits) $\uparrow$
+& $\boldsymbol{\beta}_{\mathcal{O}}(Z)$ $\uparrow$
+& $\mathbf{B}^{*}_{\mathcal{O}, \mathcal{F}}(Z)$ (bits) $\uparrow$
+& $\boldsymbol{\beta}^{*}_{\mathcal{O}, \mathcal{F}}(Z)$ $\uparrow$ \\
+\midrule
+Attention + spatial & $\mathbf{36.8}$ & $\mathbf{92.2\%}$ & $\mathbf{31.0}$ & $\mathbf{94.1\%}$  \\
+DNN + \texttt{[CLS]} & $19.4$ & $48.5\%$ & $13.9$ & $42.4\%$  \\
+\bottomrule
+\end{tabular}
+}
+\label{binding_information_attn}
+\end{table}
+
+Here in this probe, the attention weights $a_{k, i}$ can be interpreted as selecting which spatial tokens are most useful for decoding $o_k$. Qualitatively, we find that this routing process is highly accurate in our probes: when the target object $o_k$ exists in the image (with label $o_k=1$), the highest attention score $a_{k, i}$ almost always maps to the target object patch. 
+
+
+\subsection{To what extent can binding be learned on different datasets?}
+\label{data}
+
+Does our binding framework capture the intrinsic difficulty of binding in the data distribution? We measure binding information on the following datasets with different binding challenges: 
+\begin{itemize}
+    \item \textbf{ColorShape} with the number of colors and shapes varying from 1 to 7 each, where the growing feature (and object) space can make it increasingly difficult for the model to bind well. We simplify the data distribution for easier comparison.
+    \item \textbf{CLEVR} with varying degree of occlusion between objects \cite{johnson2016clevrdiagnosticdatasetcompositional}, where occlusion can lead to ambiguous boundaries between objects.
+    \item \textbf{Visual Genome} with densely annotated natural features \cite{krishna2017visual} where feature and object learning may be intrinsically more difficult.
+\end{itemize}
+
+Appendix \ref{ap:datasets} contains the detailed setups for each dataset. We note here that we construct image representations by concatenating the \texttt{[CLS]} token with the mean-pooled spatial tokens from the final layer of the ViT.
+
+\begin{figure*}[t]
+  \centering
+  \begin{minipage}[htb]{0.95\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/Fig3.pdf}
+  \end{minipage}%
+  \caption{\textbf{Binding degrades with increasing feature space complexity in ColorShape.} \textbf{Middle:} We run the CLIP ViT-L/14 (224px) model on the Color-Shape dataset with all 49 configurations of numbers of colors and shapes, and report the normalized binding information $\boldsymbol{\beta}^{*}_{\mathcal{O}, \mathcal{F}}(Z)$. The percentage of binding information captured by the model decreases as the dataset becomes more complex, involving more objects with more colors and shapes. \textbf{Left:} With the full feature code $F$ set to 7 colors and 7 shapes (all present), the uncertainty of binding is captured by $H(O\mid F=f)$ which is 47.73 bits. \textbf{Right:} The binding uncertainty of the dataset distribution $H(O|F)$ for each configuration of numbers of colors and shapes.}
+  \label{fig:colorshape}
+\end{figure*}
+
+
+\begin{figure*}[htb]
+  \centering
+  \begin{minipage}[htb]{0.95\textwidth}
+    \centering
+    \includegraphics[width=1\textwidth]{figures/clevr.pdf}
+  \end{minipage}%
+  \caption{
+\textbf{CLEVR examples of object-code uncertainty revealed by binding probes.}
+Blue bars ($H(O \mid Z)$) indicate uncertainty in predicting objects. \textbf{Left:} Color misattribution in binding. \textbf{Right:} Uncertainty on the joint presence of a brown cylinder and a brown cube.
+}
+
+  \label{fig:clevr}
+\end{figure*}
+
+
+
+\paragraph{Influence of feature and object space complexity on binding.} We run the CLIP ViT-L/14 (224px) model on the ColorShape dataset while varying the number of colors and shapes from 1 to 7. Figure \ref{fig:colorshape} shows the results for all 49 configurations on this dataset. As shown in the figure (right), as the number of feature values (e.g., colors and shapes) increases, the space of possible bindings grows exponentially in the number of feature combinations, leading to a rapid increase in binding uncertainty (e.g., from $1$ to $2^{43}$ possibilities as the numbers of colors and shapes grow from 1 to 7). While the fraction of binding information captured by the model decreases with increasing complexity, it does not decay exponentially (Figure~\ref{fig:colorshape} Middle).
+
+
+\paragraph{Influence of occlusion on binding.} 
+
+We probe the representations of DINOv2-Large on datasets with different levels of occlusion (examples shown in Figure~\ref{fig:clevrocc}), 
+where we vary the level of occlusion (by adjusting the camera elevation and angle of the scene) As shown in Table \ref{tab:occ}, occlusion has a notable influence on a model's ability to bind: binding information decodable monotonically decreases with higher levels of occlusion. 
+
+
+\begin{table}[H]
+\centering
+\caption{\textbf{Effect of occlusion on binding for DINOv2-Large}, using CLEVR dataset with 4 colors and 3 shapes. Camera elevation serves as a proxy for \textbf{occlusion level} (higher means less occlusion). $\Delta \beta(Z)$ is measured relative to the most occluded setting (0.6).}
+\label{tab:occ}
+\resizebox{\columnwidth}{!}{
+\begin{tabular}{cccc}
+\toprule
+$ht.(\text{Camera})$ & $\mathbf{B}^{*}_{\mathcal{O}, \mathcal{F}}(Z)$ (bits)& $\boldsymbol{\beta}^{*}_{\mathcal{O}, \mathcal{F}}(Z)$  & $\Delta \boldsymbol{\beta}^{*}_{\mathcal{O}, \mathcal{F}}(Z)$ (pp)  \\
+\hline
+0.6 & 5.8 & 45.0\% &  0.0\\
+1.2 & 6.6 & 51.1\% & +6.1 \\
+1.8 & 6.9 & 53.3\% & +8.3 \\
+2.5 & 7.1 & 55.4\% & +10.4 \\
+3.2 & 7.6 & 58.7\% & +13.7 \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\paragraph{Binding on natural datasets.} Table~\ref{tab:main} shows binding information on the natural Visual Genome dataset, along with previous synthetic datasets across three models. Although natural features and objects are more difficult to learn (often emerging in later layers of a neural network), the models achieve comparable levels of binding with synthetic datasets. Additionally, we note from the table that our binding measure also captures model capability: increasing CLIP's input resolution from 224px to 336px improves binding on all datasets, suggesting that finer spatial representations better support object-feature binding.
+
+
+\begin{table}[H]
+    \caption{\textbf{Conditional binding information $\boldsymbol{\beta}^{*}_{\mathcal{O}, \mathcal{F}}(Z)$ for different models and datasets.} The ColorShape dataset here has 7 colors and 7 shapes, with feature and object code distributions detailed in Appendix \ref{ap:datasets}. VG:Color and VG:TopAttr are two subsets of Visual Genome.}
+    \label{tab:main}
+    \centering
+    \resizebox{\columnwidth}{!}{%
+        \begin{tabular}{lcccccc}
+        \toprule
+        \textbf{Model} 
+        & \textbf{ColorShape} 
+        & \textbf{CLEVR}
+        & \textbf{VG:COLOR}
+        & \textbf{VG:TopAttr} \\
+        \midrule
+        \addlinespace
+        DINOv2-Large          
+            & $41.8\%$ & $61.0\%$ & $41.8\%$ & $\mathbf{47.0\%}$ \\
+        CLIP ViT-L/14 (224px) 
+            & $47.7\%$& $68.1\%$ & $45.8\%$ & $39.9\%$ \\
+        CLIP ViT-L/14 (336px) 
+            & $\mathbf{56.4\%}$ & $\mathbf{68.5\%}$ & $\mathbf{46.4\%}$ & $45.6\%$ \\
+        \bottomrule
+        \end{tabular}
+    }
+\end{table}
+
+
+
+\section*{Discussion}
+
+In our work, we defined binding with an information-theoretic framework and devised probing methods for measuring binding in model representations. We believe there are many benefits for taking a representational approach to defining binding: first, virtually all models are representation learners. Our definition can thus be widely applied for measurement and for comparison. Second, compared to directly measuring accuracy in binding tasks, the information approach (measuring entropy) takes into account the decision uncertainty of the model. Third, a representation measurement can enable us to understand the structure of the information by using differentially structured probes, as we have shown with the quadratic binding structure of the \texttt{[CLS]}. Finally, a representation-level diagnosis can guide approaches in model pre-training that specifically target better representations, such as the self-supervised pre-training of world models \cite{assran2025vjepa2selfsupervisedvideo}. 
+ 
+ \textbf{Future work} can focus on improving binding performance of the latest models using the binding probe performances as objectives, and exploring potential architectural inductive biases to improve binding.
+
+
+Our work does have \textbf{limitations}. Our framework relies on predefined discrete feature vocabularies; future work could extend it to continuous features with continuous probes. In addition, our probes measure decodable binding information rather than whether the model causally uses such information during downstream inference, so high probe performance may reflect latent information inaccessible to the model’s native readout mechanisms. Finally, the conditional definition ($B^*_{O,F}(Z)$) also assumes that feature code ($F$) can be reliably inferred from object code ($O$), which may not hold in noisy biological or human perception. 
+
+
+\section*{Acknowledgements}
+The authors would like to thank the anonymous reviewers for their helpful feedback.
+
+
+\section*{Impact Statement}
+This paper presents work whose goal is to advance the field of machine learning and neuroscience. There are many potential societal consequences of our work, including those related to improved visual capabilities of artificial intelligence and better understanding of biological vision.
+
+
+
+
+\bibliography{main}
+\bibliographystyle{icml2026}
+
+\newpage
+\newpage
+\appendix
+\onecolumn
+
+
+\section{Related Work}
+\label{sec:relatedwork}
+\paragraph{The Binding Problem}
+With its roots in early artificial intelligence \cite{rosenblatt1962principles}, the binding problem has puzzled computer scientists and cognitive neuroscientists for over half a century \cite{greff2020bindingproblemartificialneural, von1999and, feldman2013neural, roskies1999binding, treisman1996binding}. Since early artificial vision models were in their infancy and lacked the capacity for complex scene decomposition, the initial momentum for understanding feature binding came largely from psychology and neuroscience \cite{treisman1999solutions, vonderMalsburg1981Correlation}. Although there is yet no consensus on the exact neural mechanisms of binding in the brain \cite{robertson2003binding, wolfe2012binding, di2012feature, scholte2025beyond, roelfsema2025feature}, significant progress has been made in identifying some of its core mechanistic components \cite{TREISMAN198097, reynolds1999role, roelfsema2023solving, singer1995visual}. These biological insights have inspired architectures designed to explicitly address binding, whether through temporal synchrony \cite{miyato2024artificial, gopalakrishnan2024recurrent} or attention-based mechanisms \cite{salehi2024modeling}.
+
+\paragraph{Feature Binding in Deep Neural Networks} % or deep networks
+Following the unprecedented success of deep learning in computer vision \cite{krizhevsky2012imagenet, lecun2015deep}, the binding problem has gained renewed interest within the machine learning community. Earlier approaches attempted to address binding through explicit object-centric architectural and training biases \cite{locatello2020object, puebla2025visual, assouel2025object, aydemir2023self}, known as Object-Centric Learning (OCL) \cite{locatello2020object, greff2019multi}. Approaches such as Slot Attention \cite{locatello2020object} and MONet \cite{burgess2019monet} decompose inputs to permutation-invariant "slots" via iterative refinement, each representing an object. Although these models excel at grouping spatially coherent regions (object-part binding), they arguably fall short in feature binding, often struggling to correctly associate complex attributes like texture with their respective objects \cite{karazija2021clevrtex}.
+Also, their general applicability is largely surpassed by the performance and scalability of self-supervised Vision Transformers (ViTs) \cite{simeoni2025dinov3, he2022masked, zhou2021ibot} and multi-modal models \cite{radford2021learningtransferablevisualmodels, girdhar2023imagebind,rubinstein2025we}. State-of-the-art ViTs now excel in both global recognition and dense prediction tasks (e.g., segmentation) \cite{simeoni2025dinov3} without requiring explicit architectural components or training process for binding. This has prompted a growing body of research investigating the degree to which binding capabilities naturally emerge in these models \cite{li2025doesobjectbindingnaturally}, identifying the underlying mechanisms that drive their partial success \cite{okawa2023compositional, seitzer2022bridging, wu2025transformers}, and proposing methods to remedy their limitations \cite{seo2025geometrical, hu2024token, koishigarina2025clipbehaveslikebagofwords}. 
+
+
+
+\paragraph{Probing for Binding}
+A rigorous evaluation of feature binding requires both a suitably complex dataset and a precise metric for quantification. An ideal dataset must include scenes with multiple objects to challenge the model's binding capability, while providing ground-truth annotations that link objects to their specific attributes. Standard benchmarks such as MS-COCO \cite{lin2015microsoftcococommonobjects} and synthetic environments like CLEVR \cite{johnson2016clevrdiagnosticdatasetcompositional} have traditionally served this role, while recent works have introduced specialized datasets to target fine-grained compositional understanding~\cite{liu2024finecops}. In terms of measurement, existing approaches fall into two categories. The "symptomatic" approaches assess binding indirectly via performance on high-level downstream tasks, such as visual reasoning~\cite{campbell2025understandinglimitsvisionlanguage}, text-image retrieval errors \cite{yuksekgonul2023visionlanguagemodelsbehavelike} and compositional generalization \cite{lewis2024doesclipbindconcepts, pearson2025evaluatingcompositionalgeneralisationvlms}. Conversely, "mechanistic" approaches aim to evaluate binding directly within the internal representations, offering a task-agnostic measure of how information is organized and bound at the low level \cite{li2025doesobjectbindingnaturally}.
+
+Recent studies have shown that vision-language models (e.g., CLIP) behave like bag-of-words and do not reliably bind the correct attributes to their corresponding entity \cite{koishigarina2025clipbehaveslikebagofwords, yuksekgonul2023visionlanguagemodelsbehavelike}, but these analyses rely primarily on linear probes. Since binding represents a combinatorial problem where linear separation may require exponentially high dimensionality, we argue that linear probes are insufficient. We therefore train non-linear probes to capture these complex relationships. 
+\cite{li2025doesobjectbindingnaturally} propose quadratic probes to evaluate the object-binding property of \textit{IsSameObject}. However, this approach is not easily generalizable and implicitly assumes that each patch corresponds to a single, well-isolated object. Here, we provide a more formalized framework for binding that, in principle, extends to arbitrary models, representations, and feature definitions.
+
+
+
+
+
+\section{Data Processing Inequality}
+
+\begin{theorem}[Internal processing does not increase binding information]
+\label{th:dpi}
+A model typically has several layers, yielding internal representations $Z_1,\cdots, Z_n$. For a deterministic model where \[Z_1=g_0(X),\quad Z_{i+1}=g_i(Z_i),\quad i\in[1\dots n],\] there is \[\mathbf{B}_{\mathcal{O}}(X) \;\ge\; \mathbf{B}_{\mathcal{O}}(Z_1) \;\ge\; \cdots \;\ge\; \mathbf{B}_{\mathcal{O}}(Z_n),\] where we define \(\mathbf{B}_{\mathcal{O}}(X):=I(O;X\mid F).\) That is, any representation $Z_i$ cannot increase binding information in the input $X$, and neither does binding information increase through the internal processing of the model.
+
+\begin{proof}
+
+Since $Z_{i+1}\perp\!\!\!\perp Z_{<i}\mid Z_{i}$, we have a Markov Chain: $Z_1\to\cdots\to Z_n$. Since $X$ is generated from $p(X\mid O)$ (where $O$ specifies the feature values of objects), we can add $O$ to the Markov Chain: $O\to X \to Z_1\to\cdots\to Z_n$. For simplicity of notation, we denote $X:=Z_0$.
+
+For any $0\leq i<j$, we first show that $I(Z_{j}; O\mid Z_{i}, F)=0$. \(I(Z_{j}; O\mid Z_{i}, F)=H(Z_j\mid Z_i,F)-H(Z_j\mid O, Z_i, F).\) Since \(0\leq H(Z_j\mid Z_i,F)\leq H(Z_j\mid Z_i)=0, 0\leq H(Z_j\mid O, Z_i,F)\leq H(Z_j\mid Z_i)=0\), we have \(H(Z_j\mid Z_i,F)=H(Z_j\mid O, Z_i,F)=0\). Hence $I(Z_{j}; O\mid Z_{i}, F)=0$.
+
+By the chain rule of information, \[I(Z_i;O\mid F)=I(Z_i;O\mid F)+I(Z_j; O\mid F, Z_i)=I(Z_i, Z_j; O\mid F)=I(Z_j; O\mid F)+I(Z_i; O\mid F, Z_j)\geq I(Z_j; O\mid F).\]
+\end{proof}  
+
+\end{theorem}
+
+\section{Proofs}
+\label{pf:dpi}
+\subsection{Theorem \ref{minusbinding}}
+\begin{proof}
+    We know that  
+    \begin{gather}
+     I(O;Z) = H(O) - H(O\mid Z) \notag \\
+      I(F;Z) = H(F) - H(F\mid Z) \label{eq:f} \\
+      \mathbf{B}_{\mathcal{O}}(Z) = H(O\mid F) - H(O\mid F,Z)   \label{eq:b}
+    \end{gather}    
+    Adding Eqs. \ref{eq:f} and \ref{eq:b}, we have $I(F;Z)+\mathbf{B}_{\mathcal{O}}(Z)=H(O, F)-H(O,F\mid Z)=H(F)-H(O\mid Z)=I(O;Z).$
+    The penultimate equality is due to the fact that $F$ is a deterministic function of $O$.
+\end{proof}
+\subsection{Theorem \ref{bindcondeq}}
+\begin{proof}
+By definition,
+\[
+\mathbf{B}^{*}_{\mathcal{O},\mathcal{F}}(Z)=I(O;Z\mid F)
+=H(O\mid F)-H(O\mid Z,F).
+\]
+Since \(F\) is a deterministic function of \(O\), \(H(F\mid O)=H(F\mid O,Z)=0\). Hence,
+\[
+H(O\mid F)=H(O,F)-H(F)=H(O)-H(F),
+\]
+and
+\[
+H(O\mid Z,F)=H(O,F\mid Z)-H(F\mid Z)
+=H(O\mid Z)-H(F\mid Z).
+\]
+Substituting gives
+\[
+\mathbf{B}^{*}_{\mathcal{O},\mathcal{F}}(Z)
+=H(O)-H(O\mid Z)-H(F)+H(F\mid Z).
+\]
+\end{proof}
+\subsection{Theorem \ref{probeapprox}}
+\begin{proof}
+By definition,
+\[
+\mathcal L_{\mathrm{CE}}(\theta)
+=
+\mathbb{E}_{(o,z)\sim p(O,Z)}
+\left[-\log q_\theta(o\mid z)\right].
+\]
+Adding and subtracting \(\log p(o\mid z)\), we get
+\[
+\mathcal L_{\mathrm{CE}}(\theta)
+=
+\mathbb{E}_{(o,z)}
+\left[-\log p(o\mid z)\right]
++
+\mathbb{E}_{(o,z)}
+\left[
+\log \frac{p(o\mid z)}{q_\theta(o\mid z)}
+\right].
+\]
+The first term is \(H(O\mid Z)\), and the second term is
+\[
+\infdiv{p(o\mid z)}{q_\theta(o\mid z)}.
+\]
+Therefore,
+\[
+\mathcal L_{\mathrm{CE}}(\theta)
+=
+H(O\mid Z)
++
+\infdiv{p(o\mid z)}{q_\theta(o\mid z)}.
+\]
+\end{proof}
+
+\section{Experimental Setup}
+We train probes on frozen visual representations. A summary of the default probe architectures and training hyperparameters is provided in Table~\ref{tab:training-configs}. All experiments are run on NVIDIA RTX 4090 GPUs.
+
+In the dataset comparisons, we construct image representations by concatenating the \texttt{[CLS]} token with the mean-pooled spatial tokens from the final layer of the vision encoder.
+
+\begin{table}[htbp]
+\centering
+\caption{\textbf{Default probe architectures and training hyperparameters.}}
+\label{tab:training-configs}
+\begin{tabular}{ll}
+\toprule
+\textbf{Trainer component} & \textbf{Setting} \\
+\midrule
+Batch size & 512 \\
+Gradient Accumulation & 2 \\
+Learning rate & $1\times10^{-3}$ \\
+Weight decay & $1\times10^{-4}$ \\
+Epochs & 40 epochs (converged for all probes) \\
+LR scheduler & StepLR (step size = 8, $\gamma = 0.2$) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Models.}We evaluate feature binding behavior using a diverse set of pretrained Vision Transformer backbones (Table~\ref{tab:models}). All models are used in a frozen setting.
+
+
+\begin{table}[htbp]
+\centering
+\caption{\textbf{Vision Transformer backbones used for evaluation.}}
+\label{tab:models}
+\begin{tabular}{ll}
+\toprule
+Model family & HuggingFace identifier \\
+\midrule
+DINOv2-Large & \texttt{facebook/dinov2-large} \\
+CLIP ViT-L/14 (224px) & \texttt{openai/clip-vit-large-patch14} \\
+CLIP ViT-L/14 (336px) & \texttt{openai/clip-vit-large-patch14-336} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+
+
+\section{Ablation on $o_{<k}$ labels}
+\label{ablation}
+
+Table \ref{tab:object_history_ablation} shows that ablating on the conditionals leads to a notable decrease in binding information decoded, suggesting that it is necessary to condition on the $o_{<k}$ labels as required by the decomposition in Eq. \ref{autoreg}.
+
+\begin{table}[H]
+\centering
+\caption{\textbf{Ablation of conditioning quadratic object code probes on previous object codes $o_{<k}$.} We report error reduction (ER) relative to the trivial majority-label baseline, which achieves $71.9\%$ accuracy for object codes.}
+\resizebox{0.65\columnwidth}{!}{%
+\begin{tabular}{lccc}
+\toprule
+Condition on $o_{<k}$ 
+& Train loss $\downarrow$ / ER $\uparrow$ 
+& Val loss $\downarrow$ / ER $\uparrow$ 
+& Test loss $\downarrow$ / ER $\uparrow$ \\
+\midrule
+Yes 
+& $\mathbf{21.4}$ / $\mathbf{64.4\%}$ 
+& $\mathbf{22.0}$ / $\mathbf{63.3\%}$ 
+& $\mathbf{22.0}$ / $\mathbf{63.0\%}$ \\
+No 
+& $26.6$ / $52.3\%$ 
+& $27.3$ / $50.9\%$ 
+& $27.3$ / $50.9\%$ \\
+$\Delta$ (Yes -- No)
+& $-5.2$ / $+12.1$ pp 
+& $-5.3$ / $+12.5$ pp 
+& $-5.3$ / $+12.1$ pp \\
+\bottomrule
+\end{tabular}
+}
+\label{tab:object_history_ablation}
+\end{table}
+
+
+\section{Estimating Dataset Priors}\label{app:hbf}
+
+\paragraph{Computing $H(O)$ and $H(F)$ for ColorShape (8 colors and 8 shapes)}
+
+To find $H(O)$ and $H(F)$ for the ColorShape dataset, we only need to find the size of their support in each split and then take their logarithm, since they are both evenly distributed. Prior to splitting, there are $\binom{8}{6}\times \binom{8}{6}=784$ possibilities of choosing $F$. The training/validation/test sets each takes 522/131/131 disjoint values of $F$. Hence $H_{\text{train}}(F)=\log_2(522)=9.0 \text{ bits}, H_{\text{val}}(F)=H_{\text{test}}(F)=\log_2(131)=7.0  \text{ bits}.$
+
+Next we find the support size of $O$ for each split. For each \textit{chosen} set of 6 colors and 6 shapes, we now find the number of ways to choose 18 objects out of the 36 possibilities while ensuring coverage of all features. We use the inclusive-exclusion formula by first choosing 18 objects out of 36, $\binom{36}{18}$, and then subtracting that by scenarios where we miss at least one feature $-\binom{6}{1}\binom{5\times 6}{18}-\binom{6}{1}\binom{6\times 5}{18}$ and adding back scenarios where we miss at least two features $\binom{6}{2}\binom{4\times 6}{18}+\binom{6}{1}\binom{6}{1}\binom{6\times 4}{18}+\binom{6}{2}\binom{5\times 5}{18}$, and so on. More compactly, the support size of $O$, given a \textit{chosen} set of 6 colors and 6 shapes, is as follows:
+
+\[\sum_{i=0}^{6} \sum_{j=0}^{6} (-1)^{i+j} \binom{6}{i} \binom{6}{j} \binom{(6-i)(6-j)}{18}=8,058,525,440.
+\]
+
+Now, $O$ is different for different chosen sets of colors and shapes, so the total support size is the above multiplied by the support size of $F$ in each split. Hence $H_{\text{train}}(O)=\log_2(8,058,525,440\times 522)=41.9 \text{ bits}$, and similarly $H_{\text{val}}(O)=H_{\text{test}}(O)=\log_2(8,058,525,440\times 131)=39.9 \text{ bits}$.
+
+\paragraph{Computing $H(O\mid F)$ for ColorShape (1 -- 7 colors/shapes) and CLEVR}
+In ColorShape and CLEVR, we generate synthetic data with full control, enforcing a uniform distribution over all valid binding configurations, with the number of objects capped at $k_{\max}$. Under this assumption,
+\[
+H(O \mid F=f)
+=
+\log_2 \!\left( \sum_{k \in \mathcal{K}(f)} N_k(a_1,\dots,a_G) \right),
+\]
+where $f$ denotes a fixed feature realization, $\mathcal{K}(f)$ is the set of admissible object counts consistent with $f$, and $N_k(a_1,\dots,a_G)$ counts the number of valid binding configurations with exactly $k$ objects.
+
+Because the distribution of $F$ is also known and tractable in these datasets, we can compute the true conditional binding entropy $H(O\mid F)$ exactly by averaging $H(O\mid F=f)$ over feature realizations.
+
+
+
+\textbf{Computing $H(O\mid F)$ for Visual Genome.} We again approximate $H(O \mid F)$ by enumerating binding configurations consistent with $F=f$. Here, however, we cannot control for $O$ being uniform, so we need to use the empirical dataset distribution of $O$ as an approximation. We assume that each object instance occurs independently: this means the probability of a binding $O=o$ is the product of probabilities of each object instance in that binding assignment. The probability of each object instance (e.g. red car, blue balloon) is easily computed over the dataset. This then gives $H(O\mid F=f)$ as well as $p(f)$, and after averaging over $f\sim p(f)$, yields $H(O\mid F)$.
+
+
+
+
+\section{Details of datasets in Section \ref{data}}
+\label{ap:datasets}
+\paragraph{ColorShape (1 -- 7 colors/shapes)}
+We consider a ColorShape dataset with 7 colors and 7 shapes. The maximum number of objects is capped at $\lfloor N_1 N_2 / 2 \rfloor$. We evaluate the model across all possible numbers of color–shape pairs. The number of training samples is scaled proportionally to $N_1 \cdot N_2$. The dataset consists of 48,000 samples.
+
+Different from the ColorShape with 8 colors and 8 shapes, and to simplify calculation, we generate images $X \sim P(X \mid O)$ with $O$ \emph{uniform} over its allowed values in its space $\Omega_O$, i.e., every multi-object scene, determined by the object types in the scene, is equally likely. 
+
+\paragraph{CLEVR} To get progressively closer to real-world scenarios that include more feature types, we evaluate binding on CLEVR \cite{johnson2016clevrdiagnosticdatasetcompositional}, for which we generate images with 3-D objects out of 8 colors, 3 shapes, 2 materials, and 2 sizes, with a total of 96 possible feature combinations. We illustrate the different occlusion levels of the CLEVR dataset in Figure \ref{fig:clevrocc}, which are controlled by camera elevation and pitch angle. The dataset consists of 24,000 samples.
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\linewidth]{figures/clevrocc.pdf}
+    \caption{\textbf{The different occlusion levels of the CLEVR dataset, controlled by camera elevation and pitch angle.} In left-to-right, top-to-bottom order, the camera elevation and pitch angles are $(0.6, 6), (1.2, 12), (1.8, 18), (2.5, 25), (3.2, 32)$. As can be seen, in the most occluded scenario, the gray cube is almost entirely covered by the red cube, and the positioning of the green cylinder and green cube (as well as the blue cylinder and blue cube) can potentially create difficulty for binding due to their ambiguous boundaries. These issues are progressively resolved when there is less occlusion.}
+    \label{fig:clevrocc}
+\end{figure}
+
+\paragraph{Visual Genome}
+Visual Genome is a large-scale vision dataset with dense annotations of objects, attributes, and relationships. From it, we construct two subsets: VG:Color and VG:TopAttr. In VG:Color, we restrict attributes to color terms; in VG:TopAttr, we retain the most frequent (top) attributes. In both cases, we keep only images containing the selected object classes and attributes, resulting in approximately 50,000 samples. We select the 20 most frequent object classes and pair them with either 20 colors or 20 top attributes. Object classes and attributes are collapsed using WordNet synsets. Attributes that are not annotated for an object are treated as an explicit feature value, in addition to the annotated attributes.
+
+
+
+\begin{figure*}[!htb]
+  \centering
+  \begin{minipage}[htb]{1\textwidth}
+    \centering
+    \includegraphics[width=1\textwidth]{figures/vg.pdf}
+  \end{minipage}%
+  \caption{
+\textbf{VG:Color examples of object-code uncertainty revealed by binding probes.} 
+}
+
+  \label{fig:vgcolor}
+\end{figure*}
+
+
+
+
+
+
+\end{document}

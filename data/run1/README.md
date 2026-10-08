@@ -15,4 +15,7 @@ authors' claims.
 | `identified_errors/`, `evaluation_errors/` | internal (insertion-time) and external identification outputs and scores |
 | `generated_claims/` | the falsifiable claims extracted from each paper |
 
-The altered PDFs/LaTeX (`altered_papers/`) are not versioned; see `tools/README.md`.
+`altered_papers/<paper>/altered_N.tex` and `altered_N_small.pdf` are the 40 papers *with the errors
+inserted* (the files `agentic_framework` reads). **They look like the real papers but contain false
+claims; they are not the authors' work.** Failed attempts, full-size PDFs and build files are not
+versioned; see `tools/README.md`.

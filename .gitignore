@@ -14,6 +14,8 @@ data/_dl/
 data/_preflight/
 data/_regress/
 data/papers/
+# The 40 successful altered_N.tex / altered_N_small.pdf files (read by agentic_framework) are tracked
+# explicitly with `git add -f`; everything else here (failed attempts, full PDFs, build files) is not.
 data/run1/altered_papers/
 data/run1/_archive/
 data/*.log

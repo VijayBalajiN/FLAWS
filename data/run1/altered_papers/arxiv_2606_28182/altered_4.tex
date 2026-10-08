@@ -1,0 +1,1180 @@
+
+\documentclass{article}
+
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{booktabs} % for professional tables
+
+\usepackage{hyperref}
+
+
+\newcommand{\theHalgorithm}{\arabic{algorithm}}
+
+\usepackage[accepted]{icml2026}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{amsthm}
+\usepackage{mdframed}
+
+
+
+\usepackage[capitalize,noabbrev]{cleveref}
+\usepackage{xspace}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{assumption}[theorem]{Assumption}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\AC}[1]{\textcolor{red}{~AC: {#1}}}
+\newcommand{\fullname}{Learning Laws of Cooperation\xspace}
+\newcommand{\name}{LLawCo\xspace}
+\usepackage[textsize=tiny]{todonotes}
+
+\icmltitlerunning{LLawCo: Learning Laws of Cooperation for Modeling Embodied Multi-Agent Behavior} 
+
+\begin{document}
+
+\twocolumn[
+    \icmltitle{LLawCo: Learning Laws of Cooperation for \\Modeling Embodied Multi-Agent Behavior}
+
+    \icmlsetsymbol{intern}{*}
+    \vspace*{-0.5cm}
+    \begin{icmlauthorlist}
+        \icmlauthor{Qinhong Zhou}{umass,intern}
+        \icmlauthor{Chuang Gan}{umass}
+        \icmlauthor{Anoop Cherian}{comp}
+    \end{icmlauthorlist}
+
+    \hypersetup{urlcolor=[rgb]{0.6,0,0.4}}
+\centerline{\url{https://www.merl.com/research/highlights/LLawCo}}
+
+    \icmlaffiliation{comp}{Mitsubishi Electric Research Laboratories (MERL), USA}
+    \icmlaffiliation{umass}{University of Massachusetts Amherst, USA.\\}
+
+    \icmlcorrespondingauthor{Anoop Cherian}{cherian@merl.com}
+
+    \icmlkeywords{Machine Learning, ICML}
+
+    \vskip 0.3in
+]
+
+\printAffiliationsAndNotice{\hspace*{-0.4cm}\textsuperscript{*}Work done during an internship at MERL.\\}
+
+
+\begin{abstract}
+Embodied agents operating in decentralized and partially observable environments have attracted growing attention in recent years. However, existing large language model (LLM)–based agents often exhibit behaviors that are misaligned with their partners or inconsistent with the environment state, leading to inefficient cooperation and poor task success. To address this challenge, we propose a novel framework,~\fullname (\name), that enables embodied agents to autonomously align with both their partners and task objectives. Our framework allows agents to reflect on past failures to extract misaligned behavioral patterns, which are used to derive high-level behavioral laws (e.g., \textit{“Talk when necessary”}, \textit{“Wait for partner”}). These laws are explicitly incorporated into the agents’ chains of thought via supervised fine-tuning, aligning their reasoning with task requirements and the behavior of other agents. To evaluate our approach, we introduce PARTNR-Dialog, a large-scale multi-agent communicative and cooperative planning benchmark built on the PARTNR environment. Experiments on existing tasks and our new benchmark demonstrate significant improvements in cooperative efficiency and task success rates. Across four backbone LLMs, our method achieves average success rate improvements of 4.5\% on the PARTNR-Dialog benchmark and 6.8\% on the TDW-MAT benchmark over state-of-the-art open-source communicative agent frameworks. 
+\end{abstract}
+\section{Introduction}
+
+Recent years have witnessed growing interest in building frameworks to facilitate cooperation among embodied agents operating in complex, partially observable environments~\cite{wah, thomason2020vision, habitat3, partnr}. Among various problem settings, \emph{communicative embodied agents} represent one of the most challenging forms of cooperation, as agents must jointly reason, act, and communicate under partial observability. The dominant line of work~\cite{roco, coela, capo, guo2024embodiedllmagentslearn, cots, ling2025elhplan} relies on large language model (LLM)-based agents, which leverage LLMs for both high-level decision-making and natural language communication. Despite encouraging progress, existing methods suffer from two fundamental limitations. 
+
+First, current approaches~\cite{coela, capo, cots} lack effective mechanisms to align LLM-based agents with both their cooperation partners and task specifications. In realistic cooperative scenarios, an agent is expected to collaborate with diverse partners including humans and heterogeneous robots across varying environments and tasks. Achieving efficient cooperation in such settings requires agents to rapidly adapt to partner-specific behaviors, preferences, and task constraints. However, existing communicative agents often fail to explicitly model and internalize such alignment, leading to suboptimal coordination and degraded task performance.
+
+Second, existing frameworks lack learning-based mechanisms that allow LLM-based agents to \emph{self-evolve}. Most prior works either improve performance through carefully designed non-learning pipelines, which can alleviate certain failure modes but remain fundamentally constrained by the capabilities of the underlying base LLM~\cite{capo, cots, ling2025elhplan, li2025learn}, or rely on supervision distilled from stronger models to transfer capabilities to weaker ones~\cite{coela, partnr}. The latter approach requires access to more powerful models and does not enable agents to improve autonomously through interaction. As a result, current agents are unable to continuously adapt and improve in practical, long-horizon cooperative settings.
+
+To address these challenges, we draw inspiration from Isaac Asimov’s Three Laws of Robotics~\cite{asimov2004robot}, which prescribe high-level laws that agents must adhere to in their behavior. Rather than manually specifying such laws—which can be cumbersome and brittle—we propose \fullname (\name), a framework that enables emboided agents to autonomously learn effective behavioral laws. In our learning-based approach, agents reflect on and summarize recurring patterns of past failures, as well as on the constraints enforced by the environment, tasks, and partners into a set of abstract \emph{laws}. Guided by these laws and task performance signals, agents reorganize their chains of thought and selectively filter interaction traces to generate training data. We then embed these laws into the LLM via supervised fine-tuning, enabling the agent to explicitly internalize and adhere to the discovered principles in its task execution and cooperation.
+
+Our \name framework offers several desirable properties. First, the learned laws provide an interpretable and controllable mechanism for alignment, allowing agents to strictly follow discovered regularities. Moreover, by manually specifying or modifying laws, agents can be guided to comply with human preferences or domain-specific priors during cooperation. Crucially, our method does not rely on supervision from stronger models or ground-truth annotations. Instead, agents are able to self-align at the level of their underlying (LLM) reasoning models through interaction, leading to improved cooperation efficiency and task performance.
+
+A key practical impediment to progress for studying communicative cooperation among embodied agents is the absence of suitable benchmarks at scale. Widely used benchmarks such as COELA~\cite{coela, tdw-transport} are relatively small, while C-WAH~\cite{wah, virtualhome} does not provide training data, significantly limiting the development of data-driven, learning-based approaches for communicative embodied agents. To support research in this direction, we introduce \textbf{PARTNR-Dialog}, a new large-scale communicative cooperation benchmark built upon the PARTNR environment~\cite{partnr, habitat3}. PARTNR-Dialog extends the original benchmark with a richer set of cooperative actions and communicative interactions. To accommodate the increased scale of the dataset, we further optimize the benchmark framework to significantly improve the efficiency.
+
+We evaluate our \name framework across the PARTNR-Dialog benchmark and the TDW-MAT benchmark using a diverse set of LLM backbones. Experimental results demonstrate that our method consistently and significantly improves both cooperation efficiency and task success rates. Across four different model architectures, our approach achieves an average improvement of 4.5\% in success rate over the strongest communicative baseline on PARTNR-Dialog, and an average improvement of 6.8\% over the strongest baseline in success rate on TDW-MAT. Furthermore, we show that modifying the laws at inference time leads agents to reliably follow the updated constraints, highlighting the controllability and flexibility of our framework.
+
+Our contributions are summarized as follows:
+
+\noindent\textbullet{} We propose a \textbf{law-guided learning framework} that enables interpretable, controllable, and continual improvement of communicative embodied agents, without requiring supervision from stronger models or ground-truth annotations.
+
+\noindent\textbullet{} We demonstrate consistent performance gains across multiple benchmarks and LLM backbones, with a 14B model achieving performance comparable to a 70B model in certain settings.
+
+\noindent\textbullet{} We introduce \textbf{PARTNR-Dialog}, a new large-scale benchmark that addresses the data scarcity and scalability limitations of existing communicative embodied agent environments.
+
+\section{Related Works}
+
+\textbf{Embodied Communicative Cooperation.} Large-scale embodied AI simulators provide interactive, physically grounded environments for studying intelligent agents~\cite{deepmind-lab, house3d, xiang2020sapien, li2024behavior1k, virtualhome, ai2thor, chalet, isaacgym}. 
+Building upon these platforms, embodied multi-agent cooperation has recently attracted increased attention as an important research problem, focusing on how two or more agents collaborate to complete shared tasks in such environments~\cite{habitat3, partnr, wah, jain2020cordial, szot2023adaptive, zhang2024proagent, zhang2024towards, zhang2024combo, chen2024scalable, zhou2025virtualcommunityopenworld}. Within this setting, a line of work improves cooperative efficiency by enabling communication among agents. 
+A common approach in this direction is to build agent frameworks using off-the-shelf language models~\cite{roco, nayak2024long, capo, cots, ling2025elhplan, li2025learn, comm-partnr}, which are responsible for both communication and task execution. To further improve performance, some prior works rely on supervision from stronger models~\cite{coela, partnr}, collecting high-quality interaction traces and distilling them into smaller models, thereby enhancing communication effectiveness and task success rates.
+
+\textbf{Law-Guided Reasoning for LLM-based Agents.} Prior works have explored aligning large language models (LLMs) using high-level principles or rules, rather than relying on dense human supervision. Constitutional AI~\cite{bai2022constitutional, kundu2023specific} and Self-Align~\cite{sun2023principle} demonstrate that a small set of laws can guide self-alignment, enabling LLMs to perform inference with explicitly specified principles. Building on this idea, recent works further investigate making rules more programmable and controllable~\cite{mu2024rule, findeis2024inverse}, self-refining~\cite{wang2023selfinstruct, madaan2023self, chen2024self, yuan2024self}, and its applications~\cite{li2024agent}.
+In contrast to these approaches, our work focuses on \emph{embodied agents} and leverages laws to model both task structure and partner behaviors in embodied and cooperative settings. By grounding laws in embodied interaction and multi-agent conversations, our method enables more effective coordination and improved task efficiency, going beyond purely text-based alignment objectives.
+
+\begin{figure*}[t]
+    \centering
+    \includegraphics[width=.96\linewidth]{fig-method.pdf}
+    \caption{\textbf{Overview of the proposed \name framework.} Agents interact with the environment to collect training episodes, which are separated into failure traces and success traces based on task completion. Failure traces are analyzed to extract high-level laws, while success traces are filtered to retain law-aligned behaviors. These law-aligned traces are then used to generate law-guided reasoning and actions, forming supervision for fine-tuning the LLM-based planner. During inference, the fine-tuned agent follows the learned or user-specified laws to guide communication, planning, and action selection, enabling explicit human control by editing the laws.}
+    \label{fig:method}
+\end{figure*}
+
+\section{Proposed Method}
+
+Training effective multi-agent embodied AI systems presents significant data collection challenges, particularly for communicative agents that require high-quality dialog–action pairs. In particular, there are two key challenges: (1) collecting meaningful communication data, which often requires strong model capabilities to generate coherent dialog and well-coordinated actions, and (2) simultaneously achieving task effectiveness while satisfying user preferences when such preferences are present.
+
+We propose \fullname (\name) -- a law-guided framework that addresses these challenges through failure-driven law extraction and success-driven action alignment, as illustrated in Figure~\ref{fig:method}. Our method consists of three key components: (1) failure-driven law extraction, (2) success analysis with law-guided explanation, and (3) law-guided agent alignment. The framework enables both \textit{controllability} through human-editable laws and \textit{self-evolve}, allowing LLM-based embodied agents to improve autonomously without requiring supervision from human annotations or stronger models.
+
+\subsection{Problem Formulation}
+Consider a multi-agent communicative embodied AI task in which two agents, $A_0$ and $A_1$, collaborate to complete the same task. Each agent is equipped with an LLM backbone $f_{\theta}$ parameterized by learnable weights $\theta$. An episode $\mathcal{E}$ consists of a sequence of actions $\mathbf{a} = (a_0^t, a_1^t)_{t=1}^T$, observations $\mathbf{o} = (o_0^t, o_1^t)_{t=1}^T$, and communication messages $\mathbf{m} = (m_0^t, m_1^t)_{t=1}^T$ generated by both agents over a horizon of $T$ steps. The task completion rate $\rho(\mathcal{E})$ measures the proportion of task requirements that are successfully satisfied within the episode $\mathcal{E}$. An episode is considered successful if $\rho(\mathcal{E}) \geq \tau$, where $\tau$ is a predefined threshold, and is considered failed otherwise.
+
+\subsection{Communication-Aware Planning}
+Our agents are implemented on top of the ReAct agent framework~\cite{yao2022react, partnr}. In this framework, a ReAct agent triggers replanning either at the initial step or when feedback from the previous action is received, and then decides the next action to execute. In the LLM-based ReAct agent, the agent relies on a large language model to select the next action at each replanning step. All environment observations, task specifications, and action histories are parsed into natural language and provided as input to the LLM in the form of a structured prompt. In this work, we focus exclusively on LLM-based agents.
+
+To equip LLM-based agents with communication capabilities during planning, we maintain an event history buffer for each agent, which records all messages received from other agents along with their corresponding time steps and source agent identifiers. Following prior works~\cite{coela, comm-partnr}, the communication infrastructure incorporates the accumulated dialog history into the planner prompt during replanning using a structured template. This design enables the agent to explicitly reason about coordination, task allocation, and partner intentions based on the communication history observed within the episode.
+
+\subsection{Failure-Driven Law Extraction}
+
+Based on the communication-aware planning framework, our goal is to enable agents to autonomously learn a set of laws that align their behavior with both the task objectives and their cooperation partners. To this end, we first learn a law set $\mathcal{P} = \{p_i\}_{i=1}^K$ that guides agent behavior, where each law $p_i = (n_i, d_i)$ consists of a name $n_i$ and a natural language description $d_i$ specifying a behavioral principle. These laws are expressed at a high level and are intended to capture recurring coordination patterns, failure modes, and task-specific constraints observed in interaction traces.
+
+Given a set of failed episodes $\mathcal{E}_{fail} = \{\mathcal{E}_j : \rho(\mathcal{E}_j) < \tau\}$, we extract laws through a two-step process:
+
+\textbf{Failure Analysis.} For each failed episode $\mathcal{E}_j \in \mathcal{E}_{fail}$, we extract its full chain of thought reasoning trace $\tau_j$ and use an LLM $f_\theta$ to identify the failure reason:
+\begin{equation}
+r_j = f_\theta(\tau_j, \mathcal{T}_{failure}),
+\end{equation}
+where $\mathcal{T}_{failure}$ is a prompt template that guides the model to analyze communication issues, planning errors, action execution problems, coordination failures, and task understanding mistakes. See Appendix~\ref{sec:appendix-prompts} for prompt details.
+
+The following illustrates a representative failure reason identified by the model:
+\begin{mdframed}[linewidth=0.8pt, roundcorner=4pt, innerleftmargin=6pt, innerrightmargin=6pt, innertopmargin=6pt, innerbottommargin=6pt]
+Failure Reason: Agent~1 repeatedly requested Agent~0 to place objects on the table but did not take action to pick them up themselves, leading to a coordination breakdown.
+\end{mdframed}
+
+\textbf{Law Summarization.} We aggregate all failure reasons $\mathbf{R} = \{r_j\}_{j=1}^{|\mathcal{E}_{fail}|}$ and generate laws:
+\begin{equation}
+\mathcal{P} = f_\theta(\mathbf{R}, \mathcal{T}_{law}),
+\end{equation}
+where $\mathcal{T}_{law}$ is a prompt template that instructs the model to generate at most $K$ laws that are clear, actionable, and generalizable, and that address common failure patterns. The structured output $\mathcal{P} = \{(n_i, d_i)\}_{i=1}^K$ consists of a set of law tuples, where each tuple pairs a law name $n_i$ with its corresponding description $d_i$. 
+The number of laws $K$ is a hyperparameter. In our experiments, we set $K = 5$, and we provide an ablation study on different choices of $K$ in the experimental section. An example law and its description produced by the above pipeline is provided below. Additional examples of learned laws in $\mathcal{P}$ are provided in Appendix~\ref{sec:appendix-law-examples}.
+\begin{mdframed}[linewidth=0.8pt, roundcorner=4pt, innerleftmargin=6pt, innerrightmargin=6pt, innertopmargin=6pt, innerbottommargin=6pt]
+\textbf{Track State Accurately}: Agents should maintain an accurate and consistent representation of the task state, including object locations and statuses.
+\end{mdframed}
+
+
+\textbf{Law-Aligned Trace Selection.} 
+
+For each successful episode $\mathcal{E}_j \in \mathcal{E}_{success}:=\mathcal{E}_{train}\backslash\mathcal{E}_{fail}$ in training episodes $\mathcal{E}_{train}$, we extract the full action histories $\mathbf{a}_j^0$ and $\mathbf{a}_j^1$ of both agents. Our goal is to select episodes that are both successful and aligned with the learned laws $\mathcal{P}$.
+
+Specifically, we condition the backbone LLM on the law set and the episode trace, and prompt the LLM to determine whether the episode is law-aligned:
+\begin{equation}
+\epsilon_{\text{align}}^{(j)} 
+= f_\theta(\mathbf{a}_j^0, \mathbf{a}_j^1, \mathcal{P}, \mathcal{T}_{align}),
+\quad \epsilon_{\text{align}}^{(j)} \in \{0,1\},
+\end{equation}
+where $\mathcal{T}_{align}$ is a prompt template that instructs the model to assess the consistency between agent behaviors and the specified laws.
+Only episodes that are both successful and law-aligned are retained:
+\begin{equation}
+\mathcal{E}_{\text{retain}} 
+= \{ \mathcal{E}_j \mid \epsilon_{\text{succ}}^{(j)} = 1 \;\wedge\; \epsilon_{\text{align}}^{(j)} = 1 \},
+\end{equation}
+where $\epsilon_{\text{succ}}^{(j)} = 1$ denotes a successful episode i.e., $\rho(\mathcal{E}_j)\!\!\geq\!\!\tau$.
+
+\subsection{Law-Guided Agent Alignment}
+
+We align agent behavior through supervised fine-tuning (SFT) on the collected training data, followed by law-guided inference.
+
+\textbf{Law-Guided Data Generation.} 
+For the retained episodes $\mathcal{E}_{\text{retain}}$, we generate law-guided supervision data from successful executions. For each retained episode $\mathcal{E}_j \in \mathcal{E}_{\text{retain}}$, we consider the sequence of successfully executed actions $\mathbf{a}_j = (a_0^t, a_1^t)_{t=1}^{T}$. % \AC{did we define $T_j$?}
+
+For each action $a_k^t \in \mathbf{a}_j$ at time step $t$, we collect the corresponding observation history $\mathbf{o}_k^{\leq t}$ together with the executed action $a_k^t$. We then prompt the backbone LLM to generate a law-guided reasoning trace:
+\begin{equation}
+\text{Thought}_k^t = f_\theta(\mathbf{o}_k^{\leq t}, a_k^t, \mathcal{P}, \mathcal{T}_{\text{reflect}}),
+\end{equation}
+where $\mathcal{T}_{\text{reflect}}$ is a prompt template that requires the model to justify the action choice by explicitly grounding its reasoning in the most relevant law $(n_i, d_i) \in \mathcal{P}$. This single-law grounding design teaches the model to associate specific observations with the most relevant law from the set $\mathcal{P}$, creating a direct mapping from context to a specific principle. This process produces a law-guided training dataset
+\begin{equation}
+\mathcal{D}_{\text{law}} = \{(\mathbf{o}_k^{\leq t}, \text{Thought}_k^t, a_k^t)\},
+\end{equation}
+which explicitly links successful actions to their law-based justifications.
+
+\textbf{Supervised Fine-Tuning.} We use the collected training dataset $\mathcal{D}_{\text{law}}$ to fine-tune the backbone LLM $f_\theta$:
+\begin{equation}
+f_{\theta'} = \text{SFT}(f_\theta, \mathcal{D}_{\text{law}}),
+\end{equation}
+where $f_{\theta'}$ denotes the fine-tuned model that learns to generate \emph{law-referencing thoughts} together with the corresponding actions. We train the model using a standard cross-entropy loss with next-token prediction supervision. Specifically, the benchmark description is provided in the system prompt, while the observation and task description are included in the user prompt. Supervision is applied on the model outputs, which consist of both the law-guided reasoning trace and the final action.
+
+\textbf{Law-Guided Inference.} 
+During inference, we use the fine-tuned model $f_{\theta'}$ and explicitly provide the extracted laws $\mathcal{P}$ in the prompt. At each time step $t$, the agent performs a single autoregressive generation conditioned on the current context $\mathbf{h}^t$ and the law set $\mathcal{P}$. The prompt is constructed using a template $\mathcal{T}_{\text{inference}}$ that incorporates the laws and instructs the model to reason in accordance with them.
+
+Concretely, given the input context $(\mathbf{h}^t, \mathcal{P}, \mathcal{T}_{\text{inference}})$, the model sequentially generates an intermediate law-referencing thought followed by the action:
+\begin{equation}
+(\text{Thought}_i^t, a_i^t) \sim f_{\theta'}(\mathbf{h}^t, \mathcal{P}, \mathcal{T}_{\text{inference}}),
+\end{equation}
+where $\mathbf{h}^t$ summarizes the agent’s observation history, action history, and message history up to time step $t$. The thought explicitly references relevant laws from $\mathcal{P}$ and serves as an interpretable justification for the subsequent action. The inference prompt provides the full law set $\mathcal{P}$ that was used during training. The fine-tuning process embeds the selection of the most relevant law and any tradeoffs among them directly into the model's parameters, allowing it to apply the appropriate learned principle without explicit deliberation. This inference procedure ensures that the selected action is directly conditioned on the laws through the generated reasoning, without requiring a separate planning or verification stage.
+
+\subsection{Implementation}
+
+Our framework is implemented as a modular pipeline with six stages: (1) law extraction from $\mathcal{E}_{fail}$, (2) law-aligned trace $\mathcal{E}_{retain}$ selection, (3) law-guided action reflection, (5) supervised fine-tuning, and (6) law-guided inference. As Figure~\ref{fig:method} shows, with the laws $\mathcal{P}$ serving as the central interface, \name enables human oversight through direct $\mathcal{P}$ modification.
+
+\section{Experiments}
+
+\subsection{PARTNR-Dialog Benchmark}
+\label{sec:benchmark}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.95\linewidth]{fig-benchmark.pdf}
+    \caption{\textbf{Illustration of the PARTNR-Dialog architecture.} The \texttt{Talk} action is implemented via tool calling and handled through per-agent event buffers maintained at the PARTNR interface layer. The buffers route messages to individual agents, after that each agent plans independently from its own observation, history, and received messages. The benchmark is decomposed into three components: an LLM server, a planner, and a simulator. By decoupling LLM inference from simulation and executing the LLM server and simulator in parallel, the framework achieves efficient large-scale evaluation.}
+    \label{fig:benchmark}
+\end{figure}
+
+Among existing benchmarks for communicative embodied agents, two of the most widely used are C-WAH and TDW-MAT. However, C-WAH does not provide a training split, while TDW-MAT contains only 24 training episodes, significantly limitating learning-based research for communicative embodied agents.
+
+To address this issue, we choose to build upon the PARTNR benchmark~\cite{partnr}, which provides a substantially larger dataset with 2,000 training episodes and 1,000 validation episodes. Based upon it, we introduce the PARTNR-Dialog Benchmark, an extension that enables explicit communication between agents in multi-agent embodied tasks.
+
+\textbf{Communication Infrastructure} As shown in Figure~\ref{fig:benchmark}, the PARTNR-Dialog Benchmark extends the original PARTNR environment with a communication infrastructure that supports message passing between agents. At the core of this infrastructure is the \texttt{Talk} action, a new primitive action that agents can invoke to broadcast messages to other agents in the environment. When an agent executes \texttt{Talk[message]}, the message content is encoded and propagated through the event buffer. The environment implements a message encoding scheme using a special separator token to encode both the source agent identifier and the message content. The environment interface maintains an event buffer that collects all speech events generated during each simulation step. These events are encoded as integer tensors, following the same format as other actions to ensure interface consistency. In the subsequent simulation steps, the encoded events are decoded and broadcast to all agents except the speaker. The received messages are included as part of each agent's observation.
+
+\textbf{Distributed Inference Acceleration} To enable efficient large-scale evaluation, we implement a client-server architecture that decouples LLM inference from simulator execution. In this framework, the LLM inference is deployed on a GPU server and accelerated using the vLLM framework~\cite{vllm}, significantly reducing inference latency. On the client side, where simulators are executed, we exploit the fact that Habitat 3.0 can run multiple simulators in parallel on a single GPU~\cite{habitat3}. We therefore adopt episode-level parallelism to maximize GPU utilization and alleviate the GPU bottleneck during evaluation. For example, when evaluating LLaMA-3.1-8B on the validation set, our framework requires only 4 GPU hours on A100 GPUs under sufficient CPU resources.
+
+\subsection{Experimental Settings}
+
+\textbf{Tasks.}
+We evaluate our method on two communicative embodied multi-agent benchmarks: PARTNR-Dialog and TDW-MAT.
+\textbf{PARTNR-Dialog} is our extension of the PARTNR benchmark that adds explicit communication capabilities, as detailed in Section~\ref{sec:benchmark}.
+We also conduct experiments on \textbf{TDW-MAT}~\cite{coela}, a multi-agent task benchmark built on the ThreeDWorld~\cite{tdw} simulator, which focuses on collaborative manipulation scenarios involving food and household object categories. We do not report results on C-WAH or other communicative benchmarks, as our approach requires fine-tuning the agent models, while these benchmarks do not provide a training split, making them unsuitable for learning-based evaluation.
+
+\textbf{Metrics.}
+For PARTNR-Dialog, following PARTNR~\cite{partnr}, we report four primary metrics: percentage complete, success rate, steps, and replan rounds. \textit{Percentage complete} (Comp.) measures the proportion of task constraints that are satisfied at the end of the episode. The \textit{success rate} (Succ.) reflects whether all task constraints are satisfied in an episode. \textit{Steps} denote the total number of simulator steps required to complete an episode, and \textit{Replan} indicate the number of times the LLM-based planner triggers replanning. %\AC{when does this usually happen? agent gets stuck?}
+In addition, to provide a more comprehensive evaluation of communication behaviors, we also report the average number of dialog turns per episode, denoted as \textit{Talk}. For TDW-MAT, following CoELA~\cite{coela}, we report the success rates on the \textit{food} and \textit{stuff} subtasks, as well as the overall success rate.
+
+\textbf{LLM Backbones.}
+Across all experiments, we evaluate four language model backbones: LLaMA-3.1-8B~\cite{llama3}, LLaMA-3.1-70B~\cite{llama3}, Gemma-3-12B~\cite{gemma3}, and Qwen-3-14B~\cite{qwen3}. To set up the LLM during inference, including selecting the hyperparameters such as maximum tokens, temperature, top-$k$, and top-$p$, we use the corresponding values used in TDW-MAT and COELA~\cite{coela} for their TDW-MAT experiments. We use the same settings as in  PARTNR~\cite{partnr} for our PARTNR-Dialog experiments.
+
+\subsection{Baselines}
+
+\textbf{ReAct}~\cite{yao2022react} is a non-communicative planner baseline adopted in PARTNR~\cite{partnr}. In ReAct, replanning is triggered either at step 0 or after the completion of the previous action. During replanning, the LLM-based planner selects the next action based on an input prompt that includes the task description, environment information, agent states, and action history. Available actions include exploration, navigation, object pickup, and related embodied operations.
+
+\textbf{RoCo}~\cite{roco} is a simple and direct communicative agent baseline. RoCo allows agents to engage in multiple rounds of dialog at the beginning of the episode to discuss high-level strategies. After task execution begins, agents focus solely on acting and no longer communicate. In our experiments, we enforce three rounds of dialog at the start of each episode and then disable the communication action for the remainder of the task.
+
+\textbf{CoELA}~\cite{coela} is a widely used communicative agent framework. Unlike RoCo, CoELA allows agents to initiate communication at any planning step. Each planning step in CoELA consists of two substeps. In the first substep, an LLM-based communication module generates a message based on the current task state and dialog history. In the second substep, the planning module selects the next action from the available action list, which includes sending the previously generated message, thereby jointly determining both communication and physical actions.
+
+\textbf{CommPARTNR} refers to the agent baseline proposed in Communicative-PARTNR~\cite{comm-partnr}. This baseline extends ReAct by incorporating explicit support for communication. Specifically, during each planning step, the LLM is allowed to select the \texttt{talk} action and generate the corresponding message content within the same inference.
+
+\begin{table}[htpb]
+\centering
+\small
+\setlength{\tabcolsep}{5pt}
+\caption{Results on \textbf{PARTNR-Dialog}. Each language model is evaluated under four existing planning frameworks (ReAct, RoCo, CoELA, CommPARTNR) and our proposed method (\textbf{Ours}).}
+\label{tab:communicative-partnr}
+\begin{tabular}{l|ccccc}
+\toprule
+\textbf{Method} & \textbf{Comp.} & \textbf{Succ.} & \textbf{Steps} & \textbf{Replan} & \textbf{Talk} \\
+\midrule
+
+\multicolumn{6}{c}{\textbf{LLaMA-3.1-8B}} \\
+ ReAct        & \textbf{0.77} & \textbf{0.62} & 3606.2 & \textbf{20.7} & 0.0 \\
+ RoCo         & 0.69 & 0.52 & 3940.8 & 29.1 & 3.0 \\
+ CoELA        & 0.72 & 0.51 & 3694.3 & 24.4 & 4.7 \\
+ CommPARTNR  & 0.71 & 0.49 & 3671.3 & 28.6 & 3.6 \\
+ \name         & 0.74 & 0.57 & \textbf{3456.0} & 23.0 & 1.9 \\
+
+\midrule
+\multicolumn{6}{c}{\textbf{LLaMA-3.1-70B}} \\
+ ReAct        & 0.86 & 0.73 & 3295.2 & \textbf{15.2} & 0.0 \\
+ RoCo         & 0.81 & 0.66 & \textbf{2407.8} & 19.8 & 3.0 \\
+ CoELA        & 0.80 & 0.65 & 2572.0 & 17.6 & 4.2 \\
+ CommPARTNR  & 0.85 & 0.70 & 3157.5 & 16.9 & 1.6 \\
+ \name         & \textbf{0.87} & \textbf{0.75} & 2526.5 & 16.1 & 1.9 \\
+
+\midrule
+\multicolumn{6}{c}{\textbf{Gemma-3-12B}} \\
+ ReAct        & 0.75 & 0.59 & 3547.1 & 17.2 & 0.0 \\
+ RoCo         & 0.73 & 0.56 & \textbf{1837.9} & 21.2 & 3.0 \\
+ CoELA        & 0.68 & 0.42 & 3516.2 & 23.9 & 4.9 \\
+ CommPARTNR  & 0.76 & 0.60 & 3282.9 & 20.5 & 0.9 \\
+ \name         & \textbf{0.79} & \textbf{0.61} & 2741.6 & \textbf{16.0} & 0.9 \\
+
+\midrule
+\multicolumn{6}{c}{\textbf{Qwen-3-14B}} \\
+ ReAct        & 0.80 & 0.64 & 2563.1 & 15.4 & 0.0 \\
+ RoCo         & 0.81 & 0.69 & 2491.8 & 25.0 & 3.0 \\
+ CoELA        & 0.71 & 0.62 & 3136.9 & 36.0 & 7.1 \\
+ CommPARTNR  & 0.81 & 0.70 & 3518.5 & 21.0 & 1.2 \\
+ \name         & \textbf{0.84} & \textbf{0.74} & \textbf{2131.8} & \textbf{15.1} & 1.6 \\
+
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Results on PARTNR-Dialog}
+
+Table~\ref{tab:communicative-partnr} reports comprehensive results across all model sizes and communicative baselines. Our method consistently outperforms all communicative baselines across different backbone LLMs, demonstrating the effectiveness and robustness of the proposed law-guided framework. Importantly, our approach achieves performance gains purely through self-alignment of the backbone LLM, instead of relying on supervision from stronger models or external data. This result indicates that our method generalizes well across models of different sizes and architectures, enabling agents to autonomously improve task performance. In particular, our method significantly outperforms all communicative baselines, including RoCo, CoELA, and CommPARTNR.
+
+Across model scales, our method achieves a success rate of 0.74 with Qwen-3-14B, surpassing all baseline methods that employ LLaMA-3.1-70B. This highlights the efficiency of our framework in enabling smaller or mid-sized models to match or exceed the performance of substantially larger models. For the \textit{Steps} metrics, our method consistently requires fewer steps than the ReAct baseline, indicating more efficient task execution. Moreover, our \textit{Replan} number is comparable to ReAct and lower than other communicative baselines, suggesting that despite introducing communication as an additional action, our framework maintains effective over replanning.
+
+For LLaMA-3.1-8B, although our method slightly underperforms the ReAct baseline, this gap is primarily attributable to the limited ability of this model to effectively utilize the \texttt{Talk} action. This limitation is consistent across all communicative baselines on this backbone, including RoCo, CoELA, and CommPARTNR, all of which underperform ReAct. Importantly, our method significantly outperforms all other communicative baselines on LLaMA-3.1-8B, demonstrating its robustness even when the underlying model has weaker communication capabilities.
+
+\subsection{Results on TDW-MAT}
+
+Table~\ref{tab:tdw-mat} reports results on the TDW-MAT benchmark, with performance evaluated separately on the \textit{Food} and \textit{Stuff} object categories. Similar to the results on PARTNR-Dialog, our method consistently outperforms all communicative baselines across models of different sizes and architectures, demonstrating strong robustness and generality.
+
+\begin{table}[t]
+\centering
+\setlength{\tabcolsep}{5pt}
+\caption{Results on \textbf{TDW-MAT}. The heuristic baseline (\textsc{MHP}) is model-independent. Each language model is evaluated with RoCo, CoELA, and our proposed method (\textbf{Ours}).}
+\label{tab:tdw-mat}
+\begin{tabular}{l|ccc}
+\toprule
+\textbf{Method} & \textbf{Food} & \textbf{Stuff} & \textbf{Total} \\
+\midrule
+\textsc{MHP} & 0.76 & 0.74 & 0.75 \\
+
+\midrule
+\multicolumn{4}{c}{\textbf{LLaMA-3.1-8B}} \\
+RoCo  & 0.42 & 0.32 & 0.37 \\
+CoELA & 0.61 & 0.61 & 0.61 \\
+\name  & \textbf{0.71} & \textbf{0.63} & \textbf{0.67} \\
+
+\midrule
+\multicolumn{4}{c}{\textbf{LLaMA-3-70B}} \\
+RoCo  & 0.79 & 0.73 & 0.76 \\
+CoELA & 0.74 & 0.71 & 0.73 \\
+\name  & \textbf{0.86} & \textbf{0.78} & \textbf{0.82} \\
+
+\midrule
+\multicolumn{4}{c}{\textbf{Gemma-3-12B}} \\
+RoCo  & 0.66 & 0.67 & 0.66 \\
+CoELA & \textbf{0.73} & 0.58 & 0.65 \\
+\name  & \textbf{0.73} & \textbf{0.68} & \textbf{0.70} \\
+
+\midrule
+\multicolumn{4}{c}{\textbf{Qwen-3-14B}} \\
+RoCo  & 0.73 & 0.58 & 0.65 \\
+CoELA & 0.73 & 0.73 & 0.73 \\
+\name  & \textbf{0.80} & \textbf{0.80} & \textbf{0.80} \\
+
+\bottomrule
+\end{tabular}
+\end{table}
+
+For the relatively weaker LLaMA-3.1-8B backbone on this task, our method enables substantial self-improvement, surpassing all baseline methods built upon the Gemma-3-12B backbone. For the stronger LLaMA-3.1-70B model, our framework further improves performance on top of an already strong baseline, indicating that the proposed approach remains effective even in high-performance regimes.
+
+Most notably, on the Qwen-3-14B backbone, our method achieves particularly significant performance gains, outperforming all baselines based on LLaMA-70B. This result highlights the effectiveness of our law-guided framework in enabling mid-sized models to achieve performance comparable to or exceeding that of substantially larger models.
+
+\subsection{Ablation Study}
+
+We conduct extensive ablation experiments, including both pipeline-level ablations and ablations on the number of induced laws. All ablation studies are conducted using Qwen-3-14B as the backbone LLM to ensure consistency.
+
+
+\begin{table}[t]
+\centering
+\setlength{\tabcolsep}{5pt}
+\caption{Ablation study on \textbf{PARTNR-Dialog} using \textbf{Qwen-3-14B}. We analyze the effects of supervised fine-tuning (SFT), stronger inference-only retrieval, and law induction strategies during training and inference.}
+\label{tab:partnr-ablation}
+\begin{tabular}{l|cc}
+\toprule
+\textbf{Variant} & \textbf{Comp.} & \textbf{Succ.} \\
+\midrule
+\textbf{\name (Full)} 
+& \textbf{0.84} 
+& \textbf{0.74}\\
+
+\textit{w/o SFT} 
+& 0.82 
+& 0.69 \\
+
+\textit{w/o SFT + RAG}
+& 0.82
+& 0.70 \\
+
+\textit{w/o Laws} 
+& 0.82 
+& 0.67 \\
+
+\textit{w Manual Laws} 
+& \textbf{0.84}
+& 0.73 \\
+
+\textit{+ Manual Laws} 
+& 0.82 
+& 0.70 \\
+
+\textit{w/o Filter} 
+& \textbf{0.84} 
+& 0.71 \\
+
+
+\textit{Manual Laws Inf.} 
+& 0.81 
+& 0.70 \\
+
+\bottomrule
+\end{tabular}
+\end{table}
+\textbf{Pipeline Ablations.}
+Table~\ref{tab:partnr-ablation} presents an ablation study analyzing the contribution of different components of our framework. We evaluate several variants to understand the role of each design choice. Removing supervised fine-tuning (\textit{w/o SFT}) leads to a noticeable 5\% drop in success rate, highlighting the importance of learning from law-guided training data. To test whether a stronger inference-only strategy can close this gap, we add \textit{w/o SFT + RAG}, which retrieves the most relevant planning trace from the training set and includes it in the prompt at test time, following the ReAct-RAG design in PARTNR~\cite{partnr}. This variant provides only a limited gain over \textit{w/o SFT}, suggesting that the benefit of \name comes not only from seeing laws or examples at inference time, but from learning successful, law-aligned behaviors through parameter updates. The variant without laws (\textit{w/o Laws}) also shows substantial degradation in success rate, demonstrating that law-guided reasoning is critical for effective cooperation.
+
+We further ablate the data filtering step by training on all episodes without enforcing success or law alignment (\textit{w/o Filter}). This variant results in a clear performance decline, indicating that including failed or law-misaligned episodes introduces noisy or conflicting supervision that negatively impacts learning. We also examine the role of manually specified laws. Replacing automatically induced laws with manually designed ones (\textit{w/ Manual Laws}), merging induced laws with manual laws (\textit{+ Manual Laws}), or applying manual laws only during inference (\textit{Manual Laws Inf.}) all lead to slight performance drops. These results suggest that laws induced from failure traces capture task and partner specific regularities more effectively than generic human prior knowledge. At the same time, these ablations demonstrate that our framework is robust to minor modifications of the laws either before or after fine-tuning, enabling controllable behavior changes while largely preserving task performance. Appendix~\ref{sec:appendix-additional-ablations} shows that the same trend holds on Gemma-3-12B.
+
+
+\begin{table}[t]
+\centering
+\small
+\setlength{\tabcolsep}{5pt}
+\caption{Effect of the number of induced laws on \textbf{PARTNR-Dialog} (Qwen-3-14B). We vary the maximum number of laws $K$ used by our law-guided framework and report task performance.}
+\label{tab:partnr-num-laws}
+\begin{tabular}{l|cc}
+\toprule
+\textbf{\# Laws ($K$)} & \textbf{Comp.} & \textbf{Succ.} \\
+\midrule
+3 Laws  & 0.81 & 0.68 \\
+5 Laws  & \textbf{0.84} & \textbf{0.74} \\
+10 Laws & 0.80 & 0.67 \\
+\bottomrule
+\end{tabular}
+\end{table}
+\textbf{Number of Laws.}
+Table~\ref{tab:partnr-num-laws} analyzes the effect of varying the number of induced laws. We observe that different choices of the number of laws lead to performance fluctuations. Nevertheless, in most cases, our method consistently outperforms all communicative baseline methods. These results indicate that selecting five laws strikes a favorable balance between expressiveness and stability, and further demonstrate the robustness of our law-guided framework.
+
+\subsection{Additional Analysis}
+
+To assess the stability of the induced laws, we repeat the complete \name pipeline three times with different random seeds on PARTNR-Dialog using Qwen-3-14B. Although the exact wording of the extracted laws varies across runs (see Appendix~\ref{sec:appendix-stability}), downstream performance remains stable, as shown in Table~\ref{tab:seed-stability-main}. The induced law sets consistently cover planning, communication or coordination, failure handling, state verification, and task completion, suggesting that the law induction process recovers similar high-level cooperation principles across runs.
+
+\begin{table}[t]
+\centering
+\setlength{\tabcolsep}{6pt}
+\caption{Stability across three complete \name runs with different random seeds on PARTNR-Dialog using Qwen-3-14B.}
+\label{tab:seed-stability-main}
+\begin{tabular}{l|cc}
+\toprule
+\textbf{Seed} & \textbf{Comp.} & \textbf{Succ.} \\
+\midrule
+1 & 0.84 & 0.74 \\
+2 & 0.83 & 0.72 \\
+3 & 0.84 & 0.74 \\
+\midrule
+Std. & 0.006 & 0.012 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+We further analyze whether law-grounded reasoning influences action selection. In a controlled TDW-MAT intervention, replacing the law \textit{Begin with a Plan} with the contradictory law \textit{Prioritize Immediate Action} changes both the generated thought and the selected action from communication to exploration. As shown in Table~\ref{tab:send-message-main}, across 100 random queries from the same template, the provided laws systematically affect the probability of choosing \texttt{send message}. We include a detailed case in Appendix~\ref{sec:appendix-law-action}. Different induced laws also correspond to distinct local action tendencies; for example, \textit{Use Clear and Effective Communication} most often leads to \texttt{Talk} actions, while \textit{Use Correct APIs for Tasks} mostly leads to object-manipulation actions. At the same time, first-step action agreement remains high across law-induction seeds (Table~\ref{tab:seed-action-agreement-main}), indicating that law variation changes local action preferences without destabilizing the overall policy.
+
+\begin{table}[t]
+\centering
+\setlength{\tabcolsep}{6pt}
+\caption{Controlled law intervention on TDW-MAT. We report the percentage of 100 random queries for which the model outputs \texttt{send message}.}
+\label{tab:send-message-main}
+\begin{tabular}{l|c}
+\toprule
+\textbf{Setting} & \textbf{Send Message (\%)} \\
+\midrule
+Baseline (No Law) & 55 \\
+\name & \textbf{92} \\
+Intervention & 19 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\setlength{\tabcolsep}{6pt}
+\caption{Pairwise first-step action agreement across three law-induction seeds on PARTNR-Dialog.}
+\label{tab:seed-action-agreement-main}
+\begin{tabular}{l|c}
+\toprule
+\textbf{Seed Pair} & \textbf{Agreement (\%)} \\
+\midrule
+Seed 1 vs. Seed 2 & 88.4 \\
+Seed 1 vs. Seed 3 & 86.4 \\
+Seed 2 vs. Seed 3 & 87.2 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{fig-case.pdf}
+    \caption{\textbf{Case study on law-guided inference in TDW-MAT.} During task execution, agents explicitly follow both automatically generated laws and user-defined laws to guide communication and planning, thereby achieving more efficient coordination. }
+    \label{fig:case}
+\end{figure}
+
+\subsection{Case Study}
+Our method enables agents to adhere to learned laws during both communication and planning. Figure~\ref{fig:case} illustrates a representative example. At Step~0, Alice follows the law \textit{Begin with a Plan} and proposes an explicit exploration plan to Bob. Upon receiving the plan, Bob follows the law \textit{Minimize Redundancy} and chooses to explore a different room to avoid duplicating Alice’s efforts. As the episode progresses, Alice discovers three objects and one container; guided by the law \textit{Prioritize Containers}, she decides to first obtain the container. This law-guided decision-making leads to more efficient coordination and significantly improves overall task efficiency.
+
+By following such laws, agents achieve higher task efficiency and more effective cooperation. Moreover, when laws from the training set are emphasized by the user, the agent reliably adheres to them during task execution, enabling human-defined preferences or constraints to be enforced throughout the cooperative process. For example, in this case study, the law \textit{Begin with a Plan} was part of the automatically induced set, and the planner consistently follows this law when prompted to guide its communication and subsequent decision-making.
+
+\section{Conclusion}
+
+We propose \name, a law-guided learning framework that enables communicative embodied agents to autonomously summarize task and partner specific regularities into laws, learn from them, and explicitly use these laws for reasoning during cooperation. By embedding laws into the agent’s reasoning process, our method provides a controllable and interpretable mechanism for aligning agent behavior, while also allowing agents to follow human-specified rules. Across PARTNR-Dialog and TDW-MAT, and four LLM backbones, our approach consistently achieves the best performance among communicative agent methods. The results demonstrate that law-guided learning is an effective and scalable paradigm for improving cooperative embodied agents.
+
+\section{Limitations}
+
+Our experiments focus on two-agent embodied collaboration, following the dominant setting in existing benchmarks such as PARTNR, TDW-MAT, C-WAH, and DialFRED. The \name pipeline itself does not depend on a fixed number of agents, since law extraction, law-guided reflection, and SFT operate over interaction traces; however, larger teams may introduce longer dialog histories, complex credit assignment, and additional context-management challenges. Our method also requires extra training cost for collecting traces, inducing laws, generating law-grounded supervision, and fine-tuning the backbone model. Finally, although explicit laws improve interpretability and make manual inspection possible, they do not by themselves guarantee safety or desirability in deployment, since laws induced from task success can still encode behaviors that require human validation.
+
+\section*{Impact Statement}
+
+This paper presents work whose goal is to advance the field of Machine Learning. Our approach may contribute to more interpretable and controllable cooperative embodied agents by representing recurring coordination behaviors as explicit natural-language laws. However, explicit laws should not be viewed as a complete safety mechanism. Because laws are induced from patterns correlated with task success, they may still encode undesirable coordination behaviors in deployment settings. While the law representation makes inspection and manual editing easier, such oversight requires human effort, and realistic applications would require additional validation, safety-aware law induction, or deployment-specific constraints. We do not anticipate direct negative societal impacts from the benchmark and experimental study presented in this paper, but embodied-agent deployment should be evaluated carefully before use in real-world environments.
+
+\section*{Acknowledgement}
+Chuang Gan and Qinhong Zhou were partially supported by NSF IIS-2441250 and NSF IIS-2404386. Anoop Cherian was fully supported by MERL for this work. Qinhong Zhou conducted part of this work during an internship at MERL and continued the project with partial support from MERL.
+
+\begin{thebibliography}{46}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Asimov(2004)]{asimov2004robot}
+Asimov, I.
+\newblock \emph{I, robot}, volume~1.
+\newblock Spectra, 2004.
+
+\bibitem[Bai et~al.(2022)Bai, Kadavath, Kundu, Askell, Kernion, Jones, Chen,
+  Goldie, Mirhoseini, McKinnon, et~al.]{bai2022constitutional}
+Bai, Y., Kadavath, S., Kundu, S., Askell, A., Kernion, J., Jones, A., Chen, A.,
+  Goldie, A., Mirhoseini, A., McKinnon, C., et~al.
+\newblock Constitutional ai: Harmlessness from ai feedback.
+\newblock \emph{arXiv preprint arXiv:2212.08073}, 2022.
+
+\bibitem[Beattie et~al.(2016)Beattie, Leibo, Teplyashin, Ward, Wainwright,
+  K{\"u}ttler, Lefrancq, Green, Vald{\'e}s, Sadik, et~al.]{deepmind-lab}
+Beattie, C., Leibo, J.~Z., Teplyashin, D., Ward, T., Wainwright, M.,
+  K{\"u}ttler, H., Lefrancq, A., Green, S., Vald{\'e}s, V., Sadik, A., et~al.
+\newblock Deepmind lab.
+\newblock \emph{arXiv preprint arXiv:1612.03801}, 2016.
+
+\bibitem[Chang et~al.(2024)Chang, Chhablani, Clegg, Cote, Desai, Hlavac,
+  Karashchuk, Krantz, Mottaghi, Parashar, et~al.]{partnr}
+Chang, M., Chhablani, G., Clegg, A., Cote, M.~D., Desai, R., Hlavac, M.,
+  Karashchuk, V., Krantz, J., Mottaghi, R., Parashar, P., et~al.
+\newblock Partnr: A benchmark for planning and reasoning in embodied
+  multi-agent tasks.
+\newblock \emph{arXiv preprint arXiv:2411.00081}, 2024.
+
+\bibitem[Chen et~al.(2024{\natexlab{a}})Chen, Arkin, Zhang, Roy, and
+  Fan]{chen2024scalable}
+Chen, Y., Arkin, J., Zhang, Y., Roy, N., and Fan, C.
+\newblock Scalable multi-robot collaboration with large language models:
+  Centralized or decentralized systems?
+\newblock In \emph{2024 IEEE International Conference on Robotics and
+  Automation (ICRA)}, pp.\  4311--4317. IEEE, 2024{\natexlab{a}}.
+
+\bibitem[Chen et~al.(2024{\natexlab{b}})Chen, Deng, Yuan, Ji, and
+  Gu]{chen2024self}
+Chen, Z., Deng, Y., Yuan, H., Ji, K., and Gu, Q.
+\newblock Self-play fine-tuning converts weak language models to strong
+  language models.
+\newblock \emph{arXiv preprint arXiv:2401.01335}, 2024{\natexlab{b}}.
+
+\bibitem[Dubey et~al.(2024)Dubey, Jauhri, Pandey, Kadian, Al-Dahle, Letman,
+  Mathur, Schelten, Yang, Fan, et~al.]{llama3}
+Dubey, A., Jauhri, A., Pandey, A., Kadian, A., Al-Dahle, A., Letman, A.,
+  Mathur, A., Schelten, A., Yang, A., Fan, A., et~al.
+\newblock The llama 3 herd of models.
+\newblock \emph{arXiv e-prints}, pp.\  arXiv--2407, 2024.
+
+\bibitem[Findeis et~al.(2024)Findeis, Kaufmann, H{\"u}llermeier, Albanie, and
+  Mullins]{findeis2024inverse}
+Findeis, A., Kaufmann, T., H{\"u}llermeier, E., Albanie, S., and Mullins, R.
+\newblock Inverse constitutional ai: Compressing preferences into principles.
+\newblock \emph{arXiv preprint arXiv:2406.06560}, 2024.
+
+\bibitem[Gan et~al.(2020)Gan, Schwartz, Alter, Mrowca, Schrimpf, Traer,
+  De~Freitas, Kubilius, Bhandwaldar, Haber, et~al.]{tdw}
+Gan, C., Schwartz, J., Alter, S., Mrowca, D., Schrimpf, M., Traer, J.,
+  De~Freitas, J., Kubilius, J., Bhandwaldar, A., Haber, N., et~al.
+\newblock Threedworld: A platform for interactive multi-modal physical
+  simulation.
+\newblock \emph{arXiv preprint arXiv:2007.04954}, 2020.
+
+\bibitem[Gan et~al.(2022)Gan, Zhou, Schwartz, Alter, Bhandwaldar, Gutfreund,
+  Yamins, DiCarlo, McDermott, Torralba, et~al.]{tdw-transport}
+Gan, C., Zhou, S., Schwartz, J., Alter, S., Bhandwaldar, A., Gutfreund, D.,
+  Yamins, D.~L., DiCarlo, J.~J., McDermott, J., Torralba, A., et~al.
+\newblock The threedworld transport challenge: A visually guided
+  task-and-motion planning benchmark towards physically realistic embodied ai.
+\newblock In \emph{2022 International conference on robotics and automation
+  (ICRA)}, pp.\  8847--8854. IEEE, 2022.
+
+\bibitem[Guo et~al.(2024)Guo, Huang, Liu, Fan, Vélez, Wu, Wang, Griffiths, and
+  Wang]{guo2024embodiedllmagentslearn}
+Guo, X., Huang, K., Liu, J., Fan, W., Vélez, N., Wu, Q., Wang, H., Griffiths,
+  T.~L., and Wang, M.
+\newblock Embodied llm agents learn to cooperate in organized teams, 2024.
+
+\bibitem[Jain et~al.(2020)Jain, Weihs, Kolve, Farhadi, Lazebnik, Kembhavi, and
+  Schwing]{jain2020cordial}
+Jain, U., Weihs, L., Kolve, E., Farhadi, A., Lazebnik, S., Kembhavi, A., and
+  Schwing, A.
+\newblock {A Cordial Sync}: Going beyond marginal policies for multi-agent
+  embodied tasks.
+\newblock In \emph{Computer Vision--ECCV 2020: 16th European Conference,
+  Glasgow, UK, August 23--28, 2020, Proceedings, Part V 16}, pp.\  471--490.
+  Springer, 2020.
+
+\bibitem[Kim et~al.(2025)Kim, Jang, Kim, et~al.]{comm-partnr}
+Kim, H., Jang, M., Kim, J., et~al.
+\newblock Communicative partnr: Natural language communication under partial
+  observability in human--robot collaboration.
+\newblock In \emph{ICCV Workshop on Human-Robot-Scene Interaction and
+  Collaboration}, 2025.
+
+\bibitem[Kolve et~al.(2017)Kolve, Mottaghi, Han, VanderBilt, Weihs, Herrasti,
+  Gordon, Zhu, Gupta, and Farhadi]{ai2thor}
+Kolve, E., Mottaghi, R., Han, W., VanderBilt, E., Weihs, L., Herrasti, A.,
+  Gordon, D., Zhu, Y., Gupta, A., and Farhadi, A.
+\newblock {AI2-THOR: An Interactive 3D Environment for Visual AI}.
+\newblock \emph{arXiv}, 2017.
+
+\bibitem[Kundu et~al.(2023)Kundu, Bai, Kadavath, Askell, Callahan, Chen,
+  Goldie, Balwit, Mirhoseini, McLean, et~al.]{kundu2023specific}
+Kundu, S., Bai, Y., Kadavath, S., Askell, A., Callahan, A., Chen, A., Goldie,
+  A., Balwit, A., Mirhoseini, A., McLean, B., et~al.
+\newblock Specific versus general principles for constitutional ai.
+\newblock \emph{arXiv preprint arXiv:2310.13798}, 2023.
+
+\bibitem[Kwon et~al.(2023)Kwon, Li, Zhuang, Sheng, Zheng, Yu, Gonzalez, Zhang,
+  and Stoica]{vllm}
+Kwon, W., Li, Z., Zhuang, S., Sheng, Y., Zheng, L., Yu, C.~H., Gonzalez, J.~E.,
+  Zhang, H., and Stoica, I.
+\newblock Efficient memory management for large language model serving with
+  pagedattention.
+\newblock In \emph{Proceedings of the ACM SIGOPS 29th Symposium on Operating
+  Systems Principles}, 2023.
+
+\bibitem[Li et~al.(2024{\natexlab{a}})Li, Zhang, Wong, Gokmen, Srivastava,
+  Martín-Martín, Wang, Levine, Ai, Martinez, Yin, Lingelbach, Hwang,
+  Hiranaka, Garlanka, Aydin, Lee, Sun, Anvari, Sharma, Bansal, Hunter, Kim,
+  Lou, Matthews, Villa-Renteria, Tang, Tang, Xia, Li, Savarese, Gweon, Liu, Wu,
+  and Fei-Fei]{li2024behavior1k}
+Li, C., Zhang, R., Wong, J., Gokmen, C., Srivastava, S., Martín-Martín, R.,
+  Wang, C., Levine, G., Ai, W., Martinez, B., Yin, H., Lingelbach, M., Hwang,
+  M., Hiranaka, A., Garlanka, S., Aydin, A., Lee, S., Sun, J., Anvari, M.,
+  Sharma, M., Bansal, D., Hunter, S., Kim, K.-Y., Lou, A., Matthews, C.~R.,
+  Villa-Renteria, I., Tang, J.~H., Tang, C., Xia, F., Li, Y., Savarese, S.,
+  Gweon, H., Liu, C.~K., Wu, J., and Fei-Fei, L.
+\newblock Behavior-1k: A human-centered, embodied ai benchmark with 1,000
+  everyday activities and realistic simulation.
+\newblock \emph{arXiv preprint arXiv:2403.09227}, 2024{\natexlab{a}}.
+
+\bibitem[Li et~al.(2024{\natexlab{b}})Li, Lai, Li, Ren, Zhang, Kang, Wang, Li,
+  Zhang, Ma, et~al.]{li2024agent}
+Li, J., Lai, Y., Li, W., Ren, J., Zhang, M., Kang, X., Wang, S., Li, P., Zhang,
+  Y.-Q., Ma, W., et~al.
+\newblock Agent hospital: A simulacrum of hospital with evolvable medical
+  agents.
+\newblock \emph{arXiv preprint arXiv:2405.02957}, 2024{\natexlab{b}}.
+
+\bibitem[Li et~al.(2025)Li, Bai, Li, Zheng, Xiao, and Zhang]{li2025learn}
+Li, X., Bai, C., Li, Z., Zheng, J., Xiao, T., and Zhang, J.
+\newblock Learn as individuals, evolve as a team: Multi-agent llms adaptation
+  in embodied environments.
+\newblock \emph{arXiv preprint arXiv:2506.07232}, 2025.
+
+\bibitem[Ling et~al.(2025)Ling, Wang, Fan, Lam, and Hu]{ling2025elhplan}
+Ling, S., Wang, Y., Fan, C., Lam, T.~L., and Hu, J.
+\newblock Elhplan: Efficient long-horizon task planning for multi-agent
+  collaboration.
+\newblock \emph{arXiv preprint arXiv:2509.24230}, 2025.
+
+\bibitem[Liu et~al.(2024)Liu, Zhou, Du, Tan, Snoek, Sonke, and Gavves]{capo}
+Liu, J., Zhou, P., Du, Y., Tan, A.-H., Snoek, C.~G., Sonke, J.-J., and Gavves,
+  E.
+\newblock Capo: Cooperative plan optimization for efficient embodied
+  multi-agent cooperation.
+\newblock \emph{arXiv preprint arXiv:2411.04679}, 2024.
+
+\bibitem[Madaan et~al.(2023)Madaan, Tandon, Gupta, Hallinan, Gao, Wiegreffe,
+  Alon, Dziri, Prabhumoye, Yang, et~al.]{madaan2023self}
+Madaan, A., Tandon, N., Gupta, P., Hallinan, S., Gao, L., Wiegreffe, S., Alon,
+  U., Dziri, N., Prabhumoye, S., Yang, Y., et~al.
+\newblock Self-refine: Iterative refinement with self-feedback.
+\newblock \emph{Advances in Neural Information Processing Systems},
+  36:\penalty0 46534--46594, 2023.
+
+\bibitem[Makoviychuk et~al.(2021)Makoviychuk, Wawrzyniak, Guo, Lu, Storey,
+  Macklin, Hoeller, Rudin, Allshire, Handa, and State]{isaacgym}
+Makoviychuk, V., Wawrzyniak, L., Guo, Y., Lu, M., Storey, K., Macklin, M.,
+  Hoeller, D., Rudin, N., Allshire, A., Handa, A., and State, G.
+\newblock Isaac gym: High performance gpu-based physics simulation for robot
+  learning, 2021.
+
+\bibitem[Mandi et~al.(2024)Mandi, Jain, and Song]{roco}
+Mandi, Z., Jain, S., and Song, S.
+\newblock Roco: Dialectic multi-robot collaboration with large language models.
+\newblock In \emph{2024 IEEE International Conference on Robotics and
+  Automation (ICRA)}, pp.\  286--299. IEEE, 2024.
+
+\bibitem[Mu et~al.(2024)Mu, Helyar, Heidecke, Achiam, Vallone, Kivlichan, Lin,
+  Beutel, Schulman, and Weng]{mu2024rule}
+Mu, T., Helyar, A., Heidecke, J., Achiam, J., Vallone, A., Kivlichan, I., Lin,
+  M., Beutel, A., Schulman, J., and Weng, L.
+\newblock Rule based rewards for language model safety.
+\newblock \emph{Advances in Neural Information Processing Systems},
+  37:\penalty0 108877--108901, 2024.
+
+\bibitem[Nayak et~al.(2024)Nayak, Morrison~Orozco, Have, Zhang, Thirumalai,
+  Chen, Kapoor, Robinson, Gopalakrishnan, Harrison, et~al.]{nayak2024long}
+Nayak, S., Morrison~Orozco, A., Have, M., Zhang, J., Thirumalai, V., Chen, D.,
+  Kapoor, A., Robinson, E., Gopalakrishnan, K., Harrison, J., et~al.
+\newblock Long-horizon planning for multi-agent robots in partially observable
+  environments.
+\newblock \emph{Advances in Neural Information Processing Systems},
+  37:\penalty0 67929--67967, 2024.
+
+\bibitem[Puig et~al.(2018)Puig, Ra, Boben, Li, Wang, Fidler, and
+  Torralba]{virtualhome}
+Puig, X., Ra, K., Boben, M., Li, J., Wang, T., Fidler, S., and Torralba, A.
+\newblock Virtualhome: Simulating household activities via programs.
+\newblock In \emph{Proceedings of the IEEE conference on computer vision and
+  pattern recognition}, pp.\  8494--8502, 2018.
+
+\bibitem[Puig et~al.(2020)Puig, Shu, Li, Wang, Liao, Tenenbaum, Fidler, and
+  Torralba]{wah}
+Puig, X., Shu, T., Li, S., Wang, Z., Liao, Y.-H., Tenenbaum, J.~B., Fidler, S.,
+  and Torralba, A.
+\newblock Watch-and-help: A challenge for social perception and human-ai
+  collaboration.
+\newblock \emph{arXiv preprint arXiv:2010.09890}, 2020.
+
+\bibitem[Puig et~al.(2023)Puig, Undersander, Szot, Cote, Yang, Partsey, Desai,
+  Clegg, Hlavac, Min, et~al.]{habitat3}
+Puig, X., Undersander, E., Szot, A., Cote, M.~D., Yang, T.-Y., Partsey, R.,
+  Desai, R., Clegg, A.~W., Hlavac, M., Min, S.~Y., et~al.
+\newblock Habitat 3.0: A co-habitat for humans, avatars and robots.
+\newblock \emph{arXiv preprint arXiv:2310.13724}, 2023.
+
+\bibitem[Sun et~al.(2023)Sun, Shen, Zhou, Zhang, Chen, Cox, Yang, and
+  Gan]{sun2023principle}
+Sun, Z., Shen, Y., Zhou, Q., Zhang, H., Chen, Z., Cox, D., Yang, Y., and Gan,
+  C.
+\newblock Principle-driven self-alignment of language models from scratch with
+  minimal human supervision.
+\newblock \emph{Advances in Neural Information Processing Systems},
+  36:\penalty0 2511--2565, 2023.
+
+\bibitem[Szot et~al.(2023)Szot, Jain, Batra, Kira, Desai, and
+  Rai]{szot2023adaptive}
+Szot, A., Jain, U., Batra, D., Kira, Z., Desai, R., and Rai, A.
+\newblock Adaptive coordination in social embodied rearrangement.
+\newblock In \emph{International Conference on Machine Learning}, pp.\
+  33365--33380. PMLR, 2023.
+
+\bibitem[Team et~al.(2025)Team, Kamath, Ferret, Pathak, Vieillard, Merhej,
+  Perrin, Matejovicova, Ram{\'e}, Rivi{\`e}re, et~al.]{gemma3}
+Team, G., Kamath, A., Ferret, J., Pathak, S., Vieillard, N., Merhej, R.,
+  Perrin, S., Matejovicova, T., Ram{\'e}, A., Rivi{\`e}re, M., et~al.
+\newblock Gemma 3 technical report.
+\newblock \emph{arXiv preprint arXiv:2503.19786}, 2025.
+
+\bibitem[Thomason et~al.(2020)Thomason, Murray, Cakmak, and
+  Zettlemoyer]{thomason2020vision}
+Thomason, J., Murray, M., Cakmak, M., and Zettlemoyer, L.
+\newblock Vision-and-dialog navigation.
+\newblock In \emph{Conference on Robot Learning}, pp.\  394--406. PMLR, 2020.
+
+\bibitem[Wang et~al.(2023)Wang, Kordi, Mishra, Liu, Smith, Khashabi, and
+  Hajishirzi]{wang2023selfinstruct}
+Wang, Y., Kordi, Y., Mishra, S., Liu, A., Smith, N.~A., Khashabi, D., and
+  Hajishirzi, H.
+\newblock Self-instruct: Aligning language models with self-generated
+  instructions.
+\newblock In Rogers, A., Boyd-Graber, J., and Okazaki, N. (eds.),
+  \emph{Proceedings of the 61st Annual Meeting of the Association for
+  Computational Linguistics (Volume 1: Long Papers)}, pp.\  13484--13508,
+  Toronto, Canada, July 2023. Association for Computational Linguistics.
+
+\bibitem[Wu et~al.(2018)Wu, Wu, Gkioxari, and Tian]{house3d}
+Wu, Y., Wu, Y., Gkioxari, G., and Tian, Y.
+\newblock Building generalizable agents with a realistic and rich 3d
+  environment, 2018.
+\newblock URL \url{https://arxiv.org/abs/1801.02209}.
+
+\bibitem[Xiang et~al.(2020)Xiang, Qin, Mo, Xia, Zhu, Liu, Liu, Jiang, Yuan,
+  Wang, et~al.]{xiang2020sapien}
+Xiang, F., Qin, Y., Mo, K., Xia, Y., Zhu, H., Liu, F., Liu, M., Jiang, H.,
+  Yuan, Y., Wang, H., et~al.
+\newblock Sapien: A simulated part-based interactive environment.
+\newblock In \emph{Proceedings of the IEEE/CVF Conference on Computer Vision
+  and Pattern Recognition}, pp.\  11097--11107, 2020.
+
+\bibitem[Yan et~al.(2018)Yan, Misra, Bennnett, Walsman, Bisk, and
+  Artzi]{chalet}
+Yan, C., Misra, D., Bennnett, A., Walsman, A., Bisk, Y., and Artzi, Y.
+\newblock Chalet: Cornell house agent learning environment.
+\newblock \emph{arXiv preprint arXiv:1801.07357}, 2018.
+
+\bibitem[Yang et~al.(2025)Yang, Li, Yang, Zhang, Hui, Zheng, Yu, Gao, Huang,
+  Lv, et~al.]{qwen3}
+Yang, A., Li, A., Yang, B., Zhang, B., Hui, B., Zheng, B., Yu, B., Gao, C.,
+  Huang, C., Lv, C., et~al.
+\newblock Qwen3 technical report.
+\newblock \emph{arXiv preprint arXiv:2505.09388}, 2025.
+
+\bibitem[Yao et~al.(2022)Yao, Zhao, Yu, Du, Shafran, Narasimhan, and
+  Cao]{yao2022react}
+Yao, S., Zhao, J., Yu, D., Du, N., Shafran, I., Narasimhan, K.~R., and Cao, Y.
+\newblock React: Synergizing reasoning and acting in language models.
+\newblock In \emph{The eleventh international conference on learning
+  representations}, 2022.
+
+\bibitem[Yuan et~al.(2024)Yuan, Pang, Cho, Li, Sukhbaatar, Xu, and
+  Weston]{yuan2024self}
+Yuan, W., Pang, R.~Y., Cho, K., Li, X., Sukhbaatar, S., Xu, J., and Weston,
+  J.~E.
+\newblock Self-rewarding language models.
+\newblock In \emph{Forty-first International Conference on Machine Learning},
+  2024.
+
+\bibitem[Zhang et~al.(2024{\natexlab{a}})Zhang, Yang, Hu, Wang, Li, Sun, Zhang,
+  Zhang, Liu, Zhu, et~al.]{zhang2024proagent}
+Zhang, C., Yang, K., Hu, S., Wang, Z., Li, G., Sun, Y., Zhang, C., Zhang, Z.,
+  Liu, A., Zhu, S.-C., et~al.
+\newblock Proagent: building proactive cooperative agents with large language
+  models.
+\newblock In \emph{Proceedings of the AAAI Conference on Artificial
+  Intelligence}, pp.\  17591--17599, 2024{\natexlab{a}}.
+
+\bibitem[Zhang et~al.(2024{\natexlab{b}})Zhang, Du, Shan, Zhou, Du, Tenenbaum,
+  Shu, and Gan]{coela}
+Zhang, H., Du, W., Shan, J., Zhou, Q., Du, Y., Tenenbaum, J.~B., Shu, T., and
+  Gan, C.
+\newblock Building cooperative embodied agents modularly with large language
+  models.
+\newblock In \emph{The Twelfth International Conference on Learning
+  Representations}, 2024{\natexlab{b}}.
+
+\bibitem[Zhang et~al.(2024{\natexlab{c}})Zhang, Wang, Lyu, Zhang, Chen, Shu,
+  Dariush, Lee, Du, and Gan]{zhang2024combo}
+Zhang, H., Wang, Z., Lyu, Q., Zhang, Z., Chen, S., Shu, T., Dariush, B., Lee,
+  K., Du, Y., and Gan, C.
+\newblock Combo: compositional world models for embodied multi-agent
+  cooperation.
+\newblock \emph{arXiv preprint arXiv:2404.10775}, 2024{\natexlab{c}}.
+
+\bibitem[Zhang et~al.(2024{\natexlab{d}})Zhang, Yang, Bai, Wu, Li, Wang, and
+  Li]{zhang2024towards}
+Zhang, Y., Yang, S., Bai, C., Wu, F., Li, X., Wang, Z., and Li, X.
+\newblock Towards efficient llm grounding for embodied multi-agent
+  collaboration.
+\newblock \emph{arXiv preprint arXiv:2405.14314}, 2024{\natexlab{d}}.
+
+\bibitem[Zhou et~al.(2025)Zhou, Zhang, Lin, Zhang, Chen, Liu, Zhang, Chen,
+  Fang, Lyu, Sun, Yang, Wang, Dang, Chen, Ladia, Liu, and
+  Gan]{zhou2025virtualcommunityopenworld}
+Zhou, Q., Zhang, H., Lin, X., Zhang, Z., Chen, Y., Liu, W., Zhang, Z., Chen,
+  S., Fang, L., Lyu, Q., Sun, X., Yang, J., Wang, Z., Dang, B.~C., Chen, Z.,
+  Ladia, D., Liu, J., and Gan, C.
+\newblock Virtual community: An open world for humans, robots, and society,
+  2025.
+
+\bibitem[Zu et~al.(2025)Zu, Lin, Fu, Zhao, and Zhou]{cots}
+Zu, L., Lin, L., Fu, S., Zhao, N., and Zhou, P.
+\newblock Collaborative tree search for enhancing embodied multi-agent
+  collaboration.
+\newblock In \emph{Proceedings of the Computer Vision and Pattern Recognition
+  Conference}, pp.\  29513--29522, 2025.
+
+\end{thebibliography}
+
+\newpage
+\appendix
+\onecolumn
+
+\section{Law Examples Across Different LLM Backbones}
+\label{sec:appendix-law-examples}
+
+To better understand how different backbone LLMs summarize task and partner specific regularities, we present representative law sets automatically extracted by our framework across multiple LLM backbones. Concretely, for each backbone, we run the agent on the training split to collect its own interaction traces, and then apply our failure-driven law extraction pipeline to summarize these traces into a law set. As a result, the induced laws reflect both the shared structure of the tasks and backbone-specific behaviors and failure modes.
+
+\paragraph{Qwen-3-14B.}
+\begin{mdframed}[linewidth=0.8pt, roundcorner=4pt, innerleftmargin=6pt, innerrightmargin=6pt]
+\textbf{Plan Before Acting}: Before taking any action, ensure coordination with your partner to avoid redundant actions. \\
+\textbf{Use Clear and Effective Communication}: Communicate only when necessary, and ensure that your messages clearly convey your intent and current status. Avoid passive waiting. \\
+\textbf{Avoid Infinite Loops}: If an action repeatedly fails, identify the root cause and avoid repeating the same sequence of actions. \\
+\textbf{Transport Independently}: Transport objects independently. You cannot transport objects together with your partner, or deliver objects to your partner, or let your partner deliver objects to you. \\
+\textbf{Confirm Completion}: Before declaring the task done, double-check that all objects have been placed in the correct locations and that no steps were missed.
+\end{mdframed}
+
+\paragraph{Gemma-3-12B.}
+\begin{mdframed}[linewidth=0.8pt, roundcorner=4pt, innerleftmargin=6pt, innerrightmargin=6pt]
+\textbf{Prioritize Proximity}: Always verify proximity to an object before attempting to pick it up or place it, and adjust navigation accordingly. \\
+\textbf{Coordinate Object Possession}: Establish clear communication and coordination to avoid conflicts and ensure only one agent attempts to manipulate a specific object simultaneously. \\
+\textbf{Validate Action Syntax and Constraints}: Carefully review and validate the syntax of actions, especially spatial relations, and ensure they align with the environment's capabilities. \\
+\textbf{Employ Adaptive Replanning}: Continuously monitor the task state and adapt the plan in response to failures, unexpected events, or changes in object availability. \\
+\textbf{Manage Dependencies and Prerequisite Actions}: Plan actions sequentially, considering dependencies between them and ensuring prerequisite actions are completed first.
+\end{mdframed}
+
+\paragraph{LLaMA-3.1-8B.}
+\begin{mdframed}[linewidth=0.8pt, roundcorner=4pt, innerleftmargin=6pt, innerrightmargin=6pt]
+\textbf{Focus on Task Execution}: Prioritize task execution and avoid unnecessary communication, exploration, or actions unrelated to task completion. \\
+\textbf{Communicate Effectively}: Clearly and concisely communicate actions, intentions, and progress to avoid misunderstandings and redundancy. \\
+\textbf{Coordinate Actions}: Coordinate actions to ensure agents work toward the same goal without interfering with each other. \\
+\textbf{Adapt to Changing Situations}: Adapt plans and strategies to avoid getting stuck in loops or repeating failed actions. \\
+\textbf{Plan and Execute Consistently}: Ensure plans align with communications and previous actions to avoid confusion and redundant behavior.
+\end{mdframed}
+
+\paragraph{LLaMA-3.1-70B.}
+\begin{mdframed}[linewidth=0.8pt, roundcorner=4pt, innerleftmargin=6pt, innerrightmargin=6pt]
+\textbf{State Consistency}: Maintain an accurate and consistent understanding of the task state, including object locations and status. \\
+\textbf{Coordinated Behavior}: Coordinate actions to avoid redundant and conflicting efforts. \\
+\textbf{Outcome Verification}: Confirm that tasks have been completed correctly before considering them finished. \\
+\textbf{Information Sharing}: Communicate progress, intentions, and status updates to maintain shared situational awareness. \\
+\textbf{Dynamic Adaptation}: Adapt plans and actions in response to changes in the task state or unexpected events.
+\end{mdframed}
+
+\paragraph{Discussion.}
+Despite differences in formulation, several common themes emerge across backbones, including coordination, effective communication, adaptation to failures, and verification of task completion. These shared laws suggest that the failure-driven extraction process consistently captures fundamental principles of cooperative behavior from each backbone's rollout traces.
+
+At the same time, backbone-specific differences reflect varying behaviors and failure patterns during inference. Smaller models (e.g., Gemma-3-12B) tend to induce laws that emphasize low-level execution constraints, such as action syntax validation, proximity checking, and avoiding unnecessary actions, indicating sensitivity to execution and planning errors. In contrast, larger models (e.g., Qwen-3-14B and LLaMA-3.1-70B) more frequently summarize higher-level strategic and coordination principles, such as planning before acting, maintaining state consistency, and verifying outcomes. Overall, these results suggest that law induction is both task-aware and backbone-aware, producing laws that reflect the capabilities and weaknesses of the underlying model.
+
+\section{Stability of Induced Laws}
+\label{sec:appendix-stability}
+
+To complement the stability results in the main text, Table~\ref{tab:seed-stability} reports the induced laws from three complete \name runs with different random seeds on PARTNR-Dialog using Qwen-3-14B.
+
+\begin{table}[htbp]
+\centering
+\small
+\setlength{\tabcolsep}{3pt}
+\caption{Induced laws across random seeds on PARTNR-Dialog using Qwen-3-14B. Similar laws are manually aligned across columns for readability.}
+\label{tab:seed-stability}
+\begin{tabular}{l|p{0.15\linewidth}p{0.18\linewidth}p{0.16\linewidth}p{0.16\linewidth}p{0.16\linewidth}}
+\toprule
+\textbf{Seed} & \textbf{Law 1} & \textbf{Law 2} & \textbf{Law 3} & \textbf{Law 4} & \textbf{Law 5} \\
+\midrule
+1 & Plan Before Acting & Use Clear and Effective Communication & Avoid Infinite Loops & Transport Independently & Confirm Completion \\
+\midrule
+2 & Plan with Shared Goals & Coordinate Actions & Handle Failures Proactively & Verify Object States & Track Task Progress \\
+\midrule
+3 & Plan Actions Strategically & Track and Communicate Task Completion & Avoid Unnecessary Waiting & Use Correct APIs for Tasks & Verify Object State \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Law-Action Analysis}
+\label{sec:appendix-law-action}
+
+We analyze whether different induced laws correspond to distinct action tendencies. For example, \textit{Use Clear and Effective Communication} leads to \texttt{Talk} actions in 91.3\% of the cases, while \textit{Plan Before Acting} leads to \texttt{Navigate} actions in 48.5\% of the cases. The law \textit{Use Correct APIs for Tasks} leads to object-manipulation actions, such as \texttt{Clean}, \texttt{Fill}, \texttt{PowerOn}, \texttt{Open}, and \texttt{TurnOn}, in 91.9\% of the cases. These results suggest that the laws are not merely interchangeable text strings, but tend to ground different local action choices.
+
+At the same time, the overall first-step policy remains stable across seeds. We compare first-step actions on the PARTNR-Dialog validation set because later actions depend on divergent histories and are therefore less directly comparable.
+
+We also conduct a controlled intervention experiment on TDW-MAT to test whether changing a law changes the generated reasoning and action. As shown in Table~\ref{tab:law-intervention}, replacing \textit{Begin with a Plan} with \textit{Prioritize Immediate Action} changes both the thought and the selected action under the same state.
+
+\begin{table}[htbp]
+\centering
+\small
+\setlength{\tabcolsep}{4pt}
+\caption{Controlled law intervention under the same TDW-MAT state.}
+\label{tab:law-intervention}
+\begin{tabular}{p{0.12\linewidth}|p{0.19\linewidth}|p{0.46\linewidth}|p{0.15\linewidth}}
+\toprule
+\textbf{Setting} & \textbf{Input Prompt} & \textbf{Thought} & \textbf{Action} \\
+\midrule
+Baseline & Same state; no laws & Since I have not found the bed yet, exploring might help locate it, but the immediate priority is gathering objects. Therefore, the best action is to explore the current room. & explore current room \\
+\midrule
+\name & Same state; full laws & According to the \textit{Begin with a Plan} principle, the agent should propose a clear plan. The message informs the partner of the current plan and suggests complementary exploration. & send a message \\
+\midrule
+Intervention & \textit{Begin with a Plan} replaced by \textit{Prioritize Immediate Action} & The agent should prioritize immediate exploration to locate useful containers and avoid delaying physical progress. & explore current room \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Additional Ablations}
+\label{sec:appendix-additional-ablations}
+
+Table~\ref{tab:gemma-ablation} reports a representative subset of ablations on Gemma-3-12B. The trend is consistent with the Qwen-3-14B ablation in the main text: removing SFT, removing laws, or using manual laws only at inference time decreases performance.
+
+\begin{table}[htbp]
+\centering
+\small
+\setlength{\tabcolsep}{6pt}
+\caption{Additional ablation study on PARTNR-Dialog using Gemma-3-12B.}
+\label{tab:gemma-ablation}
+\begin{tabular}{l|cc}
+\toprule
+\textbf{Variant} & \textbf{Comp.} & \textbf{Succ.} \\
+\midrule
+\textbf{\name (Full)} & \textbf{0.79} & \textbf{0.61} \\
+\textit{w/o SFT} & 0.76 & \textbf{0.61} \\
+\textit{w/o Laws} & 0.77 & 0.59 \\
+\textit{Manual Laws Inf.} & 0.76 & 0.59 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+We also compare failure-only law induction with a mixed setting that derives laws from both failed and successful episodes. Table~\ref{tab:mixed-laws} shows that the two variants achieve similar performance, suggesting that both sources can yield useful laws, while failure traces provide a direct way to target recurring coordination errors.
+
+\begin{table}[htbp]
+\centering
+\small
+\setlength{\tabcolsep}{6pt}
+\caption{Comparison of law induction sources on PARTNR-Dialog using Qwen-3-14B.}
+\label{tab:mixed-laws}
+\begin{tabular}{l|l|cc}
+\toprule
+\textbf{Variant} & \textbf{Law Induction Source} & \textbf{Comp.} & \textbf{Succ.} \\
+\midrule
+\textbf{\name (Full)} & Failure episodes & 0.84 & \textbf{0.74} \\
+Mixed Laws & Failure + Successful episodes & \textbf{0.85} & 0.73 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\small
+\setlength{\tabcolsep}{6pt}
+\caption{Frequency of each induced law in the reflected training data for Gemma-3-12B.}
+\label{tab:law-frequency}
+\begin{tabular}{l|c}
+\toprule
+\textbf{Law} & \textbf{Frequency (\%)} \\
+\midrule
+Prioritize Proximity & 30.32 \\
+Coordinate Object Possession & 9.57 \\
+Validate Action Syntax and Constraints & 7.89 \\
+Employ Adaptive Replanning & 4.48 \\
+Manage Dependencies and Prerequisite Actions & 47.74 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\small
+\setlength{\tabcolsep}{6pt}
+\caption{Category distribution of induced laws for Gemma-3-12B across 25 random seeds.}
+\label{tab:law-category-distribution}
+\begin{tabular}{l|c}
+\toprule
+\textbf{Category} & \textbf{Share} \\
+\midrule
+Verify Task Progress & 0.23 \\
+Adapt Strategies & 0.20 \\
+Effective Communication & 0.20 \\
+Coordinate Actions & 0.19 \\
+Verify Task Completion & 0.18 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Statistical Summary of Induced Laws}
+\label{sec:appendix-law-statistics}
+
+We provide additional statistics on the induced laws for Gemma-3-12B. Table~\ref{tab:law-frequency} reports how frequently each law is used in the reflected training data. Table~\ref{tab:law-category-distribution} summarizes the distribution of laws generated across 25 random seeds after grouping them into high-level coordination categories.
+
+\section{Implementation Details of PARTNR-Dialog}
+
+\subsection{Backward Compatibility}
+
+The PARTNR-Dialog Benchmark maintains full backward compatibility with the original PARTNR benchmark. The communication and deliver functionalities are implemented as optional extensions: agents may operate without using the \texttt{Talk} actions, in which case the benchmark behavior degenerates to that of the original PARTNR environment. This design allows researchers to directly compare communication-enabled and communication-free approaches within the same benchmark framework, facilitating controlled ablation studies on the role of communication in multi-agent coordination.
+
+\subsection{Visualization Tools}
+
+\begin{figure}[htpb]
+    \centering
+    \includegraphics[width=0.8\linewidth]{fig-visualization.pdf}
+    \caption{\textbf{Visualization tools.} We extend the original PARTNR visualization system by adding a top-down view. In addition, for instantaneous actions such as \texttt{Talk}, the visualization briefly pauses, allowing clearer inspection.}
+    \label{fig:visualization}
+\end{figure}
+
+\begin{figure}[htpb]
+    \centering
+    \begin{subfigure}{\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{fig-case2.pdf}
+        \caption{Case study on PARTNR-Dialog with the Qwen-3-14B model.}
+        \label{fig:case-2}
+    \end{subfigure}
+
+    \vspace{0.5em}
+
+    \begin{subfigure}{\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{fig-case3.pdf}
+        \caption{Case study on PARTNR-Dialog with the Gemma-3-12B model.}
+        \label{fig:case-3}
+    \end{subfigure}
+
+    \caption{Case studies on PARTNR-Dialog demonstrating law-guided planning and communication.}
+    \label{fig:case-partnr}
+\end{figure}
+
+As shown in Figure~\ref{fig:visualization}, building upon PARTNR's existing third-person visualization with action annotations, we extend the visualization system with three key enhancements. First, we add a top-down view video that provides a bird's-eye perspective, enabling clearer analysis of spatial relationships and coordination strategies. Second, we explicitly visualize \texttt{Talk} actions by rendering the communication content alongside action annotations. Third, for instantaneous actions includeing \texttt{Talk}, the visualization system briefly pauses by extending the display duration through repeating the corresponding frame 50 times, allowing viewers to better observe the communication events and their context.
+
+\section{Case Study on PARTNR-Dialog}
+
+Figure~\ref{fig:case-2} presents a qualitative case study on PARTNR-Dialog using the Qwen-3-14B backbone, demonstrating law-guided planning and communication in a human–robot cooperative task. At the early stage of the episode, the robot follows the law \textit{Plan Before Acting} to explore the environment and gather relevant information before committing to task execution. As the task progresses, the human partner leverages the law \textit{Use Clear and Effective Communication} to issue precise and unambiguous instructions, ensuring that intentions and task status are clearly shared. This example illustrates how law-guided inference with a stronger backbone emphasizes high-level planning and coordination, leading to effective cooperation and improved task efficiency on PARTNR-Dialog.
+
+Figure~\ref{fig:case-3} shows a another case study using the Gemma-3-12B backbone. When executing a syntactically complex \texttt{Place} action, the agent explicitly invokes the law \textit{Validate Action Syntax and Constraints}, focusing on verifying action arguments and environmental feasibility before execution. This behavior reflects common failure modes observed for this backbone in the training traces, where invalid action formats or constraint violations frequently lead to execution errors. In the final stage of the episode, before issuing the \texttt{Done} signal, the agent follows the law \textit{Manage Dependencies and Prerequisite Actions} to review whether all task dependencies have been satisfied and actions have been completed in the correct order. This example highlights how law-guided inference adapts to backbone-specific weaknesses, enabling more reliable execution and robust task completion.
+
+\clearpage
+\section{Prompts Used in Experiments}
+\label{sec:appendix-prompts}
+
+This prompt ($\mathcal{T}_{failure}$) is used for failure analysis:
+
+\begin{mdframed}[linewidth=0.8pt, roundcorner=4pt, innerleftmargin=6pt, innerrightmargin=6pt]
+You are analyzing a failed multi-agent planning task. Below is the trace of the episode:
+
+\{trace\}
+
+Analyze this trace and identify the main reason why the task failed. Be specific and concise. Focus on what went wrong in the planning or execution that led to the failure. Consider:
+
+- Action execution problems
+
+- Task understanding mistakes
+
+- Coordination and communication failures
+
+- Planning errors or inconsistencies
+
+Provide a clear, concise failure reason in 1-3 sentences.
+
+Failure reason:
+
+\end{mdframed}
+
+This prompt ($\mathcal{T}_{law}$) is used for law summary:
+
+\begin{mdframed}[linewidth=0.8pt, roundcorner=4pt, innerleftmargin=6pt, innerrightmargin=6pt]
+You are analyzing multiple failure cases from multi-agent planning tasks. Below are the failure reasons extracted from failed traces:
+
+\{failure\_reasons\}
+
+Based on these failure reasons, identify the key principles that agents should follow to avoid these failures. Generate at most \{max\_law\} laws.
+
+Each principle should be:
+1. Clear, concise (one sentence), and actionable
+2. General enough to apply to various situations
+3. Address common failure patterns observed in the traces
+
+Format your response as a JSON object with law names as keys and descriptions as values. For example:
+\{\{
+    "Law Name 1": "Description of law 1",
+    "Law Name 2": "Description of law 2",
+    "Law Name 3": "Description of law 3",
+    "Law Name 4": "Description of law 4",
+    "Law Name 5": "Description of law 5"
+\}\}
+
+Generate the principles now:
+
+\end{mdframed}
+
+This prompt ($\mathcal{T}_{reflect}$) is used for law-guided data generation:
+
+\begin{mdframed}[linewidth=0.8pt, roundcorner=4pt, innerleftmargin=6pt, innerrightmargin=6pt]
+The action \{action\} has already been chosen. Your task is to regenerate the thought.
+
+Reference the principle that best matches the original thought, using its EXACT name from the principles listed below (\{all\_principle\_name\})
+
+Principles to follow (names and content):
+\{principle\_description\}
+
+Original thought:
+\{original\_thought\}
+
+Write your regenerated thought starting with "Thought: " and keep it as a single, natural paragraph.
+
+Example ("principle\_name" would be replaced by the name of an actual principle):
+
+Regenerated thought: Thought: I need to pick up the cup from the counter and place it on the table to complete the task. According to principle\_name, I should focus on task-relevant actions to make progress.
+\end{mdframed}
+
+\end{document}

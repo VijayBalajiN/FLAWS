@@ -20,10 +20,12 @@ Tests (no network): `python -m unittest discover -s tests -t .`
 
 ## What is and is not in git
 
-Tracked: the code, `preflight_state.json`, and the small text results in `data/run1/`
+Tracked: the code, `preflight_state.json`, the small text results in `data/run1/`
 (`run_summary.json`, `evaluation_summary.json`, `ERROR_REVIEW.md`, and the inserted-error, location,
-identification and evaluation files). **Not tracked** (see `.gitignore`): `data/papers/`,
-`data/_preflight/`, and `data/run1/altered_papers/` (the altered PDFs and LaTeX of real papers).
-To rebuild them, run step 2 to fetch the sources; step 3 will not redo papers that
-`run_summary.json` already marks satisfied, so remove a paper's entry to force a rebuild (the stored
-per-claim files should be reused without new API calls — not tested).
+identification and evaluation files), and the **40 successful altered papers** in
+`data/run1/altered_papers/<paper>/` (`altered_N.tex` and the compressed `altered_N_small.pdf`, 50 MB).
+These are real papers with **synthetic errors inserted** — see `data/run1/README.md`.
+**Not tracked** (see `.gitignore`): `data/papers/` (arXiv sources), `data/_preflight/`, and the rest of
+`altered_papers/` (failed attempts, full-size PDFs, build files). To regenerate the untracked parts, run step 2
+to fetch the sources; step 3 will not redo papers that `run_summary.json` already marks satisfied, so remove a
+paper's entry to force a rebuild (the stored per-claim files should be reused without new API calls — not tested).

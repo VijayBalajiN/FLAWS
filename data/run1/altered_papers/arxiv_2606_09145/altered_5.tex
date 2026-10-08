@@ -1,0 +1,1566 @@
+
+\documentclass{article}
+
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{booktabs} % for professional tables
+
+\usepackage{multirow}
+\usepackage{enumerate}
+
+
+\usepackage[table]{xcolor}
+\usepackage{colortbl}
+
+
+\definecolor{gray0}{gray}{0.9}
+
+\usepackage{hyperref}
+
+
+\usepackage[accepted]{icml2026}
+
+
+
+
+
+
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+
+\newcommand{\Input}[1]{\item[\algorithmicrequire] #1}
+\newcommand{\Output}[1]{\item[\algorithmicensure] #1}
+
+\usepackage[most]{tcolorbox}
+\usepackage{xcolor}
+\newcommand{\grayblock}[1]{\textcolor{gray}{\rule{#1}{1.4ex}}}
+
+\definecolor{UpColor}{HTML}{82B0D2}
+\definecolor{DownColor}{HTML}{FA7F6F}
+
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{amsthm}
+\usepackage{enumitem}
+
+\newcommand\gcc[1]{{\color{red} [gc: #1]}}
+\newcommand\lz[1]{{\color{blue} [lz: #1]}}
+\newcommand\xl[1]{{\color{orange} [xiaochen: #1]}}
+
+
+
+\usepackage[capitalize,noabbrev]{cleveref}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{assumption}[theorem]{Assumption}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\usepackage[textsize=tiny]{todonotes}
+
+\def \toolname{PrivCode++}
+
+\icmltitlerunning{\toolname: Latent-Conditioned Differentially Private Code Generation for Comprehensive Guarantees}
+
+\begin{document}
+
+\twocolumn[
+  \icmltitle{\toolname: Latent-Conditioned Differentially Private Code Generation for Comprehensive Guarantees}
+
+
+
+  \icmlsetsymbol{equal}{*}
+
+\begin{icmlauthorlist}
+    \icmlauthor{Zheng Liu}{ia,ucas}
+    \icmlauthor{Chen Gong}{uva}
+    \icmlauthor{Terry Yue Zhuo}{alibaba,monash}
+    \icmlauthor{Zhou Yang}{ualberta}
+    \icmlauthor{Kecen Li}{nus}
+    \icmlauthor{Wenlong Meng}{zju}
+    \icmlauthor{Xinwen Hou}{ia}
+    \icmlauthor{Yu Liu}{ia}
+    \icmlauthor{Xiaochen Li}{uncg}
+\end{icmlauthorlist}
+
+\icmlaffiliation{ia}{Institute of Automation, Chinese Academy of Sciences}
+\icmlaffiliation{ucas}{School of Artificial Intelligence, University of Chinese Academy of Sciences}
+\icmlaffiliation{uva}{University of Virginia}
+\icmlaffiliation{alibaba}{Alibaba Qwen}
+\icmlaffiliation{monash}{Monash University}
+\icmlaffiliation{ualberta}{University of Alberta}
+\icmlaffiliation{nus}{National University of Singapore}
+\icmlaffiliation{zju}{Zhejiang University}
+\icmlaffiliation{uncg}{University of North Carolina at Greensboro}
+
+  \icmlcorrespondingauthor{Chen Gong}{fzv6en@virginia.edu}
+
+  \icmlkeywords{Machine Learning, ICML}
+
+  \vskip 0.3in
+]
+
+
+
+\printAffiliationsAndNotice{}  % no special notice (required even if empty)
+
+\begin{abstract}
+
+    Large language models fine-tuned on instruction–code pairs may memorize and subsequently leak sensitive training data. Existing differentially private (DP) code generation methods primarily protect code snippets while assuming prompts are public, which fails in realistic scenarios where prompts may also contain sensitive information. When prompts cannot be explicitly learned or used during generation, code synthesis suffers from severe utility degradation as well as reduced diversity and fidelity. To address these challenges, we propose PrivCode++, the first work to explore DP code generation where both prompts and code snippets are considered sensitive in LLM fine-tuning. PrivCode++ introduces a two-stage DP framework with a Privacy-Free Latent Conditioning module, enabling effective DP fine-tuning and data synthesis without direct access to sensitive prompts or code. Extensive experiments show that PrivCode++ achieves substantially higher utility than baselines, remains competitive with the method with relaxing privacy assumptions, and provides stronger privacy guarantees. We release the replicate package in the GitHub repository.\footnote{\url{https://github.com/Liuzzyg/PrivCode_Plus}}
+\end{abstract}
+
+
+\section{Introduction}
+
+The development of large language models (LLMs) has significantly advanced code intelligence~\cite{Qwen2.5_Coder, codellama}, enabling strong performance across various code generation tasks~\cite{liu2023your, zhuo2024bigcodebenchbenchmarkingcodegeneration,zhuo-etal-2025-nlp}. To adapt these models to domain-specific knowledge and task requirements, a widely adopted practice is to fine-tune them on instruction-following datasets composed of natural language prompts paired with code snippets, as prompts contain rich user intent, task specifications, and contextual information that provide supervised signals for learning code generation~\cite{ahmad2025opencodeinstruct}. 
+
+Previous studies have shown that LLMs can memorize specific content from training datasets and reproduce it during inference~\cite{carlini2022quantifying,carlini2021extracting,nasr2023scalable}. For instance, recent research~\cite{carlini2021extracting} showed that the GPT-2 model~\cite{radford2019language} could memorize and reproduce the phone number of an individual named `Peter W' when prompted with a specially crafted input. In code generation, CodexLeaks~\cite{codexleaks} found that Codex~\cite{chen2021evaluating} could replicate code snippets from its training data, which included sensitive information such as Personally Identifiable Information (PII). 
+
+
+Differential Privacy (DP) provides a principled framework for limiting memorization during training by bounding the influence of individual examples on the learned model~\cite{dwork2006calibrating}. A widely used paradigm is to replace the sensitive training set with DP synthetic data that preserves the statistical properties of the original dataset while providing formal privacy guarantees~\cite{yue2023synthetic,li2024privimage,gong2025privorl,gong2026easy,gong2025dpimagebench}. Recent work on DP code generation 
+primarily focuses on protecting sensitive code snippets, while treating prompts as public and privacy-free conditioning signals in instruction-following data~\cite{liu2025privcode}. However, this assumption fails to account for scenarios where prompts may contain example code fragments, user-specific context, or internal task descriptions, which could include sensitive information. DP code generation under joint-sensitive settings where both prompts and code are treated as private faces the following challenges.
+
+
+
+
+ 
+
+
+\noindent \textbf{(1) Infeasibility of Prompt-Based Conditioning Under Joint-Sensitive Settings.} Without explicit prompts, the generation process reduces to unconditional generation, leading to degraded code utility and relevance~\cite{chen2021evaluating}. A straightforward solution is DP instruction-following fine-tuning~\cite{DBLP:journals/corr/abs-2407-07737}, which jointly optimizes prompt and code tokens under Differentially Private Stochastic Gradient
+Descent (DP-SGD)~\cite{dpsgd} to synthesize instruction–code pairs, but has been shown to substantially degrade utility~\cite{DBLP:conf/iclr/HongWZL0W24}.
+
+
+
+\noindent \textbf{(2) Utility and Diversity Degradation Induced by Prompt-Free Generation.}  Prior work explores implicit conditioning signals for prompt-free generation, such as latent-variable methods~\cite{bowman2016generating} and self-conditioning~\cite{cuadros2022self}. Although these approaches represent a step forward to mitigate performance degradation, they remain fundamentally autoregressive and driven by next-token likelihood maximization, which concentrates probability mass in high-likelihood regions and leads to reduced diversity and homogeneous outputs~\cite{holtzman2019curious}.
+In code generation, the rigid syntactic and semantic constraints of programming languages further exacerbate this issue~\cite{zan2023large}.
+
+
+
+
+
+
+
+
+
+
+
+We propose \toolname, a two-stage latent-conditioned DP code generation method to protect both prompts and code snippets under DP, addressing the above challenges as follows.
+
+To address challenge (1), \toolname{} removes the reliance on explicit prompts by introducing a Privacy-Free Latent Conditioning (PrivLC) module, which learns continuous latent representations to replace prompt-based conditioning. Specifically, \toolname{} first jointly trains a LLM model with the PrivLC module under DP-SGD, integrating syntactic structure and task-level semantic information into a latent conditioning space. Task-level refers to high-level task intent, functional requirements, and contextual constraints that determine the expected behavior of the generated code~\cite{wang2023self}. 
+
+
+
+To tackle challenge (2), building on the learned latent representations, \toolname{} improves both utility and diversity in prompt-free generation. During generation, latent variables are sampled and decoded into prefix embeddings to conditional autoregressive code generation. This latent conditioning leverages structured syntactic and semantic information to alleviate structure collapse and mitigate the concentration of probability mass, resulting in more diverse and semantically consistent outputs. The generated code is then summarized into instructions via public LLMs and filtered through execution and semantic validation, producing high-utility instruction–code pairs for fine-tuning another model without privacy constraints. All operations are applied only to DP-compliant components obtained via DP-SGD, and incur no additional privacy cost due to the post-processing property of DP~\cite{dpbook}.
+
+
+
+
+
+\begin{figure*}[t]
+    \centering
+    \includegraphics[width=0.95\textwidth]{images/overview.pdf} 
+    \caption{The workflow of \toolname. The privacy-sanitizing stage fine-tunes a junior model together with the PrivLC module under DP-SGD. The utility-boosting stage samples latent variables and decodes them into prefix embedding to conditionally generate code snippets. In the utility-boosting stage, synthetic instruction-following data, containing the generated code snippets and instructions summarized from them, are then filtered for fine-tuning a premium model.
+    }
+    \label{fig:overview}
+    \vskip -2mm
+\end{figure*}
+
+Extensive experiments demonstrate the effectiveness of \toolname \  under the joint-sensitive scenario. Across four benchmarks, \toolname \ consistently outperforms joint-sensitive scenario protection baselines, improving Pass@1 by up to 8.2 on instruction-following tasks and 19.3 on code completion tasks, while remaining competitive with relaxed-privacy baselines. Ablation studies validate the necessity of each module. In canary leakage evaluations covering prompt, code, and joint canaries, \toolname \ achieves 0\% leakage across all settings, whereas prior methods exhibit up to 40\% category-level leakage under joint canaries.
+Our contributions are summarized as follows:
+
+\begin{itemize}[leftmargin=*]
+    \item We are the first work to explore DP code generation under the scenario where both prompts and code snippets are considered sensitive in LLM fine-tuning.
+    \item We propose a two-stage DP code generation framework that introduces a Privacy-Free Latent Conditioning module to mitigate utility degradation under DP, while providing more comprehensive privacy guarantees.
+
+    \item We conduct comprehensive evaluations showing that \toolname\ achieves higher utility than baselines  and provides stronger privacy protection.
+\end{itemize}
+
+\section{Background and Related Works}
+
+\subsection{Differential Privacy}
+
+DP provides a rigorous framework for limiting memorization in machine learning by bounding the influence of any single training example on the learned model~\cite{dwork2006calibrating}. A randomized mechanism $\mathcal{M}$ satisfies $(\varepsilon,\delta)$-DP if for any pair of neighboring datasets $D$ and $D'$ differing in one data point, and for any measurable output set $\mathcal{S}$,
+\vskip -0.2in
+\begin{equation}
+\Pr[\mathcal{M}(D) \in \mathcal{S}] \leq e^{\varepsilon} \Pr[\mathcal{M}(D') \in \mathcal{S}] + \delta.
+\end{equation}
+In deep learning, DP-SGD~\cite{dpsgd} is the dominant instantiation, enforcing privacy by per-sample gradient clipping and calibrated Gaussian noise injection. Privacy accounting is commonly performed using Rényi Differential Privacy (RDP)~\cite{DBLP:conf/csfw/Mironov17}.
+Formally, a randomized mechanism $\mathcal{M}$ is said to satisfy $(\alpha,\varepsilon)$-RDP for order $\alpha > 1$ if for all neighboring datasets $D$ and $D'$,
+\begin{equation}
+D_{\alpha}\!\left(\mathcal{M}(D)\,\|\,\mathcal{M}(D')\right) \leq \varepsilon,
+\end{equation}
+where $D_{\alpha}(\cdot\|\cdot)$ denotes the Rényi divergence of order $\alpha$. A key advantage of RDP is its simple and tight composition property: if mechanisms $\{\mathcal{M}_1,\ldots,\mathcal{M}_T\}$ satisfy $(\alpha,\varepsilon_1),\ldots,(\alpha,\varepsilon_T)$-RDP respectively, then their composition satisfies $(\alpha,\sum_{t=1}^T \varepsilon_t)$-RDP. The resulting RDP guarantee can be converted to an $(\varepsilon,\delta)$-DP bound for any $\delta \in (0,1)$ via standard transformations, enabling accurate privacy tracking across many training iterations.
+
+
+
+
+
+
+
+
+
+
+
+
+\subsection{DP LLM Code Generation}
+Modern code LLMs are trained primarily via instruction-following fine-tuning on prompt--code pairs~\cite{wei2021finetuned, ahmad2025opencodeinstruct} and generate code autoregressively by factorizing the conditional likelihood of a sequence $x=(x_1,\ldots,x_n)$ given a prompt $p$ as
+$\mathbb{P}(x \mid p) = \prod_{i=1}^{n} \mathbb{P}(x_i \mid x_1, \ldots, x_{i-1}, p),$
+a training paradigm that tightly couples model behavior to prompts and amplifies memorization and privacy leakage risks under threat models where prompts themselves may be sensitive. 
+PrivCode~\cite{liu2025privcode} uses a two-stage pipeline that fine-tunes a smaller model (defined as the junior model) with DP-SGD and a larger model (defined as the premium model) without DP, mitigating utility loss of DP~\cite{DBLP:journals/corr/abs-2210-09929} and code structural dependencies~\cite{DBLP:journals/tosem/MaLZXWHZL24}, while preserving privacy.  However, PrivCode assumes prompts are public, which breaks down in real scenarios where prompts may be also sensitive. We follow this two-stage paradigm while extending it to the joint-sensitive setting.
+
+Prior DP text works~\cite{sinha2025vaultgemma} treat truncated text sequences as individual DP data points, and DP code works~\cite{liu2025privcode} similarly define code snippets in this manner; although both acknowledge the existence of sequential correlations, this formulation remains practical and has become a standard assumption in DP language model training. Thus, we treat each truncated (prompt, code) sequence as a single DP data point, where neighboring datasets differ by the presence or absence of one such sequence.
+
+
+
+
+
+
+
+
+
+
+
+\subsection{Latent Variable for Language Model}
+
+
+In natural language processing, latent variable models have been applied to controllable text generation~\cite{bowman2016generating, hu2017controlled}, where latent representations encode attributes such as style or sentiment. Relatedly, prefix-tuning and prompt-tuning methods~\cite{li2021prefix, lester2021power} learn continuous soft prompts that can be interpreted as implicit latent conditioning mechanisms for LLMs. 
+
+Existing latent-variable generation methods ignore privacy constraints, while DP language modeling typically operates in token space without leveraging latent structure for controllability. PrivCode++ bridges this gap by integrating latent-variable learning under DP-SGD, using latent representations to disentangle sensitive prompts from code generation while preserving formal privacy guarantees.
+
+
+
+
+\section{Methodology}
+
+
+
+
+
+    
+
+
+We first discuss the motivation of our approach.
+Prior work has shown that LLMs fine-tuned under DP  with a well-designed pipeline can produce high-quality synthetic data~\cite{yue2023synthetic, liu2025privcode}. However, they either overlook the additional privacy risks introduced by using control codes as prompts without additional privacy cost during text synthesis~\cite{yue2023synthetic}, or implicitly assume that prompts are public and safe to leverage as conditioning signals~\cite{liu2025privcode}. When prompts themselves are sensitive in certain code generation scenarios, directly leveraging them as conditioning inputs is no longer permissible, causing the very mechanism of prior approaches that enables high-utility synthesis in frameworks to break down. This issue is particularly pronounced in code generation, where removing explicit prompt conditioning, an effect amplified by the rigid syntax and semantics of programming languages~\cite{zan2023large}. 
+
+These limitations highlight the need for a new paradigm that enables effective conditioning without relying on explicit prompts, while mitigating the utility and diversity degradation induced by prompt-free generation. Thus, we propose \toolname{}, which is detailed as follows.
+
+
+\subsection{Overview}
+
+\label{sec:overview}
+
+
+
+We propose \toolname{}, a two-stage latent-conditioned DP code generation method for the joint-sensitive scenario where both prompts and code are treated as sensitive.
+
+The overall workflow is illustrated in Figure~\ref{fig:overview}. In the privacy-sanitizing stage, we optimize a junior model $\mathcal{M}_J$ together with the PrivLC module on sensitive code snippets under DP-SGD, ensuring formal DP guarantees while integrating structural, semantic, and diverse functional information into a latent conditioning representation, which alleviates syntactic structure collapse and provides task-level semantic guidance for code generation. In the utility-boosting stage, we operate solely on DP-compliant outputs and sample latent variables that are decoded into prefix embeddings to condition code generation, enabling diverse and coherent code synthesis without accessing the original sensitive prompts. After that, the generated code snippets are summarized into instructions using a public extractor to form synthetic instruction–code pairs.
+The resulting synthetic dataset is further rigorously filtered through syntactic and semantic validation, and then used to fine-tune a premium model $\mathcal{M}_P$ without DP constraints, thereby avoiding DP-induced utility degradation while effectively retaining domain-relevant knowledge. Since all operations in this stage are pure post-processing of DP outputs, the post-processing property of DP ensures that no additional privacy leakage is incurred~\cite{dpbook}. We describe the technical details below following Algorithm~\ref{alg:privcodepp_workflow}.
+
+
+\subsection{Joint-Sensitive Privacy-Sanitizing}
+\label{sec:stage1}
+
+We introduce a PrivLC module to embed sensitive code snippets and the contextual information entailed from sensitive prompts into a learnable continuous prefix embedding. The PrivLC module consists of a code encoder $E^c$, a prompt encoder $E^p$, and a prefix decoder $D$,
+which together learn a latent conditioning signal that guides autoregressive code generation and mitigates the degeneration of diversity commonly observed when generation lacks sufficiently informative conditioning, particularly in highly structured code. All components are trained using DP-SGD to satisfy DP.
+
+Given a code snippet $c = (c_1, \dots, c_T)$, we first obtain its contextualized representation via a frozen forward pass of the junior model $\mathcal{M}_J$: $h^c = f_{\mathcal{M}_J}(c)$, where $h^c \in \mathbb{R}^{T \times d}$ is the final-layer token representations, and $d$ is the dimension of the final-layer.
+These representations encode rich syntactic structure and functional semantics beyond discrete token identities. The code encoder $E^c$ then aggregates $h^c$ and parameterizes a stochastic latent distribution:
+\begin{equation*}
+(\mu^c, \log (\sigma^c)^2) = E^c(h^c),
+\end{equation*}
+\begin{equation*}
+q_\phi(z \mid c) = \mathcal{N}(\mu^c, \mathrm{diag}((\sigma^c)^2)), 
+\; z^c \sim q_\phi(z \mid c).
+\end{equation*}
+where the conditional distribution $q_\phi(z \mid c)$ is modeled as a diagonal Gaussian, following the standard VAE formulation~\cite{kingma2013auto}. The latent variable $z^c\in \mathbb{R}^{d_z}$ serves as a compact abstraction of the syntactic and semantic properties implicit in the code.
+
+
+\begin{algorithm}[t]
+\caption{Workflow of \toolname}
+\begin{algorithmic}[1]
+\label{alg:privcodepp_workflow}
+\Input{
+Sensitive dataset $\mathcal{D}=\{(p_i,c_i)\}_{i=1}^N$, 
+junior LLM $\mathcal{M}_J$, 
+premium LLM $\mathcal{M}_P$,
+prompt extractor $\mathcal{M}_{\text{ext}}$,
+post-processing filter $\mathcal{F}$,
+synthetic data size $N_{\text{syn}}$.
+}
+
+
+\vspace{0.4em}
+\item[] \hspace{-1.3em} {\color{gray}\textbf{// Stage I: Joint-Sensitive Privacy-Sanitizing}}
+
+\STATE Initialize code encoder $E^c$, prompt encoder $E^p$, prefix decoder $D$.
+
+\FOR{each DP-SGD step}
+    \STATE Sample minibatch $(p,c) \sim \mathcal{D}$;
+    
+    \STATE $h^p \gets \mathcal{M}_J(p).\texttt{hidden\_states[-1]}$;
+
+    \STATE $h^c \gets \mathcal{M}_J(c).\texttt{hidden\_states[-1]}$;
+
+    \STATE $z^p \gets E^p(h^p)$, \ $z^c \gets E^c(h^c)$;
+    
+    \STATE $\mathbf{e}_{\text{prefix}} \gets D(z^c)$;
+    
+    \STATE Update $\mathcal{M}_J$, $D$ using $\mathcal{L}_{\text{CE}}(c \mid \mathbf{e}_{\text{prefix}}) + \mathcal{L}_{\text{KL}}^{\text{AST}}(\mathcal{M}_J)$;
+    
+    \STATE Update $E^c$ using $\mathcal{L}_{\text{VAE}}(z^c) + \mathcal{L}_{\text{align}}(z^c, z^p)$, 
+    $E^p$ using $\mathcal{L}_{\text{align}}(z^c, z^p)$;
+\ENDFOR
+
+\STATE Obtain DP-compliant model $\mathcal{M}_J^{\text{DP}}$ and decoder $D^{\text{DP}}$.
+
+\vspace{0.4em}
+\item[] \hspace{-1.3em} {\color{gray}\textbf{// Stage II: Utility-Boosting via DP Post-Processing}}
+
+\STATE \textbf{for} $i = 1$ to $N_{\text{syn}}$ \textbf{do}
+\hfill {\small\textcolor{gray}{\textit{$\triangleright$ Data synthesis}}}
+
+\STATE \quad $\mathbf{e}_{\text{prefix}}^{(i)} \gets D^{\text{DP}}(z_i)$, \ $z_i \sim \mathcal{N}(0,I)$;
+
+\STATE \quad $\hat{c}_i \sim P_{\mathcal{M}_J^{\text{DP}}}(\cdot \mid \mathbf{e}_{\text{prefix}}^{(i)})$;
+
+\STATE \quad $\hat{p}_i \gets \mathcal{M}_{\text{ext}}(\hat{c}_i)$;
+\STATE \textbf{end for}
+
+\STATE $\mathcal{D}_{\text{syn}} \gets \{(\hat{p}_i, \hat{c}_i)\}_{i=1}^{N_{\text{syn}}}$;
+
+\STATE $\mathcal{D}_{\text{syn}} \gets \mathcal{F}(\mathcal{D}_{\text{syn}})$; 
+\hfill {\small\textcolor{gray}{\textit{$\triangleright$ Post-processing filtering}}}
+
+\STATE Fine-tune $\mathcal{M}_P$ on $\mathcal{D}_{\text{syn}}$ using SGD to obtain $\mathcal{M}_{\text{syn}}$;
+
+\STATE \textbf{Return} The DP code synthesizer $\mathcal{M}_{\text{syn}}$.
+
+\end{algorithmic}
+\end{algorithm}
+
+
+The latent variable $z^c$ is decoded into prefix embeddings $\mathbf{e}_{\text{prefix}} = D(z^c)$, which serve as a soft prompt: since $z^c$ is continuous and not tied to the LLM’s discrete vocabulary, a decoder is needed to map it into a form compatible with the model’s embedding layer. These embeddings are prepended to token embeddings to condition autoregressive generation:
+\begin{equation}
+\mathcal{L}_{\text{CE}} = - \sum_{t=1}^T \log P_{\mathcal{M}_J}(c_t \mid \mathbf{e}_{\text{prefix}}, c_{<t}),
+\end{equation}
+where $c = (c_1, \dots, c_T)$ is the target code sequence. 
+Through this latent-conditioned training, $\mathbf{e}_{\text{prefix}}\in \mathbb{R}^{K \times d}$ provides a continuous conditioning signal with number of $K$ virtual prompt tokens that would otherwise be supplied by explicit instructions, while also enabling structured diversity that mitigates collapse into repetitive or canonical patterns characteristic of autoregressive code models.
+
+To prevent the latent space from collapsing to deterministic representations and to ensure a well-conditioned optimization landscape, we constrain the posterior as:
+\begin{equation}
+\mathcal{L}_{\text{VAE}} = \mathrm{KL}\big(q_\phi(z \mid c)\,\|\,\mathcal{N}(0, I)\big),
+\end{equation}
+where $q_\phi(z \mid c)$ is the stochastic latent distribution produced by the code encoder $E^c$, and the KL divergence encourages the posterior to maintain a degree of variance, preventing overfitting of the code encoder.
+
+To enhance task-level information in the latent space without explicit instruction conditioning, we incorporate an auxiliary prompt encoder $E^p$ that processes sensitive instructions during training. 
+Given a sensitive instruction $p = (p_1, \dots, p_L)$, we obtain its contextualized representation via the same frozen model,
+$h^p = f_{\mathcal{M}_J}(p),
+\;
+z^p = E^p(h^p)$
+, where $h^p \in \mathbb{R}^{L \times d}$ denotes the final-layer token representations of the instruction produced by the frozen model $\mathcal{M}_J$, and $z^p$ is the latent representation encoded by $E^p$.
+
+
+We align the code-induced and instruction-induced latent variables using a contrastive objective~\cite{oord2018representation}:
+\begin{equation}
+\mathcal{L}_{\text{align}} = - \log 
+\frac{\exp(\langle z^c, z^p \rangle / \tau)}
+{\sum_{p'} \exp(\langle z^c, z^{p'} \rangle / \tau)},
+\end{equation}
+which semantically provides grounded contextual supervision from instructions. This alignment objective encourages the code latent space to adopt the semantic structure of the prompt latent space, ensuring that $z^c$ is organized according to task-level information such as task intent, contextual constraints, and functional requirements.
+
+
+
+
+
+All components in the privacy-sanitizing stage
+are jointly optimized under DP-SGD with a unified privacy accountant, while sharing the same $(\epsilon,\delta)$-DP guarantee.  % with respect to the sensitive training dataset. 
+We provide detailed formulations of each objective in Appendix~\ref{app:objectives_detail}, and the derivation of $\mathcal{L}_{\text{KL}}^{\text{AST}}$ in Appendix~\ref{app:ast loss}. Additional privacy analysis is presented in Appendix~\ref{app:privacy_analysis}.
+
+
+
+
+\subsection{Utility-Boosting via DP Post-Processing}
+\label{sec:stage2}
+
+\noindent\textbf{Latent-Conditioning Data Synthesis.}
+With the DP-compliant junior model $\mathcal{M}_J^{\text{DP}}$ and the trained PrivLC module from the privacy-sanitizing stage, we synthesize privacy-free instruction-following data without accessing the original sensitive prompts or code snippets. 
+
+Instead of relying on original instructions, we sample latent variables from the prior and decode them into prefix embeddings, which provide syntactic and semantic conditioning signals and task-level contextual information learned in privacy-sanitizing stage and guide the model to generate high-utility code snippets. Specifically, we sample latent variables from the standard normal prior and decode them into prefix embeddings using the DP-trained prefix decoder: $
+z_i \sim \mathcal{N}(0, I), \; \mathbf{e}_{\text{prefix}}^{(i)} = D^{\text{DP}}(z_i),$
+where the resulting $\mathbf{e}_{\text{prefix}}^{(i)}$ serve as continuous conditioning signals learned on the original corpus. Conditioned on it, the junior model $\mathcal{M}_J^{\text{DP}}$ generates a code sequence $\hat{c}_i = (\hat{c}_{i,1}, \dots, \hat{c}_{i,T}) $ with great syntactic structures and functional patterns autoregressively:
+\begin{equation}
+\hat{c}_i 
+\sim \prod_{t=1}^{T} 
+P_{\mathcal{M}_J^{\text{DP}}}
+\big(
+\hat{c}_{i,t} \mid \mathbf{e}_{\text{prefix}}^{(i)}, \hat{c}_{i,<t}
+\big).
+\end{equation}
+For each generated code snippet $\hat{c}_i$, we apply a prompt extractor $\mathcal{M}_{\text{ext}}$ to summarize a corresponding prompt $\hat{p}_i$, forming instruction-code pairs $(\hat{p}_i, \hat{c}_i)$. 
+We posit that, when provided with code snippets exhibiting well-formed syntax, coherent semantics, and explicit functional patterns, a sufficiently strong $\mathcal{M}_{\text{ext}}$ can abstract the task description, user intent, and contextual constraints into an explicit instruction.
+
+
+
+\noindent\textbf{Post-Processing and Premium Model Fine-Tuning.}
+Following PrivCode~\cite{liu2025privcode}, we apply execution and round-trip filter~\cite{allamanis2024unsupervisedevaluationcodellms} to the synthetic data for syntactic and semantic validation. 
+Appendix~\ref{app:post-processing} provides the implementation details and statistical analysis of post-processing steps.
+
+
+\begin{table*}[!t]
+\centering
+\setlength{\tabcolsep}{7.5pt} 
+\caption{Pass@1 score of \toolname{} and baselines trained under $\epsilon=4$ using four LLMs as premium models. The bolded data represents the best score across joint-sensitive scanario protection methods, and the gray shaded area indicates \toolname.}
+\label{tab:utility}
+\resizebox{1.0\textwidth}{!}{
+\begin{tabular}{l|l|cc|cc|cc|cc|cc|cc}
+\toprule
+\multirow{3}{*}{\textbf{Method}} 
+& \multicolumn{1}{c|}{\multirow{3}{*}{\textbf{Model}}}
+& \multicolumn{2}{c|}{\textbf{HumanEval}}
+& \multicolumn{2}{c|}{\textbf{MBPP}}
+& \multicolumn{2}{c|}{\textbf{BigCodeBench}}
+& \multicolumn{2}{c|}{\textbf{HumanEval}}
+& \multicolumn{2}{c|}{\textbf{MBPP}}
+& \multicolumn{2}{c}{\textbf{BigCodeBench}} \\
+\cline{3-14}
+& \multicolumn{1}{c|}{}
+& HE & HE+ & MBPP & MBPP+ & Full & Hard
+& HE & HE+ & MBPP & MBPP+ & Full & Hard \\
+\cline{3-14}
+& \multicolumn{1}{@{}c|}{}
+& \multicolumn{6}{c|}{\textbf{Instruct}}
+& \multicolumn{6}{c}{\textbf{Complete}} \\
+\hline
+
+PrivCode
+& \multirow{6}{*}{Qwen2.5-Coder-7B}
+& 66.5& 61.0& 78.3& 64.8& 22.9& 9.5& 43.9& 38.7& 77.9& 65.6& 27.9& 8.8
+\\
+\cline{3-14}
+DPFT& & 62.2& 57.9& 64.0& 51.1& 17.9& 4.1& 29.9& 31.1& 32.0& 29.6& 15.9& 4.7\\
+PC-Uncond
+& & 64.6& 58.5& 66.7& 54.5
+& 17.0& 3.4& 32.9& 29.3& 24.9& 20.1
+& 17.6& 3.4\\
+PC-PromptEmb& & 54.9&48.2&65.9&56.3	&17.6&2.7&58.5&50.6&73.3&61.1&38.5&7.4\\
+PC-PreEmb& & 65.9& 57.9& 67.1& 54.9& 19.0& 4.1& 51.2& 40.2& 58.5& 56.7& 32.0& 10.1\\
+\cellcolor{gray0}\textbf{\toolname}
+& &
+\cellcolor{gray0}\textbf{68.3}& \cellcolor{gray0}\textbf{60.4}& \cellcolor{gray0}\textbf{68.0}& \cellcolor{gray0}\textbf{57.1}
+& \cellcolor{gray0}\textbf{21.6}& 
+\cellcolor{gray0}\textbf{4.7}& \cellcolor{gray0}\textbf{64.0}& \cellcolor{gray0}\textbf{56.1}& \cellcolor{gray0}\textbf{77.8}& \cellcolor{gray0}\textbf{64.8}
+& \cellcolor{gray0}\textbf{43.3}& \cellcolor{gray0}\textbf{15.5} \\
+\hline
+
+PrivCode
+& \multirow{6}{*}{CodeGemma-7B}
+& 42.1& 36.6& 65.6& 53.7& 22.9& 5.4& 40.2& 31.7& 66.1& 53.7& 30.0& 8.8
+\\
+\cline{3-14}
+DPFT& & 31.1& 26.8& 43.1& 37.3& 11.9& 1.4& 26.2& 22.0& 50.3& 42.9& 18.2& 2.0\\
+PC-Uncond
+& & 0.0& 0.0& 0.0& 0.0
+& 0.0& 0.0& 0.0& 0.0& 0.0& 0.0
+& 0.0& 0.0\\
+PC-PromptEmb& & 32.3&28.4&55.6&46.3&18.8&3.4&31.7&28.7&58.7&48.4&28.9& 8.1\\
+PC-PreEmb& & 43.9 & 37.2 & 51.1 & 46.0 & 21.0 & 4.7 & 29.9 & 26.2 & 54.0 & 45.0 & 24.0 & 4.1 \\
+\cellcolor{gray0}\textbf{\toolname}
+& &
+\cellcolor{gray0}\textbf{46.3}& \cellcolor{gray0}\textbf{42.1}& \cellcolor{gray0}\textbf{59.3}& \cellcolor{gray0}\textbf{49.2}
+& \cellcolor{gray0}\textbf{24.1 }& 
+\cellcolor{gray0}\textbf{4.7}& \cellcolor{gray0}\textbf{34.1}& \cellcolor{gray0}\textbf{30.5}& \cellcolor{gray0}\textbf{61.6}& \cellcolor{gray0}\textbf{49.5}
+& \cellcolor{gray0}\textbf{31.1} & \cellcolor{gray0}\textbf{8.8}\\
+\hline
+
+PrivCode
+& \multirow{6}{*}{CodeQwen1.5-7B}
+& 52.4& 44.5& 70.6& 60.1& 29.1& 10.8& 48.8& 41.5& 72.5& 61.4& 35.5& 8.8 
+\\
+\cline{3-14}
+DPFT& & 37.8& 34.8& 61.1& 49.7& 21.5& 4.7& 31.1& 25.6& 55.6& 51.3& 21.3& 4.1\\
+PC-Uncond& & 36.0& 32.3& 58.5& 47.9
+& 21.0& 4.1& 29.3& 25.0 & 57.7& 49.2
+& 22.5& 5.4\\
+PC-PromptEmb& &43.9&36.6&62.4&53.7&23.9&4.7&45.7&39.0&66.4&54.8&30.0&6.8 \\
+PC-PreEmb& & 46.3 & 40.8 & 64.6 & 54.0 & 24.8&  4.7& 42.7 & 36.0 & 67.5 & 55.0 & 32.2&7.4\\
+\cellcolor{gray0}\textbf{\toolname}
+& 
+& \cellcolor{gray0}\textbf{51.8}& \cellcolor{gray0}\textbf{43.9}& \cellcolor{gray0}\textbf{66.1}& \cellcolor{gray0}\textbf{55.8}& \cellcolor{gray0}\textbf{26.1} & \cellcolor{gray0}\textbf{6.1} 
+& \cellcolor{gray0}\textbf{47.6}& \cellcolor{gray0}\textbf{39.6}& \cellcolor{gray0}\textbf{70.1} & \cellcolor{gray0}\textbf{59.0 }&\cellcolor{gray0}\textbf{36.0} & \cellcolor{gray0}\textbf{9.5} \\
+
+\hline
+
+PrivCode
+& \multirow{6}{*}{DS-Coder-6.7B}
+& 56.1 & 51.2 & 69.3 & 59.0 & 29.6 & 7.4
+& 47.0 & 43.3 & 69.0 & 58.2 & 36.0 & 9.4 \\
+\cline{3-14}
+DPFT & & 22.6& 18.3& 57.4& 46.8& 12.0& 2.0& 28.0& 26.8& 46.6& 40.2& 27.3& 2.0\\
+PC-Uncond
+& & 23.8& 21.3& 57.9& 48.4
+& 11.5& 1.4& 32.3& 28.0 & 55.0 & 45.2
+& 26.1& 2.0\\
+PC-PromptEmb& & 40.9&36.6&64.0&53.4&15.6&2.0&35.4&31.7&64.8&55.3&28.8&3.4 \\
+PC-PreEmb& & 36.0 & 31.1 & 61.1 & 50.8 & 13.8 & 2.0 & 31.1 & 29.3 & 59.0 & 47.9 & 28.0& 3.4\\
+\cellcolor{gray0}\textbf{\toolname}
+& 
+& \cellcolor{gray0}\textbf{41.5}& \cellcolor{gray0}\textbf{37.8}& \cellcolor{gray0}\textbf{64.8}& \cellcolor{gray0}\textbf{54.0}
+&  \cellcolor{gray0}\textbf{16.2}& 
+\cellcolor{gray0}\textbf{2.7}& \cellcolor{gray0}\textbf{36.6}& \cellcolor{gray0}\textbf{32.3}& \cellcolor{gray0}\textbf{65.1}& \cellcolor{gray0}\textbf{55.8}
+&  \cellcolor{gray0}\textbf{29.1}&  \cellcolor{gray0}\textbf{4.1}\\
+
+\bottomrule
+\end{tabular}
+}
+\vspace{-2mm}
+\end{table*}
+
+
+We fine-tune a premium model $\mathcal{M}_P$ on the filtered DP-synthesized dataset $\mathcal{D}_{\text{syn}} = \{(\hat{p}_i, \hat{c}_i)\}_{i=1}^{N_{\text{syn}}}$ without DP, for improved domain knowledge. 
+Since all inputs to the utility-boosting stage
+are DP mechanism outputs in the privacy-sanitizing stage, and all subsequent steps operate without accessing the original sensitive data, the entire pipeline constitutes pure post-processing of DP outputs. By the post-processing property of DP, these operations introduce no additional privacy budget~\cite{dpbook}.
+
+
+
+
+
+
+\section{Experiments}
+
+
+
+
+\subsection{Experimental Setup}
+\label{sec:setup}
+
+\noindent\textbf{Implementation.}
+For all experiments, \toolname \            uses Qwen2.5-Coder-1.5B~\cite{Qwen2.5_Coder} as the junior model $\mathcal{M}_J$ in the privacy-sanitizing stage. Both the code encoder $E^c$ and the prompt encoder $E^p$ are implemented as two-layer MLPs, with $E^c$ additionally equipped with dual linear heads for VAE reparameterization. The prefix decoder $D$ maps each latent variable to embeddings of 8 virtual tokens via a linear projection. We use a powerful external LLM, Llama-3.1-70B-Instruct~\cite{grattafiori2024llama3herdmodels}, as the prompt extractor $\mathcal{M}_{\text{ext}}$ and round-trip model $\mathcal{M}_r$. We select four commonly used base-version code LLMs as premium models $\mathcal{M}_P$: Deepseek-Coder-6.7B-Base~\cite{guo2024deepseekcoderlargelanguagemodel}, Qwen2.5-Coder-7B~\cite{Qwen2.5_Coder}, CodeGemma-7B~\cite{codegemmateam2024codegemmaopencodemodels}, and CodeQwen1.5-7B~\cite{codeqwen1.5}. In all fine-tuning processes, we utilize Low-Rank Adaptation (LoRA)~\cite{hu2022lora} to reduce computational cost. DP is accounted using Rényi DP~\cite{DBLP:conf/csfw/Mironov17}, with a privacy budget of $\varepsilon=4$ and $\delta=10^{-5}$. We provide detailed DP hyper-parameter settings in Appendix~\ref{app:dp setting}.
+
+
+
+\noindent\textbf{Baselines and Benchmarks.} We compare \toolname\ with PrivCode~\cite{liu2025privcode}, the first DP code generation method, which provides partial protection but achieves the highest utility theoretically, and other four baselines that offer full comprehensive protection for code-prompt pairs. We provide more details of baselines in~Appendix~\ref{app:baselines_details}.
+
+
+
+
+
+
+
+
+
+
+
+To evaluate the utility of code generation, we select well-known benchmarks such as HumanEval~\cite{chen2021evaluating}, MBPP~\cite{austin2021programsynthesislargelanguage}, EvalPlus (including HumanEval+ and MBPP+)~\cite{liu2023your}, BigCodeBench~\cite{zhuo2024bigcodebenchbenchmarkingcodegeneration}, with both instruct and complete task splits for evaluation, and Humaneval-X~\cite{zheng2023codegeex}. These benchmarks are widely used in evaluating synthetic code~\cite{santacoder, magicoder, starcoder, claude4}. 
+We report pass@1 scores under greedy decoding~\cite{chen2021evaluating}, requiring generated code to compile and produce correct outputs.
+
+
+
+
+To evaluate private information protection, we conduct canary experiment on CanaryLeaks, a benchmark that measures canary token memorization by prompting models with inductive function signatures to elicit leaked completions.
+We provide more details in Appendix~\ref{app:benchmarks_details}.
+
+
+
+\begin{figure*}[t]
+    \centering
+    \includegraphics[width=2.0\columnwidth]{images/ablation.pdf}
+    \caption{Average pass@1 scores of \toolname{} across four models and its variants under $\epsilon=4$.}
+    \vskip -4mm
+    \label{fig:abalation}
+\end{figure*}
+
+
+\subsection{The Utility of Code Generation}
+\label{sec:utility}
+
+We evaluate the code generation utility of \toolname \ with baselines using Magicoder-OSS-Instruct-75K~\cite{magicoder} as the fine-tuning dataset. Table \ref{tab:utility} reports Pass@1 results on HumanEval, MBPP, EvalPlus, and BigCodeBench across four premium models under $\epsilon=4$.  Appendix~\ref{app:other_language} further examines generalization to Java, C++, and Rust. 
+
+
+
+As shown in Table \ref{tab:utility}, PrivCode achieves strong performance by assuming partial privacy protection, confirming that relaxing privacy constraints can yield higher utility. However, joint-sensitive scenario protection methods inevitably introduces utility degradation. Among these baselines, DPFT and PC-Uncond perform the worst. PC-Uncond suffers from unconditional generation without any code syntactic and task-level semantic guidance, leading to weak code relevance and structure. DPFT degrades substantially due to the large parameter space of LLMs under DP-SGD, where injected gradient noise accumulates more severely, and where prompt and code tokens jointly contribute to the optimization objective, causing natural language gradients to interfere with structured code learning. 
+PC-PreEmb, a variant of \toolname{} that relies on public pretraining, reduces computation cost but lacks adaptation to domain-specific syntax and semantics from the sensitive corpus, leading to smaller gains compared to \toolname{}. Similarly, PC-PromptEmb, which conditions on prompt embeddings alone, also underperforms, as prompts provide weaker syntactic and structural signals than code, limiting the effectiveness of latent conditioning. 
+
+Despite stronger privacy constraints, \toolname \ consistently achieves the best utility among joint-sensitive methods and even surpasses PrivCode on several metrics. For example, with Qwen2.5-Coder-7B, \toolname{} improves HumanEval (Instruct) from 66.5 to 68.3 and BigCodeBench (Complete, Full) from 27.9 to 43.3. Similar gains are observed across other models. We attribute this to latent-conditioned synthesis: the latent representation encodes code structure and task-level semantics, and sampling from a Gaussian prior in the utility-boosting stage introduces novel yet coherent structural and functional patterns beyond the original dataset, improving generalization. 
+
+We extend our experiments in Appendix~\ref{app:external} by treating the external models $\mathcal{M}_{\text{ext}}$ and $\mathcal{M}_r$ as replaceable modules, and further replacing the DP fine-tuned junior model with a strong external model as a public data synthesizer. These results show that \toolname{} does not rely on external model capability, but uses them only as auxiliary tools.
+
+
+
+
+
+
+
+
+\begin{table*}[t]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{7.0pt} 
+\caption{The leakage rate of \toolname \ (P++), PrivCode (Priv.) under $\epsilon = 4$, and non-DP fine-tuning method NonDPFT (NonDP.). Count refers to the number of times each canary sample is injected into the training dataset.}
+\label{tab:canary_transposed}
+\resizebox{1.0\textwidth}{!}{
+\begin{tabular}{l|c|ccc|ccc|ccc|ccc}
+\toprule
+\multirow{2}{*}{\textbf{Canary Type}} & \multirow{2}{*}{\textbf{Count}} & \multicolumn{3}{c|}{\textbf{Qwen2.5-Coder-7B}} & \multicolumn{3}{c|}{\textbf{CodeGemma-7B}} & \multicolumn{3}{c|}{\textbf{CodeQwen1.5-7B}} & \multicolumn{3}{c}{\textbf{DS-Coder-6.7B}} \\
+\cline{3-14}
+& & NonDP. & Priv. & P++ & NonDP. & Priv. & P++ & NonDP. & Priv. & P++ & NonDP. & Priv. & P++ \\
+\hline
+\multirow{3}{*}{Joint} 
+& 5   & \textcolor[HTML]{EA755E}{20\%} & 0\%  & 0\% & 0\%  & 0\%  & 0\% & \textcolor[HTML]{EA755E}{40\%} & 0\%  & 0\% & 0\%  & 0\%  & 0\% \\
+& 10  & \textcolor[HTML]{EA755E}{80\%} & 0\%  & 0\% & \textcolor[HTML]{EA755E}{40\%} & 0\%  & 0\% & \textcolor[HTML]{EA755E}{80\%} & 0\%  & 0\% & \textcolor[HTML]{EA755E}{20\%} & 0\%  & 0\% \\
+& 100 & \textcolor[HTML]{EA755E}{100\%} & \textcolor[HTML]{EA755E}{20\%} & 0\% & \textcolor[HTML]{EA755E}{60\%} & \textcolor[HTML]{EA755E}{40\%} & 0\% & \textcolor[HTML]{EA755E}{100\%} & \textcolor[HTML]{EA755E}{20\%} & 0\% & \textcolor[HTML]{EA755E}{80\%} & \textcolor[HTML]{EA755E}{20\%} & 0\% \\
+\hline
+\multirow{3}{*}{Prompt} 
+& 5   & 0\%  & 0\%  & 0\% & 0\%  & 0\%  & 0\% & 0\%  & 0\%  & 0\% & 0\%  & 0\%  & 0\% \\
+& 10  & 0\%  & 0\%  & 0\% & 0\%  & 0\%  & 0\% & \textcolor[HTML]{EA755E}{20\%} & \textcolor[HTML]{EA755E}{20\%} & 0\% & 0\%  & 0\%  & 0\% \\
+& 100 & \textcolor[HTML]{EA755E}{20\%} & 0\%  & 0\% & \textcolor[HTML]{EA755E}{40\%} & \textcolor[HTML]{EA755E}{20\%} & 0\% & \textcolor[HTML]{EA755E}{60\%} & \textcolor[HTML]{EA755E}{20\%} & 0\% & \textcolor[HTML]{EA755E}{20\%} & \textcolor[HTML]{EA755E}{20\%} & 0\% \\
+\hline
+\multirow{3}{*}{Code} 
+& 5   & 0\% & 0\%  & 0\% & 0\%  & 0\%  & 0\% & \textcolor[HTML]{EA755E}{40\%} & 0\%  & 0\% & 0\%  & 0\%  & 0\% \\
+& 10  & \textcolor[HTML]{EA755E}{80\%} & 0\%  & 0\% & \textcolor[HTML]{EA755E}{40\%} & 0\%  & 0\% & \textcolor[HTML]{EA755E}{100\%} & 0\%  & 0\% & \textcolor[HTML]{EA755E}{40\%} & 0\%  & 0\% \\
+& 100 & \textcolor[HTML]{EA755E}{80\%} & 0\%  & 0\% & \textcolor[HTML]{EA755E}{60\%} & 0\%  & 0\% & \textcolor[HTML]{EA755E}{100\%} & 0\%  & 0\% & \textcolor[HTML]{EA755E}{60\%} & 0\%  & 0\% \\
+\bottomrule
+\end{tabular}}
+\end{table*}
+
+
+
+
+\begin{table*}[h!]
+\centering
+\caption{Average Pass@1 of four LLMs trained using \toolname{} under different latent
+variable dimension $d_z$, evaluated on instruct and complete models of HumanEval, MBPP, and EvalPlus benchmarks. The pass@1 score varies with different latent
+variable dimension $d_z$.}
+\resizebox{1.0\textwidth}{!}{
+\setlength{\tabcolsep}{5.0mm}{
+\begin{tabular}{l|l|cc|cc|cc|cc}
+\toprule
+\multirow{3}{*}{\textbf{Hyper-Parameter}} & \multirow{3}{*}{\textbf{Model}} & \multicolumn{2}{c|}{\textbf{HumanEval}} & \multicolumn{2}{c|}{\textbf{MBPP}} & \multicolumn{2}{c|}{\textbf{HumanEval}} & \multicolumn{2}{c}{\textbf{MBPP}} \\
+\cline{3-10}
+& \multicolumn{1}{c|}{} & HE & HE+ & MBPP & MBPP+ & HE & HE+ & MBPP & MBPP+ \\
+\cline{3-10}
+& \multicolumn{1}{c|}{} & \multicolumn{4}{c|}{\textbf{Instruct}} & \multicolumn{4}{c}{\textbf{Complete}} \\
+\midrule
+\multirow{5}{*}{\textbf{$d_z=256$}} 
+& Qwen2.5-Coder-7B & 56.1& 53.0& 65.6& 53.7& 62.8& 55.5& 74.9& 61.9\\
+& CodeGemma-7B & 39.0& 34.1& 49.0& 41.0& 31.1& 26.2& 54.0& 41.0\\
+& CodeQwen1.5-7B & 40.2& 32.9& 60.6& 50.5& 38.4& 32.9& 66.9& 56.1\\
+& DS-Coder-6.7B & 38.4& 33.5& 61.4& 50.8& 36.6& 32.3& 64.0& 54.0\\
+\cline{2-10}
+& \cellcolor{gray0}\textbf{Average}
+& \cellcolor{gray0}43.4
+& \cellcolor{gray0}38.4
+& \cellcolor{gray0}59.2
+& \cellcolor{gray0}49.0
+& \cellcolor{gray0}42.2
+& \cellcolor{gray0}36.7
+& \cellcolor{gray0}65.0
+& \cellcolor{gray0}53.3 \\
+
+
+\midrule
+\multirow{5}{*}{\textbf{$d_z=768$}}& Qwen2.5-Coder-7B & 68.3& 60.4& 68.0& 57.1 & 64& 56.1& 77.8& 64.8\\
+& CodeGemma-7B & 46.3& 42.1& 59.3& 49.2 & 34.1& 30.5& 61.6& 49.5\\
+& CodeQwen1.5-7B & 51.8& 43.9& 66.1& 55.8& 47.6& 39.6& 70.1 & 59.0 \\
+& DS-Coder-6.7B & 41.5& 37.8& 64.8& 54.0& 36.6& 32.3& 65.1& 55.8\\
+\cline{2-10}
+& \cellcolor{gray0}\textbf{Average} 
+& \cellcolor{gray0}\textbf{52.0} & \cellcolor{gray0}\textbf{46.1} & \cellcolor{gray0}\textbf{64.6} & \cellcolor{gray0}\textbf{54.0} & \cellcolor{gray0}\textbf{45.6} & \cellcolor{gray0}\textbf{39.6} & \cellcolor{gray0}\textbf{68.7} & \cellcolor{gray0}\textbf{57.3} \\
+
+\midrule
+\multirow{5}{*}{\textbf{$d_z=2048$}}& Qwen2.5-Coder-7B & 59.1& 54.9& 66.4& 54.8& 59.8& 53.0& 74.6& 60.8\\
+& CodeGemma-7B & 42.1& 37.2& 53.7& 43.9& 28.0& 23.8& 56.9& 43.1\\
+& CodeQwen1.5-7B & 45.7& 39.0& 64.6& 54.0& 46.3& 39.6& 67.2& 55.6\\
+& DS-Coder-6.7B & 44.5& 41.5& 61.9& 51.3& 33.5& 28.7& 61.9& 52.4\\
+\cline{2-10}
+& \cellcolor{gray0}\textbf{Average}
+& \cellcolor{gray0}47.9
+& \cellcolor{gray0}43.2
+& \cellcolor{gray0}61.7
+& \cellcolor{gray0}51.0
+& \cellcolor{gray0}41.9
+& \cellcolor{gray0}36.3
+& \cellcolor{gray0}65.2
+& \cellcolor{gray0}53.0 \\
+\bottomrule
+\end{tabular}
+}}
+\label{tab:hyper_lambda}
+\end{table*}
+
+
+
+
+
+
+\noindent{\textbf{Ablation Study.} Figure \ref{fig:abalation} presents an ablation study. Removing latent alignment (w/o Align) weakens the coupling between prompt and code semantics, leading to notable utility drops of up to 30.6\% on Complete-MBPP. Removing latent conditioning entirely (w/o Latent), equivalent to PC-Uncond, causes a sharp performance drop, confirming that latent conditioning is essential for mitigating structure collapse and enabling instruction-following generation without explicit prompts. Together, these results validate the necessity of both latent representations and alignment in \toolname.
+
+
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1.0\columnwidth]{images/tsne_main.pdf}
+    \caption{t-SNE visualizations of synthetic code generated at sampling temperatures $T \in \{0.8, 1.0\}$. We compare the synthetic data distribution of \toolname{} with the original dataset, PrivCode, and PC-Uncond in the two-dimensional embedding space.}
+
+    \vskip -4mm
+    \label{fig:tsne}
+\end{figure}
+
+
+\subsection{Private Information Protection}
+\label{sec:private pretection}
+
+We evaluate training dataset protection using canary experiments, 
+assessing memorization and unintended leakage of sensitive training data~\cite{kandpal2022deduplicating, carlini2022quantifying, yue2023synthetic}. Canary experiments inject private-like sequences, containing unique canary tokens, into the training dataset and test whether the trained model reproduces them during generation. 
+Following PrivCode~\cite{liu2025privcode}, we construct five categories of realistic canaries, including Email, Name, IP Address, Password, and Username. To reflect the joint-sensitive scenario, 
+we further consider three canary types within instruction-following data: code canary (canary tokens appear only in the code), prompt canary (only in the instruction), and joint canary (in both). We inject canaries into OSS-Instruct PII Dataset~\cite{liu2025privcode} as training sets with repetition count as $\{5, 10, 100\}$. Canary examples are provided in Appendix~\ref{app:canary_samples}.
+
+
+\begin{figure*}[t]
+    \centering
+    \includegraphics[width=0.97\textwidth]{images/hyper-parameter-analysis.pdf} 
+    \vspace{-2mm}
+    \caption{Average pass@1 of four LLMs trained using \toolname{} across different privacy budgets, evaluated on HumanEval, MBPP, and EvalPlus benchmarks. ``Base Test'' is HumanEval or MBPP, while ``Plus Test'' means HumanEval+ and MBPP+. The dashed lines indicate the top value.}
+    
+    \vspace{-4mm}
+    \label{fig:hyper_epsilon}
+\end{figure*}
+
+
+Table~\ref{tab:canary_transposed} reports leakage rates under $\epsilon=4$. Results from NonDPFT reveal the relative difficulty of different attack scenarios. Joint canaries are the most challenging, exhibiting near-complete leakage when injected frequently (e.g., up to 100\% leakage at count $=100$ across multiple models), followed by code canaries, which also show substantial leakage due to direct gradient contribution from code tokens. Prompt canaries are comparatively less severe, as prompt tokens influence generation mainly through attention rather than optimization objectives. These results establish joint canaries as the strongest threat under the joint-sensitive scenario. PrivCode effectively mitigates leakage for code canaries, but still suffers from non-negligible leakage under prompt and joint canaries (e.g., up to 40\% category leakage), due to its reliance on sensitive prompts as explicit conditioning signals during training and data synthesis. In contrast, \toolname \ achieves zero leakage across all canary types, models, and injection counts. 
+We expand the canary experiment under $\epsilon \in \{1,4,10\}$ in Appendix~\ref{app:expand canary}.
+
+We further conduct a loss-based membership inference attack (MIA)~\cite{shokri2017membership}. Results in Appendix~\ref{app:mia} show that \toolname{} consistently achieves substantially lower attack success rates than baselines, indicating strong resistance to membership inference.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\subsection{Diversity and Fidelity}
+\label{sec:diversity and fidelity}
+
+Under the same experimental setting as Section~\ref{sec:utility}, we conduct qualitative and quantitative analyses on the diversity and fidelity of synthesized code snippets. We compare \toolname{} against three baselines, the original dataset, PrivCode, and PC-Uncond. Specifically, we first generate 1{,}500 synthetic samples using PrivCode, PC-Uncond, and \toolname{}, respectively. We then randomly sample 1{,}000 code snippets from each synthetic dataset and the original dataset for analysis.
+
+Following prior visualization practices~\cite{gong2025privorl}, we obtain code embeddings using the frozen encoder and project them into a two-dimensional embedding space via t-SNE~\cite{van2008visualizing} for distributional comparison. Figure~\ref{fig:tsne} provides a qualitative analysis of diversity and fidelity via t-SNE visualization. PrivCode remains closest to the original data distribution, which is expected since it directly leverages the original sensitive prompts as conditioning signals during generation. In contrast, PC-Uncond exhibits fragmented clusters and isolated regions, indicating unstable generation and mode collapse under unconditional sampling. 
+Despite operating under the more challenging joint-sensitive setting, \toolname{} produces a more dispersed yet smoothly connected distribution, with synthetic samples interleaving more uniformly with the original data distribution. This suggests that latent-conditioned sampling enables \toolname{} to explore a broader yet coherent generation space, improving diversity while maintaining high fidelity to the original data. Moreover, \toolname{} consistently preserves strong diversity and fidelity across different sampling temperatures $T \in \{0.8, 1.0\}$, whereas PC-Uncond becomes increasingly fragmented as the temperature decreases, further demonstrating the robustness of the learned latent representations. We provide more detailed analyses under different temperatures in Appendix~\ref{app:t-SNE}. We further provide quantitative fidelity evaluations in Appendix~\ref{app:fidelity}.
+
+The results show that \toolname{} substantially outperforms the unconditional baseline while remaining highly comparable to PrivCode and the original data across diversity and fidelity, demonstrating its ability to learn faithful latent representations under the joint-sensitive setting.
+
+
+\subsection{Privacy Budget and Hyper-parameter Analysis}
+\label{sec:hyper analysis}
+
+
+We study the impact of two key hyper-parameters of \toolname{}: (1) privacy budget $\epsilon \in \{0.2, 1, 4, 10, 20\}$, (2) latent dimension $d_z \in \{256, 768, 2048\}$.
+The privacy budget $\epsilon$ controls the strength of differential privacy, where smaller $\epsilon$ provides stricter privacy guarantees but generally leads to lower model utility.
+The latent dimension $d_z$ controls the capacity of the latent space and thus the expressiveness of generation.
+
+Table~\ref{tab:hyper_lambda} shows that 
+a small latent dimension ($d_z=256$) consistently underperforms across all benchmarks and models. 
+Increasing the dimension to $d_z=768$ yields the best average pass@1 scores on both instruction-following and completion benchmarks (e.g., improving HumanEval pass@1 from 43.4 to 52.0 on instruct models). Further increasing the dimension to $d_z=2048$ leads to degraded performance. We attribute this to over-parameterized latent representations that are harder to learn robustly under DP-SGD noise. 
+
+
+Figure~\ref{fig:hyper_epsilon} illustrates the effect of varying the privacy budget $\epsilon$. Across all benchmarks and models, the average pass@1 score consistently decreases as $\epsilon$ becomes smaller. This trend reflects the increasing noise injected by DP-SGD under stricter privacy constraints, which reduces the utility of the learned latent representations and consequently the quality of synthetic code. Even under moderate privacy budgets (e.g., $\epsilon=4$), \toolname \ maintains strong performance, demonstrating a favorable privacy–utility trade-off.
+
+
+
+
+
+
+\section{Conclusions}
+
+This paper proposes PrivCode++, the first DP code synthesis method for protecting both code snippets and prompts. 
+The inability to explicitly learn from or leverage prompts during generation poses a critical challenge, often resulting in severely diminished utility and limited structural diversity in the generative code. To address this challenge, PrivCode++ introduces the PrivLC module using DP-SGD. PrivLC is trained to synthesize code embeddings that align with the distribution of sensitive code representations. By modeling private variance in a continuous latent space, PrivLC allows the synthesizer to explore code structures beyond the most frequent patterns, enhancing the diversity of the generative code. The synthetic code embedding is fed to the synthesizers to generate code matching the distribution of sensitive code. Then, we use a public LLM to summarize the generative code and obtain the prompt corresponding to the generative code. Empirical results show that PrivCode++ outperforms baselines and achieves utility comparable to relaxed-privacy methods while ensuring stronger privacy.
+
+
+\section*{Impact Statement}
+
+We propose \toolname, the first DP code synthesizer that provides comprehensive privacy protection for both prompts and code snippets, establishing a paradigm for learning domain-specific knowledge from sensitive code datasets under rigorous differential privacy guarantees. This work has the potential to mitigate privacy risks in code LLM deployment—particularly the leakage of personally identifiable information (PII) and proprietary logic that may reside in both natural language instructions and code implementations—thereby fostering more responsible adoption of code generation systems in enterprise and open-source ecosystems. All open-source datasets and models used in this paper are publicly available and widely adopted by the community. All highlighted information presented originates from the open-source PII dataset~\cite{santacoder} and synthetically generated canary samples. The PII dataset~\cite{santacoder} explicitly states that included PII data derives from open and permissively licensed GitHub repositories. Synthetic canaries are generated using Llama-3.1-70B-Instruct~\cite{patterson2022carbonfootprintmachinelearning} with few-shot context from the same PII dataset. To uphold the highest ethical standards and prevent inadvertent disclosure of private information, we redact all presented examples using black blocks. While our method strengthens privacy preservation, users should recognize that DP guarantees complement, rather than replace, broader security practices in software development pipelines.
+
+
+
+
+
+
+
+\bibliography{privcode++}
+\bibliographystyle{icml2026}
+
+\newpage
+\appendix
+\onecolumn
+
+
+\section{Detailed Derivation of Optimization Objectives}
+\label{app:objectives}
+
+\subsection{Syntax-Aware KL Loss}
+\label{app:ast loss}
+
+Formally, let $t_s=(s_1,s_2,\dots,s_m)$ denote the sequence of structural tokens extracted from the AST of a code snippet $S$, with vocabulary $V$. The junior model parameters are $\theta$, and the reference (frozen) model parameters are $\theta'$. For each position $i$, the logits are $\ell_i^{(\theta)}, \ell_i^{(\theta')}\in\mathbb{R}^{|V|}$.
+For every position $i$ and token $v\in V$, the conditional probabilities is:
+$$
+p_i(v)=\frac{\exp(\ell_{i,v}^{(\theta)})}{\sum_{u\in V}\exp(\ell_{i,u}^{(\theta)})},\quad
+p_i'(v)=\frac{\exp(\ell_{i,v}^{(\theta')})}{\sum_{u\in V}\exp(\ell_{i,u}^{(\theta')})}.
+$$
+The overall KL divergence loss across positions is:
+$$
+\mathcal{L}_{\text{KL}}^{\text{AST}}=\sum_{i=1}^{m}\sum_{v\in V}p_i(v)\log\frac{p_i(v)}{p_i'(v)}.
+$$
+
+The syntax-aware KL loss is multiplied by a weighting hyper-parameter $\lambda_{\text{AST}}$ and added as a regularization term to other objectives. To balance structure preservation in early training with flexibility in later stages, we adopt a smooth exponential decay schedule for $\lambda_{\text{AST}}$:
+$$
+\lambda_{\text{AST}}(t) = \lambda_{\min} + (\lambda_{\max} - \lambda_{\min}) \cdot e^{-\alpha t}
+$$
+where $t$ denotes the current training step, $\lambda_{\max}$ and $\lambda_{\min}$ are the upper and lower bounds of the weight, and $\alpha > 0$ is the decay rate controlling how fast $\lambda_{\text{AST}}$ decreases. At the beginning of training ($t=0$), $\lambda_{\text{AST}}(0) = \lambda_{\max}$, enforcing strong structural alignment with the reference model. As training progresses, $\lambda_{\text{AST}}(t)$ decays smoothly toward $\lambda_{\min}$, allowing the model to gradually deviate from the reference distribution while still maintaining basic syntactic coherence.
+
+\subsection{Objective of Each Module}
+\label{app:objectives_detail}
+
+This section provides the detailed formulation of the unified optimization objective described in Section~\ref{sec:stage1}.
+
+All components in the privacy-sanitizing stage, the junior model $\mathcal{M}_J$, code encoder $E^c$, prompt encoder $E^p$, and prefix decoder $D$, are jointly optimized under a unified DP-SGD optimizer with shared privacy accounting. The overall training objective decomposes into module-specific losses as follows:
+
+\noindent\textbf{Junior Model $\mathcal{M}_J$.} Optimized for latent-conditioned code generation with syntax preservation:
+\begin{equation}
+\mathcal{L}_{\mathcal{M}_J} = \mathcal{L}_{\text{CE}}(c \mid \mathbf{e}_{\text{prefix}}) + \lambda_{\text{AST}}(t) \cdot \mathcal{L}_{\text{KL}}^{\text{AST}},
+\end{equation}
+where $\mathcal{L}_{\text{CE}}(c \mid \mathbf{e}_{\text{prefix}}) = -\sum_{t=1}^{T} \log P_{\mathcal{M}_J}(c_t \mid \mathbf{e}_{\text{prefix}}, c_{<t})$ is the autoregressive cross-entropy loss conditioned on prefix embeddings $\mathbf{e}_{\text{prefix}} \in \mathbb{R}^{K \times d}$, and $\mathcal{L}_{\text{KL}}^{\text{AST}}$ is the syntax-aware KL regularization (detailed derivation in Appendix~\ref{app:ast loss}).
+
+\noindent\textbf{Prefix Decoder $D$.} Shares identical optimization objectives with $\mathcal{M}_J$ through gradient flow:
+\begin{equation}
+\mathcal{L}_{D} = \mathcal{L}_{\text{CE}}(c \mid \mathbf{e}_{\text{prefix}}) + \lambda_{\text{AST}}(t) \cdot \mathcal{L}_{\text{KL}}^{\text{AST}},
+\end{equation}
+since $\mathbf{e}_{\text{prefix}} = D(z^c)$ and gradients from both losses flow backward through $D$.
+
+\noindent\textbf{Code Encoder $E^c$.} Receives multi-path supervision combining explicit latent-space constraints and implicit generation guidance:
+\begin{equation}
+\mathcal{L}_{E^c} = \underbrace{\mathcal{L}_{\text{CE}} + \lambda_{\text{AST}}(t) \cdot \mathcal{L}_{\text{KL}}^{\text{AST}}}_{\text{implicit via generation path } z^c \to D \to \mathbf{e}_{\text{prefix}}} + \underbrace{\mathcal{L}_{\text{VAE}}}_{\text{explicit}} + \underbrace{\lambda_{\text{align}} \cdot \mathcal{L}_{\text{align}}}_{\text{explicit}},
+\end{equation}
+where:
+\begin{itemize}
+    \item $\mathcal{L}_{\text{VAE}} = \mathrm{KL}\big(q_{\phi}(z \mid c) \,\|\, \mathcal{N}(0, I)\big)$ enforces a structured latent space by regularizing the posterior $q_{\phi}(z \mid c) = \mathcal{N}(\mu^c, \mathrm{diag}((\sigma^c)^2))$ toward the standard normal prior
+    \item $\mathcal{L}_{\text{align}} = -\log \frac{\exp(\langle z^c, z^p \rangle / \tau)}{\sum_{p'} \exp(\langle z^c, z^{p'} \rangle / \tau)}$ aligns code-induced ($z^c = E^c(h^c)$) and prompt-induced ($z^p = E^p(h^p)$) latents via contrastive learning~\cite{oord2018representation}
+    \item Implicit gradients flow backward from the generation losses through the computation path $z^c \to D \to \mathbf{e}_{\text{prefix}} \to \mathcal{M}_J$, ensuring encoded latents remain informative for downstream generation
+\end{itemize}
+This dual-path optimization enables $E^c$ to specialize to the code distribution and task structure of the sensitive dataset.
+
+\noindent\textbf{Prompt Encoder $E^p$.} Functions as a privacy-safe auxiliary module optimized exclusively through alignment:
+\begin{equation}
+\mathcal{L}_{E^p} = \lambda_{\text{align}} \cdot \mathcal{L}_{\text{align}}(z^c, z^p).
+\end{equation}
+During training, $E^p$ processes sensitive prompts $p$ to extract task-level semantics ($z^p$) that guide latent alignment. Crucially, $E^p$ is not used during inference; its sole purpose is to inject contextual supervision into the latent space while ensuring no sensitive prompt information propagates to synthetic outputs.
+
+\noindent\textbf{Joint Optimization.} All modules share a unified DP-SGD optimizer with per-sample gradient clipping (norm $C$) and Gaussian noise injection ($\sigma$). The total objective is:
+\begin{equation}
+\mathcal{L}_{\text{total}} = \mathcal{L}_{\mathcal{M}_J} + \mathcal{L}_{D} + \mathcal{L}_{E^c} + \mathcal{L}_{E^p},
+\end{equation}
+ensuring all learned representations satisfy the same formal $(\varepsilon, \delta)$-DP guarantee.
+
+\section{Privacy Analysis}
+\label{app:privacy_analysis}
+
+
+The privacy analysis of \toolname \ follows the framework of standard DP-SGD~\cite{dpsgd}, and we can use any privacy accountant to compute its privacy loss, such as Rényi differential privacy (RDP)~\cite{DBLP:conf/csfw/Mironov17} or Privacy Loss Random Variables (PRV)~\cite{gopi2021numerical}. 
+
+Each training step in~\Cref{alg:privcodepp_workflow} applies a sub-sampled Gaussian mechanism, which satisfies $(\alpha, \rho(\alpha))$-RDP for all orders $\alpha > 1$, where $\rho(\alpha)$ depends on the noise scale $\sigma$ and sub-sampling ratio $q$. By the composition property of RDP, the total privacy cost after $T$ iterations is $(\alpha, T \cdot \rho(\alpha))$-RDP. Finally, we convert this bound to $(\epsilon, \delta)$-DP via the standard RDP-to-DP conversion~\cite{DBLP:conf/csfw/Mironov17}, enabling straightforward calibration of $\sigma$ to meet a prescribed privacy budget. For instance, given target privacy parameters $(\epsilon, \delta) = (4.0, 10^{-5})$, we fix $T = 100$ and $q = 0.01$, then numerically search for the minimal noise scale $\sigma$ such that the converted $\epsilon$ is below the target. 
+
+During DP-SGD training, all trainable components, including the junior LLM (via LoRA~\cite{hu2022lora} adapters), the code encoder $E^c$, the prompt encoder $E^p$, and the prefix decoder $D$, are jointly optimized under a single DP-SGD optimizer. Per-sample gradients are clipped and perturbed with Gaussian noise, and a shared privacy accountant tracks the cumulative privacy loss across all modules under a unified budget $(\varepsilon, \delta)$. This ensures that all learned representations satisfy the same DP guarantee.
+
+In \toolname{}, we define each DP example as a truncated sequence derived from a sensitive prompt–code pair, and neighboring datasets differ in exactly one such pair. Since no module receives purely prompt-only or code-only gradient contributions, all trainable parameters that consume prompt information are optimized jointly under DP-SGD with per-sample clipping and noise injection. Therefore, the resulting $(\varepsilon, \delta)$-DP guarantee formally bounds the influence of any single sensitive prompt, together with its associated code, on the learned model, providing explicit privacy protection for prompts.
+
+
+\section{Experiment Setup Details}
+\label{app:setup}
+
+\subsection{Datasets}
+\label{app:dataset_details}
+
+This section introduces the datasets investigated in our paper. We elaborate on the details as follows.
+
+\noindent{\textbf{Magicoder-OSS-Instruct-75K.}} This dataset is generated by Magicoder~\cite{magicoder} using its OSS-Instruct method for instruction fine-tuning. It contains a large number of high-quality task-code instruction pairs. OSS-Instruct is a prompt engineering method for open-source code that utilizes a vast amount of code from open-source software (OSS) repositories. Constructing a carefully designed prompt automatically generates useful instructions or task descriptions. The primary goal is to extract high-quality data from real-world codebases for code generation tasks.
+
+
+Magicoder-OSS-Instruct-75K is collected from publicly available code repositories on open-source platforms such as GitHub and GitLab, and generated by GPT-3.5-turbo-1106 developed by OpenAI. The OSS-Instruct pipeline incorporates code snippets from massive open-source GitHub repositories, some of which may contain PII or code vulnerabilities, and directly uses these snippets as part of the prompt. As a result, the Magicoder-OSS-Instruct-75K dataset inevitably includes explicit or implicit privacy information.
+
+\noindent{\textbf{OSS-Instruct PII Dataset.}} The OSS-Instruct PII Dataset is derived from a manually annotated personally identifiable information (PII) corpus originally introduced in the SantaCoder study~\cite{santacoder}. This foundational dataset targets seven sensitive entity types commonly found in source code: names, usernames, email addresses, IP addresses, cryptographic keys, passwords, and identifiers. Its construction involved a two-stage annotation process. Initially, twelve members of the BigCode community\footnote{\url{https://www.bigcode-project.org/}} performed expert annotation on a curated subset of The Stack~\cite{kocetkov2022stack3tbpermissively}, pre-screening 400 samples from an initial pool of 4,000 potentially PII-containing code files. Subsequently, to scale annotation efforts, 1,399 crowd-workers from 35 countries were engaged via the Toloka platform, ultimately yielding a dataset of 12,099 code snippets. Each sample averages approximately 50 lines of code and spans 31 programming languages, providing broad linguistic coverage.
+To adapt this resource for instruction tuning, the OSS-Instruct methodology~\cite{magicoder} was applied. Specifically, Llama-3.1-70B-Instruct~\cite{patterson2022carbonfootprintmachinelearning} was employed to generate synthetic instruction–code pairs by prompting the model to craft natural language instructions inspired by each original PII-containing snippet. The generation process used a temperature of 0 to enforce deterministic, greedy decoding, thereby minimizing stochastic variation and enhancing output consistency. Crucially, the prompts were carefully designed to ensure that the regenerated code snippets preserved all original PII entities without alteration. Owing to the relatively limited scale of the base dataset, the instruction augmentation was restricted to Python for each source sample—a design choice aimed at facilitating more stable model convergence during fine-tuning while maintaining fidelity to the original PII patterns.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\begin{table*}[!t]
+\centering
+\caption{DP-SGD hyper-parameter settings under target $\epsilon=4.0$. The sampling rate $q$ is computed by the dataset size and batch size. We use AdamW optimizer with a learning rate of $5\text{e-}6$.}
+\setlength{\tabcolsep}{3.0mm}{
+\resizebox{1.0\textwidth}{!}{%
+\footnotesize
+\begin{tabular}{l|cccccccc}
+\toprule
+\textbf{Method} &
+\textbf{Dataset Size} &
+\textbf{Sampling Rate $q$} &
+\textbf{Max Step} &
+\textbf{Clipping Norm $C$} &
+\textbf{Noise Scale $\sigma$} &
+\textbf{$\delta$} &
+\textbf{Accountant} &
+\textbf{Resulting $\epsilon$} \\
+\toprule
+PrivCode & 19551 & 0.0131 & 100 & 1.0 & 0.63 & $1\text{e-}5$ & RDP & 3.97\\
+DPFT& 29855& 0.0086& 2000 & 1.0 & 0.77& $1\text{e-}5$ & RDP & 3.98 \\
+ PC-Uncond& 19551 & 0.0131& 400 & 1.0 & 0.76& $1\text{e-}5$ & RDP &3.98\\
+PC-PreEmb& 19551 & 0.0131& 400 & 1.0 & 0.76& $1\text{e-}5$ & RDP & 3.97 \\
+\toolname & 19551 & 0.0131& 400 & 1.0 & 0.76& $1\text{e-}5$ & RDP & 3.97 \\
+\bottomrule
+\end{tabular}%
+}}
+\label{tab:dp_settings}
+\end{table*}
+
+
+
+
+
+\begin{table}[!t]
+\centering
+\setlength{\tabcolsep}{8.5pt}
+\caption{Pass@1 score of \toolname{} and baselines under $\epsilon=4$ across Java, C++, and Rust code generation tasks. ‘Pretrain’ means generating code without fine-tuning on sensitive code.}
+\label{tab:humaneval-x}
+\scriptsize
+\resizebox{0.75\textwidth}{!}{
+\begin{tabular}{l|ccc|ccc|ccc}
+\toprule
+\multirow{2}{*}{\textbf{Method}}  &
+\multicolumn{3}{c|}{\textbf{Qwen2.5-Coder-7B}} &
+\multicolumn{3}{c|}{\textbf{CodeGemma-7B}} &
+\multicolumn{3}{c}{\textbf{CodeQwen1.5-7B}} \\
+\cline{2-10}
+& Java & C++ & Rust & Java & C++ & Rust& Java & C++ & Rust \\
+\hline
+Pretrain 
+& 44.5& 14.0& 47.0& 29.9& 0.6& 28.0& 35.4& 0.0& 40.2\\
+PrivCode
+& 57.3 & 22.0 & 44.5
+& 42.7 & 12.8 & 28.7
+& 54.9 & 17.1 & 42.7 \\
+\cellcolor{gray0}\toolname 
+& \cellcolor{gray0}53.7 
+& \cellcolor{gray0}22.6 
+& \cellcolor{gray0}41.5 
+& \cellcolor{gray0}40.2
+& \cellcolor{gray0}11.6
+& \cellcolor{gray0}29.3
+& \cellcolor{gray0}47.0
+& \cellcolor{gray0}14.0
+& \cellcolor{gray0}45.7 \\
+\bottomrule
+\end{tabular}
+}
+\vspace{-2mm}
+\end{table}
+
+
+
+
+
+
+
+\subsection{Baselines}
+\label{app:baselines_details}
+This section introduces the baselines investigated in our paper. We elaborate on the baseline details as follows.
+
+\noindent{\textbf{PrivCode}~\cite{liu2025privcode}\textbf{.}}
+The first DP code generation method under the code-sensitive setting where prompts are assumed public. PrivCode introduces original instruction as prompt in fine-tuning and data synthesis, achieving competitive utility with non-private fine-tuning method while failing in the joint-sensitive scenario.
+
+\noindent{\textbf{DPFT}~\cite{DBLP:journals/corr/abs-2407-07737}\textbf{.}} Under the joint-sensitive scenario, DPFT optimizes the model on complete prompt–code sequences under DP, where both prompt and code tokens participate in gradient computation and jointly consume the privacy budget.
+
+\noindent{\textbf{PC-Uncond.}}
+Based on \toolname, PC-Uncond removes the PrivLC module, consequently generates code snippets relying on unconditional autoregressive decoding.
+
+\noindent{\textbf{PC-PreEmb.}}
+A variant of \toolname, PC-PreEmb pretrains the PrivLC module on a public code generation dataset, and directly use it in DP fine-tuning and data synthesis.
+
+\noindent{\textbf{PC-PromptEmb.}}
+A variant of \toolname, PC-PreEmb don't adopt the code latent embedding but only the prompt embedding as the virtual prompt tokens during both training and synthetic data generation.
+
+
+
+
+\subsection{Benchmarks}
+\label{app:benchmarks_details}
+
+This section introduces the benchmarks investigated or constructed in our paper. We elaborate on the details as follows.
+
+\noindent{\textbf{HumanEval.}} HumanEval~\cite{chen2021evaluating} contains 164 hand-crafted Python problems with natural language prompts, reference solutions, and an average of 9.6 unit tests per problem, covering diverse algorithmic domains and serving as a standard benchmark for functional correctness. 
+
+\noindent{\textbf{MBPP.}} MBPP~\cite{austin2021programsynthesislargelanguage} includes 399 crowd-sourced beginner-level programming tasks, each with a description, solution, and three test cases, focusing on basic programming constructs like loops and conditionals.
+
+\noindent{\textbf{EvalPlus.}} EvalPlus~\cite{liu2023your} augments both HumanEval and MBPP with extensive, automatically generated test suites, yielding HumanEval+ and MBPP+, which reduce overfitting and offer more robust correctness evaluation. 
+
+\noindent{\textbf{BigCodeBench.}} We also include BigCodeBench~\cite{zhuo2024bigcodebenchbenchmarkingcodegeneration}, a large-scale benchmark featuring realistic code generation tasks in two settings: \textit{instruct} (natural language prompts) and \textit{complete} (structured docstrings), each with a challenging “hard” subset targeting user-relevant scenarios.
+
+\noindent{\textbf{Humaneval-X.}} Humaneval-X~\cite{zheng2023codegeex} spans several major programming languages (e.g., Python, Java, JavaScript, C++, Go) and is designed to assess cross-lingual consistency and transferability in code generation. Like the original Humaneval, it uses unit-test–based evaluation, but each problem is manually rewritten to ensure semantic equivalence across languages. Its rigorous multilingual design makes it a widely used benchmark for evaluating multilingual code generation models.
+
+\noindent{\textbf{CanaryLeaks.}} To evaluate the effectiveness of private information protection, we construct a benchmark named CanaryLeaks for measuring the memorization and leakage of canary tokens. Following the prior work, CodexLeaks~\cite{codexleaks}, CanaryLeaks generates a large set of inducive function-signature prompts, encouraging the model to complete code that may reveal the injected canaries. We then perform exact-match detection on the generated outputs to identify the presence of training-time canary tokens, and compute the leakage rate for each canary type, defined as the ratio of leaked canary categories to the total number of canary categories.
+
+
+
+
+
+\begin{table*}[!t]
+\centering
+\caption{The filtered number/proportion of instances for execution filter and round-trip filter. The total number of instances is $5\text{e}4$, and the proportion is always relative to the total number.}
+\footnotesize
+\setlength{\tabcolsep}{6.5mm}{
+\resizebox{0.55\textwidth}{!}
+{
+\begin{tabular}{l|cc}
+\toprule
+\textbf{Method} &
+\textbf{Execution Filter} &
+\textbf{Round-Trip Filter} \\
+\midrule
+PC-Ucond & 46817 / 93.63\%& 1097 / 2.19\%\\
+PC-PreEmb      & 28590 / 57.18\%& 9228 / 18.46\%\\
+\toolname     & 17190 / 34.38\%& 2955 / 5.91\%\\
+\bottomrule
+\end{tabular}
+}}
+\label{tab:execution_validation_taxonomy}
+\vspace{-2mm}
+\end{table*}
+
+
+
+
+
+
+
+\begin{table}[!t]
+\centering
+\setlength{\tabcolsep}{6.5pt}
+\caption{The TPR@1\%FPR and TPR@10\%FPR of MIA against \toolname{} under $\epsilon=4$ across different LLMs as $\mathcal{M}_P$. Lower values indicate stronger privacy protection.}
+\label{tab:mia}
+\scriptsize
+\resizebox{0.65\textwidth}{!}{
+\begin{tabular}{l|cc|cc}
+\toprule
+\multirow{2}{*}{\textbf{Method}} &
+\multicolumn{2}{c|}{\textbf{Qwen2.5-Coder-7B}} &
+\multicolumn{2}{c}{\textbf{DS-Coder-6.7B}} \\
+\cline{2-5}
+& TPR@10\%FPR & TPR@1\%FPR & TPR@10\%FPR & TPR@1\%FPR \\
+\midrule
+NonDPFT 
+& 69.9 & 49.0 
+& 59.8 & 59.1 \\
+
+PrivCode 
+& 12.5 & 0.0 
+& 13.1 & 0.0 \\
+
+\cellcolor{gray0}\toolname 
+& \cellcolor{gray0}2.6 
+& \cellcolor{gray0}0.0 
+& \cellcolor{gray0}3.7 
+& \cellcolor{gray0}0.0 \\
+\bottomrule
+\end{tabular}
+}
+\vspace{-2mm}
+\end{table}
+
+
+
+
+
+\subsection{Metrics}
+\label{app:metrics}
+
+This section introduces the metrics evaluated in our paper. We provide the details as follows.
+
+\noindent{\textbf{Pass@1 score}~\cite{chen2021evaluating}\textbf{.}} An metric of the utility of generated code snippets. The pass@1 score measures the functional correctness of generated code by checking whether the first (greedy) sample passes all provided unit tests. A higher pass@1 indicates better code quality and correctness.
+
+\noindent{\textbf{Leakage Rate.}} A metric of privacy protection ability in canary experiment~\cite{yue2023synthetic}. For canary-based privacy evaluation, we use the category-level leakage rate: the percentage of distinct canary categories (e.g., email, IP address) that appear in any model output. This metric reflects how many types of sensitive patterns the model has memorized and leaked, with 0\% indicating no leakage.
+
+\noindent{\textbf{TPR@FPR.}} A metric of privacy protection ability in MIA experiment~\cite{li2024privimage, gong2025privorl}. The True Positive Rate (TPR) at a fixed False Positive Rate (FPR) quantifies the attacker’s ability to accurately identify sensitive information (true positives) while limiting the misidentification of non-sensitive instances as sensitive (false positives).
+
+\noindent{\textbf{BLEU-4}~\cite{papineni2002bleu}\textbf{.}} A metric of semantic fidelity between generated code and reference code. BLEU-4 measures $n$-gram overlap up to 4-grams between generated samples and ground-truth code, where higher scores indicate better lexical and semantic consistency.
+
+\noindent{\textbf{CBERT-F1}~\cite{DBLP:conf/emnlp/Zhou0AN23}\textbf{.}} A metric of instance-level semantic fidelity based on contextual embeddings. CBERT-F1 computes token-level semantic similarity between generated and reference code using contextualized CodeBERT representations, and evaluates the harmonic mean of precision and recall.
+
+\noindent{\textbf{AST-Sim}~\cite{DBLP:conf/acl/SongLTBK24}\textbf{.}} A metric of structural fidelity of generated code. AST-Sim measures the similarity between abstract syntax trees (ASTs) of generated and reference programs, reflecting whether the generated code preserves structural and syntactic patterns.
+
+\noindent{\textbf{FrechetD}~\cite{DBLP:conf/nips/HeuselRUNH17}\textbf{.}} A metric of distributional fidelity between generated and real code corpora. Frechet Distance compares the feature distributions of generated and reference code embeddings, where lower values indicate closer alignment to the original data distribution.
+
+\noindent{\textbf{CentSim.}} A metric of distribution-level semantic fidelity. Centroid Similarity measures the cosine similarity between the centroid embeddings of generated and reference code corpora using CodeBERT representations, reflecting the overall semantic alignment between the two distributions.
+
+
+
+
+\section{DP-SGD Hyper-parameter Settings}
+\label{app:dp setting}
+
+This section provides a detailed description of the implementation of the DP-SGD training process in each method under the target $\epsilon=4.0$. We follow the Fast Differential Privacy (FastDP) repository,\footnote{\url{https://github.com/awslabs/fast-differential-privacy}} a widely used implementation for LLM DP-SGD training, to conduct our experiments. The key hyper-parameters are detailed in Table~\ref{tab:dp_settings}. In \toolname and its variants, we set a smaller maximum training step because the junior model (Qwen2.5-Coder-1.5B) is fine-tuned with DP-SGD using a larger batch size of 256, which leads to a higher sampling rate, whereas the baselines use a batch size of 128. The dataset size for DPFT is kept consistent with that used in the utility-boosting stage of \toolname to ensure fairness. The noise scale $\sigma$ is computed using the standard privacy analysis function provided by FastDP. For each DP-SGD training experiment, we set the clipping norm $C$ to 1.0, $\delta$ to $1\text{e-}5$, and the accountant type to RDP, following the default configuration of FastDP. The resulting privacy budgets $\epsilon$ are all close to the target value of 4.0, ensuring that all models are trained under comparable privacy constraints.
+
+
+
+
+\section{Post-processing Details}
+\label{app:post-processing}
+
+The execution filter removes code snippets $\hat{c}_i$ that fail to compile or execute due to syntax, compilation, or runtime errors. The round-trip filter further introduces a strong external round-trip model $\mathcal{M}_r$ to assess the semantic consistency between each synthesized instruction-code pair $(\hat{p}_i, \hat{c}_i)$ by summarizing $\hat{c}_i$ into a natural language description and measuring its semantic alignment with $\hat{p}_i$, filtering out pairs with low instruction-code matching quality.
+
+
+Table~\ref{tab:execution_validation_taxonomy} presents the count and proportion of instances excluded by the execution and round-trip filtering mechanisms. From this table, the execution and round-trip filters effectively discard a substantial volume of low-quality synthetic data from the aspect of code syntax and semantics, ensuring the functional integrity of the final dataset. In particular, in \toolname{}, the execution filter discards a significant portion of the generated samples (17,190 instances, representing 34.38\%), indicating that nearly one-third of the initial DP-synthesized code fails to meet basic functional correctness. Furthermore, the round-trip filter identifies and removes an additional 5.91\% of synthetic codes. After discarding the low-quality synthetic data, the remaining synthetic data can be used to fine-tune the senior LLMs as introduced Section~\ref{sec:stage2}.
+
+Compared with other baselines, \toolname{} discards substantially fewer samples under both execution and round-trip filters, indicating higher intrinsic syntactic correctness and semantic consistency of the generated code. Specifically, only 34.38\% and 5.91\% of samples are removed by the execution and round-trip filters, respectively, which are significantly lower than PC-Uncond (93.63\% / 2.19\%) and PC-PreEmb (57.18\% / 18.46\%). These results demonstrate that the privacy-sanitizing stage of \toolname{} effectively learns core code structures and task-level semantic information through latent-conditioned modeling, enabling the synthesis of high-quality code even without explicit prompt conditioning.
+
+
+
+
+
+\section{Additional Experiment Results}
+
+
+
+\subsection{Utility on More Programming Languages}
+\label{app:other_language}
+
+
+
+
+We further evaluate \toolname{} on HumanEval-X~\cite{zheng2023codegeex}, a multilingual code generation benchmark covering multiple programming languages with unit-test-based evaluation. We evaluate Java, C++, and Rust tasks under $\epsilon=4$. 
+
+Table~\ref{tab:humaneval-x} shows that \toolname{} consistently outperforms the Pretrain baseline across most settings, demonstrating that DP fine-tuning on synthetic data enables models to acquire domain-specific capabilities beyond public pretraining alone. For example, on Qwen2.5-Coder-7B, \toolname{} improves Java pass@1 from 44.5 to 53.7 and C++ from 14.0 to 22.6. Similar gains are also observed on CodeGemma-7B and CodeQwen1.5-7B, especially for Java and Rust generation. Compared with PrivCode, \toolname{} achieves competitive performance across most languages and models despite providing stronger protection under the joint-sensitive scenario. In several cases, \toolname{} even surpasses PrivCode, such as Qwen2.5-Coder-7B on C++ (22.6 vs. 22.0) and CodeQwen1.5-7B on Rust (45.7 vs. 42.7). These results suggest that the latent-conditioned synthesis mechanism of \toolname{} can effectively learn domain-specific structural and semantic patterns across different programming languages and generate high-utility synthetic code snippets.
+
+
+
+
+
+
+
+
+
+
+\begin{figure}[!t]
+    \centering
+    \includegraphics[width=0.9\columnwidth]{images/expert_llm.pdf}
+    \caption{Pass@1 of \toolname{} and PC-Expert baseline evaluated on HumanEval, MBPP, EvalPlus, and BigCodeBench benchmarks.}
+ 
+    \vskip -0.15in
+    \label{fig:expert}
+\end{figure}
+
+
+
+\subsection{About External Model}
+\label{app:external}
+
+To investigate whether \toolname{} relies on the capability of external expert LLMs, we conduct two complementary studies: (1) replacing the auxiliary external modules $\mathcal{M}_{\text{ext}}$ and $\mathcal{M}_r$ with smaller models while keeping the remaining pipeline unchanged, and (2) replacing the DP fine-tuned junior model with a strong external LLM as a public data synthesizer. Under $\epsilon = 4$, we conduct the experiments using Qwen2.5-Coder-7B as $\mathcal{M}_P$.
+
+
+
+\paragraph{Replaceable external modules.}
+We first investigate whether \toolname{} critically depends on large external LLMs in the auxiliary modules. Specifically, we replace the default Llama-3.1-70B-Instruct with a smaller model, Llama-3.1-8B-Instruct, in either the prompt extractor $\mathcal{M}_{\text{ext}}$ or the round-trip filter $\mathcal{M}_r$, while keeping all remaining components unchanged. The results are summarized in Table~\ref{tab:external}.
+
+We observe that replacing either module only causes marginal performance degradation. For example, even replacing $\mathcal{M}_{\text{ext}}$ or $\mathcal{M}_r$ with a substantially weaker model, Llama-3.1-8B-Instruct, only leads to relatively small performance drops across benchmarks. Replacing $\mathcal{M}_{\text{ext}}$ reduces Instruct-HumanEval Pass@1 from 68.3 to 67.1 and Complete-MBPP from 77.8 to 77.0, while replacing $\mathcal{M}_r$ still maintains 66.7 on Instruct-MBPP and 73.8 on Complete-MBPP. This suggests that \toolname{} does not critically rely on the capability of large external LLMs. Instead, the overall utility of \toolname{} is primarily determined by latent-conditioned code synthesis, whereas prompt extraction and round-trip consistency checking mainly serve as lightweight auxiliary utilities that can be effectively handled by smaller models. Therefore, our use of Llama-3.1-70B-Instruct in this paper mainly serves to explore a stronger upper-bound performance setting.
+
+
+
+\paragraph{Replacing the DP junior model with an external expert LLM.}
+We further introduce an additional baseline, PC-Expert, where we directly use Llama-3.1-70B-Instruct to unconditionally synthesize code samples. Specifically, the model is only provided with minimal language-specific coding prefixes (e.g., ``\texttt{```python}'', ``\texttt{```cpp}''), sampled according to the language distribution of the original dataset, while the remaining pipeline remains identical to \toolname{}. Since PC-Expert does not access the original sensitive dataset, it does not require DP-SGD training. Figure~\ref{fig:expert} compares the performance of PC-Expert and \toolname{} on Qwen2.5-Coder-7B.
+
+The results show that directly relying on a strong external LLM is insufficient for high-quality domain-aligned synthesis. PC-Expert substantially underperforms \toolname{}, especially on completion tasks and challenging benchmarks such as BigCodeBench. For example, under the Complete setting, PC-Expert only achieves 31.1 on HumanEval and 14.0 on BigCodeBench-Full, significantly lower than the corresponding 64.0 and 43.3 achieved by \toolname{}. This suggests that the key advantage of \toolname{} comes from latent-conditioned domain adaptation rather than the intrinsic capability of external LLMs.
+
+
+
+\begin{table*}[t]
+\centering
+\scriptsize
+\caption{Ablation of \toolname{} on replaceable external modules evaluated on HumanEval, MBPP, and EvalPlus benchmarks. ``$\checkmark$'' denotes replacing the corresponding module with Llama-3.1-8B-Instruct, while ``$\times$" denotes the default setting using Llama-3.1-70B-Instruct.}
+\label{tab:external}
+\resizebox{0.7\textwidth}{!}{
+\begin{tabular}{cc|cc|cc|cc|cc}
+\toprule
+
+\multicolumn{2}{c|}{\multirow{2}{*}{Replaced Module}}
+& \multicolumn{2}{c|}{HumanEval}
+& \multicolumn{2}{c|}{MBPP}
+& \multicolumn{2}{c|}{HumanEval}
+& \multicolumn{2}{c}{MBPP} \\
+
+\cline{3-10}
+
+\multicolumn{2}{c|}{}
+& HE & HE+
+& MBPP & MBPP+
+& HE & HE+
+& MBPP & MBPP+ \\
+
+\cline{1-10}
+
+$\mathcal{M}_{\text{ext}}$
+& $\mathcal{M}_r$
+& \multicolumn{4}{c|}{Instruct}
+& \multicolumn{4}{c}{Complete} \\
+
+\midrule
+
+$\times$ & $\times$
+& 68.3 & 60.4
+& 68.0 & 57.1
+& 64.0 & 56.1
+& 77.8 & 64.8 \\
+
+$\checkmark$ & $\times$
+& 67.1 & 59.8
+& 66.4 & 56.1
+& 64.0 & 55.5
+& 77.0 & 63.5 \\
+
+$\times$ & $\checkmark$
+& 64.0 & 55.5
+& 66.7 & 55.0
+& 61.0 & 54.9
+& 73.8 & 60.8 \\
+
+\bottomrule
+\end{tabular}}
+\end{table*}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\begin{table*}[t]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{5pt}
+\caption{The leakage rate of \toolname{} under different privacy budgets $\epsilon \in \{1,10,\infty\}$ across four LLMs as $\mathcal{M}_P$, evaluated with a canary repetition count of 100.}
+\label{tab:expand_canary}
+\resizebox{1.0\textwidth}{!}{
+\begin{tabular}{l|ccc|ccc|ccc|ccc}
+\toprule
+
+\multirow{2}{*}{\textbf{Canary Type}}
+& \multicolumn{3}{c|}{\textbf{Qwen2.5-Coder-7B}}
+& \multicolumn{3}{c|}{\textbf{CodeGemma-7B-7B}}
+& \multicolumn{3}{c|}{\textbf{CodeQwen1.5-7B}}
+& \multicolumn{3}{c}{\textbf{DS-Coder-6.7B}} \\
+
+\cline{2-13}
+
+& $\epsilon=1$ & $\epsilon=10$ & $\epsilon=\infty$
+& $\epsilon=1$ & $\epsilon=10$ & $\epsilon=\infty$
+& $\epsilon=1$ & $\epsilon=10$ & $\epsilon=\infty$
+& $\epsilon=1$ & $\epsilon=10$ & $\epsilon=\infty$ \\
+
+\midrule
+
+Joint
+& 0\% & 0\% & \textcolor[HTML]{EA755E}{40\%}
+& 0\% & 0\% & 0\%
+& 0\% & 0\% & \textcolor[HTML]{EA755E}{20\%}
+& 0\% & 0\% & \textcolor[HTML]{EA755E}{20\%} \\
+
+Prompt
+& 0\% & 0\% & 0\%
+& 0\% & 0\% & \textcolor[HTML]{EA755E}{20\%}
+& 0\% & 0\% & 0\%
+& 0\% & 0\% & 0\% \\
+
+Code
+& 0\% & 0\% & \textcolor[HTML]{EA755E}{20\%}
+& 0\% & 0\% & 0\%
+& 0\% & 0\% & 0\%
+& 0\% & 0\% & \textcolor[HTML]{EA755E}{20\%} \\
+
+\bottomrule
+\end{tabular}}
+\end{table*}
+
+
+
+
+
+
+\subsection{Expanding Canary Experiment}
+\label{app:expand canary}
+
+
+
+
+We additionally report privacy protection performance under different privacy budgets $\epsilon \in \{1,10,\infty\}$. Following the experimental settings in Section~\ref{sec:private pretection}, we evaluate category-level leakage under fixed canary repetition count $=100$. Table~\ref{tab:expand_canary} summarizes the results across four LLMs as $\mathcal{M}_P$.
+
+When using finite privacy budgets (e.g., $\epsilon=1$ and the relatively relaxed setting $\epsilon=10$), \toolname{} consistently achieves zero leakage across almost all settings, demonstrating robust privacy protection under both strict and relatively relaxed privacy budgets. In contrast, when $\epsilon=\infty$ (i.e., without DP constraints), privacy leakage can reappear, especially for joint canaries. For example, Qwen2.5-Coder-7B exhibits 40\% leakage under joint canaries, while CodeQwen1.5-7B and DeepSeek-Coder-6.7B both show 20\% leakage. These results indicate that \toolname{} can effectively suppress memorization of sensitive information under practical privacy budgets.
+
+
+
+
+
+\subsection{Membership Inference Attack}
+\label{app:mia}
+
+
+
+To complement canary-based evaluations, we further assess privacy risks using a loss-based MIA~\cite{shokri2017membership}. We use per-sample loss as the attack score, and report TPR@1\%FPR and TPR@10\%FPR of MIA under $\epsilon=4$ in Table~\ref{tab:mia}. Following prior works~\cite{li2024privimage, gong2025privorl}, the fixed FPR is set as a low rate, e.g., TPR@1\%FPR indicates the FPR threshold at 1\%. The lower TPR@1\%FPR or TPR@10\%FPR indicates a higher likelihood that a sample belongs to the training set. We perform the attack on the models fine-tuned on the canary-injected datasets described in Section~\ref{sec:private pretection}, ensuring consistency with our canary experiment setting. Specifically, the sensitive training set is partitioned into member and non-member sets based on whether each sample appears in the training data. 
+
+We can observe that \toolname{} consistently achieves lowest TPR at both 1\% and 10\% FPR across all evaluated models, indicating strong resistance to membership inference. In contrast, NonDPFT exhibits high vulnerability, with TPR@10\%FPR reaching up to 69.9\% and TPR@1\%FPR up to 59.1\%, suggesting substantial memorization of training samples. PrivCode significantly reduces attack success rates, but still shows non-negligible leakage under TPR@10\%FPR. Compared to these baselines, \toolname{} consistently suppresses TPR to near-random levels across both metrics, demonstrating effective mitigation of membership leakage. These results are consistent with the canary-based evaluation, further validating the privacy protection ability of \toolname.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\begin{table*}[!t]
+\scriptsize
+\setlength{\tabcolsep}{7pt}
+\centering
+\caption{Fidelity evaluation results comparing synthetic datasets with the original data.
+Higher is better for BLEU-4, CBERT-F1, AST-Sim, and CentSim, while lower is better for FrechetD. }
+\label{tab:fidelity}
+\resizebox{0.75\textwidth}{!}{
+\begin{tabular}{lccccc}
+\toprule
+Method & BLEU-4 $\uparrow$ & CBERT-F1 $\uparrow$ & AST-Sim $\uparrow$ & FrechetD $\downarrow$ & CentSim $\uparrow$ \\
+\midrule
+PrivCode &
+0.0191 &
+0.8634 &
+0.4757 &
+20.57 &
+0.9903 \\
+
+PC-Uncond &
+0.0039$_{\scriptstyle \textcolor{DownColor}{\downarrow 0.0152}}$ &
+0.8233$_{\scriptstyle \textcolor{DownColor}{\downarrow 0.0401}}$ &
+0.2186$_{\scriptstyle \textcolor{DownColor}{\downarrow 0.2571}}$ &
+83.39$_{\scriptstyle \textcolor{DownColor}{\uparrow 62.82}}$ &
+0.8484$_{\scriptstyle \textcolor{DownColor}{\downarrow 0.1419}}$ \\
+
+PrivCode++ &
+0.0162$_{\scriptstyle \textcolor{DownColor}{\downarrow 0.0029}}$ &
+0.8834$_{\scriptstyle \textcolor{UpColor}{\uparrow 0.0200}}$ &
+0.4575$_{\scriptstyle \textcolor{DownColor}{\downarrow 0.0182}}$ &
+34.12$_{\scriptstyle \textcolor{DownColor}{\uparrow 13.55}}$ &
+0.9571$_{\scriptstyle \textcolor{DownColor}{\downarrow 0.0332}}$ \\
+
+\bottomrule
+\end{tabular}}
+\end{table*}
+
+
+
+
+
+
+\begin{figure}[!t]
+    \centering
+    \includegraphics[width=1.0\columnwidth]{images/tsne_app.pdf}
+    \caption{t-SNE visualizations of synthetic code generated at sampling temperatures $T \in \{0.5, 0.6, 0.7, 0.9\}$. We compare the synthetic data distribution of \toolname{} with the original dataset, PrivCode, and PC-Uncond in the two-dimensional embedding space.}
+
+    \vskip -0.2in
+    \label{fig:tsne_app}
+\end{figure}
+
+
+
+
+
+
+
+
+
+
+
+\subsection{T-SNE}
+\label{app:t-SNE}
+
+To further analyze the robustness of latent-conditioned generation under different sampling temperatures, we extend the t-SNE visualization experiments in Figure~\ref{fig:tsne} by evaluating additional temperatures $T \in \{0.2, 0.4, 0.6, 1.0\}$. We follow the same experimental setting as Section~\ref{sec:diversity and fidelity}. Specifically, we generate synthetic code using PrivCode, PC-Uncond, and \toolname{}, obtain code embeddings using the frozen encoder, and project them into a two-dimensional embedding space via t-SNE~\cite{van2008visualizing} for distributional comparison. 
+
+
+Figure~\ref{fig:tsne_app} presents the more detailed visualizations. Across all temperatures, PrivCode remains closest to the original data distribution due to its direct use of sensitive prompts as conditioning signals during generation. PC-Uncond consistently exhibits large outlier clusters that noticeably deviate from the original distribution, with most generated samples concentrated in these fragmented regions. As the sampling temperature decreases, this deviation becomes increasingly severe, leading to stronger distributional collapse and reduced coverage of the original embedding space. 
+
+
+Despite operating under the more challenging joint-sensitive setting, \toolname{} maintains highly consistent t-SNE distributions across all temperatures. The overall distribution shape remains closely aligned with both PrivCode and the original data, without exhibiting obvious collapse or distributional drift as the temperature decreases. Compared with PC-Uncond, the generated samples of \toolname{} remain more smoothly connected and uniformly distributed in the embedding space, indicating that latent-conditioned representations effectively stabilize generation and enable robust code synthesis with strong diversity and fidelity across varying sampling temperatures.
+
+
+
+
+
+
+
+
+
+\subsection{Fidelity Evaluation of Generative Code}
+\label{app:fidelity}
+
+
+
+
+
+Table~\ref{tab:fidelity} reports fidelity metrics between the synthetic code snippets and the original sensitive code. Overall, PrivCode achieves the strongest fidelity across most metrics, which is expected since it directly leverages the original sensitive prompts as conditioning signals during generation.
+Both PrivCode and \toolname{} substantially outperform PC-Uncond across all evaluation metrics, demonstrating that faithful task-level conditioning is essential for preserving the fidelity of synthetic data to the original distribution.
+
+Despite operating under the more challenging joint-sensitive setting, \toolname{} remains highly comparable to PrivCode across most metrics while consistently outperforming PC-Uncond by a large margin, and achieves the highest CBERT-F1 score. These results demonstrate that \toolname{} can still synthesize high-fidelity data that remains semantically and structurally consistent with the original sensitive data under the joint-sensitive setting with stronger privacy constraints.
+
+
+
+
+
+
+
+
+
+
+
+\section{Canary Samples}
+\label{app:canary_samples}
+
+We present the type of code canary samples in Table~\ref{tab:canary_samples}. These canary samples are used to quantify the level of private information protection through the canary experiments as presented in Section~\ref{sec:private pretection}. A category is counted as leaked if its canary token appears in any generated output.
+
+
+
+
+\begin{table*}[h]
+\centering
+\footnotesize
+    \caption{Five code canary samples injected into the OSS-Instruct PII Dataset for the private information leakage analysis.}
+    
+    \vspace{-1.0em}
+    \label{tab:canary_samples}
+    \begin{tabular}{l | p{0.25\linewidth}| p{0.6\linewidth}}
+   \noalign{\vspace{0.8em}}
+    \toprule
+         \multirow{2}{*}{\textbf{Type}} &  \multicolumn{2}{c}{\textbf{Canary Sample}}  \\
+         \cline{2-3}
+         & \textbf{Prompt}& \textbf{Code Snippet} \\        
+    \midrule
+    Email & 
+    Create a Python function that validates the format of a contact string to ensure it follows a standard pattern for communication addresses. The function should check if the string contains a local part, an '@' symbol, and a domain part with at least one dot. Return a boolean indicating whether the contact string is valid. 
+    & 
+    \texttt{\detokenize{import re\n\ndef validate_contact(contact):\n    pattern = r'^[a-zA-Z0-9._\%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}\$'}}\texttt{\detokenize{ \n return bool(re.match(pattern, contact))\n\n}} \par
+    \texttt{\detokenize{#Example usage\ncontact=}} \colorbox{yellow!30}{\texttt{\detokenize{"sarah.}}\grayblock{5.0em}\texttt{\detokenize{90@gmail.com"}}}
+    \par
+    \texttt{\detokenize{\nprint(validate_contact(contact))  # Output: True\n}} \\
+    
+    \midrule
+    
+    Name & 
+    Write a Python program that generates a personalized greeting for a user based on their identifier. The program should take a string and return a greeting that includes the identifier in a friendly format. 
+    & 
+    \texttt{\detokenize{def generate_greeting(identifier):\n    return f"Hello, {identifier}! Welcome to our platform."\n\n# Example usage\nidentifier = }}\colorbox{yellow!30}{\texttt{\detokenize{"Liam Al}}\grayblock{3.0em}\texttt{\detokenize{der Br}}\grayblock{2.0em}\texttt{\detokenize{"}}}\texttt{\detokenize{\nprint(generate_greeting(identifier))  # Output: Hello,}} \colorbox{yellow!30}{\texttt{\detokenize{"Liam Al}}\grayblock{3.0em}\texttt{\detokenize{der Br}}\grayblock{2.0em}\texttt{\detokenize{"}}}\texttt{\detokenize{! Welcome to our platform.\n}} \\
+        
+    \midrule
+    
+    IP Address & 
+    Write a Python script that logs connection attempts from a network address. The function should take a string representing the network address and append a log entry to a list, including the address and a timestamp. 
+    & 
+    \texttt{\detokenize{from datetime import datetime\n\ndef log_connection(address, log_list):\n    timestamp = datetime.now().strftime("\%Y-\%m-\%d \%H:\%M:\%S")\n    log_entry = f"Connection from {address} at {timestamp}"\n    log_list.append(log_entry)\n    return log_list\n\n# Example usage\nlog_list = []\naddress =}}  \colorbox{yellow!30}{\texttt{\detokenize{"10.0.0.}}\grayblock{2.0em}\texttt{\detokenize{"}}}\texttt{\detokenize{\nprint(log_connection(address, log_list))  # Output: ['Connection from  }}\colorbox{yellow!30}{\texttt{\detokenize{10.0.0.}}\grayblock{2.0em}\texttt{\detokenize{}}}\texttt{\detokenize{ at 2025-04-27 14:30:22']\n}} \\
+        
+    \midrule
+    
+    Password & 
+    Create a Python function that hashes a sensitive input string for secure storage. The function should use a secure hashing algorithm (e.g., SHA-256) and return the hexadecimal representation of the hash. 
+    & 
+    \texttt{\detokenize{import hashlib\n\ndef hash_sensitive(input_string):\n    return hashlib.sha256(input_string.encode())}} 
+    \texttt{\detokenize{.hexdigest()\n\n# Example usage\nsensitive_input = }} \colorbox{yellow!30}{\texttt{\detokenize{"Tr}}\grayblock{4.0em}\texttt{\detokenize{&3xplor3r"}}} \texttt{\detokenize{\nprint(hash_sensitive(sensitive_input))  # Output: (a long hexadecimal string)\n}} \\
+        
+    \midrule
+    
+    Username & 
+    Create a Python function that generates a unique identifier for a user based on a handle. The function should take a string, remove any spaces, convert it to lowercase, and append a random number to ensure uniqueness.
+    & 
+    \texttt{\detokenize{import random\n\ndef generate_unique_id(handle):\n    clean_handle = handle.replace(" ", "").lower()\n    return f"{clean_handle}{random.randint(1000, 9999)}"\n\n# Example usage\nhandle = }}
+    \colorbox{yellow!30}{\texttt{\detokenize{"Sky}}\grayblock{4.0em}\texttt{\detokenize{42"}}}
+    \texttt{\detokenize{\nprint(generate_unique_id(handle))  # Output: }}\colorbox{yellow!30}{\texttt{\detokenize{sky}}\grayblock{4.0em}\texttt{\detokenize{42XXXX}}} \texttt{\detokenize{(where XXXX is a random number)\n}} \\
+
+    \bottomrule
+    \end{tabular}
+    \vspace{-3mm}
+\end{table*}
+
+
+
+
+
+
+
+\end{document}

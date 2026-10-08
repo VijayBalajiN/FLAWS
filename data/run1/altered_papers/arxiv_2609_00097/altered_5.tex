@@ -1,0 +1,772 @@
+\pdfoutput=1
+\PassOptionsToPackage{capitalize}{cleveref}
+\documentclass[]{mosi}
+
+\usepackage{hyperref}
+
+\usepackage{microtype}
+\usepackage{bm}
+\usepackage{mathtools}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{multirow}
+\usepackage{makecell}
+
+\pdfstringdefDisableCommands{%
+  \def\bm#1{#1}%
+  \def\delta{delta}%
+}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{assumption}[theorem]{Assumption}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\providecommand{\onecolumn}{}
+
+\renewcommand{\topfraction}{0.95}
+\renewcommand{\bottomfraction}{0.9}
+\renewcommand{\textfraction}{0.05}
+\renewcommand{\floatpagefraction}{0.7}
+\setcounter{totalnumber}{8}
+\setcounter{topnumber}{4}
+\setcounter{bottomnumber}{4}
+\makeatletter
+\renewcommand{\fps@figure}{htbp}
+\renewcommand{\fps@table}{htbp}
+\makeatother
+
+\emergencystretch=1em
+
+\setlength{\headheight}{48pt}
+\addtolength{\topmargin}{-30pt}
+
+\title{Faster Than Flash: Exploiting Attention Sparsity for Efficient Long-Context Decoding}
+
+\author[1,2]{Zhigeng Liu}
+\author[1,2]{Zhiyuan Ning}
+\author[1,2]{Ruixiao Li}
+\author[1,2]{Xiaoran Liu}
+\author[1,2]{Yuerong Song}
+\author[3,\dagger]{Min Zhang}
+\author[2,\dagger]{Ziwei He}
+\author[1,2,\dagger]{Xipeng Qiu}
+
+\affiliation[1]{Fudan University, Shanghai, China}
+\affiliation[2]{Shanghai Innovation Institute, Shanghai, China}
+\affiliation[3]{Harbin Institute of Technology, Harbin, China}
+
+\contribution[\dagger]{Corresponding author}
+\correspondence{\texttt{253108120105@sii.edu.cn}, \texttt{zhangmin2021@hit.edu.cn}, \texttt{ziwei.he@sii.edu.cn}, \texttt{xpqiu@fudan.edu.cn}}
+
+The development of long-context Large Language Models (LLMs) is constrained by the memory bandwidth bottleneck and quadratic complexity of the attention mechanism during decoding. To overcome the inherent trade-offs between the memory overhead of metadata-based metrics and the computational inefficiency of adaptive selection strategies, we present \textbf{Faster Flash Decoding (FFD)}, a novel hardware-algorithm co-design framework designed to break the memory wall in long-context decoding. FFD integrates the selector and computer into a fully fused kernel, replacing external metadata indices with content-aware scanning via low-bit quantization. Furthermore, we introduce the top-$\delta$ strategy, which dynamically filters blocks to achieve distribution-adaptive sparsity without global synchronization. Offering a training-free and plug-and-play solution, FFD also enables the reuse of scanning results for computation, achieving up to 11.6$\times$ kernel-level speedup and scaling to 256K context length, with 2.37$\times$ end-to-end throughput improvement. Empirical validation on RULER and LongBench confirms that FFD maintains model accuracy while delivering high-ratio sparsity, with code available at \url{https://github.com/qluoluo/faster-flash-decoding}.
+}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+\label{sec:intro}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.6\textwidth]{plot_thesis/ffa_intro-v3.pdf}
+\caption{Comparison of selection strategies. (a) Top-$k$ (fixed budget) is fast but fails to adapt to distribution shape. (b) Top-$p$ offers dynamic cardinality but introduces non-trivial overhead due to global synchronization and sorting, which breaks the streaming pipeline. (c) Top-$\delta$ (ours) uses a relative threshold $\delta$ from the local max, achieving the adaptivity of top-$p$ with the hardware efficiency of top-$k$.}
+\label{fig:comparison}
+\end{figure}
+
+
+
+
+The capability to process long contexts has become a defining characteristic of modern Large Language Models (LLMs)~\citep{achiam2023gpt, team2024gemini, dubey2024llama, liu2025thus}. However, long-context capability comes at a prohibitive cost during the decoding phase. As the sequence length grows, the standard attention mechanism exhibits quadratic computational complexity and linear memory growth for Key-Value (KV) caches~\citep{vaswani2017attention}, creating a severe memory wall bottleneck in the decoding stage~\citep{dao2023flashattention, kwon2023efficientmemorymanagementlarge}. Unlike the prefill phase where computation dominates and queries are processed in parallel, the autoregressive decode phase is memory-bandwidth-bound: each token generation requires reloading the entire KV cache from HBM, making IO the primary bottleneck rather than FLOPs. Consequently, sparse attention mechanisms, particularly training-free, plug-and-play approaches, have emerged as a critical research direction to reduce computational overhead without retraining the model~\citep{tang2024quest, ribar2023sparq, lin2025twilight, yuan2025native, liu2025deepseek}.
+
+Despite the diversity of sparse attention techniques, most approaches adhere to a decoupled Selector-Computer paradigm. In this standard workflow, the selector first filters indices based on metrics, and the computer subsequently retrieves data for calculation. This separation prevents the Computer from reusing the Selector's intermediate computations, leading to efficiency bottlenecks. Furthermore, the two core components within this paradigm—the importance metric and the selection strategy—face their own dilemmas. On one hand, to determine which tokens to retain, existing methods typically rely on extra metadata, such as partial dimensions, cluster centroids, or geometric bounds \citep{ribar2023sparq, xiao2024infllm, tang2024quest}. These approaches result in a metric dilemma: they either incur additional memory overhead to store these metadata structures or suffer from information distortion. On the other hand, selecting the optimal subset of tokens remains challenging. As shown in Fig~\ref{fig:comparison}, \textit{top-$k$ selection} is computationally efficient but fails to adapt to the varying entropy of attention distributions\citep{zhang2023h2o, ge2023model}. Comparatively, \textit{top-$p$ selection} offers theoretical superiority by adapting to the distribution, but needs a global softmax operation to compute cumulative probabilities, thus limiting its efficiency~\citep{lin2025twilight}.
+
+In this paper, we propose \textbf{FFD}, \textbf{Faster Flash Decoding}, a novel sparse attention framework that addresses these challenges through a hardware-algorithm co-design. By integrating the selector and computer, FFD enables the computation stage to directly reuse the scanning results from the selection stage. We shift from metadata-based indexing to content-aware scanning. Instead of storing extra metadata, we split the K cache into low-bit quantization and half-precision residual, taking the former as a compressed representation of the KV cache. Then, we introduce a \textbf{top-$\bm\delta$} strategy rooted in numerical precision analysis. Rather than enforcing a fixed budget ($k$) or computing global probabilities ($p$), top-$\delta$ dynamically filters blocks based on their estimated contribution to the attention score sum and can be approximately parallelized thanks to the properties of attention in LLMs~\citep{xiao2023efficient}. We implement FFD as a fully fused kernel that eliminates reduction bubbles, achieving 11.6$\times$ kernel-level speedup. Our contributions are summarized as follows:
+
+\begin{itemize}
+    \item \textbf{Content-Aware Scanning via Low-Bit Quantization}. We resolve the ``metric dilemma" by replacing metadata-based indexing with content-aware scanning. By partitioning the K-cache into low-bit quantized representations and 8-bit residuals, we eliminate the memory overhead of extra metadata while maintaining high information fidelity.
+    
+    \item \textbf{The Top-$\bm\delta$ Selection Strategy}. We introduce top-$\delta$, a novel selection mechanism, unlike top-$k$ (fixed budget) or top-$p$ (high overhead), top-$\delta$ dynamically filters attention blocks based on their contribution to the attention sum, offering distribution-adaptive sparsity with the efficiency of parallel execution.
+    
+    \item \textbf{Faster Flash Decoding (FFD)}. We present FFD, a hardware-algorithm co-design framework tailored for the bandwidth-critical decode phase. We implement a fused selector-computer kernel where the calculation phase reuses the selector's quantized scan, optimizing memory access patterns. Our implementation achieves up to 11.6$\times$ kernel-level speedup and scales to 256K context, with up to 2.37$\times$ end-to-end throughput increase while remaining a plug-and-play, training-free solution.
+    
+    \item \textbf{Extensive Empirical validation}. We demonstrate that FFD maintains the performance of LLMs across various short and long-context benchmarks, including RULER~\citep{hsieh2024ruler} and LongBench~\citep{bai2024longbench}, proving that high-ratio sparsity can be achieved without retraining or sacrificing accuracy.
+\end{itemize}
+
+
+
+
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{plot_thesis/ffa_main-v5.pdf}
+\caption{Overview of our FFD implementation. Inputs include the 16-bit query as well as the value cache and the key cache split into a 2-bit quantized thumbnail and an 8-bit residual. The attention output is acquired after K quantization, pseudo-max estimation, top-$\delta$ selection, as well as filtering based on the top-$\delta$ strategy, and fine-grained refinement.}
+\label{fig:architecture}
+\end{figure*}
+
+\paragraph{Conflict of Interest Disclosure}
+We declare no financial conflicts of interest related to this work.
+
+
+\section{Related Work}
+\label{sec:related}
+
+
+
+
+\paragraph{Hardware-Aware Exact Attention.}
+The standard attention mechanism imposes a quadratic cost during prefilling and a linear cost per step during decoding, creating a significant bottleneck for long-context applications. FlashAttention~\citep{dao2023flashattention, shah2024flashattention} revolutionized this field by introducing IO-aware optimizations, employing tiling and kernel fusion to minimize High-Bandwidth Memory (HBM) access. FlashDecoding and FlashDecoding++~\citep{hong2023flashdecoding++} further adapted these principles to the generative phase by parallelizing attention computation across the sequence dimension.
+While FFD inherits the spirit of kernel fusion and hardware-algorithm co-design from these works, existing Flash-based methods fundamentally remain \textit{exact} attention mechanisms. As context length increases, they must still load and scan the entire KV cache, resulting in unavoidable linear growth in latency. FFD addresses this by integrating sparsity directly into the fused kernel, breaking the linear scanning barrier while preserving hardware efficiency.
+
+\paragraph{Dynamic Sparse Attention}
+To circumvent the costs of exact attention, various sparse attention mechanisms have been proposed. These methods generally face specific challenges in importance estimation (the Metric Dilemma) and subset filtering (the Selection Dilemma).
+Regarding the Metric Dilemma, methods like H2O~\citep{zhang2023h2o}, Scissorhands~\citep{liu2023scissorhands}, and SnapKV~\citep{li2024snapkv} rely on historical accumulation to identify "heavy hitters" for token eviction. However, purely history-based metrics risk discarding tokens that become relevant only in future contexts. To address this, dynamic retrieval methods such as SparQ~\citep{ribar2023sparq} and Quest~\citep{tang2024quest} employ auxiliary metadata (e.g., mean vectors or Min-Max bounds) to estimate block importance. Similarly, InfLLM~\citep{xiao2024infllm} utilizes representative blocks for neighborhood search. While these metadata-based approaches reduce scanning costs, they suffer from information distortion and require additional memory management.
+Regarding the Selection Dilemma, most approaches (e.g., Quest, SparQ) enforce a static \textit{top-$k$} budget, which lacks flexibility across varying attention entropy distributions. Twilight~\citep{lin2025twilight} attempts to adapt to various attention distributions but introduces a global softmax operation, thus limiting its efficiency. Concurrent to our work, SALE~\citep{ji2025salelowbitestimation} independently explored low-bit estimation with anchor-based selection for sparse attention. However, SALE targets the prefill stage and employs 4-bit quantization, doubling the scanning bandwidth compared to our 2-bit design tailored for bandwidth-critical decoding.
+In contrast, FFD performs content-aware scanning via a fused Selector-Computer kernel, bypassing the need for auxiliary structures and enabling a dynamic \textit{top-$\delta$} selection strategy that adapts to entropy changes on the fly.
+
+\paragraph{KV Cache Quantization}
+KV cache quantization is primarily employed to alleviate memory capacity constraints. Methods such as KIVI~\citep{liu2024kivi}, Atom~\citep{zhao2024atom}, and KVQuant~\citep{hooper2024kvquant} compress keys and values into low-precision formats to fit longer contexts into GPU memory. Typically, these frameworks dequantize data back to higher precision (FP16/BF16) before performing the attention computation to preserve accuracy.
+FFD fundamentally repurposes quantization. Instead of treating low-bit representations solely as a storage compression technique, we utilize the quantized INT2/4 data as a high-speed proxy for the importance metric itself. This allows our selector to scan the full context with high fidelity and minimal latency, avoiding the decompression overhead typical of standard quantization frameworks while maintaining superior precision compared to metadata-based heuristics.
+
+
+
+\section{Method}
+\label{sec:method}
+
+
+
+
+
+In this section, we present \textbf{FFD} (Faster Flash Decoding), a hardware-aware sparse attention framework designed to break the memory wall in long-context decoding. FFD is built upon a hardware-algorithm co-design that systematically resolves the trade-offs in sparse attention through two core innovations: Content-Aware Scanning via Low-Bit Quantization and top-$\bm\delta$ Selection Strategy. FFD utilizes low-bit quantization thumbnails of the K cache to perform high-fidelity importance estimation without additional memory overhead. To adapt to varying attention distributions, the top-$\delta$ criterion is introduced to provide a theoretically grounded, parallelizable alternative to the rigid top-$k$ or computationally expensive top-$p$ selection. We implement a fused operator for the selector and computer to optimize the execution; specifically, the computer reuses the selector's estimation results to continue the computation, thereby accelerating the process while efficiently supporting the adaptive selection. The overall procedure is summarized in Figure~\ref{fig:architecture} and Alg.~\ref{alg:top_delta}.
+
+The remainder of this section is organized as follows. First, we detail the efficient quantization-based scanning mechanism that enables high-fidelity importance estimation. Next, we introduce the formulation and parallel implementation of the top-$\delta$ selection. Finally we describe the system-level optimization and fused kernel design that underpin the high-speed execution of FFD.
+
+
+\subsection{Content-Aware Scanning via Low-Bit Quantization}
+
+
+Inspired by advances in KV cache quantization~\citep{liu2024kivi, hooper2024kvquant, yang2024no}, we decouple retrieval fidelity from storage overhead by decomposing the K cache as $\bm{k} \to \{\bm{k}^\text{quant}, \bm{k}^{\text{res}}\}$. Here, $\bm{k}^\text{quant}$ represents 2-bit quantized thumbnails utilized for high-throughput similarity scanning, while $\bm{k}^{\text{res}}$ denotes 8-bit residuals. 
+
+To maximize information entropy within the limited bit-width, we employ a symmetric zero-free (mid-rise) quantization scheme, which ensures that directional information is preserved even for small-magnitude features (details in Appendix~\ref{app:quant}).
+
+This architecture ensures that the scanning phase operates at minimal arithmetic intensity, while the identified candidates are reconstructed to near-FP16 precision for exact computation. A formal concentration bound on the scanning error is provided in Appendix~\ref{app:error_analysis}.
+
+
+
+\begin{algorithm}[tb]
+   \caption{FFD Decoding with Hybrid Quantization}
+   \label{alg:top_delta}
+\begin{algorithmic}[1]
+   \STATE {\bfseries Input:} Query $\bm{q}_i$, 2-bit Keys $\bm{K}^\text{quant}$, 8-bit Residuals $\bm{K}^\text{res}$, Values $\bm{V}$, threshold $\delta$, sink indices $S_\text{global}$, local indices $S_\text{local}$.
+   \STATE {\bfseries Output:} Attention output $o_t$
+   \STATE \# Pseudo-max estimation
+   \STATE $s_\text{global} \gets \max_{j \in S_\text{global}}\left(\bm{q}_i^\top\cdot \bm{k}^\text{quant}_j\right)$
+   \STATE $s_\text{local} \gets \max_{j \in S_\text{local}}\left(\bm{q}_i^\top\cdot \bm{k}^\text{quant}_j\right)$
+   \STATE $\tilde{m}_i \gets \max\left(s_\text{global}, s_\text{local}\right)$
+   \STATE 
+   \STATE \# Top-$\delta$ selection
+   \STATE $\mathcal{I}_\text{selected} \gets \emptyset$
+   \FOR{each block index $B$}
+       \STATE $s^\text{approx} \gets \bm{q}_i \cdot \bm{K}^\text{quant}[B]$
+       \IF{$\max(s^\text{approx}) \ge \tilde{m}_i - \delta$}
+           \STATE $\mathcal{I}_\text{selected} \gets \mathcal{I}_\text{selected} \cup B$
+       \ENDIF
+   \ENDFOR
+   \STATE 
+   \STATE \# Fine-grained refinement
+   \STATE $\text{logits} \gets []$
+   \FOR{each block index $B$}
+       \STATE $\bm{K}^\text{full} \gets \text{Dequant}(\bm{K}^\text{quant}[B], \bm{K}^\text{res}[B])$
+       \STATE $s_\text{final} \gets \dfrac{\bm{q}_i \cdot \bm{K}^\text{full}}{\sqrt{d}}$
+       \STATE $\text{logits}.\text{append}(s_\text{final})$
+   \ENDFOR
+   \STATE $o_t \gets \text{Softmax}(\text{logits}) \cdot V[\mathcal{I}_\text{selected}]$
+\end{algorithmic}
+\end{algorithm}
+
+
+
+
+\subsection{Top-$\bm\delta$ Selection Criterion}
+\label{sec:ffd_selection}
+
+
+Let $s_{ij} = \dfrac{\bm{q}_i^\top\bm{k}_j}{\sqrt{d}}$ be the pre-softmax attention score between query vector $\bm{q}_i$ and key vector $\bm{k}_j$. Ideally, we aim to retain only those tokens whose attention weight contributes significantly to the distribution. We define a retention condition based on the relative magnitude $\delta$ compared to the maximum attention score $m_i = \max_j s_{ij}$, and thus only calculate the attention over the KV cache where
+\begin{equation}
+\label{eq:threshold}
+s_{ij} \ge m_i - \delta.
+\end{equation}
+This additive threshold in the log-space, $\delta$, translates to a rigorous multiplicative bound in the probability space. By exponentiating Eq.~\ref{eq:threshold}, we observe that a retained token $j$ must satisfy
+\begin{equation}
+\frac{\exp(s_{ij})}{\exp(m_i)} \ge e^{-\delta}.
+\end{equation}
+This provides a clear physical interpretation that $\delta$ controls the maximum allowable attention drop-off. For instance, setting $\delta=5$ guarantees that we discard only tokens whose contribution is less than $e^{-5} \approx 0.67\%$ of the peak attention mass. This allows our FFD to adaptively vary the retrieval budget based on the sharpness of the attention distribution, rather than a fixed top-$k$ and top-$p$ as shown in Fig.~\ref{fig:comparison}.
+
+Implementing Eq.~\ref{eq:threshold} strictly requires computing the global max $m_i$, which incurs the same synchronization overhead as softmax. Fortunately, thanks to the phenomenon that attention distributions are typically dominated by either local context or initial sink tokens~\citep{xiao2023efficient}, we introduce the pseudo-max approximation $\tilde{m}_i$. This value is derived by efficiently estimating the global maximum using only these accessible subsets—sink tokens $S_\text{global}$ and local context $S_\text{local}$—without a global reduction. This approximation allows the threshold $\tilde{m}_i - \delta$ to be computed using only locally available data, effectively bypassing the global reduction bottleneck and enabling independent parallel processing of KV blocks.
+
+
+
+\subsection{Kernel Optimization}
+We implement FFD as a cooperative pipeline comprising three specialized Triton kernels, illustrated in Fig.~\ref{fig:architecture}. The execution flow proceeds as follows:
+\begin{enumerate}
+    \itemsep0em
+    \item \textbf{Pseudo-max estimation}. A lightweight kernel computes the pseudo-max $\tilde{m}$ using only the sink and local tokens.
+    \item \textbf{Top-$\bm\delta$ selection}. The main kernel loads 2-bit keys in streaming chunks. It computes tentative scores and compares them against $\tilde{m} - \delta$.
+    \item \textbf{Fine-grained refinement}. If a block passes the filter, the kernel loads the corresponding 8-bit residual keys and values.
+\end{enumerate}
+The add-on computation in the refinement stage is shown as follows and ensures that for selected tokens, the attention score is computed with near-FP16 precision.
+\begin{equation}
+s_\text{final} = \frac{\bm{q}^\top\bm{k}^\text{quant} + \bm{q}^\top\bm{k}^\text{res}}{\sqrt{d}}
+\end{equation}
+This two-term form is semantically equivalent to the \texttt{Dequant} step in Algorithm~\ref{alg:top_delta} but corresponds more closely to the actual kernel implementation, where the two dot products are accumulated without materializing a full-precision key tensor.
+
+To further minimize latency, particularly for decoding with small batch sizes where CPU launch overhead dominates, we implement a full-chain CUDA graph strategy. Unlike standard implementations that only capture the attention kernel, we capture the entire decoding step, including MLP, RMSNorm, and residual connections.
+
+However, standard CUDA Graphs are static and incompatible with the dynamic sequence growth of KV caches. We address this with two innovations:
+\begin{itemize}
+    \itemsep0em
+    \item \textbf{Block-wise JIT capture}. We introduce a dynamic graph capture mechanism that triggers re-capture only when the number of full KV blocks changes. This amortizes compilation cost over the block size.
+    \item \textbf{Graph-friendly cache}. We replace standard Python slicing (which triggers CPU-GPU synchronization) with tensor-based indexing kernels, ensuring the entire cache update process remains device-side and graph-capturable.
+\end{itemize}
+This hybrid execution model runs 99\% of steps within a CUDA Graph, falling back to eager mode only at block boundaries for memory allocation.
+
+
+
+\section{Experiments}
+\subsection{Setup}
+\label{sec:experiments_setup}
+
+\textbf{Device} 
+We conduct evaluations on two distinct GPU architectures, NVIDIA H100, representing datacenter-grade hardware with high memory bandwidth, and NVIDIA GeForce RTX 4090, representing consumer-grade hardware. All experiments are implemented using PyTorch 2.8 and Triton 3.4 under CUDA 12.8.
+
+\textbf{Baselines} 
+We compare FFD with full attention accelerated by FlashAttention-2~\citep{dao2023flashattention}, Quest~\citep{tang2024quest}, KIVI~\citep{liu2024kivi}, and Twilight~\citep{lin2025twilight}. Twilight does not provide fully open-source official code at the time of writing; its results are based on our own faithful reproduction following the algorithm described in the original paper. To ensure a fair system-level comparison, we align the token budget as 16k and memory access patterns with hardware characteristics.
+For Quest, we utilize the official page size of $P=16$. Fortunately, under this configuration, the memory footprint of the indices among these methods is equivalent to that of our 2-bit data for full scanning, which ensures a fair comparison.
+
+\textbf{Hyperparameter} 
+For FFD, we evaluate sparsity thresholds $\delta \in \{5, 7\}$. These values are selected based on their theoretical implications for the probability mass:
+\begin{itemize}
+    \itemsep0em
+    \item $\delta=5$ implies pruning tokens whose attention weight $\exp(s_{ij})$ is less than $e^{-\delta} \approx 1/148$ of the maximum score. This represents an aggressive filtering strategy targeting the top $\sim 1\%$ relevant tokens.
+    \item $\delta=7$ corresponds to a threshold of $e^{-7} \approx 1/1096$, serving as a conservative setting that retains tokens with even $\sim 0.1\%$ relative importance to prevent tail-risk information loss.
+\end{itemize}
+
+\textbf{Evaluation}
+
+We structure our evaluation into two parts: Efficiency and Effectiveness.
+
+\begin{itemize}
+    \itemsep0em
+    \item \textbf{Efficiency:} We evaluate system performance at two levels. We use \textit{Trace-Driven Kernel Microbenchmarks} (Section \ref{sec:kernel_perf}) to measure operator latency, and \textit{End-to-End Generation} (Section \ref{sec:e2e}) to test the throughput of the full model.
+    
+    \item \textbf{Effectiveness:} We validate that our method preserves model quality. We employ standard long-context benchmarks, specifically LongBench and RULER (Section \ref{sec:accuracy}), to assess performance on downstream tasks.
+\end{itemize}
+
+
+
+\subsection{Kernel Efficiency}\label{sec:kernel_perf}
+We benchmark the latency of our fused Triton kernel on a consumer GPU with sequence lengths ranging from 4K to 256K. To minimize launch overheads in the low-latency regime (<1ms), we utilize CUDA Graphs for kernel submission. We compare against the standard PyTorch \texttt{scaled\_dot\_product\_attention} (which utilizes FlashAttention-2).
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.8\textwidth]{plot_thesis/latency_vs_length_error_band.pdf}
+\caption{Kernel Latency vs. Sequence Length (RTX 4090). Layer-averaged execution time for FlashAttention-2 and FFD variants (batch=1). FFD-$\delta=5$ and $\delta=7$ achieve average speedups of $7.33\times$ and $6.18\times$ respectively, with a peak reduction of $11.63\times$. Error bands denote the min--max range across layers.}
+\label{fig:latency_error_band}
+\end{figure}
+
+As shown in Figure~\ref{fig:latency_error_band}, our FFD kernel demonstrates linear scaling with sequence length but with a significantly lower slope; error bands indicate the layer-wise min--max range for FFD ($\delta=5$, $\delta=7$) and FlashAttention-2.
+At 256K context length, FlashAttention-2 averages 1.12 ms, while FFD ($\delta=5$) and FFD ($\delta=7$) average 0.17 ms and 0.21 ms, corresponding to 6.58$\times$ and 5.33$\times$ speedups.
+This dramatic acceleration is achieved by combining:
+1. \textit{2-bit IO:} Reducing memory access from 16 bits to 2 bits for the scanning phase.
+2. \textit{High Sparsity:} The $\delta=5$ threshold effectively filters a lot of blocks on real Llama-3.1 data.
+3. \textit{CUDA Graphs:} Eliminating CPU launch overhead, which is critical when the kernel runtime is sub-100$\mu$s.
+
+\subsection{End-to-End Throughput}\label{sec:e2e}
+Beyond kernel-level microbenchmarks, we evaluate the impact of FFD on end-to-end token generation throughput. Figure~\ref{fig:e2e_throughput} compares the maximum throughput (tokens/sec) achievable by FFD, Quest, FlashAttention-2, and KIVI across varying context lengths on both NVIDIA RTX 4090 and H100 GPUs.
+
+On the consumer-grade RTX 4090, FFD consistently achieves the highest throughput, reaching 61.0 tokens/s at 4K and maintaining 51.8 tokens/s at 16K context. This represents a speedup of up to 2.37$\times$ over FlashAttention-2 (at 16K). Quest also performs well but lags behind FFD (e.g., 47.8 vs 51.8 at 16K).
+
+We further scale our evaluation to the datacenter-grade H100. FFD demonstrates strong scalability, reaching 110.6 tokens/s at 4K context and maintaining 87.0 tokens/s at 16K. This corresponds to a 1.96$\times$ speedup over FlashAttention-2 (44.5 tokens/s) at 16K context. Consistent with 4090 results, KIVI continues to underperform dense attention on H100 in this low-batch regime (e.g., 22.4 vs 44.5 at 16K), highlighting the significant cost of dequantization. 
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.8\textwidth]{plot_thesis/e2e_comparison_16k.pdf}
+\caption{End-to-End Generation Throughput Comparison on RTX 4090 and H100 (16K Context). FFD outperforms FlashAttention-2, Quest, and KIVI on both platforms. On H100, FFD achieves up to 1.96$\times$ speedup over the dense baseline and surpasses Quest (e.g., 87.0 vs 73.5 tokens/s at 16K). KIVI suffers from dequantization overheads in this single-batch setting.}
+\label{fig:e2e_throughput}
+\end{figure}
+
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.72\textwidth]{plot_thesis/sink_robustness_ecdf.pdf}
+\caption{Distribution of the approximation error ($m_i - \tilde{m}_i$) by layer. The gap is effectively zero for most of conditions, confirming that the maximum attention score is dominated by sinks and local tokens. This verifies that our Pseudo-Max approximation serves as a robust safe relaxation.}
+\label{fig:pseudomax}
+\end{figure}
+
+\subsection{Downstream Performance}\label{sec:accuracy}
+
+\begin{table*}[t]
+\caption{RULER Benchmark Results (32k Context). Comparison of Llama-3.1-8B-Instruct Base, StreamingLLM, KIVI (2-bit, group=32), Quest (ratio=0.5), Twilight, and FFD. We report the aggregated score (0--100) for each task category. \textbf{Bold} indicates the best performance among sparse methods (excluding Base). Abbreviations: SK (SingleKey), MK (MultiKey), MQ (MultiQuery), MV (MultiValue), VT (Variable Tracking), CWE (Common Words Extraction), FWE (Frequent Words Extraction). Avg is the simple average over all 13 RULER subtasks.}
+\label{tab:ruler}
+\begin{center}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lcccccccccccccc}
+\toprule
+Method & SK-1 & SK-2 & SK-3 & MK-1 & MK-2 & MK-3 & MQ & MV & VT & SQuAD & Hotpot & CWE & FWE & Avg \\
+\midrule
+Base & 100.0 & 100.0 & 100.0 & 98.0 & 100.0 & 99.0 & 98.5 & 98.5 & 99.6 & 67.0 & 56.0 & 67.8 & 93.0 & 90.6 \\
+StreamingLLM & 3.0 & 0.0 & 0.0 & 2.0 & 2.0 & 1.0 & 0.0 & 0.0 & 0.0 & 11.0 & 9.0 & 0.2 & 51.0 & 6.1 \\
+KIVI & \textbf{100.0} & 99.0 & 98.0 & 93.0 & 93.0 & 48.0 & 86.8 & 86.0 & 99.2 & 63.0 & \textbf{54.0} & 56.4 & \textbf{93.3} & 82.3 \\
+Quest (0.5) & \textbf{100.0} & \textbf{100.0} & \textbf{100.0} & \textbf{96.0} & 64.0 & 6.0 & 98.3 & 96.3 & \textbf{99.4} & 65.0 & 49.0 & 15.8 & 71.0 & 73.9 \\
+Twilight & \textbf{100.0} & 88.0 & 96.0 & 88.0 & 76.0 & 37.0 & 56.5 & 60.3 & 98.2 & 60.0 & 49.0 & 12.7 & 86.3 & 69.8 \\
+FFD ($\delta=5$) & \textbf{100.0} & 99.0 & 99.0 & \textbf{96.0} & 97.0 & 78.0 & 98.3 & 97.8 & 96.8 & 65.0 & 52.0 & 61.0 & 93.0 & 87.1 \\
+FFD ($\delta=7$) & \textbf{100.0} & \textbf{100.0} & 99.0 & \textbf{96.0} & \textbf{98.0} & \textbf{95.0} & \textbf{99.5} & \textbf{98.5} & 98.4 & \textbf{66.0} & 52.0 & 67.0 & 92.7 & \textbf{89.4} \\
+\bottomrule
+\end{tabular}%
+}
+\end{center}
+\end{table*}
+
+\begin{table*}[t]
+\caption{LongBench Results. Comparison of Base, StreamingLLM, KIVI (2-bit), Quest, Twilight, and FFD. We report the average score (\%) for each category. \textbf{Bold} indicates the best performance among sparse methods (excluding Base). Twilight results are based on our own reproduction.}
+\label{tab:longbench}
+\begin{center}
+\begin{small}
+\begin{sc}
+\begin{tabular}{lccccccc}
+\toprule
+Method & S-Doc & M-Doc & Summ & Few-Shot & Syn & Code & Avg \\
+\midrule
+Base & 24.02 & 15.24 & 16.57 & 44.10 & 32.70 & 24.68 & 26.22 \\
+StreamingLLM & 3.44 & 3.12 & 5.92 & 22.49 & 0.02 & 22.55 & 9.59 \\
+KIVI & 23.46 & 14.44 & 15.46 & 44.17 & 30.48 & 24.94 & 25.49 \\
+Quest & 23.13 & 14.33 & 15.29 & 43.69 & 30.28 & \textbf{29.36} & 26.01 \\
+Twilight & 23.25 & 15.53 & \textbf{16.97} & 43.73 & \textbf{32.37} & 25.23 & 26.18 \\
+FFD ($\delta=5$) & 23.36 & 15.35 & 16.40 & 44.09 & 30.04 & 25.94 & 25.86 \\
+FFD ($\delta=7$) & \textbf{24.00} & \textbf{15.78} & 16.11 & \textbf{44.19} & 31.83 & 26.21 & \textbf{26.35} \\
+\bottomrule
+\end{tabular}
+\end{sc}
+\end{small}
+\end{center}
+\vskip -0.1in
+\end{table*}
+
+
+To validate the effectiveness of FFD in real-world long-context scenarios, we evaluated our method on the RULER benchmark \citep{hsieh2024ruler} with a context length of 32K. Table \ref{tab:ruler} presents the results comparing FFD against the dense Llama-3.1-8B-Instruct baseline.
+
+Our method maintains high performance across all categories. Notably, on the challenging ``Needle In A Haystack" (NIAH) Single and Multi-Key retrieval tasks, FFD achieves near-perfect scores (e.g., 100.0 on SK-1/SK-2, 99.0 on SK-3), matching the dense baseline. Even on complex reasoning tasks like Variable Tracking (VT), the performance degradation is minimal (98.4 vs 99.6), demonstrating that our 2-bit high-fidelity filter successfully preserves the critical information required for multi-hop reasoning.
+
+
+We further evaluate FFD on LongBench \citep{bai2024longbench}, a comprehensive benchmark for long-context understanding containing 21 datasets across 6 categories. Table \ref{tab:longbench} reports the category-level results across all compared methods.
+
+FFD demonstrates strong performance across all six categories. With an overall average of 26.35, FFD ($\delta=7$) achieves the highest aggregate score among all methods, reinforcing our hypothesis that 2-bit content-aware scanning preserves the semantic fidelity required for diverse long-context understanding tasks.
+
+\textbf{Comparison with Top-$p$ Selection.} To provide a direct comparison with the Top-$p$ selection paradigm, we additionally benchmark Twilight~\citep{lin2025twilight} under its original operating point (budget=8192, $p=0.85$). As shown in Tables~\ref{tab:ruler} and \ref{tab:longbench}, FFD consistently outperforms Twilight by substantial margins on both benchmarks, while maintaining a clear advantage over Quest. The multi-peak retrieval tasks (MK-2, MK-3) particularly highlight the weakness of fixed-budget selectors: Quest drops sharply on MK-3 (6.0), whereas FFD with top-$\delta$ adapts to the distributed attention pattern (95.0). We omit throughput comparison with Twilight because its official implementation is not fully open-source, making a fair system-level speed comparison infeasible.
+
+\subsection{Ablation Study}
+\label{sec:ablation}
+
+To disentangle the contributions of our three co-design axes---scan precision (FP16 vs.\ 2-bit), selection rule (top-$k$ vs.\ top-$\delta$), and execution path (split vs.\ fused+fullgraph)---we conduct a controlled ablation study under matched conditions. All variants are evaluated with a 16K prefill and 128 decode steps on an RTX 4090 (batch size 1). The full ablation table and detailed analysis are presented in Appendix~\ref{app:ablation}. In summary, the fused 2-bit top-$\delta$ configuration (FFD) achieves 53.96 tok/s with RULER AVG of 90.40 and LongBench AVG of 25.90---a synergistic 2.2$\times$ throughput gain over the split-execution counterpart---demonstrating that the algorithmic and system designs are inseparably linked.
+
+\textbf{Selection-Rule Overhead.} To isolate the algorithmic cost of each selection rule, we calibrate top-$k$ and top-$p$ to match the average keep ratio of top-$\delta$ ($\sim$27.3\%). Table~\ref{tab:selection_overhead} reports the per-head latency breakdown under matched sparsity. At nearly identical keep ratios, top-$\delta$ is $2\times$ faster than top-$k$ and $25\times$ faster than top-$p$, confirming that the top-$\delta$ formulation eliminates the global synchronization bottleneck inherent to cumulative probability methods.
+
+\begin{table}[t]
+\caption{Per-head selection latency at matched keep ratio ($\sim$27.3\%).}
+\label{tab:selection_overhead}
+\begin{center}
+\begin{small}
+\begin{sc}
+\begin{tabular}{lcc}
+\toprule
+Selection Rule & Keep Ratio & Latency (ms/head) \\
+\midrule
+top-$\delta$ & 0.273 & 0.0044 \\
+top-$k$      & 0.275 & 0.0090 \\
+top-$p$      & 0.273 & 0.1115 \\
+KIVI2 (dense) & 1.000 & 0.0186 \\
+\bottomrule
+\end{tabular}
+\end{sc}
+\end{small}
+\end{center}
+\vskip -0.1in
+\end{table}
+
+\textbf{Generalization to Qwen2.5.} We further validate FFD on Qwen2.5-7B-Instruct to assess generalization beyond the Llama architecture. Under the same $\delta=7$ configuration, FFD achieves 85.90 RULER AVG and 30.11 LongBench AVG, outperforming KIVI (72.01 / 28.34), Quest (71.93 / 29.49), and StreamingLLM (16.24 / 21.45). These results confirm that FFD's content-aware scanning and top-$\delta$ selection generalize effectively across model families without architecture-specific tuning.
+
+
+
+\section{Discussion}
+
+\subsection{Retrieval Fidelity Analysis}
+We evaluate the ``quality" of the retrieved tokens by measuring two metrics:
+\begin{enumerate}
+    \itemsep0em
+    \item \textit{Recall:} The cosine similarity between the sparse attention output and the dense (exact) output.
+    \item \textit{LSE Error:} The Max Absolute Error of the Log-Sum-Exp (LSE) value, which proxies the stability of the Softmax distribution.
+\end{enumerate}
+
+\begin{figure}[t]
+     \centering
+     \begin{subfigure}[b]{0.48\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{plot_thesis/llama_lse.pdf}
+         \label{fig:main-figure-sub1}
+     \end{subfigure}
+     \hfill% 自动填充中间的间距
+     \begin{subfigure}[b]{0.48\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{plot_thesis/llama_recall.pdf}
+         \label{fig:main-figure-sub2}
+     \end{subfigure}
+     
+     \caption{Quality vs. IO Budget on Llama. FFD maintains lower LSE error while achieving higher recall than Quest under the same retrieval budget, showing that high-fidelity scanning preserves distributional accuracy and hit rate.}
+     \label{fig:main-figure}
+\end{figure}
+
+FFD achieves significantly higher recall than Quest across all sparsity ratios, confirming the ``Thumbnail vs Bounding Box" hypothesis: 2-bit quantization preserves the geometric directionality of keys, enabling more precise filtering than min/max bounds. FFD also minimizes the error in the normalization term (LSE), which is critical for preventing ``collapse" in the attention distribution.
+
+\begin{figure}[t]
+     \centering
+     \includegraphics[width=0.6\textwidth]{plot_thesis/layer_correlation_trends_spearman.pdf}
+     \caption{Layer-wise Correlation Trends. FFD achieves consistently higher Spearman correlations across all layers compared to Quest, indicating better preservation of the attention distribution's structural properties.}
+     \label{fig:layer_correlation}
+\end{figure}
+
+Figure~\ref{fig:layer_correlation} shows that FFD consistently maintains higher Spearman correlation than Quest across all layers, indicating that quantization-based scanning better preserves the relative ordering of attention scores, whereas the bounding-box approximation suffers from degradation.
+
+
+\subsection{Pseudo-Max Robustness}
+FFD avoids a global reduction by estimating the threshold using a Pseudo-Max computed from sink and local tokens.
+Figure~\ref{fig:pseudomax} reports the empirical gap between the global maximum and the Pseudo-Max in a simulation that mirrors the sink/local bias.
+
+We analyze the implications of the approximation gap where $\tilde{m}_i < m_i$. As shown in Figure \ref{fig:pseudomax}, such gaps are rare and numerically negligible. Crucially, when they do occur, this underestimation represents the primary source of approximation error.
+Recall our filtering condition: $s_{ij} \ge \tilde{m}_i - \delta$.
+If $\tilde{m}_i$ underestimates $m_i$, the threshold $\tilde{m}_i - \delta$ becomes lower than the ideal $m_i - \delta$. This causes FFD to fall back to a more conservative retrieval policy, preserving slightly more tokens. This structural asymmetry ensures that approximation errors result only in a minor increase in I/O budget (efficiency penalty), rather than the loss of critical information (accuracy penalty).
+
+\begin{figure}[t]
+     \centering
+     \includegraphics[width=0.6\textwidth]{plot_thesis/skip_ratio_comparison.pdf}
+     \caption{Layer-wise sparsity distribution on LongBench (Llama-3.1-8B). FFD achieves significant computational savings, maintaining average sparsity levels of 82\% and 73\% under $\delta=5$ and $\delta=7$ configurations respectively.}
+     \label{fig:skip_ratio}
+\end{figure}
+
+\subsection{Sparsity Analysis}
+FFD exhibits layer-wise adaptive sparsity governed by $\delta$, with higher sparsity at smaller $\delta$. As shown in Figure~\ref{fig:skip_ratio}, FFD maintains average sparsity of 82\% and 73\% under $\delta=5$ and $\delta=7$ respectively---operating with substantially lower compute budget than dense attention---while Tables~\ref{tab:ruler} and \ref{tab:longbench} confirm no accuracy sacrifice. By mitigating redundant I/O overhead, FFD achieves superior inference speed compared to other approaches.
+
+\subsection{Limitations}
+We identify several limitations that point to future work. First, while our head-wise variation analysis (Appendix~\ref{app:headwise}) indicates that FFD adapts naturally to diverse per-head sparsity patterns, the characterization is based on controlled single-sample statistics and has not been systematically validated across diverse task distributions. Second, the failure-case profiling in Appendix~\ref{app:failure} uses proxy metrics (top-1/top-2 gap and score standard deviation) rather than direct end-to-end task-failure attribution; a more comprehensive causal attribution remains open. Third, FFD has been validated on Llama and Qwen architectures employing grouped-query attention (GQA); its applicability to MLA-style architectures~\citep{liu2025deepseek} with fundamentally different key/value factorization has not yet been assessed. Finally, while our component-wise ablation isolates the major contributors to the end-to-end speedup, a fine-grained latency breakdown within the fused execution path is deferred to future work.
+
+
+
+
+
+
+
+
+
+\section{Conclusion}
+
+We presented FFD, a hardware-algorithm co-design that rethinks sparse attention as geometric filtering rather than metadata indexing. By utilizing 2-bit quantization for high-fidelity scanning and attention sinks for adaptive thresholding, we break the dependency on rigid top-$k$ budgets. Our results suggest that future long-context inference should prioritize ``compute-for-IO'' trade-offs---spending cheap FLOPs on low-bit scanning to save expensive HBM bandwidth.
+
+\section*{Acknowledgments}
+This work was supported by the Science and Technology Commission of Shanghai Municipality (No. 25DZ3100402).
+
+\section*{Impact Statement}
+This work improves the decoding efficiency of large language models through algorithmic and kernel optimization. It does not involve human subjects, personal information, or sensitive content, and we identify no extra ethical concerns specific to our work.
+
+
+\bibliographystyle{unsrtnat}
+\bibliography{main}
+
+\appendix
+\appendix
+
+\section{Details of Quantization Implementation}
+\label{app:quant}
+
+FFD employs a Symmetric Mid-rise Uniform Quantization scheme. Unlike standard integer mapping (e.g., $\{-1, 0, 1\}$) which wastes quantization bins on a zero state, our approach utilizes a strictly non-zero grid to maximize the information capacity of the limited 2-bit budget.
+
+\subsection{Formulation}
+
+We define a 4-level quantization codebook $\mathcal{C}$ centered around zero but excluding zero itself:
+\begin{equation}
+    \mathcal{C} = \{-1.5, -0.5, +0.5, +1.5\}
+\end{equation}
+For a given input channel vector $\mathbf{x}$, we compute the scaling factor $s$ based on the absolute maximum value to ensure coverage:
+\begin{equation}
+    s = \frac{\max(|\mathbf{x}|)}{1.5}
+\end{equation}
+The quantized representation $\mathbf{x}_q$ is obtained by projecting the scaled input onto the nearest neighbor in the codebook:
+\begin{equation}
+    \mathbf{x}_q = \underset{c \in \mathcal{C}}{\arg\min} \left| \frac{\mathbf{x}}{s} - c \right|
+\end{equation}
+The reconstructed approximation is then $\hat{\mathbf{x}} = \mathbf{x}_q \cdot s$.
+
+\subsection{Design Rationale}
+
+We explicitly choose a mid-rise quantizer (no zero point) over a mid-tread quantizer to align with the distributional properties of modern LLMs. Key vectors, particularly after Rotary Positional Embeddings (RoPE), are typically dense with magnitude distributed across dimensions. A standard zero-inclusive grid effectively utilizes only 3 states ($\log_2 3 \approx 1.58$ bits), wasting roughly 20\% of the representational capacity of a 2-bit system. By forcing every dimension to take a non-zero value, our mid-rise scheme ensures full bit utilization and prevents ``information collapse", preserving the directional fidelity required for high-dimensional dot-product scanning.
+
+\section{Error Analysis of Quantized Scanning}
+\label{app:error_analysis}
+
+In this section, we provide a theoretical bound on the approximation error introduced by the 2-bit quantization during the scanning phase. We demonstrate that as the head dimension $d$ increases, the probability of the approximation error exceeding the selection safety margin decays exponentially.
+
+\subsection{Quantization Error Bound}
+
+Let $\mathbf{q}, \mathbf{k} \in \mathbb{R}^d$ denote the query and key vectors of dimension $d$ (head dimension). In our FFD framework, the exact pre-softmax attention score is defined as $s = \mathbf{q}^\top \mathbf{k} / \sqrt{d}$. The scanner approximates this using the 2-bit quantized key $\hat{\mathbf{k}} = \mathbf{k} + \mathbf{\epsilon}$, where $\mathbf{\epsilon} \in \mathbb{R}^d$ is the quantization noise vector. The approximate score is given by:
+\begin{equation}
+    \hat{s} = \frac{\mathbf{q}^\top (\mathbf{k} + \mathbf{\epsilon})}{\sqrt{d}} = s + \frac{\mathbf{q}^\top \mathbf{\epsilon}}{\sqrt{d}}
+\end{equation}
+The approximation error is thus $e_{approx} = \frac{\mathbf{q}^\top \mathbf{\epsilon}}{\sqrt{d}}$.
+
+\begin{assumption}[Sub-Gaussian Quantization Noise]
+\label{ass:subgaussian}
+While standard quantization theory models noise as uniform for high bit-depths, for 2-bit quantization, we adopt a more robust assumption: the noise components $\epsilon_i$ are independent, mean-zero, and $\sigma^2$-sub-Gaussian. This means $\mathbb{E}[\exp(t\epsilon_i)] \le \exp(\sigma^2 t^2 / 2)$ for all $t \in \mathbb{R}$. For a symmetric 4-level quantizer with step size $\Delta$, the variance and sub-Gaussian parameter are determined by the bin width $\Delta \approx \max(|\mathbf{k}|)/1.5$.
+\end{assumption}
+
+\begin{theorem}[Concentration of Scanning Error]
+\label{thm:concentration_error}
+Let the query vector $\mathbf{q}$ have a bounded $\ell_2$-norm such that $\|\mathbf{q}\|_2 \le \alpha \sqrt{d}$, where $\alpha$ is a constant determined by the model's normalization layers (e.g., RMSNorm). Under \cref{ass:subgaussian}, the probability that the magnitude of the scanning error $|e_{approx}|$ exceeds a deviation $\lambda$ is bounded by:
+\begin{equation}
+    P(|e_{approx}| \ge \lambda) \le 2 \exp \left( -\frac{\lambda^2}{2 \sigma^2 \alpha^2} \right)
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+The error term $e_{approx}$ is a linear combination of independent sub-Gaussian random variables:
+\begin{equation}
+    e_{approx} = \sum_{i=1}^d \left( \frac{q_i}{\sqrt{d}} \right) \epsilon_i
+\end{equation}
+The sum of independent sub-Gaussian variables $X = \sum w_i \epsilon_i$ is itself sub-Gaussian with parameter $\|\mathbf{w}\|_2^2 \sigma^2$. Here, the weights are $w_i = q_i / \sqrt{d}$. The effective sub-Gaussian parameter for $e_{approx}$ is:
+\begin{equation}
+    \sigma_{eff}^2 = \sum_{i=1}^d \left( \frac{q_i}{\sqrt{d}} \right)^2 \sigma^2 = \frac{\sigma^2}{d} \|\mathbf{q}\|_2^2
+\end{equation}
+Using the $\| \mathbf{q} \|_2 \le \alpha \sqrt{d}$ bound (where typically $\alpha \approx 1$ in normalized LLMs), we have $\sigma_{eff}^2 \le \sigma^2 \alpha^2$. Applying the general Hoeffding-type bound for sub-Gaussian variables:
+\begin{equation}
+    P(|e_{approx}| \ge \lambda) \le 2 \exp \left( -\frac{\lambda^2}{2 \sigma_{eff}^2} \right) \le 2 \exp \left( -\frac{\lambda^2}{2 \sigma^2 \alpha^2} \right) \qedhere
+\end{equation}
+\end{proof}
+
+\subsection{Reliability of Top-$\delta$ Selection}
+
+Based on the error bound derived in \cref{thm:concentration_error}, we can now formally justify the FFD selection strategy. The primary goal is to minimize the False Negative Rate (FNR)---missing a token that is truly significant.
+
+Let $\delta_{ideal}$ be the theoretically optimal threshold in log-space (Eq.~\ref{eq:threshold}). In FFD, we set the operational threshold $\delta = \delta_{ideal} + \lambda_{margin}$, where $\lambda_{margin}$ acts as a safety buffer. 
+A False Negative occurs if a token satisfies $s \ge m - \delta_{ideal}$ but is rejected by the scanner: $\hat{s} < \tilde{m} - \delta$. 
+
+Given $\hat{s} = s + e_{approx}$ and our definition of $\delta$, the rejection condition implies:
+\begin{equation}
+    s + e_{approx} < \tilde{m} - (\delta_{ideal} + \lambda_{margin})
+\end{equation}
+Using $s \ge m - \delta_{ideal}$ and the fact that the Pseudo-Max $\tilde{m}$ is a lower bound on the true max $m$ ($\tilde{m} \le m$), we obtain:
+\begin{equation}
+    e_{approx} < (\tilde{m} - m) - \lambda_{margin} \le -\lambda_{margin}
+\end{equation}
+Thus, a False Negative requires the quantization error to exceed the safety margin in the negative direction. According to \cref{thm:concentration_error}, this probability is:
+\begin{equation}
+    P(\text{False Negative}) \le \exp \left( - \frac{\lambda_{margin}^2}{2 \sigma^2 \alpha^2} \right)
+\end{equation}
+
+This result provides a strong theoretical guarantee: the probability of missing a critical token decays exponentially with the square of the safety margin. In practice, setting $\delta=5$ or $7$ provides a sufficiently large $\lambda_{margin}$ relative to the noise scale $\sigma$, explaining the near-perfect recall observed in our LongBench and RULER experiments despite the 2-bit representation.
+
+
+\section{Bandwidth Proportionality of Quantization Depth}
+\label{app:bandwidth}
+
+A central design choice in FFD is the 2-bit thumbnail with 8-bit residual (``2+8'') configuration. To justify this choice empirically for the decode setting, we benchmark the decoding kernel latency under three quantization configurations---2+8, 4+8, and 8+8---using real text from the LongBench dataset on an RTX 4090. Table~\ref{tab:quant_depth} reports the results.
+
+\begin{table}[h]
+\caption{Decode kernel latency under different quantization depths (RTX 4090, 16k context).}
+\label{tab:quant_depth}
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+Configuration & Latency (ms/head) & Speedup vs.\ FlashAttn \\
+\midrule
+2+8 (FFD)   & 0.105 & 10.65$\times$ \\
+4+8         & 0.201 & 5.60$\times$ \\
+8+8         & 0.406 & 2.82$\times$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{table}
+
+The kernel speed is nearly proportional to the scan bandwidth: 2-bit scanning incurs one-quarter the I/O of 8-bit and half that of 4-bit. This proportionality is a distinctive characteristic of the decode setting where memory bandwidth dominates; it does not necessarily hold in prefill, where computation is the primary bottleneck and 4-bit may be a natural choice due to better hardware support for 4-bit arithmetic. This finding motivates the 2+8 design as the bandwidth-optimal configuration for long-context decoding.
+
+
+\section{Head-Wise Variation under Fixed Delta}
+\label{app:headwise}
+
+To assess whether FFD implicitly assumes uniform sparsity across attention heads, we conduct a controlled head-wise analysis on a sample from LongBench with $\delta=5$ fixed. Across $1024$ layer-head pairs (32 layers $\times$ 32 heads on Llama-3.1-8B), we measure the per-head keep ratio and salient hit rate. Table~\ref{tab:headwise} summarizes the results.
+
+\begin{table}[h]
+\caption{Head-wise variation statistics ($\delta=5$, single LongBench sample, 1024 layer-head pairs).}
+\label{tab:headwise}
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+Statistic & Keep Ratio (\%) & Salient Hit Rate (\%) \\
+\midrule
+Mean      & 6.42  & 87.45 \\
+Std.\ dev.\ & 14.14 & -- \\
+Min       & 0.62  & -- \\
+Max       & 100.0 & -- \\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{table}
+
+The keep ratio spans from $0.62\%$ to $100\%$ with a standard deviation of $14.14$ percentage points, indicating that FFD does \emph{not} impose a uniform sparsity structure. Rather, the same $\delta$-threshold rule allows different heads to exhibit markedly different retention behavior, with the mean salient hit rate remaining at $87.45\%$. Notably, both Quest and Twilight require retaining the first two layers' full-precision KV cache to avoid accuracy collapse, whereas FFD requires no such early-layer exception---suggesting that the content-aware scanning mechanism naturally captures the distributional properties that lead other methods to rely on architectural hand-tuning.
+
+\textbf{Scope.} These statistics are derived from a single LongBench sample under a fixed $\delta=5$. They should be interpreted as a mechanistic characterization rather than as claims about worst-case behavior across all task distributions.
+
+
+\section{Failure-Case Profiling}
+\label{app:failure}
+
+To characterize when FFD's approximation is most stressed, we profile failure-prone conditions using two proxy metrics: the gap between the top-1 and top-2 attention scores ($\text{top1\_top2\_gap}$) and the standard deviation of attention scores ($\text{score\_std}$). A layer-head pair is flagged as a \emph{proxy-error} case if it falls into the lowest decile (bottom $10\%$) on either metric, and as a \emph{high-error} case if it falls into the lowest decile on both. These are proxy indicators of flat or multi-peak attention distributions where quantization-based selection is most challenged.
+
+We profile $3392$ layer-head pairs across $4$ attention dumps (2 models $\times$ 2 LongBench tasks). Table~\ref{tab:failure} summarizes the results.
+
+\begin{table}[h]
+\caption{Failure-case profiling across 3392 layer-head pairs.}
+\label{tab:failure}
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+Case Type & Proportion (\%) & Mean Keep Ratio (\%) & Mean Salient Hit Rate (\%) \\
+\midrule
+Regular      & 80.84 & 2.43  & 63.74 \\
+Proxy-error  & 19.16 & 13.15 & 74.67 \\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{table}
+
+The dominant response to challenging distributions is \emph{conservative retrieval}: the mean keep ratio rises from $2.43\%$ (regular) to $13.15\%$ (proxy-error), while the salient hit rate actually \emph{improves} from $63.74\%$ to $74.67\%$. This confirms the structural asymmetry discussed in Section~5.2: when the pseudo-max approximation deviates from the true global maximum, the resulting threshold is more permissive (not more restrictive), so the selection defaults to retaining more blocks rather than dropping salient ones. The primary consequence of these cases is therefore an efficiency penalty rather than an accuracy failure. We caution that proxy-error flags are based on attention-level statistics and have not been causally linked to downstream task errors.
+
+
+\section{Cross-Architecture Generalization: Qwen2.5}
+\label{app:qwen}
+
+Table~\ref{tab:qwen_ruler} reports the full per-subtask RULER results on Qwen2.5-7B-Instruct.
+
+\begin{table}[h]
+\caption{Qwen2.5-7B-Instruct RULER results (32k context, all 13 subtasks).}
+\label{tab:qwen_ruler}
+\begin{center}
+\footnotesize
+\begin{tabular}{lcccccccccccccc}
+\toprule
+Method & SK-1 & SK-2 & SK-3 & MK-1 & MK-2 & MK-3 & MQ & MV & VT & SQA & HOT & CWE & FWE & Avg \\
+\midrule
+Base & 100 & 100 & 100 & 100 & 96 & 92 & 97.8 & 94.3 & 99.4 & 57 & 44 & 61.2 & 88.3 & 86.9 \\
+KIVI & 100 & 100 & 86 & 99 & 54 & 7 & 88.5 & 86.3 & 94.4 & 49 & 40 & 49.3 & 82.7 & 72.0 \\
+Quest & 100 & 100 & 97 & 98 & 68 & 4 & 96.3 & 92.8 & 99.6 & 39 & 37 & 36.1 & 67.3 & 71.9 \\
+Stream. & 3 & 4 & 6 & 8 & 5 & 11 & 7.3 & 8.0 & 11.6 & 18 & 26 & 15.0 & 88.3 & 16.2 \\
+Twilight & 100 & 96 & 91 & 85 & 86 & 44 & 66.3 & 73.3 & 80.4 & 44 & 35 & 54.3 & 82.7 & 72.1 \\
+FFD ($\delta=7$) & 99 & 99 & 99 & 99 & 95 & 87 & 98.3 & 93.5 & 98.6 & 53 & 40 & 68.4 & 87.0 & 85.9 \\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{table}
+
+Table~\ref{tab:qwen_longbench} reports the LongBench breakdown. FFD maintains a clear advantage over all sparse baselines on Qwen, confirming generalization beyond Llama.
+
+\begin{table}[h]
+\caption{Qwen2.5-7B-Instruct LongBench results (category averages).}
+\label{tab:qwen_longbench}
+\begin{center}
+\begin{tabular}{lccccccc}
+\toprule
+Method & S-Doc & M-Doc & Summ & Few-Shot & Syn & Code & Avg \\
+\midrule
+Base    & 24.35 & 27.88 & 24.35 & 59.50 & 32.99 & 11.71 & 30.13 \\
+KIVI    & 24.49 & 27.04 & 23.26 & 59.01 & 24.38 & 11.89 & 28.34 \\
+Quest   & 25.00 & 26.68 & 22.70 & 58.81 & 32.18 & 11.61 & 29.49 \\
+Stream. & 15.92 & 22.51 & 18.96 & 52.53 &  5.48 & 13.29 & 21.45 \\
+Twilight & 26.07 & 30.53 & 23.61 & 59.19 & 32.65 & 11.81 & 30.64 \\
+FFD     & 24.65 & 28.38 & 24.23 & 59.31 & 32.30 & 11.79 & 30.11 \\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{table}
+
+FFD maintains a clear accuracy advantage over sparse baselines on Qwen while generalizing beyond Llama without architecture-specific tuning. For Twilight, its stronger LongBench average is largely driven by M-Doc and Syn categories; however on RULER retrieval tasks, FFD retains a substantial lead across all key subtasks (e.g., MK-3: 87 vs.\ 44, MQ: 98.3 vs.\ 66.3).
+
+
+\section{Component-wise Ablation Study}
+\label{app:ablation}
+
+To disentangle the contributions of our three co-design axes---scan precision (FP16 vs.\ 2-bit), selection rule (top-$k$ vs.\ top-$\delta$), and execution path (split vs.\ fused+fullgraph)---we conduct a controlled ablation study under matched conditions. All variants are evaluated with a 16k prefill and 128 decode steps on an RTX 4090 (batch size 1). Table~\ref{tab:ablation} reports the end-to-end throughput and downstream task accuracy for six configurations.
+
+\begin{table}[h]
+\caption{Component-wise ablation of scan precision, selection rule, and execution path (16k context, RTX 4090).}
+\label{tab:ablation}
+\begin{center}
+\begin{small}
+\begin{tabular}{llccc}
+\toprule
+\# & Variant (Scan -- Rule -- Execution) & Tok/s & RULER AVG & LongBench AVG \\
+\midrule
+1 & FP16 -- top-$k$ -- split        & 17.43 & 86.82 & 25.87 \\
+2 & FP16 -- top-$\delta$ -- split    & 21.64 & 90.39 & 25.90 \\
+3 & 2-bit -- top-$k$ -- split       & 14.80 & 86.95 & 25.83 \\
+4 & 2-bit -- top-$\delta$ -- split   & 24.65 & 90.40 & 25.90 \\
+5 & 2-bit -- top-$k$ -- fused       & 21.21 & 86.95 & 25.83 \\
+6 & 2-bit -- top-$\delta$ -- fused (FFD) & \textbf{53.96} & \textbf{90.40} & \textbf{25.90} \\
+\bottomrule
+\end{tabular}
+\end{small}
+\end{center}
+\end{table}
+
+The ablation reveals three key findings. First, replacing top-$k$ with top-$\delta$ alone improves both accuracy (RULER: 86.82 $\rightarrow$ 90.39) and throughput (17.4 $\rightarrow$ 21.6 tok/s), confirming that top-$\delta$ achieves distribution-adaptive sparsity without the overhead of global synchronization (V1 vs.\ V2). Second, 2-bit scanning is not beneficial in isolation---under top-$k$, the quantized scan degrades throughput (V1 vs.\ V3: 17.4 $\rightarrow$ 14.8) due to compute-bound sorting overhead. However, when paired with top-$\delta$, which reduces selection to a scalar comparison, the reduced memory footprint of 2-bit becomes a strict asset (V2 vs.\ V4: 21.6 $\rightarrow$ 24.7). Third, and most importantly, the system-level fusion and CUDA Graph capture exhibit a \textbf{synergistic amplification} with the algorithmic components. While fusion alone yields a modest 1.4$\times$ gain under top-$k$ (V3 vs.\ V5), the same system optimizations deliver a 2.2$\times$ boost when combined with top-$\delta$ (V4 vs.\ V6), demonstrating that the algorithmic and system designs are inseparably linked.
+
+\section{Component Accuracy Ablation on RULER}
+\label{app:component_ruler}
+
+Table~\ref{tab:component_ruler} provides the full per-subtask RULER breakdown for the four non-fused variants of the component ablation study (Section~4.5). The key observation is that CWE degrades severely under the fixed-budget (top-$k$) selector (scores of 24.6 and 25.8), whereas top-$\delta$ restores it to 68.2--69.5. This is because CWE requires the model to count word frequencies across the full context, a task that demands distribution-aware adaptive sparsity rather than a fixed token budget.
+
+\begin{table}[h]
+\caption{Per-subtask RULER scores for component ablation variants (Llama-3.1-8B, 32K, split execution).}
+\label{tab:component_ruler}
+\begin{center}
+\footnotesize
+\begin{tabular}{lcccc}
+\toprule
+Subtask & fp-fixed-split & fp-delta-split & q2-fixed-split & q2-delta-split \\
+\midrule
+SK-1 & 100 & 100 & 100 & 100 \\
+SK-2 & 100 & 100 & 100 & 100 \\
+SK-3 & 100 & 100 & 100 & 100 \\
+MK-1 & 97 & 98 & 97 & 97 \\
+MK-2 & 97 & 99 & 98 & 99 \\
+MK-3 & 99 & 99 & 96 & 99 \\
+MQ   & 98.5 & 99.0 & 97.8 & 99.0 \\
+MV   & 99.3 & 100 & 98.8 & 99.8 \\
+VT   & 98.6 & 98.2 & 98.4 & 98.0 \\
+SQuAD & 67 & 68 & 69 & 68 \\
+Hotpot & 54 & 54 & 56 & 55 \\
+CWE  & 24.6 & 68.2 & 25.8 & 69.5 \\
+FWE  & 93.7 & 91.7 & 93.7 & 91.0 \\
+\midrule
+Avg  & 86.8 & 90.4 & 87.0 & 90.4 \\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{table}
+
+
+
+\end{document}

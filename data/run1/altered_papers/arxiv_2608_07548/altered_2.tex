@@ -1,0 +1,1072 @@
+
+\documentclass{article}
+
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{booktabs} % for professional tables
+
+\usepackage{hyperref}
+
+
+\newcommand{\theHalgorithm}{\arabic{algorithm}}
+
+
+
+\usepackage[accepted]{icml2026}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{amsthm}
+
+\usepackage{textcomp}
+\usepackage{caption}
+\usepackage[table,xcdraw]{xcolor}
+\usepackage{multirow,booktabs,makecell}
+\usepackage{setspace}
+\usepackage{threeparttable}
+\usepackage{float}
+\usepackage{stfloats}
+\usepackage{gensymb}
+\usepackage{comment}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{arydshln}
+\usepackage{url}
+\usepackage{soul}   % \ul下划线 \st删除线 \hl高亮
+\soulregister\cite7
+\soulregister\ref7
+\usepackage{tabularx}
+\definecolor{Gray}{gray}{0.5}   % 0=black, 1=white，0.9 就是很浅的灰
+\usepackage{xcolor,colortbl}
+\usepackage{adjustbox}
+\usepackage{enumitem}
+\usepackage{pifont}
+\usepackage{upquote}  
+\usepackage{hhline}
+
+
+
+\usepackage[capitalize,noabbrev]{cleveref}
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{assumption}[theorem]{Assumption}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\usepackage[textsize=tiny]{todonotes}
+
+\icmltitlerunning{ A Self-Correcting World Model with Closed-Loop Feedback for VLN-CE}
+
+\begin{document}
+
+\twocolumn[
+  \icmltitle{\textsc{SC$^{2}$-WM}: A Self-Correcting World Model with Closed-Loop Feedback for Vision-and-Language Navigation in Continuous Environments}
+
+
+  \icmlsetsymbol{equal}{*}
+
+  \begin{icmlauthorlist}
+    \icmlauthor{Xuan Yao}{1,2,4}
+    \icmlauthor{Yuze Zhu}{2}
+    \icmlauthor{Junyu Gao}{1,2}
+    \icmlauthor{Zongmeng Wang}{1}
+    \icmlauthor{Changsheng Xu}{1,2,3}
+  \end{icmlauthorlist}
+
+  \icmlaffiliation{1}{State Key Laboratory of Multimodal Artificial Intelligence Systems (MAIS), Institute of Automation, Chinese Academy of Sciences (CASIA)}
+  \icmlaffiliation{2}{School of Artificial Intelligence, University of Chinese Academy of Sciences (UCAS)}
+  \icmlaffiliation{3}{Peng Cheng Laboratory, ShenZhen, China}
+  \icmlaffiliation{4}{HiThink Research, China}
+
+
+  \icmlcorrespondingauthor{Junyu Gao}{junyu.gao@nlpr.ia.ac.cn}
+
+  \icmlkeywords{World Model, Vision-and-Langauge Navigation, ICML}
+
+  \vskip 0.3in
+]
+
+
+
+\printAffiliationsAndNotice{}  % no special notice (required even if empty)
+
+\begin{abstract}
+Vision-and-Language Navigation in Continuous Environments (VLN-CE) requires agents to make fine-grained navigation decisions under partial observability.
+However, most existing methods rely on open-loop execution, lacking mechanisms to detect and correct internal state drift during inference.
+We propose SC$^{2}$-WM, a self-correcting world model framework that introduces internal feedback for closed-loop decision making in VLN-CE.
+Our method derives feedback from world-model foresight to perform state-level plan refinement before action execution.
+To handle challenging scenarios, we further introduce conditional world-aware adaptation, which enables model-level correction by selectively updating the world model at test time when feedback indicates model capacity insufficiency.
+Experiments on standard VLN-CE benchmarks demonstrate improved navigation robustness and generalization. Our code is available at \url{https://github.com/sunrise-ikun/SC2_WM}. 
+\end{abstract}
+
+
+
+\section{Introduction} \label{sec:intro}   
+Vision-and-Language Navigation (VLN)~\cite{anderson2018vision,qi2020reverie,chen2022think} is a representative embodied AI task that requires an agent to navigate autonomously in 3D environments following natural language instructions. Targeting real-world interactive settings, this task captures tight coupling between language understanding and spatial decision making, making it a central topic in multimodal and embodied intelligence research~\cite{zhang2024navid, gao2025building, yuan2025evoagent}.
+
+
+
+
+Extending Vision-and-Language Navigation to continuous environments (VLN-CE)~\cite{krantz2020beyond,an2024etpnav} imposes substantially stricter demands on embodied agents.
+Beyond fine-grained control in a continuous action space, the agent must continuously update its understanding of the environment during execution.
+Moreover, real-world navigation is inherently partially observable, requiring the agent to integrate historical information into an internal representation while remaining aligned with the semantic constraints of natural language instructions.
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=\linewidth]{pic/vln-intro.pdf}
+    \caption{Comparison of (a) conventional open-loop VLN framework, (b) classical closed-loop control, and (c) our self-correcting world model with closed-loop feedback. Unlike open-loop methods that execute actions without validation, SC$^{2}$-WM leverages internal feedback derived from foresight prediction to refine latent states before action execution.}
+    \label{fig:intro}
+\end{figure}
+
+Despite recent advances in model architectures and decision policies for VLN-CE~\cite{an2024etpnav,wang2024lookahead}, most existing approaches still adopt an open-loop execution paradigm at inference time, as shown in Figure~\ref{fig:intro}(a).
+The agent predicts actions from current observations and history, and executes them without validating their consequences.
+As a result, early decision errors may accumulate over time, degrading navigation performance. 
+Classical closed-loop control (Figure~\ref{fig:intro}(b)) addresses this by comparing outputs against references to compute error signals.
+While introducing closed-loop feedback mechanisms seems a natural solution~\cite{bu2024clover,li2024self}, doing so in VLN-CE is inherently challenging: external supervision is typically sparse and delayed, with success only observable at the trajectory level.
+Prior attempts incorporate feedback through reinforcement learning~\cite{wang2024rl} or model predictive control~\cite{dey2025adaptive}, but often rely on manually designed rewards and suffer from training instability.
+Test-time adaptation methods~\cite{wang2020tent,gao2024fast} instead adjust models using output-level statistics such as uncertainty or entropy, yet these signals remain decoupled from the agent’s internal representation and cannot directly reveal misalignment in its understanding of the environment.
+
+
+
+
+
+Based on the above analysis, we argue that effective closed-loop decision making in VLN-CE hinges on constructing appropriate feedback signals.
+Since external rewards are difficult to obtain or design reliably, we turn to an alternative: `can the agent extract internal feedback signals from its own decision process for self-correction?'
+Predictive processing in cognitive science~\cite{huang2011predictive} suggests that adaptive behavior relies on continuously monitoring the consistency between internal predictions and subsequent observations, rather than on single-pass inference or delayed external supervision.
+This perspective aligns well with VLN-CE, where navigation failures often arise not from a single erroneous observation, but from gradual drift in the agent's internal understanding of the environment or instruction.
+If such drift can be detected during execution, the agent can correct its representation before errors amplify further.
+
+
+Inspired by this, we propose SC$^{2}$-WM, a self-correcting world model framework for VLN-CE that enables closed-loop decision making through a computable internal feedback signal (Figure~\ref{fig:intro}(c)).
+SC$^{2}$-WM focuses on detecting and correcting deviations in the agent’s internal understanding of the environment during navigation.
+The core of SC$^{2}$-WM is a world model that captures environment dynamics and produces foresight predictions from latent state representations.
+These predictions reflect both the anticipated evolution of the environment and the agent’s current internal assumptions.
+During inference, the discrepancy between the current latent state and its foresight provides an internal reference signal indicating how the selected action would steer the agent's internal dynamics before it is executed.
+
+Based on this signal, SC$^{2}$-WM introduces a dual-level self-correction mechanism.
+\emph{(i) At the state level}, feedback-guided plan refinement performs state-level correction by modulating the current latent state using foresight-derived signals, mitigating local inference drift during action selection.
+\emph{(ii) At the model level}, conditional world-aware adaptation targets model-level correction by updating the world model when feedback reveals heavy reliance on foresight-derived guidance, improving its generalization ability
+for the testing environments.
+Together, these mechanisms enable effective navigation in continuous, dynamic environments.
+
+Our main contributions are summarized as follows:
+\begin{itemize}
+    \item We propose {SC$^{2}$-WM}, a dual-level self-correcting world model framework for VLN-CE that leverages internal foresight to enable closed-loop decision making with internal generated feedback.
+
+    \item We introduce a {dual-level self-correction mechanism}, comprising {feedback-guided plan refinement} for immediate state-level correction and {conditional world-aware adaptation} for targeted model-level correction at test time.
+
+    
+    \item We conduct extensive experiments on standard VLN-CE benchmarks and real-world deployment, demonstrating that SC$^{2}$-WM consistently improves navigation performance.
+\end{itemize}
+
+
+
+
+\section{Related Work} \label{sec:rw}   
+\noindent\textbf{Vision-and-Language Navigation in Continuous Environments.}
+Vision-and-Language Navigation (VLN) has emerged as a cornerstone of embodied AI, requiring agents to navigate unseen environments following natural language instructions \citep{anderson2018vision,qi2020reverie,banerjee2021robotslang,Chen_2022_DUET,an2023bevbert,qiao2023hop,song2024towards, guo2026hist}.
+While early works operated in discrete settings, \citet{krantz2020beyond} introduced Vision-and-Language Navigation in Continuous Environments (VLN-CE) to narrow the sim-to-real gap. This setting transitions agents from graph-based teleportation to continuous 3D spaces, introducing higher demands for understanding the environment state.
+To address the challenges posed by partial observability and the absence of topological priors in VLN-CE, many existing approaches adopt lightweight navigation architectures, improving navigation robustness and execution stability through enhanced state representation~\citep{wang2025g3d,huang2025unemo}, trajectory modeling~\citep{an2024etpnav,wang2023gridmm}, and action selection strategies~\citep{wang2024sim,wang2024lookahead}.
+These methods typically emphasize efficient perception and compact policy learning, enabling practical deployment under limited computational resources while maintaining competitive navigation performance in complex environments.
+More recently, with the rapid advancement of multimodal large-language models (MLLMs), recent works~\citep{lin2025navcot, zhang2025activevln, zhang2024navid, gao2025building, yuan2025evoagent} have explored incorporating MLLMs into VLN to leverage their strong language understanding and cross-modal reasoning abilities, thereby enhancing the modeling of complex instructions, long-term dependencies, and high-level semantic relationships. 
+Despite their promising semantic performance, such approaches typically incur substantial computational overhead and still face limitations in online inference efficiency and edge deployment. Therefore, we focus on the lightweight model paradigm for VLN-CE, investigating how to systematically improve navigation decision-making and online adaptability within a compact model framework, without focusing on large-scale MLLMs.
+
+
+
+\noindent\textbf{World Models.} World models are fundamentally defined as internal representations that capture environmental dynamics, enabling agents to simulate future states based on current observations and potential actions \citep{ha2018world,hafner2025dreamerv3}. This predictive capability has been extensively applied across various embodied tasks, ranging from game simulation in virtual environments \citep{valevski2024game} to autonomous driving \citep{nvidia2025cosmosdrivedreams,russell2025gaia} and robotic manipulation \citep{chi2025wow,chi2024evaembodiedworldmodel}. In the context of VLN, world models empower agents to overcome partial observability through predictive foresight. 
+DreamWalker \citep{wang2023dreamwalker} integrates scene synthesis with Monte Carlo Tree Search (MCTS) for decision making. NavMorph \citep{Yao2025navmorph} employs a recurrent state-space model to characterize the evolution of internal states. However, these approaches follow an open-loop paradigm, in which action execution is not guided by feedback signals, making them prone to the accumulation of navigation errors. Although a few works \citep{huang2025unemo} explore predictive feedback, they are limited to modeling discrete environments and do not explicitly quantify error signals for joint correction at both the decision and model levels. To date, how to construct closed-loop, feedback-driven world models for tasks with sparse and delayed supervision remains an open problem.
+
+
+\noindent\textbf{Closed-Loop Mechanisms for Embodied Tasks.} 
+The goal of closed-loop control is to continuously adjust actions based on real-time sensory feedback to minimize the discrepancy between the current state and the target state \citep{hutchinson2002tutorial, levine2016end}. Early approaches typically focused on tasks with real-time error sensors, such as visual servoing \citep{hutchinson2002tutorial}. However, in contemporary embodied manipulation or navigation tasks, the absence of supervision signals often makes it difficult to compute error signals in real-time, hindering the construction of closed-loop systems. To address this, CLOVER \citep{bu2024clover} uses video diffusion models to generate visual sub-goals for establishing closed-loop control during manipulation. The fast-slow system paradigm \citep{li2024self} leverages the semantic reasoning capability of large language models to construct feedback signals, where the fast system is responsible for efficient execution and the slow system is used for failure reflection and correction. Other methods have explored the design of feedback signals in VLA models, delegating closed-loop control to lightweight policies \citep{sendai2025a2c2}. In recent years, world models have become a viable approach for building closed-loop feedback mechanisms due to their ability to predict future states. However, current explorations in this area are primarily based on the Model Predictive Control (MPC) framework \citep{sendai2025a2c2}, which heavily relies on reinforcement learning and is difficult to train. Therefore, this paper focuses on exploring how to efficiently extract internal feedback signals from the world model's own decision-making process to enable self-correction at both the decision and model levels.
+
+
+
+\section{Our Approach} \label{sec:method}
+\begin{figure*}[t]
+    \centering
+    \includegraphics[width=0.98\textwidth]{pic/vln-method.pdf}
+    \caption{\textbf{Overview of SC$^{2}$-WM framework,} which has two complementary self-correction modules: (i) feedback-guided plan refinement for state-level correction before action execution, and (ii) conditional world-aware adaptation for model-level correction during test time.}
+    \label{fig:framework}
+\end{figure*}
+
+In this section, we propose SC$^{2}$-WM, a self-correcting world model framework for VLN-CE.
+Our model incorporates an internal feedback mechanism to support closed-loop decision making, enabling self-correction to enhance navigation.
+
+
+\noindent\textbf{Task Definition.}
+In VLN-CE~\cite{krantz2020beyond,Krantz2022Sim2SimTF,wang2024sim}, an agent navigates in continuous 3D environments given RGB-D observations and a natural language instruction. Each episode starts from an initial position and terminates when the agent issues a {`STOP'} action or reaches a predefined maximum number of steps.
+At each timestep $t$, the agent receives an observation $\boldsymbol{o}_{t}$ and selects a navigation action $a_t$ based on predicted candidate waypoints~\cite{krantz2021waypoint,Hong2022BridgingTG}, which is then executed via low-level continuous control.
+Formally, the agent follows a learnable policy $\pi$ that maps the instruction $\boldsymbol{l}$, observation history $\boldsymbol{o}_{1:t}$, and past actions $\boldsymbol{a}_{1:t-1}$ to the current action:
+$\boldsymbol{a}_t \sim \pi(\boldsymbol{a}_t \mid \boldsymbol{l}, \boldsymbol{o}_{1:t}, \boldsymbol{a}_{1:t-1})$.
+
+
+
+\noindent\textbf{Framework Overview.}
+As illustrated in Figure~\ref{fig:framework}, we propose SC$^{2}$-WM, a self-correcting world model framework that integrates internal foresight with closed-loop feedback for robust decision making in VLN-CE.
+The framework supports two complementary forms of self-correction:
+\emph{(i) feedback-guided plan refinement}, which performs immediate, state-level correction before action execution; and
+\emph{(ii) conditional world-aware adaptation}, which selectively updates the world model at test time when feedback signals challenging scenarios, achieving model-level correction.
+
+
+At each timestep $t$, the agent encodes the current observation $\boldsymbol{o}_t$ into visual features $\boldsymbol{v}_t$ and integrates them with the linguistic representation extracted from the instruction $\boldsymbol{l}$~\cite{chen2022think,an2024etpnav}.
+These features are then incorporated into a latent state $\boldsymbol{s}_t$, maintained by the world model to capture the navigational context.
+This state is updated recurrently via a posterior transition $q({\boldsymbol{s}}_{t}\,|\, \cdot)$ that integrates the previous state, the executed action, and the current visual-linguistic features.
+Based on $\boldsymbol{s}_t$, a foresight policy $\tilde{\pi}$ proposes a provisional action $\tilde{\boldsymbol{a}}_t$, and the world model anticipates a foresight state $\tilde{\boldsymbol{s}}_{t+1}$ via a prior transition $p(\tilde{\boldsymbol{s}}_{t+1}\,|\, \cdot)$ without observing new visual input.
+An internal feedback signal derived from this foresight is used for {plan refinement}, correcting the current state to $\boldsymbol{s}_t^{(\Delta)}$ (detailed in Section~\ref{sec:plan_refinement}), from which the navigation policy $\pi$ selects the final action $\boldsymbol{a}_t$.
+We formalize SC$^{2}$-WM as follows:
+
+\begin{align}
+    \text{Visual Representation:}& \,\boldsymbol{v}_t = f_{\mathrm{enc}}(\boldsymbol{o}_t),\\
+    \text{Initial Latent State:}& \,\boldsymbol{s}_0 \sim \mathcal{N}(\mathbf{0}, \mathbf{I}),\\
+    \text{Posterior State Update:}& \,\boldsymbol{s}_{t} \sim q\big(\boldsymbol{s}_{t}\,|\,\boldsymbol{s}_{t-1}^{(\Delta)}, \boldsymbol{a}_{t-1}, \boldsymbol{v}_{t}, \boldsymbol{l}\big),\label{Eq:po}\\
+    \text{Provisional Decision:}& \,\tilde{\boldsymbol{a}}_t \sim \tilde{\pi}(\cdot \mid \boldsymbol{s}_t), \\
+    \text{Prior State Transition:}& \,\boldsymbol{\tilde{s}}_{t+1} \sim p\big(\boldsymbol{\tilde{s}}_{t+1}\,|\,\boldsymbol{s}_{t}, \tilde{\boldsymbol{a}}_t\big),\label{Eq:p}\\
+    \text{Action Prediction:}& \,\boldsymbol{a}_t \sim \pi(\cdot \mid \boldsymbol{s}_t^{(\Delta)}),\label{Eq:ap}\\
+    \text{Visual Decoder:}& \,\boldsymbol{\tilde{v}}_{t+1} \sim p\big(\boldsymbol{\tilde{v}}_{t+1}\,|\,\boldsymbol{\tilde{s}}_{t+1}\big)\label{Eq:v},
+\end{align}
+Here, the visual decoder reconstructs future visual features from the foresight state, providing a learning signal for training the world model, as described in Section~\ref{sec:training}.
+
+
+
+When the above feedback-guided plan refinement leads to a pronounced change in the action distributions generated by $\tilde{\pi}(\boldsymbol{s}_t)$ and $\pi(\boldsymbol{s}_t^{(\Delta)})$, it suggests that foresight-derived guidance plays a substantial role in shaping the current decision.
+In such cases, SC$^{2}$-WM selectively activates conditional world-aware adaptation to further enhance its modeling capacity for the current environment dynamics.
+This adaptation operates at the model level by updating the world model parameters using its internal self-supervised objective.
+We detail the adaptation procedure in Section~\ref{sec:world_adaptation}. %denote all components of the world model without policies collectively by parameters $\boldsymbol{\Theta}$, and 
+
+
+
+
+
+
+
+
+
+\subsection{Feedback-Guided Plan Refinement}
+\label{sec:plan_refinement}
+Having introduced the overall pipeline, this section focuses on how the internal feedback signal is constructed and used for plan refinement.
+In our latent-based world model, an effective feedback mechanism critically depends on the quality of the latent state representation.
+To serve as a reliable basis for feedback, the latent state should capture action-relevant dynamics while suppressing variations from viewpoint changes, partial observability, and rendering noise.
+Otherwise, the state shift induced by foresight may become ambiguous, making it unclear whether the predicted change reflects the agent’s decision or incidental perceptual fluctuations.
+To mitigate this, we first calibrate the visual representation so that the latent state more faithfully reflects action-conditioned dynamics.
+
+\noindent\textbf{Visual Calibration Module (VCM).}
+VCM maintains an episodic memory of recent visual representations, $\mathcal{M}_t = \lbrace (\boldsymbol{k}_i,\boldsymbol{m}_i) \rbrace_{i=t-L}^{t-1}$,
+where $L$ denotes the memory horizon.
+Each memory element $\boldsymbol{m}_i$ stores visual features extracted from past observations.
+To retrieve relevant context for calibration, VCM constructs attention keys on the fly by augmenting the stored visual features with relative spatial and temporal cues with respect to the current step $t$ (see Appendix for details).
+
+Given the current visual representation $\boldsymbol{v}_t$ as the query, VCM retrieves contextual information from $\mathcal{M}_t$ via cross-attention with learnable temporal decay:
+\begin{equation}
+\boldsymbol{c}_t = \sum_i \mathrm{softmax}(A_i)\,\boldsymbol{m}_i,\quad
+A_i \propto \boldsymbol{v}_t^\top \boldsymbol{k}_i - \varphi(\delta t_i),
+\end{equation}
+where $\delta t_i = t - i$ is the temporal distance and $\varphi(\cdot)$ downweights temporally distant observations.
+
+The retrieved context $\boldsymbol{c}_t$ is then fused with the current representation via adaptive gating:
+$\hat{\boldsymbol{v}}_t = \boldsymbol{\alpha}_t \odot \boldsymbol{v}_t + (1-\boldsymbol{\alpha}_t) \odot \boldsymbol{c}_t$,
+where $\boldsymbol{\alpha}_t$ is a learnable weight.
+
+By aggregating observations from multiple viewpoints along the trajectory, the calibrated representation $\hat{\boldsymbol{v}}_t$ captures richer geometric and semantic cues about the environment, effectively mitigating ambiguity arising from partial observability and perceptual noise~\cite{arandjelovic2016netvlad}. This multi-view integration provides a more stable basis for latent-state inference, ensuring that state shifts induced by foresight primarily reflect action-relevant dynamics rather than incidental perceptual fluctuations.
+
+
+
+
+\noindent\textbf{Internal Feedback.}
+With the calibrated visual input providing a stable latent state $\boldsymbol{s}_t$, which better captures action-conditioned dynamics, we now construct an internal feedback signal from foresight to guide plan refinement.
+Based on $\boldsymbol{s}_t$, the foresight policy $\tilde{\pi}$ proposes a provisional action $\tilde{\boldsymbol{a}}_t$.
+To form a baseline prediction that is independent of the latest observation, we leverage the world model's prior transition $f_p$ to anticipate the outcome from the previous latent state:
+$\tilde{\boldsymbol{s}}_{t+1} = f_{p}(\boldsymbol{s}_{t-1}^{(\Delta)}, \tilde{\boldsymbol{a}}_t).$
+Here, $f_p$ is implemented as a Transformer-based transition model.
+Note that while the world model formulation in Eq.(\ref{Eq:p}) models the prior transition as a distribution, we use the deterministic mean prediction~\cite{min2024driveworld} to obtain $\tilde{\boldsymbol{s}}_{t+1}$, avoiding the introduction of additional noise into the feedback signal.
+
+The foresight state $\tilde{\boldsymbol{s}}_{t+1}$ encodes the anticipated consequence of the provisional action.
+However, it represents a future latent state rather than actionable information for the current decision.
+We therefore extract the action-induced change by computing the latent discrepancy:
+\begin{equation}
+\boldsymbol{\Delta}_t = \tilde{\boldsymbol{s}}_{t+1} - \boldsymbol{s}_t.
+\end{equation}
+Notably, $\boldsymbol{\Delta}_t$ is not a training target to be minimized, but a model-internal guidance signal that captures how the provisional action would steer the latent dynamics. 
+
+
+Based on this guidance, we perform self-correction by updating the current latent:
+\begin{equation}\label{eq:psi}
+\boldsymbol{s}_t^{(\Delta)} = \psi(\boldsymbol{s}_t, \boldsymbol{\Delta}_t), %\quad
+\end{equation}
+where $\psi(\cdot)$ is a learnable neural network and $\boldsymbol{s}_t^{(\Delta)}$ is the feedback-refined state for final action prediction (Eq.(\ref{Eq:ap})).
+
+The overall forward process of the proposed state-level self-correction mechanism is summarized in Algorithm~\ref{alg:state_correction}.
+
+\begin{algorithm}[htbp]
+\caption{Feedback-Guided Plan Refinement \textit{(Forward Pass)}}
+\label{alg:state_correction}
+\begin{algorithmic}[1]
+\REQUIRE Observation sequence \(\mathcal{O}\), instruction \(l\), navigation graph
+\ENSURE Executed action sequence \(\mathcal{A}\), refined latent states
+\STATE \textbf{Initialize:} episodic memory \(\mathcal{M}_0 = \emptyset\), refined initial state \(\boldsymbol{s}_0^{(\Delta)}\)
+
+\FOR{\(t = 1\) to \(T\)}
+    \STATE \textcolor{gray}{\textit{// Visual Context Memory}}
+    \STATE \(\boldsymbol{v}_t = f_{\mathrm{enc}}(\boldsymbol{o}_t, \boldsymbol{l})\)
+    \STATE \(\boldsymbol{m}_t = \mathrm{MemoryRetrieval}(\mathcal{M}_{t-1}, \boldsymbol{v}_t)\)
+    \STATE \(\boldsymbol{\hat{v}}_t = \mathrm{AdaptiveGatingFusion}(\boldsymbol{v}_t, \boldsymbol{m}_t)\)
+    
+    \STATE \textcolor{gray}{\textit{// Posterior state update}}
+    \STATE \(\boldsymbol{s}_t = f_q(\boldsymbol{s}_{t-1}^{({\Delta})}, \boldsymbol{a}_{t-1}, \boldsymbol{\hat{v}}_t)\)
+    
+    \STATE \textcolor{gray}{\textit{// Foresight prediction}}
+    \STATE \(\boldsymbol{\tilde{a}}_t \sim \tilde{\pi}(\cdot \mid \boldsymbol{s}_t)\)
+    \STATE \(\boldsymbol{\tilde{s}}_{t+1} = f_p(\boldsymbol{s}_{t-1}^{({\Delta})}, \boldsymbol{\tilde{a}}_t)\)
+    
+    \STATE \textcolor{gray}{\textit{// Internal feedback and refinement}}
+    \STATE \(\boldsymbol{\Delta}_t = \boldsymbol{\tilde{s}}_{t+1} - \boldsymbol{s}_t\)
+    \STATE \(\boldsymbol{s}_t^{(\Delta)} = \psi(\boldsymbol{s}_t, \boldsymbol{\Delta}_t)\)
+    
+    \STATE \textcolor{gray}{\textit{// Action execution and memory update}}
+    \STATE \(\boldsymbol{a}_t \sim \pi(\cdot \mid \boldsymbol{s}_t^{({\Delta})})\)
+    \STATE Execute \(\boldsymbol{a}_t\) and observe \(\boldsymbol{o}_{t+1}\)
+    \STATE Update \(\mathcal{M}_t\) with \((\boldsymbol{\hat{v}}_t, \boldsymbol{s}_t^{(\Delta)})\)
+\ENDFOR
+\end{algorithmic}
+\end{algorithm}
+
+
+
+
+
+
+\subsection{Pre-training Objective}
+\label{sec:training}
+The pre-training of SC$^{2}$-WM aims to learn an internal latent state $\boldsymbol{s}_t$ that is suitable for feedback-guided plan refinement.
+Specifically, the learned state is expected to (i) support reliable action prediction and (ii) encode predictive latent dynamics that anticipate future observations.
+Together, these properties provide the necessary foundation for feedback-guided refinement mechanism introduced in Section~\ref{sec:plan_refinement} and conditional world-aware adaptation described in Section~\ref{sec:world_adaptation}.
+
+We first impose action-level supervision on both original latent state $\boldsymbol{s}_t$ and feedback-refined latent state $\boldsymbol{s}_t^{(\Delta)}$, ensuring a consistent decision basis before and after refinement:
+\begin{equation}
+\mathcal{L}_{\mathrm{ac}}
+=
+- \, \mathbb{E}_{t}
+\Big[
+\log p(a_t^{*}\mid \boldsymbol{s}_t)
++
+\log p(a_t^{*}\mid \boldsymbol{s}_t^{(\Delta)})
+\Big],
+\end{equation}
+where $a_t^{*}$ denotes the expert action at time step $t$.
+In practice, this objective is implemented using standard imitation learning supervision~\cite{an2024etpnav,wang2024sim}.
+
+In addition, we regularize the prior transition (Eq.(\ref{Eq:p})) by aligning it with the observation-conditioned posterior (Eq.(\ref{Eq:po})) via KL divergence, encouraging distributional consistency between inference and foresight:
+\begin{align}
+\mathcal{L}_{\mathrm{wm}} =  
+\mathbb{E}_{t}\Big[D_{\mathrm{KL}}\!\big(
+q(\boldsymbol{s}_{t}\,|\,\cdot)
+\;\big\|\;
+p(\tilde{\boldsymbol{s}}_{t}\,|\,\cdot)
+\big)\Big],
+\end{align}
+
+However, distributional alignment alone does not guarantee that the foresight state captures meaningful environment dynamics.
+To this end, we further supervise the action-conditioned prior transition by its ability to anticipate future visual features.
+Specifically, given the foresight state $\tilde{\boldsymbol{s}}_{t+1}$ predicted by the world model, a lightweight decoder $d(\cdot)$ maps it to an estimate of the next-step front-view visual representation (Eq.(\ref{Eq:v})).
+The supervision signal $\boldsymbol{v}_{t+1}$ is obtained by encoding the observation at $t{+}1$ with a pretrained visual encoder~\cite{dosovitskiy2020image}:
+\begin{align}\label{eq:rec}
+  \mathcal{L}_{\mathrm{rec}} =    \mathbb{E}_{t}\Big[\left\|
+d(\tilde{\boldsymbol{s}}_{t+1})-\boldsymbol{v}_{t+1}
+\right\|_2^2\Big]. 
+\end{align}
+Although defined in the visual feature space, this objective directly constrains the transitioned latent state, encouraging the world model to encode task-relevant environment dynamics without resorting to pixel-level reconstruction.
+
+
+The final training objective jointly optimizes action prediction and predictive dynamics by combining navigation and world model losses: $\mathcal{L}=\mathcal{L}_{\mathrm{ac}}+ \mathcal{L}_{\mathrm{wm}}+\mathcal{L}_{\mathrm{rec}}.$
+
+
+
+\subsection{Conditional World-Aware Adaptation}
+\label{sec:world_adaptation}
+The feedback-guided refinement enables immediate self-correction by modulating the latent state before action execution, leveraging foresight from the trained world model. Its effectiveness thus depends on how accurately the world model captures the current environment dynamics.
+
+
+
+During deployment, the agent may encounter environments whose visual appearance or dynamics differ from training.
+Under such domain shifts, the prior transition (Eq.(\ref{Eq:p})) learned offline may become less aligned with the current observations, reducing the informativeness of the resulting feedback signal.
+Adapting the world model to better reflect environment-specific characteristics can improve foresight quality, thereby strengthening feedback-guided refinement.
+We therefore introduce a conditional world-aware adaptation mechanism that selectively updates the world model parameters at test time, activated only when the agent's decision relies heavily on feedback guidance.
+
+
+To determine when adaptation is beneficial, we monitor the magnitude of feedback-induced corrections via the KL divergence between action distributions before and after refinement:
+$\kappa_t = D_{\mathrm{KL}}\!\left(\tilde{\boldsymbol{p}}_t \,\|\, \boldsymbol{p}_t\right),$
+where $\tilde{\boldsymbol{p}}_t = \mathrm{softmax}(\tilde{\pi}(\boldsymbol{s}_t))$ and $\boldsymbol{p}_t = \mathrm{softmax}(\pi(\boldsymbol{s}_t^{(\Delta)}))$.
+A large $\kappa_t$ indicates that feedback has substantially altered the agent’s action preference, suggesting that the world model would benefit from adapting to the current environment dynamics.
+
+
+
+Instead of relying on a fixed threshold, we maintain a running buffer of recent $\kappa$ values and trigger adaptation when $\kappa_t$ exceeds the $\tau$-th percentile of this empirical distribution.
+We further require that the entropy of $\boldsymbol{p}_t$ falls below a threshold $\epsilon$, ensuring that updates occur only when the corrective signal is both substantial and confident.
+
+
+Once triggered, we update the world model using the self-supervised reconstruction objective $\mathcal{L}_{\mathrm{rec}}$ (Eq.(\ref{eq:rec})): 
+\begin{equation}\label{eq:grad}
+\boldsymbol{\Theta} \leftarrow \boldsymbol{\Theta} - \eta \cdot \,\nabla_{\small \boldsymbol{\Theta}} \mathcal{L}_{\mathrm{rec}},
+\end{equation}
+where $\eta$ denotes the adaptation learning rate and we denote all components of the world model without policies collectively by parameters $\boldsymbol{\Theta}$.
+
+This online update allows SC$^{2}$-WM to refine its internal dynamics in testing scenarios, working synergistically with plan refinement to enable effective navigation.
+The complete procedure of the proposed conditional world-aware adaptation is summarized in Algorithm~\ref{alg:adapt}.
+
+\begin{algorithm}[htbp]
+\caption{Conditional World-Aware Adaptation \textit{(Test-Time)}}
+\label{alg:adapt}
+\begin{algorithmic}[1]
+\REQUIRE Pre-trained world model parameters \(\Theta\), adaptation threshold \(\tau\), learning rate \(\eta\)
+\ENSURE Adapted world model parameters \(\Theta'\)
+
+\FOR{each testing step \(t\)}
+    \STATE \textcolor{gray}{\textit{// Compute action distributions}}
+    \STATE \(\boldsymbol{\tilde{p}}_t = \tilde{\pi}(\boldsymbol{s}_t)\)
+    \STATE \(\boldsymbol{p}_t = \pi(\boldsymbol{s}_t^{(\Delta)})\)
+    
+    \STATE \textcolor{gray}{\textit{// Measure feedback-induced discrepancy}}
+    \STATE \(\kappa_t = D_{\mathrm{KL}}\!\left(\boldsymbol{\tilde{p}}_t \parallel \boldsymbol{{p}}_t \right)\)
+    
+    \STATE \textcolor{gray}{\textit{// Conditional adaptation trigger}}
+    \IF{\(\kappa_t > \tau\)}
+        \STATE \(\mathcal{L}_{\mathrm{rec}} = \| d(\boldsymbol{\tilde{s}}_{t+1}) - \boldsymbol{\hat{v}}_t \|_2^2\)
+        \STATE \(\Theta \leftarrow \Theta - \eta \cdot \nabla_{\Theta} \mathcal{L}_{\mathrm{rec}}\)
+    \ENDIF
+\ENDFOR
+\end{algorithmic}
+\end{algorithm}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section{Experiments} \label{sec:expr}
+To validate the effectiveness of our proposed method, we conduct experiments on two continuous environment benchmarks: R2R-CE and RxR-CE~\cite{krantz2020beyond}, which are continuous reconstructions of the discrete R2R~\cite{anderson2018vision} and RxR~\cite{ku2020room} datasets. 
+Additional experimental results and ablation studies are provided in Sec.~\ref{sec:exper} of the Appendix.
+
+
+\begin{table*}[thpb] \centering
+	\caption{Experimental results on R2R-CE dataset. Results better than \textbf{base model} are shown in \textcolor{blue}{blue}. Best results for {both panoramic and monocular settings} are $\underline{\text{underlined}}$. * indicates experimental results that we have reproduced.}
+	\vspace{0mm}
+	\label{tab:r2r-ce}
+	\resizebox{\textwidth}{!}{
+		\begin{threeparttable}
+		\begin{tabular}{@{}c|l|ccccccccccccccc@{}}
+			\toprule
+			& \multicolumn{1}{c|}{} & \multicolumn{5}{c|}{\textbf{Val Seen}} & \multicolumn{5}{c|}{\textbf{Val Unseen}} & \multicolumn{5}{c}{\textbf{Test Unseen}} \\  
+			\multirow{-2}{*}{\textbf{Camera}} & \multicolumn{1}{c|}{\multirow{-2}{*}{\textbf{Methods}}} & \cellcolor{red!25}TL $\downarrow$ & \cellcolor{red!25}NE $\downarrow$ & \cellcolor{gray!25}OSR & \cellcolor{gray!25}SR & \cellcolor{gray!25}SPL & \cellcolor{red!25}TL $\downarrow$ & \cellcolor{red!25}NE $\downarrow$ & \cellcolor{gray!25}OSR & \cellcolor{gray!25}SR & \cellcolor{gray!25}SPL & \cellcolor{red!25}TL $\downarrow$ & \cellcolor{red!25}NE $\downarrow$ & \cellcolor{gray!25}OSR & \cellcolor{gray!25}SR & {\cellcolor{gray!25}SPL} \\ \midrule
+			& LAW~\cite{Raychaudhuri2021LanguageAlignedW} {\scriptsize {\color{Gray} [EMNLP21]}}& 9.34 & 6.35 & 49 & 40 & \multicolumn{1}{c|}{37} & 8.89 & 6.83 & 44 & 35 & \multicolumn{1}{c|}{31} & 9.67 & 7.69 & 28 & 38 & 25 \\
+			\multicolumn{1}{c|}{} & CM$^2$~\cite{Georgakis2022CrossmodalML} {\scriptsize {\color{Gray} [CVPR22]}} & 12.05 & 6.10 & 50.7 & 42.9 & \multicolumn{1}{c|}{34.8} & \multicolumn{1}{c}{11.54} & 7.02 & 41.5 & 34.3 & \multicolumn{1}{c|}{27.6} & 13.90 & 7.70 & 39 & 31 & 24 \\
+			\multicolumn{1}{c|}{} & WS-MGMap~\cite{Chen2022WeaklySupervisedMM} {\scriptsize {\color{Gray} [NeurIPS22]}}& 10.12 & 5.65 & 51.7 & 46.9 & \multicolumn{1}{c|}{43.4} & 10.00 & 6.28 & 47.6 & 38.9 & \multicolumn{1}{c|}{34.3} & 12.30 & 7.11 & 45 & 35 & 28 \\
+			\multicolumn{1}{c|}{} & NaVid~\cite{zhang2024navid} {\scriptsize {\color{Gray} [RSS24]}}& - & - & - & - & \multicolumn{1}{c|}{-} & - & 5.47 & 49.1 & 37.4 & \multicolumn{1}{c|}{35.9} & - & - & - & - & - \\
+			\multicolumn{1}{c|}{} & ETPNav/p~\cite{wang2024sim} {\scriptsize {\color{Gray} [CoRL24]}} & - & - & - & - & \multicolumn{1}{c|}{-} & - & 6.81 & 42.4 & 32.9 & \multicolumn{1}{c|}{23.1} & - & - & - & - & - \\ 
+            \multicolumn{1}{c|}{} & NavMorph~\cite{Yao2025navmorph} {\scriptsize {\color{Gray} [ICCV2025]}} & 20.03 & 4.58 & 62.7 & 55.8 & \multicolumn{1}{c|}{38.9} & 22.54 & 5.75 & 56.9 & 47.9 & \multicolumn{1}{c|}{33.2} & 24.75 & 6.01 & 54.5 & 45.7 & 30.2 \\
+            \multicolumn{1}{c|}{} & g3D-LF~\cite{wang2025g3d} {\scriptsize {\color{Gray} [CVPR2025]}}& - & - & - & - & \multicolumn{1}{c|}{-} & - & 5.70 & 59.5 & 47.2 &\multicolumn{1}{c|}{34.6} & - & 6.00 & 57.5 & 46.3 & 32.2 \\   
+               \cmidrule(l){2-17} 
+            \multicolumn{1}{c|}{} & VLN-3DFF~\cite{wang2024sim} {\scriptsize {\color{Gray} [CoRL24]}}& - & - & - & - & \multicolumn{1}{c|}{-} & - & 5.95 & 55.8 & 44.9 & \multicolumn{1}{c|}{30.4} & - & 6.24 & 54.4 & 43.7 & 28.9 \\
+            	\multicolumn{1}{c|}{} & \cellcolor{gray!5}VLN-3DFF* & \cellcolor{gray!5}22.90 & \cellcolor{gray!5}4.92 & \cellcolor{gray!5}62.1 & \cellcolor{gray!5}52.7 & \multicolumn{1}{c|}{\cellcolor{gray!5}36.7} & \cellcolor{gray!5}26.16 & \cellcolor{gray!5}6.05 & \cellcolor{gray!5}54.9 & \cellcolor{gray!5}43.8 & \multicolumn{1}{c|}{\cellcolor{gray!5}29.4} & \cellcolor{gray!5}26.02 & \cellcolor{gray!5}6.22 & \cellcolor{gray!5}{54.7} & \cellcolor{gray!5}43.8 & \cellcolor{gray!5}28.6 \\
+   		\multicolumn{1}{c|}{\multirow{-8}{*}{\textbf{Monocular}}} & \cellcolor{gray!15}\textbf{SC$^2$-WM} & \multicolumn{1}{c}{\cellcolor{gray!15}{\textcolor{blue}{17.26}}} &  \multicolumn{1}{c}{\cellcolor{gray!15}\textcolor{blue}{4.53}} &  \multicolumn{1}{c}{\cellcolor{gray!15}\textcolor{blue}{64.3}} &  \multicolumn{1}{c}{\cellcolor{gray!15}\textcolor{blue}{56.0}} &  \multicolumn{1}{c|}{\cellcolor{gray!15}{\textcolor{blue}{41.9}}} & \multicolumn{1}{c}{\cellcolor{gray!15}{\textcolor{blue}{17.65}}} & \multicolumn{1}{c}{\cellcolor{gray!15}{\textcolor{blue}{5.37}}} & \multicolumn{1}{c}{\cellcolor{gray!15}{\textcolor{blue}{58.8}}} & \multicolumn{1}{c}{\cellcolor{gray!15}{\textcolor{blue}{50.9}}} & \multicolumn{1}{c|}{\cellcolor{gray!15}{\textcolor{blue}{37.2}}} & {\cellcolor{gray!15}{\textcolor{blue}{21.68}}} & \multicolumn{1}{c}{\cellcolor{gray!15}{\textcolor{blue}{6.04}}} & \multicolumn{1}{c}{\cellcolor{gray!15}{\textcolor{blue}{57.1}}} & \multicolumn{1}{c}{\cellcolor{gray!15}{\textcolor{blue}{47.0}}} & {\cellcolor{gray!15}{\textcolor{blue}{32.1}}}  \\
+            \midrule[0.7pt]
+			\multicolumn{1}{c|}{} 
+			& Seq2Seq~\cite{anderson2018vision} {\scriptsize {\color{Gray} [CVPR18]} } & \underline{9.26} & 7.12 & 46 & 37 & \multicolumn{1}{c|}{35} & \underline{8.64} & 7.37 & 40 & 32 & \multicolumn{1}{c|}{30} & \underline {8.85} & 7.91 & 36 & 28 & 25 \\
+			& Sim2Sim~\cite{Krantz2022Sim2SimTF} {\scriptsize {\color{Gray} [ECCV22]} }& 11.18 & 4.67 & 61 & 52 & \multicolumn{1}{c|}{44} & 10.69 & 6.07 & 52 & 43 & \multicolumn{1}{c|}{36} & 11.43 & 6.17 & 52 & 44 & 37 \\
+			& CWP-CMA~\cite{Hong2022BridgingTG} {\scriptsize {\color{Gray} [CVPR22]}}& 11.47 & 5.20 & 61 & 51 & \multicolumn{1}{c|}{45} & 10.90 & 6.20 & 52 & 41 & \multicolumn{1}{c|}{36} & 11.85 & 6.30 & 49 & 38 & 33 \\
+			& CWP-BERT~\cite{Hong2022BridgingTG}{\scriptsize {\color{Gray} [CVPR22]}}& 12.50 & 5.02 & 59 & 50 & \multicolumn{1}{c|}{44} & 12.23 & 5.74 & 53 & 44 & \multicolumn{1}{c|}{39} & 13.51 & 5.89 & 51 & 42 & 36 \\
+			& DREAMW~\cite{Wang2023DREAMWALKERMP} {\scriptsize {\color{Gray} [ICCV23]}}& 11.60 & 4.09 & 59 & 66 & \multicolumn{1}{c|}{48} & 11.30 & 5.53 & 49 & {59} & \multicolumn{1}{c|}{44} & 11.80 & 5.48 & 49 & {57} & 44 \\
+			& GridMM~\cite{wang2023gridmm} {\scriptsize {\color{Gray} [ICCV23]}}& 12.69 & 4.21 & 69 & 59 & \multicolumn{1}{c|}{51} & 13.36 & 5.11 & 61 & 49 & \multicolumn{1}{c|}{41} & 13.31 & 5.64 & 56 & 46 & 39 \\
+			& BEVBert~\cite{an2023bevbert} {\scriptsize {\color{Gray} [ICCV23]}}& 13.98 & 3.77 & 73 & 68 & \multicolumn{1}{c|}{60} & 13.27 & 4.57 & 67 & 59 & \multicolumn{1}{c|}{50} & 15.31 & 4.70 & 67 & 59 & 50 \\ 
+			& FSTTA~\cite{gao2024fast} {\scriptsize {\color{Gray} [ICML24]}}& 12.39 & 4.25 & 69 & 58 & \multicolumn{1}{c|}{50} & 11.58 & 5.27 & 58 & 48 & \multicolumn{1}{c|}{42} & 13.17 & 5.84 & 55 & 46 & 38 \\ 
+            & {Dynam3D}~\cite{wang2025dynam3d} {\scriptsize {\color{Gray} [ICCV2025]}} & - & - & - & - & \multicolumn{1}{c|}{-} & - & 5.34  & 62 & 53 & \multicolumn{1}{c|}{46} & - & 5.53 & 60 & 51 & 45 \\ 
+           & NavMorph~\cite{Yao2025navmorph} {\scriptsize {\color{Gray} [ICCV2025]}} & 11.76 & 3.66 & 78 & 70 & \multicolumn{1}{c|}{62} & 12.68 & 4.37 & 68 & 64 & \multicolumn{1}{c|}{53} & 12.69 & \underline{4.69} & 68 & 60 & 52 \\ 
+           & g3D-LF~\cite{wang2025g3d} {\scriptsize {\color{Gray} [CVPR2025]}} & - & - & - & - & \multicolumn{1}{c|}{-} & - & 4.53 & 68 & 61 & \multicolumn{1}{c|}{52} & - & 4.78 & 68 &58 & 51 \\
+             \cmidrule(l){2-17} 
+              & ETPNav~\cite{an2024etpnav} {\scriptsize {\color{Gray} [TPAMI24]}}& 11.78 & 3.95 & 72 & 66 & \multicolumn{1}{c|}{59} & 11.99 & 4.71 & 65 & 57 & \multicolumn{1}{c|}{49} & 12.87 & 5.12 & 63 & 55 & 48 \\ 
+              & \cellcolor{gray!5}ETPNav* & \multicolumn{1}{c}{\cellcolor{gray!5}11.35} & \multicolumn{1}{c}{\cellcolor{gray!5}3.93} & \multicolumn{1}{c}{\cellcolor{gray!5}72} & \multicolumn{1}{c}{\cellcolor{gray!5}66} &\multicolumn{1}{c|}{\cellcolor{gray!5}59} & \multicolumn{1}{c}{\cellcolor{gray!5}11.40} & \multicolumn{1}{c}{\cellcolor{gray!5}4.69} & \multicolumn{1}{c}{\cellcolor{gray!5}64} & \multicolumn{1}{c}{\cellcolor{gray!5}57} & \multicolumn{1}{c|}{\cellcolor{gray!5}49} & \cellcolor{gray!5}12.72 & \cellcolor{gray!5}5.10 & \cellcolor{gray!5}63 & \cellcolor{gray!5}55 & \cellcolor{gray!5}48 \\
+             & \cellcolor{gray!15}\textbf{SC$^2$-WM} & \multicolumn{1}{c}{\cellcolor{gray!15}{12.15}} & \multicolumn{1}{c}{\cellcolor{gray!15}{\textcolor{blue}{3.85}}} & \multicolumn{1}{c}{\cellcolor{gray!15}{\textcolor{blue}{73}}} & \multicolumn{1}{c}{\cellcolor{gray!15}{\textcolor{blue}{68}}} & \multicolumn{1}{c|}{\cellcolor{gray!15}{\textcolor{blue}{60}}} & \multicolumn{1}{c}{\cellcolor{gray!15}{12.05}} & \multicolumn{1}{c}{\cellcolor{gray!15}{\textcolor{blue}{4.60}}} & \multicolumn{1}{c}{\cellcolor{gray!15}{\textcolor{blue}{68}}} & \multicolumn{1}{c}{\cellcolor{gray!15}{\textcolor{blue}{59}}} & \multicolumn{1}{c|}{\cellcolor{gray!15}{\textcolor{blue}{51}}} & {\cellcolor{gray!15}{13.88}} & \multicolumn{1}{c}{\cellcolor{gray!15}{\textcolor{blue}{4.97}}} & \multicolumn{1}{c}{\cellcolor{gray!15}{\textcolor{blue}{65}}} & \multicolumn{1}{c}{\cellcolor{gray!15}{\textcolor{blue}{57}}} & {\cellcolor{gray!15}{\textcolor{blue}{50}}}  \\
+               \cmidrule(l){2-17} 
+            & HNR~\cite{wang2024lookahead} {\scriptsize {\color{Gray} [CVPR24]}} & 11.79 & {3.67} & 76 & 69 & \multicolumn{1}{c|}{61} & 12.64 & 4.42 & 67 & 61 & \multicolumn{1}{c|}{51} & 13.03 & 4.81 & 67 & 58 & 50 \\ 
+            & \cellcolor{gray!5}HNR* & \multicolumn{1}{c}{\cellcolor{gray!5}11.84} & \multicolumn{1}{c}{\cellcolor{gray!5}3.73} & \multicolumn{1}{c}{\cellcolor{gray!5}76} & \multicolumn{1}{c}{\cellcolor{gray!5}69} &\multicolumn{1}{c|}{\cellcolor{gray!5}61} & \multicolumn{1}{c}{\cellcolor{gray!5}12.76} & \multicolumn{1}{c}{\cellcolor{gray!5}4.57} & \multicolumn{1}{c}{\cellcolor{gray!5}67} & \multicolumn{1}{c}{\cellcolor{gray!5}61} & \multicolumn{1}{c|}{\cellcolor{gray!5}51} & \cellcolor{gray!5}12.92 & \cellcolor{gray!5}4.85 & \cellcolor{gray!5}67 & \cellcolor{gray!5}58 & \cellcolor{gray!5}50 \\
+            \multirow{-13}{*}{\textbf{Panoramic}} 
+            & \cellcolor{gray!15}\textbf{SC$^2$-WM}        & \multicolumn{1}{c}{\cellcolor{gray!15}{12.09}}  & \multicolumn{1}{c}{\cellcolor{gray!15}\underline{\textcolor{blue}{3.28}}} & \multicolumn{1}{c}{\cellcolor{gray!15}\underline{\textcolor{blue}{80}}}  & \multicolumn{1}{c}{\cellcolor{gray!15}\underline{\textcolor{blue}{71}}}   & \multicolumn{1}{c|}{\cellcolor{gray!15}\underline{\textcolor{blue}{64}}}  & \multicolumn{1}{c}{\cellcolor{gray!15}{12.89}}  & \multicolumn{1}{c}{\cellcolor{gray!15}\underline{\textcolor{blue}{4.25}}}  & \multicolumn{1}{c}{\cellcolor{gray!15}\underline{\textcolor{blue}{70}}}  & \multicolumn{1}{c}{\cellcolor{gray!15}\underline{\textcolor{blue}{66}}} & \multicolumn{1}{c|}{\cellcolor{gray!15}\underline{\textcolor{blue}{54}}} & {\cellcolor{gray!15}{13.42}} & \multicolumn{1}{c}{\cellcolor{gray!15}{4.90}} & \multicolumn{1}{c}{\cellcolor{gray!15}{\underline{\textcolor{blue}{71}}}} & \multicolumn{1}{c}{\cellcolor{gray!15}{\underline{\textcolor{blue}{62}}}} & {\cellcolor{gray!15}{\underline{\textcolor{blue}{53}}}}   \\
+			\bottomrule
+		\end{tabular}
+		\begin{tablenotes}    
+			\footnotesize                  
+			\item Note: Following prior work, we report the results with different precision formats across camera configurations——integers for panoramic settings and two decimal places for monocular settings. 
+		\end{tablenotes}           
+		\end{threeparttable} 	
+  }
+\end{table*}
+
+
+
+
+
+\subsection{Experimental Setup}
+\noindent\textbf{Datasets.} The R2R-CE dataset~\cite{krantz2020beyond,anderson2018vision} consists of 5,611 shortest-path trajectories distributed across training, validation, and test sets. Each path is associated with an average of three English instructions. The trajectories feature a mean length of 9.89 meters, while the instructions have an average length of 32 words.The RxR-CE dataset~\cite{krantz2020beyond, ku2020room}, which shares similar scene splits, presents a more challenging setting with a larger scale and multilingual instructions (English, Hindi, and Telugu). The instructions here are significantly longer, averaging 120 words.A key distinction lies in the agent dynamics: R2R-CE agents possess a chassis radius of 0.10 meters and are permitted to slide along obstacles. In contrast, RxR-CE agents have a larger radius of 0.18 meters and are strictly prohibited from sliding, making them more susceptible to collisions.
+
+\noindent\textbf{Evaluation Metrics.} We employ a comprehensive set of metrics used in prior works\citep{anderson2018evaluation,anderson2018vision,ilharco2019general}: Trajectory Length (TL), Navigation Error (NE), Success Rate given Oracle stop policy (OSR), Success Rate (SR), Success weighted by Path Length (SPL), Normalized Dynamic Time Warping (NDTW), and Success weighted by NDTW (SDTW). More details are provided in Sec.~\ref{sec:metrics} of the Appendix.
+
+
+\noindent\textbf{Implementation Details.}
+We evaluate our method in both monocular and panoramic navigation settings. In the monocular setting, we adopt the VLN-3DFF framework~\citep{wang2024sim}, which leverages the pretrained 3D Feature Fields~\citep{wang2024lookahead} to enable monocular agents to operate in environments originally designed for panoramic observations. This setting better reflects practical deployment constraints, where monocular cameras provide advantages in cost and energy efficiency.
+
+Under the panoramic setting, we follow the standard VLN-CE protocol~\cite{krantz2020beyond,krantz2021waypoint}, where 12 RGB-D observations are captured at $30^\circ$ intervals at each location. We integrate SC$^{2}$-WM with ETPNav~\cite{an2024etpnav} and HNR~\cite{wang2024lookahead} to verify its compatibility and generalizability across different navigation architectures.
+
+To perform conditional adaptation, we maintain a dynamic percentile-based queue over recent discrepancy values $\kappa_t$, and trigger adaptation when the current discrepancy exceeds the $\tau$-th percentile (\(\tau=0.5\)). The refinement function $\psi$ in Eq.~(\ref{eq:psi}) is implemented as a lightweight dynamic gating network that predicts residual corrections conditioned on reconstructed state and action features. A sigmoid gate is further employed to adaptively modulate the update magnitude. The entire framework is trained end-to-end using the objectives described in Sec.~\ref{sec:training}.
+
+All experiments follow the online VLN evaluation protocol~\citep{gao2024fast} with batch size 1 during inference. Our implementation is based on PyTorch and trained on a single NVIDIA RTX 3090 GPU. Additional implementation details are provided in Sec.~\ref{sec:detail} of the Appendix.
+
+
+
+
+
+
+
+
+\subsection{Comparison with State-of-the-art VLN Models}
+
+
+
+
+
+
+\noindent\textbf{R2R-CE.}
+Table~\ref{tab:r2r-ce} presents a comprehensive comparison between our proposed SC$^2$-WM and previous state-of-the-art methods on R2R-CE datasets. Our method significantly outperforms the strong baseline, VLN-3DFF, across multiple metrics. On the {Val Unseen} split, we achieve remarkable gains of 7.1\% in Success Rate (SR) and nearly 7.8\% in Success weighted by Path Length (SPL). Simultaneously, the method demonstrates a sharp reduction in Trajectory Length (TL), with an average decrease of 5 meters. These gains generalize robustly to the {Test Unseen} split, where SC$^2$-WM surpasses baseline by 3.2\% in SR and 3.5\% in SPL. Compared with the recent method g3D-LF, our approach achieves superior or comparable performance on most metrics. It is worth noting that g3D-LF leverages additional 3D representations, whereas our method does not. Besides, recent monoVLN method~\citep{Lu2025monoVLN} employs more powerful 3DGS-based feature fields and achieves superior performance. Since monoVLN has not been open-sourced, we are unable to adopt it as a base model for world model construction. Incorporating more expressive 3D representations will be explored as future work.
+
+We attribute the reduction in trajectory length directly to our correction mechanism. By anticipating potential future observations before executing an action, the agent effectively prunes useless exploration and avoids sub-optimal steps. Regarding the improvements in SR and SPL, these stem from the intrinsic nature of the predictive module, alongside the effective utilization of historical memory. The objective of successfully predicting future visual features implicitly compels the model to develop a deeper cognitive understanding of the environment; this enhanced internal representation indirectly strengthens the agent's overall decision-making capability. Furthermore, our online Test-Time Adaptation (TTA) plays a critical role in generalization, as it continuously refines the World Model's predictive accuracy to maintain high environmental awareness even in unfamiliar, unseen settings.
+In the panoramic setting, 
+SC$^{2}$-WM achieves the best overall results on the Val Unseen split, outperforming HNR by +5\% SR and +3\% SPL, indicating more stable and goal-aligned decision making.
+
+
+
+
+\begin{table}[t!]
+	\centering
+	\caption{Experimental results on RxR-CE dataset. Results better than \textbf{base model} are shown in \textcolor{blue}{blue}. Best results for {both panoramic and monocular settings} are $\underline{\text{underlined}}$. * indicates experimental results that we have reproduced.}
+	\vspace{0mm}
+	\label{tab:rxr-ce}
+	\resizebox{0.98\linewidth}{!}{
+		\begin{threeparttable}
+			\begin{tabular}{@{}c|l|ccccc@{}}
+				\toprule
+				& \multicolumn{1}{c|}{} & \multicolumn{5}{c}{\textbf{Val Unseen}} \\ \cline{3-7}
+				\multirow{-2}{*}{\textbf{Camera}} & \multicolumn{1}{c|}{\multirow{-2}{*}{\textbf{Methods}}} & \cellcolor{red!25}NE $\downarrow$  & \cellcolor{gray!25}SR & \cellcolor{gray!25}SPL & \cellcolor{gray!25}NDTW & \cellcolor{gray!25}SDTW \\ \midrule
+				\multirow{8}{*}{\textbf{Monocular}}  
+		    &LAW~\cite{Raychaudhuri2021LanguageAlignedW}  & 10.87  & 8.0 & 8.0 & - & - \\
+				&CM$^2$~\cite{Georgakis2022CrossmodalML}  & 8.98  & 14.4 & 9.2 & - & - \\
+				&WS-MGMap~\cite{Chen2022WeaklySupervisedMM} & 9.83 & 15.0 & 12.1 & - & - \\
+				& NaVid~\cite{zhang2024navid}  & 8.41 & 23.8 & 32.2 & - & - \\
+				& A$^2$-Nav~\cite{chen20232} & - & 16.8 & 6.3 & - & - \\ 
+                & NavMorph~\cite{Yao2025navmorph} & 8.85 & 30.8 & 22.8 & 44.2 & 23.3 \\  
+                \cmidrule(l){2-7}
+                & VLN-3DFF~\cite{wang2024sim} & 8.79 & 25.5 & 18.1 & - & - \\ 
+                & \cellcolor{gray!5}VLN-3DFF*  & \cellcolor{gray!5}9.40 & \cellcolor{gray!5}26.7 & \cellcolor{gray!5}20.1 & \cellcolor{gray!5}42.9 & \cellcolor{gray!5}20.4 \\
+                &\cellcolor{gray!15}\textbf{SC$^2$-WM} & \cellcolor{gray!15}\textcolor{blue}{8.36}  & \cellcolor{gray!15}\textcolor{blue}{35.8}  & \cellcolor{gray!15}\textcolor{blue}{27.2}  & \cellcolor{gray!15}\textcolor{blue}{44.9}  & \cellcolor{gray!15}\textcolor{blue}{26.5}  \\
+                 \midrule[0.7pt]
+				\multirow{12}{*}{\textbf{Panoramic}} & LAW-Pano~\cite{Raychaudhuri2021LanguageAlignedW} & 11.04 & 10 & 9 & - & - \\
+				& Seq2Seq~\cite{anderson2018vision} & 12.10 & 14 & 12 & 31 & 11 \\
+				& CWP-CMA~\cite{Hong2022BridgingTG} & 8.76 & 27 & 22 & 47 & - \\
+				& CWP-BERT~\cite{Hong2022BridgingTG} & 8.98 & 27 & 23 & 47 & - \\
+				& AO-Planner~\cite{chen2024affordances} & 7.06 & 43 & 30 & 50 & - \\
+				& Reborn~\cite{an20221st} & 5.98 & 49 & 42 & {63} & 42\\
+                & NavMorph~\cite{Yao2025navmorph} & 5.70 & 58 & 49 & 65 & 49 \\
+                \cmidrule(l){2-7}
+                & ETPNav~\cite{an2024etpnav} & {5.64} & 55 & 45 & 62& 45 \\
+                	& \cellcolor{gray!5}ETPNav* & \cellcolor{gray!5}5.96 & \cellcolor{gray!5}55 & \cellcolor{gray!5}45 & \cellcolor{gray!5}61 & \cellcolor{gray!5}45 \\
+            & \cellcolor{gray!15}\textbf{SC$^2$-WM}    & \cellcolor{gray!15}\textcolor{blue}{5.57}    & \cellcolor{gray!15}\textcolor{blue}{57}   & \cellcolor{gray!15}\textcolor{blue}{46}     & \cellcolor{gray!15}\textcolor{blue}{64}     & \cellcolor{gray!15}\textcolor{blue}{47}  \\
+                \cmidrule(l){2-7}
+                & HNR~\cite{wang2024lookahead} & \underline{5.51} & 56 & 47 & 64 & 47 \\
+                & \cellcolor{gray!5}HNR* & \cellcolor{gray!5}5.75 & \cellcolor{gray!5}56 & \cellcolor{gray!5}47 & \cellcolor{gray!5}63 & \cellcolor{gray!5}47 \\
+				& \cellcolor{gray!15}\textbf{SC$^2$-WM} & \cellcolor{gray!15}{5.72}  & \cellcolor{gray!15}\underline{\textcolor{blue}{60}} 	& \cellcolor{gray!15}\underline{\textcolor{blue}{50}}	& \cellcolor{gray!15}\underline{\textcolor{blue}{67}} 	& \cellcolor{gray!15}\underline{\textcolor{blue}{50}}   \\
+				\bottomrule
+			\end{tabular}
+				\begin{tablenotes}    
+                \item Note: Following prior work, we report the results with different precision formats across camera configurations, integers for panoramic settings and two decimal places for monocular settings. 
+			\end{tablenotes}           
+			\end{threeparttable} 	
+	}
+\end{table}
+
+
+
+\noindent\textbf{RxR-CE.}
+Table~\ref{tab:rxr-ce} extends our evaluation to the RxR-CE dataset, where SC$^2$-WM achieves comprehensive improvements over VLN-3DFF. We observe substantial gains of 9.1\% in SR and 7.1\% in SPL, alongside a consistent reduction in average trajectory length ($8.36\,m$ vs $9.41\,m$). Considering the strict sequentiality and temporal complexity of RxR instructions, these results underscore the necessity of our correction mechanism,
+which ensures the agent adheres closer to the described path, yielding higher path fidelity as evidenced by the significant boost in SDTW (26.5\% vs 20.4\%).
+As for panoramic setting, when built upon ETPNav, our method improves SR from 55\% to 57\% and SPL from 45\% to 47\% on the val-unseen split, while reducing NE from $5.96\,m$ to $5.57\,m$, indicating more efficient navigation paths.
+Notably, the consistent improvements across both frameworks demonstrate that our self-correcting mechanism is complementary to existing approaches and effectively mitigates error accumulation through closed-loop feedback.
+
+
+\noindent\textbf{Discussion.} 
+While recent MLLM-based VLN approaches (full comparisons are provided in Table~\ref{tab:r2r-ce-full} of the Appendix) primarily improve navigation through scaling multimodal semantic reasoning, our work focuses on a lightweight world-model paradigm that enhances execution-time adaptability and decision stability within a compact framework. Notably, SC$^2$-WM requires only a single NVIDIA RTX 3090 GPU and less than 40 hours of training, demonstrating that effective closed-loop self-correction can be achieved without relying on large-scale multimodal models. Further discussion is provided in Sec.~\ref{sec:further discussion} of the Appendix.
+
+
+
+\subsection{Further Remarks}
+
+\begin{table}[]
+	\centering
+	\caption{Ablation Study of the proposed World Model. Best results are highlighted in \textbf{bold}.}
+	\label{tab:abla}
+	\resizebox{0.99\linewidth}{!}{
+		\begin{threeparttable}
+			\begin{tabular}{@{}l|ccc|ccccccc@{}}
+				\toprule
+				& \multicolumn{3}{c|}{} & \multicolumn{7}{c}{\textbf{R2R-CE Val Unseen}} \\ 
+				\cline{5-11}
+				\multirow{-2}{*}{\textbf{Model}} & \multirow{-2}{*}{\textbf{State-C}} & \multirow{-2}{*}{\textbf{VCM}} & \multirow{-2}{*}{\textbf{Model-C}} & \cellcolor{red!25}TL$\downarrow$ & \cellcolor{red!25}NE$\downarrow$ & \cellcolor{gray!25}OSR & \cellcolor{gray!25}SR & \cellcolor{gray!25}SPL & \cellcolor{gray!25}NDTW & \cellcolor{gray!25}SDTW \\ 
+				\midrule
+				Base model & - & - & - & 26.16 & 6.05 & 54.92 & 43.77 & 29.39 & 40.94 & 29.30 \\
+				\midrule
+				\multirow{4}{*}{SC$^2$-WM} & \checkmark & & & 21.75 & 5.69 & 56.22 & 48.34 & 33.02 & 45.36 & 32.82 \\
+				& \checkmark & \checkmark & & 18.73 & 5.46 & \textbf{59.22} & 49.86 & 36.05 & 48.10 & 34.62 \\
+				& \checkmark & \checkmark & \checkmark$^\dagger$ & 18.43 & 5.43 & 58.67 & 50.30 & 36.58 & 48.66 & 35.37 \\
+				 & \cellcolor{gray!15}\checkmark & \cellcolor{gray!15}\checkmark & \cellcolor{gray!15}\checkmark & \cellcolor{gray!15}\textbf{17.65} & \cellcolor{gray!15}\textbf{5.37} & \cellcolor{gray!15}58.84 & \cellcolor{gray!15}\textbf{50.90} & \cellcolor{gray!15}\textbf{37.17} & \cellcolor{gray!15}\textbf{49.31} & \cellcolor{gray!15}\textbf{35.70} \\
+				\midrule
+				SC$^2$-WM \textit{w/o} $\mathcal{L}_{\mathrm{rec}}$ & \checkmark & \checkmark & \checkmark & 18.12 & 5.55 & 57.37 & 48.89 & 34.58 & 47.62 & 33.91 \\
+				\bottomrule
+			\end{tabular}
+			\begin{tablenotes}    
+				\footnotesize
+                \item Note: State-C and Model-C denote State-Level Correction and Model-Level Correction, respectively. $^\dagger$ indicates fixed-interval adaptation performed every \(T=2\) steps, instead of the proposed feedback-triggered adaptation strategy.
+			\end{tablenotes}           
+		\end{threeparttable}
+	}
+\end{table}
+
+
+
+\noindent\textbf{Ablation Study of the Proposed World Model.}
+To investigate the efficacy of each component in SC$^{2}$-WM, we conduct ablation studies by incrementally incorporating the feedback-guided plan refinement (`State-C'), the visual calibration module (`VCM'), and the conditional world-aware adaptation (`Model-C'). Here, state-level correction refers to feedback-guided plan refinement that adjusts latent representations before action execution, while model-level correction refers to conditional world-aware adaptation that selectively updates the world model at test time. Table~\ref{tab:abla} details the contribution of each component on the R2R-CE Val Unseen split:
+\begin{itemize}
+    \item \textbf{Effect of State-Level Self-Correction.} Introducing feedback-guided plan refinement leads to a direct increase in SR from 43.77\% to 48.34\%, alongside a reduction in TL (from $26.16\,m$ to $21.75\,m$). This indicates that the state-level correction effectively identifies and prunes erroneous steps by adjusting latent states based on world-model foresight.
+    \item \textbf{Impact of VCM.} The integration of the VCM module triggers a substantial performance leap, reducing TL to $18.73\,m$ and boosting SPL to 36.05\%. Episodic Memory in VCM provides the world model with essential historical context, enriching its foresight capability and enabling more accurate feedback signals for plan refinement.
+    \item \textbf{Benefit of Model-Level Correction.} Conditional world-aware adaptation further elevates performance by selectively updating the world model online.
+    By adapting the predictive module to unseen environments, model-level correction achieves the best overall performance with an SR of 50.9\% and the lowest TL of $17.65\,m$, validating the importance of dynamic adaptation for generalization. 
+    Notably, compared to the fixed-interval update mechanism adopted in~\cite{gao2024fast}, where we set $T=2$ to match the average update frequency of our method for fair comparison, our feedback-triggered approach yields higher SR and SPL, demonstrating that selective adaptation based on internal feedback signals outperforms naive periodic updates.
+    Additionally, removing the reconstruction loss $\mathcal{L}_{\mathrm{rec}}$ (Eq.~(\ref{eq:rec})) leads to performance degradation, confirming that $\mathcal{L}_{\mathrm{rec}}$ helps learn effective latent representations for accurate world model predictions.
+\end{itemize}
+
+
+
+
+
+
+
+
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=\linewidth]{pic/vln-vis.pdf}
+    \caption{\textbf{Qualitative results on R2R-CE unseen set.} Comparison between our SC$^2$-WM (\textcolor{blue}{blue}) and baseline VLN-3DFF (\textcolor{green}{green}) against ground truth (black). Yellow arrows indicate the agent's moving direction.}
+    \label{fig:navigation_vis}
+\end{figure}
+
+
+
+
+
+
+\noindent\textbf{Qualitative Analysis.}
+Figure~\ref{fig:navigation_vis} presents qualitative comparisons on the VLN-CE task using the R2R-CE dataset. We visualize two navigation episodes with varying instruction complexity. In both cases, our SC$^2$-WM (\textcolor{blue}{blue}) produces trajectories that closely align with the ground truth (black), while the baseline method (\textcolor{green}{green}) tends to deviate from the intended path after a few steps. Notably, in Figure~\ref{fig:navigation_vis}(b) where the instruction involves multiple turns and spatial references, our method maintains correct navigation throughout the episode, whereas the baseline fails to recover after early mistakes. These results suggest that our dual world-model design enables better spatial reasoning and more robust long-horizon navigation.
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=\linewidth]{pic/vln-real.pdf}
+    \caption{\textbf{Real-world deployment on a Unitree GO2 quadruped robot.} SC$^{2}$-WM enables robust vision-and-language navigation in indoor environments, leveraging internal feedback for self-correction under complex instructions.}
+    \label{fig:realworld}
+\end{figure}
+
+\noindent\textbf{Real-world Experiments.}
+We deploy SC$^{2}$-WM on a physical robotic platform to validate its effectiveness beyond simulation.
+The platform consists of a Unitree GO2 quadruped robot equipped with an Intel RealSense D435i RGB-D camera for visual perception.
+Given natural language navigation instructions, the robot is required to navigate through indoor environment.
+As shown in Figure~\ref{fig:realworld}, SC$^{2}$-WM demonstrates robust navigation behavior across varying conditions, highlighting the benefit of closed-loop self-correction for real-world deployment.
+Details are provided in the Appendix.
+
+
+
+\section{Conclusion} \label{sec:conclu} 
+
+
+We presented SC$^{2}$-WM, a self-correcting world model framework that enables closed-loop decision making for vision-and-language navigation. By deriving internal feedback from world-model foresight, our approach performs state-level plan refinement and model-level adaptation, providing a principled way to mitigate error accumulation under partial observability.
+
+The current framework opens several promising directions for future research. The quality of internal feedback is tied to world-model expressiveness, suggesting potential benefits from incorporating uncertainty-aware or structured world models. Additionally, the test-time adaptation mechanism could be further optimized for efficiency to enable deployment on resource-constrained platforms. We also plan to extend the framework to longer-horizon planning and multi-agent scenarios, and explore tighter integration between language grounding and world modeling for richer semantic feedback.
+
+
+\section*{Acknowledgments}
+This work was supported in part by the Guangdong S$\&$T Program (2024B0101050004), in part by the National Natural Science Foundation of China under Grants 62472422, U23A20387, and 62236008.
+
+
+\section*{Impact Statement}
+This paper presents work whose goal is to advance the field of Machine
+Learning. There are many potential societal consequences of our work, none which we feel must be specifically highlighted here.
+
+
+\bibliography{reference}
+\bibliographystyle{icml2026}
+
+\newpage
+\appendix
+\onecolumn
+
+\S~\ref{sec:code} presents the guidelines for our source code. \S~\ref{sec:metrics} presents more details about evaluation metrics. Implementation details for experiments are provided in \S~\ref{sec:detail}, and further comparisons against state-of-the-art methods are shown in \S~\ref{sec:exper}. Finally, we present real-world verification to validate the effectiveness of our method in \S~\ref{sec:real}.
+
+
+\section{Source Code}\label{sec:code}
+The source code to reproduce our experimental results is included in the supplementary material (6618-supp.zip) under the \texttt{./code} directory. For more details, please refer to the README file therein.
+
+\section{Evaluation Metrics for VLN-CE agents}
+\label{sec:metrics}
+We follow previous approaches~\cite{anderson2018vision, anderson2018evaluation,ilharco2019general} and adopt the standard metrics for evaluating VLN-CE agents:
+\begin{itemize}[left=1em]
+	\item \textbf{TL (Trajectory length)} measures the average length of the predicted navigation trajectories.
+	\item \textbf{NE (Navigation Error)} measures the average distance (in meter) between the agent's final position in the predicted trajectory and the target in the ground truth.
+	\item \textbf{SR (Success Rate)} is the proportion of the agent stopping
+	in the predicted route within a threshold distance (set as 3 meters) of the goal
+	in the reference route.
+	\item \textbf{OSR (Oracle Success Rate)} is the proportion of the closest point in the predicted trajectory to the target in the reference trajectory within a threshold distance. 
+	\item \textbf{SPL (Success weighted by Path Length)} is a comprehensive metric method integrating SR and TL that takes both effectiveness and efficiency into account.
+	\item \textbf{NDTW (Normalized Dynamic Time Warping)} measures the normalized cumulative distance between reference path and agent position.
+	\item \textbf{SDTW (Success weighted by normalized Dynamic Time Warping)} is a comprehensive metric method integrating NDTW and SR that takes both path efficiency and task completion into account.
+\end{itemize}
+
+\section{Implementation Details}\label{sec:detail}
+\textbf{The Baseline Framework.}
+In conventional panoramic VLN-CE frameworks~\cite{an2024etpnav, wang2023gridmm}, the agent perceives its surroundings through multi-view RGB-D panoramas captured at 30-degree intervals at each timestep $t$. These panoramic observations are processed by a trained waypoint prediction module\cite{Hong2022BridgingTG} to identify navigable waypoints. The VLN model then encodes both the visual features of these waypoints and their spatial information (relative direction and distance) to construct a topological map. This map is subsequently integrated with the navigation instruction via the Cross-Modal Graph Transformer\cite{chen2022think, an2024etpnav}, which selects the optimal waypoint as the agent’s next navigation goal.
+
+Monocular VLN-CE settings rely on a single RGB-D camera, which presents challenges in waypoint estimation due to the lack of full panoramic coverage. To address this, an enhanced waypoint predictor~\cite{wang2024sim} utilizes a semantic traversability map and 3D feature fields to infer viable waypoints, ensuring effective decision-making even with limited field-of-view.
+
+\noindent\textbf{Model Configuration.}
+Following previous baseline models~\cite{an2024etpnav, wang2024sim}, we utilize CLIP-pretrained ViT-B/16~\cite{dosovitskiy2020image} for RGB feature extraction on R2R-CE, while ViT-B/32~\cite{dosovitskiy2020image} is adopted for RxR-CE to maintain consistency with prior settings. Depth information is processed using a point-goal navigation pretrained ResNet-50~\cite{he2016deep}.
+The framework maintains encoder depths of 2, 9, and 4 layers for panoramic, textual, and cross-modal graph components respectively, aligned with~\cite{Hong2022BridgingTG, Georgakis2022CrossmodalML}.  Other hyperparameters are the same as LXMERT~\cite{tan2019lxmert} on the R2R-CE dataset and pre-trained RoBerta~\cite{liu2019roberta} for the multilingual RxR-CE dataset. The camera's HFOV is set to $90^{\circ}$ for R2R-CE and $79^{\circ}$ for RxR-CE.
+
+
+\noindent\textbf{Experimental Details.}
+We conduct our experiments using distinct initialization and training strategies for the R2R-CE and RxR-CE datasets.
+For R2R-CE, we initialize the model with weights pretrained on the R2R-CE dataset for 25,000 iterations. We employ a hierarchical training strategy consisting of two stages: First, we jointly train all modules with a learning rate of $1 \times 10^{-5}$ for 12,000 episodes. Subsequently, we freeze the language encoder and fine-tune the remaining components with a reduced learning rate of $4 \times 10^{-6}$ for an additional 10,000 episodes.
+For RxR-CE, we initialize our framework using the pretrained checkpoint from VLN-3DFF~\cite{wang2024sim}. The model is then trained with a learning rate of $1 \times 10^{-5}$ for 14,000 episodes.
+
+In addition, We use a dynamic percentile-based queue over recent , triggering adaptation when it exceeds the $\tau$-th percentile ($\tau$ = 0.5). This self-adapts to recent dynamics without manual threshold tuning. $\psi$ in Eq.~(\ref{eq:psi}) is implemented as a dynamic gating network that predicts a residual correction conditioned on reconstructed state and action features. A sigmoid gate modulates the update magnitude adaptively. The network is trained end-to-end with the same objectives.
+
+\textbf{Temporal Prior in Memory of VCM module.} To explicitly incorporate temporal locality and prioritize recent navigational contexts, we inject a learnable temporal bias into the cross-attention mechanism of the memory $\mathcal{M}_t$. We introduce a learnable scalar parameter $\lambda$ (initialized to $0.1$) to regulate the attention distribution based on the temporal distance between the current time step $t$ and a historical memory step $k$. A bias term, formulated as $B_{t,k} = -|\lambda| \cdot (t - k)$, is added to the raw attention logits prior to the softmax normalization. This linear decay effectively penalizes older historical observations, encouraging the agent to assign higher attention weights to the most immediate predecessor steps during the reasoning process.
+
+\textbf{Spatio-temporal Encodings in Memory of VCM Module.} To effectively ground historical observations within the agent's current frame of reference, we enhance the visual features of memory items with explicit spatial and temporal encodings prior to the attention mechanism:
+
+~~~~\textbf{(i) Relative Spatial Encoding.} 
+We compute a 7-dimensional relative geometric feature vector $\mathbf{g}_{t,k} \in \mathbb{R}^7$ for each historical node $k$ with respect to the agent's current pose at step $t$. This vector consists of the relative heading and elevation (represented by sine and cosine values) and the normalized Euclidean distance. These geometric features are projected into the model's hidden dimension $D$ via a linear layer followed by Layer Normalization:
+\begin{equation}
+    \mathbf{e}^{(pos)}_{t,k} = \text{LayerNorm}(\mathbf{W}_p \mathbf{g}_{t,k} + \mathbf{b}_p),
+\end{equation}
+where $\mathbf{W}_p$ and $\mathbf{b}_p$ are learnable parameters.
+
+~~~~\textbf{(ii) Step (Temporal) Embedding.} 
+To encode the sequential order and temporal distance of visited nodes, we introduce a discrete step embedding. Let $\delta t = \min(t - k, T_{max})$ denote the clamped time difference between the current step $t$ and the memory step $k$. We utilize a learnable lookup table $\mathbf{E}_{step}$ to retrieve a dense vector representation for this time lag:
+\begin{equation}
+    \mathbf{e}^{(step)}_{t,k} = \mathbf{E}_{step}[\delta t].
+\end{equation}
+Both $\mathbf{e}^{(pos)}_{t,k}$ and $\mathbf{e}^{(step)}_{t,k}$ are added element-wise to the visual features of the corresponding memory item, thereby fusing spatiotemporal context into the visual representation.
+
+\section{Complementary Experiments}\label{sec:exper}
+\subsection{Full Results}
+In our main paper, we provide representative comparison results on the R2R-CE~\cite{krantz2020beyond} and RxR-CE~\cite{krantz2020beyond} benchmarks due to space constraints. Here, we present the complete results across the `validation seen', `validation unseen', and `test unseen' splits of these benchmarks, including comparisons with a broader range of state-of-the-art methods, as detailed in Table~\ref{tab:r2r-ce-full} and Table~\ref{tab:rxr-ce-full}. Our proposed SC$^2$-WM method enhances its ability to perform navigation decision based on self-correcting with closed-loop feedback, effectively handling complex navigation tasks even with monocular input.
+Note that the recent monoVLN method~\citep{Lu2025monoVLN} employs more powerful 3DGS-based feature fields and achieves superior performance. Since monoVLN has not been open-sourced, we are unable to adopt it as a base model for world model construction. Incorporating more expressive 3D representations will be explored as future work. Besides, compared with monoVLN, our method achieves better performance on the RxR dataset.
+
+
+\subsection{Discussion on Model Paradigm}\label{sec:further discussion}
+While we include MLLM-based VLN methods in the full results (Table~\ref{tab:r2r-ce-full}), our work focuses on a lightweight world-model-based framework rather than incorporating large-scale multimodal language models. Although recent MLLM-based approaches demonstrate strong semantic reasoning, they typically incur substantial computational overhead and remain limited in online adaptability during execution. In contrast, prior studies have shown that improving internal state representations and predictive dynamics can effectively enhance decision stability under partial observability~\cite{Yao2025navmorph,wang2025g3d,huang2025unemo,an2024etpnav}. Building on this line of work, our design introduces internal feedback and self-correction within a compact world model, enabling robust execution-time regulation without relying on large-scale models.
+It is worth noting that the model proposed in this paper requires only a single NVIDIA RTX 3090 GPU and less than 40 hours of training to achieve strong performance, whereas such computational resources are typically insufficient to meet the demands of methods based on large-scale multimodal models.
+
+
+
+
+\begin{table*}[thpb] \centering
+	\caption{Experimental results on R2R-CE dataset. Results better than \textbf{base model} are shown in \textcolor{blue}{blue}. Best results for \textbf{both panoramic and monocular settings} are $\underline{\text{underlined}}$. * indicates experimental results that we have reproduced. $^\dagger$ Methods based on large language/vision-language models.}
+	\vspace{0mm}
+	\label{tab:r2r-ce-full}
+	\resizebox{\textwidth}{!}{
+		\begin{threeparttable}
+		\begin{tabular}{@{}c|l|ccccccccccccccc@{}}
+			\toprule
+			& \multicolumn{1}{c|}{} & \multicolumn{5}{c|}{\textbf{Val Seen}} & \multicolumn{5}{c|}{\textbf{Val Unseen}} & \multicolumn{5}{c}{\textbf{Test Unseen}} \\  
+			\multirow{-2}{*}{\textbf{Camera}} & \multicolumn{1}{c|}{\multirow{-2}{*}{\textbf{Methods}}} & \cellcolor{red!25}TL $\downarrow$ & \cellcolor{red!25}NE $\downarrow$ & \cellcolor{gray!15}OSR & \cellcolor{gray!15}SR & \cellcolor{gray!15}SPL & \cellcolor{red!25}TL $\downarrow$ & \cellcolor{red!25}NE $\downarrow$ & \cellcolor{gray!15}OSR & \cellcolor{gray!15}SR & \cellcolor{gray!15}SPL & \cellcolor{red!25}TL $\downarrow$ & \cellcolor{red!25}NE $\downarrow$ & \cellcolor{gray!15}OSR & \cellcolor{gray!15}SR & {\cellcolor{gray!15}SPL} \\ \midrule
+			& LAW~\cite{Raychaudhuri2021LanguageAlignedW} {\scriptsize {\color{Gray} [EMNLP21]}}& 9.34 & 6.35 & 49 & 40 & \multicolumn{1}{c|}{37} & 8.89 & 6.83 & 44 & 35 & \multicolumn{1}{c|}{31} & 9.67 & 7.69 & 28 & 38 & 25 \\
+			\multicolumn{1}{c|}{} & CM$^2$~\cite{Georgakis2022CrossmodalML} {\scriptsize {\color{Gray} [CVPR22]}} & 12.05 & 6.10 & 50.7 & 42.9 & \multicolumn{1}{c|}{34.8} & \multicolumn{1}{c}{11.54} & 7.02 & 41.5 & 34.3 & \multicolumn{1}{c|}{27.6} & 13.90 & 7.70 & 39 & 31 & 24 \\
+			\multicolumn{1}{c|}{} & WS-MGMap~\cite{Chen2022WeaklySupervisedMM} {\scriptsize {\color{Gray} [NeurIPS22]}}& 10.12 & 5.65 & 51.7 & 46.9 & \multicolumn{1}{c|}{43.4} & 10.00 & 6.28 & 47.6 & 38.9 & \multicolumn{1}{c|}{34.3} & 12.30 & 7.11 & 45 & 35 & 28 \\
+			\multicolumn{1}{c|}{} & NaVid~\cite{zhang2024navid} {\scriptsize {\color{Gray} [RSS24]}}& - & - & - & - & \multicolumn{1}{c|}{-} & - & 5.47 & 49.1 & 37.4 & \multicolumn{1}{c|}{35.9} & - & - & - & - & - \\
+			\multicolumn{1}{c|}{} & ETPNav/p~\cite{wang2024sim} {\scriptsize {\color{Gray} [CoRL24]}} & - & - & - & - & \multicolumn{1}{c|}{-} & - & 6.81 & 42.4 & 32.9 & \multicolumn{1}{c|}{23.1} & - & - & - & - & - \\ 
+            \multicolumn{1}{c|}{} & NavMorph~\cite{Yao2025navmorph} {\scriptsize {\color{Gray} [ICCV2025]}} & 20.03 & 4.58 & 62.7 & 55.8 & \multicolumn{1}{c|}{38.9} & 22.54 & 5.75 & 56.9 & 47.9 & \multicolumn{1}{c|}{33.2} & 24.75 & 6.01 & 54.5 & 45.7 & 30.2 \\
+            \multicolumn{1}{c|}{} & g3D-LF~\cite{wang2025g3d} {\scriptsize {\color{Gray} [CVPR2025]}}& - & - & - & - & \multicolumn{1}{c|}{-} & - & 5.70 & 59.5 & 47.2 &\multicolumn{1}{c|}{34.6} & - & 6.00 & 57.5 & 46.3 & 32.2 \\   
+            \multicolumn{1}{c|}{} & monoVLN~\cite{Lu2025monoVLN} {\scriptsize {\color{Gray} [CVPR2025]}}& - & - & - & - & \multicolumn{1}{c|}{-} & - & 4.61 & 62.4 & 54.8 &\multicolumn{1}{c|}{44.4} & - & 4.97 & 60.5 & 53.6 & 44.9 \\
+             \multicolumn{1}{c|}{} & NaVILA$^\dagger$~\cite{cheng2024navila} {\scriptsize {\color{Gray} [arxiv2025]}}& - & - & - & - & \multicolumn{1}{c|}{-} & - & 5.43 & 62.5 & 54.0 &\multicolumn{1}{c|}{49.0} & - & - & - & - & - \\ 
+            \multicolumn{1}{c|}{} & UniNaVid$^\dagger$~\cite{zhang2024navid} {\scriptsize {\color{Gray} [arxiv2025]}}& - & - & - & - & \multicolumn{1}{c|}{-} & - & 5.58 & 53.3 & 47.0 &\multicolumn{1}{c|}{42.7} & - & - & - & - & - \\  
+            \multicolumn{1}{c|}{} & StreamVLN$^\dagger$~\cite{wei2025streamvln} {\scriptsize {\color{Gray} [arxiv2025]}}& - & - & - & - & \multicolumn{1}{c|}{-} & - & 4.98 & 64.2 & 56.9 &\multicolumn{1}{c|}{51.9} & - & - & - & - & - \\ 
+            \multicolumn{1}{c|}{} & DualVLN$^\dagger$~\cite{wei2025ground}{\scriptsize {\color{Gray} [arxiv2025]}}& - & - & - & - & \multicolumn{1}{c|}{-} & - & \underline{4.05} & \underline{70.7} & 64.3 &\multicolumn{1}{c|}{\underline{58.5}} & - & - & - & - & - \\
+               \cmidrule(l){2-17} 
+            \multicolumn{1}{c|}{} & VLN-3DFF~\cite{wang2024sim} {\scriptsize {\color{Gray} [CoRL24]}}& - & - & - & - & \multicolumn{1}{c|}{-} & - & 5.95 & 55.8 & 44.9 & \multicolumn{1}{c|}{30.4} & - & 6.24 & 54.4 & 43.7 & 28.9 \\
+			\multicolumn{1}{c|}{} & \cellcolor{gray!5}VLN-3DFF* & \cellcolor{gray!5}22.90 & \cellcolor{gray!5}4.92 & \cellcolor{gray!5}62.1 & \cellcolor{gray!5}52.7 & \multicolumn{1}{c|}{\cellcolor{gray!5}36.7} & \cellcolor{gray!5}26.16 & \cellcolor{gray!5}6.05 & \cellcolor{gray!5}54.9 & \cellcolor{gray!5}43.8 & \multicolumn{1}{c|}{\cellcolor{gray!5}29.4} & \cellcolor{gray!5}26.02 & \cellcolor{gray!5}6.22 & \cellcolor{gray!5}54.7 & \cellcolor{gray!5}43.8 & \cellcolor{gray!5}28.6 \\
+   		\multicolumn{1}{c|}{\multirow{-14}{*}{\textbf{Monocular}}} & \cellcolor{gray!15}\textbf{SC$^2$-WM} & \multicolumn{1}{c}{\cellcolor{gray!15}{\textcolor{blue}{17.26}}} &  \multicolumn{1}{c}{\cellcolor{gray!15}\textcolor{blue}{4.53}} &  \multicolumn{1}{c}{\cellcolor{gray!15}\textcolor{blue}{64.3}} &  \multicolumn{1}{c}{\cellcolor{gray!15}\textcolor{blue}{56.0}} &  \multicolumn{1}{c|}{\cellcolor{gray!15}{\textcolor{blue}{41.9}}} & \multicolumn{1}{c}{\cellcolor{gray!15}{\textcolor{blue}{17.65}}} & \multicolumn{1}{c}{\cellcolor{gray!15}{\textcolor{blue}{5.37}}} & \multicolumn{1}{c}{\cellcolor{gray!15}{\textcolor{blue}{58.8}}} & \multicolumn{1}{c}{\cellcolor{gray!15}{\textcolor{blue}{50.9}}} & \multicolumn{1}{c|}{\cellcolor{gray!15}{\textcolor{blue}{37.2}}} & {\cellcolor{gray!15}{\textcolor{blue}{21.68}}} & \multicolumn{1}{c}{\cellcolor{gray!15}{\textcolor{blue}{6.04}}} & \multicolumn{1}{c}{\cellcolor{gray!15}{\textcolor{blue}{57.1}}} & \multicolumn{1}{c}{\cellcolor{gray!15}{\textcolor{blue}{47.0}}} & {\cellcolor{gray!15}{\textcolor{blue}{32.1}}}  \\
+            \midrule[0.7pt]
+			\multicolumn{1}{c|}{} 
+			& Seq2Seq~\cite{anderson2018vision} {\scriptsize {\color{Gray} [CVPR18]} } & \underline{9.26} & 7.12 & 46 & 37 & \multicolumn{1}{c|}{35} & 8.64 & 7.37 & 40 & 32 & \multicolumn{1}{c|}{30} & \underline {8.85} & 7.91 & 36 & 28 & 25 \\
+			& Sim2Sim~\cite{Krantz2022Sim2SimTF} {\scriptsize {\color{Gray} [ECCV22]} }& 11.18 & 4.67 & 61 & 52 & \multicolumn{1}{c|}{44} & 10.69 & 6.07 & 52 & 43 & \multicolumn{1}{c|}{36} & 11.43 & 6.17 & 52 & 44 & 37 \\
+			& CWP-CMA~\cite{Hong2022BridgingTG} {\scriptsize {\color{Gray} [CVPR22]}}& 11.47 & 5.20 & 61 & 51 & \multicolumn{1}{c|}{45} & 10.90 & 6.20 & 52 & 41 & \multicolumn{1}{c|}{36} & 11.85 & 6.30 & 49 & 38 & 33 \\
+			& CWP-BERT~\cite{Hong2022BridgingTG}{\scriptsize {\color{Gray} [CVPR22]}}& 12.50 & 5.02 & 59 & 50 & \multicolumn{1}{c|}{44} & 12.23 & 5.74 & 53 & 44 & \multicolumn{1}{c|}{39} & 13.51 & 5.89 & 51 & 42 & 36 \\
+			& DREAMW~\cite{Wang2023DREAMWALKERMP} {\scriptsize {\color{Gray} [ICCV23]}}& 11.60 & 4.09 & 59 & 66 & \multicolumn{1}{c|}{48} & 11.30 & 5.53 & 49 & {59} & \multicolumn{1}{c|}{44} & 11.80 & 5.48 & 49 & {57} & 44 \\
+			& GridMM~\cite{wang2023gridmm} {\scriptsize {\color{Gray} [ICCV23]}}& 12.69 & 4.21 & 69 & 59 & \multicolumn{1}{c|}{51} & 13.36 & 5.11 & 61 & 49 & \multicolumn{1}{c|}{41} & 13.31 & 5.64 & 56 & 46 & 39 \\
+			& BEVBert~\cite{an2023bevbert} {\scriptsize {\color{Gray} [ICCV23]}}& 13.98 & 3.77 & 73 & 68 & \multicolumn{1}{c|}{60} & 13.27 & 4.57 & 67 & 59 & \multicolumn{1}{c|}{50} & 15.31 & 4.70 & 67 & 59 & 50 \\ 
+            & {InstructNav$^\dagger$}~\cite{long2024instructnav} {\scriptsize {\color{Gray} [arxiv2024]}}& - & - & - & - & \multicolumn{1}{c|}{-} & \underline{7.74} & 6.89 & - & 31 &\multicolumn{1}{c|}{24} & - & - & - & - & - \\
+			& FSTTA~\cite{gao2024fast} {\scriptsize {\color{Gray} [ICML24]}}& 12.39 & 4.25 & 69 & 58 & \multicolumn{1}{c|}{50} & 11.58 & 5.27 & 58 & 48 & \multicolumn{1}{c|}{42} & 13.17 & 5.84 & 55 & 46 & 38 \\ 
+            & {SmartWay$^\dagger$}~\cite{shi2025smartway} {\scriptsize {\color{Gray} [arxiv2025]}}& - & - & - & - & \multicolumn{1}{c|}{-} & 13.09 & 7.01 & 51 & 29 &\multicolumn{1}{c|}{22} & - & - & - & - & - \\
+            & {Aux-Think$^\dagger$}~\cite{wang2025think} {\scriptsize {\color{Gray} [arxiv2025]}}& - & - & - & - & \multicolumn{1}{c|}{-} & - & 6.01 & 52 & 46 &\multicolumn{1}{c|}{41} & - & - & - & - & - \\
+            & {Dynam3D$^\dagger$}~\cite{wang2025dynam3d} {\scriptsize {\color{Gray} [ICCV2025]}} & - & - & - & - & \multicolumn{1}{c|}{-} & - & 5.34  & 62 & 53 & \multicolumn{1}{c|}{46} & - & 5.53 & 60 & 51 & 45 \\ 
+           & NavMorph~\cite{Yao2025navmorph} {\scriptsize {\color{Gray} [ICCV2025]}} & 11.76 & 3.66 & 78 & 70 & \multicolumn{1}{c|}{62} & 12.68 & 4.37 & 68 & 64 & \multicolumn{1}{c|}{53} & 12.69 & \underline{4.69} & 68 & 60 & 52 \\ 
+           & g3D-LF~\cite{wang2025g3d} {\scriptsize {\color{Gray} [CVPR2025]}} & - & - & - & - & \multicolumn{1}{c|}{-} & - & 4.53 & 68 & 61 & \multicolumn{1}{c|}{52} & - & 4.78 & 68 &58 & 51 \\
+             \cmidrule(l){2-17} 
+              & ETPNav~\cite{an2024etpnav} {\scriptsize {\color{Gray} [TPAMI24]}}& 11.78 & 3.95 & 72 & 66 & \multicolumn{1}{c|}{59} & 11.99 & 4.71 & 65 & 57 & \multicolumn{1}{c|}{49} & 12.87 & 5.12 & 63 & 55 & 48 \\ 
+              & \cellcolor{gray!5}ETPNav* & \multicolumn{1}{c}{\cellcolor{gray!5}11.35} & \multicolumn{1}{c}{\cellcolor{gray!5}3.93} & \multicolumn{1}{c}{\cellcolor{gray!5}72} & \multicolumn{1}{c}{\cellcolor{gray!5}66} &\multicolumn{1}{c|}{\cellcolor{gray!5}59} & \multicolumn{1}{c}{\cellcolor{gray!5}11.40} & \multicolumn{1}{c}{\cellcolor{gray!5}4.69} & \multicolumn{1}{c}{\cellcolor{gray!5}64} & \multicolumn{1}{c}{\cellcolor{gray!5}57} & \multicolumn{1}{c|}{\cellcolor{gray!5}49} & \cellcolor{gray!5}12.72 & \cellcolor{gray!5}5.10 & \cellcolor{gray!5}63 & \cellcolor{gray!5}55 & \cellcolor{gray!5}48 \\
+             & \cellcolor{gray!15}\textbf{SC$^2$-WM} & \multicolumn{1}{c}{\cellcolor{gray!15}{12.15}} & \multicolumn{1}{c}{\cellcolor{gray!15}{\textcolor{blue}{3.85}}} & \multicolumn{1}{c}{\cellcolor{gray!15}{\textcolor{blue}{73}}} & \multicolumn{1}{c}{\cellcolor{gray!15}{\textcolor{blue}{68}}} & \multicolumn{1}{c|}{\cellcolor{gray!15}{\textcolor{blue}{60}}} & \multicolumn{1}{c}{\cellcolor{gray!15}{12.05}} & \multicolumn{1}{c}{\cellcolor{gray!15}{\textcolor{blue}{4.60}}} & \multicolumn{1}{c}{\cellcolor{gray!15}{\textcolor{blue}{68}}} & \multicolumn{1}{c}{\cellcolor{gray!15}{\textcolor{blue}{59}}} & \multicolumn{1}{c|}{\cellcolor{gray!15}{\textcolor{blue}{51}}} & {\cellcolor{gray!15}{13.88}} & \multicolumn{1}{c}{\cellcolor{gray!15}{\textcolor{blue}{4.97}}} & \multicolumn{1}{c}{\cellcolor{gray!15}{\textcolor{blue}{65}}} & \multicolumn{1}{c}{\cellcolor{gray!15}{\textcolor{blue}{57}}} & {\cellcolor{gray!15}{\textcolor{blue}{50}}}  \\
+               \cmidrule(l){2-17} 
+            & HNR~\cite{wang2024lookahead} {\scriptsize {\color{Gray} [CVPR24]}} & 11.79 & {3.67} & 76 & 69 & \multicolumn{1}{c|}{61} & 12.64 & 4.42 & 67 & 61 & \multicolumn{1}{c|}{51} & 13.03 & 4.81 & 67 & 58 & 50 \\ 
+            & \cellcolor{gray!5}HNR* & \multicolumn{1}{c}{\cellcolor{gray!5}11.84} & \multicolumn{1}{c}{\cellcolor{gray!5}3.73} & \multicolumn{1}{c}{\cellcolor{gray!5}76} & \multicolumn{1}{c}{\cellcolor{gray!5}69} &\multicolumn{1}{c|}{\cellcolor{gray!5}61} & \multicolumn{1}{c}{\cellcolor{gray!5}12.76} & \multicolumn{1}{c}{\cellcolor{gray!5}4.57} & \multicolumn{1}{c}{\cellcolor{gray!5}67} & \multicolumn{1}{c}{\cellcolor{gray!5}61} & \multicolumn{1}{c|}{\cellcolor{gray!5}51} & \cellcolor{gray!5}12.92 & \cellcolor{gray!5}4.85 & \cellcolor{gray!5}67 & \cellcolor{gray!5}58 & \cellcolor{gray!5}50 \\
+            \multirow{-19}{*}{\textbf{Panoramic}} 
+            & \cellcolor{gray!15}\textbf{SC$^2$-WM}        & \multicolumn{1}{c}{\cellcolor{gray!15}{12.09}}  & \multicolumn{1}{c}{\cellcolor{gray!15}\underline{\textcolor{blue}{3.28}}} & \multicolumn{1}{c}{\cellcolor{gray!15}\underline{\textcolor{blue}{80}}}  & \multicolumn{1}{c}{\cellcolor{gray!15}\underline{\textcolor{blue}{71}}}   & \multicolumn{1}{c|}{\cellcolor{gray!15}\underline{\textcolor{blue}{64}}}  & \multicolumn{1}{c}{\cellcolor{gray!15}{12.89}}  & \multicolumn{1}{c}{\cellcolor{gray!15}\textcolor{blue}{4.25}}  & \multicolumn{1}{c}{\cellcolor{gray!15}\textcolor{blue}{70}}  & \multicolumn{1}{c}{\cellcolor{gray!15}\underline{\textcolor{blue}{66}}} & \multicolumn{1}{c|}{\cellcolor{gray!15}\textcolor{blue}{54}} & {\cellcolor{gray!15}{13.42}} & \multicolumn{1}{c}{\cellcolor{gray!15}{4.90}} & \multicolumn{1}{c}{\cellcolor{gray!15}{\underline{\textcolor{blue}{71}}}} & \multicolumn{1}{c}{\cellcolor{gray!15}{\underline{\textcolor{blue}{62}}}} & {\cellcolor{gray!15}{\underline{\textcolor{blue}{53}}}}   \\
+			\bottomrule
+		\end{tabular}
+		\begin{tablenotes}    
+			\footnotesize                  
+			\item Note: Following prior work, we report the results with different precision formats across camera configurations——integers for panoramic settings and two decimal places for monocular settings. 
+		\end{tablenotes}           
+		\end{threeparttable} 	
+  }\vspace{0mm}
+\end{table*}
+
+
+
+
+
+
+
+
+
+
+\begin{table*}[ht] \centering
+	\caption{Experimental results on RxR-CE datasets. Results better than the base model are shown in blue. Best results for the panoramic and monocular settings are each highlighted in bold.}
+	\label{tab:rxr-ce-full}
+	\resizebox{\textwidth}{!}{
+		\begin{threeparttable}
+		\begin{tabular}{@{}c|l|ccccccc|ccccccc|ccccccc@{}}
+			\toprule
+			& \multicolumn{1}{c|}{} & \multicolumn{7}{c|}{\textbf{Val Seen}} & \multicolumn{7}{c|}{\textbf{Val Unseen}} & \multicolumn{7}{c}{\textbf{Test Unseen}} \\
+			\multirow{-2}{*}{\textbf{Camera}} & \multicolumn{1}{c|}{\multirow{-2}{*}{\textbf{Methods}}} &		
+			 \cellcolor{red!25}TL $\downarrow$& \cellcolor{red!25}NE $\downarrow$& \cellcolor{gray!15}OSR & \cellcolor{gray!15}SR & \cellcolor{gray!15}SPL & \cellcolor{gray!15}NDTW & \cellcolor{gray!15}SDTW & \cellcolor{red!25}TL $\downarrow$& \cellcolor{red!25}NE $\downarrow$& \cellcolor{gray!15}OSR & \cellcolor{gray!15}SR & \cellcolor{gray!15}SPL & \cellcolor{gray!15}NDTW & \cellcolor{gray!15}SDTW & \cellcolor{red!25}TL $\downarrow$& \cellcolor{red!25}NE $\downarrow$& \cellcolor{gray!15}OSR & \cellcolor{gray!15}SR & \cellcolor{gray!15}SPL & \cellcolor{gray!15}NDTW & \cellcolor{gray!15}SDTW \\ \midrule
+			 \multicolumn{1}{l|}{} & LAW~\cite{Raychaudhuri2021LanguageAlignedW} & \textbf{7.92} & 11.94 & 20.0 & 7.0 & 6.0 & - & - & \textbf{4.01} & 10.87 & 21.0 & 8.0 & 8.0 & - & - & - & - & - & - & - & - & - \\
+			 \multicolumn{1}{l|}{} & CM$^2$~\cite{Georgakis2022CrossmodalML} & - & - & - & - & - & - & - & 12.29 & 8.98 & 25.3 & 14.4 & 9.2 & - & - & - & - & - & - & - & - & - \\
+			 \multicolumn{1}{l|}{} & WS-MGMap~\cite{Chen2022WeaklySupervisedMM} & 10.37 & 10.19 & 27.7 & 14.0 & 12.3 & - & - & 10.80 & 9.83 & 29.8 & 15.0 & 12.1 & - & - & - & - & - & - & - & - & - \\
+			 \multicolumn{1}{l|}{} & NaVid~\cite{zhang2024navid} & - & - & - & - & - & - & - & 10.59 & {8.41} & 34.5 & 23.8 & 32.2 & - & - & - & - & - & - & - & - & - \\
+			 \multicolumn{1}{l|}{} & A$^2$-Nav~\cite{chen20232} & - & - & - & - & - & - & - & - & - & - & 16.8 & 6.3 & - & - & - & - & - & - & - & - & - \\ 
+    	   \multicolumn{1}{l|}{} & NavMorph~\cite{Yao2025navmorph} & 21.61 & 9.80 & 41.27 & 29.81 & 23.23 & \textbf{44.51} & 22.68 & 20.28 & 8.85 & {43.05} & 30.76 & 22.84 & 44.19 & 23.30 & 21.13 & \textbf{9.81}& - & \textbf{24.93} & \textbf{16.82} & \textbf{33.71}  & \textbf{15.64} \\
+            \multicolumn{1}{l|}{} & monoVLN~\cite{Lu2025monoVLN} & - & - & - & - & - & - & - & - & 8.29 & 37.7 & 31.8 & 26.8 & - & 25.2 & - & -& - & - & - & -  & - \\
+          \cmidrule(l){2-23} 
+			 \multicolumn{1}{l|}{} & VLN-3DFF~\cite{wang2024sim} & - & - & - & - & - & - & - & - & 8.79 & 36.7 & 25.5 & 18.1 & - & - & - & - & - & - & - & - & - \\
+			 \multicolumn{1}{l|}{} & \cellcolor{gray!5}VLN-3DFF* & \cellcolor{gray!5}18.91 & \cellcolor{gray!5}9.87 & \cellcolor{gray!5}40.54 & \cellcolor{gray!5}27.72 & \cellcolor{gray!5}20.61 & \cellcolor{gray!5}42.37 & \cellcolor{gray!5}20.94 & \cellcolor{gray!5}16.21 & \cellcolor{gray!5}9.41 & \cellcolor{gray!5}38.40 & \cellcolor{gray!5}26.66 & \cellcolor{gray!5}20.11 & \cellcolor{gray!5}42.91 & \cellcolor{gray!5}20.36 & \cellcolor{gray!5}\textbf{20.85}		
+			  & \cellcolor{gray!5}10.19 & \cellcolor{gray!5}- & \cellcolor{gray!5}23.41 & \cellcolor{gray!5}15.43 & \cellcolor{gray!5}32.38 & \cellcolor{gray!5}14.75 \\
+        \multicolumn{1}{l|}{\multirow{-9}{*}{\textbf{Monocular}}} & \cellcolor{gray!10}\textbf{SC$^2$-WM} & \cellcolor{gray!10}22.08 & \cellcolor{gray!10}\textbf{\color{blue}9.39} & \cellcolor{gray!10}\textbf{\color{blue}44.83} & \cellcolor{gray!10}\textbf{\color{blue}31.66} & \cellcolor{gray!10}\textbf{\color{blue}23.97} & \cellcolor{gray!10}42.81 & \cellcolor{gray!10}\textbf{\color{blue}23.65} & \cellcolor{gray!10}20.87 & \cellcolor{gray!10}\textbf{\color{blue}8.36} & \cellcolor{gray!10}\textbf{\color{blue}48.38} & \cellcolor{gray!10}\textbf{\color{blue}35.77} & \cellcolor{gray!10}\textbf{\color{blue}27.20} & \cellcolor{gray!10}\textbf{\color{blue}44.93} & \cellcolor{gray!10}\textbf{\color{blue}26.47} & \cellcolor{gray!10}- & \cellcolor{gray!10}- & \cellcolor{gray!10}- & \cellcolor{gray!10}- & \cellcolor{gray!10}- & \cellcolor{gray!10}- & \cellcolor{gray!10}- \\\midrule[0.7pt] 
+			& Seq2Seq~\cite{anderson2018vision} & - & - & - & - & - & - & - & 7.33 & 12.1 & - & 13.93 & 11.96 & 30.86 & 11.01 & - & 12.10 & - & 13.93 & 11.96 & 30.86 & 11.01 \\
+			& Reborn~\cite{an20221st} & - & 5.69 & - & 52.43 & 45.46 & 66.27 & 44.47 & - & 5.98 & - & 48.60 & 42.05 & 63.35 & 41.82 & - & 7.10 & - & 45.82 & 38.82 & 55.43 & 38.42 \\
+			& CWP-CMA~\cite{Hong2022BridgingTG} & - & - & - & - & - & - & - & - & 8.76 & - & 26.59 & 22.16 & 47.05 & - & \textbf{20.04} & 10.4 & - & 24.08 & 19.07 & 37.39 & 18.65 \\
+			& CWP-RecBERT~\cite{Hong2022BridgingTG} & - & - & - & - & - & - & - & - & 8.98 & - & 27.08 & 22.65 & 46.71 & - & 20.09 & 10.4 & - & 24.85 & 19.61 & 37.30 & 19.05 \\
+			& AO-Planner~\cite{chen2024affordances} & - & - & - & - & - & - & - & - & 7.06 & - & 43.3 & 30.5 & 50.1 & - & - & - & - & - & - & - & - \\
+			& LAW-Pano~\cite{Raychaudhuri2021LanguageAlignedW} & \textbf{6.27} & 12.07 & 17.0 & 9.0 & 9.0 & - & - & \textbf{4.62} & 11.04 & 16.0 & 10.0 & 9.0 & - & - & - & - & - & - & - & - & - \\
+               & UnitedVLN~\cite{dai2024unitedvln}& - & \textbf{4.74} & - & \textbf{65.1} & 52.9 & 69.4 & 53.6 & - & \textbf{5.48} & - & 57.9 & 45.9 & 63.9 & 48.1 & - & - & - & - & - & - & - \\ 
+              & {NavMorph}~\cite{Yao2025navmorph} & {20.80} & {5.10} & \textbf{67.88} & {64.95} & \textbf{54.17} & \textbf{70.94} & \textbf{54.82} & {21.33} & {5.67} & \textbf{66.02} & \textbf{58.02} & \textbf{48.98} & \textbf{64.77} & \textbf{48.85} & 23.36 & \textbf{6.67} & - & \textbf{54.98} & \textbf{43.02} & \textbf{57.31} & \textbf{44.76} \\
+               \cmidrule(l){2-23} 
+			& ETPNav~\cite{an2024etpnav} & - & 5.03 & - & 61.46 & 50.83 & 66.41 & 51.28 & - & 5.64 & - & 54.79 & 44.89 & 61.90 & 45.33 & - & 6.99 & - & 51.21 & 39.86 & 54.11 & 41.30 \\
+			& \cellcolor{gray!5}ETPNav* & \cellcolor{gray!5}18.16				
+			& \cellcolor{gray!5}5.06 & \cellcolor{gray!5}64.06 & \cellcolor{gray!5}62.09 & \cellcolor{gray!5}50.64 & \cellcolor{gray!5}66.06 & \cellcolor{gray!5}51.17 & \cellcolor{gray!5}{18.92} & \cellcolor{gray!5}{5.96} & \cellcolor{gray!5}{63.66} & \cellcolor{gray!5}54.83 & \cellcolor{gray!5}44.62 & \cellcolor{gray!5}61.36 & \cellcolor{gray!5}44.87 &  \cellcolor{gray!5}21.83 & \cellcolor{gray!5}6.92 & \cellcolor{gray!5}- & \cellcolor{gray!5}51.38 & \cellcolor{gray!5}39.90 & \cellcolor{gray!5}53.85 & \cellcolor{gray!5}40.91 \\
+			 & \cellcolor{gray!15}\textbf{SC$^2$-WM} & \cellcolor{gray!15}{18.88} & \cellcolor{gray!15}{4.91} & \cellcolor{gray!15}\textcolor{blue}{67.13} & \cellcolor{gray!15}\textcolor{blue}{64.89} & \cellcolor{gray!15}\textcolor{blue}{52.71} & \cellcolor{gray!15}\textcolor{blue}{68.34} & \cellcolor{gray!15}\textcolor{blue}{52.98} & \cellcolor{gray!15}{19.65} & \cellcolor{gray!15}\textcolor{blue}{5.57} & \cellcolor{gray!15}\textcolor{blue}{65.17} & \cellcolor{gray!15}\textcolor{blue}{56.72} & \cellcolor{gray!15}\textcolor{blue}{46.17} & \cellcolor{gray!15}\textcolor{blue}{63.66} & \cellcolor{gray!15}\textcolor{blue}{46.87} &  \cellcolor{gray!15}- & \cellcolor{gray!15}- & \cellcolor{gray!15}- & \cellcolor{gray!15}- & \cellcolor{gray!15}- & \cellcolor{gray!15}- & \cellcolor{gray!15}- \\ \cmidrule(l){2-23} 
+            & HNR~\cite{wang2024lookahead} & - & {4.85} & - & 63.72 & 53.17 & 68.81 & 52.78 & - & 5.51 & - & 56.39 & 46.73 & 63.56 & 47.24 & - & 6.81 & - & 53.22 & 41.14 & 55.61 & 42.89 \\
+             & \cellcolor{gray!5}HNR* & \cellcolor{gray!5}19.74 & \cellcolor{gray!5}4.93 & \cellcolor{gray!5}66.01 & \cellcolor{gray!5}63.55 & \cellcolor{gray!5}53.37 & \cellcolor{gray!5}69.02 & \cellcolor{gray!5}52.66  & \cellcolor{gray!5}20.41 & \cellcolor{gray!5}5.75 & \cellcolor{gray!5}64.93  & \cellcolor{gray!5}56.48 & \cellcolor{gray!5}46.62 & \cellcolor{gray!5}63.43 & \cellcolor{gray!5}47.38 & \cellcolor{gray!5}23.02&\cellcolor{gray!5}6.88 & \cellcolor{gray!5}- & \cellcolor{gray!5}53.33 & \cellcolor{gray!5}41.18 & \cellcolor{gray!5}55.47 & \cellcolor{gray!5}42.95 \\
+             \multirow{-14}{*}{\textbf{Panoramic}} & \cellcolor{gray!15}\textbf{SC$2$-WM} & \cellcolor{gray!15}{20.54} & \cellcolor{gray!15}{4.98} & \cellcolor{gray!15}\textcolor{blue}{\textbf{68.76}} & \cellcolor{gray!15}\textcolor{blue}{{65.10}} & \cellcolor{gray!15}\textcolor{blue}{\textbf{54.67}} & \cellcolor{gray!15}\textcolor{blue}{\textbf{71.32}} & \cellcolor{gray!15}\textcolor{blue}{\textbf{54.94}} & \cellcolor{gray!15}{21.01} & \cellcolor{gray!15}\textcolor{blue}{{5.72}} &\cellcolor{gray!15}\textcolor{blue}{\textbf{66.77}}  & \cellcolor{gray!15}\textcolor{blue}{\textbf{60.02}}  & \cellcolor{gray!15}\textcolor{blue}{\textbf{49.79}}  & \cellcolor{gray!15}\textcolor{blue}{\textbf{66.77}}  & \cellcolor{gray!15}\textcolor{blue}{\textbf{49.50}}& \cellcolor{gray!15}- & \cellcolor{gray!15}\textcolor{blue}{\textbf{-}}	& \cellcolor{gray!15}- & \cellcolor{gray!15}\textcolor{blue}{\textbf{-}} & \cellcolor{gray!15}\textcolor{blue}{\textbf{-}} & \cellcolor{gray!15}\textcolor{blue}{\textbf{-}} & \cellcolor{gray!15}\textcolor{blue}{\textbf{-}} \\
+            \bottomrule
+		\end{tabular}
+		\begin{tablenotes}    
+			\footnotesize                             
+            \item Note: The official evaluation server for the Test Unseen split of RxR-CE dataset is currently unavailable, thus we only report results on the Val Seen and Unseen split.
+		\end{tablenotes}           
+		\end{threeparttable} 	
+	}
+\end{table*}
+
+			
+			
+			
+			
+			
+\begin{table}[h]
+	\centering
+	\caption{Ablation study of different loss functions for online model adaptation, including average time per episode. Best results are highlighted in \textbf{bold}.}
+	\label{tab:ablation_loss}
+	\resizebox{0.8\linewidth}{!}{
+		\begin{tabular}{@{}lccccccc c@{}}
+			\toprule
+			\multicolumn{1}{c}{\multirow{2}{*}{\textbf{Methods}}} & \multicolumn{7}{c}{\textbf{R2R-CE Val Unseen}} & \multirow{2}{*}{\textbf{Time (s)}} \\ \cmidrule(lr){2-8} 
+			\multicolumn{1}{c}{} & \cellcolor{red!25}TL $\downarrow$ & \cellcolor{red!25}NE $\downarrow$ & \cellcolor{gray!15}OSR & \cellcolor{gray!15}SR & \cellcolor{gray!15}SPL & \cellcolor{gray!15}NDTW & \cellcolor{gray!15}SDTW & \\ \midrule
+			Base model & 26.16 & 6.05 & 54.92 & 43.77 & 29.39 & 40.94 & 29.30 & 17.21\\ \midrule
+			SC$^2$-WM \textit{w/o} Adaptation & 18.73 & 5.46 & 59.22 & 49.86 & 36.05 & 48.10 & 34.62 & 17.78 \\ 
+			\midrule
+			SC$^2$-WM \textit{w/} Self-Entropy Loss & 18.62 & 5.46 & 58.62 & 49.48 & 35.84 & 48.32 & 34.52 & 19.93 \\
+			
+			SC$^2$-WM \textit{w/} Async Scoring Loss & 18.57 & 5.42 & \textbf{59.43} & 50.19 & 36.20 & 48.31 & 34.78 & 18.76 \\ 
+
+			\rowcolor{gray!15} \textbf{SC$^2$-WM \textit{w/} FRL (Ours)} & \textbf{17.65} & \textbf{5.37} & 58.84 & \textbf{50.90} & \textbf{37.17} & \textbf{49.31} & \textbf{35.70} & 18.92 \\
+			\bottomrule
+		\end{tabular}
+	}
+\end{table}
+
+\begin{table}[h]
+	\centering
+	\caption{Ablation study of different memory lengths in the proposed World Model.}
+	\label{tab:ablation_memory}
+	\resizebox{0.7\linewidth}{!}{
+		\begin{tabular}{@{}lccccccc@{}}
+			\toprule
+			\multicolumn{1}{c}{\multirow{2}{*}{\textbf{Methods}}} & \multicolumn{7}{c}{\textbf{R2R-CE Val Unseen}} \\ \cmidrule(l){2-8} 
+			\multicolumn{1}{c}{} & \cellcolor{red!25}TL $\downarrow$ & \cellcolor{red!25}NE $\downarrow$ & \cellcolor{gray!15}OSR & \cellcolor{gray!15}SR & \cellcolor{gray!15}SPL & \cellcolor{gray!15}NDTW & \cellcolor{gray!15}SDTW  \\ \midrule
+			Base model & 26.16 & 6.05 & 54.92 & 43.77 & 29.39 & 40.94 & 29.30\\ \midrule
+			SC$^2$-WM ($L=2$) & 21.47 & 5.96 & 57.31 & 46.49 & 32.24 & 43.29 & 31.17 \\
+			
+			\textbf{SC$^2$-WM ($L=4$)} & 17.65 & \textbf{5.37} & \textbf{58.84} & \textbf{50.90} & \textbf{37.17} & \textbf{49.31} & \textbf{35.70} \\
+			
+			SC$^2$-WM ($L=6$) & 18.50 & 5.97 & 53.83 & 46.00 & 32.81 & 45.82 & 32.59 \\
+			
+			SC$^2$-WM ($L=8$) & \textbf{16.13} & 5.82 & 51.17 & 44.48 & 33.78 & 48.84 & 32.75 \\ 
+			
+			\bottomrule
+		\end{tabular}
+	}
+\end{table}
+
+\noindent\textbf{Analysis of Optimization Objectives for Conditional World-Aware Adaptation.}
+As detailed in Table~\ref{tab:ablation_loss}, we investigate the effectiveness of three distinct self-supervised objectives for the adaptation of the world model during inference. 
+Recent test-time adaptation studies on dynamic tasks have demonstrated the effectiveness of different optimization objectives~\citep{guo2026dual,gao2025unity}. 
+We compare the Self-Entropy Loss, which minimizes the entropy of the scoring distribution to encourage high-confidence predictions; the Asynchronous Scoring Loss, which utilizes the posterior score from the subsequent step to supervise the current step under the assumption that later steps possess better context; and our proposed Foresight-Reconstruction Loss (FRL, Eq.(\ref{eq:rec})), which aligns the World Model's predicted next-step features with the actual observations. Experimental results indicate that the Self-Entropy Loss fails to improve performance, as it lacks grounded supervision and merely reinforces existing beliefs without correcting errors. Besides, the Asynchronous Scoring Loss achieves superior results compared to the w/o-adaptation baseline. However, the improvement is not significant due to the scoring function's lack of strict temporal consistency; influenced by extraneous factors like the absolute step index, the posterior score serves as a noisy supervision target. In contrast, FRL achieves superior performance by retaining objective consistency with the training phase. By leveraging the deviation between the model's `imagination' and reality as a robust error signal, FRL ensures effective model updates and better generalization in unseen environments.
+
+
+
+\noindent\textbf{Ablation Study of Visual Memory Design.}
+We further investigate the optimal size of the memory buffer, which stores visual features from preceding steps to augment the current observation. We evaluate memory lengths $L \in \{2, 4, 6, 8\}$ and find that $L=4$ yields the best performance, with results shown in Table ~\ref{tab:ablation_memory}. Shorter memory lengths (e.g., $L=2$) provide insufficient historical context, leading to a `myopic' agent that fails to capture necessary temporal dependencies. Conversely, excessive memory lengths (e.g., $L=8$) degrade performance due to attention dilution. As the search space expands, the attention mechanism struggles to allocate focus efficiently, resulting in a dispersed (near-uniform) weight distribution that drowns out salient features. Thus, $L=4$ strikes an optimal balance, providing rich context without overwhelming the attention module.
+
+Additionally, we clarify that VCM is designed as a lightweight functional module tailored for our closed-loop correction framework, rather than a standalone memory architecture. VCM performs query-conditioned retrieval directly in the latent space, avoiding explicit map construction while enabling efficient access to short-term visual history. This design makes it particularly suitable for high-frequency step-wise refinement in real-time VLN settings. The employed 7D geometric encoding follows standard VLN practice, consisting of 4D angular features (sine/cosine of relative heading and elevation) together with 3D distance features.
+
+\subsection{Further Discussions}
+\noindent\textbf{Clarification of ``Closed-Loop".} Our formulation differs from a classical control-theoretic "closed-loop", which relies on external environmental measurements to compute feedback signals. In our work, "closed-loop" refers to an internal feedback cycle over latent states. Specifically, the agent evaluates a provisional action through world-model foresight and computes a discrepancy  between the predicted next state and the current state. This signal is then used to refine the latent state before committing to a final decision, forming a self-correcting loop within the model. Importantly, this mechanism operates on internally predicted dynamics rather than external measurements. Therefore, it is more precisely an internal refinement loop grounded in model-based foresight, rather than a classical feedback control process. We will clarify this distinction in final version. Our terminology is inspired by predictive processing in cognitive science~\cite{huang2011predictive}, where internal prediction errors are used to guide behavior. This design is particularly motivated by VLN settings~\cite{krantz2020beyond}, where dense and reliable external feedback signals are difficult to obtain, making internal feedback a practical alternative. 
+
+\noindent\textbf{Difference from critic-based feedback.}
+Our feedback mechanism differs fundamentally from critic-based feedback in both representation and functionality. In reinforcement learning, a critic typically outputs a scalar value estimate that reflects the expected return of the current state or action. Such scalar supervision is highly compressed and, under partial observability, can become noisy or biased. In contrast, the proposed feedback $\Delta_t$ is a high-dimensional latent signal derived from world-model foresight. Rather than merely evaluating whether an action is beneficial, $\Delta_t$ captures structured state-transition information that can directly guide online state correction. Consequently, critic signals mainly serve an evaluative role, whereas $\Delta_t$ functions as a predictive corrective signal. Our goal is therefore not to compare reinforcement learning with world modeling, but to investigate how foresight-driven latent feedback can improve error correction in VLN-CE. Moreover, quantitatively isolating and comparing these heterogeneous signals across paradigms is itself non-trivial.
+
+\noindent\textbf{Potential extension to reinforcement learning.}
+The current implementation of SC$^{2}$-WM adopts imitation learning because VLN-CE exhibits severe partial observability and sparse reward supervision, making purely reward-driven optimization unstable in practice. Demonstration supervision is therefore important for establishing reliable navigation behaviors before introducing exploration. Nevertheless, the proposed framework is naturally compatible with reinforcement learning. For example, the foresight feedback $\Delta_t$ could be incorporated as an intrinsic reward to provide denser training signals, or used as an auxiliary latent representation to facilitate policy optimization. Importantly, the core contribution of SC$^{2}$-WM—leveraging world-model foresight for online self-correction—is orthogonal to the choice of policy learning paradigm, making reinforcement-learning-based extensions a promising future direction.
+
+
+\section{Real-World Verification}\label{sec:real}
+
+We further evaluate SC$^{2}$-WM on a real-world vision-and-language navigation platform using a Unitree GO2 quadruped robot  equipped with an Intel RealSense D435i camera, as illustrated in Figure~\ref{fig:real_world}.
+Experiments are conducted in indoor home environments, covering an area of approximately 100$m^2$ and includeing diverse furniture layouts/rooms.
+The robot is required to follow natural language navigation instructions such as ``\textit{Go through the table and find the trash can}''.
+The robot executes actions (forward, turn left/right, stop) consistent with our simulation setup, and visual observations are processed in real-time. Depth sensing is utilized only for collision avoidance as a safety mechanism.
+
+We perform 100 navigation trials (500 physical runs, 100 trials $\times$ 5 repetitions) across diverse layouts and instructions with varying levels of complexity. A trial is considered successful if the robot reaches the goal location described in the instruction (within 1.5 meters).
+SC$^{2}$-WM achieves an overall success rate of 85\%, compared to 70\% for the baseline.
+The performance gain is particularly notable in scenarios involving visual ambiguity or decision-making at intersections, where the self-correction mechanism enables the robot to recover from suboptimal actions.
+Importantly, the proposed adaptation mechanism introduces only limited runtime overhead in practice. Since adaptation is conditionally triggered rather than applied at every step, its frequency remains low. In addition, we adopt an asynchronous execution strategy, where gradient updates in Eq.~(\ref{eq:grad}) are performed in parallel while the robot executes the current action, preventing the control loop from waiting for backpropagation. Although our current system relies on offboard computation, the lightweight design remains compatible with resource-constrained embodied platforms. Overall, these results demonstrate that SC$^{2}$-WM transfers effectively from simulation to real-world deployment and exhibits promising practicality for real-world VLN tasks.
+
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{pic/vln-real-ap.pdf}
+    \caption{Real-world deployment of SC$^2$-WM on a quadruped robot navigating indoor environments with natural language instructions.}
+    \label{fig:real_world}
+\end{figure}
+
+
+    
+    
+    
+    
+
+
+    
+    
+
+
+    
+    
+    
+    
+
+
+    
+    
+
+
+			
+
+
+
+
+
+
+
+\end{document}

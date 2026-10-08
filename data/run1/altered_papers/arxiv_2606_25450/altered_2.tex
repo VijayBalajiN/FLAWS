@@ -1,0 +1,1476 @@
+\documentclass[]{bytedance_seed}
+
+
+
+\usepackage[toc,page,header]{appendix}
+
+
+
+\usepackage{minitoc}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{amsthm}
+\usepackage{tikz}
+\usepackage{comment}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{assumption}[theorem]{Assumption}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\usepackage{mdframed}
+\usepackage{listings}
+\tcbuselibrary{skins,breakable}
+
+\usepackage{enumitem}
+\usepackage{pifont}
+\usepackage{colortbl}
+
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{longtable}
+
+\definecolor{headerpurple}{RGB}{90, 70, 110}
+\definecolor{contentbg}{RGB}{252, 250, 255}
+\definecolor{highlightpurple}{RGB}{120, 60, 140}
+\definecolor{bordercolor}{RGB}{140, 120, 160}
+
+\newtcolorbox{toolbox}[2][]{%
+  enhanced,
+  arc=3mm,
+  boxrule=0.5pt,
+  colframe=bordercolor,
+  colback=contentbg,
+  width=\linewidth,
+  left=2.5mm,
+  right=2.5mm,
+  top=2mm,
+  bottom=2mm,
+  title={#2},
+  fonttitle=\bfseries\small\sffamily,
+  colbacktitle=headerpurple,
+  coltitle=white,
+  toptitle=1.2mm,
+  bottomtitle=1.2mm,
+  fontupper=\small\ttfamily,
+  before upper={\raggedright\setlength{\parindent}{0pt}},
+  #1
+}
+
+\newcommand{\hlpurple}[1]{\textcolor{highlightpurple}{#1}}
+
+\newtcolorbox{problembox}[2][]{%
+  enhanced,
+  breakable,
+  arc=0pt,
+  outer arc=0pt,
+  boxrule=0.8pt,
+  colframe=#1,
+  colback=white,
+  colupper=black,
+  width=\linewidth,
+  left=3mm,
+  right=3mm,
+  top=2mm,
+  bottom=2mm,
+  fontupper=\small\color{black},
+  before upper={\noindent\textbf{#2}\par\vspace{1.5mm}},
+}
+
+\definecolor{gold}{RGB}{205,133,63}
+\definecolor{fGreen}{RGB}{34,139,34}
+\definecolor{tOrange}{RGB}{255,207,151}
+\definecolor{tBlue}{RGB}{165,238,255}
+\definecolor{lightblue}{RGB}{219, 234, 254}
+\definecolor{darkgray}{RGB}{181,186,186}
+\definecolor{tPurple}{RGB}{240,177,254}
+\definecolor{tPink}{RGB}{254,189,208}
+\definecolor{tGreen}{RGB}{204,255,180}
+\definecolor{tGold}{RGB}{255,215,0}
+\definecolor{ood}{rgb}{0.95, 0.98, 1.0}
+\definecolor{posgreen}{RGB}{22, 163, 74}
+\definecolor{negred}{RGB}{220, 38, 38}
+\definecolor{lightred}{RGB}{254, 226, 226}
+\definecolor{lightyellow}{RGB}{254, 243, 199}
+\definecolor{lightgray}{RGB}{229, 231, 235}
+\definecolor{OliveGreen}{RGB}{85, 107, 47}
+\definecolor{Maroon}{RGB}{128, 0, 0}
+
+\newcommand{\cellpos}[3]{%
+  \begin{tabular}{@{}c@{}}
+    \textbf{#1} \\[-2pt]
+    {\scriptsize\color{posgreen}$\uparrow$#2} \\[-3pt]
+    {\tiny\color{gray}(#3)}
+  \end{tabular}%
+}
+\newcommand{\cellneg}[3]{%
+  \begin{tabular}{@{}c@{}}
+    \textbf{#1} \\[-2pt]
+    {\scriptsize\color{negred}$\downarrow$#2} \\[-3pt]
+    {\tiny\color{gray}(#3)}
+  \end{tabular}%
+}
+\newcommand{\cellzero}[3]{%
+  \begin{tabular}{@{}c@{}}
+    \textbf{#1} \\[-2pt]
+    {\scriptsize\color{gray}#2} \\[-3pt]
+    {\tiny\color{gray}(#3)}
+  \end{tabular}%
+}
+\newcommand{\cellmiss}{%
+  \begin{tabular}{@{}c@{}}
+    \textbf{---}
+  \end{tabular}%
+}
+\newcommand{\up}[1]{\textcolor{OliveGreen}{\large \ $\uparrow${#1}}}
+\newcommand{\down}[1]{\textcolor{Maroon}{\large \ $\downarrow${#1}}}
+
+\newcommand{\upnew}[1]{\textcolor{OliveGreen}{${\scriptstyle\uparrow}${\scriptsize#1}}}
+\newcommand{\downnew}[1]{\textcolor{Maroon}{${\scriptstyle\downarrow}${\scriptsize#1}}}
+
+
+\newcommand{\downbad}[1]{\textcolor{Maroon}{\large \ $\downarrow${#1}}}
+
+\newcommand{\jz}[1]{\textcolor{magenta}{$_{jinghan}$[#1]}}
+
+
+\title{The Generalization Spectrum: A Chromatographic Approach to Evaluating Learning Algorithms}
+
+\author[1,2,\dagger]{Jinghan Zhang}
+\author[3,*]{Zerui Cheng}
+\author[4]{Shiqi Chen}
+\author[1]{Ge Zhang}
+\author[1]{Wenhao Huang}
+\author[1]{Jiashuo Liu}
+\author[2]{Junxian He}
+\author[1, \dagger]{Tianle Cai}
+
+\affiliation[1]{ByteDance Seed}
+\affiliation[2]{Hong Kong University of Science and Technology}
+\affiliation[3]{Princeton University}
+\affiliation[4]{University of Oxford}
+
+
+\contribution[*]{Work done while at Seed, ByteDance}
+\contribution[\dagger]{Corresponding authors}
+
+\abstract{
+Traditional evaluations measure a learning algorithm's final performance on an i.i.d. test set, reducing learning to a single aggregate score. This approach obscures a fundamental question: to what extent does learning from a specific example generalize to others? Such per-sample generalization, akin to learning by analogy in human cognition, captures how far the knowledge extracted from one example can transfer, yet remains invisible to standard benchmarks.
+We introduce the Generalization Spectrum, an evaluation framework designed to expose this hidden dimension. For each training example, we construct a controlled suite of test variants arranged by increasing transfer distance, from exact recall to implementation transfer across languages, context transfer under complete narrative re-framing, category-matched in-domain problems, and an unpaired baseline. By tracking performance across these distances, we reveal not just whether an algorithm learns, but how far that learning extends.
+We instantiate this framework on competitive programming, using a selection-and-synthesis pipeline seeded with recent problems to mitigate contamination.
+We first compare \textbf{three canonical learning paradigms} under matched memorization. RL converts memorization into near-transfer more efficiently than SFT-family baselines, while ICL exhibits strong transfer only when instance correspondence is preserved, failing to generalize at an abstract, categorical level.
+We then use the Spectrum to diagnose \textbf{within-family variants}. The resulting profiles show that local gains need not expand the generalization radius: abstractions and hints mainly lift local transfer, RFT preserves a stronger far-transfer tail than reference SFT, and self-distillation or hint-assisted RL can reduce far transfer even when local transfer or optimization improves.
+}
+
+\date{\today}
+\correspondence{Jinghan Zhang at \email{zhangjinghan.23@bytedance.com}, Tianle Cai at \email{caitianle@bytedance.com}}
+
+
+\begin{document}
+\maketitle
+
+
+\section{Introduction}
+
+\begin{figure*}[t]
+    \centering
+    \vspace{-8pt}
+    \includegraphics[width=\textwidth]{figures/generalization_spectrum_editable_modules.pdf}
+    \caption{\textbf{The Generalization Spectrum.}
+    \textbf{(A)}~To measure \emph{how far} learning transfers from a training seed, we construct paired evaluation variants at increasing transfer distance. Each level removes one attribute shared with the seed: \emph{format} (the surface code realization), \emph{narrative} (the natural-language context, \emph{excluding} the formal I/O contract), \emph{executable specification} (the I/O contract, solution logic, and tests), and \emph{family} (the algorithmic category). Thus $D_0$ shares all four (exact recall); $D_1$ drops format (implementation transfer); $D_2$ additionally drops narrative (context transfer); $D_3$ retains only family (category-matched); and $D_4$ shares none (unpaired in-domain baseline).
+    \textbf{(B)}~Plotting pass@1 against transfer distance yields a \emph{Generalization Profile}. At matched memorization ($D_0$), GRPO yields stronger near-transfer than SFT---especially on implementation ($D_1$) and context ($D_2$) transfer---while paired ICL stays strong through the instance-paired levels ($D_0$--$D_2$) and then drops at the category-matched and unpaired levels ($D_3$--$D_4$), exposing a correspondence bottleneck rather than uniformly stable transfer. ...while paired ICL stays strong through the instance-paired levels ($D_0$--$D_2$) and then drops at the category-matched and unpaired levels ($D_3$--$D_4$), exposing its reliance on surface-level pattern matching and inability to generalize abstract concepts.}
+    \label{fig:generalization_spectrum}
+    \end{figure*}
+
+Post-training methods including prompting, supervised fine-tuning, and reinforcement learning can achieve comparable aggregate scores on standard benchmarks, yet produce qualitatively different behaviors when probed more carefully~\citep{kirk2024rlhf, chu2025sft}. A model that ``passes'' a benchmark may be memorizing training instances, transferring under minor perturbations, or acquiring abstractions that survive substantial distributional shifts---but aggregate metrics conflate these distinct capabilities. Recent work has begun to compare paradigms on in- vs.\ out-of-distribution splits~\citep{wang2024icl_ood}, but such binary comparisons still obscure a key question: how far does learning generalize from each training example?
+
+We introduce the Generalization Spectrum, a framework that evaluates generalization as a function of transfer distance rather than a binary in/out split. The core idea is to construct paired test variants derived from the same seed instance, ordered by increasing distance from the original. The analogy is chromatographic: transfer distance acts as a separation axis, so memorization, near transfer, and broader transfer appear as distinct profile shapes rather than a single aggregate score. Evaluating a model across these levels yields a Generalization Profile---a curve that reveals distance-dependent decay patterns invisible to any single score~\citep{kaplan2020scaling}. We instantiate five levels: exact recall of training instances (D0), implementation transfer across programming languages (D1)~\citep{cassano2023multiple}, context transfer under complete narrative reframing with preserved mathematical structure (D2), category-matched problems sharing algorithmic tags (D3), and an unpaired in-domain baseline (D4). This design enables fine-grained diagnosis: two methods with identical aggregate performance may exhibit strikingly different profiles---one decaying sharply after D1, another maintaining transfer through D2.
+
+A central challenge in comparing learning paradigms is that stronger training tends to increase both memorization and transfer simultaneously~\citep{power2022grokking, nakkiran2020deep}. If method A outperforms method B on transfer tasks but also shows higher training-set performance, is the transfer gain genuine or merely a side effect of better memorization? To isolate transfer efficiency---the ability to convert memorization into generalization---we propose matched-memorization comparison: selecting checkpoints where different methods achieve comparable D0 (exact recall) performance, then comparing their behavior at D1 and beyond. This controlled setup supports two analyses developed below: how algorithm choice shapes the transfer profile, and how within-family interventions reshape local transfer, far-transfer preservation, and optimization speed.
+
+We instantiate the Generalization Spectrum on competitive programming~\citep{li2022competition, hendrycks2021apps, jain2024livecodebench}, a domain particularly suited for this investigation. First, correctness is unambiguous: solutions either pass all test cases or fail, eliminating evaluation subjectivity~\citep{chen2021evaluating}. Second, the domain supports controlled paired variants: a single algorithmic problem can be expressed in different languages (D1)~\citep{cassano2023multiple, peng2024humanevalxl}, reframed with entirely different narratives while preserving mathematical structure (D2), or matched to problems requiring similar algorithmic techniques (D3). Third, competitive programming platforms continuously release new problems, providing fresh evaluation material as models evolve~\citep{jain2024livecodebench}. We construct a benchmark of 256 evaluation instances (64 seed problems × 4 spectrum levels), with D2 variants generated through a multi-stage pipeline involving cross-model generation and verification (details in Appendix A).
+
+Using matched-memorization comparison, we first compare three canonical paradigms---ICL~\citep{brown2020language, dong2024survey}, SFT, and RL~\citep{ouyang2022training, shao2024grpo}---across the Generalization Spectrum. The comparison reveals distinct decay profiles under matched seed recall: reference-solution SFT concentrates its gains near implementation transfer and largely exhausts them after narrative recontextualization, GRPO attenuates with distance but extends its gains through the far tail of the Spectrum, and paired ICL remains strong across instance-paired levels before collapsing once the task requires abstract category-level generalization rather than instance-level matching. More strikingly, D2 exposes divergent transfer mechanisms: gradient-based imitation shows sharp degradation under narrative recontextualization, while ICL maintains strong transfer---suggesting these paradigms exploit fundamentally different generalization pathways~\citep{mosbach2023fewshot}. We then use the Spectrum to diagnose within-family variants---ICL content variants (abstraction, hints), SFT target-source variants including RFT~\citep{yuan2023rft}, self-taught distillation (SDFT~\citep{sdft2026,opsd2026,sdpo2026}), and a coding-adapted hint-assisted GRPO variant inspired by sparse-reward guidance methods~\citep{li2026questa,ghpo2025,zhang2026bread,zhang2025stephint,wang2026hint,huang2025hintgrpo,kang2025table}---asking whether they expand the generalization radius or merely shift local height, speed, or near-far concentration. Across these variants, the profiles show that auxiliary signals mostly reshape specific parts of the Spectrum rather than uniformly expanding it: ICL abstractions and hints lift paired transfer, RFT preserves a smoother supervised tail, while SDFT and hint-assisted GRPO trade local gains or faster fitting for weaker far transfer.
+
+In this work, we propose the Generalization Spectrum, a distance-aware evaluation framework with paired transfer levels (D0--D4) and profile-based analysis. We introduce matched-memorization comparison to isolate transfer efficiency across learning paradigms, and construct a competitive-programming benchmark with 64 seeds and 256 evaluation instances. These components make it possible to compare not only whether adaptation improves performance, but where its gains appear along the transfer axis. The resulting profiles separate seed recall, local transfer, and far-transfer preservation, revealing that different post-training methods can change different parts of the generalization profile even when their aggregate gains may look similar. More broadly, the Spectrum provides a diagnostic tool for understanding newly proposed learning methods beyond single-score benchmark comparisons.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section{The Generalization Spectrum Framework}
+\label{sec:spectrum}
+
+Traditional evaluation reduces a learning algorithm's performance to a single aggregate score, obscuring a key question: \emph{how far does learning generalize?} We introduce the \textbf{Generalization Spectrum}, an evaluation framework that exposes this hidden dimension. The core idea is to construct paired test variants arranged by increasing transfer distance---from exact recall through surface perturbation to category-matched and domain-level problems---thereby characterizing the \emph{generalization radius} of learning rather than merely final performance. Figure~\ref{fig:generalization_spectrum} illustrates the key insight: plotting pass rate as a function of transfer distance yields a \textbf{Generalization Profile} that reveals how different learning algorithms (ICL~\citep{brown2020language}, SFT~\citep{ouyang2022training}, RL~\citep{schulman2017ppo,shao2024grpo,yu2025dapo}) exhibit distinct decay patterns.
+
+
+\subsection{Spectrum Levels}
+\label{subsec:spectrum-levels}
+
+We define transfer distance by which pieces of information remain shared between a seed instance and its evaluation variant.
+We consider four attributes: (i) implementation format, the surface realization of the solution; 
+(ii) problem narrative, the natural-language context of the task excluding the formal I/O contract; 
+(iii) executable specification, including the reference algorithm, I/O contract, and test suite; 
+and (iv) problem family, the broader algorithmic category. 
+
+These attributes nest into an ordered spectrum (Figure~\ref{fig:generalization_spectrum}A). Moving from D0 to D4 removes one additional shared attribute: D0 measures exact recall, D1 changes only the implementation format, D2 additionally changes the narrative while preserving the executable task, D3 keeps only the problem family, and D4 removes intentional seed-specific pairing. We use D0--D4 as the transfer-distance axis throughout the paper.
+
+
+
+
+\subsection{Benchmark Instantiation and Construction}
+\label{subsec:benchmark}
+
+We instantiate the abstract spectrum in competitive programming~\citep{hendrycks2021apps,li2022competition} because the domain offers (i)~unambiguous correctness via execution against test cases, (ii)~a rich space for controlled variation around a single algorithmic idea, and (iii)~a continuously growing problem pool that guards against data contamination (see Appendix~\ref{app:why-cp} for further discussion).
+
+To operationalize the spectrum in this domain, we map these abstract attributes to concrete competitive-programming artifacts.
+A seed problem is represented by a problem narrative, a formal I/O contract, reference tests, a reference solution, and algorithmic tags. 
+The implementation format corresponds to the requested programming language and surface code form; the narrative is the natural-language task context; the executable specification consists of the I/O contract, reference algorithm, and test suite; and the family is the algorithmic tag or category.
+
+Given this decomposition, we instantiate the five spectrum levels for each seed problem as follows:
+\begin{itemize}
+    \item \textbf{D0: Exact recall.} The original problem paired with its Python reference solution.
+    \item \textbf{D1: Implementation transfer.} The same problem, I/O contract, tests, and solution logic, but evaluated in C++.
+    \item \textbf{D2: Context transfer.} A newly narrated problem that preserves the same executable specification and solution logic.
+    \item \textbf{D3: Category-matched transfer.} A different coding problem selected to share the seed's algorithmic family.
+    \item \textbf{D4: Unpaired baseline.} A recent in-domain problem sampled without enforcing any tag or structural relationship to the seed.
+\end{itemize}
+
+Following the construction pipeline detailed in Appendix~\ref{app:dataset-construction}, we build the \textbf{Generalization Spectrum Benchmark} around 64 seeds, yielding 256 transfer instances across D1--D4 while retaining the original seeds as D0 exact-recall references. Worked examples are provided in Appendix~\ref{app:examples}. The framework is model- and source-agnostic, allowing practitioners to instantiate new benchmarks as models evolve.
+
+\paragraph{Quantitative validation.}
+The spectrum ordering reflects progressive removal of shared structure rather than an \emph{a priori} assumption about task difficulty. The final two columns of Table~\ref{tab:dataset-stats} provide independent validation against D0: statement-level cosine similarity~\citep{reimers2019sentence} decreases monotonically from D1 to D4, and algorithmic tag overlap drops from 100\% (D1--D3) to 17.2\% at D4 (incidental). The sharp similarity drop from D1 to D2 ($1.000 \to 0.513$) supports that our recontextualization pipeline produces substantially different problem descriptions rather than paraphrases. D3 and D4 exhibit comparable text similarity ($0.373$ vs.\ $0.346$) because both use unrelated statements; their distinction is purely structural, residing in shared algorithmic family.
+
+\begin{table}[t]
+\centering
+\caption{Dataset statistics and transfer-distance validation for each level of the Generalization Spectrum. D0 and D1 share the same problem set but evaluate solutions in different programming languages. D4 covers 23 of the 27 seed categories as it is sampled without category-matching constraints.}
+\label{tab:dataset-stats}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lrrrrrcc@{}}
+\toprule
+\multirow{2}{*}{Level} & \multicolumn{5}{c}{Dataset statistics} & \multicolumn{2}{c}{Distance to D0} \\
+\cmidrule(lr){2-6} \cmidrule(l){7-8}
+& \#Problems & Avg. Rating & Rating Range & Avg. Length & Categories & Cosine Sim. & Tag Overlap \\
+\midrule
+D0 & 64 & 1706 & 900--2600 & 487 & 27 & -- & -- \\
+D1 & 64 & 1706 & 900--2600 & 487 & 27 & $1.000 \pm .000$ & 100\% \\
+D2 & 64 & 1736 & 1236--2450 & 416 & 27 & $0.513 \pm .086$ & 100\% \\
+D3 & 64 & 1905 & 900--2900 & 448 & 27 & $0.373 \pm .095$ & 100\% \\
+D4 & 64 & 2076 & 1100--3200 & 514 & 23 & $0.346 \pm .096$ & 17.2\% \\
+\bottomrule
+\end{tabular*}
+\end{table}
+\FloatBarrier
+
+
+\subsection{Metrics}
+\label{subsec:metrics}
+
+Our base metric is \textbf{pass@1} ($r_i$)~\citep{chen2021evaluating}: the pass rate at each distance level $i$. Let $M$ denote the base model and $M_S$ the model after learning on seed set $S$ (via ICL, SFT, or RL). Building on this, we define:
+
+\begin{itemize}[leftmargin=*,itemsep=2pt]
+    \item \textbf{Gain:} $\text{Gain}(i) = r_i(M_S) - r_i(M)$, the improvement over the base model at spectrum level $D_i$. $\text{Gain}(0)$ measures memorization of the seed problems~\citep{arpit2017memorization}; $\text{Gain}(i)$ for $i \ge 1$ measures transfer to variants at distance $i$.
+    \item \textbf{Normalized Gain:} $\text{Gain}_n(i) = \text{Gain}(i) / (1 - r_i(M))$, which accounts for remaining headroom at each distance.
+    \item \textbf{Area Under Spectrum (AUS):} Aggregate score computed as $\frac{1}{4}\sum_{i=1}^{4}\text{Gain}(i)$, the average absolute pass@1 gain across $D_1$--$D_4$, enabling cross-method comparison.
+    \item \textbf{Normalized Near-Far Gap ($\text{N-F}_n$):} $\text{N-F}_n = \frac{\text{Gain}_n(1)+\text{Gain}_n(2)}{2} - \frac{\text{Gain}_n(3)+\text{Gain}_n(4)}{2}$, the gap between normalized near-transfer gains ($D_1$--$D_2$) and normalized far-transfer gains ($D_3$--$D_4$). Larger values indicate that transfer gains concentrate near the seed rather than extending to farther variants; when $\text{Gain}_n(i)$ is reported as a percentage, $\text{N-F}_n$ is reported in percentage points~\citep{barnett2002taxonomy}.
+\end{itemize}
+
+
+
+
+\section{Experimental Setup}
+\label{sec:experimental-setup}
+
+We evaluate three canonical learning paradigms, in-context learning (ICL)~\citep{brown2020language,dong2024survey}, supervised fine-tuning (SFT), and reinforcement learning (RL), on the Generalization Spectrum using Qwen3-4B-Thinking. For each paradigm, adaptation starts from the same 64 seed problems and performance is measured across $D_0$--$D_4$ with pass@1~\citep{chen2021evaluating}. Our evaluation follows a four-stage pipeline.
+
+\paragraph{Stage 1: Apply learning paradigms.}
+We instantiate each paradigm on the training set. ICL conditions each evaluation problem on its oracle-paired seed demonstration, with a random-demonstration control. SFT fine-tunes on reference reasoning traces and code~\citep{ouyang2022training}. RL uses binary outcome reward and reports GRPO~\citep{shao2024grpo} as the primary algorithm, with DAPO variants~\citep{yu2025dapo,schulman2017ppo} in Table~\ref{tab:extended-spectrum}. Full training details are in Appendix~\ref{app:training-config}.
+
+\paragraph{Stage 2: Select matched checkpoints during training.}
+To compare methods fairly, we periodically evaluate gradient-based checkpoints on $D_0$ (exact recall of the seed problems) and compare methods only at matched $D_0$ pass@1 levels. The key is to match methods on $D_0$ before interpreting transfer on $D_1$--$D_4$. Final-checkpoint or compute-matched comparisons would otherwise conflate \emph{how much} a method memorizes with \emph{how far} that memorization transfers. ICL has no training trajectory, so it is included at the memorization level induced by its demonstration strategy.
+
+\paragraph{Stage 3: Evaluate selected checkpoints across the spectrum.}
+Each selected checkpoint, or ICL-conditioned model, is evaluated across all five levels of the Generalization Spectrum, with 256 transfer instances at $D_1$--$D_4$ and $D_0$ used as the matched-memorization reference. We report pass@1 estimated from 8 samples per instance using the same decoding and sandbox settings for all methods; prompts and implementation details are in Appendix~\ref{app:implementation}.
+
+\paragraph{Stage 4: Compute transfer profiles.}
+Using the base model as baseline, we compute $\text{Gain}(i)$, normalized gains $\text{Gain}_n(i)$, aggregate scores (AUS), and the normalized Near-Far Gap ($\text{N-F}_n$; \S\ref{subsec:metrics}). These metrics summarize each method's behavior across $D_0$--$D_4$ as a complete generalization profile.
+
+By fixing the seed set, matching trainable methods on $D_0$ before evaluating $D_1$--$D_4$, and placing ICL at its demonstration-induced $D_0$ level, the pipeline isolates each paradigm's \emph{transfer efficiency}: how effectively a fixed level of seed memorization becomes generalization at increasing transfer distances.
+
+
+
+
+\section{Comparing Learning Paradigms: How Algorithm Transfer across the Spectrum?}
+\label{sec:results}
+
+The Generalization Spectrum measures how far learning extends, but this distance depends critically on how learning happens. Prior comparisons suggest that paradigm choice can change generalization even when data or adaptation budgets are controlled~\citep{mosbach2023fewshot,chu2025sft}. Given identical training content (the same 64 seed problems), do ICL, SFT, and RL produce the same generalization profile? Or does algorithm choice reshape the spectrum itself?
+We compare these paradigms under matched-memorization conditions: checkpoints are selected where $D_0$ performance is equivalent, isolating each algorithm's transfer efficiency, its ability to convert memorization into generalization at increasing distances.
+
+\subsection{Main Results}
+\label{subsec:main-results}
+
+Table~\ref{tab:main_results} presents performance across the Generalization Spectrum at matched memorization levels. A key pattern validates the spectrum design: RL gains generally attenuate as transfer distance increases, yet remain positive across all levels, while SFT drops sharply at far distances. At matched $D_0{\approx}0.6$, RL improves over SFT on near transfer ($\text{Gain}_n(D_1)$ of $39.0\%$ vs.\ $21.9\%$; $\text{Gain}_n(D_2)$ of $13.6\%$ vs.\ $3.0\%$) and preserves positive far-transfer gains ($\text{Gain}_n(D_3)$/$\text{Gain}_n(D_4)$ of $12.3\%$/$16.8\%$ vs.\ $-7.1\%$/$-0.5\%$ for SFT). Thus, outcome-based training not only strengthens near transfer but also avoids the far-distance collapse observed under reference-solution SFT.
+
+
+\newcommand{\cellp}[2]{\textbf{#1}$_{\textcolor{posgreen}{\uparrow\text{\tiny #2}}}$}
+\newcommand{\celln}[2]{\textbf{#1}$_{\textcolor{negred}{\downarrow\text{\tiny #2}}}$}
+\newcommand{\cellz}[2]{\textbf{#1}$_{\textcolor{gray}{\text{\tiny #2}}}$}
+\newcommand{\cellna}{---}
+
+\begin{table*}[t]
+\centering
+\caption{Performance across the Generalization Spectrum. Each cell shows pass@1 (bold) with $\text{Gain}(i)$ over the base model as subscript (\textcolor{posgreen}{$\uparrow$}~positive, \textcolor{negred}{$\downarrow$}~negative). $D_0$ measures seed memorization; $D_1$--$D_4$ measure transfer to increasingly distant variants. \textbf{$\text{Gain}_n$} normalizes each level's gain by remaining headroom. \textbf{AUS} averages raw transfer gains across $D_1$--$D_4$, while \textbf{$\text{N-F}_n$} measures whether normalized gains concentrate on near-transfer ($D_1$--$D_2$) rather than far-transfer ($D_3$--$D_4$), reported on the same percentage-point scale as $\text{Gain}_n$. See \S\ref{subsec:metrics} for formal definitions.}
+\label{tab:main_results}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{l|cc|cc|cc|cc|cc|cc}
+\toprule
+& \multicolumn{2}{c|}{\textbf{$D_0$ (Exact Recall)}} & \multicolumn{2}{c|}{\textbf{$D_1$ (Impl.\ Transfer)}} & \multicolumn{2}{c|}{\textbf{$D_2$ (Context Trans.)}} & \multicolumn{2}{c|}{\textbf{$D_3$ (Category Match)}} & \multicolumn{2}{c|}{\textbf{$D_4$ (Unpaired)}} & & \\
+\textbf{Method} & Result & $\text{Gain}_n$ & Result & $\text{Gain}_n$ & Result & $\text{Gain}_n$ & Result & $\text{Gain}_n$ & Result & $\text{Gain}_n$ & \textbf{AUS} & \textbf{$\text{N-F}_n$} \\
+\midrule
+\rowcolor{lightgray}
+Base model &
+\cellz{0.26}{+0.00} & --- &
+\cellz{0.24}{+0.00} & --- &
+\cellz{0.29}{+0.00} & --- &
+\cellz{0.24}{+0.00} & --- &
+\cellz{0.22}{+0.00} & --- &
+0.00 & 0.0\% \\
+\midrule
+\rowcolor{lightyellow}
+ICL (paired) &
+\cellp{0.65}{+.40} & +53.5\% &
+\cellp{0.57}{+.33} & +43.0\% &
+\cellp{0.63}{+.35} & +48.6\% &
+\celln{0.17}{-.07} & -8.7\% &
+\celln{0.10}{-.12} & -15.4\% &
++0.10 & +57.9\% \\
+\rowcolor{lightyellow}
+ICL (random) &
+\celln{0.21}{-.05} & -6.6\% &
+\celln{0.17}{-.07} & -9.5\% &
+\celln{0.21}{-.07} & -10.0\% &
+\celln{0.06}{-.06} & -6.3\% &
+\celln{0.10}{-.12} & -15.4\% &
+-0.06 & +1.1\% \\
+\midrule
+RL ($D_0{\approx}0.8$) &
+\cellp{0.80}{+.55} & +73.5\% &
+\cellp{0.72}{+.48} & +62.9\% &
+\cellp{0.49}{+.21} & +29.2\% &
+\cellp{0.34}{+.10} & +13.4\% &
+\cellp{0.37}{+.15} & +18.8\% &
++0.23 & +29.9\% \\
+\midrule
+SFT ($D_0{\approx}0.7$) &
+\cellp{0.69}{+.43} & +58.1\% &
+\cellp{0.44}{+.20} & +26.3\% &
+\cellz{0.29}{+.00} & +0.0\% &
+\celln{0.18}{-.06} & -7.9\% &
+\celln{0.20}{-.02} & -2.6\% &
++0.03 & +18.4\% \\
+RL ($D_0{\approx}0.7$) &
+\cellp{0.71}{+.46} & +61.4\% &
+\cellp{0.63}{+.38} & +50.5\% &
+\cellp{0.43}{+.14} & +19.9\% &
+\cellp{0.32}{+.08} & +11.1\% &
+\cellp{0.34}{+.12} & +15.5\% &
++0.18 & +21.9\% \\
+\midrule
+SFT ($D_0{\approx}0.6$) &
+\cellp{0.61}{+.35} & +47.4\% &
+\cellp{0.41}{+.17} & +21.9\% &
+\cellp{0.31}{+.02} & +3.0\% &
+\celln{0.19}{-.05} & -7.1\% &
+\cellz{0.22}{-.00} & -0.5\% &
++0.04 & +16.3\% \\
+RL ($D_0{\approx}0.6$) &
+\cellp{0.60}{+.35} & +46.5\% &
+\cellp{0.54}{+.30} & +39.0\% &
+\cellp{0.38}{+.10} & +13.6\% &
+\cellp{0.33}{+.09} & +12.3\% &
+\cellp{0.35}{+.13} & +16.8\% &
++0.15 & +11.7\% \\
+\midrule
+SFT ($D_0{\approx}0.5$) &
+\cellp{0.51}{+.26} & +34.7\% &
+\cellp{0.40}{+.16} & +20.8\% &
+\cellp{0.32}{+.04} & +5.2\% &
+\celln{0.21}{-.03} & -4.3\% &
+\cellp{0.26}{+.04} & +4.5\% &
++0.05 & +12.9\% \\
+RL ($D_0{\approx}0.5$) &
+\cellp{0.49}{+.23} & +31.2\% &
+\cellp{0.49}{+.25} & +33.0\% &
+\cellp{0.34}{+.06} & +7.8\% &
+\cellp{0.34}{+.10} & +13.6\% &
+\cellp{0.31}{+.09} & +11.3\% &
++0.12 & +8.0\% \\
+\midrule
+SFT ($D_0{\approx}0.4$) &
+\cellp{0.42}{+.16} & +22.0\% &
+\cellp{0.41}{+.17} & +22.7\% &
+\cellz{0.29}{+.00} & +0.3\% &
+\celln{0.19}{-.05} & -6.2\% &
+\celln{0.19}{-.03} & -4.4\% &
++0.02 & +16.8\% \\
+RL ($D_0{\approx}0.4$) &
+\cellp{0.41}{+.16} & +21.0\% &
+\cellp{0.34}{+.09} & +12.4\% &
+\cellp{0.32}{+.03} & +4.8\% &
+\cellz{0.24}{+.00} & +0.5\% &
+\cellp{0.29}{+.06} & +8.3\% &
++0.05 & +4.2\% \\
+\bottomrule
+\end{tabular}
+}
+\end{table*}
+
+
+
+\subsection{Which Paradigm Best Converts Memorization into Transfer?}
+\label{subsec:algorithm-comparison}
+
+\paragraph{ICL: strong but fragile context-based transfer.}
+Paired ICL shows impressive gains across $D_0$--$D_2$ when the oracle retriever provides the matched seed example, but drops once the target is only category-matched or unpaired. Random ICL performs \emph{worse} than the base model, highlighting a fundamental limitation of context-based adaptation: it operates on surface-level pattern matching and fails to form abstract, transferable representations of algorithmic categories.
+
+\paragraph{RL vs.\ supervised imitation.}
+At matched $D_0{\approx}0.6$, RL outperforms reference SFT at every transfer level: $D_1$ (0.54 vs.\ 0.41), $D_2$ (0.38 vs.\ 0.31), $D_3$ (0.33 vs.\ 0.19), and $D_4$ (0.35 vs.\ 0.22). The advantage is not confined to implementation or context transfer; it remains visible at far distances where SFT's normalized gains become negative or near zero. This suggests that outcome-based training learns a transfer profile that attenuates with distance but does not collapse as sharply as supervised imitation.
+
+\paragraph{$D_2$ reveals divergent transfer mechanisms.}
+At $D_2$ (Context Transfer), where problems are recontextualized with different narratives, we observe a striking divergence: reference SFT shows a sharp drop ($\text{Gain}_n(2)$ of 3.0\% at matched $D_0{\approx}0.6$), while ICL maintains strong transfer ($\text{Gain}_n(2)$ of 48.6\%), even exceeding its $D_1$ performance. RL lies between these regimes, retaining a positive $D_2$ gain (13.6\%) but still attenuating relative to $D_1$. This asymmetry suggests that context-based learning leverages demonstration-test correspondence most effectively under surface variation, while parameter-based methods differ in how much of the underlying structure they preserve.
+
+\subsection{Inspecting Failure Modes behind the Spectrum}
+\label{sec:case_study}
+
+Aggregate pass rates show where the learning paradigms separate, but they do not reveal which errors drive the separation. We therefore use $D_1$ and $D_2$ as two controlled diagnostic lenses. $D_1$ changes the implementation language while keeping the problem statement fixed, so the model can still identify the seed problem from its remembered surface form. $D_2$ is farther: the narrative is recontextualized while the executable task is preserved, so surface memorization of the original statement no longer identifies the problem. This setting isolates whether training preserves solution-family identification from the underlying structure rather than from the original wording.
+
+On $D_1$, the main gap is an implementation-language failure: among various failure categories, compile errors surge specifically in SFT, while RL maintains stable compilation rates.
+As shown in Figure~\ref{fig:compile-error-d1}, SFT maintains an average compile error rate of 17.6\%, whereas RL remains stable at 5.5\% throughout training.
+This pattern is diagnostic: SFT learns by imitating \emph{surface patterns} of Python solutions, which corrupt cross-lingual transfer.
+In contrast, RL, trained via outcome reward, avoids imitating reference-solution surface forms, preserving linguistic competence across implementation languages.
+
+The second diagnostic focuses on $D_2$, where the learned solution family must survive recontextualization. $D_2$ changes the narrative while preserving the executable task; therefore, the model can no longer rely on remembered statement wording to recognize the seed problem. Figure~\ref{fig:d0-d2-algorithm-mismatch}  compares one-to-one $D_0$/$D_2$ algorithm-mismatch failures, asking whether training improves structural solution-family identification.
+
+\begin{figure}[t]
+\centering
+\begin{subfigure}[t]{0.48\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{figures/compile_errors_comparison.png}
+    \caption{$D_1$ compilation error rate during training.}
+    \label{fig:compile-error-d1}
+\end{subfigure}
+\hfill
+\begin{subfigure}[t]{0.48\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{figures/d0_d2_algorithm_mismatch_bars.pdf}
+    \caption{Algorithm-mismatch failures on $D_0$ and $D_2$.}
+    \label{fig:d0-d2-algorithm-mismatch}
+\end{subfigure}
+\caption{Near-transfer failure diagnostics. Left: SFT shows a persistently higher $D_1$ compilation-error rate than RL. Right: both SFT and RL reduce algorithm mismatch on $D_0$, but only RL preserves a substantial reduction after $D_2$ recontextualization.}
+\label{fig:failure-mode-diagnostics}
+\end{figure}
+
+As shown in Figure~\ref{fig:d0-d2-algorithm-mismatch}, the $D_0$ rows serve as a control: on the original seed problems, both trainable methods substantially reduce algorithm-mismatch failures relative to the base model. Supervised imitation can therefore learn the appropriate solution family when the training and evaluation narratives are aligned. The contrast emerges after $D_2$ recontextualization: RL preserves most of its reduction, whereas SFT regresses to near the base-model level. The $D_2$ gap is therefore not explained by an inability of SFT to fit seed algorithms. Rather, SFT's algorithm-selection gain is largely tied to recognizing the original statement, whereas RL preserves more of that gain when the problem must be identified through structure. Appendix Table~\ref{tab:d0-d2-failure-taxonomy} reports the full taxonomy with exact counts.
+
+
+
+\begin{figure}[!t]
+    \centering
+    \begin{minipage}[t]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/mg_gg_new_data_abs.pdf}
+        \caption{Pass@1 across the Generalization Spectrum ($D_0$--$D_4$) with 256 seeds. GRPO outperforms SFT on near-transfer ($D_1$--$D_2$); all methods converge at far-transfer.}
+        \label{fig:data-scale-ablation}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/hard_profile.pdf}
+        \caption{Generalization profiles on the hard subset ($\text{pass@32}=0$) under matched $\text{Gain}(0)$. The distance-decay pattern persists; RL retains its advantage at near distances ($D_1$/$D_2$).}
+        \label{fig:hard-profile}
+    \end{minipage}
+\end{figure}
+
+\subsection{Sensitivity Analysis}
+\label{subsec:robustness}
+\label{subsec:hard-problems}
+
+The preceding analyses establish clear patterns (notably near-to-far attenuation, RL's positive transfer profile, and ICL's strong-but-fragile profile), but rest on a single model trained on 64 seed problems of moderate difficulty, with ICL using oracle pairing. We vary the ICL retrieval method, model architecture, training set size, and problem difficulty to test robustness.
+
+\textbf{ICL retrieval.} Paired ICL assumes oracle access to a relevant demonstration. We replace the oracle with three practical retrievers over the same 64-seed pool: text embedding (E5-Mistral cosine similarity), embedding + LLM rerank, and an LLM selector over all 64 candidate statements. Random retrieval serves as a lower control. The LLM selector recovers 100\% recall on $D_0$--$D_2$ and nearly matches oracle ICL performance there, while embedding-only retrieval degrades as surface similarity decreases; at $D_3$--$D_4$, no method finds the structurally paired seed (Appendix~\ref{app:icl-retrieval}). ICL's near-transfer advantage thus survives dropping the oracle, while its far-transfer ceiling reflects a retrieval bottleneck (identifying algorithmic correspondence beyond surface similarity) rather than a contingent assumption.
+
+\textbf{Model family.} We replicate the full protocol on DeepSeek-R1-Distill-Llama-8B, a Llama-based 8B model trained via distillation from DeepSeek-R1. Despite the change in architecture and scale, all principal findings transfer (Appendix~\ref{app:ablation-model-family}): transfer gains attenuate across the Spectrum, RL retains its advantage at matched $D_0$, and all methods converge at $D_3$--$D_4$.
+
+\textbf{Seed set scale.} Next, we vary the number of seed problems. Expanding from 64 to 256 seeds preserves both the shape of the generalization profile and the relative ordering of methods (Appendix~\ref{app:ablation-seed-scale}). Under matched-memorization comparison (Figure~\ref{fig:data-scale-ablation}), RL retains advantage over SFT on $D_1$, with attenuated but persistent gaps at $D_2$, while all methods converge at far-transfer ($D_3$--$D_4$).
+
+\textbf{Hard problems.} The most demanding test examines problems where the base model achieves $\text{pass@32}=0$, creating conditions of sparse reward for RL and maximal distribution shift for SFT. Learning dynamics on this subset differ qualitatively: $\text{Gain}(0)$ is severely depressed early in training as reward signals are rare, though sporadic correct solutions eventually accumulate. Nevertheless, conditioning on equivalent $\text{Gain}(0)$ reveals the same structural patterns: transfer attenuates with distance, and the SFT--RL gap remains concentrated at near-transfer distances ($D_1$/$D_2$), with far-transfer improvement remaining bounded regardless of method (Figure~\ref{fig:hard-profile}).
+This suggests that the generalization radius is relatively robust to learning content.
+
+
+
+
+\section{Variants under the Spectrum: How Within-Family Modifications Deform Profiles}
+\label{sec:analysis}
+
+Having established the generalization profiles of vanilla ICL, SFT, and RL (\S\ref{sec:results}), we next ask how stable these profiles are under within-family modifications. Many recent methods improve aggregate performance by enriching the learning signal, through reasoning demonstrations~\citep{wei2022chainofthought,zelikman2022star}, self-generated supervised targets~\citep{yuan2023rft}, self-distillation~\citep{opsd2026,sdft2026,sdpo2026}, or hint- and scaffold-assisted RL variants~\citep{li2026questa,ghpo2025,zhang2026bread,zhang2025stephint,wang2026hint,huang2025hintgrpo,kang2025table}. The Generalization Spectrum lets us ask whether these variants expand the generalization radius of their base family, preserve it while changing profile height or speed, or compress it.
+
+
+\begin{table}[t]
+\centering
+\small
+\caption{Pass@1 under ICL content and correspondence-hint interventions. The Demonstration Format block reports Base, Code Only, Code + CoT, Code + Pseudocode, and Code + Key Insight. The Oracle Hint block reports variants where a level-specific cue naming the demonstration-target relation is prepended to raw code or to code with pseudocode (Appendix~\ref{app:hint-texts}). Values are percentages. Structured content and hints lift $D_0$--$D_2$ but stay near the code-only baseline at $D_3$--$D_4$.}
+\label{tab:combined-icl}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lccccc|cc}
+\toprule
+\textbf{Level} & \multicolumn{5}{c|}{\textbf{Demonstration Format}} & \multicolumn{2}{c}{\textbf{Oracle Hint}} \\
+\cmidrule(lr){2-6}\cmidrule(lr){7-8}
+& \textbf{Base} & \textbf{Code + CoT} & \textbf{Code Only} & \textbf{Code + Pseudocode} & \textbf{Code + Key Insight} & \textbf{+Hint} & \textbf{+Pseudocode + Hint} \\
+\midrule
+$D_0$ & 26.0\% & 65.0\% & 66.4\% & 73.6\% & 71.5\% & 67.6\% & 70.9\% \\
+$D_1$ & 24.0\% & 57.0\% & 56.6\% & 63.3\% & 63.9\% & 62.9\% & 68.0\% \\
+$D_2$ & 29.0\% & 63.0\% & 64.4\% & 71.1\% & 69.7\% & 71.7\% & \textbf{80.1\%} \\
+$D_3$ & 22.5\% & 10.0\% & 11.5\% & 12.9\% & 9.8\% & 11.9\% & 9.6\% \\
+$D_4$ & 19.0\% & 10.0\% & 11.3\% & 11.3\% & 12.7\% & 14.1\% & 11.3\% \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+
+
+
+\subsection{ICL Content Variants: Abstraction and Hints Lift Local Transfer}
+\label{subsec:icl-content}
+
+Generalization performance under paired ICL~\citep{brown2020language,dong2024survey} depends on two steps: extracting a reusable algorithmic abstraction from the seed solution and recognizing when the target shares it. We vary demonstration content and correspondence hints to probe these steps, then combine them to test whether their effects overlap.
+
+To probe extraction, we augment the raw-code demonstration with pseudocode that strips language-specific syntax (Code + Pseudocode), a short key insight (Code + Key Insight), or the natural reasoning trace that produced the code (Code + CoT)~\citep{wei2022chainofthought, zelikman2022star}. The Code Only baseline uses the raw solution alone. As Table~\ref{tab:combined-icl} shows, pseudocode and key insight, which expose algorithmic structure explicitly, yield consistent gains on $D_0$--$D_2$, where the demonstration is instance-paired with the target. Code + CoT stays close to Code Only across these levels. Transfer therefore improves when the added content states the algorithm, not merely the derivation. At far-transfer distances ($D_3$, $D_4$), all three additions remain within run-to-run variation.
+
+\iffalse
+\begin{figure}[t]
+    \centering
+    \begin{minipage}[t]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/demo_format_spectrum.pdf}
+        \caption{Pass@1 across the Generalization Spectrum under four demonstration formats. Structured formats (Pseudocode, Key Insight) improve $D_0$--$D_2$, while CoT stays close to Code Only. $D_3$--$D_4$ differences fall within run-to-run variation.}
+        \label{fig:demo-format-spectrum}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/perplexity_heatmap.png}
+        \caption{Pass@1 heatmap across solution sources (sorted by perplexity) and evaluation levels. On-policy solutions maintain generalization; off-policy solutions collapse beyond memorization.}
+        \label{fig:solution-distribution-heatmap}
+    \end{minipage}
+\end{figure}
+\fi
+
+To probe recognition separately, we prepend a level-specific oracle hint that names the demonstration-target relation (e.g., ``same algorithm, different language'' at $D_1$; full hint texts in Appendix~\ref{app:hint-texts}). As Table~\ref{tab:combined-icl} shows, hints yield little improvement at $D_0$, where correspondence inference is minimal, but produce substantial gains at $D_1$--$D_2$, where the model must infer correspondence across a language or narrative shift. At $D_3$ and $D_4$, where seed and target no longer share an instance-level pairing, hints no longer move pass@1.
+
+Combining abstraction and hints yields additional gains on $D_1$--$D_2$ beyond either intervention alone ($D_2$: 64.4\% $\to$ 80.1\%), consistent with partially non-overlapping sources of error. Past $D_2$, all four conditions cluster around the code-only baseline, so neither richer content nor explicit correspondence cues extend transfer beyond the language- and narrative-shift regime. The ICL interventions therefore move the paired portion of the Spectrum without shifting its boundary. The discontinuity lies between instance-level correspondence ($D_0$--$D_2$) and category-level pairing ($D_3$): $D_3$ behaves closer to unpaired $D_4$ than to local transfer.
+
+
+
+\subsection{SFT Target-Source Variants: RFT Preserves Far Transfer Relative to Demonstration SFT}
+\label{subsec:sft-target-source}
+
+With training problems and supervised objective held fixed, Figure~\ref{fig:rft-spectrum} separates target-source alignment from the imitation loss. Demonstration SFT imitates the supervised demonstrations used as the reference baseline. RFT~\citep{yuan2023rft} samples the base model and retains only rollouts that pass all tests, making it \textbf{SFT with self-generated correct targets}. GPT-OSS SFT imitates GPT-OSS-20B solutions and serves as a more distant off-policy source. GRPO is included only as a matched-memorization RL reference.
+
+At matched memorization, target source mainly affects what survives beyond seed recall. RFT and demonstration SFT have nearly identical $D_0$ and $D_1$ performance, but RFT preserves a smoother tail from $D_2$ through $D_4$, whereas demonstration SFT falls after implementation transfer. GPT-OSS SFT drops earlier still, with weaker $D_1$/$D_2$ and the lowest far-transfer scores. The associated target-source perplexities follow the same ordering (1.30, 2.51, and 4.29), suggesting that larger source mismatch can support recall without carrying learned information into transfer.
+
+This source effect is consistent with the $D_1$ failure-mode analysis in \S\ref{sec:case_study} and Figure~\ref{fig:compile-error-d1}. Demonstration SFT raises the average compile-error rate on C++ transfer to 17.6\%, whereas RFT with self-generated targets remains low at 6.8\%. The diagnostic suggests that the problem is not only weaker semantic transfer; imitating external Python traces can also interfere with implementation-language competence. RL's 5.5\% compile-error rate is reported in \S\ref{sec:case_study} as part of the algorithm comparison, while the SFT-family contrast here is between demonstration SFT and RFT.
+This pattern points to target-source alignment, rather than the supervised objective alone, as the factor that determines whether imitation preserves or compresses far transfer.
+
+
+\begin{figure}[t]
+    \centering
+    \begin{minipage}[t]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/matched06_sft_source_heatmap.pdf}
+        \caption{SFT target-source variants at matched $D_0 \approx 0.6$. The direct SFT-family comparison is RFT with self-generated Qwen3-4B targets against demonstration SFT with QWQ-32B targets. GPT-OSS-20B provides a more distant off-policy extrapolation, and GRPO is included as the matched-memorization RL reference.}
+        \label{fig:rft-spectrum}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/sdft_spectrum.pdf}
+        \caption{SDFT vs.\ vanilla SFT at matched $D_0 \approx 0.6$. SDFT lifts $D_1$/$D_2$ above SFT, but its far-transfer profile drops below SFT at $D_3$/$D_4$. Full numeric profile in Appendix~\ref{app:extended-spectrum}.}
+        \label{fig:sdft-spectrum}
+    \end{minipage}
+\end{figure}
+
+
+
+\subsection{Self-Distillation Variants: An Implicit Demonstration Reward Lifts Local Transfer but Weakens Far Transfer}
+\label{subsec:self-distillation}
+
+Unlike the target-source variants, SDFT changes the role of the demonstration itself. Rather than being copied as a target sequence, the demonstration shapes a dense preference signal over the model's own rollouts~\citep{sdft2026, opsd2026, sdpo2026}. For samples from $\pi_\theta(\cdot|x)$, the objective applies a reverse-KL loss against the demonstration-conditioned policy $\pi_T(\cdot|x,c)$~\citep{sdft2026}. The matched-memorization protocol isolates how this inverse-RL-like signal changes the Spectrum profile.
+
+At matched $D_0 \approx 0.6$, SDFT produces a local-transfer gain with a far-transfer cost (Figure~\ref{fig:sdft-spectrum}; full numbers in Appendix~\ref{app:extended-spectrum}). It outperforms vanilla SFT on $D_1$ and $D_2$, where the evaluation item remains an implementation or narrative variant of the paired seed. At $D_3$ and $D_4$, however, it falls below both vanilla SFT and the unadapted base model, indicating that the gain is confined to near correspondence rather than extending to category-paired or unpaired transfer.
+
+Viewed through the profile rather than the objective alone, SDFT behaves as an \textbf{ICL-distillate}: it writes demonstration-conditioned local structure into the weights, but does not preserve that benefit once the target no longer shares an instance-level correspondence.
+
+
+\subsection{RL Algorithmic Variants: Training-Time Hints Improve Sample Efficiency but Compress Far Transfer}
+\label{subsec:rl-variants}
+
+Recent hint- and scaffold-assisted RL methods seek to reduce the exploration burden of sparse verifier rewards by adding partial solutions, expert anchors, stepwise hints, heuristic guidance, or hint-completion pairs during training~\citep{li2026questa,ghpo2025,zhang2026bread,zhang2025stephint,wang2026hint,huang2025hintgrpo,kang2025table}. In this setting, the scaffold is expected to help RL make more efficient use of each seed sample. What remains unclear is whether this more efficient use of the training sample also produces a broader generalization profile after learning. To test this, we compare verifier-only GRPO~\citep{shao2024grpo} with two \textbf{hint-assisted GRPO} variants at matched memorization ($D_0 \approx 0.6$). Hint GRPO-Pseudo appends pseudocode to the training sample, while Hint GRPO-KI names the key algorithmic idea. Both variants provide compact algorithmic scaffolds rather than full target solutions.
+
+The training trajectory confirms the intended sample-efficiency effect. Both hint variants reach the same memorization level much earlier than verifier-only GRPO, with Hint GRPO-KI at step $60$, Hint GRPO-Pseudo at step $70$, and GRPO at step $170$ (Figure~\ref{fig:ghpo-d0-progression}). Yet this faster adaptation does not translate into broader generalization. At $D_0 \approx 0.6$, hint-assisted GRPO stays close to verifier-only GRPO on $D_1$ and $D_2$, indicating that the scaffold preserves local implementation and narrative transfer under matched memorization. The separation appears at the far end of the Spectrum, where both hint variants fall below verifier-only GRPO on $D_3$ and $D_4$ (Figure~\ref{fig:ghpo-spectrum}; exact values in Appendix~\ref{app:extended-spectrum}). Training-time hints therefore improve the speed of fitting the seed examples, but do not expand the generalization radius. A plausible interpretation is that the scaffold makes reward-bearing trajectories easier to find while keeping learning tied to the scaffolded seed relation. Under the Spectrum, this appears as faster memorization with a narrower far-transfer tail.
+
+\begin{figure}[t]
+    \centering
+    \begin{minipage}[t]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/ghpo_d0_progression.pdf}
+        \caption{Matched-checkpoint steps at $D_0{\approx}0.6$: Hint GRPO-Pseudo at step 70 and Hint GRPO-KI at step 60, versus GRPO at step 170.}
+        \label{fig:ghpo-d0-progression}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/ghpo_spectrum.pdf}
+        \caption{Under matched $D_0$, Hint GRPO stays close to GRPO at $D_1$/$D_2$ but falls below it at $D_3$/$D_4$. Full numeric profile in Appendix~\ref{app:extended-spectrum}.}
+        \label{fig:ghpo-spectrum}
+    \end{minipage}
+\end{figure}
+
+\iffalse
+\subsection{Synthesis: A Family-Envelope View of Variants}
+\label{subsec:variant-synthesis}
+
+Pulling the four classes of variants together, the Generalization Spectrum reveals a consistent pattern: \textbf{within-family modifications can preserve, expand, or compress the generalization radius rather than acting as uniform accuracy lifts}. Table~\ref{tab:variant-synthesis} summarizes the observed effects.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Synthesis of within-family variants under the Generalization Spectrum. ``Local'' = $D_0$--$D_2$, ``Far'' = $D_3$--$D_4$. Numeric profiles for all rows are reported in Appendix~\ref{app:extended-spectrum}.}
+\label{tab:variant-synthesis}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lllll}
+\toprule
+\textbf{Variant} & \textbf{Family} & \textbf{What changes?} & \textbf{Spectrum effect} & \textbf{Interpretation} \\
+\midrule
+ICL + abstraction          & ICL               & demo content                              & lifts $D_0$--$D_2$, not $D_4$              & improves knowledge extraction \\
+ICL + hint                 & ICL               & inference-time correspondence cue         & lifts $D_1$--$D_2$, not $D_4$              & unlocks latent transfer \\
+RFT / on-policy SFT        & SFT               & target source aligned with model          & preserves gradual decay                     & avoids distributional corruption \\
+Off-policy SFT             & SFT               & target distribution shifted               & collapses transfer                          & imitation mismatch compresses radius \\
+SDFT                       & self-distillation & ICL-style self-teacher                    & lifts $D_1$/$D_2$, drops below SFT at $D_3$/$D_4$ & demo-conditioned local structure written into weights; far transfer not inherited \\
+Hint GRPO (training-time hints)      & RL                & training-time coding scaffold             & faster $D_0$, $D_3$/$D_4$ below verifier-only RL  & scaffold accelerates fitting, trades far-transfer for speed \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+Across variants, the Spectrum reveals a consistent message: \textbf{the generalization radius can be preserved, expanded, or compressed}. ICL hints lift paired transfer without moving $D_3$/$D_4$; RFT preserves a smoother far-transfer tail than reference SFT; SDFT and Hint GRPO improve local transfer or speed while lowering $D_3$/$D_4$. Aggregate scores therefore hide qualitatively different changes to the same family profile.
+\fi
+
+\section{Related Work}
+
+\paragraph{Generalization of Post-Training Paradigms.}
+A growing body of work compares how ICL, SFT, and RL generalize under distribution shift, building on the observation that large language models acquire scale-dependent emergent abilities~\citep{wei2022emergent}. For ICL versus fine-tuning, evidence is mixed: ICL can outperform fine-tuning on tasks with implicit regularities via context-induced circuit shifts~\citep{yin2024deeper}, while fine-tuning achieves stronger performance given sufficient data~\citep{liu2022fewshot}. Many-shot ICL can match fine-tuning in some regimes~\citep{agarwal2024manyshot}, though ICL's generalization appears bounded by the pretraining hypothesis space~\citep{wang2024icl_ood, goddard2025icl_ood}. For SFT versus RL, comparisons more consistently report improved robustness for RL as distribution shift increases~\citep{kirk2024rlhf, chu2025sft, huan2025transferability, luong2024reft}. Beyond these core paradigms, recent variants modify the learning signal: rejection-sampling fine-tuning (RFT)~\citep{yuan2023rft} uses self-generated on-policy targets, hint- and scaffold-assisted RL methods provide partial solutions, expert anchors, stepwise hints, heuristic guidance, or hint-completion pairs to mitigate sparse rewards~\citep{li2026questa,ghpo2025,zhang2026bread,zhang2025stephint,wang2026hint,huang2025hintgrpo,kang2025table}, and self-taught distillation methods~\citep{sdft2026, opsd2026} bridge context-based and parameter-based learning. However, all these studies assess generalization through aggregate metrics on coarse in-distribution versus out-of-distribution splits, making it difficult to quantify \emph{how far} transfer extends from individual training examples.
+
+\paragraph{Beyond Binary Generalization Evaluation.}
+Standard OOD evaluation treats generalization as binary---in-distribution or out---obscuring the gradual decay of transfer with increasing distance~\citep{ye2022oodbench, yu2024ood_survey}. In reasoning domains, ThinkBench~\citep{huang2025thinkbench} and related efforts construct OOD variants dynamically, yet still report binary ID/OOD comparisons. Our work differs by constructing a \emph{paired} evaluation spectrum: each training example maps to test variants at multiple controlled distances (D0--D4), enabling measurement of per-sample generalization profiles rather than aggregate OOD gaps.
+
+\paragraph{Benchmarks and Synthetic Data for Code Reasoning.}
+Competitive programming offers unique advantages for studying generalization: correctness is unambiguous via test cases~\citep{chen2021evaluating,austin2021program}, problems encode implicit algorithmic patterns resistant to surface memorization, and continuous new releases mitigate contamination~\citep{jain2024livecodebench, quan2025codeelo, zheng2025livecodebench}. Prior work on synthetic coding data spans problem--solution--test synthesis~\citep{liu2025rstarcoder, xu2025kodcode, zeng2025acecoder}, automatic test-case generation and specification validation~\citep{gabel2012testing, he2025hardtests, ma2025dynamicscaling, wang2025codecontestsplus, fu2025klearcodetest}, and reasoning trace or self-critique construction~\citep{ahmad2025opencodereasoning, ahmad2025opencodereasoning2}. Cross-lingual benchmarks evaluate implementation transfer across languages~\citep{cassano2023multiple, peng2024humanevalxl}, while controlled generators and template-based methods probe transfer across algorithmic variants~\citep{sun2025deltacode, zhou2025dpbench, tang2024grapharena}. We build on these directions by constructing paired variants at controlled transfer distances---from cross-language transfer (D1) through narrative reframing (D2) to category-matched problems (D3)---enabling fine-grained diagnosis of where each learning paradigm's generalization breaks down.
+
+\section{Conclusions}
+
+We introduce the \textbf{Generalization Spectrum}, a chromatographic-style evaluation that measures not only \textit{whether} a learning algorithm improves, but \textbf{how far} improvements transfer from each training example across controlled distances (D0--D4). By instantiating this framework in competitive programming and releasing a paired benchmark with \textbf{256 evaluation instances}, we enable fine-grained diagnosis of memorization, near-transfer, and far-transfer behavior under a unified protocol.
+
+Across in-context learning, supervised fine-tuning, and reinforcement learning, we find a consistent pattern: generalization decays with transfer distance, though the shape varies by paradigm. Under matched memorization, RL converts memorization into near-transfer more efficiently than SFT-family baselines and preserves a more positive far-transfer tail. Paired ICL remains strong through the instance-paired levels ($D_0$--$D_2$), including narrative recontextualization, but drops once the target is only category-matched or unpaired, exposing its inability to generalize via abstract representations, a key limitation compared to gradient-based adaptation. Stress-testing recent within-family variants further sharpens the picture: abstraction and hints lift paired ICL without extending $D_3$/$D_4$, RFT-style self-generated supervised targets preserve a smoother SFT-family tail than reference or off-policy imitation, while SDFT and hint-assisted GRPO improve local transfer or optimization speed but can compress the far-transfer tail. Across variants, auxiliary signals do not simply improve generalization; they move different parts of the Spectrum, separating local gains, far-transfer preservation, and optimization speed.
+
+\textbf{Limitations and Future Work.} Our study uses competitive programming, a domain chosen for its clear evaluation and structured variation. We believe the Generalization Spectrum framework is domain-agnostic; its validity across mathematical reasoning, code translation, and creative generation remains for future work. Looking ahead, the Spectrum suggests concrete directions: increasing the number of variants per seed to better resolve decay profiles, exploring mixed training pipelines that combine complementary profiles, such as GRPO followed by distillation, and developing training methods that explicitly optimize \textbf{transfer efficiency} rather than memorization alone. We hope this framework enables more nuanced evaluation and inspires algorithms that learn not only patterns, but how to adapt them meaningfully to new challenges.
+
+
+
+\begin{comment}
+\section{Conclusions}
+
+We introduce the \textbf{Generalization Spectrum}, a chromatographic-style evaluation that measures not only \textit{whether} a learning algorithm improves, but \textbf{how far} improvements transfer from each training example across controlled distances (D0--D4). By instantiating this framework in competitive programming and releasing a paired benchmark with \textbf{256 evaluation instances}, we enable fine-grained diagnosis of memorization, near-transfer, and far-transfer behavior under a unified protocol.
+
+Across in-context learning, supervised fine-tuning, and reinforcement learning, we find a consistent pattern: \textbf{generalization decays with transfer distance}, though the rate varies by paradigm. Under matched memorization, \textbf{RL converts memorization into near-transfer more efficiently than SFT}. Notably, \textbf{ICL handles D2 (context transfer) effectively}, maintaining strong performance under narrative recontextualization, while gradient-based methods show sharper degradation---revealing that context-based and gradient-based learning exploit different generalization mechanisms.
+
+
+\textbf{Limitations and Future Work.} The study in this paper is conducted within competitive programming, a domain chosen for its clear evaluation and structured variation. We believe the Generalization Spectrum framework is domain-agnostic and broadly applicable to other reasoning and generative tasks. Its validity across domains such as mathematical reasoning, code translation, scientific explanation, and creative generation is left for future work to further explore. Looking ahead, the Spectrum suggests concrete directions: increasing the number of variants per seed to better resolve decay profiles, and developing training methods that explicitly optimize \textbf{transfer efficiency} rather than memorization alone. We hope this framework enables more nuanced evaluation and inspires algorithms that learn not only patterns, but how to adapt them meaningfully to new challenges.
+\end{comment}
+
+
+
+
+\section*{Impact Statement}
+
+This paper presents work whose goal is to advance the field of machine learning. There are many potential societal consequences of our work, none of which we feel must be specifically highlighted here.
+
+
+
+\clearpage
+
+\bibliographystyle{plainnat}
+\bibliography{main}
+
+\clearpage
+
+\beginappendix
+
+\appendix
+
+\section{Dataset Construction Details}
+\label{app:dataset-construction}
+
+This section provides the full details of our dataset construction pipeline, including selection criteria, synthesis procedures, and quality control measures.
+
+\subsection{Why Competitive Programming}
+\label{app:why-cp}
+
+Instantiating the Generalization Spectrum framework requires a domain with precise correctness criteria and rich structure for controlled variations. We use competitive programming as our testbed for the following reasons:
+
+\begin{itemize}
+    \item \textbf{No room for lucky guesses.} Unlike multiple-choice or short-answer questions, the space of correct solutions is vanishingly sparse---a random string has essentially zero probability of passing all test cases. Success is therefore unlikely to arise from statistical flukes alone.
+
+    \item \textbf{Unambiguous correctness.} Each problem comes with test cases $\{(x_i, y_i)\}$; correctness is determined by execution, requiring no human judgment.
+
+    \item \textbf{Rich space for variations.} A single algorithmic idea naturally instantiates across different problem statements, constraints, and application contexts---providing an ideal basis for constructing varying transfer distances.
+
+    \item \textbf{Ever-growing problem pool.} Platforms like Codeforces and AtCoder continually release new problems, supplying fresh test material and reducing contamination risk. This lets the Generalization Spectrum evolve alongside model capabilities.
+\end{itemize}
+
+\subsection{Construction Pipeline}
+\label{app:construction-pipeline}
+
+We construct five problem sets (D0--D4) via two strategies: \textbf{selection} from existing problems (D0, D1, D3, D4) and \textbf{synthesis} of new problems (D2). We detail each below.
+
+\paragraph{D0 (Seed Problems).}
+We aggregate Codeforces problems from recent competitive programming datasets: RStar-Coder~\citep{liu2025rstarcoder}, CodeContests+~\citep{wang2025codecontestsplus}, and LiveCodeBench-Pro~\citep{zheng2025livecodebench}.
+
+We first filter by \textbf{difficulty}: problems where the base model (Qwen3-4B-Thinking) achieves an average test case pass rate below 0.6. This ensures sufficient challenge---trivially easy problems cannot differentiate learning algorithms. We then split by \textbf{learnability}: whether the model can solve the problem within a few attempts. Main experiments focus on learnable problems ($\text{pass@8} > 0$); harder problems ($\text{pass@32} = 0$) are analyzed separately in \S\ref{subsec:hard-problems}. Within qualifying problems, we \textbf{sample randomly} with no constraints on algorithmic category.
+
+This yields 64 seed problems. Appendix~\ref{app:ablation-seed-scale} describes the corresponding seed-scale ablation with 256 problems.
+
+\paragraph{D1 (Implementation Transfer).}
+We reuse D0 problems directly, changing only the target language from Python to C++ at evaluation time. No additional construction needed.
+
+\paragraph{D2 (Context Transfer).}
+D2 requires generating problems with entirely different narrative contexts---not paraphrases, but complete recontextualizations where characters, settings, and stories change while the underlying mathematical structure remains identical. The solution and test cases are preserved. We use a four-stage pipeline:
+
+\begin{enumerate}
+    \item \textbf{Solution verification.} GPT-5.2 attempts the original problem (pass@3). Only problems it solves proceed---this ensures the LLM understands the problem well enough to generate valid variants.
+
+    \item \textbf{Problem generation.} Given the original statement, I/O format, and examples, we prompt GPT-5.2 to generate a new problem description. The prompt requires: (a) entirely different story and narrative, (b) identical I/O format, (c) the original solution logic must still apply.
+
+    \item \textbf{Consistency review.} Gemini-3-Pro independently checks whether the new problem truly shares the same solution and test cases. Failed cases are filtered out or regenerated. First-pass acceptance is approximately 85\%; after regeneration, retention is 100\%.
+
+    \item \textbf{Solution re-derivation.} As final validation, Gemini-3-Pro solves the new problem from scratch (no access to the original) and we verify that its solution passes the original test cases. This provides further evidence of semantic equivalence.
+\end{enumerate}
+
+For quality control, we automatically verify that the original solution still passes all test cases on the new problem, and manually spot-check 10\% for natural phrasing and unambiguous specification.
+The Codeforces-style ratings reported for D2 are GPT-5 estimates calibrated to the original rating scale and are used only as descriptive metadata; D2 selection inherits the D0 difficulty and learnability filter.
+
+\paragraph{D3 (Category Matched).}
+We select problems sharing algorithmic tags with seed problems, testing whether learning one algorithm (e.g., BFS) transfers to different problems requiring the same algorithmic skill. Candidate problems satisfy the same difficulty and learnability filter as D0: base-model solve rate below 0.6 and pass@8 $> 0$.
+
+\textit{Classification system.}
+We use a hierarchical taxonomy of 30 algorithm categories organized into six families: \textbf{DS} (Data Structures: arrays, hash tables, heaps, stacks, segment trees), \textbf{DP} (Dynamic Programming: classic, digit, interval, tree DP), \textbf{GT} (Graph Theory: traversal, shortest path, MST, flow), \textbf{M} (Mathematics: number theory, combinatorics, geometry), \textbf{SP} (String Processing), and \textbf{Others} (greedy, binary search, two pointers, simulation, etc.). Each problem is assigned 1--3 categories by GPT-based classification using both the problem statement and solution code.
+
+\textit{Tag source.}
+The tag source depends on problem difficulty: for rating $\leq 2000$, we use LLM annotations (official Codeforces tags are crowd-sourced and noisy at lower difficulties); for rating $> 2000$, we use official Codeforces tags (curated by expert users and more reliable than LLM annotations for hard problems).
+
+\textit{Matching algorithm.}
+We employ \textbf{family-based matching}: categories are first mapped to their family prefix (e.g., ``DP -- Classic DP'' $\to$ ``DP'') before computing overlap, capturing algorithmic similarity at an appropriate granularity. We then apply \textbf{maximum bipartite matching} (Hungarian algorithm) to find optimal 1-to-1 pairings between D0 and the candidate pool, ensuring no problem is reused and maximizing total matches. This achieves 100\% matching success (64/64 pairs). Among matched pairs, 92.2\% share exactly one family tag and 7.8\% share two tags. The most common matching families are Data Structures (15 pairs), Greedy (14), Mathematics (13), and Dynamic Programming (4).
+
+\paragraph{D4 (Unpaired Baseline).}
+We use random samples from the same source and time period as seed problems, excluding those already used in D0 or D3, and applying the same difficulty and learnability filter as D0. This represents in-domain generalization with no direct relation---measuring the marginal contribution of learning a single sample to overall domain ability.
+
+\subsection{Quality Control Summary}
+\label{app:quality-control}
+
+Table~\ref{tab:quality-control} summarizes the quality control measures applied at each level.
+
+\begin{table}[h]
+\centering
+\small
+\caption{Quality control measures for each spectrum level.}
+\label{tab:quality-control}
+\begin{tabular}{lll}
+\toprule
+\textbf{Level} & \textbf{Verification Method} & \textbf{Pass Criteria} \\
+\midrule
+D0 & Difficulty filter + learnability check & pass rate $<0.6$, pass@8 $>0$ \\
+D1 & Automatic (same problem) & N/A \\
+D2 & Multi-model generation + cross-validation & Solution equivalence verified \\
+D3 & Tag matching + bipartite matching & $\geq$1 shared family tag \\
+D4 & Random sampling + exclusion filter & Not in D0/D3 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The cosine similarity reported in Table~\ref{tab:dataset-stats} is computed between the sentence embeddings of each variant's problem statement and its paired D0 statement, using the all-mpnet-base-v2 model~\citep{reimers2019sentence}.
+
+\section{Example Test Variants}
+\label{app:examples}
+
+We illustrate the Generalization Spectrum with concrete examples from our dataset. The following shows a seed problem ($D_0$), its recontextualized variant ($D_2$), a category-matched problem ($D_3$), and an unpaired baseline problem ($D_4$).
+
+\subsection*{$D_0$: Seed Problem (Grid Reachability)}
+
+\begin{problembox}[blue!60!black]{Original Problem}
+NEKO has just got a new maze game on her PC!
+
+The game's main puzzle is a maze, in the form of a $2 \times n$ rectangle grid. NEKO's task is to lead a Nekomimi girl from cell $(1, 1)$ to the gate at $(2, n)$ and escape the maze. The girl can only move between cells sharing a common side.
+
+However, at some moments during the game, some cells may change their state: either from normal ground to lava (which forbids movement into that cell), or vice versa. Initially all cells are of the ground type.
+
+After hours of streaming, NEKO finally figured out there are only $q$ such moments: the $i$-th moment toggles the state of cell $(r_i, c_i)$.
+
+Knowing this, NEKO wonders, after each of the $q$ moments, whether it is still possible to move from cell $(1, 1)$ to cell $(2, n)$ without going through any lava cells.
+
+\vspace{1.5mm}
+\noindent\textbf{Input:} $n$, $q$ ($2 \le n \le 10^5$, $1 \le q \le 10^5$), followed by $q$ lines of $(r_i, c_i)$.\\
+\textbf{Output:} For each moment, print ``Yes'' or ``No''.
+\end{problembox}
+
+\subsection*{$D_2$: Synthetic Variant (Same Algorithm, Different Context)}
+
+\begin{problembox}[green!60!black]{Synthetic Problem}
+Two parallel railway lines run side-by-side, each divided into $n$ numbered segments from west to east. A maintenance trolley starts on the northern line at segment 1 and must reach the depot on the southern line at segment $n$. The trolley can move between segments that share a common side: it may move east or west along the same line, or switch between the two lines within the same segment index (i.e., vertical move).
+
+Some segments may become temporarily closed for maintenance, and later reopen. Initially, all segments are open. You are given $q$ events; the $i$-th event toggles the status of segment $(r_i, c_i)$: if it was open it becomes closed, and if it was closed it becomes open.
+
+After each event, determine whether the trolley can still reach the depot from its start without entering any closed segment.
+
+\vspace{1.5mm}
+\noindent\textbf{Input:} $n$ and $q$ ($2 \le n \le 10^5$, $1 \le q \le 10^5$), followed by $q$ lines of $(r_i, c_i)$.\\
+\textbf{Output:} After each event, print ``Yes'' or ``No''.
+\end{problembox}
+
+\noindent The $D_2$ variant preserves the exact algorithmic structure (dynamic connectivity on a $2 \times n$ grid with toggle operations) while completely changing the surface narrative from a video game maze to a railway maintenance scenario. The input/output format and constraints are identical.
+
+\subsection*{$D_3$: Category Matched (Same Algorithm Family)}
+
+\begin{problembox}[yellow!60!black]{Category-Matched Problem}
+In the NN country, there are $n$ cities, numbered from 1 to $n$, and $n - 1$ roads connecting them. There is a road path between any two cities.
+
+There are $m$ bidirectional bus routes between cities. Buses drive between two cities taking the shortest path with stops in every city they drive through. Travelling by bus, you can travel from any stop on the route to any other. You can travel between cities only by bus.
+
+You are interested in $q$ questions: is it possible to get from one city to another and what is the minimum number of buses you need to use for it?
+
+\vspace{1.5mm}
+\noindent\textbf{Input:} $n$ ($2 \le n \le 2 \cdot 10^5$), $n-1$ parent pointers, $m$ bus routes, $q$ queries.\\
+\textbf{Output:} For each query, print the minimum number of buses or $-1$ if unreachable.
+\end{problembox}
+
+\noindent The $D_3$ problem shares the algorithmic category (graph traversal / shortest path) with $D_0$ but requires different techniques (tree structure, BFS on route graph). This tests whether learning one graph algorithm transfers to related problems in the same family.
+
+\subsection*{$D_4$: Unpaired Baseline}
+
+\begin{problembox}[orange!60!black]{Unpaired Baseline Problem}
+Gildong was hiking a mountain, walking by millions of trees. Inspired by them, he suddenly came up with an interesting idea for trees in data structures: What if we add another edge in a tree?
+
+Then he found that such tree-like graphs are called 1-trees. First, he'll provide you a tree with $n$ vertices, then he will ask you $q$ queries. Each query contains 5 integers: $x$, $y$, $a$, $b$, and $k$. This means you're asked to determine if there exists a path from vertex $a$ to $b$ that contains exactly $k$ edges after adding a bidirectional edge between vertices $x$ and $y$. A path can contain the same vertices and same edges multiple times. All queries are independent of each other.
+
+\vspace{1.5mm}
+\noindent\textbf{Input:} $n$ ($3 \le n \le 10^5$), $n-1$ edges, $q$ queries ($1 \le q \le 10^5$), each with $(x, y, a, b, k)$.\\
+\textbf{Output:} For each query, print ``YES'' or ``NO''.
+\end{problembox}
+
+\noindent The $D_4$ problem is randomly sampled from the same time period as D0 with no direct pairing, serving as a reference for in-domain generalization. It tests whether training on $D_0$ provides any general domain benefit beyond sample-specific transfer.
+
+\iffalse
+\subsection*{Case Study Examples}
+\label{app:casestudy-examples}
+
+The following examples are referenced in \S\ref{sec:case_study} to illustrate how D2 exposes systematic misunderstanding patterns.
+
+\paragraph{Problem 1860: Geometric Movement Constraints.}
+
+This problem tests feasibility checking under geometric movement constraints. On D0, both SFT and base models solve it correctly. On D2, the changed narrative triggers distinct failure clusters.
+
+\begin{problembox}[blue!60!black]{$D_0$: Cake Assembly Line}
+A cake assembly line in a bakery was once again optimized, and now $n$ cakes are made at a time! In the last step, each of the $n$ cakes should be covered with chocolate.
+
+Consider a side view on the conveyor belt, let it be a number line. The $i$-th cake occupies the segment $[a_i - w, a_i + w]$ on this line, each pair of these segments does not have common points. Above the conveyor, there are $n$ dispensers, and when a common button is pressed, chocolate from the $i$-th dispenser will cover the conveyor segment $[b_i - h, b_i + h]$. Each pair of these segments also does not have common points.
+
+Determine if it's possible to shift the conveyor so that each cake has some chocolate on it, and there is no chocolate outside the cakes. You can assume that the conveyor is long enough, so the cakes never fall. Also note that the button can only be pressed once.
+
+\vspace{1.5mm}
+\noindent\textbf{Input:} Each test contains multiple test cases. The first line contains $t$ ($1 \le t \le 10^5$). Each test case: first line contains $n$, $w$, $h$ ($1 \le n \le 10^5$; $1 \le w, h \le 10^5$; $h \le w$); second line contains $n$ integers $a_1, \ldots, a_n$ ($1 \le a_i \le 10^9$, $a_i + w < a_{i+1} - w$); third line contains $n$ integers $b_1, \ldots, b_n$ ($1 \le b_i \le 10^9$, $b_i + h < b_{i+1} - h$). Sum of $n$ over all test cases $\le 10^5$.\\
+\textbf{Output:} For each test case, print ``Yes'' or ``No''.
+\end{problembox}
+
+\begin{problembox}[green!60!black]{$D_2$: Platform Screen Doors}
+A metro station uses platform screen doors (PSDs) to align with a train's door openings for safe boarding. Along the track (modeled as a number line), the train has $n$ door openings, and the platform has $n$ PSD gates. Before doors open, the train may slide along the track by a single uniform offset (forward or backward). Once the PSDs open, each platform gate exposes a fixed segment on the track.
+
+The $i$-th train door opening covers the segment $[a_i - w, a_i + w]$ relative to the train's current position; all train door segments are pairwise disjoint. The $i$-th PSD gate exposes the fixed segment $[b_i - h, b_i + h]$ on the platform; all gate segments are pairwise disjoint.
+
+Determine whether there exists a single longitudinal shift of the train such that after the shift: (1) every platform gate lies completely within some train door opening, and (2) no exposed platform gate lies outside the train's door openings. The train can only be shifted once before opening the doors. You may assume the track is long enough so the train never goes out of bounds.
+
+\vspace{1.5mm}
+\noindent\textbf{Input:} Same format as $D_0$.\\
+\textbf{Output:} For each test case, print ``Yes'' or ``No''.
+\end{problembox}
+
+\noindent The D2 variant preserves the exact algorithmic structure (interval containment feasibility with uniform shift) while completely changing the narrative from a bakery conveyor to a metro platform. The underlying constraint---finding a shift such that each dispenser/gate segment $[b_i - h, b_i + h]$ is contained within the corresponding cake/door segment $[a_i - w, a_i + w]$---remains identical.
+
+\paragraph{Problem 14816: 2D Prefix Sum Counting.}
+
+This problem is solvable via 2D prefix sums, an advanced technique that reduces $O(n^4)$ to $O(n^2)$. SFT discovers this technique on D0 but abandons it on D2; RL never discovers prefix sums but learns a transferable geometric property.
+
+\begin{problembox}[blue!60!black]{$D_0$: Broken Monitor Frame}
+Innocentius has a problem---his computer monitor has broken. Now some of the pixels are ``dead'', that is, they are always black. He is playing a game with his younger brother Polycarpus: Innocentius touch-types a program that paints a white square one-pixel wide frame on the black screen. As the monitor is broken, some pixels that should be white remain black. Polycarpus should guess the position and size of the frame.
+
+Find such a possible square frame that:
+\begin{itemize}[nosep]
+\item the frame's width is 1 pixel,
+\item the frame doesn't go beyond the borders of the screen,
+\item all white pixels of the monitor are located on the frame,
+\item of all frames that satisfy the previous three conditions, the required frame must have the smallest size.
+\end{itemize}
+
+Formally, a square frame consists of pixels on the border of a solid square. For $d = 3$, the frame has 8 pixels; for $d = 2$, it has 4 pixels; for $d = 1$, it is a single pixel.
+
+\vspace{1.5mm}
+\noindent\textbf{Input:} First line: $n$, $m$ ($1 \le n, m \le 2000$). Next $n$ lines: $m$ characters each (``.'' = black, ``w'' = white). At least one pixel is white.\\
+\textbf{Output:} Print the monitor screen with the frame marked by ``+'' characters. White pixels remain ``w''. If no valid frame exists, print $-1$.
+\end{problembox}
+
+\begin{problembox}[green!60!black]{$D_2$: Safety Cordon}
+A team of field engineers deployed a square safety cordon around a temporary research site. The cordon runs along the perimeter of a solid square area and occupies exactly one cell in width. Due to intermittent communication, only some perimeter beacons reported their positions. These reports are marked on a site grid. Your task is to reconstruct a possible position and size of the cordon that is consistent with the reports.
+
+Find a square cordon such that:
+\begin{itemize}[nosep]
+\item the cordon occupies exactly the perimeter cells of a solid square (width 1 cell),
+\item the cordon stays entirely within the grid bounds,
+\item every reported beacon cell lies on the cordon's perimeter,
+\item among all cordons satisfying the above, the chosen one has the smallest possible size.
+\end{itemize}
+
+Formally, the perimeter of a square of size $d$ consists of all cells on its border; for $d = 3$ it contains 8 cells, for $d = 2$ it contains 4 cells, and for $d = 1$ it is a single cell.
+
+\vspace{1.5mm}
+\noindent\textbf{Input:} First line: $n$, $m$ ($1 \le n, m \le 2000$). Next $n$ lines: $m$ characters each (``.'' = empty, ``w'' = reported beacon). At least one ``w'' exists.\\
+\textbf{Output:} Output the grid with the cordon perimeter marked by ``+''. Reported beacons remain ``w''. If no valid cordon exists, print $-1$.
+\end{problembox}
+
+\noindent The D2 variant preserves the exact algorithmic structure (finding a minimum-size axis-aligned square frame containing all marked cells on its perimeter) while changing the narrative from a broken monitor game to a field engineering scenario. Both require the same 2D geometric reasoning and can be solved efficiently using prefix sums.
+\fi
+
+
+\section{Experimental Setup}
+\label{app:experimental-setup}
+
+\subsection{Training Configuration}
+\label{app:training-config}
+
+\paragraph{Learning paradigms.}
+All paradigms learn from the same 64 seed problems, each paired with a reference solution containing the problem statement, step-by-step reasoning trace, and Python code. For ICL, we prepend a single paired seed problem with its reference solution as a 1-shot demonstration. The paired setting uses the oracle pair mapping: each evaluation problem is conditioned on its corresponding matched seed problem. The random baseline samples the demonstration without using this pair mapping. No model parameters are updated for ICL.
+
+SFT fine-tunes the base model on reference (problem, reasoning trace, code) triples. RFT uses the same training objective and hyperparameters as SFT, but replaces reference solutions with self-generated correct solutions: the base model samples candidate solutions, and we retain only those passing all test cases. RL uses outcome-based binary reward ($+1$ for passing all test cases, $0$ otherwise). The main text reports GRPO as the primary RL algorithm; extended GRPO and DAPO profiles are reported in Table~\ref{tab:extended-spectrum}.
+
+\paragraph{Matched-memorization selection.}
+Different learning paradigms memorize seed problems at different rates. A method with higher $D_0$ accuracy has more opportunity to exhibit transfer, so comparing final checkpoints would mix two factors: how much the method has memorized and how efficiently that memorization transfers. We therefore save checkpoints at regular intervals, evaluate each checkpoint on $D_0$ (exact recall of seed problems), and compare methods at matched $D_0$ pass@1 levels such as 50\%, 60\%, 70\%, and 80\%. ICL has no intermediate checkpoints, so its $D_0$ level is determined by the demonstration strategy.
+
+Table~\ref{tab:hyperparameters} summarizes key hyperparameters for each gradient-based learning paradigm.
+
+\begin{table}[h]
+\centering
+\small
+\caption{Key hyperparameters for SFT, RFT, and RL training. Checkpoints are saved periodically to enable matched-memorization comparisons at equivalent $D_0$ performance levels.}
+\label{tab:hyperparameters}
+\begin{tabular}{lccc}
+\toprule
+ & \textbf{SFT} & \textbf{RFT} & \textbf{RL} \\
+\midrule
+Learning rate & 2e-5 & 2e-5 & 1e-6 \\
+Batch size & 64 & 64 & 64 \\
+Training steps & 1000 & 1000 & 150 \\
+Warmup ratio & 0.1 & 0.1 & 0.05 \\
+Rollouts per problem & --- & --- & 8 \\
+KL coefficient & --- & --- & 0.01 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+For RL, 150 steps is the standard training budget. Selected runs were continued up to 400 steps for extended matched-memorization profiles, and Table~\ref{tab:extended-spectrum} reports the actual checkpoint step used for each row.
+
+
+\subsection{Implementation Details}
+\label{app:implementation}
+
+\paragraph{Evaluation protocol.}
+Each selected checkpoint is frozen and evaluated on all five spectrum levels ($D_0$--$D_4$), producing $64 \times 5 = 320$ total instances, of which $64 \times 4 = 256$ are transfer instances at $D_1$--$D_4$. We report \textbf{pass@1} as the primary metric. For each instance, we draw \textbf{8 samples} and report the mean pass@1. Transfer metrics ($\text{Gain}(i)$, $\text{Gain}_n(i)$, AUS, $\text{N-F}_n$) follow the definitions in \S\ref{subsec:metrics}; matched $D_0$ comparison makes these profiles reflect transfer efficiency rather than unequal training progress.
+
+\paragraph{Decoding parameters.}
+We use Qwen3-4B-Thinking as the base model with thinking mode enabled (\texttt{enable\_thinking=True}). For all methods, we sample with temperature 0.8, top-p 0.95, and maximum output length of 32768 tokens. Each sample is drawn with a different random seed. Generation terminates upon producing the end-of-code delimiter or reaching the token limit.
+
+\paragraph{Execution environment.}
+Solutions are executed in an isolated sandbox with the following configuration:
+\begin{itemize}
+    \item Python 3.10, GCC 11.4 (for C++17)
+    \item Time limit: 5 seconds per test case
+    \item Memory limit: 512 MB
+    \item Solutions that fail to compile, exceed time/memory limits, or crash at runtime are marked as incorrect
+\end{itemize}
+
+\paragraph{Error classification.}
+We classify failures into three categories for fine-grained analysis:
+\begin{enumerate}
+    \item \textit{Syntax/compile errors}---code fails to compile or parse;
+    \item \textit{Runtime errors}---code compiles but crashes during execution;
+    \item \textit{Wrong answer}---code runs to completion but produces incorrect output.
+\end{enumerate}
+All categories count as fail for pass@1.
+
+\paragraph{$D_0$/$D_2$ failure taxonomy.}
+The $D_0$/$D_2$ diagnostic separates evaluator-failed traces by the first
+diagnosed cause of failure. The annotation was performed by
+GPT-5.2 Thinking, which was given the problem statement, the reference
+solution, the generated code, and the evaluator pass rate. The taxonomy
+is designed to distinguish failures in solution-family identification
+from closer specification or implementation errors:
+\begin{enumerate}[nosep]
+    \item \textit{Algorithm mismatch}: the solution chooses an incompatible algorithmic route or solution family.
+    \item \textit{Constraint omission}: the algorithmic direction is close, but a required constraint, boundary case, or output condition is missing.
+    \item \textit{Structure confusion}: the broad family is similar, but the state space, transition, counted object, graph relation, or interval semantics is mis-specified.
+    \item \textit{Other error}: the high-level route is plausible, but the code fails through implementation, indexing, I/O, variable, or complexity errors.
+\end{enumerate}
+When the annotator judged an evaluator-failed trace to be apparently
+correct or could not assign a category, that trace is excluded from the
+failure-category counts. Table~\ref{tab:d0-d2-failure-taxonomy} reports
+counts for the aligned $D_0$/$D_2$ diagnostic set.
+
+\begin{table}[h]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{5pt}
+\caption{Failure-taxonomy counts for the aligned $D_0$/$D_2$ diagnostic. Each row uses evaluator-failed traces from the one-to-one $D_0$/$D_2$ comparison, excluding traces marked as apparently correct or unknown by the annotator. Counts are shown without normalization.}
+\label{tab:d0-d2-failure-taxonomy}
+\begin{tabular}{llrrrr}
+\toprule
+\textbf{Level} & \textbf{Method} & \textbf{\shortstack{Algorithm\\mismatch}} & \textbf{\shortstack{Constraint\\omission}} & \textbf{\shortstack{Structure\\confusion}} & \textbf{\shortstack{Other\\error}} \\
+\midrule
+$D_0$ & Base & 116 & 52 & 90 & 70 \\
+$D_0$ & RL   & 44  & 20 & 35 & 79 \\
+$D_0$ & SFT  & 62  & 30 & 37 & 60 \\
+\midrule
+$D_2$ & Base & 177 & 46 & 51 & 56 \\
+$D_2$ & RL   & 125 & 34 & 45 & 62 \\
+$D_2$ & SFT  & 172 & 30 & 44 & 67 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Code extraction.}
+For models that generate chain-of-thought reasoning, only the final code block is extracted and executed; intermediate reasoning is ignored for evaluation.
+
+\paragraph{Prompt template.}
+All prompts follow a unified structure: language-specific instructions, problem description, and input/output specification. Training and evaluation use the same template, differing only in the specified target language (e.g., Python for training vs.\ C++17 for $D_1$ evaluation). The full prompt template is shown below:
+
+\begin{problembox}[gray!60!black]{Prompt Template}
+\ttfamily\small\raggedright
+You are an expert competitive programmer. You will be given a competitive programming problem. Please reason step by step about the solution, then provide a complete implementation in \{Python 3 | C++17\}.
+
+Your solution must read input from standard input, write output to standard output.
+
+Do not include any debug prints or additional output. Put your final solution within a single code block: ```\{python|cpp\} ...```
+
+\vspace{1mm}
+\# Problem: \{title\}
+
+\{problem\_statement\}
+
+Execution time limit: \{time\_limit\} seconds\\
+Memory limit: \{memory\_limit\} MB
+
+\#\# Input Format
+
+\{input\_format\}
+
+\#\# Output Format
+
+\{output\_format\}
+
+\#\# Examples
+
+```input\\
+\{example\_input\}\\
+```\\
+```output\\
+\{example\_output\}\\
+```
+
+\#\# Note
+
+\{note\}
+\end{problembox}
+
+\noindent For ICL, we construct a multi-turn conversation with the demonstration as a completed interaction:
+
+\begin{problembox}[gray!60!black]{ICL Format}
+\ttfamily\small
+[\newline
+~~\{"role": "user",~~~~~~"content": "\{example\_prompt\}"\},\newline
+~~\{"role": "assistant", "content": "\{example\_answer\}"\},\newline
+~~\{"role": "user",~~~~~~"content": "\{target\_prompt\}"\}\newline
+]
+\end{problembox}
+
+\noindent where \texttt{example\_prompt} is the seed problem (same template as above), \texttt{example\_answer} contains the chain-of-thought reasoning followed by the solution code, and \texttt{target\_prompt} is the test problem to be solved.
+
+\paragraph{Model selection.}
+When multiple algorithmic variants are considered, we report their training-set $D_0$ improvement speed, measured by steps required to reach a fixed pass@1 threshold. SFT regularization variants are reported in Appendix~\ref{app:variant-comparison}; full matched-memorization profiles for trainable variants are reported in Appendix~\ref{app:extended-spectrum}.
+
+\subsection{Training-Run Generalization Profiles}
+\label{app:training-run-profiles}
+
+Figure~\ref{fig:training-run-profiles} reports the full checkpoint trajectories behind the matched-memorization comparisons. These curves serve a different role from Table~\ref{tab:extended-spectrum}: the table aligns methods at comparable $D_0$ levels, while the figure shows how each method reaches those levels during training. Across runs, $D_0$ usually improves fastest. The transfer levels then separate by method: $D_1$ and $D_2$ often rise with $D_0$, but with smaller gains, while $D_3$ and $D_4$ are flatter or more volatile. This supports using matched-$D_0$ comparisons, since raw final checkpoints would conflate transfer efficiency with different optimization speeds.
+
+\begin{figure}[p]
+    \centering
+    \includegraphics[width=0.92\textwidth,height=0.84\textheight,keepaspectratio]{figures/appendix_training_pass1_grid.png}
+    \caption{Full training-run generalization profiles. Each panel plots pass@1 across $D_0$--$D_4$ over saved checkpoints for one training method. The trajectories show the raw checkpoint behaviour used to select matched-memorization comparison points.}
+    \label{fig:training-run-profiles}
+\end{figure}
+
+\section{Analysis Details}
+\label{app:analysis-details}
+
+\subsection{ICL: Oracle Hint Texts}
+\label{app:hint-texts}
+
+Table~\ref{tab:hint-texts} lists the oracle hints prepended to the demonstration in the recognition-bottleneck experiment (\S\ref{subsec:icl-content}). Each hint names the demonstration-target relation at the corresponding spectrum level.
+
+\begin{table}[h]
+\centering
+\small
+\caption{Oracle hint texts used in the recognition-bottleneck probing experiment.}
+\label{tab:hint-texts}
+\begin{tabular}{lp{10cm}}
+\toprule
+\textbf{Level} & \textbf{Hint text} \\
+\midrule
+$D_0$ & ``Note: This is the exact same problem as the previous one.'' \\
+$D_1$ & ``This problem requires the same algorithm as the previous one, implemented in a different programming language.'' \\
+$D_2$ & ``This problem has identical solution logic as the previous one---only the problem description differs.'' \\
+$D_3$ & ``This problem uses a similar algorithmic approach as the previous one.'' \\
+$D_4$ & ``This is an unrelated problem from the same domain.'' \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{ICL: Realistic Retrieval}
+\label{app:icl-retrieval}
+
+The main ICL experiment uses paired demonstrations, which isolate the effect of a relevant example but also represent an oracle retrieval setting. To test whether this assumption is attainable in the few-shot regime, we run a retrieval study using the same 64-seed training pool. Each method selects one seed demonstration for a target problem before applying the standard ICL prompt.
+
+\paragraph{Retrieval methods.}
+We compare five selection strategies: (i) Oracle, which uses the known paired seed; (ii) Text Embedding, which embeds problem statements with E5-Mistral-7B-Instruct and retrieves by cosine similarity; (iii) Embed + LLM Rerank, which reranks the top-20 embedding candidates with GPT-5.4-thinking; (iv) LLM Selector, which sees all 64 full seed statements in one context window and chooses the most algorithmically relevant demonstration; and (v) Random, which samples a seed uniformly.
+
+\begin{table}[h]
+\centering
+\small
+\caption{Retrieval accuracy for selecting the true paired seed from the 64-seed pool. $D_0$ and $D_1$ share the same statement, so they have identical retrieval accuracy.}
+\label{tab:icl-retrieval-accuracy}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Retrieval Method} & \textbf{$D_0$/$D_1$} & \textbf{$D_2$} & \textbf{$D_3$} \\
+\midrule
+Oracle & 100\% & 100\% & 100\% \\
+LLM Selector & 100\% & 100\% & 0\% \\
+Embed + LLM Rerank & 100\% & 78.0\% & 0\% \\
+Text Embedding & 100\% & 47.5\% & 0\% \\
+Random & 1.6\% & 1.6\% & 1.6\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering
+\small
+\caption{ICL pass@1 under different retrieval strategies. LLM selection nearly matches oracle performance on $D_0$--$D_2$, while all non-oracle methods provide limited gains on $D_3$--$D_4$, where the correct correspondence is algorithmic rather than statement-level.}
+\label{tab:icl-retrieval-performance}
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Retrieval Method} & \textbf{$D_0$} & \textbf{$D_1$} & \textbf{$D_2$} & \textbf{$D_3$} & \textbf{$D_4$} \\
+\midrule
+Base model & 0.26 & 0.24 & 0.29 & 0.24 & 0.22 \\
+Oracle & 0.65 & 0.57 & 0.63 & 0.17 & 0.10 \\
+LLM Selector & 0.65 & 0.57 & 0.64 & 0.12 & 0.16 \\
+Embed + LLM Rerank & 0.64 & 0.57 & 0.55 & 0.13 & 0.17 \\
+Text Embedding & 0.65 & 0.58 & 0.44 & 0.15 & 0.20 \\
+Random & 0.21 & 0.17 & 0.21 & 0.06 & 0.10 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Full-statement context is what makes the LLM selector work.}
+The LLM selector reaches 100\% recall on $D_0$--$D_2$ when given the full $\sim$28k tokens of all 64 candidate statements in one context window. To check whether this success comes from the LLM's reasoning or merely from keyword matching, we truncate each candidate to its first 240 characters and rerun selection: $D_0$ recall collapses from 100\% to 7.8\%. The selector therefore relies on detailed problem semantics rather than surface keywords, which is why a text-embedding retriever over the same statements cannot match it on $D_2$.
+
+\paragraph{ICL performance tracks retrieval accuracy.}
+The pass@1 in Table~\ref{tab:icl-retrieval-performance} closely mirrors the recall in Table~\ref{tab:icl-retrieval-accuracy}. On $D_2$, pass@1 drops from 0.64 (LLM Selector, 100\% recall) to 0.55 (Embed + LLM Rerank, 78\% recall) to 0.44 (Text Embedding, 47.5\% recall), matching the recall ordering. On $D_3$, the practical non-random retrievers recover 0\% of the paired seeds, while Random reaches 1.6\% by chance; $D_4$ has no true paired seed. The corresponding pass@1 values remain below or close to the base model, indicating limited ICL gains beyond near transfer. This coupling is consistent with the paper's main claim: ICL transfer is gated by demonstration-test correspondence, and retrieval failure passes through to the downstream ICL result.
+
+\paragraph{Summary.}
+The key takeaway is not the absolute 100\% recall on a small candidate pool, but the qualitative gap between correspondence-aware and surface-only retrieval. For $D_0$--$D_2$, full-statement LLM selection recovers the relevant demonstration and reproduces oracle-level ICL performance, indicating that the paired ICL result is not an artifact of manual pairing in this few-shot setting and that oracle retrieval is attainable at near distances in this 64-seed pool. For $D_3$--$D_4$, the desired relation is no longer textual equivalence but algorithmic correspondence, which current retrieval strategies do not reliably identify; this defines the practical bottleneck for ICL beyond near transfer.
+
+
+\iffalse
+\subsection{SFT: Solution-Source Familiarity and Performance}
+\label{app:perplexity}
+
+Table~\ref{tab:sft_results} reports solution-source length and perplexity together with downstream SFT performance. Perplexity is computed by the training model (Qwen3-4B-Thinking); lower perplexity indicates higher familiarity between the model and the solution distribution.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Solution-source familiarity and downstream SFT performance. Avg.\ Len and PPL describe the supervised target distribution; P@1/P@4 report Qwen3-4B-Thinking performance after SFT with each source. D0: Exact Recall (training set), D1: Implementation Transfer (C++), D2: Context Transfer, D4: Unpaired Baseline.}
+\label{tab:sft_results}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llcccccccccc}
+\toprule
+\multirow{2}{*}{\textbf{Source}} & \multirow{2}{*}{\textbf{Avg. Len}} & \multirow{2}{*}{\textbf{PPL}} & \multirow{2}{*}{\textbf{Step}} & \multicolumn{2}{c}{\textbf{D0 (Exact Recall)}} & \multicolumn{2}{c}{\textbf{D1 (Impl.\ Transfer)}} & \multicolumn{2}{c}{\textbf{D2 (Context Trans.)}} & \multicolumn{2}{c}{\textbf{D4 (Unpaired)}} \\
+\cmidrule(lr){5-6} \cmidrule(lr){7-8} \cmidrule(lr){9-10} \cmidrule(lr){11-12}
+ &  &  &  & P@1 & P@4 & P@1 & P@4 & P@1 & P@4 & P@1 & P@4 \\
+\midrule
+\multicolumn{4}{l}{\textit{Baseline (no SFT)}} & 0.256 & 0.611 & 0.242 & 0.570 & 0.118 & 0.235 & 0.186 & 0.480 \\
+\midrule
+\multirow{3}{*}{Qwen3-4B-Thinking} & \multirow{3}{*}{19,317} & \multirow{3}{*}{1.30}
+    & 100  & 0.377 & 0.739 & 0.342 & 0.635 & 0.112 & 0.213 & 0.318 & 0.626 \\
+ &  &  & 500  & 0.711 & 0.921 & 0.395 & 0.725 & 0.101 & 0.200 & 0.271 & 0.542 \\
+ &  &  & 1000 & \textbf{0.830} & \textbf{0.913} & \textbf{0.459} & \textbf{0.762} & 0.134 & 0.253 & \textbf{0.275} & \textbf{0.570} \\
+\midrule
+\multirow{3}{*}{QWQ-32B} & \multirow{3}{*}{18,115} & \multirow{3}{*}{2.51}
+    & 100  & 0.420 & 0.735 & 0.414 & 0.682 & 0.103 & 0.213 & 0.125 & 0.329 \\
+ &  &  & 500  & 0.514 & 0.766 & 0.400 & 0.681 & 0.106 & 0.213 & 0.188 & 0.411 \\
+ &  &  & 1000 & 0.561 & 0.795 & 0.381 & 0.673 & 0.309 & 0.537 & 0.182 & 0.419 \\
+\midrule
+\multirow{3}{*}{GPT-OSS} & \multirow{3}{*}{9,474} & \multirow{3}{*}{4.29}
+    & 100  & 0.396 & 0.674 & 0.252 & 0.511 & 0.125 & 0.276 & 0.146 & 0.368 \\
+ &  &  & 500  & 0.590 & 0.781 & 0.273 & 0.540 & 0.123 & 0.316 & 0.121 & 0.328 \\
+ &  &  & 1000 & 0.654 & 0.819 & 0.275 & 0.550 & 0.108 & 0.236 & 0.148 & 0.370 \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+The increasing perplexity reflects decreasing familiarity between the training model and the solution distribution. Self-generated solutions are most familiar, same-family external solutions show moderate shift, and off-policy solutions from a different model family exhibit the largest distribution gap.
+\fi
+
+
+\section{Robustness and Ablations}
+\label{app:ablations}
+
+\subsection{Algorithm and Regularization Variant Comparison}
+\label{app:variant-comparison}
+
+We compare SFT regularization variants to justify the supervised baseline used in the main experiments.
+
+\paragraph{SFT variants: Vanilla vs.\ GEM.}
+Table~\ref{tab:sft-variants} compares vanilla SFT with SFT augmented by GEM (Gradient Equilibrium Method) regularization. While GEM is designed to improve generalization by balancing gradient contributions, we find that vanilla SFT achieves faster convergence on $D_0$ in our setting. Both methods show similar generalization profiles on $D_1$--$D_4$ when compared at matched memorization levels; we therefore report vanilla SFT in the main text for simplicity.
+
+\begin{table}[h]
+\centering
+\small
+\caption{SFT variant comparison on Qwen3-4B-Thinking. Pass@1 at step 500 (approximately matched $D_0$).}
+\label{tab:sft-variants}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Method} & \textbf{D0} & \textbf{D1} & \textbf{D2} & \textbf{D4} \\
+\midrule
+SFT (lr=2e-5) & 0.50 & 0.36 & 0.14 & 0.28 \\
+SFT (lr=1e-5) & 0.37 & 0.32 & 0.13 & 0.30 \\
+GEM (lr=2e-5) & 0.30 & 0.25 & 0.13 & 0.05 \\
+GEM (lr=5e-6) & 0.23 & 0.18 & 0.08 & 0.05 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\iffalse
+\paragraph{RL algorithms: PPO vs.\ GRPO vs.\ DAPO.}
+Table~\ref{tab:rl-variants} compares three RL algorithms under identical training budgets. DAPO (Direct Advantage Policy Optimization) achieves the fastest $D_0$ convergence among the three, reaching comparable memorization levels in fewer steps. PPO and GRPO show similar convergence speeds but require more careful hyperparameter tuning. The main text uses GRPO as the primary RL algorithm, while DAPO is reported here as a faster-converging appendix variant.
+
+\begin{table}[h]
+\centering
+\small
+\caption{RL algorithm comparison on Qwen3-4B-Thinking. Pass@1 at step 200.}
+\label{tab:rl-variants}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Algorithm} & \textbf{D0} & \textbf{D1} & \textbf{D2} & \textbf{D4} \\
+\midrule
+PPO & 0.71 & 0.60 & 0.40 & 0.18 \\
+GRPO & 0.70 & 0.58 & 0.46 & 0.18 \\
+DAPO & 0.84 & 0.76 & 0.53 & 0.12 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+DAPO's advantage over PPO and GRPO is primarily training efficiency rather than a qualitatively different generalization profile. Under matched-memorization comparison, all three algorithms show comparable transfer profiles across the Generalization Spectrum.
+\fi
+
+
+\subsection{Extended Spectrum Profiles for All Variants}
+\label{app:extended-spectrum}
+
+
+This appendix extends Table~\ref{tab:main_results} with additional trainable methods under the same matched-memorization protocol. Rows are grouped by $D_0$ buckets and report pass@1 across $D_0$--$D_4$. The added methods are self-distillation (SDFT, \S\ref{subsec:self-distillation}), hint-assisted GRPO (Hint GRPO-Pseudo / Hint GRPO-KI, \S\ref{subsec:rl-variants}), and off-policy SFT with GPT-OSS-20B targets (\S\ref{subsec:sft-target-source}). The self-generated-target SFT condition is reported as RFT and is therefore not duplicated. Each bucket lists the same trainable methods; in metric columns, ``---'' indicates that no checkpoint for that method reached the corresponding memorization bucket with a complete $D_0$--$D_4$ profile under the training budget.
+
+\begingroup
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\setlength{\LTleft}{0pt}
+\setlength{\LTright}{0pt}
+\setlength{\LTcapwidth}{\textwidth}
+\renewcommand{\arraystretch}{0.92}
+\captionof{table}{Extension of Table~\ref{tab:main_results}: pass@1 across the Generalization Spectrum for methods evaluated under the matched-memorization protocol.}
+\label{tab:extended-spectrum}
+\vspace{-0.5\baselineskip}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.43\textwidth}>{\centering\arraybackslash}p{0.055\textwidth}|*{5}{>{\centering\arraybackslash}p{0.070\textwidth}}@{}}
+\toprule
+\textbf{Method} & \textbf{Step} & \textbf{$D_0$} & \textbf{$D_1$} & \textbf{$D_2$} & \textbf{$D_3$} & \textbf{$D_4$} \\
+\midrule
+\endfirsthead
+
+\multicolumn{7}{@{}c@{}}{\sffamily\textbf{Table~\ref{tab:extended-spectrum}} Extension of Table~\ref{tab:main_results} (continued).}\\[2pt]
+\toprule
+\textbf{Method} & \textbf{Step} & \textbf{$D_0$} & \textbf{$D_1$} & \textbf{$D_2$} & \textbf{$D_3$} & \textbf{$D_4$} \\
+\midrule
+\endhead
+
+\midrule
+\multicolumn{7}{r}{\scriptsize Continued on next page} \\
+\endfoot
+
+\bottomrule
+\endlastfoot
+
+Base model                                  & ---  & 0.26 & 0.24 & 0.29 & 0.24 & 0.22 \\
+ICL (paired, oracle)                        & ---  & 0.65 & 0.57 & 0.63 & 0.17 & 0.10 \\
+ICL (random)                                & ---  & 0.21 & 0.17 & 0.21 & 0.06 & 0.10 \\
+\midrule
+\multicolumn{7}{@{}l}{\textit{Matched $D_0 \approx 0.8$}} \\*
+SFT                                         & ---  & ---  & ---  & ---  & ---  & ---  \\
+RFT                                         & ---  & ---  & ---  & ---  & ---  & ---  \\
+DAPO                                        & 370  & 0.80 & 0.74 & 0.56 & 0.34 & 0.42 \\
+GRPO                                        & 290  & 0.80 & 0.72 & 0.49 & 0.34 & 0.37 \\
+SDFT                                        & ---  & ---  & ---  & ---  & ---  & ---  \\
+Hint GRPO-Pseudo                            & ---  & ---  & ---  & ---  & ---  & ---  \\
+Hint GRPO-KI                                & ---  & ---  & ---  & ---  & ---  & ---  \\
+Off-policy SFT (GPT-OSS)                    & ---  & ---  & ---  & ---  & ---  & ---  \\
+\midrule
+\multicolumn{7}{@{}l}{\textit{Matched $D_0 \approx 0.7$}} \\*
+SFT                                         & 1900 & 0.69 & 0.44 & 0.29 & 0.18 & 0.20 \\
+RFT                                         & 500  & 0.71 & 0.40 & 0.31 & 0.31 & 0.33 \\
+DAPO                                        & 230  & 0.71 & 0.63 & 0.44 & 0.33 & 0.36 \\
+GRPO                                        & 220  & 0.71 & 0.63 & 0.43 & 0.32 & 0.34 \\
+SDFT                                        & ---  & ---  & ---  & ---  & ---  & ---  \\
+Hint GRPO-Pseudo                            & ---  & ---  & ---  & ---  & ---  & ---  \\
+Hint GRPO-KI                                & 110  & 0.70 & 0.63 & 0.42 & 0.21 & 0.30 \\
+Off-policy SFT (GPT-OSS)                    & ---  & ---  & ---  & ---  & ---  & ---  \\
+\midrule
+\multicolumn{7}{@{}l}{\textit{Matched $D_0 \approx 0.6$}} \\*
+SFT                                         & 900  & 0.61 & 0.41 & 0.31 & 0.19 & 0.22 \\
+RFT                                         & 250  & 0.60 & 0.40 & 0.34 & 0.29 & 0.31 \\
+DAPO                                        & 180  & 0.60 & 0.57 & 0.42 & 0.29 & 0.35 \\
+GRPO                                        & 170  & 0.60 & 0.54 & 0.38 & 0.33 & 0.35 \\
+SDFT                                        & 60   & 0.61 & 0.51 & 0.40 & 0.13 & 0.16 \\
+Hint GRPO-Pseudo                            & 70   & 0.60 & 0.57 & 0.38 & 0.23 & 0.27 \\
+Hint GRPO-KI                                & 60   & 0.60 & 0.56 & 0.35 & 0.22 & 0.29 \\
+Off-policy SFT (GPT-OSS)                    & 400  & 0.60 & 0.28 & 0.23 & 0.17 & 0.14 \\
+\midrule
+\multicolumn{7}{@{}l}{\textit{Matched $D_0 \approx 0.5$}} \\*
+SFT                                         & 500  & 0.51 & 0.40 & 0.32 & 0.21 & 0.26 \\
+RFT                                         & 200  & 0.50 & 0.36 & 0.32 & 0.31 & 0.35 \\
+DAPO                                        & 120  & 0.49 & 0.47 & 0.38 & 0.29 & 0.33 \\
+GRPO                                        & 120  & 0.51 & 0.46 & 0.37 & 0.33 & 0.30 \\
+SDFT                                        & 40   & 0.51 & 0.47 & 0.37 & 0.14 & 0.16 \\
+Hint GRPO-Pseudo                            & 40   & 0.54 & 0.51 & 0.36 & 0.25 & 0.28 \\
+Hint GRPO-KI                                & 40   & 0.49 & 0.48 & 0.35 & 0.23 & 0.26 \\
+Off-policy SFT (GPT-OSS)                    & 300  & 0.48 & 0.27 & 0.23 & 0.18 & 0.14 \\
+\midrule
+\multicolumn{7}{@{}l}{\textit{Matched $D_0 \approx 0.4$}} \\*
+SFT                                         & 100  & 0.42 & 0.41 & 0.29 & 0.19 & 0.19 \\
+RFT                                         & 100  & 0.38 & 0.34 & 0.31 & 0.30 & 0.35 \\
+DAPO                                        & 80   & 0.42 & 0.36 & 0.34 & 0.25 & 0.28 \\
+GRPO                                        & 60   & 0.41 & 0.34 & 0.32 & 0.24 & 0.29 \\
+SDFT                                        & 20   & 0.46 & 0.44 & 0.29 & 0.12 & 0.12 \\
+Hint GRPO-Pseudo                            & 20   & 0.40 & 0.39 & 0.31 & 0.27 & 0.24 \\
+Hint GRPO-KI                                & 30   & 0.44 & 0.45 & 0.32 & 0.24 & 0.27 \\
+Off-policy SFT (GPT-OSS)                    & 100  & 0.40 & 0.25 & 0.23 & 0.18 & 0.15 \\
+\end{longtable}
+\addtocounter{table}{-1}
+\endgroup
+
+For off-policy SFT, $D_2$ uses the \texttt{level2\_v0} synthetic set used by the staged appendix training-run data. $D_3$ was rerun for the matched $D_0 \approx 0.4$, $0.5$, and $0.6$ checkpoints. Higher buckets remain ``---'' because the available run does not reach them with a complete $D_0$--$D_4$ profile.
+
+
+\begin{center}
+    \centering
+    \includegraphics[width=\textwidth]{figures/matched_spectrum_profiles.pdf}
+    \captionof{figure}{Generalization profiles at matched memorization levels. Each panel fixes a $D_0$ bucket and plots pass@1 across $D_0$--$D_4$ for methods with available entries in Table~\ref{tab:extended-spectrum}. The dashed gray line is the base model reference.}
+    \label{fig:matched-spectrum-profiles}
+\end{center}
+
+
+\subsection{Model Family Ablation}
+\label{app:ablation-model-family}
+
+We replicate the full experimental protocol on DeepSeek-R1-Distill-Llama-8B, which differs from the main paper's Qwen3-4B-Thinking in architecture (Llama vs.\ Qwen), parameter count (8B vs.\ 4B), and training recipe (distillation from DeepSeek-R1 vs.\ native reasoning training). We apply the same seed selection, variant construction, and evaluation pipeline. Table~\ref{tab:llama-spectrum} reports performance across the Generalization Spectrum.
+
+\begin{table}[h]
+\centering
+\small
+\caption{DeepSeek-R1-Distill-Llama-8B across the Generalization Spectrum. $\text{Gain}_n$ columns report normalized gains, AUS reports average raw transfer gain, and $\text{N-F}_n$ reports the normalized near-far gap. Format follows Table~\ref{tab:main_results}.}
+\label{tab:llama-spectrum}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lcccccccccccc}
+\toprule
+& \multicolumn{2}{c}{\textbf{$D_0$}} & \multicolumn{2}{c}{\textbf{$D_1$}} & \multicolumn{2}{c}{\textbf{$D_2$}} & \multicolumn{2}{c}{\textbf{$D_3$}} & \multicolumn{2}{c}{\textbf{$D_4$}} & \textbf{AUS} & \textbf{$\text{N-F}_n$} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(lr){6-7}\cmidrule(lr){8-9}\cmidrule(lr){10-11}
+\textbf{Method} & Result & $\text{Gain}_n$ & Result & $\text{Gain}_n$ & Result & $\text{Gain}_n$ & Result & $\text{Gain}_n$ & Result & $\text{Gain}_n$ & & \\
+\midrule
+Base model & 0.18 & --- & 0.02 & --- & 0.16 & --- & 0.12 & --- & 0.03 & --- & 0.00 & 0.0 \\
+ICL (oracle) & 0.66 & +58.8 & 0.57 & +56.2 & 0.63 & +56.3 & 0.11 & $-$1.3 & 0.13 & +10.3 & +0.28 & +51.8 \\
+SFT ($D_0{\approx}0.5$) & 0.53 & +43.1 & 0.06 & +4.5 & 0.20 & +4.4 & 0.11 & $-$1.8 & 0.07 & +3.9 & +0.03 & +3.4 \\
+RL ($D_0{\approx}0.5$) & 0.50 & +39.7 & 0.13 & +10.5 & 0.25 & +10.7 & 0.18 & +7.0 & 0.09 & +5.8 & +0.08 & +4.2 \\
+SFT ($D_0{\approx}0.37$) & 0.37 & +23.9 & 0.05 & +3.2 & 0.17 & +0.2 & 0.11 & $-$1.8 & 0.04 & +1.2 & +0.01 & +2.0 \\
+RL ($D_0{\approx}0.37$) & 0.37 & +23.7 & 0.09 & +6.6 & 0.23 & +8.2 & 0.15 & +2.9 & 0.05 & +2.2 & +0.05 & +4.9 \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+The overall decay pattern replicates: (1) transfer gains attenuate from near to far levels for gradient-based methods; (2) RL's near-transfer advantage persists at matched $D_0$; (3) far-transfer results converge at $D_3$--$D_4$.
+
+
+\subsection{Seed Set Scale Ablation}
+\label{app:ablation-seed-scale}
+
+We expand the seed set from 64 to 256 by sampling an additional 192 problems from the same source (recent Codeforces problems), using the same filtering criteria as in the main study: the base model's solve rate is below 0.6 and pass@8 $>$ 0. For each new seed, we construct the full $D_0$--$D_4$ variants following the main protocol, yielding 1,280 evaluation instances in total (256 seeds $\times$ 5 levels). We retrain both SFT and RL (GRPO) models on the expanded dataset with identical hyperparameters to the main experiments.
+
+Figure~\ref{fig:data-scale-ablation} in the main text reports the pass@1 profile for this ablation. This appendix records the construction and training scope for that result.
+
+
+\end{document}
