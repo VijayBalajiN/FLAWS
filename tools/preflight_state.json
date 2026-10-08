@@ -1,0 +1,236 @@
+{
+ "2606.06572v1": {
+  "id": "2606.06572v1",
+  "title": "Generative Models Erode Human Temporal Learning Through Market Selection",
+  "published": "2026-06-04T17:59:06Z",
+  "primary": "cs.LG",
+  "comment": "Accepted at ICML 2026",
+  "status": "ACCEPT",
+  "folder": "arxiv_2606_06572"
+ },
+ "2606.19341v2": {
+  "id": "2606.19341v2",
+  "title": "Native Active Perception as Reasoning for Omni-Modal Understanding",
+  "published": "2026-06-17T17:59:56Z",
+  "primary": "cs.CV",
+  "comment": "Accepted at ICML 2026. Code and models: https://github.com/harryhsing/omniagent",
+  "status": "ACCEPT",
+  "folder": "arxiv_2606_19341"
+ },
+ "2606.15880v1": {
+  "id": "2606.15880v1",
+  "title": "Deep Residual Injection for Full-Spectrum Forensic Signal Perception in Multimodal Large Language Models",
+  "published": "2026-06-14T16:05:45Z",
+  "primary": "cs.CV",
+  "comment": "Accepted at ICML 2026",
+  "status": "ACCEPT",
+  "folder": "arxiv_2606_15880"
+ },
+ "2606.25325v2": {
+  "id": "2606.25325v2",
+  "title": "Omni-Perception Policy Optimization for Multimodal Emotion Reasoning",
+  "published": "2026-06-24T02:43:26Z",
+  "primary": "cs.AI",
+  "comment": "Accepted at ICML 2026. Project page: https://zjycutieee.github.io/OPPO-page/ Code: https://github.com/ZhiyuanHan-Aaron/OPPO",
+  "status": "ACCEPT",
+  "folder": "arxiv_2606_25325"
+ },
+ "2606.04754v2": {
+  "id": "2606.04754v2",
+  "title": "Beyond Structural Symmetries: Linear Mode Connectivity via Neuron Identifiability",
+  "published": "2026-06-03T11:37:58Z",
+  "primary": "cs.LG",
+  "comment": "Accepted at ICML 2026",
+  "status": "size-out-of-range:239716",
+  "folder": "arxiv_2606_04754"
+ },
+ "2609.00097v1": {
+  "id": "2609.00097v1",
+  "title": "Faster Than Flash: Exploiting Attention Sparsity for Efficient Long-Context Decoding",
+  "published": "2026-08-31T15:13:20Z",
+  "primary": "cs.LG",
+  "comment": "20 pages, 8 figures, 10 tables; Accepted at ICML 2026",
+  "status": "ACCEPT",
+  "folder": "arxiv_2609_00097"
+ },
+ "2608.07952v1": {
+  "id": "2608.07952v1",
+  "title": "Persistent Semantic Entities in Tool-Augmented LLM Systems",
+  "published": "2026-08-08T06:31:00Z",
+  "primary": "cs.LG",
+  "comment": "Accepted at the 43rd International Conference on Machine Learning (ICML 2026). Camera-ready version; 32 pages . The openreview url is https://openreview.net/forum?id=zPjmtawzT8&noteId=CXB95ws5so and ICML poster url is https://icml.cc/virtual/2026/poster/60521",
+  "status": "ACCEPT",
+  "folder": "arxiv_2608_07952"
+ },
+ "2606.03290v1": {
+  "id": "2606.03290v1",
+  "title": "Message Tuning Outshines Graph Prompt Tuning: A Prismatic Space Perspective",
+  "published": "2026-06-02T07:52:54Z",
+  "primary": "cs.LG",
+  "comment": "Accepted by ICML 2026",
+  "status": "size-out-of-range:392971",
+  "folder": "arxiv_2606_03290"
+ },
+ "2606.03976v1": {
+  "id": "2606.03976v1",
+  "title": "Formalizing the Binding Problem",
+  "published": "2026-06-02T17:56:24Z",
+  "primary": "cs.CV",
+  "comment": "Accepted to ICML 2026",
+  "status": "ACCEPT",
+  "folder": "arxiv_2606_03976"
+ },
+ "2608.02827v1": {
+  "id": "2608.02827v1",
+  "title": "Emergence of Biased Consensus in Multi-Agent LLM Debates",
+  "published": "2026-08-03T19:40:49Z",
+  "primary": "cs.MA",
+  "comment": "Accepted at the 43rd International Conference on Machine Learning (ICML 2026). 23 pages, 12 figures",
+  "status": "ACCEPT",
+  "folder": "arxiv_2608_02827"
+ },
+ "2606.12146v1": {
+  "id": "2606.12146v1",
+  "title": "nD-RoPE: A Generalized RoPE for n-Dimensional Position Embedding",
+  "published": "2026-06-10T14:38:00Z",
+  "primary": "cs.LG",
+  "comment": "Accepted to the 43rd International Conference on Machine Learning (ICML 2026)",
+  "status": "ACCEPT",
+  "folder": "arxiv_2606_12146"
+ },
+ "2606.25450v2": {
+  "id": "2606.25450v2",
+  "title": "The Generalization Spectrum: A Chromatographic Approach to Evaluating Learning Algorithms",
+  "published": "2026-06-24T06:26:02Z",
+  "primary": "cs.LG",
+  "comment": "Accepted at ICML 2026. 30 pages, 6 figures",
+  "status": "ACCEPT",
+  "folder": "arxiv_2606_25450"
+ },
+ "2606.08814v1": {
+  "id": "2606.08814v1",
+  "title": "STAR: Rethinking MoE Routing as Structure-Aware Subspace Learning",
+  "published": "2026-06-07T20:07:24Z",
+  "primary": "cs.AI",
+  "comment": "Accepted at ICML 2026",
+  "status": "compile-failed",
+  "folder": "arxiv_2606_08814"
+ },
+ "2606.03066v1": {
+  "id": "2606.03066v1",
+  "title": "CORE: Conflict-Oriented Reasoning for General Multimodal Manipulation Detection",
+  "published": "2026-06-02T02:53:48Z",
+  "primary": "cs.AI",
+  "comment": "Accepted by ICML 2026",
+  "status": "ACCEPT",
+  "folder": "arxiv_2606_03066"
+ },
+ "2608.23493v1": {
+  "id": "2608.23493v1",
+  "title": "SRPO: Self-Reflective Policy Optimization for Long-Horizon Reasoning",
+  "published": "2026-08-24T16:55:09Z",
+  "primary": "cs.AI",
+  "comment": "Accepted to ICML 2026",
+  "status": "ACCEPT",
+  "folder": "arxiv_2608_23493"
+ },
+ "2606.05793v1": {
+  "id": "2606.05793v1",
+  "title": "CollabBench: Benchmarking and Unleashing Collaborative Ability of LLMs with Diverse Players via Proactive Engagement",
+  "published": "2026-06-04T07:22:44Z",
+  "primary": "cs.CL",
+  "comment": "Accepted by ICML 2026",
+  "status": "ACCEPT",
+  "folder": "arxiv_2606_05793"
+ },
+ "2606.28182v1": {
+  "id": "2606.28182v1",
+  "title": "LLawCo: Learning Laws of Cooperation for Modeling Embodied Multi-Agent Behavior",
+  "published": "2026-06-26T15:26:12Z",
+  "primary": "cs.LG",
+  "comment": "Accepted to ICML 2026",
+  "status": "ACCEPT",
+  "folder": "arxiv_2606_28182"
+ },
+ "2606.09145v1": {
+  "id": "2606.09145v1",
+  "title": "PrivCode++: Latent-Conditioned Differentially Private Code Generation for Comprehensive Guarantees",
+  "published": "2026-06-08T07:42:44Z",
+  "primary": "cs.CR",
+  "comment": "Accepted at ICML 2026",
+  "status": "ACCEPT",
+  "folder": "arxiv_2606_09145"
+ },
+ "2607.06807v1": {
+  "id": "2607.06807v1",
+  "title": "When Agents Go Rogue: Activation-Based Detection of Malicious Behaviors in Multi-Agent Systems",
+  "published": "2026-07-07T21:12:27Z",
+  "primary": "cs.CR",
+  "comment": "Accepted to ICML 2026",
+  "status": "ACCEPT",
+  "folder": "arxiv_2607_06807"
+ },
+ "2607.09921v1": {
+  "id": "2607.09921v1",
+  "title": "Global Merger-Arbitrage Forecasting with Language Models",
+  "published": "2026-07-10T19:16:03Z",
+  "primary": "cs.CL",
+  "comment": "Accepted to ICML 2026",
+  "status": "ACCEPT",
+  "folder": "arxiv_2607_09921"
+ },
+ "2606.03291v1": {
+  "id": "2606.03291v1",
+  "title": "Multilingual Unlearning in LLMs: Transfer, Dynamics, and Reversibility",
+  "published": "2026-06-02T07:55:52Z",
+  "primary": "cs.CL",
+  "comment": "Accepted at ICML 2026",
+  "status": "compile-failed",
+  "folder": "arxiv_2606_03291"
+ },
+ "2606.12716v2": {
+  "id": "2606.12716v2",
+  "title": "Does AI Reviewer See the Full Picture? Attacking and Defending Multimodal Peer Review",
+  "published": "2026-06-10T22:06:35Z",
+  "primary": "cs.CL",
+  "comment": "Accepted to ICML 2026, Project Page: https://paper-guard.github.io/",
+  "status": "compile-failed",
+  "folder": "arxiv_2606_12716"
+ },
+ "2606.08656v1": {
+  "id": "2606.08656v1",
+  "title": "From Player to Master: Enhancing Test-Time Learning of LLM Agents via Reinforcement Learning over Memory",
+  "published": "2026-06-07T14:53:19Z",
+  "primary": "cs.CL",
+  "comment": "Accepted by ICML 2026",
+  "status": "ACCEPT",
+  "folder": "arxiv_2606_08656"
+ },
+ "2607.02466v1": {
+  "id": "2607.02466v1",
+  "title": "Learning to Move Before Learning to Do: Task-Agnostic pretraining for VLAs",
+  "published": "2026-07-02T17:33:37Z",
+  "primary": "cs.RO",
+  "comment": "Accepted to ICML 2026, 21 pages,6 figures",
+  "status": "compile-failed",
+  "folder": "arxiv_2607_02466"
+ },
+ "2608.07548v1": {
+  "id": "2608.07548v1",
+  "title": "SC$^{2}$-WM: A Self-Correcting World Model with Closed-Loop Feedback for Vision-and-Language Navigation in Continuous Environments",
+  "published": "2026-08-01T03:17:48Z",
+  "primary": "cs.RO",
+  "comment": "Accepted by ICML 2026",
+  "status": "ACCEPT",
+  "folder": "arxiv_2608_07548"
+ },
+ "2606.13802v1": {
+  "id": "2606.13802v1",
+  "title": "A Benchmark and Framework for Evaluating Next Action Predictions in Spreadsheets",
+  "published": "2026-06-11T18:16:37Z",
+  "primary": "cs.SE",
+  "comment": "Accepted at ICML 2026. Code and benchmark: https://github.com/Tej-55/NAPE",
+  "status": "ACCEPT",
+  "folder": "arxiv_2606_13802"
+ }
+}

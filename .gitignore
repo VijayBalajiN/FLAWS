@@ -5,3 +5,17 @@ data/.DS_Store
 .env
 __pycache__/
 *.pyc
+.venv/
+
+# Heavy or third-party material is not versioned (this fork is public):
+# arXiv sources/PDFs, preflight builds, and the altered PDFs/LaTeX of real papers.
+# Rebuild locally with tools/fetch_and_preflight.py (see tools/README.md).
+data/_dl/
+data/_preflight/
+data/_regress/
+data/papers/
+data/run1/altered_papers/
+data/run1/_archive/
+data/*.log
+data/*.jsonl
+tools/*.log
