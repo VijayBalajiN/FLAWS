@@ -14,12 +14,10 @@ import os
 
 from src.utils.confidence_ranking import _load_dotenv, confidence_win_rate
 
-PLANS_DIR = "data/final_altered_plans"
-MIRROR_DIR = "data/altered_plans"
-AISCIENTIST_DIR = "/Users/vijaybalajinarasimmabharathi/Desktop/7th-sem/project/AIScientist/data/flaws_altered_plans"
+DEFAULT_PLANS_DIR = "data/dataset/v2/altered_plans"
 
 
-def process_one(path: str) -> dict | None:
+def process_one(path: str, mirror_dirs: tuple[str, ...] = ()) -> dict | None:
     with open(path) as f:
         d = json.load(f)
     meta = d["_error_metadata"]
@@ -55,7 +53,7 @@ def process_one(path: str) -> dict | None:
         ),
     }
 
-    for base_dir in (PLANS_DIR, MIRROR_DIR, AISCIENTIST_DIR):
+    for base_dir in (os.path.dirname(path), *mirror_dirs):
         target = os.path.join(base_dir, os.path.basename(path))
         if not os.path.exists(target):
             continue
@@ -71,10 +69,18 @@ def process_one(path: str) -> dict | None:
 
 
 if __name__ == "__main__":
+    import sys
+
+    # usage: python -m src.utils.run_confidence_check_batch [plans_dir] [mirror_dir ...]
+    # Results are written back into plans_dir and into every mirror_dir that holds a file of the same name.
     _load_dotenv()
-    paths = sorted(glob.glob(os.path.join(PLANS_DIR, "*.json")))
+    plans_dir = sys.argv[1] if len(sys.argv) > 1 else DEFAULT_PLANS_DIR
+    mirrors = tuple(sys.argv[2:])
+    paths = sorted(glob.glob(os.path.join(plans_dir, "*.json")))
+    if not paths:
+        sys.exit(f"no *.json plans found in {plans_dir}")
     for path in paths:
         try:
-            process_one(path)
+            process_one(path, mirrors)
         except Exception as e:
             print(f"[{os.path.basename(path)}] FAILED: {e}")
